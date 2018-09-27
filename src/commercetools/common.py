@@ -96,6 +96,7 @@ class AssetDraftSchema(Schema):
     def make(self, data):
         return AssetDraft(**data)
 
+
 @attr.s(auto_attribs=True)
 class Asset:
     key: str

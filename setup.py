@@ -8,8 +8,11 @@ install_requires = [
     "pytz",
     "requests-oauthlib>=1.0.0",
     "attrs>=18.2.0",
-    "marshmallow==3.0.0b13",
+    "marshmallow==3.0.0b16",
+    "marshmallow-enum==1.4.1",
 ]
+
+codegen_requires = ["PyYAML==3.13", "astunparse==1.5.0", "black==18.9b0"]
 
 docs_require = ["sphinx>=1.4.0"]
 
@@ -44,7 +47,11 @@ setup(
     url="https://github.co/labd/commercetools-python-sdk",
     install_requires=install_requires,
     tests_require=tests_require,
-    extras_require={"docs": docs_require, "test": tests_require},
+    extras_require={
+        "docs": docs_require,
+        "test": tests_require,
+        "codegen": codegen_requires,
+    },
     entry_points={},
     package_dir={"": "src"},
     packages=["commercetools"],

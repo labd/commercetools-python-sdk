@@ -3,6 +3,10 @@ __pycache__/
 .cache/
 *.egg-info
 
+# Dist files
+/build/
+/dist/
+
 
 # Local test files
 /api.py

@@ -1,7 +1,7 @@
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 
-from .products import ProductService
+from commercetools.services.products import ProductService
 
 
 class Client:

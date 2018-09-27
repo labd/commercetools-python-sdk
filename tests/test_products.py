@@ -1,4 +1,4 @@
-
+from commercetools import schemas, types
 
 data = """
 {
@@ -93,10 +93,8 @@ data = """
 }
 """
 
-from commercetools.products import Product, ProductSchema
 
 def test_product_deserialize():
-
-    obj = ProductSchema().loads(data)
-    print(obj)
-    assert False
+    obj = schemas.ProductSchema().loads(data)
+    assert isinstance(obj, types.Product)
+    assert obj.master_data.staged.master_variant.prices[0].value.cent_amount == 10000

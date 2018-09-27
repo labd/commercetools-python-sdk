@@ -1,7 +1,20 @@
+import typing
 from typing import List, Optional
-from commercetools import types, schemas
+from uuid import UUID
+
+from marshmallow import Schema, fields
+
+from commercetools import schemas, types
 
 __all__ = ["ProductService"]
+
+
+class ProductDeleteSchema(Schema):
+    version = fields.Integer()
+    price_currency = fields.String(data_key="priceCurrency", required=False)
+    price_country = fields.String(data_key="priceCountry", required=False)
+    price_customer_group = fields.UUID(data_key="priceCustomerGroup", required=False)
+    price_channel = fields.UUID(data_key="priceChannel", required=False)
 
 
 class ProductService:
@@ -46,8 +59,44 @@ class ProductService:
             schemas.ProductSchema,
         )
 
-    def delete_by_id(self, id: str) -> types.Product:
-        pass
+    def delete_by_id(
+        self,
+        id: str,
+        version: int,
+        price_currency: typing.Optional[str] = None,
+        price_country: typing.Optional[str] = None,
+        price_customer_group: typing.Optional[UUID] = None,
+        price_channel: typing.Optional[UUID] = None,
+    ) -> types.Product:
+        params = ProductDeleteSchema().dump(
+            {
+                "version": version,
+                "price_currency": price_currency,
+                "price_country": price_country,
+                "price_customer_group": price_customer_group,
+                "price_channel": price_channel,
+            }
+        )
+        return self._client._delete(f"products/{id}", params, schemas.ProductSchema)
 
-    def delete_by_key(self, key: str) -> types.Product:
-        pass
+    def delete_by_key(
+        self,
+        key: str,
+        version: int,
+        price_currency: typing.Optional[str] = None,
+        price_country: typing.Optional[str] = None,
+        price_customer_group: typing.Optional[UUID] = None,
+        price_channel: typing.Optional[UUID] = None,
+    ) -> types.Product:
+        params = ProductDeleteSchema().dump(
+            {
+                "version": version,
+                "price_currency": price_currency,
+                "price_country": price_country,
+                "price_customer_group": price_customer_group,
+                "price_channel": price_channel,
+            }
+        )
+        return self._client._delete(
+            f"products/key={key}", params, schemas.ProductSchema
+        )

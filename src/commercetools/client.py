@@ -49,6 +49,13 @@ class Client:
             return response_schema_cls().load(response.json())
         return self._process_error(response)
 
+    def _delete(self, endpoint, params, response_schema_cls):
+        """Delete an object from the commercetools platform"""
+        response = self._http_client.delete(self._base_url + endpoint, params=params)
+        if response.status_code == 200:
+            return response_schema_cls().load(response.json())
+        return self._process_error(response)
+
     def _process_error(self, response):
         if not response.content:
             response.raise_for_status()

@@ -27,9 +27,7 @@ class Client:
 
         if response.status_code == 200:
             return schema_cls().load(response.json())
-        else:
-            obj = schemas.ErrorResponseSchema().loads(response.content)
-            raise CommercetoolsError(obj.message, obj)
+        return self._process_error(response)
 
     def _create(
         self, endpoint, params, data_object, request_schema_cls, response_schema_cls
@@ -39,9 +37,7 @@ class Client:
         response = self._http_client.post(self._base_url + endpoint, json=data)
         if response.status_code in (200, 201):
             return response_schema_cls().load(response.json())
-        else:
-            obj = schemas.ErrorResponseSchema().loads(response.content)
-            raise CommercetoolsError(obj.message, obj)
+        return self._process_error(response)
 
     def _update(
         self, endpoint, params, data_object, request_schema_cls, response_schema_cls
@@ -51,9 +47,13 @@ class Client:
         response = self._http_client.post(self._base_url + endpoint, json=data)
         if response.status_code == 200:
             return response_schema_cls().load(response.json())
-        else:
-            obj = schemas.ErrorResponseSchema().loads(response.content)
-            raise CommercetoolsError(obj.message, obj)
+        return self._process_error(response)
+
+    def _process_error(self, response):
+        if not response.content:
+            response.raise_for_status()
+        obj = schemas.ErrorResponseSchema().loads(response.content)
+        raise CommercetoolsError(obj.message, obj)
 
     @property
     def products(self) -> ProductService:

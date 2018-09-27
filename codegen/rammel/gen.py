@@ -22,6 +22,8 @@ def create_data_type(name: str, data: Dict[str, Any]):
         if isinstance(value, dict):
             property_type = value["type"]
             items = value.get("items")
+            if items:
+                items = [v.strip() for v in value.get("items").split("|")]
         else:
             property_type = value
             items = []
@@ -30,11 +32,13 @@ def create_data_type(name: str, data: Dict[str, Any]):
         many = property_type.endswith("[]")
         if many:
             property_type = property_type[:-2]
-        property_object = UnresolvedType(name=property_type)
+
+        property_types = [v.strip() for v in property_type.split("|")]
+        property_objects = [UnresolvedType(name=p) for p in property_types]
         prop = Property(
             name=key.rstrip("?"),
             optional=optional,
-            type=property_object,
+            types=property_objects,
             many=many,
             items=items,
         )
@@ -88,16 +92,19 @@ class TypeProcessor:
             if type_obj.base:
                 type_obj.base.children.append(type_obj)
 
+            # TODO: A property can have multiple types. For now we only us the
+            # first one (see Property.type)
             for property in type_obj.properties:
                 property.type = self.resolve_type(property.type.name)
-
                 if property.type.name == "array":
                     if not property.items:
                         print(
                             f"[WARNING] {type_obj.name}.{property.name} is of type array but has no items defined"
                         )
-                        property.items = "any"
-                    property.items_type = self.resolve_type(property.items)
+                        property.items = ["any"]
+                    property.items_types = [
+                        self.resolve_type(item) for item in property.items
+                    ]
 
     def dump(self):
         for type_name, type_obj in self.types.items():
@@ -109,6 +116,3 @@ class TypeProcessor:
             print(" - Properties")
             for prop in type_obj.properties:
                 print("   -", prop.name)
-
-
-# print(packages['Subscription'])

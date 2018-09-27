@@ -142,7 +142,24 @@ class AssetSourceSchema(marshmallow.Schema):
 
 
 class AttributeDefinitionDraftSchema(marshmallow.Schema):
-    type = marshmallow.fields.Dict()
+    type = helpers.Discriminator(
+        discriminator_field="name",
+        discriminator_schemas={
+            "boolean": "commercetools.schemas.AttributeBooleanTypeSchema",
+            "datetime": "commercetools.schemas.AttributeDateTimeTypeSchema",
+            "date": "commercetools.schemas.AttributeDateTypeSchema",
+            "enum": "commercetools.schemas.AttributeEnumTypeSchema",
+            "ltext": "commercetools.schemas.AttributeLocalizableTextTypeSchema",
+            "lenum": "commercetools.schemas.AttributeLocalizedEnumTypeSchema",
+            "money": "commercetools.schemas.AttributeMoneyTypeSchema",
+            "nested": "commercetools.schemas.AttributeNestedTypeSchema",
+            "number": "commercetools.schemas.AttributeNumberTypeSchema",
+            "reference": "commercetools.schemas.AttributeReferenceTypeSchema",
+            "set": "commercetools.schemas.AttributeSetTypeSchema",
+            "text": "commercetools.schemas.AttributeTextTypeSchema",
+            "time": "commercetools.schemas.AttributeTimeTypeSchema",
+        },
+    )
     name = marshmallow.fields.String()
     label = LocalizedStringField()
     is_required = marshmallow.fields.Bool(data_key="isRequired")
@@ -167,7 +184,24 @@ class AttributeDefinitionDraftSchema(marshmallow.Schema):
 
 
 class AttributeDefinitionSchema(marshmallow.Schema):
-    type = marshmallow.fields.Dict()
+    type = helpers.Discriminator(
+        discriminator_field="name",
+        discriminator_schemas={
+            "boolean": "commercetools.schemas.AttributeBooleanTypeSchema",
+            "datetime": "commercetools.schemas.AttributeDateTimeTypeSchema",
+            "date": "commercetools.schemas.AttributeDateTypeSchema",
+            "enum": "commercetools.schemas.AttributeEnumTypeSchema",
+            "ltext": "commercetools.schemas.AttributeLocalizableTextTypeSchema",
+            "lenum": "commercetools.schemas.AttributeLocalizedEnumTypeSchema",
+            "money": "commercetools.schemas.AttributeMoneyTypeSchema",
+            "nested": "commercetools.schemas.AttributeNestedTypeSchema",
+            "number": "commercetools.schemas.AttributeNumberTypeSchema",
+            "reference": "commercetools.schemas.AttributeReferenceTypeSchema",
+            "set": "commercetools.schemas.AttributeSetTypeSchema",
+            "text": "commercetools.schemas.AttributeTextTypeSchema",
+            "time": "commercetools.schemas.AttributeTimeTypeSchema",
+        },
+    )
     name = marshmallow.fields.String()
     label = LocalizedStringField()
     is_required = marshmallow.fields.Bool(data_key="isRequired")
@@ -240,7 +274,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
     name = LocalizedStringField()
     description = LocalizedStringField(missing=None)
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "absolute": "commercetools.schemas.CartDiscountValueAbsoluteSchema",
             "giftLineItem": "commercetools.schemas.CartDiscountValueGiftLineItemSchema",
@@ -249,7 +283,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
     )
     cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
     target = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "customLineItems": "commercetools.schemas.CartDiscountCustomLineItemsTargetSchema",
             "lineItems": "commercetools.schemas.CartDiscountLineItemsTargetSchema",
@@ -381,7 +415,7 @@ class CartDraftSchema(marshmallow.Schema):
     )
     origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True, missing=None)
     shipping_rate_input = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "Classification": "commercetools.schemas.ClassificationShippingRateInputDraftSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputDraftSchema",
@@ -468,7 +502,12 @@ class ChannelDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    geo_location = marshmallow.fields.Dict(missing=None, data_key="geoLocation")
+    geo_location = marshmallow.fields.Nested(
+        nested="commercetools.schemas.GeoJsonPointSchema",
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="geoLocation",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -503,7 +542,10 @@ class CustomFieldLocalizedEnumValueSchema(marshmallow.Schema):
 
 
 class CustomFieldsDraftSchema(marshmallow.Schema):
-    type = marshmallow.fields.Dict()
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+    )
     fields = FieldContainerField(missing=None)
 
     class Meta:
@@ -571,7 +613,7 @@ class CustomLineItemSchema(marshmallow.Schema):
     id = marshmallow.fields.String()
     name = LocalizedStringField()
     money = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -584,7 +626,7 @@ class CustomLineItemSchema(marshmallow.Schema):
         data_key="taxedPrice",
     )
     total_price = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -1007,7 +1049,7 @@ class DiscountedLineItemPriceForQuantitySchema(marshmallow.Schema):
 
 class DiscountedLineItemPriceSchema(marshmallow.Schema):
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -1064,8 +1106,30 @@ class ErrorResponseSchema(marshmallow.Schema):
     error = marshmallow.fields.String(missing=None)
     error_description = marshmallow.fields.String(missing=None)
     errors = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
+        helpers.Discriminator(
+            discriminator_field="code",
+            discriminator_schemas={
+                "access_denied": "commercetools.schemas.AccessDeniedErrorSchema",
+                "ConcurrentModification": "commercetools.schemas.ConcurrentModificationErrorSchema",
+                "DiscountCodeNonApplicable": "commercetools.schemas.DiscountCodeNonApplicableErrorSchema",
+                "DuplicateAttributeValue": "commercetools.schemas.DuplicateAttributeValueErrorSchema",
+                "DuplicateAttributeValues": "commercetools.schemas.DuplicateAttributeValuesErrorSchema",
+                "DuplicateField": "commercetools.schemas.DuplicateFieldErrorSchema",
+                "DuplicatePriceScope": "commercetools.schemas.DuplicatePriceScopeErrorSchema",
+                "DuplicateVariantValues": "commercetools.schemas.DuplicateVariantValuesErrorSchema",
+                "insufficient_scope": "commercetools.schemas.InsufficientScopeErrorSchema",
+                "InvalidCredentials": "commercetools.schemas.InvalidCredentialsErrorSchema",
+                "InvalidCurrentPassword": "commercetools.schemas.InvalidCurrentPasswordErrorSchema",
+                "InvalidField": "commercetools.schemas.InvalidFieldErrorSchema",
+                "InvalidItemShippingDetails": "commercetools.schemas.InvalidItemShippingDetailsErrorSchema",
+                "InvalidOperation": "commercetools.schemas.InvalidOperationErrorSchema",
+                "InvalidSubject": "commercetools.schemas.InvalidSubjectErrorSchema",
+                "invalid_token": "commercetools.schemas.InvalidTokenErrorSchema",
+                "OutOfStock": "commercetools.schemas.OutOfStockErrorSchema",
+                "PriceChanged": "commercetools.schemas.PriceChangedErrorSchema",
+                "RequiredField": "commercetools.schemas.RequiredFieldErrorSchema",
+                "ResourceNotFound": "commercetools.schemas.ResourceNotFoundErrorSchema",
+            },
         ),
         missing=None,
     )
@@ -1093,7 +1157,7 @@ class ExtensionDestinationSchema(marshmallow.Schema):
 class ExtensionDraftSchema(marshmallow.Schema):
     key = marshmallow.fields.String(missing=None)
     destination = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "AWSLambda": "commercetools.schemas.ExtensionAWSLambdaDestinationSchema",
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
@@ -1128,7 +1192,7 @@ class ExtensionHttpDestinationAuthenticationSchema(marshmallow.Schema):
 class ExtensionInputSchema(marshmallow.Schema):
     action = marshmallow_enum.EnumField(types.ExtensionAction, by_value=True)
     resource = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -1666,7 +1730,7 @@ class MessageSchema(marshmallow.Schema):
     last_modified_at = marshmallow.fields.DateTime(data_key="lastModifiedAt")
     sequence_number = marshmallow.fields.Integer(data_key="sequenceNumber")
     resource = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -2376,7 +2440,7 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
     name = LocalizedStringField()
     description = LocalizedStringField(missing=None)
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "absolute": "commercetools.schemas.ProductDiscountValueAbsoluteSchema",
             "external": "commercetools.schemas.ProductDiscountValueExternalSchema",
@@ -2693,7 +2757,7 @@ class ProjectSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
     )
     shipping_rate_input_type = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "CartClassification": "commercetools.schemas.CartClassificationTypeSchema",
             "CartScore": "commercetools.schemas.CartScoreTypeSchema",
@@ -2713,7 +2777,7 @@ class ProjectSchema(marshmallow.Schema):
 
 class ReplicaCartDraftSchema(marshmallow.Schema):
     reference = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -2842,8 +2906,16 @@ class ReviewDraftSchema(marshmallow.Schema):
     author_name = marshmallow.fields.String(missing=None, data_key="authorName")
     title = marshmallow.fields.String(missing=None)
     text = marshmallow.fields.String(missing=None)
-    target = marshmallow.fields.Dict(missing=None)
-    state = marshmallow.fields.Dict(missing=None)
+    target = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ProductReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
     rating = marshmallow.fields.Integer(missing=None)
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
@@ -2882,14 +2954,14 @@ class ReviewRatingStatisticsSchema(marshmallow.Schema):
 class ScopedPriceSchema(marshmallow.Schema):
     id = marshmallow.fields.String()
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
     )
     current_value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -2931,8 +3003,14 @@ class ScopedPriceSchema(marshmallow.Schema):
 
 class SearchKeywordSchema(marshmallow.Schema):
     text = marshmallow.fields.String()
-    suggest_tokenizer = marshmallow.fields.Dict(
-        missing=None, data_key="suggestTokenizer"
+    suggest_tokenizer = helpers.Discriminator(
+        discriminator_field="type",
+        discriminator_schemas={
+            "custom": "commercetools.schemas.CustomTokenizerSchema",
+            "whitespace": "commercetools.schemas.WhitespaceTokenizerSchema",
+        },
+        missing=None,
+        data_key="suggestTokenizer",
     )
 
     class Meta:
@@ -3016,7 +3094,7 @@ class ShippingInfoDraftSchema(marshmallow.Schema):
 class ShippingInfoSchema(marshmallow.Schema):
     shipping_method_name = marshmallow.fields.String(data_key="shippingMethodName")
     price = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -3112,7 +3190,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
         data_key="freeAbove",
     )
     tiers = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "CartClassification": "commercetools.schemas.CartClassificationTierSchema",
             "CartScore": "commercetools.schemas.CartScoreTierSchema",
@@ -3180,14 +3258,14 @@ class ShippingRatePriceTierSchema(marshmallow.Schema):
 
 class ShippingRateSchema(marshmallow.Schema):
     price = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
     )
     free_above = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -3197,7 +3275,7 @@ class ShippingRateSchema(marshmallow.Schema):
     )
     is_matching = marshmallow.fields.Bool(missing=None, data_key="isMatching")
     tiers = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "CartClassification": "commercetools.schemas.CartClassificationTierSchema",
             "CartScore": "commercetools.schemas.CartScoreTierSchema",
@@ -3349,7 +3427,7 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
     project_key = marshmallow.fields.String(data_key="projectKey")
     notification_type = marshmallow.fields.String(data_key="notificationType")
     resource = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -3392,7 +3470,7 @@ class SubscriptionDraftSchema(marshmallow.Schema):
         many=True,
     )
     destination = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "EventGrid": "commercetools.schemas.AzureEventGridDestinationSchema",
             "AzureServiceBus": "commercetools.schemas.AzureServiceBusDestinationSchema",
@@ -3566,7 +3644,7 @@ class TaxedItemPriceDraftSchema(marshmallow.Schema):
 
 class TaxedItemPriceSchema(marshmallow.Schema):
     total_net = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -3574,7 +3652,7 @@ class TaxedItemPriceSchema(marshmallow.Schema):
         data_key="totalNet",
     )
     total_gross = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -3696,7 +3774,7 @@ class TransactionSchema(marshmallow.Schema):
     timestamp = marshmallow.fields.DateTime(missing=None)
     type = marshmallow_enum.EnumField(types.TransactionType, by_value=True)
     amount = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -3976,7 +4054,7 @@ class AttributeReferenceTypeSchema(AttributeTypeSchema):
 
 class AttributeSetTypeSchema(AttributeTypeSchema):
     element_type = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="name",
         discriminator_schemas={
             "boolean": "commercetools.schemas.AttributeBooleanTypeSchema",
             "datetime": "commercetools.schemas.AttributeDateTimeTypeSchema",
@@ -4125,7 +4203,7 @@ class CartDiscountSchema(ResourceSchema):
     name = LocalizedStringField()
     description = LocalizedStringField(missing=None)
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "absolute": "commercetools.schemas.CartDiscountValueAbsoluteSchema",
             "giftLineItem": "commercetools.schemas.CartDiscountValueGiftLineItemSchema",
@@ -4134,7 +4212,7 @@ class CartDiscountSchema(ResourceSchema):
     )
     cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
     target = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "customLineItems": "commercetools.schemas.CartDiscountCustomLineItemsTargetSchema",
             "lineItems": "commercetools.schemas.CartDiscountLineItemsTargetSchema",
@@ -4150,7 +4228,7 @@ class CartDiscountSchema(ResourceSchema):
     valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
     requires_discount_code = marshmallow.fields.Bool(data_key="requiresDiscountCode")
     references = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -4332,7 +4410,7 @@ class CartSchema(ResourceSchema):
         data_key="customLineItems",
     )
     total_price = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -4415,7 +4493,7 @@ class CartSchema(ResourceSchema):
     )
     origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True)
     shipping_rate_input = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "Classification": "commercetools.schemas.ClassificationShippingRateInputSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputSchema",
@@ -4742,7 +4820,12 @@ class ChannelSchema(ResourceSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    geo_location = marshmallow.fields.Dict(missing=None, data_key="geoLocation")
+    geo_location = marshmallow.fields.Nested(
+        nested="commercetools.schemas.GeoJsonPointSchema",
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="geoLocation",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4936,7 +5019,7 @@ class CustomFieldReferenceTypeSchema(FieldTypeSchema):
 
 class CustomFieldSetTypeSchema(FieldTypeSchema):
     element_type = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="name",
         discriminator_schemas={
             "Boolean": "commercetools.schemas.CustomFieldBooleanTypeSchema",
             "DateTime": "commercetools.schemas.CustomFieldDateTimeTypeSchema",
@@ -5448,7 +5531,7 @@ class DiscountCodeSchema(ResourceSchema):
     cart_predicate = marshmallow.fields.String(missing=None, data_key="cartPredicate")
     is_active = marshmallow.fields.Bool(data_key="isActive")
     references = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -5658,7 +5741,7 @@ class ExtensionAzureFunctionsAuthenticationSchema(
 class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
     url = marshmallow.fields.String()
     authentication = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "AuthorizationHeader": "commercetools.schemas.ExtensionAuthorizationHeaderAuthenticationSchema",
             "AzureFunctions": "commercetools.schemas.ExtensionAzureFunctionsAuthenticationSchema",
@@ -5693,7 +5776,7 @@ class ExtensionPagedQueryResponseSchema(PagedQueryResponseSchema):
 class ExtensionSchema(ResourceSchema):
     key = marshmallow.fields.String(missing=None)
     destination = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "AWSLambda": "commercetools.schemas.ExtensionAWSLambdaDestinationSchema",
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
@@ -6029,7 +6112,7 @@ class MessageDeliverySchema(SubscriptionDeliverySchema):
 
 class MessagePagedQueryResponseSchema(PagedQueryResponseSchema):
     results = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "CategoryCreated": "commercetools.schemas.CategoryCreatedMessageSchema",
             "CategorySlugChanged": "commercetools.schemas.CategorySlugChangedMessageSchema",
@@ -6418,7 +6501,7 @@ class OrderSchema(ResourceSchema):
         data_key="taxCalculationMode",
     )
     shipping_rate_input = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "Classification": "commercetools.schemas.ClassificationShippingRateInputSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputSchema",
@@ -6717,7 +6800,7 @@ class PaymentSchema(ResourceSchema):
     external_id = marshmallow.fields.String(missing=None, data_key="externalId")
     interface_id = marshmallow.fields.String(missing=None, data_key="interfaceId")
     amount_planned = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -6725,7 +6808,7 @@ class PaymentSchema(ResourceSchema):
         data_key="amountPlanned",
     )
     amount_authorized = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -6737,7 +6820,7 @@ class PaymentSchema(ResourceSchema):
         missing=None, data_key="authorizedUntil"
     )
     amount_paid = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -6746,7 +6829,7 @@ class PaymentSchema(ResourceSchema):
         data_key="amountPaid",
     )
     amount_refunded = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
@@ -6964,7 +7047,7 @@ class ProductDiscountSchema(ResourceSchema):
     name = LocalizedStringField()
     description = LocalizedStringField(missing=None)
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "absolute": "commercetools.schemas.ProductDiscountValueAbsoluteSchema",
             "external": "commercetools.schemas.ProductDiscountValueExternalSchema",
@@ -6975,7 +7058,7 @@ class ProductDiscountSchema(ResourceSchema):
     sort_order = marshmallow.fields.String(data_key="sortOrder")
     is_active = marshmallow.fields.Bool(data_key="isActive")
     references = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -7665,7 +7748,7 @@ class ReviewRatingSetMessageSchema(MessageSchema):
     new_rating = marshmallow.fields.Integer(data_key="newRating")
     included_in_statistics = marshmallow.fields.Bool(data_key="includedInStatistics")
     target = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -7709,7 +7792,11 @@ class ReviewSchema(ResourceSchema):
     author_name = marshmallow.fields.String(missing=None, data_key="authorName")
     title = marshmallow.fields.String(missing=None)
     text = marshmallow.fields.String(missing=None)
-    target = marshmallow.fields.Dict(missing=None)
+    target = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ProductReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
     included_in_statistics = marshmallow.fields.Bool(data_key="includedInStatistics")
     rating = marshmallow.fields.Integer(missing=None)
     state = marshmallow.fields.Nested(
@@ -7754,7 +7841,7 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
         data_key="newIncludedInStatistics"
     )
     target = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="typeId",
         discriminator_schemas={
             "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
             "cart": "commercetools.schemas.CartReferenceSchema",
@@ -8164,7 +8251,7 @@ class SubscriptionSchema(ResourceSchema):
         many=True,
     )
     destination = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "EventGrid": "commercetools.schemas.AzureEventGridDestinationSchema",
             "AzureServiceBus": "commercetools.schemas.AzureServiceBusDestinationSchema",
@@ -8841,7 +8928,7 @@ class CartDiscountChangeStackingModeActionSchema(CartDiscountUpdateActionSchema)
 
 class CartDiscountChangeTargetActionSchema(CartDiscountUpdateActionSchema):
     target = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "customLineItems": "commercetools.schemas.CartDiscountCustomLineItemsTargetSchema",
             "lineItems": "commercetools.schemas.CartDiscountLineItemsTargetSchema",
@@ -8862,7 +8949,7 @@ class CartDiscountChangeTargetActionSchema(CartDiscountUpdateActionSchema):
 
 class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "absolute": "commercetools.schemas.CartDiscountValueAbsoluteSchema",
             "giftLineItem": "commercetools.schemas.CartDiscountValueGiftLineItemSchema",
@@ -9562,7 +9649,7 @@ class CartSetShippingMethodTaxRateActionSchema(CartUpdateActionSchema):
 
 class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
     shipping_rate_input = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "Classification": "commercetools.schemas.ClassificationShippingRateInputDraftSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputDraftSchema",
@@ -10041,7 +10128,12 @@ class ChannelSetCustomTypeActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelSetGeoLocationActionSchema(ChannelUpdateActionSchema):
-    geo_location = marshmallow.fields.Dict(missing=None, data_key="geoLocation")
+    geo_location = marshmallow.fields.Nested(
+        nested="commercetools.schemas.GeoJsonPointSchema",
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="geoLocation",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10674,7 +10766,7 @@ class DiscountCodeSetValidUntilActionSchema(DiscountCodeUpdateActionSchema):
 
 class ExtensionChangeDestinationActionSchema(ExtensionUpdateActionSchema):
     destination = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "AWSLambda": "commercetools.schemas.ExtensionAWSLambdaDestinationSchema",
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
@@ -12093,7 +12185,7 @@ class ProductDiscountChangeSortOrderActionSchema(ProductDiscountUpdateActionSche
 
 class ProductDiscountChangeValueActionSchema(ProductDiscountUpdateActionSchema):
     value = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "absolute": "commercetools.schemas.ProductDiscountValueAbsoluteSchema",
             "external": "commercetools.schemas.ProductDiscountValueExternalSchema",
@@ -13110,7 +13202,7 @@ class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
 
 class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
     shipping_rate_input_type = helpers.Discriminator(
-        discriminator_field="action",
+        discriminator_field="type",
         discriminator_schemas={
             "CartClassification": "commercetools.schemas.CartClassificationTypeSchema",
             "CartScore": "commercetools.schemas.CartScoreTypeSchema",

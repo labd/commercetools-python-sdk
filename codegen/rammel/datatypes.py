@@ -73,11 +73,23 @@ class DataType:
 @attr.s(auto_attribs=True, slots=True)
 class Property:
     name: str
-    type: DataType
+    types: List[DataType]
     optional: bool = False
     many: bool = False
     items: List[str] = attr.Factory(lambda: [])
-    items_type: "DataType" = None
+    items_types: List["DataType"] = None
+
+    @property
+    def type(self):
+        if self.types:
+            return self.types[0]
+
+    @type.setter
+    def type(self, value):
+        if self.types:
+            self.types[0] = value
+        else:
+            self.types = [value]
 
     @property
     def attribute_name(self):

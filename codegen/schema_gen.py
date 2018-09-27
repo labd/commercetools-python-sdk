@@ -216,11 +216,13 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
                 child.discriminator_value
             ] = f"commercetools.schemas.{child.name}Schema"
 
+        field = type_obj.get_discriminator_field()
+
         return ast.Call(
             func=ast.Name(id="helpers.Discriminator"),
             args=[],
             keywords=[
-                ast.keyword(arg="discriminator_field", value=ast.Str(s="action")),
+                ast.keyword(arg="discriminator_field", value=ast.Str(s=field.name)),
                 ast.keyword(
                     arg="discriminator_schemas",
                     value=ast.Dict(
@@ -256,11 +258,14 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
             field_type_name = self._field_types[prop.type.name]
             if prop.type.name == "array":
                 assert prop.items, f"The array property {prop.name} has no items"
-                assert prop.items_type
-                if prop.items_type.discriminator:
-                    args.append(self._create_discriminator_field(prop.items_type))
+                assert prop.items_types
+
+                # TODO: We for now assume that the items are all subclasses of
+                # the first item. We shouldn't do that :-)
+                if prop.items_types[0].discriminator:
+                    args.append(self._create_discriminator_field(prop.items_types[0]))
                 else:
-                    args.append(self._create_nested_field(prop.items_type))
+                    args.append(self._create_nested_field(prop.items_types[0]))
 
         # Dict Field
         elif "asMap" in prop.type.annotations:

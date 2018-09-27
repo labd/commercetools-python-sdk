@@ -178,7 +178,7 @@ class Attribute:
 
 @attr.s(auto_attribs=True)
 class AttributeDefinition:
-    type: typing.Optional[typing.Any] = None
+    type: typing.Optional["AttributeType"] = None
     name: typing.Optional[str] = None
     label: typing.Optional["LocalizedString"] = None
     is_required: typing.Optional[bool] = None
@@ -189,7 +189,7 @@ class AttributeDefinition:
 
     def __init__(
         self,
-        type: typing.Optional[typing.Any] = None,
+        type: typing.Optional["AttributeType"] = None,
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
         is_required: typing.Optional[bool] = None,
@@ -212,7 +212,7 @@ class AttributeDefinition:
 
 @attr.s(auto_attribs=True)
 class AttributeDefinitionDraft:
-    type: typing.Optional[typing.Any] = None
+    type: typing.Optional["AttributeType"] = None
     name: typing.Optional[str] = None
     label: typing.Optional["LocalizedString"] = None
     is_required: typing.Optional[bool] = None
@@ -223,7 +223,7 @@ class AttributeDefinitionDraft:
 
     def __init__(
         self,
-        type: typing.Optional[typing.Any] = None,
+        type: typing.Optional["AttributeType"] = None,
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
         is_required: typing.Optional[bool] = None,
@@ -486,7 +486,7 @@ class ChannelDraft:
     description: typing.Optional["LocalizedString"] = None
     address: typing.Optional["Address"] = None
     custom: typing.Optional["CustomFieldsDraft"] = None
-    geo_location: typing.Optional[typing.Any] = None
+    geo_location: typing.Optional["GeoJsonPoint"] = None
 
     def __init__(
         self,
@@ -496,7 +496,7 @@ class ChannelDraft:
         description: typing.Optional["LocalizedString"] = None,
         address: typing.Optional["Address"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        geo_location: typing.Optional[typing.Any] = None,
+        geo_location: typing.Optional["GeoJsonPoint"] = None,
     ) -> None:
         super().__init__(key, roles, name, description, address, custom, geo_location)
 
@@ -540,12 +540,12 @@ class CustomFields:
 
 @attr.s(auto_attribs=True)
 class CustomFieldsDraft:
-    type: typing.Optional[typing.Any] = None
+    type: typing.Optional["ResourceIdentifier"] = None
     fields: typing.Optional["FieldContainer"] = None
 
     def __init__(
         self,
-        type: typing.Optional[typing.Any] = None,
+        type: typing.Optional["ResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
         super().__init__(type, fields)
@@ -2602,8 +2602,8 @@ class ReviewDraft:
     author_name: typing.Optional[str] = None
     title: typing.Optional[str] = None
     text: typing.Optional[str] = None
-    target: typing.Optional[typing.Any] = None
-    state: typing.Optional[typing.Any] = None
+    target: typing.Optional["ProductReference"] = None
+    state: typing.Optional["ResourceIdentifier"] = None
     rating: typing.Optional[int] = None
     customer: typing.Optional["CustomerReference"] = None
     custom: typing.Optional["CustomFieldsDraft"] = None
@@ -2616,8 +2616,8 @@ class ReviewDraft:
         author_name: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
         text: typing.Optional[str] = None,
-        target: typing.Optional[typing.Any] = None,
-        state: typing.Optional[typing.Any] = None,
+        target: typing.Optional["ProductReference"] = None,
+        state: typing.Optional["ResourceIdentifier"] = None,
         rating: typing.Optional[int] = None,
         customer: typing.Optional["CustomerReference"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -2701,12 +2701,12 @@ class ScopedPrice:
 @attr.s(auto_attribs=True)
 class SearchKeyword:
     text: typing.Optional[str] = None
-    suggest_tokenizer: typing.Optional[typing.Any] = None
+    suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None
 
     def __init__(
         self,
         text: typing.Optional[str] = None,
-        suggest_tokenizer: typing.Optional[typing.Any] = None,
+        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
     ) -> None:
         super().__init__(text, suggest_tokenizer)
 
@@ -4110,7 +4110,7 @@ class Channel(Resource):
     address: typing.Optional["Address"] = None
     review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None
     custom: typing.Optional["CustomFields"] = None
-    geo_location: typing.Optional[typing.Any] = None
+    geo_location: typing.Optional["GeoJsonPoint"] = None
 
     def __init__(
         self,
@@ -4125,7 +4125,7 @@ class Channel(Resource):
         address: typing.Optional["Address"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
         custom: typing.Optional["CustomFields"] = None,
-        geo_location: typing.Optional[typing.Any] = None,
+        geo_location: typing.Optional["GeoJsonPoint"] = None,
     ) -> None:
         super().__init__(
             id,
@@ -7607,7 +7607,7 @@ class Review(Resource):
     author_name: typing.Optional[str] = None
     title: typing.Optional[str] = None
     text: typing.Optional[str] = None
-    target: typing.Optional[typing.Any] = None
+    target: typing.Optional["ProductReference"] = None
     included_in_statistics: typing.Optional[bool] = None
     rating: typing.Optional[int] = None
     state: typing.Optional["StateReference"] = None
@@ -7626,7 +7626,7 @@ class Review(Resource):
         author_name: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
         text: typing.Optional[str] = None,
-        target: typing.Optional[typing.Any] = None,
+        target: typing.Optional["ProductReference"] = None,
         included_in_statistics: typing.Optional[bool] = None,
         rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
@@ -9865,9 +9865,9 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
     action: typing.Optional[str] = attr.ib(
         repr=False, init=False, default="setGeoLocation"
     )
-    geo_location: typing.Optional[typing.Any] = None
+    geo_location: typing.Optional["GeoJsonPoint"] = None
 
-    def __init__(self, geo_location: typing.Optional[typing.Any] = None) -> None:
+    def __init__(self, geo_location: typing.Optional["GeoJsonPoint"] = None) -> None:
         super().__init__(geo_location)
 
 

@@ -2,6 +2,8 @@
 
 [![Travis Build Status](https://travis-ci.org/labd/commercetools-python-sdk.svg?branch=master)](https://travis-ci.org/labd/commercetools-python-sdk)
 [![codecov](https://codecov.io/gh/LabD/commercetools-python-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/LabD/commercetools-python-sdk)
+[![PyPI](https://img.shields.io/pypi/v/commercetools.svg)](https://pypi.org/project/commercetools/)
+
 
 This is an unofficial Python SDK for the Commercetools platform. It only
 supports Python 3.6+ and uses type annotation for an improved development

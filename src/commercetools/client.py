@@ -29,12 +29,23 @@ class Client:
             return schema_cls().load(response.json())
         return self._process_error(response)
 
+    def _query(self, endpoint, params, schema_cls):
+        """Retrieve a single object from the commercetools platform"""
+        response = self._http_client.get(self._base_url + endpoint, params=params)
+
+        if response.status_code == 200:
+            return schema_cls().load(response.json())
+        return self._process_error(response)
+
     def _create(
         self, endpoint, params, data_object, request_schema_cls, response_schema_cls
     ):
         """Create an object in the commercetools platform"""
         data = request_schema_cls().dump(data_object)
-        response = self._http_client.post(self._base_url + endpoint, json=data)
+        response = self._http_client.post(
+            self._base_url + endpoint, params=params, json=data
+        )
+
         if response.status_code in (200, 201):
             return response_schema_cls().load(response.json())
         return self._process_error(response)
@@ -45,6 +56,7 @@ class Client:
         """Retrieve a single object from the commercetools platform"""
         data = request_schema_cls().dump(data_object)
         response = self._http_client.post(self._base_url + endpoint, json=data)
+
         if response.status_code == 200:
             return response_schema_cls().load(response.json())
         return self._process_error(response)
@@ -52,6 +64,7 @@ class Client:
     def _delete(self, endpoint, params, response_schema_cls):
         """Delete an object from the commercetools platform"""
         response = self._http_client.delete(self._base_url + endpoint, params=params)
+
         if response.status_code == 200:
             return response_schema_cls().load(response.json())
         return self._process_error(response)

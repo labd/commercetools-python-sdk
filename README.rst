@@ -1,3 +1,0 @@
-Python SDK for Commercetools
-============================
-

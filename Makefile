@@ -7,6 +7,9 @@ generate:
 test:
 	pytest tests/
 
+coverage:
+	pytest --cov=commercetools
+
 release:
 	pip install twine wheel
 	rm -rf build/* dist/*

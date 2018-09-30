@@ -16,6 +16,14 @@ def snakeit(name):
     return val
 
 
+def enum_attr(val):
+    val = val.replace("-", "_")
+    val = snakeit(val).upper()
+    if keyword.iskeyword(val):
+        val += "_"
+    return val
+
+
 def merge_imports(imports):
     importfrom_nodes = defaultdict(dict)
     import_nodes = set()
@@ -66,6 +74,6 @@ def reorder_class_definitions(definitions):
         for name in sorted(items):
             if name in nodes:
                 result.append(nodes[name])
-            else:
-                print("[MISSING NODE]", name)
+            elif not name.startswith(('enum.', 'typing.', 'marshmallow.')):
+                print("[MISSING BASE CLASS]", name)
     return result

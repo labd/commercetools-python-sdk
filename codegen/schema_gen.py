@@ -1,23 +1,24 @@
 import ast
 
+from .rammel import datatypes
 from .abstract_gen import AbstractModuleGenerator
 from .utils import merge_imports, reorder_class_definitions
+
+FIELD_TYPES = {
+    "string": "marshmallow.fields.String",
+    "object": "marshmallow.fields.Dict",
+    "number": "marshmallow.fields.Integer",
+    "integer": "marshmallow.fields.Integer",
+    "boolean": "marshmallow.fields.Bool",
+    "array": "marshmallow.fields.List",
+    "datetime": "marshmallow.fields.DateTime",
+    "date-only": "marshmallow.fields.Date",
+    "any": "marshmallow.fields.Raw",
+}
 
 
 class SchemaModuleGenerator(AbstractModuleGenerator):
     """This generator is responsible for generating the schemas.py file"""
-
-    _field_types = {
-        "string": "marshmallow.fields.String",
-        "object": "marshmallow.fields.Dict",
-        "number": "marshmallow.fields.Integer",
-        "integer": "marshmallow.fields.Integer",
-        "boolean": "marshmallow.fields.Bool",
-        "array": "marshmallow.fields.List",
-        "datetime": "marshmallow.fields.DateTime",
-        "date-only": "marshmallow.fields.Date",
-        "any": "marshmallow.fields.Dict",
-    }
 
     def __init__(self):
         self._import_nodes = []
@@ -26,6 +27,11 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         super().__init__()
 
     def get_module_node(self):
+        self.add_import_statement("re")
+        self.add_import_statement("commercetools", "helpers", "types")
+        self.add_import_statement("marshmallow")
+        self.add_import_statement("marshmallow_enum")
+
         type_nodes = reorder_class_definitions(self._type_nodes)
         import_nodes = merge_imports(self._import_nodes)
 
@@ -35,15 +41,20 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
 
     def add_type_definition(self, resource):
         """Create a class definition"""
-        if resource.name in self._field_types:
+        if resource.name in FIELD_TYPES:
             return
         if "asMap" in resource.annotations:
             return self.add_dict_field_definition(resource)
-        return self.add_resource_definition(resource)
+
+        return self.add_schema_definition(resource)
+
+    def add_schema_definition(self, resource):
+
+        node = SchemaClassGenerator(resource).build()
+        if node:
+            self._type_nodes.append(node)
 
     def add_dict_field_definition(self, resource):
-        self.add_import_statement("marshmallow")
-        self.add_import_statement("commercetools", "types")
 
         base_class = ast.Name(id="marshmallow.fields.Dict")
 
@@ -107,22 +118,29 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
 
         self._field_nodes.append(class_node)
 
-    def add_resource_definition(self, resource):
-        self.add_import_statement("marshmallow")
-        self.add_import_statement("marshmallow_enum")
-        self.add_import_statement("commercetools", "helpers", "types")
 
+class SchemaClassGenerator:
+    """Create a marshmallow schema"""
+
+    def __init__(self, resource: datatypes.DataType):
+        self.resource = resource
+        self.properties = resource.get_all_properties()
+        self.contains_regex_field = any(
+            p.name.startswith("/") for p in resource.properties
+        )
+
+    def build(self):
         # Create the base class
-        if not resource.base or resource.base.name == "object":
+        if not self.resource.base or self.resource.base.name == "object":
             base_class = ast.Attribute(value=ast.Name(id="marshmallow"), attr="Schema")
         else:
-            if resource.base.name in self._field_types:
+            if self.resource.base.name in FIELD_TYPES:
                 return
-            base_class = ast.Name(id=resource.base.name + "Schema")
+            base_class = ast.Name(id=self.resource.base.name + "Schema")
 
         # Define the base class
         class_node = ast.ClassDef(
-            name=resource.name + "Schema",
+            name=self.resource.name + "Schema",
             bases=[base_class],
             keywords=[],
             decorator_list=[],
@@ -130,7 +148,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         )
 
         # Add the field definitions
-        for prop in resource.properties:
+        for prop in self.resource.properties:
             node = self._create_schema_property(prop)
             if node:
                 class_node.body.append(node)
@@ -152,35 +170,38 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         )
 
         # Create the post_load() method
-        class_node.body.append(
-            ast.FunctionDef(
-                name="make",
-                args=ast.arguments(
-                    args=[
-                        ast.arg(arg="self", annotation=None),
-                        ast.arg(arg="data", annotation=None),
-                    ],
-                    vararg=None,
-                    kwonlyargs=[],
-                    kw_defaults=[],
-                    kwarg=None,
-                    defaults=[],
-                ),
-                body=[
-                    ast.Return(
-                        value=ast.Call(
-                            func=ast.Name(id=f"types.{resource.name}"),
-                            args=[],
-                            keywords=[ast.keyword(arg=None, value=ast.Name(id="data"))],
-                        )
-                    )
-                ],
-                decorator_list=[ast.Name(id="marshmallow.post_load")],
-                returns=None,
+        node = self._create_marshmallow_hook("post_load")
+        if self.contains_regex_field:
+            node.body.append(self._create_regex_call("_regex", "postprocess"))
+        node.body.append(
+            ast.Return(
+                value=ast.Call(
+                    func=ast.Name(id=f"types.{self.resource.name}"),
+                    args=[],
+                    keywords=[ast.keyword(arg=None, value=ast.Name(id="data"))],
+                )
             )
         )
+        class_node.body.append(node)
 
-        d_field = resource.get_discriminator_field()
+        # Create the pre_load() method
+        if self.contains_regex_field:
+            node = self._create_marshmallow_hook("pre_load")
+            node.body.append(self._create_regex_call("_regex", "preprocess"))
+            node.body.append(ast.Return(value=ast.Name(id="data")))
+            class_node.body.append(node)
+
+            node = self._create_marshmallow_hook("pre_dump")
+            node.body.append(self._create_regex_call("_regex", "preprocess"))
+            node.body.append(ast.Return(value=ast.Name(id="data")))
+            class_node.body.append(node)
+
+            node = self._create_marshmallow_hook("post_dump")
+            node.body.append(self._create_regex_call("_regex", "postprocess"))
+            node.body.append(ast.Return(value=ast.Name(id="data")))
+            class_node.body.append(node)
+
+        d_field = self.resource.get_discriminator_field()
         if d_field:
             class_node.body[-1].body.insert(
                 0,
@@ -193,21 +214,100 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
                     ]
                 ),
             )
+        return class_node
 
-        self._type_nodes.append(class_node)
+    def _create_schema_property(self, prop):
+        node = self._get_property_field(prop)
 
-    def _create_nested_field(self, type_obj):
-        return ast.Call(
-            func=ast.Name(id="marshmallow.fields.Nested"),
-            args=[],
-            keywords=[
-                ast.keyword(
-                    arg="nested",
-                    value=ast.Str(s=f"commercetools.schemas.{type_obj.name}Schema"),
-                ),
-                ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
-            ],
+        if prop.optional:
+            node.keywords.append(
+                ast.keyword(arg="missing", value=ast.NameConstant(value=None))
+            )
+
+        if prop.many:
+            node.keywords.append(
+                ast.keyword(arg="many", value=ast.NameConstant(value=True))
+            )
+
+        if prop.attribute_name != prop.name and not prop.name.startswith("/"):
+            node.keywords.append(
+                ast.keyword(arg="data_key", value=ast.Str(s=prop.name))
+            )
+
+        if prop.name.startswith("/"):
+            assert len(self.properties) == 1
+            node = ast.Call(
+                func=ast.Name(id="helpers.RegexField"),
+                args=[],
+                keywords=[
+                    ast.keyword(
+                        arg="pattern",
+                        value=ast.Call(
+                            func=ast.Name(id="re.compile"),
+                            args=[ast.Str(s=prop.name[1:-1])],
+                            keywords=[],
+                        ),
+                    ),
+                    ast.keyword(arg="type", value=node),
+                ],
+            )
+
+        node = ast.Assign(
+            targets=[ast.Name(id=prop.attribute_name or "_regex")], value=node, simple=1
         )
+        return node
+
+    def _get_property_field(self, prop):
+        if prop.type is None:
+            return ast.Call(
+                func=ast.Name(id=FIELD_TYPES["object"]), args=[], keywords=[]
+            )
+        elif prop.type.enum:
+            return ast.Call(
+                func=ast.Name(id="marshmallow_enum.EnumField"),
+                args=[ast.Attribute(value=ast.Name(id="types"), attr=prop.type.name)],
+                keywords=[ast.keyword(arg="by_value", value=ast.NameConstant(True))],
+            )
+
+        elif prop.type.discriminator:
+            return self._create_discriminator_field(prop.type)
+
+        elif prop.type.name.startswith("/"):
+            return ast.Call(
+                func=ast.Name(id=prop.type.name + "Field"), args=[], keywords=[]
+            )
+
+        elif prop.type.name in FIELD_TYPES:
+            node = ast.Call(
+                func=ast.Name(id=FIELD_TYPES[prop.type.name]), args=[], keywords=[]
+            )
+            if prop.type.name == "array":
+                assert prop.items, f"The array property {prop.name} has no items"
+                assert prop.items_types
+
+                # TODO: We for now assume that the items are all subclasses of
+                # the first item. We shouldn't do that :-)
+                if prop.items_types[0].discriminator:
+                    node.args.append(
+                        self._create_discriminator_field(prop.items_types[0])
+                    )
+                else:
+                    node.args.append(self._create_nested_field(prop.items_types[0]))
+            return node
+
+        # Dict Field
+        elif "asMap" in prop.type.annotations:
+            return ast.Call(
+                func=ast.Name(id=prop.type.name + "Field"), args=[], keywords=[]
+            )
+
+        elif prop.type.base and prop.type.base.name == "string":
+            return ast.Call(
+                func=ast.Name(id="marshmallow.fields.String"), args=[], keywords=[]
+            )
+
+        else:
+            return self._create_nested_field(prop.type)
 
     def _create_discriminator_field(self, type_obj):
         items = {}
@@ -233,67 +333,50 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
             ],
         )
 
-    def _create_schema_property(self, prop):
-        if not prop.name.isidentifier():
-            print("Skipping:", prop)
-            return None
-
-        args = []
-        kwargs = []
-
-        if prop.type is None:
-            field_type_name = self._field_types["object"]
-
-        elif prop.type.enum:
-            field_type_name = "marshmallow_enum.EnumField"
-            args.append(ast.Attribute(value=ast.Name(id="types"), attr=prop.type.name))
-            kwargs.append(ast.keyword(arg="by_value", value=ast.NameConstant(True)))
-
-        elif prop.type.discriminator:
-            func = self._create_discriminator_field(prop.type)
-            field_type_name = func.func.id
-            kwargs = func.keywords
-
-        elif prop.type.name in self._field_types:
-            field_type_name = self._field_types[prop.type.name]
-            if prop.type.name == "array":
-                assert prop.items, f"The array property {prop.name} has no items"
-                assert prop.items_types
-
-                # TODO: We for now assume that the items are all subclasses of
-                # the first item. We shouldn't do that :-)
-                if prop.items_types[0].discriminator:
-                    args.append(self._create_discriminator_field(prop.items_types[0]))
-                else:
-                    args.append(self._create_nested_field(prop.items_types[0]))
-
-        # Dict Field
-        elif "asMap" in prop.type.annotations:
-            field_type_name = prop.type.name + "Field"
-
-        elif prop.type.base and prop.type.base.name == "string":
-            field_type_name = "marshmallow.fields.String"
-
-        else:
-            func = self._create_nested_field(prop.type)
-            field_type_name = func.func.id
-            kwargs = func.keywords
-
-        if prop.optional:
-            kwargs.append(
-                ast.keyword(arg="missing", value=ast.NameConstant(value=None))
-            )
-
-        if prop.many:
-            kwargs.append(ast.keyword(arg="many", value=ast.NameConstant(value=True)))
-
-        field_type = ast.Name(id=field_type_name)
-        if prop.attribute_name != prop.name:
-            kwargs.append(ast.keyword(arg="data_key", value=ast.Str(s=prop.name)))
-
-        node = ast.Assign(
-            targets=[ast.Name(id=prop.attribute_name, ctx=ast.Store())],
-            value=ast.Call(func=field_type, args=args, keywords=kwargs),
-            simple=1,
+    def _create_nested_field(self, type_obj):
+        return ast.Call(
+            func=ast.Name(id="marshmallow.fields.Nested"),
+            args=[],
+            keywords=[
+                ast.keyword(
+                    arg="nested",
+                    value=ast.Str(s=f"commercetools.schemas.{type_obj.name}Schema"),
+                ),
+                ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
+            ],
         )
-        return node
+
+    def _create_regex_call(self, field_name, method_name):
+        return ast.Assign(
+            targets=[ast.Name(id="data")],
+            value=ast.Call(
+                func=ast.Attribute(
+                    value=ast.Subscript(
+                        value=ast.Attribute(value=ast.Name(id="self"), attr="fields"),
+                        slice=ast.Index(value=ast.Str(s=field_name)),
+                    ),
+                    attr=method_name,
+                ),
+                args=[ast.Name(id="data")],
+                keywords=[],
+            ),
+        )
+
+    def _create_marshmallow_hook(self, name):
+        return ast.FunctionDef(
+            name=name,
+            args=ast.arguments(
+                args=[
+                    ast.arg(arg="self", annotation=None),
+                    ast.arg(arg="data", annotation=None),
+                ],
+                vararg=None,
+                kwonlyargs=[],
+                kw_defaults=[],
+                kwarg=None,
+                defaults=[],
+            ),
+            body=[],
+            decorator_list=[ast.Name(id=f"marshmallow.{name}")],
+            returns=None,
+        )

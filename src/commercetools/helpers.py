@@ -1,8 +1,41 @@
-from marshmallow import class_registry
+from marshmallow import class_registry, missing
 from marshmallow.fields import Field
 from marshmallow.utils import RAISE, is_collection
 from marshmallow.utils import missing as missing_
 from marshmallow.exceptions import ValidationError, StringNotCollectionError
+
+
+class RegexField(Field):
+    def _serialize(self, nested_obj, attr, obj):
+        result = {}
+        data = obj[attr]
+
+        for key, subvalue in data.items():
+            result[key] = self.metadata["type"].serialize(
+                key, data, lambda obj, key, default: obj.get(key) or missing
+            )
+            assert result[key]
+        return result
+
+    def _deserialize(self, value, attr, data):
+        result = {}
+        for key, subvalue in value.items():
+            result[key] = self.metadata["type"].deserialize(subvalue)
+        return result
+
+    def postprocess(self, data):
+        extra_data = data.pop(self.name)
+        data.update(extra_data)
+        return data
+
+    def preprocess(self, data):
+        new = {self.name: {}}
+        for k, v in data.items():
+            if self.metadata["pattern"].match(k):
+                new[self.name][k] = v
+            else:
+                new[k] = v
+        return new
 
 
 class Discriminator(Field):
@@ -54,8 +87,9 @@ class Discriminator(Field):
         ]
 
     def _serialize(self, nested_obj, attr, obj):
+
         discriminator_value = getattr(nested_obj, self.discriminator_field)
-        schema_name = self.discriminator_schemas[discriminator_value]
+        schema_name = self.discriminator_schemas[discriminator_value.value]
         schema = self.get_schema(schema_name)
 
         if nested_obj is None:

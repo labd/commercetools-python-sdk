@@ -7,6 +7,9 @@ generate:
 test:
 	pytest tests/
 
+mypy:
+	 mypy --config-file=mypy.ini src/commercetools
+
 coverage:
 	pytest --cov=commercetools
 

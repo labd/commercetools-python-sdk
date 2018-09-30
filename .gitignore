@@ -2,6 +2,7 @@
 __pycache__/
 .cache/
 *.egg-info
+.mypy_cache/
 
 # Dist files
 /build/

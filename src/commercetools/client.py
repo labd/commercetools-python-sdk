@@ -6,6 +6,11 @@ from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 
 from commercetools import schemas
+from commercetools.services.carts import CartService
+from commercetools.services.categories import CategoriesService
+from commercetools.services.orders import OrderService
+from commercetools.services.payments import PaymentService
+from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.products import ProductService
 
 
@@ -76,5 +81,25 @@ class Client:
         raise CommercetoolsError(obj.message, obj)
 
     @property
+    def categories(self) -> CategoriesService:
+        return CategoriesService(self)
+
+    @property
     def products(self) -> ProductService:
         return ProductService(self)
+
+    @property
+    def carts(self) -> CartService:
+        return CartService(self)
+
+    @property
+    def orders(self) -> OrderService:
+        return OrderService(self)
+
+    @property
+    def payments(self) -> PaymentService:
+        return PaymentService(self)
+
+    @property
+    def product_projections(self) -> ProductProjectionService:
+        return ProductProjectionService(self)

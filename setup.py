@@ -1,7 +1,6 @@
 import re
-import sys
 
-from setuptools import find_packages, setup
+from setuptools import setup
 
 install_requires = [
     "requests>=2.7.0",

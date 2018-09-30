@@ -1,4 +1,5 @@
 import typing
+
 import requests
 from marshmallow.base import SchemaABC
 from oauthlib.oauth2 import BackendApplicationClient

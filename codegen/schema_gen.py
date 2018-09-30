@@ -1,7 +1,7 @@
 import ast
 
-from .rammel import datatypes
 from .abstract_gen import AbstractModuleGenerator
+from .rammel import datatypes
 from .utils import merge_imports, reorder_class_definitions
 
 FIELD_TYPES = {

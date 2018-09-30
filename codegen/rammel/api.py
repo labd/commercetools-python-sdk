@@ -1,5 +1,5 @@
-from .yaml import read_raml_file
 from .gen import TypeProcessor
+from .yaml import read_raml_file
 
 
 def parse_raml_file(filename):

@@ -4,7 +4,7 @@ from uuid import UUID
 
 from marshmallow import fields
 
-from commercetools import schemas, types, abstract
+from commercetools import abstract, schemas, types
 
 __all__ = ["ProductService"]
 

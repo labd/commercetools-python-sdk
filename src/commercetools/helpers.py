@@ -1,8 +1,8 @@
 from marshmallow import class_registry, missing
+from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
-from marshmallow.utils import RAISE, is_collection
 from marshmallow.utils import missing as missing_
-from marshmallow.exceptions import ValidationError, StringNotCollectionError
+from marshmallow.utils import RAISE, is_collection
 
 
 class RegexField(Field):

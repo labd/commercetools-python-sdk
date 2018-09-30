@@ -1,5 +1,6 @@
 from commercetools import schemas, types
 
+
 data = """
 {
   "id": "00633d11-c5bb-434e-b132-73f7e130b4e3",
@@ -98,3 +99,29 @@ def test_product_deserialize():
     obj = schemas.ProductSchema().loads(data)
     assert isinstance(obj, types.Product)
     assert obj.master_data.staged.master_variant.prices[0].value.cent_amount == 10000
+
+
+def test_product_query_deserialize():
+    with open("tests/test_products_query.json", "r") as fh:
+        data = fh.read()
+    result = schemas.ProductPagedQueryResponseSchema().loads(data)
+
+    attrs = result.results[5].master_data.staged.master_variant.attributes
+    expected = [
+        types.Attribute(
+            name="bundel",
+            value=[{"id": "00633d11-c5bb-434e-b132-73f7e130b4e3", "typeId": "product"}],
+        )
+    ]
+    assert expected == attrs
+
+
+def test_product_search_deserialize():
+    with open("tests/product-projections-search.example.json", "r") as fh:
+        data = fh.read()
+
+    result_1 = schemas.ProductProjectionPagedSearchResponseSchema().loads(data)
+    result_2 = schemas.ProductProjectionPagedSearchResponseSchema().dumps(result_1)
+    result_3 = schemas.ProductProjectionPagedSearchResponseSchema().loads(result_2)
+    assert isinstance(result_3, types.ProductProjectionPagedSearchResponse)
+    assert result_3 == result_1

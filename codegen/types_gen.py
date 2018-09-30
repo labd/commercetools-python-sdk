@@ -2,7 +2,7 @@ import ast
 
 from .abstract_gen import AbstractModuleGenerator
 from .rammel import datatypes
-from .utils import merge_imports, reorder_class_definitions, enum_attr
+from .utils import enum_attr, merge_imports, reorder_class_definitions
 
 BUILTIN_TYPES = {
     "string": ast.Name(id="str"),

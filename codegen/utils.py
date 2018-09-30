@@ -1,8 +1,9 @@
-import keyword
-import astunparse
 import ast
+import keyword
 import re
 from collections import defaultdict
+
+import astunparse
 
 
 def snakeit(name):

@@ -10,7 +10,7 @@ from commercetools.services.products import ProductService
 
 
 class CommercetoolsError(Exception):
-    def __init__(self, message, response):
+    def __init__(self, message, response) -> None:
         super().__init__(message)
         self.response = response
 

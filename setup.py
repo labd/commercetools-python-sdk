@@ -12,7 +12,7 @@ install_requires = [
     "marshmallow-enum==1.4.1",
 ]
 
-codegen_requires = ["PyYAML==3.13", "astunparse==1.5.0", "black==18.9b0"]
+codegen_requires = ["PyYAML==3.13", "astunparse==1.5.0", "black==18.9b0", "isort"]
 
 docs_require = ["sphinx>=1.4.0"]
 

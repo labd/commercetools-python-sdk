@@ -3,6 +3,7 @@ from pathlib import Path
 
 import astunparse
 import black
+from isort import SortImports
 from codegen.rammel import parse_raml_file
 from codegen.schema_gen import SchemaModuleGenerator
 from codegen.types_gen import TypesModuleGenerator
@@ -52,6 +53,8 @@ def write_module(filename, ast):
 
 
 def reformat_code(filename):
+    SortImports(filename)
+
     src = Path(filename)
     report = black.Report()
     black.reformat_one(

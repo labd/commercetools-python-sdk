@@ -58,12 +58,12 @@ class ProductService:
                 "price_channel": price_channel,
             }
         )
-        return self._client._query(
+        return self._client._get(
             "products", params, schemas.ProductPagedQueryResponseSchema
         )
 
     def create(self, draft: types.ProductDraft) -> types.Product:
-        return self._client._create(
+        return self._client._post(
             "products", [], draft, schemas.ProductUpdateSchema, schemas.ProductSchema
         )
 
@@ -71,7 +71,7 @@ class ProductService:
         self, id: str, version: int, actions: List[types.ProductUpdateAction]
     ) -> types.Product:
         update_action = types.ProductUpdate(version=version, actions=actions)
-        return self._client._update(
+        return self._client._post(
             f"products/{id}",
             [],
             update_action,
@@ -83,7 +83,7 @@ class ProductService:
         self, key: str, version: int, actions: List[types.ProductUpdateAction]
     ) -> types.Product:
         update_action = types.ProductUpdate(version=version, actions=actions)
-        return self._client._update(
+        return self._client._post(
             f"products/key={key}",
             [],
             update_action,

@@ -9,6 +9,7 @@ install_requires = [
     "attrs>=18.2.0",
     "marshmallow==3.0.0b16",
     "marshmallow-enum==1.4.1",
+    "wrapt==1.10.0",
 ]
 
 codegen_requires = ["PyYAML==3.13", "astunparse==1.5.0", "black==18.9b0", "isort"]
@@ -28,6 +29,7 @@ tests_require = [
     "flake8-blind-except==0.1.1",
     "flake8-debugger==1.4.0",
     "flake8-imports==0.1.1",
+    "mypy==0.630",
 ]
 
 
@@ -62,7 +64,6 @@ setup(
         "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
     ],

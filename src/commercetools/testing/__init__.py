@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import wrapt
 import requests_mock
 
@@ -17,13 +19,16 @@ class BackendRepository:
             backend.register(adapter)
 
 
-@wrapt.decorator
-def mock_commercetools(wrapped, instance, args, kwargs):
-    def callback(request, context):
-        print("X")
-        pass
-
+@contextmanager
+def backend_mocker(*args, **kwargs):
     with requests_mock.Mocker() as m:
         repo = BackendRepository()
         repo.register(m)
+
+        yield m
+
+
+@wrapt.decorator
+def mock_commercetools(wrapped, instance, args, kwargs):
+    with backend_mocker():
         return wrapped(*args, **kwargs)

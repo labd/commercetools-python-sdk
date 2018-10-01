@@ -1,4 +1,5 @@
 import ast
+import typing
 
 from .abstract_gen import AbstractModuleGenerator
 from .rammel import datatypes
@@ -21,9 +22,9 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
     """This generator is responsible for generating the schemas.py file"""
 
     def __init__(self):
-        self._import_nodes = []
-        self._field_nodes = []
-        self._type_nodes = []
+        self._import_nodes: typing.List[ast.AST] = []
+        self._field_nodes: typing.List[ast.AST] = []
+        self._type_nodes: typing.List[ast.AST] = []
         super().__init__()
 
     def get_module_node(self):
@@ -122,20 +123,22 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
 class SchemaClassGenerator:
     """Create a marshmallow schema"""
 
-    def __init__(self, resource: datatypes.DataType):
+    def __init__(self, resource: datatypes.DataType) -> None:
         self.resource = resource
         self.properties = resource.get_all_properties()
         self.contains_regex_field = any(
             p.name.startswith("/") for p in resource.properties
         )
 
-    def build(self):
+    def build(self) -> typing.Optional[ast.ClassDef]:
+        base_class: typing.Union[ast.Attribute, ast.Name]
+
         # Create the base class
         if not self.resource.base or self.resource.base.name == "object":
             base_class = ast.Attribute(value=ast.Name(id="marshmallow"), attr="Schema")
         else:
             if self.resource.base.name in FIELD_TYPES:
-                return
+                return None
             base_class = ast.Name(id=self.resource.base.name + "Schema")
 
         # Define the base class

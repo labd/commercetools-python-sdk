@@ -1,3 +1,5 @@
+import typing
+
 from marshmallow import class_registry, missing
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
@@ -29,7 +31,7 @@ class RegexField(Field):
         return data
 
     def preprocess(self, data):
-        new = {self.name: {}}
+        new: typing.Dict[str, typing.Any] = {self.name: {}}
         for k, v in data.items():
             if self.metadata["pattern"].match(k):
                 new[self.name][k] = v

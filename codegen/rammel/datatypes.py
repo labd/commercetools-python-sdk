@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import attr
 
@@ -8,13 +8,13 @@ from .utils import snakeit
 @attr.s(auto_attribs=True)
 class DataType:
     name: str
-    type: str
-    properties: List[object] = attr.Factory(lambda: [])
+    type: Optional[str]
+    properties: List['Property'] = attr.Factory(lambda: [])
     annotations: Dict[str, object] = attr.Factory(lambda: {})
     enum: List[str] = attr.Factory(lambda: [])
     base: "DataType" = attr.ib(repr=False, default=None)
-    discriminator: str = None
-    discriminator_value: str = None
+    discriminator: Optional[str] = None
+    discriminator_value: Optional[str] = None
     children: List["DataType"] = attr.ib(repr=False, default=attr.Factory(lambda: []))
 
     @property
@@ -37,7 +37,7 @@ class DataType:
             cur = cur.base
         return bases
 
-    def get_all_properties(self):
+    def get_all_properties(self) -> List['Property']:
         """Return all the properties for this datatype including parent types.
 
         Note that we need to remove duplicate properties in case a sub resoruce

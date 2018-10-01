@@ -1,4 +1,5 @@
 import ast
+import typing
 
 from .abstract_gen import AbstractModuleGenerator
 from .rammel import datatypes
@@ -19,8 +20,8 @@ BUILTIN_TYPES = {
 
 class TypesModuleGenerator(AbstractModuleGenerator):
     def __init__(self):
-        self._import_nodes = []
-        self._type_nodes = []
+        self._import_nodes: typing.List[ast.AST] = []
+        self._type_nodes: typing.List[ast.AST] = []
         super().__init__()
 
     def get_module_node(self):
@@ -62,7 +63,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         # we should do something smart with this (combination of
         # dict/dataclass)?
         properties = resource.get_all_properties()
-        if len(properties) == 1 and properties[0].name.startswith('/'):
+        if len(properties) == 1 and properties[0].name.startswith("/"):
             return self.create_dict(resource)
 
         return self.create_dataclass(resource)
@@ -82,10 +83,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         bases = [
             ast.Subscript(
                 value=ast.Name(id="typing.Dict"),
-                slice=ast.Index(value=ast.Tuple(elts=[
-                    ast.Name(id="str"),
-                    value_node
-                ]))
+                slice=ast.Index(value=ast.Tuple(elts=[ast.Name(id="str"), value_node])),
             )
         ]
         class_node = ast.ClassDef(
@@ -200,7 +198,9 @@ class ResourceClassGenerator:
     def _create_property(self, prop: datatypes.Property):
         attribute_name = prop.attribute_name
         if not attribute_name:
-            print(f"[ERROR]: '{self.resource.name}.{prop.name}' - No valid attribute_name")
+            print(
+                f"[ERROR]: '{self.resource.name}.{prop.name}' - No valid attribute_name"
+            )
             assert len(self.properties) == 1, self.properties
             return None
 

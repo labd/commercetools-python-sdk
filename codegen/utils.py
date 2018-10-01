@@ -1,14 +1,15 @@
 import ast
 import keyword
 import re
+import typing
 from collections import defaultdict
 
 import astunparse
 
 
-def snakeit(name):
+def snakeit(name) -> typing.Optional[str]:
     if not name:
-        return
+        return None
     # https://stackoverflow.com/questions/1175208/
     s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
     val = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
@@ -17,16 +18,18 @@ def snakeit(name):
     return val
 
 
-def enum_attr(val):
+def enum_attr(val) -> str:
     val = val.replace("-", "_")
-    val = snakeit(val).upper()
-    if keyword.iskeyword(val):
-        val += "_"
+    val = snakeit(val)
+    if val:
+        val = val.upper()
+        if keyword.iskeyword(val):
+            val += "_"
     return val
 
 
-def merge_imports(imports):
-    importfrom_nodes = defaultdict(dict)
+def merge_imports(imports) -> typing.List[ast.AST]:
+    importfrom_nodes: typing.Dict[str, typing.Dict[str, ast.AST]] = defaultdict(dict)
     import_nodes = set()
     for node in imports:
         if isinstance(node, ast.ImportFrom):
@@ -75,6 +78,6 @@ def reorder_class_definitions(definitions):
         for name in sorted(items):
             if name in nodes:
                 result.append(nodes[name])
-            elif not name.startswith(('enum.', 'typing.', 'marshmallow.')):
+            elif not name.startswith(("enum.", "typing.", "marshmallow.")):
                 print("[MISSING BASE CLASS]", name)
     return result

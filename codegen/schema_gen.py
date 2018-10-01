@@ -173,10 +173,10 @@ class SchemaClassGenerator:
         )
 
         # Create the post_load() method
-        node = self._create_marshmallow_hook("post_load")
+        post_load_node = self._create_marshmallow_hook("post_load")
         if self.contains_regex_field:
-            node.body.append(self._create_regex_call("_regex", "postprocess"))
-        node.body.append(
+            post_load_node.body.append(self._create_regex_call("_regex", "postprocess"))
+        post_load_node.body.append(
             ast.Return(
                 value=ast.Call(
                     func=ast.Name(id=f"types.{self.resource.name}"),
@@ -185,7 +185,7 @@ class SchemaClassGenerator:
                 )
             )
         )
-        class_node.body.append(node)
+        class_node.body.append(post_load_node)
 
         # Create the pre_load() method
         if self.contains_regex_field:
@@ -206,7 +206,7 @@ class SchemaClassGenerator:
 
         d_field = self.resource.get_discriminator_field()
         if d_field:
-            class_node.body[-1].body.insert(
+            post_load_node.body.insert(
                 0,
                 ast.Delete(
                     targets=[
@@ -243,6 +243,9 @@ class SchemaClassGenerator:
                 func=ast.Name(id="helpers.RegexField"),
                 args=[],
                 keywords=[
+                    ast.keyword(
+                        arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")
+                    ),
                     ast.keyword(
                         arg="pattern",
                         value=ast.Call(
@@ -333,6 +336,7 @@ class SchemaClassGenerator:
                         values=[ast.Str(s=v) for v in items.values()],
                     ),
                 ),
+                ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
             ],
         )
 

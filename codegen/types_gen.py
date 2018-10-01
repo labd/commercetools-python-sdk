@@ -89,8 +89,29 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         class_node = ast.ClassDef(
             name=resource.name, bases=bases, keywords=[], decorator_list=[], body=[]
         )
-        if not class_node.body:
-            class_node.body.append(ast.Pass())
+
+        node = ast.FunctionDef(
+            name="__repr__",
+            args=ast.arguments(
+                args=[ast.arg(arg="self", annotation=None)],
+                vararg=None,
+                kwonlyargs=[],
+                kw_defaults=[],
+                kwarg=None,
+                defaults=[],
+            ),
+            body=[],
+            decorator_list=[],
+            returns=ast.Name(id="str"),
+        )
+
+        # Cheating a bit here, but using ast nodes for this results in a lot of
+        # code.
+        repr_statement = ast.Return(
+            value=ast.Name(id="'" + resource.name + "(%s)' % (', '.join(f'{k}={v!r}' for k, v in self.items()))"))
+
+        node.body.append(repr_statement)
+        class_node.body.append(node)
         return class_node
 
     def create_enum(self, resource):

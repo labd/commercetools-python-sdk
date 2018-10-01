@@ -107,7 +107,7 @@ class Discriminator(Field):
             raise ValidationError(exc.messages, data=obj, valid_data=exc.valid_data)
 
     def _test_collection(self, value):
-        if self.many and not utils.is_collection(value):
+        if self.many and not is_collection(value):
             self.fail("type", input=value, type=value.__class__.__name__)
 
     def _load(self, value, data):

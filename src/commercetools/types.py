@@ -5879,7 +5879,10 @@ class CategoryCreatedMessage(Message):
 
 
 class CategoryOrderHints(typing.Dict[(str, str)]):
-    pass
+    def __repr__(self) -> str:
+        return "CategoryOrderHints(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -7718,7 +7721,8 @@ class ExtensionUpdateAction(UpdateAction):
 
 
 class FacetResults(typing.Dict[(str, "FacetResult")]):
-    pass
+    def __repr__(self) -> str:
+        return "FacetResults(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
 
 
 class FacetTypes(enum.Enum):
@@ -7728,7 +7732,8 @@ class FacetTypes(enum.Enum):
 
 
 class FieldContainer(typing.Dict[(str, typing.Any)]):
-    pass
+    def __repr__(self) -> str:
+        return "FieldContainer(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -8162,7 +8167,10 @@ class LineItemStateTransitionMessage(Message):
 
 
 class LocalizedString(typing.Dict[(str, str)]):
-    pass
+    def __repr__(self) -> str:
+        return "LocalizedString(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -10757,7 +10765,10 @@ class ProductUpdateAction(UpdateAction):
 class ProductVariantChannelAvailabilityMap(
     typing.Dict[(str, "ProductVariantChannelAvailability")]
 ):
-    pass
+    def __repr__(self) -> str:
+        return "ProductVariantChannelAvailabilityMap(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -11397,7 +11408,8 @@ class ScoreShippingRateInputDraft(ShippingRateInputDraft):
 
 
 class SearchKeywords(typing.Dict[(str, "SearchKeyword")]):
-    pass
+    def __repr__(self) -> str:
+        return "SearchKeywords(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
 
 
 class SelectionMode(enum.Enum):
@@ -11929,7 +11941,10 @@ class SubscriptionUpdateAction(UpdateAction):
 
 
 class SuggestionResult(typing.Dict[(str, list)]):
-    pass
+    def __repr__(self) -> str:
+        return "SuggestionResult(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
 
 
 class TaxCalculationMode(enum.Enum):

@@ -162,6 +162,7 @@ class AttributeDefinitionDraftSchema(marshmallow.Schema):
             "text": "commercetools.schemas.AttributeTextTypeSchema",
             "time": "commercetools.schemas.AttributeTimeTypeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     name = marshmallow.fields.String()
     label = LocalizedStringField()
@@ -204,6 +205,7 @@ class AttributeDefinitionSchema(marshmallow.Schema):
             "text": "commercetools.schemas.AttributeTextTypeSchema",
             "time": "commercetools.schemas.AttributeTimeTypeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     name = marshmallow.fields.String()
     label = LocalizedStringField()
@@ -283,6 +285,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
             "giftLineItem": "commercetools.schemas.CartDiscountValueGiftLineItemSchema",
             "relative": "commercetools.schemas.CartDiscountValueRelativeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
     target = helpers.Discriminator(
@@ -294,6 +297,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
             "multiBuyCustomLineItems": "commercetools.schemas.MultiBuyCustomLineItemsTargetSchema",
             "multiBuyLineItems": "commercetools.schemas.MultiBuyLineItemsTargetSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
     )
     sort_order = marshmallow.fields.String(data_key="sortOrder")
@@ -423,6 +427,7 @@ class CartDraftSchema(marshmallow.Schema):
             "Classification": "commercetools.schemas.ClassificationShippingRateInputDraftSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputDraftSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="shippingRateInput",
     )
@@ -621,6 +626,7 @@ class CustomLineItemSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedItemPriceSchema",
@@ -634,6 +640,7 @@ class CustomLineItemSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="totalPrice",
     )
     slug = marshmallow.fields.String()
@@ -1057,6 +1064,7 @@ class DiscountedLineItemPriceSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     included_discounts = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPortionSchema",
@@ -1133,6 +1141,7 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "RequiredField": "commercetools.schemas.RequiredFieldErrorSchema",
                 "ResourceNotFound": "commercetools.schemas.ResourceNotFoundErrorSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         ),
         missing=None,
     )
@@ -1165,6 +1174,7 @@ class ExtensionDraftSchema(marshmallow.Schema):
             "AWSLambda": "commercetools.schemas.ExtensionAWSLambdaDestinationSchema",
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     triggers = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExtensionTriggerSchema",
@@ -1219,6 +1229,7 @@ class ExtensionInputSchema(marshmallow.Schema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -1351,6 +1362,7 @@ class FacetResultTermSchema(marshmallow.Schema):
 
 class FacetResultsSchema(marshmallow.Schema):
     _regex = helpers.RegexField(
+        unknown=marshmallow.EXCLUDE,
         pattern=re.compile("^[a-z].*$"),
         type=helpers.Discriminator(
             discriminator_field="type",
@@ -1359,6 +1371,7 @@ class FacetResultsSchema(marshmallow.Schema):
                 "range": "commercetools.schemas.RangeFacetResultSchema",
                 "terms": "commercetools.schemas.TermFacetResultSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         ),
     )
 
@@ -1785,6 +1798,7 @@ class MessageSchema(marshmallow.Schema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     resource_version = marshmallow.fields.Integer(data_key="resourceVersion")
     type = marshmallow.fields.String()
@@ -2477,6 +2491,7 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
             "external": "commercetools.schemas.ProductDiscountValueExternalSchema",
             "relative": "commercetools.schemas.ProductDiscountValueRelativeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     predicate = marshmallow.fields.String()
     sort_order = marshmallow.fields.String(data_key="sortOrder")
@@ -2625,6 +2640,7 @@ class ProductVariantAvailabilitySchema(marshmallow.Schema):
 
 class ProductVariantChannelAvailabilityMapSchema(marshmallow.Schema):
     _regex = helpers.RegexField(
+        unknown=marshmallow.EXCLUDE,
         pattern=re.compile(""),
         type=marshmallow.fields.Nested(
             nested="commercetools.schemas.ProductVariantChannelAvailabilitySchema",
@@ -2818,6 +2834,7 @@ class ProjectSchema(marshmallow.Schema):
             "CartScore": "commercetools.schemas.CartScoreTypeSchema",
             "CartValue": "commercetools.schemas.CartValueTypeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="shippingRateInputType",
     )
@@ -2856,6 +2873,7 @@ class ReplicaCartDraftSchema(marshmallow.Schema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -3014,6 +3032,7 @@ class ScopedPriceSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     current_value = helpers.Discriminator(
         discriminator_field="type",
@@ -3021,6 +3040,7 @@ class ScopedPriceSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="currentValue",
     )
     country = marshmallow.fields.String(missing=None)
@@ -3064,6 +3084,7 @@ class SearchKeywordSchema(marshmallow.Schema):
             "custom": "commercetools.schemas.CustomTokenizerSchema",
             "whitespace": "commercetools.schemas.WhitespaceTokenizerSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="suggestTokenizer",
     )
@@ -3078,6 +3099,7 @@ class SearchKeywordSchema(marshmallow.Schema):
 
 class SearchKeywordsSchema(marshmallow.Schema):
     _regex = helpers.RegexField(
+        unknown=marshmallow.EXCLUDE,
         pattern=re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
         type=marshmallow.fields.Nested(
             nested="commercetools.schemas.SearchKeywordSchema",
@@ -3179,6 +3201,7 @@ class ShippingInfoSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateSchema",
@@ -3276,6 +3299,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
             "CartScore": "commercetools.schemas.CartScoreTierSchema",
             "CartValue": "commercetools.schemas.CartValueTierSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         many=True,
     )
@@ -3343,6 +3367,7 @@ class ShippingRateSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     free_above = helpers.Discriminator(
         discriminator_field="type",
@@ -3350,6 +3375,7 @@ class ShippingRateSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="freeAbove",
     )
@@ -3361,6 +3387,7 @@ class ShippingRateSchema(marshmallow.Schema):
             "CartScore": "commercetools.schemas.CartScoreTierSchema",
             "CartValue": "commercetools.schemas.CartValueTierSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         many=True,
     )
 
@@ -3531,6 +3558,7 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -3559,6 +3587,7 @@ class SubscriptionDraftSchema(marshmallow.Schema):
             "SNS": "commercetools.schemas.SnsDestinationSchema",
             "SQS": "commercetools.schemas.SqsDestinationSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     key = marshmallow.fields.String(missing=None)
     messages = marshmallow.fields.Nested(
@@ -3590,6 +3619,7 @@ class SuggestTokenizerSchema(marshmallow.Schema):
 
 class SuggestionResultSchema(marshmallow.Schema):
     _regex = helpers.RegexField(
+        unknown=marshmallow.EXCLUDE,
         pattern=re.compile("searchKeywords.[a-z]{2}(-[A-Z]{2})?"),
         type=marshmallow.fields.List(
             marshmallow.fields.Nested(
@@ -3755,6 +3785,7 @@ class TaxedItemPriceSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="totalNet",
     )
     total_gross = helpers.Discriminator(
@@ -3763,6 +3794,7 @@ class TaxedItemPriceSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="totalGross",
     )
 
@@ -3885,6 +3917,7 @@ class TransactionSchema(marshmallow.Schema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     interaction_id = marshmallow.fields.String(missing=None, data_key="interactionId")
     state = marshmallow_enum.EnumField(
@@ -4176,6 +4209,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
             "text": "commercetools.schemas.AttributeTextTypeSchema",
             "time": "commercetools.schemas.AttributeTimeTypeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="elementType",
     )
 
@@ -4315,6 +4349,7 @@ class CartDiscountSchema(ResourceSchema):
             "giftLineItem": "commercetools.schemas.CartDiscountValueGiftLineItemSchema",
             "relative": "commercetools.schemas.CartDiscountValueRelativeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
     target = helpers.Discriminator(
@@ -4326,6 +4361,7 @@ class CartDiscountSchema(ResourceSchema):
             "multiBuyCustomLineItems": "commercetools.schemas.MultiBuyCustomLineItemsTargetSchema",
             "multiBuyLineItems": "commercetools.schemas.MultiBuyLineItemsTargetSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
     )
     sort_order = marshmallow.fields.String(data_key="sortOrder")
@@ -4358,6 +4394,7 @@ class CartDiscountSchema(ResourceSchema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         many=True,
     )
     stacking_mode = marshmallow_enum.EnumField(
@@ -4417,6 +4454,7 @@ class CartDiscountUpdateSchema(UpdateSchema):
                 "setValidFromAndUntil": "commercetools.schemas.CartDiscountSetValidFromAndUntilActionSchema",
                 "setValidUntil": "commercetools.schemas.CartDiscountSetValidUntilActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -4521,6 +4559,7 @@ class CartSchema(ResourceSchema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
@@ -4604,6 +4643,7 @@ class CartSchema(ResourceSchema):
             "Classification": "commercetools.schemas.ClassificationShippingRateInputSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="shippingRateInput",
     )
@@ -4723,6 +4763,7 @@ class CartUpdateSchema(UpdateSchema):
                 "setShippingRateInput": "commercetools.schemas.CartSetShippingRateInputActionSchema",
                 "updateItemShippingAddress": "commercetools.schemas.CartUpdateItemShippingAddressActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -4879,6 +4920,7 @@ class CategoryUpdateSchema(UpdateSchema):
                 "setMetaKeywords": "commercetools.schemas.CategorySetMetaKeywordsActionSchema",
                 "setMetaTitle": "commercetools.schemas.CategorySetMetaTitleActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -4967,6 +5009,7 @@ class ChannelUpdateSchema(UpdateSchema):
                 "setGeoLocation": "commercetools.schemas.ChannelSetGeoLocationActionSchema",
                 "setRoles": "commercetools.schemas.ChannelSetRolesActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -5140,6 +5183,7 @@ class CustomFieldSetTypeSchema(FieldTypeSchema):
             "String": "commercetools.schemas.CustomFieldStringTypeSchema",
             "Time": "commercetools.schemas.CustomFieldTimeTypeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="elementType",
     )
 
@@ -5406,6 +5450,7 @@ class CustomerGroupUpdateSchema(UpdateSchema):
                 "setCustomType": "commercetools.schemas.CustomerGroupSetCustomTypeActionSchema",
                 "setKey": "commercetools.schemas.CustomerGroupSetKeyActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -5526,6 +5571,7 @@ class CustomerUpdateSchema(UpdateSchema):
                 "setTitle": "commercetools.schemas.CustomerSetTitleActionSchema",
                 "setVatId": "commercetools.schemas.CustomerSetVatIdActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -5661,6 +5707,7 @@ class DiscountCodeSchema(ResourceSchema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         many=True,
     )
     max_applications = marshmallow.fields.Integer(
@@ -5715,6 +5762,7 @@ class DiscountCodeUpdateSchema(UpdateSchema):
                 "setValidFromAndUntil": "commercetools.schemas.DiscountCodeSetValidFromAndUntilActionSchema",
                 "setValidUntil": "commercetools.schemas.DiscountCodeSetValidUntilActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -5852,6 +5900,7 @@ class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
             "AuthorizationHeader": "commercetools.schemas.ExtensionAuthorizationHeaderAuthenticationSchema",
             "AzureFunctions": "commercetools.schemas.ExtensionAzureFunctionsAuthenticationSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
     )
 
@@ -5887,6 +5936,7 @@ class ExtensionSchema(ResourceSchema):
             "AWSLambda": "commercetools.schemas.ExtensionAWSLambdaDestinationSchema",
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     triggers = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExtensionTriggerSchema",
@@ -5921,6 +5971,7 @@ class ExtensionUpdateSchema(UpdateSchema):
                 "changeTriggers": "commercetools.schemas.ExtensionChangeTriggersActionSchema",
                 "setKey": "commercetools.schemas.ExtensionSetKeyActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -6147,6 +6198,7 @@ class InventoryUpdateSchema(UpdateSchema):
                 "setRestockableInDays": "commercetools.schemas.InventorySetRestockableInDaysActionSchema",
                 "setSupplyChannel": "commercetools.schemas.InventorySetSupplyChannelActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -6275,6 +6327,7 @@ class MessagePagedQueryResponseSchema(PagedQueryResponseSchema):
             "ReviewRatingSet": "commercetools.schemas.ReviewRatingSetMessageSchema",
             "ReviewStateTransition": "commercetools.schemas.ReviewStateTransitionMessageSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         many=True,
     )
 
@@ -6612,6 +6665,7 @@ class OrderSchema(ResourceSchema):
             "Classification": "commercetools.schemas.ClassificationShippingRateInputSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="shippingRateInput",
     )
@@ -6742,6 +6796,7 @@ class OrderUpdateSchema(UpdateSchema):
                 "updateItemShippingAddress": "commercetools.schemas.OrderUpdateItemShippingAddressActionSchema",
                 "updateSyncInfo": "commercetools.schemas.OrderUpdateSyncInfoActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -6911,6 +6966,7 @@ class PaymentSchema(ResourceSchema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         data_key="amountPlanned",
     )
     amount_authorized = helpers.Discriminator(
@@ -6919,6 +6975,7 @@ class PaymentSchema(ResourceSchema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="amountAuthorized",
     )
@@ -6931,6 +6988,7 @@ class PaymentSchema(ResourceSchema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="amountPaid",
     )
@@ -6940,6 +6998,7 @@ class PaymentSchema(ResourceSchema):
             "centPrecision": "commercetools.schemas.CentPrecisionMoneySchema",
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="amountRefunded",
     )
@@ -7072,6 +7131,7 @@ class PaymentUpdateSchema(UpdateSchema):
                 "setStatusInterfaceText": "commercetools.schemas.PaymentSetStatusInterfaceTextActionSchema",
                 "transitionState": "commercetools.schemas.PaymentTransitionStateActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -7159,6 +7219,7 @@ class ProductDiscountSchema(ResourceSchema):
             "external": "commercetools.schemas.ProductDiscountValueExternalSchema",
             "relative": "commercetools.schemas.ProductDiscountValueRelativeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     predicate = marshmallow.fields.String()
     sort_order = marshmallow.fields.String(data_key="sortOrder")
@@ -7188,6 +7249,7 @@ class ProductDiscountSchema(ResourceSchema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         many=True,
     )
     valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
@@ -7226,6 +7288,7 @@ class ProductDiscountUpdateSchema(UpdateSchema):
                 "setValidFromAndUntil": "commercetools.schemas.ProductDiscountSetValidFromAndUntilActionSchema",
                 "setValidUntil": "commercetools.schemas.ProductDiscountSetValidUntilActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -7581,6 +7644,7 @@ class ProductTypeUpdateSchema(UpdateSchema):
                 "setInputTip": "commercetools.schemas.ProductTypeSetInputTipActionSchema",
                 "setKey": "commercetools.schemas.ProductTypeSetKeyActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -7664,6 +7728,7 @@ class ProductUpdateSchema(UpdateSchema):
                 "transitionState": "commercetools.schemas.ProductTransitionStateActionSchema",
                 "unpublish": "commercetools.schemas.ProductUnpublishActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -7717,6 +7782,7 @@ class ProjectUpdateSchema(UpdateSchema):
                 "changeName": "commercetools.schemas.ProjectChangeNameActionSchema",
                 "setShippingRateInputType": "commercetools.schemas.ProjectSetShippingRateInputTypeActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -7878,6 +7944,7 @@ class ReviewRatingSetMessageSchema(MessageSchema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -7971,6 +8038,7 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
             "type": "commercetools.schemas.TypeReferenceSchema",
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     force = marshmallow.fields.Bool()
 
@@ -8010,6 +8078,7 @@ class ReviewUpdateSchema(UpdateSchema):
                 "setTitle": "commercetools.schemas.ReviewSetTitleActionSchema",
                 "transitionState": "commercetools.schemas.ReviewTransitionStateActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8112,6 +8181,7 @@ class ShippingMethodUpdateSchema(UpdateSchema):
                 "setKey": "commercetools.schemas.ShippingMethodSetKeyActionSchema",
                 "setPredicate": "commercetools.schemas.ShippingMethodSetPredicateActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8219,6 +8289,7 @@ class ShoppingListUpdateSchema(UpdateSchema):
                 "setLineItemCustomType": "commercetools.schemas.ShoppingListSetLineItemCustomTypeActionSchema",
                 "setSlug": "commercetools.schemas.ShoppingListSetSlugActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8324,6 +8395,7 @@ class StateUpdateSchema(UpdateSchema):
                 "setRoles": "commercetools.schemas.StateSetRolesActionSchema",
                 "setTransitions": "commercetools.schemas.StateSetTransitionsActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8366,6 +8438,7 @@ class SubscriptionSchema(ResourceSchema):
             "SNS": "commercetools.schemas.SnsDestinationSchema",
             "SQS": "commercetools.schemas.SqsDestinationSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
     key = marshmallow.fields.String(missing=None)
     messages = marshmallow.fields.Nested(
@@ -8401,6 +8474,7 @@ class SubscriptionUpdateSchema(UpdateSchema):
                 "setKey": "commercetools.schemas.SubscriptionSetKeyActionSchema",
                 "setMessages": "commercetools.schemas.SubscriptionSetMessagesActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8467,6 +8541,7 @@ class TaxCategoryUpdateSchema(UpdateSchema):
                 "setDescription": "commercetools.schemas.TaxCategorySetDescriptionActionSchema",
                 "setKey": "commercetools.schemas.TaxCategorySetKeyActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8565,6 +8640,7 @@ class TypeUpdateSchema(UpdateSchema):
                 "removeFieldDefinition": "commercetools.schemas.TypeRemoveFieldDefinitionActionSchema",
                 "setDescription": "commercetools.schemas.TypeSetDescriptionActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -8651,6 +8727,7 @@ class ZoneUpdateSchema(UpdateSchema):
                 "removeLocation": "commercetools.schemas.ZoneRemoveLocationActionSchema",
                 "setDescription": "commercetools.schemas.ZoneSetDescriptionActionSchema",
             },
+            unknown=marshmallow.EXCLUDE,
         )
     )
 
@@ -9042,6 +9119,7 @@ class CartDiscountChangeTargetActionSchema(CartDiscountUpdateActionSchema):
             "multiBuyCustomLineItems": "commercetools.schemas.MultiBuyCustomLineItemsTargetSchema",
             "multiBuyLineItems": "commercetools.schemas.MultiBuyLineItemsTargetSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -9061,6 +9139,7 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
             "giftLineItem": "commercetools.schemas.CartDiscountValueGiftLineItemSchema",
             "relative": "commercetools.schemas.CartDiscountValueRelativeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -9760,6 +9839,7 @@ class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
             "Classification": "commercetools.schemas.ClassificationShippingRateInputDraftSchema",
             "Score": "commercetools.schemas.ScoreShippingRateInputDraftSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="shippingRateInput",
     )
@@ -10877,6 +10957,7 @@ class ExtensionChangeDestinationActionSchema(ExtensionUpdateActionSchema):
             "AWSLambda": "commercetools.schemas.ExtensionAWSLambdaDestinationSchema",
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -12297,6 +12378,7 @@ class ProductDiscountChangeValueActionSchema(ProductDiscountUpdateActionSchema):
             "external": "commercetools.schemas.ProductDiscountValueExternalSchema",
             "relative": "commercetools.schemas.ProductDiscountValueRelativeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
     )
 
     class Meta:
@@ -13314,6 +13396,7 @@ class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
             "CartScore": "commercetools.schemas.CartScoreTypeSchema",
             "CartValue": "commercetools.schemas.CartValueTypeSchema",
         },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="shippingRateInputType",
     )

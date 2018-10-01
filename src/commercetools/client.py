@@ -1,3 +1,4 @@
+import os
 import typing
 
 import requests
@@ -13,6 +14,8 @@ from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.products import ProductService
 
+env = os.environ.get
+
 
 class CommercetoolsError(Exception):
     def __init__(self, message, response) -> None:
@@ -21,14 +24,22 @@ class CommercetoolsError(Exception):
 
 
 class Client:
-    def __init__(self, project_key, client_id, client_secret, scope, url, token_url):
+    def __init__(self, project_key: str=None, client_id: str=None, client_secret: str=None,
+                 scope: typing.List[str]=None, url: str=None, token_url: str=None) -> None:
+        project_key = project_key or env('CTP_PROJECT_KEY')
+        client_id = client_id or env('CTP_CLIENT_ID')
+        client_secret = client_secret or env('CTP_CLIENT_SECRET')
+        scope = scope or env('CTP_SCOPES', '').split(',')
+        url = url or env('CTP_API_URL')
+        token_url = token_url or env('CTP_AUTH_URL', '') + '/oauth/token'
+
         self._url = url
         client = BackendApplicationClient(client_id=client_id)
         self._http_client = OAuth2Session(client=client)
         self._http_client.fetch_token(
             token_url=token_url, client_id=client_id, client_secret=client_secret
         )
-        self._base_url = url + "/" + project_key + "/"
+        self._base_url = f"{url}/{project_key}/"
 
     def _get(
         self, endpoint: str, params: typing.Dict[str, typing.Any], schema_cls: SchemaABC

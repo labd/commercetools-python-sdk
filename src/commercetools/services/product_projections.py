@@ -2,7 +2,7 @@ import typing
 from typing import List, Optional
 from uuid import UUID
 
-from marshmallow import EXCLUDE, fields, post_dump
+from marshmallow import EXCLUDE, fields, post_dump, Schema
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID
@@ -10,7 +10,23 @@ from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListU
 __all__ = ["ProductProjectionService"]
 
 
-class ProductProjectionsQuerySchema(abstract.AbstractQuerySchema):
+class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
+    sort = fields.List(fields.String())
+    limit = fields.Int()
+    offset = fields.Int()
+
+    staged = fields.Bool(data_key="staged", required=False)
+    price_currency = fields.String(data_key="priceCurrency")
+    price_country = fields.String(data_key="priceCountry")
+    price_customer_group = fields.UUID(data_key="priceCustomerGroup")
+    price_channel = fields.UUID(data_key="priceChannel")
+
+
+class ProductProjectionsQuerySchema(_ProductProjectionsBaseSchema):
+    where = fields.List(fields.String())
+
+
+class ProductProjectionsSearchSchema(_ProductProjectionsBaseSchema):
     text = fields.Method("text_serialize")
     fuzzy = fields.Bool()
     fuzzy_level = fields.Integer(data_key="fuzzy.level")
@@ -18,15 +34,7 @@ class ProductProjectionsQuerySchema(abstract.AbstractQuerySchema):
     filter_query = fields.List(fields.String(), data_key="filter.query")
     filter_facets = fields.List(fields.String(), data_key="filter.facets")
     facet = fields.List(fields.String())
-    sort = fields.List(fields.String())
-    limit = fields.Int()
-    offset = fields.Int()
-    staged = fields.Bool(data_key="staged", required=False)
     mark_matching_variants = fields.Bool(data_key="markMatchingVariants")
-    price_currency = fields.String(data_key="priceCurrency")
-    price_country = fields.String(data_key="priceCountry")
-    price_customer_group = fields.UUID(data_key="priceCustomerGroup")
-    price_channel = fields.UUID(data_key="priceChannel")
 
     def text_serialize(self, value):
         result = {}
@@ -84,7 +92,7 @@ class ProductProjectionService:
         price_country: OptionalListStr = None,
         price_customer_group: OptionalListUUID = None,
         price_channel: OptionalListUUID = None,
-    ) -> List[types.ProductProjection]:
+    ) -> types.ProductProjectionPagedQueryResponse:
         params = ProductProjectionsQuerySchema().dump(
             {
                 "where": where,
@@ -109,28 +117,33 @@ class ProductProjectionService:
         text: typing.Optional[typing.Dict[str, str]] = None,
         fuzzy: typing.Optional[bool] = None,
         fuzzy_level: typing.Optional[int] = None,
+        filter: OptionalListStr = None,
         filter_query: OptionalListStr = None,
         filter_facets: OptionalListStr = None,
-        where: OptionalListStr = None,
+        facet: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: OptionalListStr = None,
         limit: OptionalListInt = None,
         offset: OptionalListInt = None,
         staged: bool = False,
+        mark_matching_variants: bool = False,
         price_currency: OptionalListStr = None,
         price_country: OptionalListStr = None,
         price_customer_group: OptionalListUUID = None,
         price_channel: OptionalListUUID = None,
-    ) -> List[types.ProductProjection]:
+    ) -> types.ProductProjectionPagedSearchResponse:
         params = {
             "text": text,
             "fuzzy": fuzzy,
             "fuzzy_level": fuzzy_level,
+            "filter": filter,
             "filter_query": filter_query,
             "filter_facets": filter_facets,
+            "facet": facet,
             "sort": sort,
             "limit": limit,
             "offset": offset,
+            "staged": staged,
+            "mark_matching_variants": mark_matching_variants,
             "price_currency": price_currency,
             "price_country": price_country,
             "price_customer_group": price_customer_group,
@@ -140,7 +153,7 @@ class ProductProjectionService:
             "product-projections/search",
             {},
             params,
-            ProductProjectionsQuerySchema,
+            ProductProjectionsSearchSchema,
             schemas.ProductProjectionPagedSearchResponseSchema,
             form_encoded=True,
         )

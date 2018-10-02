@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info
 .mypy_cache/
 .coverage
+.idea/
 .vscode/
 
 # Dist files

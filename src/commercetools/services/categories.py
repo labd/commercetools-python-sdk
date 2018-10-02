@@ -50,7 +50,7 @@ class CategoriesService:
             "categories",
             [],
             draft,
-            schemas.CategoryUpdateSchema,
+            schemas.CategoryDraftSchema,
             schemas.CategorySchema,
         )
 

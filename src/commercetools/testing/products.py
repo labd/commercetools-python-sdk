@@ -4,7 +4,7 @@ import uuid
 from requests_mock import create_response
 
 from commercetools import schemas, types
-from commercetools.testing.abstract import ServiceBackend, BaseModel
+from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ProductsModel(BaseModel):

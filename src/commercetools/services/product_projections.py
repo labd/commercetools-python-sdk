@@ -2,7 +2,7 @@ import typing
 from typing import List, Optional
 from uuid import UUID
 
-from marshmallow import EXCLUDE, fields, post_dump, Schema
+from marshmallow import EXCLUDE, Schema, fields, post_dump
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID

@@ -7,39 +7,28 @@ from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
-class ProductsModel(BaseModel):
+class CategoriesModel(BaseModel):
     def add(self, id, obj):
-        obj = self.convert_product_draft(obj)
+        obj = self.add_category(obj)
         self.objects[obj.id] = obj
         return obj
 
-    def convert_product_draft(self, obj):
-        product_data = types.ProductData(
+    def add_category(self, obj):
+        return types.Category(
+            id=str(uuid.uuid4()),
+            version=1,
             name=obj.name,
-            categories=obj.categories,
-            category_order_hints=obj.category_order_hints,
             description=obj.description,
             slug=obj.slug,
-        )
-
-        product_catalog_data = types.ProductCatalogData(
-            staged=product_data, published=False
-        )
-
-        product = types.Product(
-            id=str(uuid.uuid4()),
             key=obj.key,
-            version=1,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),
-            master_data=product_catalog_data,
         )
-        return product
 
 
-class ProductsBackend(ServiceBackend):
-    service_path = "products"
-    model_class = ProductsModel
+class CategoriesBackend(ServiceBackend):
+    service_path = "categories"
+    model_class = CategoriesModel
 
     def urls(self):
         return [
@@ -51,27 +40,27 @@ class ProductsBackend(ServiceBackend):
 
     @property
     def path_prefix(self):
-        return r"/(?P<project>[^/]+)/products/?(?P<path>.*)?"
+        return r"/(?P<project>[^/]+)/categories/?(?P<path>.*)?"
 
     def query(self, request):
         pass
 
     def create(self, request):
-        obj = schemas.ProductDraftSchema().loads(request.body)
+        obj = schemas.CategoryDraftSchema().loads(request.body)
         data = self.model.add(id, obj)
-        content = schemas.ProductSchema().dumps(data)
+        content = schemas.CategorySchema().dumps(data)
         return create_response(request, text=content)
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            content = schemas.ProductSchema().dumps(obj)
+            content = schemas.CategorySchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)
 
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            content = schemas.ProductSchema().dumps(obj)
+            content = schemas.CategorySchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)

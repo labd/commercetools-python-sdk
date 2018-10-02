@@ -17,4 +17,4 @@ release:
 	pip install twine wheel
 	rm -rf build/* dist/*
 	python setup.py sdist bdist_wheel
-	twine upload dist/*
+	twine upload --repository-url=https://repo.fury.io/labdigital/ dist/*

@@ -57,6 +57,8 @@ setup(
     include_package_data=True,
     license="MIT",
     classifiers=[
+        "Private :: Do Not Upload",
+
         "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",

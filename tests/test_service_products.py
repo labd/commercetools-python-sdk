@@ -1,3 +1,7 @@
+import pytest
+
+from requests.exceptions import HTTPError
+
 from commercetools.testing import mock_commercetools
 
 
@@ -24,6 +28,9 @@ def test_products_get():
     product = client.products.get_by_id(product.id)
     assert product.id
     assert product.key == "test-product"
+
+    with pytest.raises(HTTPError) as e:
+        client.products.get_by_id('invalid')
 
     product = client.products.get_by_key(product.key)
     assert product

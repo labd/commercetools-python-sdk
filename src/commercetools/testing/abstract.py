@@ -56,4 +56,4 @@ class ServiceBackend(BaseBackend):
 
     @property
     def path_prefix(self):
-        return r"/(?P<project>[^/]+)/products/?(?P<path>.*)?"
+        return r"/(?P<project>[^/]+)/services/?(?P<path>.*)?"

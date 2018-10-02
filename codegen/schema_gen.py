@@ -266,7 +266,9 @@ class SchemaClassGenerator:
     def _get_property_field(self, prop):
         if prop.type is None:
             return ast.Call(
-                func=ast.Name(id=FIELD_TYPES["object"]), args=[], keywords=[]
+                func=ast.Name(id=FIELD_TYPES["object"]),
+                args=[],
+                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
             )
         elif prop.type.enum:
             return ast.Call(
@@ -285,7 +287,9 @@ class SchemaClassGenerator:
 
         elif prop.type.name in FIELD_TYPES:
             node = ast.Call(
-                func=ast.Name(id=FIELD_TYPES[prop.type.name]), args=[], keywords=[]
+                func=ast.Name(id=FIELD_TYPES[prop.type.name]),
+                args=[],
+                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
             )
             if prop.type.name == "array":
                 assert prop.items, f"The array property {prop.name} has no items"
@@ -304,7 +308,9 @@ class SchemaClassGenerator:
         # Dict Field
         elif "asMap" in prop.type.annotations:
             return ast.Call(
-                func=ast.Name(id=prop.type.name + "Field"), args=[], keywords=[]
+                func=ast.Name(id=prop.type.name + "Field"),
+                args=[],
+                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
             )
 
         elif prop.type.base and prop.type.base.name == "string":
@@ -337,6 +343,7 @@ class SchemaClassGenerator:
                     ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
+                ast.keyword(arg="allow_none", value=ast.NameConstant(True)),
             ],
         )
 
@@ -350,6 +357,7 @@ class SchemaClassGenerator:
                     value=ast.Str(s=f"commercetools.schemas.{type_obj.name}Schema"),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
+                ast.keyword(arg="allow_none", value=ast.NameConstant(True)),
             ],
         )
 

@@ -27,35 +27,47 @@ class FieldContainerField(marshmallow.fields.Dict):
 
 
 class AddressSchema(marshmallow.Schema):
-    id = marshmallow.fields.String(missing=None)
-    key = marshmallow.fields.String(missing=None)
-    title = marshmallow.fields.String(missing=None)
-    salutation = marshmallow.fields.String(missing=None)
-    first_name = marshmallow.fields.String(missing=None, data_key="firstName")
-    last_name = marshmallow.fields.String(missing=None, data_key="lastName")
-    street_name = marshmallow.fields.String(missing=None, data_key="streetName")
-    street_number = marshmallow.fields.String(missing=None, data_key="streetNumber")
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
+    street_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="streetName"
+    )
+    street_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="streetNumber"
+    )
     additional_street_info = marshmallow.fields.String(
-        missing=None, data_key="additionalStreetInfo"
+        allow_none=True, missing=None, data_key="additionalStreetInfo"
     )
-    postal_code = marshmallow.fields.String(missing=None, data_key="postalCode")
-    city = marshmallow.fields.String(missing=None)
-    region = marshmallow.fields.String(missing=None)
-    state = marshmallow.fields.String(missing=None)
+    postal_code = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="postalCode"
+    )
+    city = marshmallow.fields.String(allow_none=True, missing=None)
+    region = marshmallow.fields.String(allow_none=True, missing=None)
+    state = marshmallow.fields.String(allow_none=True, missing=None)
     country = marshmallow.fields.String()
-    company = marshmallow.fields.String(missing=None)
-    department = marshmallow.fields.String(missing=None)
-    building = marshmallow.fields.String(missing=None)
-    apartment = marshmallow.fields.String(missing=None)
-    p_o_box = marshmallow.fields.String(missing=None, data_key="pOBox")
-    phone = marshmallow.fields.String(missing=None)
-    mobile = marshmallow.fields.String(missing=None)
-    email = marshmallow.fields.String(missing=None)
-    fax = marshmallow.fields.String(missing=None)
+    company = marshmallow.fields.String(allow_none=True, missing=None)
+    department = marshmallow.fields.String(allow_none=True, missing=None)
+    building = marshmallow.fields.String(allow_none=True, missing=None)
+    apartment = marshmallow.fields.String(allow_none=True, missing=None)
+    p_o_box = marshmallow.fields.String(allow_none=True, missing=None, data_key="pOBox")
+    phone = marshmallow.fields.String(allow_none=True, missing=None)
+    mobile = marshmallow.fields.String(allow_none=True, missing=None)
+    email = marshmallow.fields.String(allow_none=True, missing=None)
+    fax = marshmallow.fields.String(allow_none=True, missing=None)
     additional_address_info = marshmallow.fields.String(
-        missing=None, data_key="additionalAddressInfo"
+        allow_none=True, missing=None, data_key="additionalAddressInfo"
     )
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -66,8 +78,8 @@ class AddressSchema(marshmallow.Schema):
 
 
 class AssetDimensionsSchema(marshmallow.Schema):
-    w = marshmallow.fields.Integer()
-    h = marshmallow.fields.Integer()
+    w = marshmallow.fields.Integer(allow_none=True)
+    h = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -81,17 +93,19 @@ class AssetDraftSchema(marshmallow.Schema):
     sources = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetSourceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
-    tags = marshmallow.fields.String(missing=None, many=True)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    tags = marshmallow.fields.String(allow_none=True, missing=None, many=True)
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -102,21 +116,23 @@ class AssetDraftSchema(marshmallow.Schema):
 
 
 class AssetSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
+    id = marshmallow.fields.String(allow_none=True)
     sources = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetSourceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
-    tags = marshmallow.fields.String(missing=None, many=True)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    tags = marshmallow.fields.String(allow_none=True, missing=None, many=True)
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -127,14 +143,17 @@ class AssetSchema(marshmallow.Schema):
 
 
 class AssetSourceSchema(marshmallow.Schema):
-    uri = marshmallow.fields.String()
-    key = marshmallow.fields.String(missing=None)
+    uri = marshmallow.fields.String(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     dimensions = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetDimensionsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    content_type = marshmallow.fields.String(missing=None, data_key="contentType")
+    content_type = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="contentType"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -163,21 +182,24 @@ class AttributeDefinitionDraftSchema(marshmallow.Schema):
             "time": "commercetools.schemas.AttributeTimeTypeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    name = marshmallow.fields.String()
-    label = LocalizedStringField()
-    is_required = marshmallow.fields.Bool(data_key="isRequired")
+    name = marshmallow.fields.String(allow_none=True)
+    label = LocalizedStringField(allow_none=True)
+    is_required = marshmallow.fields.Bool(allow_none=True, data_key="isRequired")
     attribute_constraint = marshmallow_enum.EnumField(
         types.AttributeConstraintEnum,
         by_value=True,
         missing=None,
         data_key="attributeConstraint",
     )
-    input_tip = LocalizedStringField(missing=None, data_key="inputTip")
+    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
     input_hint = marshmallow_enum.EnumField(
         types.TextInputHint, by_value=True, missing=None, data_key="inputHint"
     )
-    is_searchable = marshmallow.fields.Bool(missing=None, data_key="isSearchable")
+    is_searchable = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isSearchable"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -206,18 +228,19 @@ class AttributeDefinitionSchema(marshmallow.Schema):
             "time": "commercetools.schemas.AttributeTimeTypeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    name = marshmallow.fields.String()
-    label = LocalizedStringField()
-    is_required = marshmallow.fields.Bool(data_key="isRequired")
+    name = marshmallow.fields.String(allow_none=True)
+    label = LocalizedStringField(allow_none=True)
+    is_required = marshmallow.fields.Bool(allow_none=True, data_key="isRequired")
     attribute_constraint = marshmallow_enum.EnumField(
         types.AttributeConstraintEnum, by_value=True, data_key="attributeConstraint"
     )
-    input_tip = LocalizedStringField(missing=None, data_key="inputTip")
+    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
     input_hint = marshmallow_enum.EnumField(
         types.TextInputHint, by_value=True, data_key="inputHint"
     )
-    is_searchable = marshmallow.fields.Bool(data_key="isSearchable")
+    is_searchable = marshmallow.fields.Bool(allow_none=True, data_key="isSearchable")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -228,8 +251,8 @@ class AttributeDefinitionSchema(marshmallow.Schema):
 
 
 class AttributeLocalizedEnumValueSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
-    label = LocalizedStringField()
+    key = marshmallow.fields.String(allow_none=True)
+    label = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -240,8 +263,8 @@ class AttributeLocalizedEnumValueSchema(marshmallow.Schema):
 
 
 class AttributePlainEnumValueSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
-    label = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
+    label = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -252,8 +275,8 @@ class AttributePlainEnumValueSchema(marshmallow.Schema):
 
 
 class AttributeSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw()
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -264,7 +287,7 @@ class AttributeSchema(marshmallow.Schema):
 
 
 class AttributeTypeSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -276,8 +299,8 @@ class AttributeTypeSchema(marshmallow.Schema):
 
 
 class CartDiscountDraftSchema(marshmallow.Schema):
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     value = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -286,8 +309,11 @@ class CartDiscountDraftSchema(marshmallow.Schema):
             "relative": "commercetools.schemas.CartDiscountValueRelativeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
+    cart_predicate = marshmallow.fields.String(
+        allow_none=True, data_key="cartPredicate"
+    )
     target = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -298,19 +324,29 @@ class CartDiscountDraftSchema(marshmallow.Schema):
             "multiBuyLineItems": "commercetools.schemas.MultiBuyLineItemsTargetSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    sort_order = marshmallow.fields.String(data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(missing=None, data_key="isActive")
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
-    requires_discount_code = marshmallow.fields.Bool(data_key="requiresDiscountCode")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    is_active = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isActive"
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
+    requires_discount_code = marshmallow.fields.Bool(
+        allow_none=True, data_key="requiresDiscountCode"
+    )
     stacking_mode = marshmallow_enum.EnumField(
         types.StackingMode, by_value=True, missing=None, data_key="stackingMode"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -323,7 +359,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
 
 
 class CartDiscountTargetSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -335,7 +371,7 @@ class CartDiscountTargetSchema(marshmallow.Schema):
 
 
 class CartDiscountValueSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -348,16 +384,23 @@ class CartDiscountValueSchema(marshmallow.Schema):
 
 class CartDraftSchema(marshmallow.Schema):
     currency = marshmallow.fields.String()
-    customer_id = marshmallow.fields.String(missing=None, data_key="customerId")
-    customer_email = marshmallow.fields.String(missing=None, data_key="customerEmail")
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
-    country = marshmallow.fields.String(missing=None)
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    country = marshmallow.fields.String(allow_none=True, missing=None)
     inventory_mode = marshmallow_enum.EnumField(
         types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
     )
@@ -376,6 +419,7 @@ class CartDraftSchema(marshmallow.Schema):
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.LineItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="lineItems",
@@ -383,6 +427,7 @@ class CartDraftSchema(marshmallow.Schema):
     custom_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomLineItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="customLineItems",
@@ -390,35 +435,40 @@ class CartDraftSchema(marshmallow.Schema):
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="billingAddress",
     )
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingMethodReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingMethod",
     )
     external_tax_rate_for_shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRateForShippingMethod",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
     origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True, missing=None)
     shipping_rate_input = helpers.Discriminator(
@@ -428,12 +478,14 @@ class CartDraftSchema(marshmallow.Schema):
             "Score": "commercetools.schemas.ScoreShippingRateInputDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingRateInput",
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="itemShippingAddresses",
@@ -448,31 +500,44 @@ class CartDraftSchema(marshmallow.Schema):
 
 
 class CategoryDraftSchema(marshmallow.Schema):
-    name = LocalizedStringField()
-    slug = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    slug = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     parent = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    order_hint = marshmallow.fields.String(missing=None, data_key="orderHint")
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
+    order_hint = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderHint"
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     assets = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -483,7 +548,9 @@ class CategoryDraftSchema(marshmallow.Schema):
 
 
 class ChangeSubscriptionSchema(marshmallow.Schema):
-    resource_type_id = marshmallow.fields.String(data_key="resourceTypeId")
+    resource_type_id = marshmallow.fields.String(
+        allow_none=True, data_key="resourceTypeId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -494,25 +561,28 @@ class ChangeSubscriptionSchema(marshmallow.Schema):
 
 
 class ChannelDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
     roles = marshmallow_enum.EnumField(
         types.ChannelRoleEnum, by_value=True, missing=None, many=True
     )
-    name = LocalizedStringField(missing=None)
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     geo_location = marshmallow.fields.Nested(
         nested="commercetools.schemas.GeoJsonPointSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="geoLocation",
     )
@@ -526,8 +596,8 @@ class ChannelDraftSchema(marshmallow.Schema):
 
 
 class CustomFieldEnumValueSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
-    label = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
+    label = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -538,8 +608,8 @@ class CustomFieldEnumValueSchema(marshmallow.Schema):
 
 
 class CustomFieldLocalizedEnumValueSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
-    label = LocalizedStringField()
+    key = marshmallow.fields.String(allow_none=True)
+    label = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -553,8 +623,9 @@ class CustomFieldsDraftSchema(marshmallow.Schema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    fields = FieldContainerField(missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -566,9 +637,11 @@ class CustomFieldsDraftSchema(marshmallow.Schema):
 
 class CustomFieldsSchema(marshmallow.Schema):
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas.TypeReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.TypeReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    fields = FieldContainerField()
+    fields = FieldContainerField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -579,32 +652,38 @@ class CustomFieldsSchema(marshmallow.Schema):
 
 
 class CustomLineItemDraftSchema(marshmallow.Schema):
-    name = LocalizedStringField()
-    quantity = marshmallow.fields.Integer()
+    name = LocalizedStringField(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True)
     money = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    slug = marshmallow.fields.String()
+    slug = marshmallow.fields.String(allow_none=True)
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -618,8 +697,8 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
 
 
 class CustomLineItemSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    name = LocalizedStringField()
+    id = marshmallow.fields.String(allow_none=True)
+    name = LocalizedStringField(allow_none=True)
     money = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -627,10 +706,12 @@ class CustomLineItemSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedItemPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
@@ -641,41 +722,48 @@ class CustomLineItemSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalPrice",
     )
-    slug = marshmallow.fields.String()
-    quantity = marshmallow.fields.Integer()
+    slug = marshmallow.fields.String(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True)
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxRate",
     )
     discounted_price_per_quantity = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPriceForQuantitySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="discountedPricePerQuantity",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -689,10 +777,10 @@ class CustomLineItemSchema(marshmallow.Schema):
 
 
 class CustomObjectDraftSchema(marshmallow.Schema):
-    container = marshmallow.fields.String()
-    key = marshmallow.fields.String()
-    value = marshmallow.fields.Raw()
-    version = marshmallow.fields.Integer(missing=None)
+    container = marshmallow.fields.String(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -703,10 +791,12 @@ class CustomObjectDraftSchema(marshmallow.Schema):
 
 
 class CustomerChangePasswordSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer()
-    current_password = marshmallow.fields.String(data_key="currentPassword")
-    new_password = marshmallow.fields.String(data_key="newPassword")
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    current_password = marshmallow.fields.String(
+        allow_none=True, data_key="currentPassword"
+    )
+    new_password = marshmallow.fields.String(allow_none=True, data_key="newPassword")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -717,9 +807,9 @@ class CustomerChangePasswordSchema(marshmallow.Schema):
 
 
 class CustomerCreateEmailTokenSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer(missing=None)
-    ttl_minutes = marshmallow.fields.Integer(data_key="ttlMinutes")
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    ttl_minutes = marshmallow.fields.Integer(allow_none=True, data_key="ttlMinutes")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -730,7 +820,7 @@ class CustomerCreateEmailTokenSchema(marshmallow.Schema):
 
 
 class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
-    email = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -741,56 +831,75 @@ class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
 
 
 class CustomerDraftSchema(marshmallow.Schema):
-    customer_number = marshmallow.fields.String(missing=None, data_key="customerNumber")
-    email = marshmallow.fields.String()
-    password = marshmallow.fields.String()
-    first_name = marshmallow.fields.String(missing=None, data_key="firstName")
-    last_name = marshmallow.fields.String(missing=None, data_key="lastName")
-    middle_name = marshmallow.fields.String(missing=None, data_key="middleName")
-    title = marshmallow.fields.String(missing=None)
-    anonymous_cart_id = marshmallow.fields.String(
-        missing=None, data_key="anonymousCartId"
+    customer_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerNumber"
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
-    date_of_birth = marshmallow.fields.Date(missing=None, data_key="dateOfBirth")
-    company_name = marshmallow.fields.String(missing=None, data_key="companyName")
-    vat_id = marshmallow.fields.String(missing=None, data_key="vatId")
+    email = marshmallow.fields.String(allow_none=True)
+    password = marshmallow.fields.String(allow_none=True)
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
+    middle_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="middleName"
+    )
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    anonymous_cart_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousCartId"
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    date_of_birth = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="dateOfBirth"
+    )
+    company_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="companyName"
+    )
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
     addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     default_shipping_address = marshmallow.fields.Integer(
-        missing=None, data_key="defaultShippingAddress"
+        allow_none=True, missing=None, data_key="defaultShippingAddress"
     )
     shipping_addresses = marshmallow.fields.Integer(
-        missing=None, many=True, data_key="shippingAddresses"
+        allow_none=True, missing=None, many=True, data_key="shippingAddresses"
     )
     default_billing_address = marshmallow.fields.Integer(
-        missing=None, data_key="defaultBillingAddress"
+        allow_none=True, missing=None, data_key="defaultBillingAddress"
     )
     billing_addresses = marshmallow.fields.Integer(
-        missing=None, many=True, data_key="billingAddresses"
+        allow_none=True, missing=None, many=True, data_key="billingAddresses"
     )
     is_email_verified = marshmallow.fields.Bool(
-        missing=None, data_key="isEmailVerified"
+        allow_none=True, missing=None, data_key="isEmailVerified"
     )
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    locale = marshmallow.fields.String(missing=None)
-    salutation = marshmallow.fields.String(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -801,8 +910,8 @@ class CustomerDraftSchema(marshmallow.Schema):
 
 
 class CustomerEmailVerifySchema(marshmallow.Schema):
-    version = marshmallow.fields.Integer(missing=None)
-    token_value = marshmallow.fields.String(data_key="tokenValue")
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    token_value = marshmallow.fields.String(allow_none=True, data_key="tokenValue")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -813,11 +922,12 @@ class CustomerEmailVerifySchema(marshmallow.Schema):
 
 
 class CustomerGroupDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(missing=None)
-    group_name = marshmallow.fields.String(data_key="groupName")
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    group_name = marshmallow.fields.String(allow_none=True, data_key="groupName")
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -830,9 +940,9 @@ class CustomerGroupDraftSchema(marshmallow.Schema):
 
 
 class CustomerResetPasswordSchema(marshmallow.Schema):
-    token_value = marshmallow.fields.String(data_key="tokenValue")
-    new_password = marshmallow.fields.String(data_key="newPassword")
-    version = marshmallow.fields.Integer(missing=None)
+    token_value = marshmallow.fields.String(allow_none=True, data_key="tokenValue")
+    new_password = marshmallow.fields.String(allow_none=True, data_key="newPassword")
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -844,9 +954,11 @@ class CustomerResetPasswordSchema(marshmallow.Schema):
 
 class CustomerSignInResultSchema(marshmallow.Schema):
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.CustomerSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    cart = marshmallow.fields.Dict(missing=None)
+    cart = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -857,10 +969,10 @@ class CustomerSignInResultSchema(marshmallow.Schema):
 
 
 class CustomerSigninSchema(marshmallow.Schema):
-    email = marshmallow.fields.String()
-    password = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
+    password = marshmallow.fields.String(allow_none=True)
     anonymous_cart_id = marshmallow.fields.String(
-        missing=None, data_key="anonymousCartId"
+        allow_none=True, missing=None, data_key="anonymousCartId"
     )
     anonymous_cart_sign_in_mode = marshmallow_enum.EnumField(
         types.AnonymousCartSignInMode,
@@ -868,7 +980,9 @@ class CustomerSigninSchema(marshmallow.Schema):
         missing=None,
         data_key="anonymousCartSignInMode",
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -879,14 +993,14 @@ class CustomerSigninSchema(marshmallow.Schema):
 
 
 class CustomerTokenSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
+    id = marshmallow.fields.String(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
     last_modified_at = marshmallow.fields.DateTime(
-        missing=None, data_key="lastModifiedAt"
+        allow_none=True, missing=None, data_key="lastModifiedAt"
     )
-    customer_id = marshmallow.fields.String(data_key="customerId")
-    expires_at = marshmallow.fields.DateTime(data_key="expiresAt")
-    value = marshmallow.fields.String()
+    customer_id = marshmallow.fields.String(allow_none=True, data_key="customerId")
+    expires_at = marshmallow.fields.DateTime(allow_none=True, data_key="expiresAt")
+    value = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -897,8 +1011,8 @@ class CustomerTokenSchema(marshmallow.Schema):
 
 
 class DeliveryItemSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    quantity = marshmallow.fields.Integer()
+    id = marshmallow.fields.String(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -909,21 +1023,24 @@ class DeliveryItemSchema(marshmallow.Schema):
 
 
 class DeliverySchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
+    id = marshmallow.fields.String(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     parcels = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -936,7 +1053,7 @@ class DeliverySchema(marshmallow.Schema):
 
 
 class DestinationSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -948,36 +1065,49 @@ class DestinationSchema(marshmallow.Schema):
 
 
 class DiscountCodeDraftSchema(marshmallow.Schema):
-    name = LocalizedStringField(missing=None)
-    description = LocalizedStringField(missing=None)
-    code = marshmallow.fields.String()
+    name = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    code = marshmallow.fields.String(allow_none=True)
     cart_discounts = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="cartDiscounts",
     )
-    cart_predicate = marshmallow.fields.String(missing=None, data_key="cartPredicate")
-    is_active = marshmallow.fields.Bool(missing=None, data_key="isActive")
+    cart_predicate = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="cartPredicate"
+    )
+    is_active = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isActive"
+    )
     max_applications = marshmallow.fields.Integer(
-        missing=None, data_key="maxApplications"
+        allow_none=True, missing=None, data_key="maxApplications"
     )
     max_applications_per_customer = marshmallow.fields.Integer(
-        missing=None, data_key="maxApplicationsPerCustomer"
+        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     groups = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.stringSchema", unknown=marshmallow.EXCLUDE
+            nested="commercetools.schemas.stringSchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         missing=None,
     )
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -991,6 +1121,7 @@ class DiscountCodeInfoSchema(marshmallow.Schema):
     discount_code = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountCodeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="discountCode",
     )
     state = marshmallow_enum.EnumField(types.DiscountCodeState, by_value=True)
@@ -1007,10 +1138,12 @@ class DiscountedLineItemPortionSchema(marshmallow.Schema):
     discount = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     discounted_amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="discountedAmount",
     )
 
@@ -1024,11 +1157,14 @@ class DiscountedLineItemPortionSchema(marshmallow.Schema):
 
 class DiscountedLineItemPriceDraftSchema(marshmallow.Schema):
     value = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     included_discounts = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPortionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="includedDiscounts",
     )
@@ -1042,10 +1178,11 @@ class DiscountedLineItemPriceDraftSchema(marshmallow.Schema):
 
 
 class DiscountedLineItemPriceForQuantitySchema(marshmallow.Schema):
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
     discounted_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="discountedPrice",
     )
 
@@ -1065,10 +1202,12 @@ class DiscountedLineItemPriceSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     included_discounts = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPortionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="includedDiscounts",
     )
@@ -1083,11 +1222,14 @@ class DiscountedLineItemPriceSchema(marshmallow.Schema):
 
 class DiscountedPriceSchema(marshmallow.Schema):
     value = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     discount = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductDiscountReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -1099,8 +1241,8 @@ class DiscountedPriceSchema(marshmallow.Schema):
 
 
 class ErrorObjectSchema(marshmallow.Schema):
-    code = marshmallow.fields.String()
-    message = marshmallow.fields.String()
+    code = marshmallow.fields.String(allow_none=True)
+    message = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1112,10 +1254,10 @@ class ErrorObjectSchema(marshmallow.Schema):
 
 
 class ErrorResponseSchema(marshmallow.Schema):
-    status_code = marshmallow.fields.Integer(data_key="statusCode")
-    message = marshmallow.fields.String()
-    error = marshmallow.fields.String(missing=None)
-    error_description = marshmallow.fields.String(missing=None)
+    status_code = marshmallow.fields.Integer(allow_none=True, data_key="statusCode")
+    message = marshmallow.fields.String(allow_none=True)
+    error = marshmallow.fields.String(allow_none=True, missing=None)
+    error_description = marshmallow.fields.String(allow_none=True, missing=None)
     errors = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field="code",
@@ -1142,7 +1284,9 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "ResourceNotFound": "commercetools.schemas.ResourceNotFoundErrorSchema",
             },
             unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         missing=None,
     )
 
@@ -1155,7 +1299,7 @@ class ErrorResponseSchema(marshmallow.Schema):
 
 
 class ExtensionDestinationSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1167,7 +1311,7 @@ class ExtensionDestinationSchema(marshmallow.Schema):
 
 
 class ExtensionDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     destination = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -1175,10 +1319,12 @@ class ExtensionDraftSchema(marshmallow.Schema):
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     triggers = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExtensionTriggerSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -1191,7 +1337,7 @@ class ExtensionDraftSchema(marshmallow.Schema):
 
 
 class ExtensionHttpDestinationAuthenticationSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1230,6 +1376,7 @@ class ExtensionInputSchema(marshmallow.Schema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -1258,11 +1405,14 @@ class ExtensionTriggerSchema(marshmallow.Schema):
 
 class ExternalLineItemTotalPriceSchema(marshmallow.Schema):
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalPrice",
     )
 
@@ -1278,11 +1428,13 @@ class ExternalTaxAmountDraftSchema(marshmallow.Schema):
     total_gross = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalGross",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="taxRate",
     )
 
@@ -1295,13 +1447,14 @@ class ExternalTaxAmountDraftSchema(marshmallow.Schema):
 
 
 class ExternalTaxRateDraftSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
-    amount = marshmallow.fields.Integer(missing=None)
-    country = marshmallow.fields.String()
-    state = marshmallow.fields.String(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    amount = marshmallow.fields.Integer(allow_none=True, missing=None)
+    country = marshmallow.fields.String(allow_none=True)
+    state = marshmallow.fields.String(allow_none=True, missing=None)
     sub_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.SubRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="subRates",
@@ -1316,16 +1469,18 @@ class ExternalTaxRateDraftSchema(marshmallow.Schema):
 
 
 class FacetResultRangeSchema(marshmallow.Schema):
-    from_ = marshmallow.fields.Integer(data_key="from")
-    from_str = marshmallow.fields.String(data_key="fromStr")
-    to = marshmallow.fields.Integer()
-    to_str = marshmallow.fields.String(data_key="toStr")
-    count = marshmallow.fields.Integer()
-    product_count = marshmallow.fields.Integer(missing=None, data_key="productCount")
-    total = marshmallow.fields.Integer()
-    min = marshmallow.fields.Integer()
-    max = marshmallow.fields.Integer()
-    mean = marshmallow.fields.Integer()
+    from_ = marshmallow.fields.Integer(allow_none=True, data_key="from")
+    from_str = marshmallow.fields.String(allow_none=True, data_key="fromStr")
+    to = marshmallow.fields.Integer(allow_none=True)
+    to_str = marshmallow.fields.String(allow_none=True, data_key="toStr")
+    count = marshmallow.fields.Integer(allow_none=True)
+    product_count = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="productCount"
+    )
+    total = marshmallow.fields.Integer(allow_none=True)
+    min = marshmallow.fields.Integer(allow_none=True)
+    max = marshmallow.fields.Integer(allow_none=True)
+    mean = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1348,9 +1503,11 @@ class FacetResultSchema(marshmallow.Schema):
 
 
 class FacetResultTermSchema(marshmallow.Schema):
-    term = marshmallow.fields.Raw()
-    count = marshmallow.fields.Integer()
-    product_count = marshmallow.fields.Integer(missing=None, data_key="productCount")
+    term = marshmallow.fields.Raw(allow_none=True)
+    count = marshmallow.fields.Integer(allow_none=True)
+    product_count = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="productCount"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1372,6 +1529,7 @@ class FacetResultsSchema(marshmallow.Schema):
                 "terms": "commercetools.schemas.TermFacetResultSchema",
             },
             unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
     )
 
@@ -1400,11 +1558,13 @@ class FacetResultsSchema(marshmallow.Schema):
 
 
 class FieldDefinitionSchema(marshmallow.Schema):
-    type = marshmallow.fields.Dict()
-    name = marshmallow.fields.String()
-    label = LocalizedStringField()
-    required = marshmallow.fields.Bool()
-    input_hint = marshmallow.fields.String(missing=None, data_key="inputHint")
+    type = marshmallow.fields.Dict(allow_none=True)
+    name = marshmallow.fields.String(allow_none=True)
+    label = LocalizedStringField(allow_none=True)
+    required = marshmallow.fields.Bool(allow_none=True)
+    input_hint = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="inputHint"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1415,7 +1575,7 @@ class FieldDefinitionSchema(marshmallow.Schema):
 
 
 class FieldTypeSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1427,11 +1587,14 @@ class FieldTypeSchema(marshmallow.Schema):
 
 
 class GeoJsonSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
     coordinates = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
-        )
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -1444,8 +1607,8 @@ class GeoJsonSchema(marshmallow.Schema):
 
 
 class ImageDimensionsSchema(marshmallow.Schema):
-    w = marshmallow.fields.Integer()
-    h = marshmallow.fields.Integer()
+    w = marshmallow.fields.Integer(allow_none=True)
+    h = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1456,12 +1619,13 @@ class ImageDimensionsSchema(marshmallow.Schema):
 
 
 class ImageSchema(marshmallow.Schema):
-    url = marshmallow.fields.String()
+    url = marshmallow.fields.String(allow_none=True)
     dimensions = marshmallow.fields.Nested(
         nested="commercetools.schemas.ImageDimensionsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    label = marshmallow.fields.String(missing=None)
+    label = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1472,23 +1636,27 @@ class ImageSchema(marshmallow.Schema):
 
 
 class InventoryEntryDraftSchema(marshmallow.Schema):
-    sku = marshmallow.fields.String()
+    sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
-    quantity_on_stock = marshmallow.fields.Integer(data_key="quantityOnStock")
+    quantity_on_stock = marshmallow.fields.Integer(
+        allow_none=True, data_key="quantityOnStock"
+    )
     restockable_in_days = marshmallow.fields.Integer(
-        missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays"
     )
     expected_delivery = marshmallow.fields.DateTime(
-        missing=None, data_key="expectedDelivery"
+        allow_none=True, missing=None, data_key="expectedDelivery"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -1504,6 +1672,7 @@ class ItemShippingDetailsDraftSchema(marshmallow.Schema):
     targets = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingTargetSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -1519,9 +1688,10 @@ class ItemShippingDetailsSchema(marshmallow.Schema):
     targets = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingTargetSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    valid = marshmallow.fields.Bool()
+    valid = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1532,8 +1702,8 @@ class ItemShippingDetailsSchema(marshmallow.Schema):
 
 
 class ItemShippingTargetSchema(marshmallow.Schema):
-    address_key = marshmallow.fields.String(data_key="addressKey")
-    quantity = marshmallow.fields.Integer()
+    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey")
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1544,9 +1714,11 @@ class ItemShippingTargetSchema(marshmallow.Schema):
 
 
 class ItemStateSchema(marshmallow.Schema):
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -1558,48 +1730,59 @@ class ItemStateSchema(marshmallow.Schema):
 
 
 class LineItemDraftSchema(marshmallow.Schema):
-    product_id = marshmallow.fields.String(missing=None, data_key="productId")
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    sku = marshmallow.fields.String(missing=None)
-    quantity = marshmallow.fields.Integer(missing=None)
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="distributionChannel",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalLineItemTotalPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -1613,42 +1796,52 @@ class LineItemDraftSchema(marshmallow.Schema):
 
 
 class LineItemImportDraftSchema(marshmallow.Schema):
-    product_id = marshmallow.fields.String(missing=None, data_key="productId")
-    name = LocalizedStringField()
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    name = LocalizedStringField(allow_none=True)
     variant = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantImportDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PriceDraftSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.PriceDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxRate",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -1662,59 +1855,73 @@ class LineItemImportDraftSchema(marshmallow.Schema):
 
 
 class LineItemSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    product_id = marshmallow.fields.String(data_key="productId")
-    name = LocalizedStringField()
-    product_slug = LocalizedStringField(missing=None, data_key="productSlug")
+    id = marshmallow.fields.String(allow_none=True)
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
+    name = LocalizedStringField(allow_none=True)
+    product_slug = LocalizedStringField(
+        allow_none=True, missing=None, data_key="productSlug"
+    )
     product_type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="productType",
     )
     variant = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductVariantSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ProductVariantSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PriceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.PriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedItemPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
     total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalPrice",
     )
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxRate",
     )
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="distributionChannel",
     )
     discounted_price_per_quantity = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPriceForQuantitySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="discountedPricePerQuantity",
     )
@@ -1727,11 +1934,13 @@ class LineItemSchema(marshmallow.Schema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -1746,7 +1955,7 @@ class LineItemSchema(marshmallow.Schema):
 
 class LocationSchema(marshmallow.Schema):
     country = marshmallow.fields.String()
-    state = marshmallow.fields.String(missing=None)
+    state = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1757,7 +1966,7 @@ class LocationSchema(marshmallow.Schema):
 
 
 class MessageConfigurationSchema(marshmallow.Schema):
-    enabled = marshmallow.fields.Bool()
+    enabled = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1768,11 +1977,15 @@ class MessageConfigurationSchema(marshmallow.Schema):
 
 
 class MessageSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer()
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(data_key="lastModifiedAt")
-    sequence_number = marshmallow.fields.Integer(data_key="sequenceNumber")
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    sequence_number = marshmallow.fields.Integer(
+        allow_none=True, data_key="sequenceNumber"
+    )
     resource = helpers.Discriminator(
         discriminator_field="typeId",
         discriminator_schemas={
@@ -1799,9 +2012,12 @@ class MessageSchema(marshmallow.Schema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    resource_version = marshmallow.fields.Integer(data_key="resourceVersion")
-    type = marshmallow.fields.String()
+    resource_version = marshmallow.fields.Integer(
+        allow_none=True, data_key="resourceVersion"
+    )
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1813,8 +2029,10 @@ class MessageSchema(marshmallow.Schema):
 
 
 class MessageSubscriptionSchema(marshmallow.Schema):
-    resource_type_id = marshmallow.fields.String(data_key="resourceTypeId")
-    types = marshmallow.fields.String(missing=None, many=True)
+    resource_type_id = marshmallow.fields.String(
+        allow_none=True, data_key="resourceTypeId"
+    )
+    types = marshmallow.fields.String(allow_none=True, missing=None, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1825,7 +2043,7 @@ class MessageSubscriptionSchema(marshmallow.Schema):
 
 
 class MoneySchema(marshmallow.Schema):
-    cent_amount = marshmallow.fields.Integer(data_key="centAmount")
+    cent_amount = marshmallow.fields.Integer(allow_none=True, data_key="centAmount")
     currency_code = marshmallow.fields.String(data_key="currencyCode")
 
     class Meta:
@@ -1838,14 +2056,17 @@ class MoneySchema(marshmallow.Schema):
 
 class MyCartDraftSchema(marshmallow.Schema):
     currency = marshmallow.fields.String()
-    customer_email = marshmallow.fields.String(missing=None, data_key="customerEmail")
-    country = marshmallow.fields.String(missing=None)
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
+    country = marshmallow.fields.String(allow_none=True, missing=None)
     inventory_mode = marshmallow_enum.EnumField(
         types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
     )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.MyLineItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="lineItems",
@@ -1853,36 +2074,41 @@ class MyCartDraftSchema(marshmallow.Schema):
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="billingAddress",
     )
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingMethodReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingMethod",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
     tax_mode = marshmallow_enum.EnumField(
         types.TaxMode, by_value=True, missing=None, data_key="taxMode"
     )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="itemShippingAddresses",
@@ -1897,33 +2123,45 @@ class MyCartDraftSchema(marshmallow.Schema):
 
 
 class MyCustomerDraftSchema(marshmallow.Schema):
-    email = marshmallow.fields.String()
-    password = marshmallow.fields.String()
-    first_name = marshmallow.fields.String(missing=None, data_key="firstName")
-    last_name = marshmallow.fields.String(missing=None, data_key="lastName")
-    middle_name = marshmallow.fields.String(missing=None, data_key="middleName")
-    title = marshmallow.fields.String(missing=None)
-    date_of_birth = marshmallow.fields.Date(missing=None, data_key="dateOfBirth")
-    company_name = marshmallow.fields.String(missing=None, data_key="companyName")
-    vat_id = marshmallow.fields.String(missing=None, data_key="vatId")
+    email = marshmallow.fields.String(allow_none=True)
+    password = marshmallow.fields.String(allow_none=True)
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
+    middle_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="middleName"
+    )
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    date_of_birth = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="dateOfBirth"
+    )
+    company_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="companyName"
+    )
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
     addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     default_shipping_address = marshmallow.fields.Integer(
-        missing=None, data_key="defaultShippingAddress"
+        allow_none=True, missing=None, data_key="defaultShippingAddress"
     )
     default_billing_address = marshmallow.fields.Integer(
-        missing=None, data_key="defaultBillingAddress"
+        allow_none=True, missing=None, data_key="defaultBillingAddress"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1934,29 +2172,33 @@ class MyCustomerDraftSchema(marshmallow.Schema):
 
 
 class MyLineItemDraftSchema(marshmallow.Schema):
-    product_id = marshmallow.fields.String(data_key="productId")
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
-    quantity = marshmallow.fields.Integer()
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="distributionChannel",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -1970,8 +2212,8 @@ class MyLineItemDraftSchema(marshmallow.Schema):
 
 
 class MyOrderFromCartDraftSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer()
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1982,9 +2224,11 @@ class MyOrderFromCartDraftSchema(marshmallow.Schema):
 
 
 class OrderFromCartDraftSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer()
-    order_number = marshmallow.fields.String(missing=None, data_key="orderNumber")
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    order_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderNumber"
+    )
     payment_state = marshmallow_enum.EnumField(
         types.PaymentState, by_value=True, missing=None, data_key="paymentState"
     )
@@ -1998,12 +2242,19 @@ class OrderFromCartDraftSchema(marshmallow.Schema):
 
 
 class OrderImportDraftSchema(marshmallow.Schema):
-    order_number = marshmallow.fields.String(missing=None, data_key="orderNumber")
-    customer_id = marshmallow.fields.String(missing=None, data_key="customerId")
-    customer_email = marshmallow.fields.String(missing=None, data_key="customerEmail")
+    order_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderNumber"
+    )
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.LineItemImportDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="lineItems",
@@ -2011,6 +2262,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
     custom_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomLineItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="customLineItems",
@@ -2018,33 +2270,38 @@ class OrderImportDraftSchema(marshmallow.Schema):
     total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="billingAddress",
     )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
-    country = marshmallow.fields.String(missing=None)
+    country = marshmallow.fields.String(allow_none=True, missing=None)
     order_state = marshmallow_enum.EnumField(
         types.OrderState, by_value=True, missing=None, data_key="orderState"
     )
@@ -2057,13 +2314,17 @@ class OrderImportDraftSchema(marshmallow.Schema):
     shipping_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingInfoDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingInfo",
     )
-    completed_at = marshmallow.fields.DateTime(missing=None, data_key="completedAt")
+    completed_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="completedAt"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     inventory_mode = marshmallow_enum.EnumField(
@@ -2075,6 +2336,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="itemShippingAddresses",
@@ -2089,12 +2351,13 @@ class OrderImportDraftSchema(marshmallow.Schema):
 
 
 class PagedQueryResponseSchema(marshmallow.Schema):
-    count = marshmallow.fields.Integer()
-    total = marshmallow.fields.Integer(missing=None)
-    offset = marshmallow.fields.Integer()
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -2110,17 +2373,20 @@ class ParcelDraftSchema(marshmallow.Schema):
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2135,15 +2401,17 @@ class ParcelDraftSchema(marshmallow.Schema):
 
 class ParcelMeasurementsSchema(marshmallow.Schema):
     height_in_millimeter = marshmallow.fields.Integer(
-        missing=None, data_key="heightInMillimeter"
+        allow_none=True, missing=None, data_key="heightInMillimeter"
     )
     length_in_millimeter = marshmallow.fields.Integer(
-        missing=None, data_key="lengthInMillimeter"
+        allow_none=True, missing=None, data_key="lengthInMillimeter"
     )
     width_in_millimeter = marshmallow.fields.Integer(
-        missing=None, data_key="widthInMillimeter"
+        allow_none=True, missing=None, data_key="widthInMillimeter"
     )
-    weight_in_gram = marshmallow.fields.Integer(missing=None, data_key="weightInGram")
+    weight_in_gram = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="weightInGram"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2154,22 +2422,25 @@ class ParcelMeasurementsSchema(marshmallow.Schema):
 
 
 class ParcelSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
+    id = marshmallow.fields.String(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2183,8 +2454,8 @@ class ParcelSchema(marshmallow.Schema):
 
 
 class PayloadNotIncludedSchema(marshmallow.Schema):
-    reason = marshmallow.fields.String()
-    payload_type = marshmallow.fields.String(data_key="payloadType")
+    reason = marshmallow.fields.String(allow_none=True)
+    payload_type = marshmallow.fields.String(allow_none=True, data_key="payloadType")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2198,58 +2469,73 @@ class PaymentDraftSchema(marshmallow.Schema):
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
-    interface_id = marshmallow.fields.String(missing=None, data_key="interfaceId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    interface_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interfaceId"
+    )
     amount_planned = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="amountPlanned",
     )
     amount_authorized = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="amountAuthorized",
     )
     authorized_until = marshmallow.fields.String(
-        missing=None, data_key="authorizedUntil"
+        allow_none=True, missing=None, data_key="authorizedUntil"
     )
     amount_paid = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="amountPaid",
     )
     amount_refunded = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="amountRefunded",
     )
     payment_method_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentMethodInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="paymentMethodInfo",
     )
     payment_status = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentStatusSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="paymentStatus",
     )
     transactions = marshmallow.fields.Nested(
         nested="commercetools.schemas.TransactionDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     interface_interactions = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="interfaceInteractions",
@@ -2257,9 +2543,10 @@ class PaymentDraftSchema(marshmallow.Schema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2273,6 +2560,7 @@ class PaymentInfoSchema(marshmallow.Schema):
     payments = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -2286,10 +2574,10 @@ class PaymentInfoSchema(marshmallow.Schema):
 
 class PaymentMethodInfoSchema(marshmallow.Schema):
     payment_interface = marshmallow.fields.String(
-        missing=None, data_key="paymentInterface"
+        allow_none=True, missing=None, data_key="paymentInterface"
     )
-    method = marshmallow.fields.String(missing=None)
-    name = LocalizedStringField(missing=None)
+    method = marshmallow.fields.String(allow_none=True, missing=None)
+    name = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2300,11 +2588,16 @@ class PaymentMethodInfoSchema(marshmallow.Schema):
 
 
 class PaymentStatusSchema(marshmallow.Schema):
-    interface_code = marshmallow.fields.String(missing=None, data_key="interfaceCode")
-    interface_text = marshmallow.fields.String(missing=None, data_key="interfaceText")
+    interface_code = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interfaceCode"
+    )
+    interface_text = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interfaceText"
+    )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -2318,30 +2611,40 @@ class PaymentStatusSchema(marshmallow.Schema):
 
 class PriceDraftSchema(marshmallow.Schema):
     value = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     country = marshmallow.fields.String(missing=None)
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     tiers = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceTierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2356,7 +2659,7 @@ class PriceDraftSchema(marshmallow.Schema):
 
 class PriceFunctionSchema(marshmallow.Schema):
     currency_code = marshmallow.fields.String(data_key="currencyCode")
-    function = marshmallow.fields.String()
+    function = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2367,37 +2670,48 @@ class PriceFunctionSchema(marshmallow.Schema):
 
 
 class PriceSchema(marshmallow.Schema):
-    id = marshmallow.fields.String(missing=None)
+    id = marshmallow.fields.String(allow_none=True, missing=None)
     value = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     country = marshmallow.fields.String(missing=None)
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
     discounted = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     tiers = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceTierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2411,9 +2725,13 @@ class PriceSchema(marshmallow.Schema):
 
 
 class PriceTierSchema(marshmallow.Schema):
-    minimum_quantity = marshmallow.fields.Integer(data_key="minimumQuantity")
+    minimum_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="minimumQuantity"
+    )
     value = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -2425,14 +2743,20 @@ class PriceTierSchema(marshmallow.Schema):
 
 
 class ProductCatalogDataSchema(marshmallow.Schema):
-    published = marshmallow.fields.Bool()
+    published = marshmallow.fields.Bool(allow_none=True)
     current = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductDataSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ProductDataSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     staged = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductDataSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ProductDataSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    has_staged_changes = marshmallow.fields.Bool(data_key="hasStagedChanges")
+    has_staged_changes = marshmallow.fields.Bool(
+        allow_none=True, data_key="hasStagedChanges"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2443,33 +2767,43 @@ class ProductCatalogDataSchema(marshmallow.Schema):
 
 
 class ProductDataSchema(marshmallow.Schema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
     categories = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     category_order_hints = CategoryOrderHintsField(
-        missing=None, data_key="categoryOrderHints"
+        allow_none=True, missing=None, data_key="categoryOrderHints"
     )
-    description = LocalizedStringField(missing=None)
-    slug = LocalizedStringField()
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
+    description = LocalizedStringField(allow_none=True, missing=None)
+    slug = LocalizedStringField(allow_none=True)
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
     master_variant = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="masterVariant",
     )
     variants = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     search_keywords = marshmallow.fields.Nested(
         nested="commercetools.schemas.SearchKeywordsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="searchKeywords",
     )
 
@@ -2482,8 +2816,8 @@ class ProductDataSchema(marshmallow.Schema):
 
 
 class ProductDiscountDraftSchema(marshmallow.Schema):
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     value = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -2492,12 +2826,17 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
             "relative": "commercetools.schemas.ProductDiscountValueRelativeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    predicate = marshmallow.fields.String()
-    sort_order = marshmallow.fields.String(data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(data_key="isActive")
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    predicate = marshmallow.fields.String(allow_none=True)
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2508,11 +2847,13 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
 
 
 class ProductDiscountMatchQuerySchema(marshmallow.Schema):
-    product_id = marshmallow.fields.String(data_key="productId")
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
-    staged = marshmallow.fields.Bool()
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    staged = marshmallow.fields.Bool(allow_none=True)
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PriceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.PriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -2524,7 +2865,7 @@ class ProductDiscountMatchQuerySchema(marshmallow.Schema):
 
 
 class ProductDiscountValueSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2539,55 +2880,68 @@ class ProductDraftSchema(marshmallow.Schema):
     product_type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="productType",
     )
-    name = LocalizedStringField()
-    slug = LocalizedStringField()
-    key = marshmallow.fields.String(missing=None)
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    slug = LocalizedStringField(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
     categories = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     category_order_hints = CategoryOrderHintsField(
-        missing=None, data_key="categoryOrderHints"
+        allow_none=True, missing=None, data_key="categoryOrderHints"
     )
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
     master_variant = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="masterVariant",
     )
     variants = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     search_keywords = marshmallow.fields.Nested(
         nested="commercetools.schemas.SearchKeywordsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="searchKeywords",
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    publish = marshmallow.fields.Bool(missing=None)
+    publish = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2598,12 +2952,13 @@ class ProductDraftSchema(marshmallow.Schema):
 
 
 class ProductTypeDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(missing=None)
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True)
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeDefinitionDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2617,16 +2972,19 @@ class ProductTypeDraftSchema(marshmallow.Schema):
 
 
 class ProductVariantAvailabilitySchema(marshmallow.Schema):
-    is_on_stock = marshmallow.fields.Bool(missing=None, data_key="isOnStock")
+    is_on_stock = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isOnStock"
+    )
     restockable_in_days = marshmallow.fields.Integer(
-        missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays"
     )
     available_quantity = marshmallow.fields.Integer(
-        missing=None, data_key="availableQuantity"
+        allow_none=True, missing=None, data_key="availableQuantity"
     )
     channels = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantChannelAvailabilityMapSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -2645,6 +3003,7 @@ class ProductVariantChannelAvailabilityMapSchema(marshmallow.Schema):
         type=marshmallow.fields.Nested(
             nested="commercetools.schemas.ProductVariantChannelAvailabilitySchema",
             unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
     )
 
@@ -2673,12 +3032,14 @@ class ProductVariantChannelAvailabilityMapSchema(marshmallow.Schema):
 
 
 class ProductVariantChannelAvailabilitySchema(marshmallow.Schema):
-    is_on_stock = marshmallow.fields.Bool(missing=None, data_key="isOnStock")
+    is_on_stock = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isOnStock"
+    )
     restockable_in_days = marshmallow.fields.Integer(
-        missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays"
     )
     available_quantity = marshmallow.fields.Integer(
-        missing=None, data_key="availableQuantity"
+        allow_none=True, missing=None, data_key="availableQuantity"
     )
 
     class Meta:
@@ -2690,29 +3051,33 @@ class ProductVariantChannelAvailabilitySchema(marshmallow.Schema):
 
 
 class ProductVariantDraftSchema(marshmallow.Schema):
-    sku = marshmallow.fields.String(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     images = marshmallow.fields.Nested(
         nested="commercetools.schemas.ImageSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     assets = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2726,23 +3091,26 @@ class ProductVariantDraftSchema(marshmallow.Schema):
 
 
 class ProductVariantImportDraftSchema(marshmallow.Schema):
-    id = marshmallow.fields.Integer(missing=None)
-    sku = marshmallow.fields.String(missing=None)
+    id = marshmallow.fields.Integer(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     images = marshmallow.fields.Nested(
         nested="commercetools.schemas.ImageSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -2756,54 +3124,61 @@ class ProductVariantImportDraftSchema(marshmallow.Schema):
 
 
 class ProductVariantSchema(marshmallow.Schema):
-    id = marshmallow.fields.Integer()
-    sku = marshmallow.fields.String(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    id = marshmallow.fields.Integer(allow_none=True)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     price = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     images = marshmallow.fields.Nested(
         nested="commercetools.schemas.ImageSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     assets = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     availability = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantAvailabilitySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     is_matching_variant = marshmallow.fields.Bool(
-        missing=None, data_key="isMatchingVariant"
+        allow_none=True, missing=None, data_key="isMatchingVariant"
     )
     scoped_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.ScopedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="scopedPrice",
     )
     scoped_price_discounted = marshmallow.fields.Bool(
-        missing=None, data_key="scopedPriceDiscounted"
+        allow_none=True, missing=None, data_key="scopedPriceDiscounted"
     )
 
     class Meta:
@@ -2815,17 +3190,20 @@ class ProductVariantSchema(marshmallow.Schema):
 
 
 class ProjectSchema(marshmallow.Schema):
-    version = marshmallow.fields.Integer()
-    key = marshmallow.fields.String()
-    name = marshmallow.fields.String()
+    version = marshmallow.fields.Integer(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True)
+    name = marshmallow.fields.String(allow_none=True)
     countries = marshmallow.fields.String(many=True)
     currencies = marshmallow.fields.String(many=True)
     languages = marshmallow.fields.String(many=True)
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
-    trial_until = marshmallow.fields.String(missing=None, data_key="trialUntil")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    trial_until = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="trialUntil"
+    )
     messages = marshmallow.fields.Nested(
         nested="commercetools.schemas.MessageConfigurationSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     shipping_rate_input_type = helpers.Discriminator(
         discriminator_field="type",
@@ -2835,6 +3213,7 @@ class ProjectSchema(marshmallow.Schema):
             "CartValue": "commercetools.schemas.CartValueTypeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingRateInputType",
     )
@@ -2874,6 +3253,7 @@ class ReplicaCartDraftSchema(marshmallow.Schema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -2888,8 +3268,8 @@ class ResourceIdentifierSchema(marshmallow.Schema):
     type_id = marshmallow_enum.EnumField(
         types.ReferenceTypeId, by_value=True, missing=None, data_key="typeId"
     )
-    id = marshmallow.fields.String(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2900,10 +3280,12 @@ class ResourceIdentifierSchema(marshmallow.Schema):
 
 
 class ResourceSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer()
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(data_key="lastModifiedAt")
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2917,12 +3299,15 @@ class ReturnInfoSchema(marshmallow.Schema):
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReturnItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     return_tracking_id = marshmallow.fields.String(
-        missing=None, data_key="returnTrackingId"
+        allow_none=True, missing=None, data_key="returnTrackingId"
     )
-    return_date = marshmallow.fields.DateTime(missing=None, data_key="returnDate")
+    return_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="returnDate"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2933,9 +3318,9 @@ class ReturnInfoSchema(marshmallow.Schema):
 
 
 class ReturnItemDraftSchema(marshmallow.Schema):
-    quantity = marshmallow.fields.Integer()
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    comment = marshmallow.fields.String(missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    comment = marshmallow.fields.String(allow_none=True, missing=None)
     shipment_state = marshmallow_enum.EnumField(
         types.ReturnShipmentState, by_value=True, data_key="shipmentState"
     )
@@ -2949,18 +3334,20 @@ class ReturnItemDraftSchema(marshmallow.Schema):
 
 
 class ReturnItemSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    quantity = marshmallow.fields.Integer()
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    comment = marshmallow.fields.String(missing=None)
+    id = marshmallow.fields.String(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    comment = marshmallow.fields.String(allow_none=True, missing=None)
     shipment_state = marshmallow_enum.EnumField(
         types.ReturnShipmentState, by_value=True, data_key="shipmentState"
     )
     payment_state = marshmallow_enum.EnumField(
         types.ReturnPaymentState, by_value=True, data_key="paymentState"
     )
-    last_modified_at = marshmallow.fields.DateTime(data_key="lastModifiedAt")
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2971,33 +3358,39 @@ class ReturnItemSchema(marshmallow.Schema):
 
 
 class ReviewDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     uniqueness_value = marshmallow.fields.String(
-        missing=None, data_key="uniquenessValue"
+        allow_none=True, missing=None, data_key="uniquenessValue"
     )
-    locale = marshmallow.fields.String(missing=None)
-    author_name = marshmallow.fields.String(missing=None, data_key="authorName")
-    title = marshmallow.fields.String(missing=None)
-    text = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    author_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="authorName"
+    )
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    text = marshmallow.fields.String(allow_none=True, missing=None)
     target = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    rating = marshmallow.fields.Integer(missing=None)
+    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -3010,11 +3403,17 @@ class ReviewDraftSchema(marshmallow.Schema):
 
 
 class ReviewRatingStatisticsSchema(marshmallow.Schema):
-    average_rating = marshmallow.fields.Integer(data_key="averageRating")
-    highest_rating = marshmallow.fields.Integer(data_key="highestRating")
-    lowest_rating = marshmallow.fields.Integer(data_key="lowestRating")
-    count = marshmallow.fields.Integer()
-    ratings_distribution = marshmallow.fields.Dict(data_key="ratingsDistribution")
+    average_rating = marshmallow.fields.Integer(
+        allow_none=True, data_key="averageRating"
+    )
+    highest_rating = marshmallow.fields.Integer(
+        allow_none=True, data_key="highestRating"
+    )
+    lowest_rating = marshmallow.fields.Integer(allow_none=True, data_key="lowestRating")
+    count = marshmallow.fields.Integer(allow_none=True)
+    ratings_distribution = marshmallow.fields.Dict(
+        allow_none=True, data_key="ratingsDistribution"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3025,7 +3424,7 @@ class ReviewRatingStatisticsSchema(marshmallow.Schema):
 
 
 class ScopedPriceSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
+    id = marshmallow.fields.String(allow_none=True)
     value = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -3033,6 +3432,7 @@ class ScopedPriceSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     current_value = helpers.Discriminator(
         discriminator_field="type",
@@ -3041,30 +3441,39 @@ class ScopedPriceSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="currentValue",
     )
     country = marshmallow.fields.String(missing=None)
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
     discounted = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -3077,7 +3486,7 @@ class ScopedPriceSchema(marshmallow.Schema):
 
 
 class SearchKeywordSchema(marshmallow.Schema):
-    text = marshmallow.fields.String()
+    text = marshmallow.fields.String(allow_none=True)
     suggest_tokenizer = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -3085,6 +3494,7 @@ class SearchKeywordSchema(marshmallow.Schema):
             "whitespace": "commercetools.schemas.WhitespaceTokenizerSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="suggestTokenizer",
     )
@@ -3104,6 +3514,7 @@ class SearchKeywordsSchema(marshmallow.Schema):
         type=marshmallow.fields.Nested(
             nested="commercetools.schemas.SearchKeywordSchema",
             unknown=marshmallow.EXCLUDE,
+            allow_none=True,
             many=True,
         ),
     )
@@ -3133,48 +3544,59 @@ class SearchKeywordsSchema(marshmallow.Schema):
 
 
 class ShippingInfoDraftSchema(marshmallow.Schema):
-    shipping_method_name = marshmallow.fields.String(data_key="shippingMethodName")
+    shipping_method_name = marshmallow.fields.String(
+        allow_none=True, data_key="shippingMethodName"
+    )
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="shippingRate",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedItemPriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxRate",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingMethodReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingMethod",
     )
     deliveries = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliverySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     discounted_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="discountedPrice",
     )
@@ -3194,7 +3616,9 @@ class ShippingInfoDraftSchema(marshmallow.Schema):
 
 
 class ShippingInfoSchema(marshmallow.Schema):
-    shipping_method_name = marshmallow.fields.String(data_key="shippingMethodName")
+    shipping_method_name = marshmallow.fields.String(
+        allow_none=True, data_key="shippingMethodName"
+    )
     price = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -3202,45 +3626,53 @@ class ShippingInfoSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="shippingRate",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedItemPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxRate",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingMethodReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingMethod",
     )
     deliveries = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliverySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     discounted_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedLineItemPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="discountedPrice",
     )
@@ -3257,22 +3689,24 @@ class ShippingInfoSchema(marshmallow.Schema):
 
 
 class ShippingMethodDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(missing=None)
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="taxCategory",
     )
     zone_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.ZoneRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="zoneRates",
     )
-    is_default = marshmallow.fields.Bool(data_key="isDefault")
-    predicate = marshmallow.fields.String(missing=None)
+    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault")
+    predicate = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3284,11 +3718,14 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
 
 class ShippingRateDraftSchema(marshmallow.Schema):
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     free_above = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="freeAbove",
     )
@@ -3300,6 +3737,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
             "CartValue": "commercetools.schemas.CartValueTierSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -3313,7 +3751,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
 
 
 class ShippingRateInputDraftSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3325,7 +3763,7 @@ class ShippingRateInputDraftSchema(marshmallow.Schema):
 
 
 class ShippingRateInputSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3368,6 +3806,7 @@ class ShippingRateSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     free_above = helpers.Discriminator(
         discriminator_field="type",
@@ -3376,10 +3815,13 @@ class ShippingRateSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="freeAbove",
     )
-    is_matching = marshmallow.fields.Bool(missing=None, data_key="isMatching")
+    is_matching = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isMatching"
+    )
     tiers = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -3388,6 +3830,7 @@ class ShippingRateSchema(marshmallow.Schema):
             "CartValue": "commercetools.schemas.CartValueTierSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -3403,35 +3846,41 @@ class ShoppingListDraftSchema(marshmallow.Schema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
-    description = LocalizedStringField(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShoppingListLineItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="lineItems",
     )
-    name = LocalizedStringField()
-    slug = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    slug = LocalizedStringField(allow_none=True, missing=None)
     text_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.TextLineItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="textLineItems",
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3442,16 +3891,23 @@ class ShoppingListDraftSchema(marshmallow.Schema):
 
 
 class ShoppingListLineItemDraftSchema(marshmallow.Schema):
-    added_at = marshmallow.fields.DateTime(missing=None, data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    sku = marshmallow.fields.String(missing=None)
-    product_id = marshmallow.fields.String(missing=None, data_key="productId")
-    quantity = marshmallow.fields.Integer(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3462,29 +3918,38 @@ class ShoppingListLineItemDraftSchema(marshmallow.Schema):
 
 
 class ShoppingListLineItemSchema(marshmallow.Schema):
-    added_at = marshmallow.fields.DateTime(data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(allow_none=True, data_key="addedAt")
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    deactivated_at = marshmallow.fields.DateTime(missing=None, data_key="deactivatedAt")
-    id = marshmallow.fields.String()
-    name = LocalizedStringField()
-    product_id = marshmallow.fields.String(data_key="productId")
-    product_slug = LocalizedStringField(missing=None, data_key="productSlug")
+    deactivated_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="deactivatedAt"
+    )
+    id = marshmallow.fields.String(allow_none=True)
+    name = LocalizedStringField(allow_none=True)
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
+    product_slug = LocalizedStringField(
+        allow_none=True, missing=None, data_key="productSlug"
+    )
     product_type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="productType",
     )
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
     variant = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3495,17 +3960,18 @@ class ShoppingListLineItemSchema(marshmallow.Schema):
 
 
 class StateDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
     type = marshmallow_enum.EnumField(types.StateTypeEnum, by_value=True)
-    name = LocalizedStringField(missing=None)
-    description = LocalizedStringField(missing=None)
-    initial = marshmallow.fields.Bool(missing=None)
+    name = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    initial = marshmallow.fields.Bool(allow_none=True, missing=None)
     roles = marshmallow_enum.EnumField(
         types.StateRoleEnum, by_value=True, missing=None, many=True
     )
     transitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -3519,8 +3985,8 @@ class StateDraftSchema(marshmallow.Schema):
 
 
 class SubRateSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
-    amount = marshmallow.fields.Integer()
+    name = marshmallow.fields.String(allow_none=True)
+    amount = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3531,8 +3997,10 @@ class SubRateSchema(marshmallow.Schema):
 
 
 class SubscriptionDeliverySchema(marshmallow.Schema):
-    project_key = marshmallow.fields.String(data_key="projectKey")
-    notification_type = marshmallow.fields.String(data_key="notificationType")
+    project_key = marshmallow.fields.String(allow_none=True, data_key="projectKey")
+    notification_type = marshmallow.fields.String(
+        allow_none=True, data_key="notificationType"
+    )
     resource = helpers.Discriminator(
         discriminator_field="typeId",
         discriminator_schemas={
@@ -3559,6 +4027,7 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -3574,6 +4043,7 @@ class SubscriptionDraftSchema(marshmallow.Schema):
     changes = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChangeSubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -3588,11 +4058,13 @@ class SubscriptionDraftSchema(marshmallow.Schema):
             "SQS": "commercetools.schemas.SqsDestinationSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     messages = marshmallow.fields.Nested(
         nested="commercetools.schemas.MessageSubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -3606,7 +4078,7 @@ class SubscriptionDraftSchema(marshmallow.Schema):
 
 
 class SuggestTokenizerSchema(marshmallow.Schema):
-    type = marshmallow.fields.String()
+    type = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3625,7 +4097,9 @@ class SuggestionResultSchema(marshmallow.Schema):
             marshmallow.fields.Nested(
                 nested="commercetools.schemas.SuggestionSchema",
                 unknown=marshmallow.EXCLUDE,
-            )
+                allow_none=True,
+            ),
+            allow_none=True,
         ),
     )
 
@@ -3654,7 +4128,7 @@ class SuggestionResultSchema(marshmallow.Schema):
 
 
 class SuggestionSchema(marshmallow.Schema):
-    text = marshmallow.fields.String()
+    text = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3668,9 +4142,12 @@ class SyncInfoSchema(marshmallow.Schema):
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
-    synced_at = marshmallow.fields.DateTime(data_key="syncedAt")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    synced_at = marshmallow.fields.DateTime(allow_none=True, data_key="syncedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3681,14 +4158,15 @@ class SyncInfoSchema(marshmallow.Schema):
 
 
 class TaxCategoryDraftSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
     rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3699,10 +4177,12 @@ class TaxCategoryDraftSchema(marshmallow.Schema):
 
 
 class TaxPortionSchema(marshmallow.Schema):
-    name = marshmallow.fields.String(missing=None)
-    rate = marshmallow.fields.Integer()
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    rate = marshmallow.fields.Integer(allow_none=True)
     amount = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -3714,14 +4194,17 @@ class TaxPortionSchema(marshmallow.Schema):
 
 
 class TaxRateDraftSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
-    amount = marshmallow.fields.Integer(missing=None)
-    included_in_price = marshmallow.fields.Bool(data_key="includedInPrice")
+    name = marshmallow.fields.String(allow_none=True)
+    amount = marshmallow.fields.Integer(allow_none=True, missing=None)
+    included_in_price = marshmallow.fields.Bool(
+        allow_none=True, data_key="includedInPrice"
+    )
     country = marshmallow.fields.String()
-    state = marshmallow.fields.String(missing=None)
+    state = marshmallow.fields.String(allow_none=True, missing=None)
     sub_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.SubRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="subRates",
@@ -3736,15 +4219,18 @@ class TaxRateDraftSchema(marshmallow.Schema):
 
 
 class TaxRateSchema(marshmallow.Schema):
-    id = marshmallow.fields.String(missing=None)
-    name = marshmallow.fields.String()
-    amount = marshmallow.fields.Integer()
-    included_in_price = marshmallow.fields.Bool(data_key="includedInPrice")
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    amount = marshmallow.fields.Integer(allow_none=True)
+    included_in_price = marshmallow.fields.Bool(
+        allow_none=True, data_key="includedInPrice"
+    )
     country = marshmallow.fields.String()
-    state = marshmallow.fields.String(missing=None)
+    state = marshmallow.fields.String(allow_none=True, missing=None)
     sub_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.SubRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="subRates",
@@ -3762,11 +4248,13 @@ class TaxedItemPriceDraftSchema(marshmallow.Schema):
     total_net = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalNet",
     )
     total_gross = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalGross",
     )
 
@@ -3786,6 +4274,7 @@ class TaxedItemPriceSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalNet",
     )
     total_gross = helpers.Discriminator(
@@ -3795,6 +4284,7 @@ class TaxedItemPriceSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalGross",
     )
 
@@ -3810,16 +4300,19 @@ class TaxedPriceSchema(marshmallow.Schema):
     total_net = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalNet",
     )
     total_gross = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalGross",
     )
     tax_portions = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxPortionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="taxPortions",
     )
@@ -3833,15 +4326,18 @@ class TaxedPriceSchema(marshmallow.Schema):
 
 
 class TextLineItemDraftSchema(marshmallow.Schema):
-    added_at = marshmallow.fields.DateTime(missing=None, data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    description = LocalizedStringField(missing=None)
-    name = LocalizedStringField()
-    quantity = marshmallow.fields.Integer(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3852,16 +4348,17 @@ class TextLineItemDraftSchema(marshmallow.Schema):
 
 
 class TextLineItemSchema(marshmallow.Schema):
-    added_at = marshmallow.fields.DateTime(data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(allow_none=True, data_key="addedAt")
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    description = LocalizedStringField(missing=None)
-    id = marshmallow.fields.String()
-    name = LocalizedStringField()
-    quantity = marshmallow.fields.Integer()
+    description = LocalizedStringField(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True)
+    name = LocalizedStringField(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3872,13 +4369,17 @@ class TextLineItemSchema(marshmallow.Schema):
 
 
 class TrackingDataSchema(marshmallow.Schema):
-    tracking_id = marshmallow.fields.String(missing=None, data_key="trackingId")
-    carrier = marshmallow.fields.String(missing=None)
-    provider = marshmallow.fields.String(missing=None)
-    provider_transaction = marshmallow.fields.String(
-        missing=None, data_key="providerTransaction"
+    tracking_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="trackingId"
     )
-    is_return = marshmallow.fields.Bool(missing=None, data_key="isReturn")
+    carrier = marshmallow.fields.String(allow_none=True, missing=None)
+    provider = marshmallow.fields.String(allow_none=True, missing=None)
+    provider_transaction = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="providerTransaction"
+    )
+    is_return = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isReturn"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3889,12 +4390,16 @@ class TrackingDataSchema(marshmallow.Schema):
 
 
 class TransactionDraftSchema(marshmallow.Schema):
-    timestamp = marshmallow.fields.DateTime(missing=None)
+    timestamp = marshmallow.fields.DateTime(allow_none=True, missing=None)
     type = marshmallow_enum.EnumField(types.TransactionType, by_value=True)
     amount = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    interaction_id = marshmallow.fields.String(missing=None, data_key="interactionId")
+    interaction_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interactionId"
+    )
     state = marshmallow_enum.EnumField(
         types.TransactionState, by_value=True, missing=None
     )
@@ -3908,8 +4413,8 @@ class TransactionDraftSchema(marshmallow.Schema):
 
 
 class TransactionSchema(marshmallow.Schema):
-    id = marshmallow.fields.String()
-    timestamp = marshmallow.fields.DateTime(missing=None)
+    id = marshmallow.fields.String(allow_none=True)
+    timestamp = marshmallow.fields.DateTime(allow_none=True, missing=None)
     type = marshmallow_enum.EnumField(types.TransactionType, by_value=True)
     amount = helpers.Discriminator(
         discriminator_field="type",
@@ -3918,8 +4423,11 @@ class TransactionSchema(marshmallow.Schema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    interaction_id = marshmallow.fields.String(missing=None, data_key="interactionId")
+    interaction_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interactionId"
+    )
     state = marshmallow_enum.EnumField(
         types.TransactionState, by_value=True, missing=None
     )
@@ -3933,15 +4441,16 @@ class TransactionSchema(marshmallow.Schema):
 
 
 class TypeDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String()
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    key = marshmallow.fields.String(allow_none=True)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     resource_type_ids = marshmallow_enum.EnumField(
         types.ResourceTypeId, by_value=True, many=True, data_key="resourceTypeIds"
     )
     field_definitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.FieldDefinitionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="fieldDefinitions",
@@ -3956,7 +4465,7 @@ class TypeDraftSchema(marshmallow.Schema):
 
 
 class UpdateActionSchema(marshmallow.Schema):
-    action = marshmallow.fields.String()
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3967,12 +4476,14 @@ class UpdateActionSchema(marshmallow.Schema):
 
 
 class UpdateSchema(marshmallow.Schema):
-    version = marshmallow.fields.Integer()
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         marshmallow.fields.Nested(
             nested="commercetools.schemas.UpdateActionSchema",
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -3984,15 +4495,17 @@ class UpdateSchema(marshmallow.Schema):
 
 
 class VariantValuesSchema(marshmallow.Schema):
-    sku = marshmallow.fields.String(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4005,11 +4518,12 @@ class VariantValuesSchema(marshmallow.Schema):
 
 
 class ZoneDraftSchema(marshmallow.Schema):
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
     locations = marshmallow.fields.Nested(
         nested="commercetools.schemas.LocationSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4023,11 +4537,14 @@ class ZoneDraftSchema(marshmallow.Schema):
 
 class ZoneRateDraftSchema(marshmallow.Schema):
     zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     shipping_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="shippingRates",
     )
@@ -4042,11 +4559,14 @@ class ZoneRateDraftSchema(marshmallow.Schema):
 
 class ZoneRateSchema(marshmallow.Schema):
     zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     shipping_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="shippingRates",
     )
@@ -4103,6 +4623,7 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
     values = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributePlainEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4129,6 +4650,7 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
     values = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4155,6 +4677,7 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
     type_reference = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="typeReference",
     )
 
@@ -4210,6 +4733,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
             "time": "commercetools.schemas.AttributeTimeTypeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="elementType",
     )
 
@@ -4243,8 +4767,8 @@ class AttributeTimeTypeSchema(AttributeTypeSchema):
 
 
 class AzureEventGridDestinationSchema(DestinationSchema):
-    uri = marshmallow.fields.String()
-    access_key = marshmallow.fields.String(data_key="accessKey")
+    uri = marshmallow.fields.String(allow_none=True)
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4256,7 +4780,9 @@ class AzureEventGridDestinationSchema(DestinationSchema):
 
 
 class AzureServiceBusDestinationSchema(DestinationSchema):
-    connection_string = marshmallow.fields.String(data_key="connectionString")
+    connection_string = marshmallow.fields.String(
+        allow_none=True, data_key="connectionString"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4268,11 +4794,15 @@ class AzureServiceBusDestinationSchema(DestinationSchema):
 
 
 class CartClassificationTierSchema(ShippingRatePriceTierSchema):
-    value = marshmallow.fields.String()
+    value = marshmallow.fields.String(allow_none=True)
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    is_matching = marshmallow.fields.Bool(missing=None, data_key="isMatching")
+    is_matching = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isMatching"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4288,7 +4818,9 @@ class CartClassificationTypeSchema(ShippingRateInputTypeSchema):
         marshmallow.fields.Nested(
             nested="commercetools.schemas.CustomFieldLocalizedEnumValueSchema",
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -4301,7 +4833,7 @@ class CartClassificationTypeSchema(ShippingRateInputTypeSchema):
 
 
 class CartDiscountCustomLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String()
+    predicate = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4313,7 +4845,7 @@ class CartDiscountCustomLineItemsTargetSchema(CartDiscountTargetSchema):
 
 
 class CartDiscountLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String()
+    predicate = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4328,6 +4860,7 @@ class CartDiscountPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4340,8 +4873,8 @@ class CartDiscountPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class CartDiscountSchema(ResourceSchema):
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     value = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -4350,8 +4883,11 @@ class CartDiscountSchema(ResourceSchema):
             "relative": "commercetools.schemas.CartDiscountValueRelativeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
+    cart_predicate = marshmallow.fields.String(
+        allow_none=True, data_key="cartPredicate"
+    )
     target = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -4362,13 +4898,20 @@ class CartDiscountSchema(ResourceSchema):
             "multiBuyLineItems": "commercetools.schemas.MultiBuyLineItemsTargetSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    sort_order = marshmallow.fields.String(data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(data_key="isActive")
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
-    requires_discount_code = marshmallow.fields.Bool(data_key="requiresDiscountCode")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
+    requires_discount_code = marshmallow.fields.Bool(
+        allow_none=True, data_key="requiresDiscountCode"
+    )
     references = helpers.Discriminator(
         discriminator_field="typeId",
         discriminator_schemas={
@@ -4395,6 +4938,7 @@ class CartDiscountSchema(ResourceSchema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     stacking_mode = marshmallow_enum.EnumField(
@@ -4403,6 +4947,7 @@ class CartDiscountSchema(ResourceSchema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -4455,7 +5000,9 @@ class CartDiscountUpdateSchema(UpdateSchema):
                 "setValidUntil": "commercetools.schemas.CartDiscountSetValidUntilActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -4470,6 +5017,7 @@ class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
     money = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4486,17 +5034,20 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
     product = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="distributionChannel",
     )
@@ -4511,7 +5062,7 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
 
 
 class CartDiscountValueRelativeSchema(CartDiscountValueSchema):
-    permyriad = marshmallow.fields.Integer()
+    permyriad = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4526,6 +5077,7 @@ class CartPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4538,18 +5090,26 @@ class CartPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class CartSchema(ResourceSchema):
-    customer_id = marshmallow.fields.String(missing=None, data_key="customerId")
-    customer_email = marshmallow.fields.String(missing=None, data_key="customerEmail")
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.LineItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="lineItems",
     )
     custom_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomLineItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="customLineItems",
     )
@@ -4560,11 +5120,13 @@ class CartSchema(ResourceSchema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
@@ -4574,12 +5136,14 @@ class CartSchema(ResourceSchema):
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="billingAddress",
     )
@@ -4598,6 +5162,7 @@ class CartSchema(ResourceSchema):
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
@@ -4605,12 +5170,14 @@ class CartSchema(ResourceSchema):
     shipping_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingInfo",
     )
     discount_codes = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountCodeInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="discountCodes",
@@ -4618,21 +5185,24 @@ class CartSchema(ResourceSchema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     payment_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="paymentInfo",
     )
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
     refused_gifts = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="refusedGifts",
     )
@@ -4644,12 +5214,14 @@ class CartSchema(ResourceSchema):
             "Score": "commercetools.schemas.ScoreShippingRateInputSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingRateInput",
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="itemShippingAddresses",
@@ -4664,19 +5236,23 @@ class CartSchema(ResourceSchema):
 
 
 class CartScoreTierSchema(ShippingRatePriceTierSchema):
-    score = marshmallow.fields.Integer()
+    score = marshmallow.fields.Integer(allow_none=True)
     price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     price_function = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceFunctionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="priceFunction",
     )
-    is_matching = marshmallow.fields.Bool(missing=None, data_key="isMatching")
+    is_matching = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isMatching"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4764,7 +5340,9 @@ class CartUpdateSchema(UpdateSchema):
                 "updateItemShippingAddress": "commercetools.schemas.CartUpdateItemShippingAddressActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -4776,11 +5354,17 @@ class CartUpdateSchema(UpdateSchema):
 
 
 class CartValueTierSchema(ShippingRatePriceTierSchema):
-    minimum_cent_amount = marshmallow.fields.Integer(data_key="minimumCentAmount")
-    price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+    minimum_cent_amount = marshmallow.fields.Integer(
+        allow_none=True, data_key="minimumCentAmount"
     )
-    is_matching = marshmallow.fields.Bool(missing=None, data_key="isMatching")
+    price = marshmallow.fields.Nested(
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    is_matching = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="isMatching"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4803,7 +5387,9 @@ class CartValueTypeSchema(ShippingRateInputTypeSchema):
 
 class CategoryCreatedMessageSchema(MessageSchema):
     category = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CategorySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.CategorySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -4819,6 +5405,7 @@ class CategoryPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategorySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4831,36 +5418,48 @@ class CategoryPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class CategorySchema(ResourceSchema):
-    name = LocalizedStringField()
-    slug = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    slug = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     ancestors = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     parent = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    order_hint = marshmallow.fields.String(data_key="orderHint")
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
+    order_hint = marshmallow.fields.String(allow_none=True, data_key="orderHint")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     assets = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4871,7 +5470,7 @@ class CategorySchema(ResourceSchema):
 
 
 class CategorySlugChangedMessageSchema(MessageSchema):
-    slug = LocalizedStringField()
+    slug = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4921,7 +5520,9 @@ class CategoryUpdateSchema(UpdateSchema):
                 "setMetaTitle": "commercetools.schemas.CategorySetMetaTitleActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -4936,6 +5537,7 @@ class ChannelPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -4948,29 +5550,33 @@ class ChannelPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ChannelSchema(ResourceSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
     roles = marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True, many=True)
-    name = LocalizedStringField(missing=None)
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     review_rating_statistics = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReviewRatingStatisticsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="reviewRatingStatistics",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     geo_location = marshmallow.fields.Nested(
         nested="commercetools.schemas.GeoJsonPointSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="geoLocation",
     )
@@ -5010,7 +5616,9 @@ class ChannelUpdateSchema(UpdateSchema):
                 "setRoles": "commercetools.schemas.ChannelSetRolesActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -5022,7 +5630,7 @@ class ChannelUpdateSchema(UpdateSchema):
 
 
 class ClassificationShippingRateInputDraftSchema(ShippingRateInputDraftSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5034,8 +5642,8 @@ class ClassificationShippingRateInputDraftSchema(ShippingRateInputDraftSchema):
 
 
 class ClassificationShippingRateInputSchema(ShippingRateInputSchema):
-    key = marshmallow.fields.String()
-    label = LocalizedStringField()
+    key = marshmallow.fields.String(allow_none=True)
+    label = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5048,7 +5656,7 @@ class ClassificationShippingRateInputSchema(ShippingRateInputSchema):
 
 class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     current_version = marshmallow.fields.Integer(
-        missing=None, data_key="currentVersion"
+        allow_none=True, missing=None, data_key="currentVersion"
     )
 
     class Meta:
@@ -5094,6 +5702,7 @@ class CustomFieldEnumTypeSchema(FieldTypeSchema):
     values = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5110,6 +5719,7 @@ class CustomFieldLocalizedEnumTypeSchema(FieldTypeSchema):
     values = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5184,6 +5794,7 @@ class CustomFieldSetTypeSchema(FieldTypeSchema):
             "Time": "commercetools.schemas.CustomFieldTimeTypeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="elementType",
     )
 
@@ -5217,17 +5828,23 @@ class CustomFieldTimeTypeSchema(FieldTypeSchema):
 
 
 class CustomLineItemStateTransitionMessageSchema(MessageSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
-    transition_date = marshmallow.fields.DateTime(data_key="transitionDate")
-    quantity = marshmallow.fields.Integer()
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="fromState",
     )
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="toState",
     )
 
@@ -5244,6 +5861,7 @@ class CustomObjectPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomObjectSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5256,9 +5874,9 @@ class CustomObjectPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class CustomObjectSchema(ResourceSchema):
-    container = marshmallow.fields.String()
-    key = marshmallow.fields.String()
-    value = marshmallow.fields.Raw()
+    container = marshmallow.fields.String(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5269,7 +5887,7 @@ class CustomObjectSchema(ResourceSchema):
 
 
 class CustomTokenizerSchema(SuggestTokenizerSchema):
-    inputs = marshmallow.fields.String(many=True)
+    inputs = marshmallow.fields.String(allow_none=True, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5282,7 +5900,9 @@ class CustomTokenizerSchema(SuggestTokenizerSchema):
 
 class CustomerAddressAddedMessageSchema(MessageSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5296,7 +5916,9 @@ class CustomerAddressAddedMessageSchema(MessageSchema):
 
 class CustomerAddressChangedMessageSchema(MessageSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5310,7 +5932,9 @@ class CustomerAddressChangedMessageSchema(MessageSchema):
 
 class CustomerAddressRemovedMessageSchema(MessageSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5323,7 +5947,7 @@ class CustomerAddressRemovedMessageSchema(MessageSchema):
 
 
 class CustomerCompanyNameSetMessageSchema(MessageSchema):
-    company_name = marshmallow.fields.String(data_key="companyName")
+    company_name = marshmallow.fields.String(allow_none=True, data_key="companyName")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5336,7 +5960,9 @@ class CustomerCompanyNameSetMessageSchema(MessageSchema):
 
 class CustomerCreatedMessageSchema(MessageSchema):
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.CustomerSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5349,7 +5975,7 @@ class CustomerCreatedMessageSchema(MessageSchema):
 
 
 class CustomerDateOfBirthSetMessageSchema(MessageSchema):
-    date_of_birth = marshmallow.fields.Date(data_key="dateOfBirth")
+    date_of_birth = marshmallow.fields.Date(allow_none=True, data_key="dateOfBirth")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5361,7 +5987,7 @@ class CustomerDateOfBirthSetMessageSchema(MessageSchema):
 
 
 class CustomerEmailChangedMessageSchema(MessageSchema):
-    email = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5386,6 +6012,7 @@ class CustomerGroupPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5398,11 +6025,12 @@ class CustomerGroupPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class CustomerGroupSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
-    name = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True)
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -5418,6 +6046,7 @@ class CustomerGroupSetMessageSchema(MessageSchema):
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="customerGroup",
     )
 
@@ -5451,7 +6080,9 @@ class CustomerGroupUpdateSchema(UpdateSchema):
                 "setKey": "commercetools.schemas.CustomerGroupSetKeyActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -5466,6 +6097,7 @@ class CustomerPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5478,49 +6110,68 @@ class CustomerPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class CustomerSchema(ResourceSchema):
-    customer_number = marshmallow.fields.String(missing=None, data_key="customerNumber")
-    email = marshmallow.fields.String()
-    password = marshmallow.fields.String()
-    first_name = marshmallow.fields.String(missing=None, data_key="firstName")
-    last_name = marshmallow.fields.String(missing=None, data_key="lastName")
-    middle_name = marshmallow.fields.String(missing=None, data_key="middleName")
-    title = marshmallow.fields.String(missing=None)
-    date_of_birth = marshmallow.fields.Date(missing=None, data_key="dateOfBirth")
-    company_name = marshmallow.fields.String(missing=None, data_key="companyName")
-    vat_id = marshmallow.fields.String(missing=None, data_key="vatId")
+    customer_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerNumber"
+    )
+    email = marshmallow.fields.String(allow_none=True)
+    password = marshmallow.fields.String(allow_none=True)
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
+    middle_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="middleName"
+    )
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    date_of_birth = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="dateOfBirth"
+    )
+    company_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="companyName"
+    )
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
     addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     default_shipping_address_id = marshmallow.fields.String(
-        missing=None, data_key="defaultShippingAddressId"
+        allow_none=True, missing=None, data_key="defaultShippingAddressId"
     )
     shipping_address_ids = marshmallow.fields.String(
-        missing=None, many=True, data_key="shippingAddressIds"
+        allow_none=True, missing=None, many=True, data_key="shippingAddressIds"
     )
     default_billing_address_id = marshmallow.fields.String(
-        missing=None, data_key="defaultBillingAddressId"
+        allow_none=True, missing=None, data_key="defaultBillingAddressId"
     )
     billing_address_ids = marshmallow.fields.String(
-        missing=None, many=True, data_key="billingAddressIds"
+        allow_none=True, missing=None, many=True, data_key="billingAddressIds"
     )
-    is_email_verified = marshmallow.fields.Bool(data_key="isEmailVerified")
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
+    is_email_verified = marshmallow.fields.Bool(
+        allow_none=True, data_key="isEmailVerified"
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    locale = marshmallow.fields.String(missing=None)
-    salutation = marshmallow.fields.String(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5572,7 +6223,9 @@ class CustomerUpdateSchema(UpdateSchema):
                 "setVatId": "commercetools.schemas.CustomerSetVatIdActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -5585,7 +6238,9 @@ class CustomerUpdateSchema(UpdateSchema):
 
 class DeliveryAddedMessageSchema(MessageSchema):
     delivery = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliverySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.DeliverySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5598,10 +6253,11 @@ class DeliveryAddedMessageSchema(MessageSchema):
 
 
 class DeliveryAddressSetMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -5615,10 +6271,11 @@ class DeliveryAddressSetMessageSchema(MessageSchema):
 
 
 class DeliveryItemsUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5633,7 +6290,9 @@ class DeliveryItemsUpdatedMessageSchema(MessageSchema):
 
 class DeliveryRemovedMessageSchema(MessageSchema):
     delivery = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliverySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.DeliverySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5659,6 +6318,7 @@ class DiscountCodePagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountCodeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5671,17 +6331,20 @@ class DiscountCodePagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class DiscountCodeSchema(ResourceSchema):
-    name = LocalizedStringField(missing=None)
-    description = LocalizedStringField(missing=None)
-    code = marshmallow.fields.String()
+    name = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    code = marshmallow.fields.String(allow_none=True)
     cart_discounts = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="cartDiscounts",
     )
-    cart_predicate = marshmallow.fields.String(missing=None, data_key="cartPredicate")
-    is_active = marshmallow.fields.Bool(data_key="isActive")
+    cart_predicate = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="cartPredicate"
+    )
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
     references = helpers.Discriminator(
         discriminator_field="typeId",
         discriminator_schemas={
@@ -5708,22 +6371,28 @@ class DiscountCodeSchema(ResourceSchema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     max_applications = marshmallow.fields.Integer(
-        missing=None, data_key="maxApplications"
+        allow_none=True, missing=None, data_key="maxApplications"
     )
     max_applications_per_customer = marshmallow.fields.Integer(
-        missing=None, data_key="maxApplicationsPerCustomer"
+        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    groups = marshmallow.fields.String(many=True)
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    groups = marshmallow.fields.String(allow_none=True, many=True)
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5763,7 +6432,9 @@ class DiscountCodeUpdateSchema(UpdateSchema):
                 "setValidUntil": "commercetools.schemas.DiscountCodeSetValidUntilActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -5776,7 +6447,9 @@ class DiscountCodeUpdateSchema(UpdateSchema):
 
 class DuplicateAttributeValueErrorSchema(ErrorObjectSchema):
     attribute = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AttributeSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AttributeSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -5792,6 +6465,7 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5805,8 +6479,10 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
 
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(missing=None)
-    duplicate_value = marshmallow.fields.Raw(missing=None, data_key="duplicateValue")
+    field = marshmallow.fields.String(allow_none=True, missing=None)
+    duplicate_value = marshmallow.fields.Raw(
+        allow_none=True, missing=None, data_key="duplicateValue"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5821,6 +6497,7 @@ class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
     conflicting_prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="conflictingPrices",
     )
@@ -5838,6 +6515,7 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
     variant_values = marshmallow.fields.Nested(
         nested="commercetools.schemas.VariantValuesSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="variantValues",
     )
 
@@ -5851,9 +6529,9 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
 
 
 class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
-    arn = marshmallow.fields.String()
-    access_key = marshmallow.fields.String(data_key="accessKey")
-    access_secret = marshmallow.fields.String(data_key="accessSecret")
+    arn = marshmallow.fields.String(allow_none=True)
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
+    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5867,7 +6545,7 @@ class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
 class ExtensionAuthorizationHeaderAuthenticationSchema(
     ExtensionHttpDestinationAuthenticationSchema
 ):
-    header_value = marshmallow.fields.String(data_key="headerValue")
+    header_value = marshmallow.fields.String(allow_none=True, data_key="headerValue")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5881,7 +6559,7 @@ class ExtensionAuthorizationHeaderAuthenticationSchema(
 class ExtensionAzureFunctionsAuthenticationSchema(
     ExtensionHttpDestinationAuthenticationSchema
 ):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -5893,7 +6571,7 @@ class ExtensionAzureFunctionsAuthenticationSchema(
 
 
 class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
-    url = marshmallow.fields.String()
+    url = marshmallow.fields.String(allow_none=True)
     authentication = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -5901,6 +6579,7 @@ class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
             "AzureFunctions": "commercetools.schemas.ExtensionAzureFunctionsAuthenticationSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -5917,6 +6596,7 @@ class ExtensionPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExtensionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5929,7 +6609,7 @@ class ExtensionPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ExtensionSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     destination = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -5937,10 +6617,12 @@ class ExtensionSchema(ResourceSchema):
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     triggers = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExtensionTriggerSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -5972,7 +6654,9 @@ class ExtensionUpdateSchema(UpdateSchema):
                 "setKey": "commercetools.schemas.ExtensionSetKeyActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -5984,8 +6668,10 @@ class ExtensionUpdateSchema(UpdateSchema):
 
 
 class FilteredFacetResultSchema(FacetResultSchema):
-    count = marshmallow.fields.Integer()
-    product_count = marshmallow.fields.Integer(missing=None, data_key="productCount")
+    count = marshmallow.fields.Integer(allow_none=True)
+    product_count = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="productCount"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6007,8 +6693,8 @@ class GeoJsonPointSchema(GeoJsonSchema):
 
 
 class GoogleCloudPubSubDestinationSchema(DestinationSchema):
-    project_id = marshmallow.fields.String(data_key="projectId")
-    topic = marshmallow.fields.String()
+    project_id = marshmallow.fields.String(allow_none=True, data_key="projectId")
+    topic = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6050,12 +6736,15 @@ class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
 
 
 class InvalidFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String()
-    invalid_value = marshmallow.fields.Raw(data_key="invalidValue")
+    field = marshmallow.fields.String(allow_none=True)
+    invalid_value = marshmallow.fields.Raw(allow_none=True, data_key="invalidValue")
     allowed_values = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         missing=None,
         data_key="allowedValues",
     )
@@ -6070,8 +6759,8 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
 
 
 class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
-    subject = marshmallow.fields.String()
-    item_id = marshmallow.fields.String(data_key="itemId")
+    subject = marshmallow.fields.String(allow_none=True)
+    item_id = marshmallow.fields.String(allow_none=True, data_key="itemId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6113,10 +6802,11 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
 
 
 class InventoryEntryDeletedMessageSchema(MessageSchema):
-    sku = marshmallow.fields.String()
+    sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="supplyChannel",
     )
 
@@ -6130,24 +6820,30 @@ class InventoryEntryDeletedMessageSchema(MessageSchema):
 
 
 class InventoryEntrySchema(ResourceSchema):
-    sku = marshmallow.fields.String()
+    sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
-    quantity_on_stock = marshmallow.fields.Integer(data_key="quantityOnStock")
-    available_quantity = marshmallow.fields.Integer(data_key="availableQuantity")
+    quantity_on_stock = marshmallow.fields.Integer(
+        allow_none=True, data_key="quantityOnStock"
+    )
+    available_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="availableQuantity"
+    )
     restockable_in_days = marshmallow.fields.Integer(
-        missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays"
     )
     expected_delivery = marshmallow.fields.DateTime(
-        missing=None, data_key="expectedDelivery"
+        allow_none=True, missing=None, data_key="expectedDelivery"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -6163,6 +6859,7 @@ class InventoryPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.InventoryEntrySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -6199,7 +6896,9 @@ class InventoryUpdateSchema(UpdateSchema):
                 "setSupplyChannel": "commercetools.schemas.InventorySetSupplyChannelActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -6211,7 +6910,7 @@ class InventoryUpdateSchema(UpdateSchema):
 
 
 class IronMqDestinationSchema(DestinationSchema):
-    uri = marshmallow.fields.String()
+    uri = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6223,17 +6922,21 @@ class IronMqDestinationSchema(DestinationSchema):
 
 
 class LineItemStateTransitionMessageSchema(MessageSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    transition_date = marshmallow.fields.DateTime(data_key="transitionDate")
-    quantity = marshmallow.fields.Integer()
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="fromState",
     )
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="toState",
     )
 
@@ -6247,15 +6950,22 @@ class LineItemStateTransitionMessageSchema(MessageSchema):
 
 
 class MessageDeliverySchema(SubscriptionDeliverySchema):
-    id = marshmallow.fields.String()
-    version = marshmallow.fields.Integer()
-    created_at = marshmallow.fields.DateTime(data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(data_key="lastModifiedAt")
-    sequence_number = marshmallow.fields.Integer(data_key="sequenceNumber")
-    resource_version = marshmallow.fields.Integer(data_key="resourceVersion")
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    sequence_number = marshmallow.fields.Integer(
+        allow_none=True, data_key="sequenceNumber"
+    )
+    resource_version = marshmallow.fields.Integer(
+        allow_none=True, data_key="resourceVersion"
+    )
     payload_not_included = marshmallow.fields.Nested(
         nested="commercetools.schemas.PayloadNotIncludedSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="payloadNotIncluded",
     )
 
@@ -6328,6 +7038,7 @@ class MessagePagedQueryResponseSchema(PagedQueryResponseSchema):
             "ReviewStateTransition": "commercetools.schemas.ReviewStateTransitionMessageSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -6340,10 +7051,16 @@ class MessagePagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String()
-    trigger_quantity = marshmallow.fields.Integer(data_key="triggerQuantity")
-    discounted_quantity = marshmallow.fields.Integer(data_key="discountedQuantity")
-    max_occurrence = marshmallow.fields.Integer(missing=None, data_key="maxOccurrence")
+    predicate = marshmallow.fields.String(allow_none=True)
+    trigger_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="triggerQuantity"
+    )
+    discounted_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="discountedQuantity"
+    )
+    max_occurrence = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="maxOccurrence"
+    )
     selection_mode = marshmallow_enum.EnumField(
         types.SelectionMode, by_value=True, data_key="selectionMode"
     )
@@ -6358,10 +7075,16 @@ class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
 
 
 class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String()
-    trigger_quantity = marshmallow.fields.Integer(data_key="triggerQuantity")
-    discounted_quantity = marshmallow.fields.Integer(data_key="discountedQuantity")
-    max_occurrence = marshmallow.fields.Integer(missing=None, data_key="maxOccurrence")
+    predicate = marshmallow.fields.String(allow_none=True)
+    trigger_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="triggerQuantity"
+    )
+    discounted_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="discountedQuantity"
+    )
+    max_occurrence = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="maxOccurrence"
+    )
     selection_mode = marshmallow_enum.EnumField(
         types.SelectionMode, by_value=True, data_key="selectionMode"
     )
@@ -6377,7 +7100,9 @@ class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
 
 class OrderBillingAddressSetMessageSchema(MessageSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6391,7 +7116,9 @@ class OrderBillingAddressSetMessageSchema(MessageSchema):
 
 class OrderCreatedMessageSchema(MessageSchema):
     order = marshmallow.fields.Nested(
-        nested="commercetools.schemas.OrderSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.OrderSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6404,7 +7131,7 @@ class OrderCreatedMessageSchema(MessageSchema):
 
 
 class OrderCustomerEmailSetMessageSchema(MessageSchema):
-    email = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6419,23 +7146,27 @@ class OrderCustomerSetMessageSchema(MessageSchema):
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     old_customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="oldCustomer",
     )
     old_customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="oldCustomerGroup",
     )
@@ -6451,7 +7182,9 @@ class OrderCustomerSetMessageSchema(MessageSchema):
 
 class OrderDeletedMessageSchema(MessageSchema):
     order = marshmallow.fields.Nested(
-        nested="commercetools.schemas.OrderSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.OrderSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6465,7 +7198,9 @@ class OrderDeletedMessageSchema(MessageSchema):
 
 class OrderImportedMessageSchema(MessageSchema):
     order = marshmallow.fields.Nested(
-        nested="commercetools.schemas.OrderSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.OrderSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6481,6 +7216,7 @@ class OrderPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.OrderSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -6493,7 +7229,7 @@ class OrderPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class OrderPaymentChangedMessageSchema(MessageSchema):
-    payment_state = marshmallow.fields.String(data_key="paymentState")
+    payment_state = marshmallow.fields.String(allow_none=True, data_key="paymentState")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6508,6 +7244,7 @@ class OrderReturnInfoAddedMessageSchema(MessageSchema):
     return_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReturnInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="returnInfo",
     )
 
@@ -6521,7 +7258,7 @@ class OrderReturnInfoAddedMessageSchema(MessageSchema):
 
 
 class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
-    return_item_id = marshmallow.fields.String(data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
     return_shipment_state = marshmallow_enum.EnumField(
         types.ReturnShipmentState, by_value=True, data_key="returnShipmentState"
     )
@@ -6536,43 +7273,59 @@ class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
 
 
 class OrderSchema(ResourceSchema):
-    completed_at = marshmallow.fields.DateTime(missing=None, data_key="completedAt")
-    order_number = marshmallow.fields.String(missing=None, data_key="orderNumber")
-    customer_id = marshmallow.fields.String(missing=None, data_key="customerId")
-    customer_email = marshmallow.fields.String(missing=None, data_key="customerEmail")
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    completed_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="completedAt"
+    )
+    order_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderNumber"
+    )
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.LineItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="lineItems",
     )
     custom_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomLineItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="customLineItems",
     )
     total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxedPrice",
     )
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="billingAddress",
     )
@@ -6585,16 +7338,18 @@ class OrderSchema(ResourceSchema):
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
-    country = marshmallow.fields.String(missing=None)
+    country = marshmallow.fields.String(allow_none=True, missing=None)
     order_state = marshmallow_enum.EnumField(
         types.OrderState, by_value=True, data_key="orderState"
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     shipment_state = marshmallow_enum.EnumField(
@@ -6606,18 +7361,21 @@ class OrderSchema(ResourceSchema):
     shipping_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingInfo",
     )
     sync_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.SyncInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="syncInfo",
     )
     return_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReturnInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="returnInfo",
@@ -6625,30 +7383,34 @@ class OrderSchema(ResourceSchema):
     discount_codes = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountCodeInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="discountCodes",
     )
     last_message_sequence_number = marshmallow.fields.Integer(
-        data_key="lastMessageSequenceNumber"
+        allow_none=True, data_key="lastMessageSequenceNumber"
     )
     cart = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     payment_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="paymentInfo",
     )
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
     inventory_mode = marshmallow_enum.EnumField(
         types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
     )
@@ -6666,12 +7428,14 @@ class OrderSchema(ResourceSchema):
             "Score": "commercetools.schemas.ScoreShippingRateInputSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingRateInput",
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="itemShippingAddresses",
@@ -6701,7 +7465,9 @@ class OrderShipmentStateChangedMessageSchema(MessageSchema):
 
 class OrderShippingAddressSetMessageSchema(MessageSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6714,7 +7480,7 @@ class OrderShippingAddressSetMessageSchema(MessageSchema):
 
 
 class OrderStateChangedMessageSchema(MessageSchema):
-    order_state = marshmallow.fields.String(data_key="orderState")
+    order_state = marshmallow.fields.String(allow_none=True, data_key="orderState")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6727,9 +7493,11 @@ class OrderStateChangedMessageSchema(MessageSchema):
 
 class OrderStateTransitionMessageSchema(MessageSchema):
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    force = marshmallow.fields.Bool()
+    force = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6797,7 +7565,9 @@ class OrderUpdateSchema(UpdateSchema):
                 "updateSyncInfo": "commercetools.schemas.OrderUpdateSyncInfoActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -6809,8 +7579,10 @@ class OrderUpdateSchema(UpdateSchema):
 
 
 class OutOfStockErrorSchema(ErrorObjectSchema):
-    line_items = marshmallow.fields.String(many=True, data_key="lineItems")
-    skus = marshmallow.fields.String(many=True)
+    line_items = marshmallow.fields.String(
+        allow_none=True, many=True, data_key="lineItems"
+    )
+    skus = marshmallow.fields.String(allow_none=True, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6823,10 +7595,14 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
 
 class ParcelAddedToDeliveryMessageSchema(MessageSchema):
     delivery = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliverySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.DeliverySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
     parcel = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ParcelSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ParcelSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6839,11 +7615,14 @@ class ParcelAddedToDeliveryMessageSchema(MessageSchema):
 
 
 class ParcelItemsUpdatedMessageSchema(MessageSchema):
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
-    delivery_id = marshmallow.fields.String(missing=None, data_key="deliveryId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -6857,11 +7636,12 @@ class ParcelItemsUpdatedMessageSchema(MessageSchema):
 
 
 class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -6875,9 +7655,11 @@ class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
 
 
 class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
     parcel = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ParcelSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ParcelSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6890,11 +7672,12 @@ class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
 
 
 class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="trackingData",
     )
@@ -6910,7 +7693,9 @@ class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
 
 class PaymentCreatedMessageSchema(MessageSchema):
     payment = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PaymentSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.PaymentSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6924,7 +7709,9 @@ class PaymentCreatedMessageSchema(MessageSchema):
 
 class PaymentInteractionAddedMessageSchema(MessageSchema):
     interaction = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomFieldsSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -6940,6 +7727,7 @@ class PaymentPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -6955,11 +7743,18 @@ class PaymentSchema(ResourceSchema):
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
-    interface_id = marshmallow.fields.String(missing=None, data_key="interfaceId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    interface_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interfaceId"
+    )
     amount_planned = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -6967,6 +7762,7 @@ class PaymentSchema(ResourceSchema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="amountPlanned",
     )
     amount_authorized = helpers.Discriminator(
@@ -6976,11 +7772,12 @@ class PaymentSchema(ResourceSchema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="amountAuthorized",
     )
     authorized_until = marshmallow.fields.String(
-        missing=None, data_key="authorizedUntil"
+        allow_none=True, missing=None, data_key="authorizedUntil"
     )
     amount_paid = helpers.Discriminator(
         discriminator_field="type",
@@ -6989,6 +7786,7 @@ class PaymentSchema(ResourceSchema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="amountPaid",
     )
@@ -6999,36 +7797,42 @@ class PaymentSchema(ResourceSchema):
             "highPrecision": "commercetools.schemas.HighPrecisionMoneySchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="amountRefunded",
     )
     payment_method_info = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentMethodInfoSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="paymentMethodInfo",
     )
     payment_status = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentStatusSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="paymentStatus",
     )
     transactions = marshmallow.fields.Nested(
         nested="commercetools.schemas.TransactionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     interface_interactions = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="interfaceInteractions",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7039,8 +7843,10 @@ class PaymentSchema(ResourceSchema):
 
 
 class PaymentStatusInterfaceCodeSetMessageSchema(MessageSchema):
-    payment_id = marshmallow.fields.String(data_key="paymentId")
-    interface_code = marshmallow.fields.String(data_key="interfaceCode")
+    payment_id = marshmallow.fields.String(allow_none=True, data_key="paymentId")
+    interface_code = marshmallow.fields.String(
+        allow_none=True, data_key="interfaceCode"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7053,9 +7859,11 @@ class PaymentStatusInterfaceCodeSetMessageSchema(MessageSchema):
 
 class PaymentStatusStateTransitionMessageSchema(MessageSchema):
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    force = marshmallow.fields.Bool()
+    force = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7068,7 +7876,9 @@ class PaymentStatusStateTransitionMessageSchema(MessageSchema):
 
 class PaymentTransactionAddedMessageSchema(MessageSchema):
     transaction = marshmallow.fields.Nested(
-        nested="commercetools.schemas.TransactionSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.TransactionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -7081,7 +7891,9 @@ class PaymentTransactionAddedMessageSchema(MessageSchema):
 
 
 class PaymentTransactionStateChangedMessageSchema(MessageSchema):
-    transaction_id = marshmallow.fields.String(data_key="transactionId")
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="transactionId"
+    )
     state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
 
     class Meta:
@@ -7132,7 +7944,9 @@ class PaymentUpdateSchema(UpdateSchema):
                 "transitionState": "commercetools.schemas.PaymentTransitionStateActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -7144,8 +7958,10 @@ class PaymentUpdateSchema(UpdateSchema):
 
 
 class PriceChangedErrorSchema(ErrorObjectSchema):
-    line_items = marshmallow.fields.String(many=True, data_key="lineItems")
-    shipping = marshmallow.fields.Bool()
+    line_items = marshmallow.fields.String(
+        allow_none=True, many=True, data_key="lineItems"
+    )
+    shipping = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7160,6 +7976,7 @@ class ProductCreatedMessageSchema(MessageSchema):
     product_projection = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="productProjection",
     )
 
@@ -7175,13 +7992,17 @@ class ProductCreatedMessageSchema(MessageSchema):
 class ProductDeletedMessageSchema(MessageSchema):
     removed_image_urls = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         data_key="removedImageUrls",
     )
     current_projection = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="currentProjection",
     )
 
@@ -7198,6 +8019,7 @@ class ProductDiscountPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductDiscountSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7210,8 +8032,8 @@ class ProductDiscountPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ProductDiscountSchema(ResourceSchema):
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     value = helpers.Discriminator(
         discriminator_field="type",
         discriminator_schemas={
@@ -7220,10 +8042,11 @@ class ProductDiscountSchema(ResourceSchema):
             "relative": "commercetools.schemas.ProductDiscountValueRelativeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    predicate = marshmallow.fields.String()
-    sort_order = marshmallow.fields.String(data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(data_key="isActive")
+    predicate = marshmallow.fields.String(allow_none=True)
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
     references = helpers.Discriminator(
         discriminator_field="typeId",
         discriminator_schemas={
@@ -7250,10 +8073,15 @@ class ProductDiscountSchema(ResourceSchema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7289,7 +8117,9 @@ class ProductDiscountUpdateSchema(UpdateSchema):
                 "setValidUntil": "commercetools.schemas.ProductDiscountSetValidUntilActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -7304,6 +8134,7 @@ class ProductDiscountValueAbsoluteSchema(ProductDiscountValueSchema):
     money = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7327,7 +8158,7 @@ class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
 
 
 class ProductDiscountValueRelativeSchema(ProductDiscountValueSchema):
-    permyriad = marshmallow.fields.Integer()
+    permyriad = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7339,11 +8170,13 @@ class ProductDiscountValueRelativeSchema(ProductDiscountValueSchema):
 
 
 class ProductImageAddedMessageSchema(MessageSchema):
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
     image = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ImageSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ImageSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    staged = marshmallow.fields.Bool()
+    staged = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7358,6 +8191,7 @@ class ProductPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7373,6 +8207,7 @@ class ProductProjectionPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7388,10 +8223,13 @@ class ProductProjectionPagedSearchResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     facets = marshmallow.fields.Nested(
-        nested="commercetools.schemas.FacetResultsSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.FacetResultsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -7403,60 +8241,74 @@ class ProductProjectionPagedSearchResponseSchema(PagedQueryResponseSchema):
 
 
 class ProductProjectionSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     product_type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="productType",
     )
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
-    slug = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    slug = LocalizedStringField(allow_none=True)
     categories = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     category_order_hints = CategoryOrderHintsField(
-        missing=None, data_key="categoryOrderHints"
+        allow_none=True, missing=None, data_key="categoryOrderHints"
     )
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
     search_keywords = marshmallow.fields.Nested(
         nested="commercetools.schemas.SearchKeywordsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="searchKeywords",
     )
     has_staged_changes = marshmallow.fields.Bool(
-        missing=None, data_key="hasStagedChanges"
+        allow_none=True, missing=None, data_key="hasStagedChanges"
     )
-    published = marshmallow.fields.Bool(missing=None)
+    published = marshmallow.fields.Bool(allow_none=True, missing=None)
     master_variant = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="masterVariant",
     )
     variants = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductVariantSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     review_rating_statistics = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReviewRatingStatisticsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="reviewRatingStatistics",
     )
@@ -7472,13 +8324,17 @@ class ProductProjectionSchema(ResourceSchema):
 class ProductPublishedMessageSchema(MessageSchema):
     removed_image_urls = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         data_key="removedImageUrls",
     )
     product_projection = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="productProjection",
     )
     scope = marshmallow_enum.EnumField(types.ProductPublishScope, by_value=True)
@@ -7495,8 +8351,11 @@ class ProductPublishedMessageSchema(MessageSchema):
 class ProductRevertedStagedChangesMessageSchema(MessageSchema):
     removed_image_urls = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         data_key="removedImageUrls",
     )
 
@@ -7510,31 +8369,36 @@ class ProductRevertedStagedChangesMessageSchema(MessageSchema):
 
 
 class ProductSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     product_type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="productType",
     )
     master_data = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductCatalogDataSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="masterData",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     review_rating_statistics = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReviewRatingStatisticsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="reviewRatingStatistics",
     )
@@ -7548,7 +8412,7 @@ class ProductSchema(ResourceSchema):
 
 
 class ProductSlugChangedMessageSchema(MessageSchema):
-    slug = LocalizedStringField()
+    slug = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7561,9 +8425,11 @@ class ProductSlugChangedMessageSchema(MessageSchema):
 
 class ProductStateTransitionMessageSchema(MessageSchema):
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    force = marshmallow.fields.Bool()
+    force = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7578,6 +8444,7 @@ class ProductTypePagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7590,12 +8457,13 @@ class ProductTypePagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ProductTypeSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True)
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeDefinitionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -7645,7 +8513,9 @@ class ProductTypeUpdateSchema(UpdateSchema):
                 "setKey": "commercetools.schemas.ProductTypeSetKeyActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -7729,7 +8599,9 @@ class ProductUpdateSchema(UpdateSchema):
                 "unpublish": "commercetools.schemas.ProductUnpublishActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -7743,12 +8615,17 @@ class ProductUpdateSchema(UpdateSchema):
 class ProductVariantDeletedMessageSchema(MessageSchema):
     removed_image_urls = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema", unknown=marshmallow.EXCLUDE
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
         ),
+        allow_none=True,
         data_key="removedImageUrls",
     )
     variant = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductVariantSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ProductVariantSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -7783,7 +8660,9 @@ class ProjectUpdateSchema(UpdateSchema):
                 "setShippingRateInputType": "commercetools.schemas.ProjectSetShippingRateInputTypeActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -7798,6 +8677,7 @@ class RangeFacetResultSchema(FacetResultSchema):
     ranges = marshmallow.fields.Nested(
         nested="commercetools.schemas.FacetResultRangeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7825,7 +8705,7 @@ class ReferenceSchema(ResourceIdentifierSchema):
 
 
 class RequiredFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String()
+    field = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7837,8 +8717,8 @@ class RequiredFieldErrorSchema(ErrorObjectSchema):
 
 
 class ResourceCreatedDeliverySchema(SubscriptionDeliverySchema):
-    version = marshmallow.fields.Integer()
-    modified_at = marshmallow.fields.DateTime(data_key="modifiedAt")
+    version = marshmallow.fields.Integer(allow_none=True)
+    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7850,8 +8730,8 @@ class ResourceCreatedDeliverySchema(SubscriptionDeliverySchema):
 
 
 class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
-    version = marshmallow.fields.Integer()
-    modified_at = marshmallow.fields.DateTime(data_key="modifiedAt")
+    version = marshmallow.fields.Integer(allow_none=True)
+    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7873,9 +8753,9 @@ class ResourceNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
-    version = marshmallow.fields.Integer()
-    old_version = marshmallow.fields.Integer(data_key="oldVersion")
-    modified_at = marshmallow.fields.DateTime(data_key="modifiedAt")
+    version = marshmallow.fields.Integer(allow_none=True)
+    old_version = marshmallow.fields.Integer(allow_none=True, data_key="oldVersion")
+    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7888,7 +8768,9 @@ class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
 
 class ReviewCreatedMessageSchema(MessageSchema):
     review = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ReviewSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ReviewSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -7904,6 +8786,7 @@ class ReviewPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReviewSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -7916,9 +8799,11 @@ class ReviewPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ReviewRatingSetMessageSchema(MessageSchema):
-    old_rating = marshmallow.fields.Integer(data_key="oldRating")
-    new_rating = marshmallow.fields.Integer(data_key="newRating")
-    included_in_statistics = marshmallow.fields.Bool(data_key="includedInStatistics")
+    old_rating = marshmallow.fields.Integer(allow_none=True, data_key="oldRating")
+    new_rating = marshmallow.fields.Integer(allow_none=True, data_key="newRating")
+    included_in_statistics = marshmallow.fields.Bool(
+        allow_none=True, data_key="includedInStatistics"
+    )
     target = helpers.Discriminator(
         discriminator_field="typeId",
         discriminator_schemas={
@@ -7945,6 +8830,7 @@ class ReviewRatingSetMessageSchema(MessageSchema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -7957,34 +8843,42 @@ class ReviewRatingSetMessageSchema(MessageSchema):
 
 
 class ReviewSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     uniqueness_value = marshmallow.fields.String(
-        missing=None, data_key="uniquenessValue"
+        allow_none=True, missing=None, data_key="uniquenessValue"
     )
-    locale = marshmallow.fields.String(missing=None)
-    author_name = marshmallow.fields.String(missing=None, data_key="authorName")
-    title = marshmallow.fields.String(missing=None)
-    text = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    author_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="authorName"
+    )
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    text = marshmallow.fields.String(allow_none=True, missing=None)
     target = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    included_in_statistics = marshmallow.fields.Bool(data_key="includedInStatistics")
-    rating = marshmallow.fields.Integer(missing=None)
+    included_in_statistics = marshmallow.fields.Bool(
+        allow_none=True, data_key="includedInStatistics"
+    )
+    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -8000,18 +8894,20 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
     old_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="oldState",
     )
     new_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="newState",
     )
     old_included_in_statistics = marshmallow.fields.Bool(
-        data_key="oldIncludedInStatistics"
+        allow_none=True, data_key="oldIncludedInStatistics"
     )
     new_included_in_statistics = marshmallow.fields.Bool(
-        data_key="newIncludedInStatistics"
+        allow_none=True, data_key="newIncludedInStatistics"
     )
     target = helpers.Discriminator(
         discriminator_field="typeId",
@@ -8039,8 +8935,9 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
             "zone": "commercetools.schemas.ZoneReferenceSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    force = marshmallow.fields.Bool()
+    force = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8079,7 +8976,9 @@ class ReviewUpdateSchema(UpdateSchema):
                 "transitionState": "commercetools.schemas.ReviewTransitionStateActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8091,7 +8990,7 @@ class ReviewUpdateSchema(UpdateSchema):
 
 
 class ScoreShippingRateInputDraftSchema(ShippingRateInputDraftSchema):
-    score = marshmallow.fields.Integer()
+    score = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8103,7 +9002,7 @@ class ScoreShippingRateInputDraftSchema(ShippingRateInputDraftSchema):
 
 
 class ScoreShippingRateInputSchema(ShippingRateInputSchema):
-    score = marshmallow.fields.Integer()
+    score = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8118,6 +9017,7 @@ class ShippingMethodPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingMethodSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8130,22 +9030,24 @@ class ShippingMethodPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ShippingMethodSchema(ResourceSchema):
-    key = marshmallow.fields.String(missing=None)
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="taxCategory",
     )
     zone_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.ZoneRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="zoneRates",
     )
-    is_default = marshmallow.fields.Bool(data_key="isDefault")
-    predicate = marshmallow.fields.String(missing=None)
+    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault")
+    predicate = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8182,7 +9084,9 @@ class ShippingMethodUpdateSchema(UpdateSchema):
                 "setPredicate": "commercetools.schemas.ShippingMethodSetPredicateActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8197,6 +9101,7 @@ class ShoppingListPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShoppingListSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8212,35 +9117,41 @@ class ShoppingListSchema(ResourceSchema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
-    description = LocalizedStringField(missing=None)
-    key = marshmallow.fields.String(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShoppingListLineItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="lineItems",
     )
-    name = LocalizedStringField()
-    slug = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    slug = LocalizedStringField(allow_none=True, missing=None)
     text_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas.TextLineItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="textLineItems",
     )
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8290,7 +9201,9 @@ class ShoppingListUpdateSchema(UpdateSchema):
                 "setSlug": "commercetools.schemas.ShoppingListSetSlugActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8302,9 +9215,9 @@ class ShoppingListUpdateSchema(UpdateSchema):
 
 
 class SnsDestinationSchema(DestinationSchema):
-    access_key = marshmallow.fields.String(data_key="accessKey")
-    access_secret = marshmallow.fields.String(data_key="accessSecret")
-    topic_arn = marshmallow.fields.String(data_key="topicArn")
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
+    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
+    topic_arn = marshmallow.fields.String(allow_none=True, data_key="topicArn")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8316,10 +9229,10 @@ class SnsDestinationSchema(DestinationSchema):
 
 
 class SqsDestinationSchema(DestinationSchema):
-    access_key = marshmallow.fields.String(data_key="accessKey")
-    access_secret = marshmallow.fields.String(data_key="accessSecret")
-    queue_url = marshmallow.fields.String(data_key="queueURL")
-    region = marshmallow.fields.String()
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
+    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
+    queue_url = marshmallow.fields.String(allow_none=True, data_key="queueURL")
+    region = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8334,6 +9247,7 @@ class StatePagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8346,18 +9260,19 @@ class StatePagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class StateSchema(ResourceSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
     type = marshmallow_enum.EnumField(types.StateTypeEnum, by_value=True)
-    name = LocalizedStringField(missing=None)
-    description = LocalizedStringField(missing=None)
-    initial = marshmallow.fields.Bool()
-    built_in = marshmallow.fields.Bool(data_key="builtIn")
+    name = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    initial = marshmallow.fields.Bool(allow_none=True)
+    built_in = marshmallow.fields.Bool(allow_none=True, data_key="builtIn")
     roles = marshmallow_enum.EnumField(
         types.StateRoleEnum, by_value=True, missing=None, many=True
     )
     transitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -8396,7 +9311,9 @@ class StateUpdateSchema(UpdateSchema):
                 "setTransitions": "commercetools.schemas.StateSetTransitionsActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8411,6 +9328,7 @@ class SubscriptionPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.SubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8426,6 +9344,7 @@ class SubscriptionSchema(ResourceSchema):
     changes = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChangeSubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
     destination = helpers.Discriminator(
@@ -8439,11 +9358,13 @@ class SubscriptionSchema(ResourceSchema):
             "SQS": "commercetools.schemas.SqsDestinationSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     messages = marshmallow.fields.Nested(
         nested="commercetools.schemas.MessageSubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8475,7 +9396,9 @@ class SubscriptionUpdateSchema(UpdateSchema):
                 "setMessages": "commercetools.schemas.SubscriptionSetMessagesActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8490,6 +9413,7 @@ class TaxCategoryPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategorySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8502,14 +9426,15 @@ class TaxCategoryPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class TaxCategorySchema(ResourceSchema):
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
     rates = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8542,7 +9467,9 @@ class TaxCategoryUpdateSchema(UpdateSchema):
                 "setKey": "commercetools.schemas.TaxCategorySetKeyActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8557,12 +9484,13 @@ class TermFacetResultSchema(FacetResultSchema):
     data_type = marshmallow_enum.EnumField(
         types.TermFacetResultType, by_value=True, data_key="dataType"
     )
-    missing = marshmallow.fields.Integer()
-    total = marshmallow.fields.Integer()
-    other = marshmallow.fields.Integer()
+    missing = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True)
+    other = marshmallow.fields.Integer(allow_none=True)
     terms = marshmallow.fields.Nested(
         nested="commercetools.schemas.FacetResultTermSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8579,6 +9507,7 @@ class TypePagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8591,15 +9520,16 @@ class TypePagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class TypeSchema(ResourceSchema):
-    key = marshmallow.fields.String()
-    name = LocalizedStringField()
-    description = LocalizedStringField(missing=None)
+    key = marshmallow.fields.String(allow_none=True)
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
     resource_type_ids = marshmallow_enum.EnumField(
         types.ResourceTypeId, by_value=True, many=True, data_key="resourceTypeIds"
     )
     field_definitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.FieldDefinitionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="fieldDefinitions",
     )
@@ -8641,7 +9571,9 @@ class TypeUpdateSchema(UpdateSchema):
                 "setDescription": "commercetools.schemas.TypeSetDescriptionActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8654,7 +9586,9 @@ class TypeUpdateSchema(UpdateSchema):
 
 class TypedMoneySchema(MoneySchema):
     type = marshmallow_enum.EnumField(types.MoneyType, by_value=True)
-    fraction_digits = marshmallow.fields.Integer(data_key="fractionDigits")
+    fraction_digits = marshmallow.fields.Integer(
+        allow_none=True, data_key="fractionDigits"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8679,6 +9613,7 @@ class ZonePagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ZoneSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8691,11 +9626,12 @@ class ZonePagedQueryResponseSchema(PagedQueryResponseSchema):
 
 
 class ZoneSchema(ResourceSchema):
-    name = marshmallow.fields.String()
-    description = marshmallow.fields.String(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
     locations = marshmallow.fields.Nested(
         nested="commercetools.schemas.LocationSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -8728,7 +9664,9 @@ class ZoneUpdateSchema(UpdateSchema):
                 "setDescription": "commercetools.schemas.ZoneSetDescriptionActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -8741,25 +9679,30 @@ class ZoneUpdateSchema(UpdateSchema):
 
 class CartAddCustomLineItemActionSchema(CartUpdateActionSchema):
     money = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    name = LocalizedStringField()
-    quantity = marshmallow.fields.Integer()
-    slug = marshmallow.fields.String()
+    name = LocalizedStringField(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    slug = marshmallow.fields.String(allow_none=True)
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
@@ -8774,7 +9717,7 @@ class CartAddCustomLineItemActionSchema(CartUpdateActionSchema):
 
 
 class CartAddDiscountCodeActionSchema(CartUpdateActionSchema):
-    code = marshmallow.fields.String()
+    code = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8787,7 +9730,9 @@ class CartAddDiscountCodeActionSchema(CartUpdateActionSchema):
 
 class CartAddItemShippingAddressActionSchema(CartUpdateActionSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -8803,45 +9748,56 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="distributionChannel",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
-    product_id = marshmallow.fields.String(missing=None, data_key="productId")
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    sku = marshmallow.fields.String(missing=None)
-    quantity = marshmallow.fields.Integer(missing=None)
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalLineItemTotalPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -8859,6 +9815,7 @@ class CartAddPaymentActionSchema(CartUpdateActionSchema):
     payment = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -8874,17 +9831,20 @@ class CartAddShoppingListActionSchema(CartUpdateActionSchema):
     shopping_list = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShoppingListReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="shoppingList",
     )
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="distributionChannel",
     )
@@ -8901,10 +9861,13 @@ class CartAddShoppingListActionSchema(CartUpdateActionSchema):
 class CartApplyDeltaToCustomLineItemShippingDetailsTargetsActionSchema(
     CartUpdateActionSchema
 ):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     targets_delta = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingTargetSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="targetsDelta",
     )
@@ -8921,10 +9884,11 @@ class CartApplyDeltaToCustomLineItemShippingDetailsTargetsActionSchema(
 class CartApplyDeltaToLineItemShippingDetailsTargetsActionSchema(
     CartUpdateActionSchema
 ):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     targets_delta = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingTargetSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="targetsDelta",
     )
@@ -8939,9 +9903,13 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsActionSchema(
 
 
 class CartChangeCustomLineItemMoneyActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     money = marshmallow.fields.Nested(
-        nested="commercetools.schemas.MoneySchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -8954,8 +9922,10 @@ class CartChangeCustomLineItemMoneyActionSchema(CartUpdateActionSchema):
 
 
 class CartChangeCustomLineItemQuantityActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
-    quantity = marshmallow.fields.Integer()
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8967,17 +9937,19 @@ class CartChangeCustomLineItemQuantityActionSchema(CartUpdateActionSchema):
 
 
 class CartChangeLineItemQuantityActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    quantity = marshmallow.fields.Integer()
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalLineItemTotalPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -9034,7 +10006,9 @@ class CartChangeTaxRoundingModeActionSchema(CartUpdateActionSchema):
 
 
 class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema):
-    cart_predicate = marshmallow.fields.String(data_key="cartPredicate")
+    cart_predicate = marshmallow.fields.String(
+        allow_none=True, data_key="cartPredicate"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9046,7 +10020,7 @@ class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema
 
 
 class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
-    is_active = marshmallow.fields.Bool(data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9058,7 +10032,7 @@ class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountChangeNameActionSchema(CartDiscountUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9072,7 +10046,9 @@ class CartDiscountChangeNameActionSchema(CartDiscountUpdateActionSchema):
 class CartDiscountChangeRequiresDiscountCodeActionSchema(
     CartDiscountUpdateActionSchema
 ):
-    requires_discount_code = marshmallow.fields.Bool(data_key="requiresDiscountCode")
+    requires_discount_code = marshmallow.fields.Bool(
+        allow_none=True, data_key="requiresDiscountCode"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9084,7 +10060,7 @@ class CartDiscountChangeRequiresDiscountCodeActionSchema(
 
 
 class CartDiscountChangeSortOrderActionSchema(CartDiscountUpdateActionSchema):
-    sort_order = marshmallow.fields.String(data_key="sortOrder")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9120,6 +10096,7 @@ class CartDiscountChangeTargetActionSchema(CartDiscountUpdateActionSchema):
             "multiBuyLineItems": "commercetools.schemas.MultiBuyLineItemsTargetSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -9140,6 +10117,7 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
             "relative": "commercetools.schemas.CartDiscountValueRelativeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -9155,6 +10133,7 @@ class CartDiscountReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -9168,8 +10147,8 @@ class CartDiscountReferenceSchema(ReferenceSchema):
 
 
 class CartDiscountSetCustomFieldActionSchema(CartDiscountUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9181,10 +10160,11 @@ class CartDiscountSetCustomFieldActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -9198,7 +10178,7 @@ class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountSetDescriptionActionSchema(CartDiscountUpdateActionSchema):
-    description = LocalizedStringField(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9210,7 +10190,9 @@ class CartDiscountSetDescriptionActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountSetValidFromActionSchema(CartDiscountUpdateActionSchema):
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9222,8 +10204,12 @@ class CartDiscountSetValidFromActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountSetValidFromAndUntilActionSchema(CartDiscountUpdateActionSchema):
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9235,7 +10221,9 @@ class CartDiscountSetValidFromAndUntilActionSchema(CartDiscountUpdateActionSchem
 
 
 class CartDiscountSetValidUntilActionSchema(CartDiscountUpdateActionSchema):
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9248,7 +10236,7 @@ class CartDiscountSetValidUntilActionSchema(CartDiscountUpdateActionSchema):
 
 class CartRecalculateActionSchema(CartUpdateActionSchema):
     update_product_data = marshmallow.fields.Bool(
-        missing=None, data_key="updateProductData"
+        allow_none=True, missing=None, data_key="updateProductData"
     )
 
     class Meta:
@@ -9264,6 +10252,7 @@ class CartReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -9277,7 +10266,9 @@ class CartReferenceSchema(ReferenceSchema):
 
 
 class CartRemoveCustomLineItemActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9292,6 +10283,7 @@ class CartRemoveDiscountCodeActionSchema(CartUpdateActionSchema):
     discount_code = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountCodeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="discountCode",
     )
 
@@ -9305,7 +10297,7 @@ class CartRemoveDiscountCodeActionSchema(CartUpdateActionSchema):
 
 
 class CartRemoveItemShippingAddressActionSchema(CartUpdateActionSchema):
-    address_key = marshmallow.fields.String(data_key="addressKey")
+    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9317,23 +10309,26 @@ class CartRemoveItemShippingAddressActionSchema(CartUpdateActionSchema):
 
 
 class CartRemoveLineItemActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    quantity = marshmallow.fields.Integer(missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalLineItemTotalPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
     )
     shipping_details_to_remove = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetailsToRemove",
     )
@@ -9351,6 +10346,7 @@ class CartRemovePaymentActionSchema(CartUpdateActionSchema):
     payment = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -9363,7 +10359,9 @@ class CartRemovePaymentActionSchema(CartUpdateActionSchema):
 
 
 class CartSetAnonymousIdActionSchema(CartUpdateActionSchema):
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9378,6 +10376,7 @@ class CartSetBillingAddressActionSchema(CartUpdateActionSchema):
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -9394,11 +10393,13 @@ class CartSetCartTotalTaxActionSchema(CartUpdateActionSchema):
     external_total_gross = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="externalTotalGross",
     )
     external_tax_portions = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxPortionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
         data_key="externalTaxPortions",
@@ -9426,8 +10427,8 @@ class CartSetCountryActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomFieldActionSchema(CartUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9439,9 +10440,11 @@ class CartSetCustomFieldActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomLineItemCustomFieldActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9453,13 +10456,16 @@ class CartSetCustomLineItemCustomFieldActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomLineItemCustomTypeActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9471,10 +10477,13 @@ class CartSetCustomLineItemCustomTypeActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -9489,10 +10498,13 @@ class CartSetCustomLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomLineItemTaxAmountActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     external_tax_amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxAmountDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -9507,10 +10519,13 @@ class CartSetCustomLineItemTaxAmountActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomLineItemTaxRateActionSchema(CartUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
@@ -9525,21 +10540,26 @@ class CartSetCustomLineItemTaxRateActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomShippingMethodActionSchema(CartUpdateActionSchema):
-    shipping_method_name = marshmallow.fields.String(data_key="shippingMethodName")
+    shipping_method_name = marshmallow.fields.String(
+        allow_none=True, data_key="shippingMethodName"
+    )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="shippingRate",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
@@ -9557,9 +10577,10 @@ class CartSetCustomTypeActionSchema(CartUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9571,7 +10592,7 @@ class CartSetCustomTypeActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomerEmailActionSchema(CartUpdateActionSchema):
-    email = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9586,6 +10607,7 @@ class CartSetCustomerGroupActionSchema(CartUpdateActionSchema):
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
@@ -9600,7 +10622,9 @@ class CartSetCustomerGroupActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCustomerIdActionSchema(CartUpdateActionSchema):
-    customer_id = marshmallow.fields.String(missing=None, data_key="customerId")
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9613,7 +10637,7 @@ class CartSetCustomerIdActionSchema(CartUpdateActionSchema):
 
 class CartSetDeleteDaysAfterLastModificationActionSchema(CartUpdateActionSchema):
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
 
     class Meta:
@@ -9626,9 +10650,9 @@ class CartSetDeleteDaysAfterLastModificationActionSchema(CartUpdateActionSchema)
 
 
 class CartSetLineItemCustomFieldActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9640,13 +10664,14 @@ class CartSetLineItemCustomFieldActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLineItemCustomTypeActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9658,10 +10683,11 @@ class CartSetLineItemCustomTypeActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLineItemPriceActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalPrice",
     )
@@ -9676,10 +10702,11 @@ class CartSetLineItemPriceActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -9694,10 +10721,11 @@ class CartSetLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLineItemTaxAmountActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     external_tax_amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxAmountDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -9712,10 +10740,11 @@ class CartSetLineItemTaxAmountActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLineItemTaxRateActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
@@ -9730,10 +10759,11 @@ class CartSetLineItemTaxRateActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLineItemTotalPriceActionSchema(CartUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalLineItemTotalPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -9748,7 +10778,7 @@ class CartSetLineItemTotalPriceActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLocaleActionSchema(CartUpdateActionSchema):
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9763,6 +10793,7 @@ class CartSetShippingAddressActionSchema(CartUpdateActionSchema):
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -9779,12 +10810,14 @@ class CartSetShippingMethodActionSchema(CartUpdateActionSchema):
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingMethod",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
@@ -9802,6 +10835,7 @@ class CartSetShippingMethodTaxAmountActionSchema(CartUpdateActionSchema):
     external_tax_amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxAmountDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -9819,6 +10853,7 @@ class CartSetShippingMethodTaxRateActionSchema(CartUpdateActionSchema):
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="externalTaxRate",
     )
@@ -9840,6 +10875,7 @@ class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
             "Score": "commercetools.schemas.ScoreShippingRateInputDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingRateInput",
     )
@@ -9855,7 +10891,9 @@ class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
 
 class CartUpdateItemShippingAddressActionSchema(CartUpdateActionSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -9869,9 +10907,11 @@ class CartUpdateItemShippingAddressActionSchema(CartUpdateActionSchema):
 
 class CategoryAddAssetActionSchema(CategoryUpdateActionSchema):
     asset = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AssetDraftSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AssetDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    position = marshmallow.fields.Integer(missing=None)
+    position = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9883,9 +10923,13 @@ class CategoryAddAssetActionSchema(CategoryUpdateActionSchema):
 
 
 class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    name = LocalizedStringField()
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9897,7 +10941,9 @@ class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
 
 
 class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
-    asset_order = marshmallow.fields.String(many=True, data_key="assetOrder")
+    asset_order = marshmallow.fields.String(
+        allow_none=True, many=True, data_key="assetOrder"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9909,7 +10955,7 @@ class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
 
 
 class CategoryChangeNameActionSchema(CategoryUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9921,7 +10967,7 @@ class CategoryChangeNameActionSchema(CategoryUpdateActionSchema):
 
 
 class CategoryChangeOrderHintActionSchema(CategoryUpdateActionSchema):
-    order_hint = marshmallow.fields.String(data_key="orderHint")
+    order_hint = marshmallow.fields.String(allow_none=True, data_key="orderHint")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9936,6 +10982,7 @@ class CategoryChangeParentActionSchema(CategoryUpdateActionSchema):
     parent = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -9948,7 +10995,7 @@ class CategoryChangeParentActionSchema(CategoryUpdateActionSchema):
 
 
 class CategoryChangeSlugActionSchema(CategoryUpdateActionSchema):
-    slug = LocalizedStringField()
+    slug = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9963,6 +11010,7 @@ class CategoryReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategorySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -9976,8 +11024,12 @@ class CategoryReferenceSchema(ReferenceSchema):
 
 
 class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -9989,10 +11041,14 @@ class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10004,12 +11060,18 @@ class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    type = marshmallow.fields.Nested(
-        nested="commercetools.schemas.TypeReferenceSchema", unknown=marshmallow.EXCLUDE
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
     )
-    fields = marshmallow.fields.Dict()
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas.TypeReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    fields = marshmallow.fields.Dict(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10021,9 +11083,13 @@ class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    description = LocalizedStringField(missing=None)
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10035,8 +11101,10 @@ class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
+    asset_id = marshmallow.fields.String(allow_none=True, data_key="assetId")
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10048,11 +11116,16 @@ class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
     sources = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetSourceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -10066,9 +11139,13 @@ class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    tags = marshmallow.fields.String(missing=None, many=True)
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    tags = marshmallow.fields.String(allow_none=True, missing=None, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10080,8 +11157,8 @@ class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetCustomFieldActionSchema(CategoryUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10096,9 +11173,10 @@ class CategorySetCustomTypeActionSchema(CategoryUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10110,7 +11188,7 @@ class CategorySetCustomTypeActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetDescriptionActionSchema(CategoryUpdateActionSchema):
-    description = LocalizedStringField(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10122,7 +11200,9 @@ class CategorySetDescriptionActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetExternalIdActionSchema(CategoryUpdateActionSchema):
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10134,7 +11214,7 @@ class CategorySetExternalIdActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetKeyActionSchema(CategoryUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10146,7 +11226,9 @@ class CategorySetKeyActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetMetaDescriptionActionSchema(CategoryUpdateActionSchema):
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10158,7 +11240,9 @@ class CategorySetMetaDescriptionActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetMetaKeywordsActionSchema(CategoryUpdateActionSchema):
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10170,7 +11254,9 @@ class CategorySetMetaKeywordsActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetMetaTitleActionSchema(CategoryUpdateActionSchema):
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10204,7 +11290,7 @@ class ChannelAddRolesActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelChangeDescriptionActionSchema(ChannelUpdateActionSchema):
-    description = LocalizedStringField()
+    description = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10216,7 +11302,7 @@ class ChannelChangeDescriptionActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelChangeKeyActionSchema(ChannelUpdateActionSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10228,7 +11314,7 @@ class ChannelChangeKeyActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelChangeNameActionSchema(ChannelUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10243,6 +11329,7 @@ class ChannelReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -10271,6 +11358,7 @@ class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -10284,8 +11372,8 @@ class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelSetCustomFieldActionSchema(ChannelUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10300,9 +11388,10 @@ class ChannelSetCustomTypeActionSchema(ChannelUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10317,6 +11406,7 @@ class ChannelSetGeoLocationActionSchema(ChannelUpdateActionSchema):
     geo_location = marshmallow.fields.Nested(
         nested="commercetools.schemas.GeoJsonPointSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="geoLocation",
     )
@@ -10346,6 +11436,7 @@ class CustomObjectReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomObjectSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -10360,7 +11451,9 @@ class CustomObjectReferenceSchema(ReferenceSchema):
 
 class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -10373,7 +11466,7 @@ class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10385,7 +11478,7 @@ class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10397,9 +11490,11 @@ class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -10412,7 +11507,7 @@ class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerChangeEmailActionSchema(CustomerUpdateActionSchema):
-    email = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10424,7 +11519,7 @@ class CustomerChangeEmailActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerGroupChangeNameActionSchema(CustomerGroupUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10439,6 +11534,7 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -10452,8 +11548,8 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
 
 
 class CustomerGroupSetCustomFieldActionSchema(CustomerGroupUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10468,9 +11564,10 @@ class CustomerGroupSetCustomTypeActionSchema(CustomerGroupUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10482,7 +11579,7 @@ class CustomerGroupSetCustomTypeActionSchema(CustomerGroupUpdateActionSchema):
 
 
 class CustomerGroupSetKeyActionSchema(CustomerGroupUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10497,6 +11594,7 @@ class CustomerReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -10510,7 +11608,7 @@ class CustomerReferenceSchema(ReferenceSchema):
 
 
 class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10522,7 +11620,7 @@ class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10534,7 +11632,7 @@ class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10546,7 +11644,9 @@ class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
-    company_name = marshmallow.fields.String(missing=None, data_key="companyName")
+    company_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="companyName"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10558,8 +11658,8 @@ class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetCustomFieldActionSchema(CustomerUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10574,9 +11674,10 @@ class CustomerSetCustomTypeActionSchema(CustomerUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10591,6 +11692,7 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
@@ -10605,7 +11707,9 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
-    customer_number = marshmallow.fields.String(missing=None, data_key="customerNumber")
+    customer_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerNumber"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10617,7 +11721,9 @@ class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
-    date_of_birth = marshmallow.fields.Date(missing=None, data_key="dateOfBirth")
+    date_of_birth = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="dateOfBirth"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10629,7 +11735,9 @@ class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(missing=None, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10641,7 +11749,9 @@ class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(missing=None, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10653,7 +11763,9 @@ class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10665,7 +11777,9 @@ class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetFirstNameActionSchema(CustomerUpdateActionSchema):
-    first_name = marshmallow.fields.String(missing=None, data_key="firstName")
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10677,7 +11791,7 @@ class CustomerSetFirstNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetKeyActionSchema(CustomerUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10689,7 +11803,9 @@ class CustomerSetKeyActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetLastNameActionSchema(CustomerUpdateActionSchema):
-    last_name = marshmallow.fields.String(missing=None, data_key="lastName")
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10701,7 +11817,7 @@ class CustomerSetLastNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetLocaleActionSchema(CustomerUpdateActionSchema):
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10713,7 +11829,9 @@ class CustomerSetLocaleActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetMiddleNameActionSchema(CustomerUpdateActionSchema):
-    middle_name = marshmallow.fields.String(missing=None, data_key="middleName")
+    middle_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="middleName"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10725,7 +11843,7 @@ class CustomerSetMiddleNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetSalutationActionSchema(CustomerUpdateActionSchema):
-    salutation = marshmallow.fields.String(missing=None)
+    salutation = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10737,7 +11855,7 @@ class CustomerSetSalutationActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):
-    title = marshmallow.fields.String(missing=None)
+    title = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10749,7 +11867,7 @@ class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetVatIdActionSchema(CustomerUpdateActionSchema):
-    vat_id = marshmallow.fields.String(missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10764,6 +11882,7 @@ class DiscountCodeChangeCartDiscountsActionSchema(DiscountCodeUpdateActionSchema
     cart_discounts = marshmallow.fields.Nested(
         nested="commercetools.schemas.CartDiscountReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
         data_key="cartDiscounts",
     )
@@ -10778,7 +11897,7 @@ class DiscountCodeChangeCartDiscountsActionSchema(DiscountCodeUpdateActionSchema
 
 
 class DiscountCodeChangeGroupsActionSchema(DiscountCodeUpdateActionSchema):
-    groups = marshmallow.fields.String(many=True)
+    groups = marshmallow.fields.String(allow_none=True, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10790,7 +11909,7 @@ class DiscountCodeChangeGroupsActionSchema(DiscountCodeUpdateActionSchema):
 
 
 class DiscountCodeChangeIsActiveActionSchema(DiscountCodeUpdateActionSchema):
-    is_active = marshmallow.fields.Bool(data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10805,6 +11924,7 @@ class DiscountCodeReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountCodeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -10818,7 +11938,9 @@ class DiscountCodeReferenceSchema(ReferenceSchema):
 
 
 class DiscountCodeSetCartPredicateActionSchema(DiscountCodeUpdateActionSchema):
-    cart_predicate = marshmallow.fields.String(missing=None, data_key="cartPredicate")
+    cart_predicate = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="cartPredicate"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10830,8 +11952,8 @@ class DiscountCodeSetCartPredicateActionSchema(DiscountCodeUpdateActionSchema):
 
 
 class DiscountCodeSetCustomFieldActionSchema(DiscountCodeUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10846,9 +11968,10 @@ class DiscountCodeSetCustomTypeActionSchema(DiscountCodeUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10860,7 +11983,7 @@ class DiscountCodeSetCustomTypeActionSchema(DiscountCodeUpdateActionSchema):
 
 
 class DiscountCodeSetDescriptionActionSchema(DiscountCodeUpdateActionSchema):
-    description = LocalizedStringField(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10873,7 +11996,7 @@ class DiscountCodeSetDescriptionActionSchema(DiscountCodeUpdateActionSchema):
 
 class DiscountCodeSetMaxApplicationsActionSchema(DiscountCodeUpdateActionSchema):
     max_applications = marshmallow.fields.Integer(
-        missing=None, data_key="maxApplications"
+        allow_none=True, missing=None, data_key="maxApplications"
     )
 
     class Meta:
@@ -10889,7 +12012,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerActionSchema(
     DiscountCodeUpdateActionSchema
 ):
     max_applications_per_customer = marshmallow.fields.Integer(
-        missing=None, data_key="maxApplicationsPerCustomer"
+        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer"
     )
 
     class Meta:
@@ -10902,7 +12025,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerActionSchema(
 
 
 class DiscountCodeSetNameActionSchema(DiscountCodeUpdateActionSchema):
-    name = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10914,7 +12037,9 @@ class DiscountCodeSetNameActionSchema(DiscountCodeUpdateActionSchema):
 
 
 class DiscountCodeSetValidFromActionSchema(DiscountCodeUpdateActionSchema):
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10926,8 +12051,12 @@ class DiscountCodeSetValidFromActionSchema(DiscountCodeUpdateActionSchema):
 
 
 class DiscountCodeSetValidFromAndUntilActionSchema(DiscountCodeUpdateActionSchema):
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10939,7 +12068,9 @@ class DiscountCodeSetValidFromAndUntilActionSchema(DiscountCodeUpdateActionSchem
 
 
 class DiscountCodeSetValidUntilActionSchema(DiscountCodeUpdateActionSchema):
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10958,6 +12089,7 @@ class ExtensionChangeDestinationActionSchema(ExtensionUpdateActionSchema):
             "HTTP": "commercetools.schemas.ExtensionHttpDestinationSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -10973,6 +12105,7 @@ class ExtensionChangeTriggersActionSchema(ExtensionUpdateActionSchema):
     triggers = marshmallow.fields.Nested(
         nested="commercetools.schemas.ExtensionTriggerSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -10986,7 +12119,7 @@ class ExtensionChangeTriggersActionSchema(ExtensionUpdateActionSchema):
 
 
 class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -10998,7 +12131,9 @@ class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
 
 
 class HighPrecisionMoneySchema(TypedMoneySchema):
-    precise_amount = marshmallow.fields.Integer(data_key="preciseAmount")
+    precise_amount = marshmallow.fields.Integer(
+        allow_none=True, data_key="preciseAmount"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11010,7 +12145,7 @@ class HighPrecisionMoneySchema(TypedMoneySchema):
 
 
 class InventoryAddQuantityActionSchema(InventoryUpdateActionSchema):
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11022,7 +12157,7 @@ class InventoryAddQuantityActionSchema(InventoryUpdateActionSchema):
 
 
 class InventoryChangeQuantityActionSchema(InventoryUpdateActionSchema):
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11037,6 +12172,7 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.InventoryEntrySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11050,7 +12186,7 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
 
 
 class InventoryRemoveQuantityActionSchema(InventoryUpdateActionSchema):
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11062,8 +12198,8 @@ class InventoryRemoveQuantityActionSchema(InventoryUpdateActionSchema):
 
 
 class InventorySetCustomFieldActionSchema(InventoryUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11078,9 +12214,10 @@ class InventorySetCustomTypeActionSchema(InventoryUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11093,7 +12230,7 @@ class InventorySetCustomTypeActionSchema(InventoryUpdateActionSchema):
 
 class InventorySetExpectedDeliveryActionSchema(InventoryUpdateActionSchema):
     expected_delivery = marshmallow.fields.DateTime(
-        missing=None, data_key="expectedDelivery"
+        allow_none=True, missing=None, data_key="expectedDelivery"
     )
 
     class Meta:
@@ -11107,7 +12244,7 @@ class InventorySetExpectedDeliveryActionSchema(InventoryUpdateActionSchema):
 
 class InventorySetRestockableInDaysActionSchema(InventoryUpdateActionSchema):
     restockable_in_days = marshmallow.fields.Integer(
-        missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays"
     )
 
     class Meta:
@@ -11123,6 +12260,7 @@ class InventorySetSupplyChannelActionSchema(InventoryUpdateActionSchema):
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
@@ -11140,18 +12278,21 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     parcels = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11166,7 +12307,9 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
 
 class OrderAddItemShippingAddressActionSchema(OrderUpdateActionSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -11179,21 +12322,24 @@ class OrderAddItemShippingAddressActionSchema(OrderUpdateActionSchema):
 
 
 class OrderAddParcelToDeliveryActionSchema(OrderUpdateActionSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -11211,6 +12357,7 @@ class OrderAddPaymentActionSchema(OrderUpdateActionSchema):
     payment = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -11226,11 +12373,14 @@ class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReturnItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    return_date = marshmallow.fields.DateTime(missing=None, data_key="returnDate")
+    return_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="returnDate"
+    )
     return_tracking_id = marshmallow.fields.String(
-        missing=None, data_key="returnTrackingId"
+        allow_none=True, missing=None, data_key="returnTrackingId"
     )
 
     class Meta:
@@ -11285,10 +12435,13 @@ class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
 
 
 class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -11302,10 +12455,11 @@ class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 
 class OrderImportLineItemStateActionSchema(OrderUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -11322,6 +12476,7 @@ class OrderReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.OrderSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11335,7 +12490,7 @@ class OrderReferenceSchema(ReferenceSchema):
 
 
 class OrderRemoveDeliveryActionSchema(OrderUpdateActionSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11347,7 +12502,7 @@ class OrderRemoveDeliveryActionSchema(OrderUpdateActionSchema):
 
 
 class OrderRemoveItemShippingAddressActionSchema(OrderUpdateActionSchema):
-    address_key = marshmallow.fields.String(data_key="addressKey")
+    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11359,7 +12514,7 @@ class OrderRemoveItemShippingAddressActionSchema(OrderUpdateActionSchema):
 
 
 class OrderRemoveParcelFromDeliveryActionSchema(OrderUpdateActionSchema):
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11374,6 +12529,7 @@ class OrderRemovePaymentActionSchema(OrderUpdateActionSchema):
     payment = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -11389,6 +12545,7 @@ class OrderSetBillingAddressActionSchema(OrderUpdateActionSchema):
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11402,8 +12559,8 @@ class OrderSetBillingAddressActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomFieldActionSchema(OrderUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11415,9 +12572,11 @@ class OrderSetCustomFieldActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11429,11 +12588,14 @@ class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
-    fields = marshmallow.fields.String(missing=None)
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11447,10 +12609,13 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -11465,10 +12630,11 @@ class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema)
 
 
 class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11482,7 +12648,7 @@ class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomerEmailActionSchema(OrderUpdateActionSchema):
-    email = marshmallow.fields.String()
+    email = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11494,7 +12660,9 @@ class OrderSetCustomerEmailActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomerIdActionSchema(OrderUpdateActionSchema):
-    customer_id = marshmallow.fields.String(missing=None, data_key="customerId")
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11506,10 +12674,11 @@ class OrderSetCustomerIdActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetDeliveryAddressActionSchema(OrderUpdateActionSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11523,10 +12692,11 @@ class OrderSetDeliveryAddressActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetDeliveryItemsActionSchema(OrderUpdateActionSchema):
-    delivery_id = marshmallow.fields.String(data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -11540,9 +12710,9 @@ class OrderSetDeliveryItemsActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11554,11 +12724,12 @@ class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11572,10 +12743,11 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingDetails",
     )
@@ -11590,7 +12762,7 @@ class OrderSetLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetLocaleActionSchema(OrderUpdateActionSchema):
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11602,7 +12774,7 @@ class OrderSetLocaleActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
-    order_number = marshmallow.fields.String(data_key="orderNumber")
+    order_number = marshmallow.fields.String(allow_none=True, data_key="orderNumber")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11614,10 +12786,11 @@ class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetParcelItemsActionSchema(OrderUpdateActionSchema):
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -11631,10 +12804,11 @@ class OrderSetParcelItemsActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetParcelMeasurementsActionSchema(OrderUpdateActionSchema):
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11648,10 +12822,11 @@ class OrderSetParcelMeasurementsActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetParcelTrackingDataActionSchema(OrderUpdateActionSchema):
-    parcel_id = marshmallow.fields.String(data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="trackingData",
     )
 
@@ -11668,7 +12843,7 @@ class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
     payment_state = marshmallow_enum.EnumField(
         types.ReturnPaymentState, by_value=True, data_key="paymentState"
     )
-    return_item_id = marshmallow.fields.String(data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11680,7 +12855,7 @@ class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetReturnShipmentStateActionSchema(OrderUpdateActionSchema):
-    return_item_id = marshmallow.fields.String(data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
     shipment_state = marshmallow_enum.EnumField(
         types.ReturnShipmentState, by_value=True, data_key="shipmentState"
     )
@@ -11698,6 +12873,7 @@ class OrderSetShippingAddressActionSchema(OrderUpdateActionSchema):
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas.AddressSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11712,18 +12888,22 @@ class OrderSetShippingAddressActionSchema(OrderUpdateActionSchema):
 
 class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     actual_transition_date = marshmallow.fields.DateTime(
-        missing=None, data_key="actualTransitionDate"
+        allow_none=True, missing=None, data_key="actualTransitionDate"
     )
-    custom_line_item_id = marshmallow.fields.String(data_key="customLineItemId")
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="fromState",
     )
-    quantity = marshmallow.fields.Integer()
+    quantity = marshmallow.fields.Integer(allow_none=True)
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="toState",
     )
 
@@ -11738,18 +12918,20 @@ class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderTransitionLineItemStateActionSchema(OrderUpdateActionSchema):
     actual_transition_date = marshmallow.fields.DateTime(
-        missing=None, data_key="actualTransitionDate"
+        allow_none=True, missing=None, data_key="actualTransitionDate"
     )
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="fromState",
     )
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    quantity = marshmallow.fields.Integer()
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="toState",
     )
 
@@ -11766,9 +12948,10 @@ class OrderTransitionStateActionSchema(OrderUpdateActionSchema):
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    force = marshmallow.fields.Bool(missing=None)
+    force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11781,7 +12964,9 @@ class OrderTransitionStateActionSchema(OrderUpdateActionSchema):
 
 class OrderUpdateItemShippingAddressActionSchema(OrderUpdateActionSchema):
     address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -11797,9 +12982,14 @@ class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
-    synced_at = marshmallow.fields.DateTime(missing=None, data_key="syncedAt")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    synced_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="syncedAt"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11811,10 +13001,11 @@ class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
 
 
 class PaymentAddInterfaceInteractionActionSchema(PaymentUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11831,6 +13022,7 @@ class PaymentAddTransactionActionSchema(PaymentUpdateActionSchema):
     transaction = marshmallow.fields.Nested(
         nested="commercetools.schemas.TransactionDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -11846,6 +13038,7 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
     amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11859,8 +13052,12 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchema):
-    interaction_id = marshmallow.fields.String(data_key="interactionId")
-    transaction_id = marshmallow.fields.String(data_key="transactionId")
+    interaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="interactionId"
+    )
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="transactionId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11873,7 +13070,9 @@ class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchem
 
 class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
     state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
-    transaction_id = marshmallow.fields.String(data_key="transactionId")
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="transactionId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11885,8 +13084,10 @@ class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentChangeTransactionTimestampActionSchema(PaymentUpdateActionSchema):
-    timestamp = marshmallow.fields.DateTime()
-    transaction_id = marshmallow.fields.String(data_key="transactionId")
+    timestamp = marshmallow.fields.DateTime(allow_none=True)
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="transactionId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11901,6 +13102,7 @@ class PaymentReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.PaymentSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11917,6 +13119,7 @@ class PaymentSetAmountPaidActionSchema(PaymentUpdateActionSchema):
     amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11933,6 +13136,7 @@ class PaymentSetAmountRefundedActionSchema(PaymentUpdateActionSchema):
     amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -11946,7 +13150,9 @@ class PaymentSetAmountRefundedActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetAnonymousIdActionSchema(PaymentUpdateActionSchema):
-    anonymous_id = marshmallow.fields.String(missing=None, data_key="anonymousId")
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11961,9 +13167,10 @@ class PaymentSetAuthorizationActionSchema(PaymentUpdateActionSchema):
     amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    until = marshmallow.fields.DateTime(missing=None)
+    until = marshmallow.fields.DateTime(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11975,8 +13182,8 @@ class PaymentSetAuthorizationActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetCustomFieldActionSchema(PaymentUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11988,10 +13195,11 @@ class PaymentSetCustomFieldActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetCustomTypeActionSchema(PaymentUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -12008,6 +13216,7 @@ class PaymentSetCustomerActionSchema(PaymentUpdateActionSchema):
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -12021,7 +13230,9 @@ class PaymentSetCustomerActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
-    external_id = marshmallow.fields.String(missing=None, data_key="externalId")
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12033,7 +13244,7 @@ class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetInterfaceIdActionSchema(PaymentUpdateActionSchema):
-    interface_id = marshmallow.fields.String(data_key="interfaceId")
+    interface_id = marshmallow.fields.String(allow_none=True, data_key="interfaceId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12045,7 +13256,7 @@ class PaymentSetInterfaceIdActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetKeyActionSchema(PaymentUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12057,7 +13268,7 @@ class PaymentSetKeyActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetMethodInfoInterfaceActionSchema(PaymentUpdateActionSchema):
-    interface = marshmallow.fields.String()
+    interface = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12069,7 +13280,7 @@ class PaymentSetMethodInfoInterfaceActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetMethodInfoMethodActionSchema(PaymentUpdateActionSchema):
-    method = marshmallow.fields.String(missing=None)
+    method = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12081,7 +13292,7 @@ class PaymentSetMethodInfoMethodActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetMethodInfoNameActionSchema(PaymentUpdateActionSchema):
-    name = LocalizedStringField(missing=None)
+    name = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12093,7 +13304,9 @@ class PaymentSetMethodInfoNameActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
-    interface_code = marshmallow.fields.String(missing=None, data_key="interfaceCode")
+    interface_code = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interfaceCode"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12105,7 +13318,9 @@ class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
-    interface_text = marshmallow.fields.String(missing=None, data_key="interfaceText")
+    interface_text = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interfaceText"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12120,9 +13335,10 @@ class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    force = marshmallow.fields.Bool(missing=None)
+    force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12135,12 +13351,16 @@ class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):
 
 class ProductAddAssetActionSchema(ProductUpdateActionSchema):
     asset = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AssetDraftSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.AssetDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
-    position = marshmallow.fields.Integer(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
+    position = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12153,11 +13373,15 @@ class ProductAddAssetActionSchema(ProductUpdateActionSchema):
 
 class ProductAddExternalImageActionSchema(ProductUpdateActionSchema):
     image = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ImageSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ImageSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12170,11 +13394,15 @@ class ProductAddExternalImageActionSchema(ProductUpdateActionSchema):
 
 class ProductAddPriceActionSchema(ProductUpdateActionSchema):
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PriceDraftSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.PriceDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12189,9 +13417,12 @@ class ProductAddToCategoryActionSchema(ProductUpdateActionSchema):
     category = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    order_hint = marshmallow.fields.String(missing=None, data_key="orderHint")
-    staged = marshmallow.fields.Bool(missing=None)
+    order_hint = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderHint"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12206,24 +13437,27 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
     images = marshmallow.fields.Nested(
         nested="commercetools.schemas.ImageSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
-    sku = marshmallow.fields.String(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12235,12 +13469,18 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
 
 
 class ProductChangeAssetNameActionSchema(ProductUpdateActionSchema):
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    name = LocalizedStringField()
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    name = LocalizedStringField(allow_none=True)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12252,10 +13492,14 @@ class ProductChangeAssetNameActionSchema(ProductUpdateActionSchema):
 
 
 class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
-    asset_order = marshmallow.fields.String(many=True, data_key="assetOrder")
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    asset_order = marshmallow.fields.String(
+        allow_none=True, many=True, data_key="assetOrder"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12267,9 +13511,11 @@ class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
 
 
 class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12281,8 +13527,8 @@ class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
 
 
 class ProductChangeNameActionSchema(ProductUpdateActionSchema):
-    name = LocalizedStringField()
-    staged = marshmallow.fields.Bool(missing=None)
+    name = LocalizedStringField(allow_none=True)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12295,10 +13541,12 @@ class ProductChangeNameActionSchema(ProductUpdateActionSchema):
 
 class ProductChangePriceActionSchema(ProductUpdateActionSchema):
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PriceDraftSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.PriceDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    price_id = marshmallow.fields.String(data_key="priceId")
-    staged = marshmallow.fields.Bool(missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12310,8 +13558,8 @@ class ProductChangePriceActionSchema(ProductUpdateActionSchema):
 
 
 class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
-    slug = LocalizedStringField()
-    staged = marshmallow.fields.Bool(missing=None)
+    slug = LocalizedStringField(allow_none=True)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12323,7 +13571,7 @@ class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
 
 
 class ProductDiscountChangeIsActiveActionSchema(ProductDiscountUpdateActionSchema):
-    is_active = marshmallow.fields.Bool(data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12335,7 +13583,7 @@ class ProductDiscountChangeIsActiveActionSchema(ProductDiscountUpdateActionSchem
 
 
 class ProductDiscountChangeNameActionSchema(ProductDiscountUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12347,7 +13595,7 @@ class ProductDiscountChangeNameActionSchema(ProductDiscountUpdateActionSchema):
 
 
 class ProductDiscountChangePredicateActionSchema(ProductDiscountUpdateActionSchema):
-    predicate = marshmallow.fields.String()
+    predicate = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12359,7 +13607,7 @@ class ProductDiscountChangePredicateActionSchema(ProductDiscountUpdateActionSche
 
 
 class ProductDiscountChangeSortOrderActionSchema(ProductDiscountUpdateActionSchema):
-    sort_order = marshmallow.fields.String(data_key="sortOrder")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12379,6 +13627,7 @@ class ProductDiscountChangeValueActionSchema(ProductDiscountUpdateActionSchema):
             "relative": "commercetools.schemas.ProductDiscountValueRelativeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -12394,6 +13643,7 @@ class ProductDiscountReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductDiscountSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -12407,7 +13657,7 @@ class ProductDiscountReferenceSchema(ReferenceSchema):
 
 
 class ProductDiscountSetDescriptionActionSchema(ProductDiscountUpdateActionSchema):
-    description = LocalizedStringField(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12419,7 +13669,9 @@ class ProductDiscountSetDescriptionActionSchema(ProductDiscountUpdateActionSchem
 
 
 class ProductDiscountSetValidFromActionSchema(ProductDiscountUpdateActionSchema):
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12433,8 +13685,12 @@ class ProductDiscountSetValidFromActionSchema(ProductDiscountUpdateActionSchema)
 class ProductDiscountSetValidFromAndUntilActionSchema(
     ProductDiscountUpdateActionSchema
 ):
-    valid_from = marshmallow.fields.DateTime(missing=None, data_key="validFrom")
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12446,7 +13702,9 @@ class ProductDiscountSetValidFromAndUntilActionSchema(
 
 
 class ProductDiscountSetValidUntilActionSchema(ProductDiscountUpdateActionSchema):
-    valid_until = marshmallow.fields.DateTime(missing=None, data_key="validUntil")
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12458,8 +13716,8 @@ class ProductDiscountSetValidUntilActionSchema(ProductDiscountUpdateActionSchema
 
 
 class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12471,11 +13729,13 @@ class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
 
 
 class ProductMoveImageToPositionActionSchema(ProductUpdateActionSchema):
-    image_url = marshmallow.fields.String(data_key="imageUrl")
-    position = marshmallow.fields.Integer()
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl")
+    position = marshmallow.fields.Integer(allow_none=True)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12504,6 +13764,7 @@ class ProductReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -12517,11 +13778,17 @@ class ProductReferenceSchema(ReferenceSchema):
 
 
 class ProductRemoveAssetActionSchema(ProductUpdateActionSchema):
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12536,8 +13803,9 @@ class ProductRemoveFromCategoryActionSchema(ProductUpdateActionSchema):
     category = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
-    staged = marshmallow.fields.Bool(missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12549,10 +13817,12 @@ class ProductRemoveFromCategoryActionSchema(ProductUpdateActionSchema):
 
 
 class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
-    image_url = marshmallow.fields.String(data_key="imageUrl")
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl")
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12564,8 +13834,8 @@ class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
 
 
 class ProductRemovePriceActionSchema(ProductUpdateActionSchema):
-    price_id = marshmallow.fields.String(data_key="priceId")
-    staged = marshmallow.fields.Bool(missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12577,9 +13847,9 @@ class ProductRemovePriceActionSchema(ProductUpdateActionSchema):
 
 
 class ProductRemoveVariantActionSchema(ProductUpdateActionSchema):
-    id = marshmallow.fields.Integer(missing=None)
-    sku = marshmallow.fields.String(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
+    id = marshmallow.fields.Integer(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12601,7 +13871,7 @@ class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
 
 
 class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12613,13 +13883,19 @@ class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    name = marshmallow.fields.String()
-    sku = marshmallow.fields.String(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
-    value = marshmallow.fields.Raw(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    name = marshmallow.fields.String(allow_none=True)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12631,17 +13907,24 @@ class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    fields = marshmallow.fields.String(missing=None)
-    sku = marshmallow.fields.String(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12653,12 +13936,18 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAssetDescriptionActionSchema(ProductUpdateActionSchema):
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    description = LocalizedStringField(missing=None)
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    description = LocalizedStringField(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12670,11 +13959,15 @@ class ProductSetAssetDescriptionActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAssetKeyActionSchema(ProductUpdateActionSchema):
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    sku = marshmallow.fields.String(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
-    asset_id = marshmallow.fields.String(data_key="assetId")
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
+    asset_id = marshmallow.fields.String(allow_none=True, data_key="assetId")
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12686,14 +13979,21 @@ class ProductSetAssetKeyActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    sku = marshmallow.fields.String(missing=None)
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    staged = marshmallow.fields.Bool(missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     sources = marshmallow.fields.Nested(
         nested="commercetools.schemas.AssetSourceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -12707,12 +14007,18 @@ class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
-    asset_key = marshmallow.fields.String(missing=None, data_key="assetKey")
-    asset_id = marshmallow.fields.String(missing=None, data_key="assetId")
-    sku = marshmallow.fields.String(missing=None)
-    tags = marshmallow.fields.String(missing=None, many=True)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    asset_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetKey"
+    )
+    asset_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="assetId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    tags = marshmallow.fields.String(allow_none=True, missing=None, many=True)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12724,11 +14030,13 @@ class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAttributeActionSchema(ProductUpdateActionSchema):
-    name = marshmallow.fields.String()
-    sku = marshmallow.fields.String(missing=None)
-    value = marshmallow.fields.Raw(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12740,9 +14048,9 @@ class ProductSetAttributeActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAttributeInAllVariantsActionSchema(ProductUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12754,9 +14062,11 @@ class ProductSetAttributeInAllVariantsActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetCategoryOrderHintActionSchema(ProductUpdateActionSchema):
-    category_id = marshmallow.fields.String(data_key="categoryId")
-    order_hint = marshmallow.fields.String(missing=None, data_key="orderHint")
-    staged = marshmallow.fields.Bool(missing=None)
+    category_id = marshmallow.fields.String(allow_none=True, data_key="categoryId")
+    order_hint = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderHint"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12768,8 +14078,8 @@ class ProductSetCategoryOrderHintActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetDescriptionActionSchema(ProductUpdateActionSchema):
-    description = LocalizedStringField()
-    staged = marshmallow.fields.Bool(missing=None)
+    description = LocalizedStringField(allow_none=True)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12784,10 +14094,11 @@ class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
     discounted = marshmallow.fields.Nested(
         nested="commercetools.schemas.DiscountedPriceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    price_id = marshmallow.fields.String(data_key="priceId")
-    staged = marshmallow.fields.Bool(missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12799,11 +14110,13 @@ class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetImageLabelActionSchema(ProductUpdateActionSchema):
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    image_url = marshmallow.fields.String(data_key="imageUrl")
-    label = marshmallow.fields.String(missing=None)
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl")
+    label = marshmallow.fields.String(allow_none=True, missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12815,7 +14128,7 @@ class ProductSetImageLabelActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetKeyActionSchema(ProductUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12827,8 +14140,10 @@ class ProductSetKeyActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetMetaDescriptionActionSchema(ProductUpdateActionSchema):
-    meta_description = LocalizedStringField(missing=None, data_key="metaDescription")
-    staged = marshmallow.fields.Bool(missing=None)
+    meta_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaDescription"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12840,8 +14155,10 @@ class ProductSetMetaDescriptionActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetMetaKeywordsActionSchema(ProductUpdateActionSchema):
-    meta_keywords = LocalizedStringField(missing=None, data_key="metaKeywords")
-    staged = marshmallow.fields.Bool(missing=None)
+    meta_keywords = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaKeywords"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12853,8 +14170,10 @@ class ProductSetMetaKeywordsActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
-    meta_title = LocalizedStringField(missing=None, data_key="metaTitle")
-    staged = marshmallow.fields.Bool(missing=None)
+    meta_title = LocalizedStringField(
+        allow_none=True, missing=None, data_key="metaTitle"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12869,11 +14188,14 @@ class ProductSetPricesActionSchema(ProductUpdateActionSchema):
     prices = marshmallow.fields.Nested(
         nested="commercetools.schemas.PriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12885,10 +14207,10 @@ class ProductSetPricesActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
-    name = marshmallow.fields.String()
-    price_id = marshmallow.fields.String(data_key="priceId")
-    staged = marshmallow.fields.Bool(missing=None)
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12900,12 +14222,13 @@ class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
-    price_id = marshmallow.fields.String(data_key="priceId")
-    staged = marshmallow.fields.Bool(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -12919,10 +14242,12 @@ class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetProductVariantKeyActionSchema(ProductUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12937,9 +14262,10 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
     search_keywords = marshmallow.fields.Nested(
         nested="commercetools.schemas.SearchKeywordsSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="searchKeywords",
     )
-    staged = marshmallow.fields.Bool(missing=None)
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12951,9 +14277,9 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetSkuActionSchema(ProductUpdateActionSchema):
-    sku = marshmallow.fields.String(missing=None)
-    variant_id = marshmallow.fields.Integer(data_key="variantId")
-    staged = marshmallow.fields.Bool(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12968,6 +14294,7 @@ class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="taxCategory",
     )
@@ -12985,9 +14312,10 @@ class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    force = marshmallow.fields.Bool(missing=None)
+    force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13002,6 +14330,7 @@ class ProductTypeAddAttributeDefinitionActionSchema(ProductTypeUpdateActionSchem
     attribute = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeDefinitionDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13014,10 +14343,13 @@ class ProductTypeAddAttributeDefinitionActionSchema(ProductTypeUpdateActionSchem
 
 
 class ProductTypeAddLocalizedEnumValueActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13030,10 +14362,13 @@ class ProductTypeAddLocalizedEnumValueActionSchema(ProductTypeUpdateActionSchema
 
 
 class ProductTypeAddPlainEnumValueActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributePlainEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13046,7 +14381,9 @@ class ProductTypeAddPlainEnumValueActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeChangeAttributeConstraintActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     new_value = marshmallow_enum.EnumField(
         types.AttributeConstraintEnum, by_value=True, data_key="newValue"
     )
@@ -13061,8 +14398,12 @@ class ProductTypeChangeAttributeConstraintActionSchema(ProductTypeUpdateActionSc
 
 
 class ProductTypeChangeAttributeNameActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    new_attribute_name = marshmallow.fields.String(data_key="newAttributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    new_attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="newAttributeName"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13077,6 +14418,7 @@ class ProductTypeChangeAttributeOrderActionSchema(ProductTypeUpdateActionSchema)
     attributes = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeDefinitionDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -13090,7 +14432,7 @@ class ProductTypeChangeAttributeOrderActionSchema(ProductTypeUpdateActionSchema)
 
 
 class ProductTypeChangeDescriptionActionSchema(ProductTypeUpdateActionSchema):
-    description = marshmallow.fields.String()
+    description = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13102,9 +14444,11 @@ class ProductTypeChangeDescriptionActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeChangeEnumKeyActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    key = marshmallow.fields.String()
-    new_key = marshmallow.fields.String(data_key="newKey")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    key = marshmallow.fields.String(allow_none=True)
+    new_key = marshmallow.fields.String(allow_none=True, data_key="newKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13116,8 +14460,10 @@ class ProductTypeChangeEnumKeyActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeChangeInputHintActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    new_value = marshmallow.fields.String(data_key="newValue")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    new_value = marshmallow.fields.String(allow_none=True, data_key="newValue")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13129,8 +14475,10 @@ class ProductTypeChangeInputHintActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeChangeIsSearchableActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    is_searchable = marshmallow.fields.Bool(data_key="isSearchable")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    is_searchable = marshmallow.fields.Bool(allow_none=True, data_key="isSearchable")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13142,8 +14490,10 @@ class ProductTypeChangeIsSearchableActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeChangeLabelActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    label = LocalizedStringField()
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    label = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13157,10 +14507,13 @@ class ProductTypeChangeLabelActionSchema(ProductTypeUpdateActionSchema):
 class ProductTypeChangeLocalizedEnumValueLabelActionSchema(
     ProductTypeUpdateActionSchema
 ):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     new_value = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="newValue",
     )
 
@@ -13176,10 +14529,13 @@ class ProductTypeChangeLocalizedEnumValueLabelActionSchema(
 class ProductTypeChangeLocalizedEnumValueOrderActionSchema(
     ProductTypeUpdateActionSchema
 ):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     values = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributeLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -13193,7 +14549,7 @@ class ProductTypeChangeLocalizedEnumValueOrderActionSchema(
 
 
 class ProductTypeChangeNameActionSchema(ProductTypeUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13205,10 +14561,13 @@ class ProductTypeChangeNameActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeChangePlainEnumValueLabelActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     new_value = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributePlainEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="newValue",
     )
 
@@ -13222,10 +14581,13 @@ class ProductTypeChangePlainEnumValueLabelActionSchema(ProductTypeUpdateActionSc
 
 
 class ProductTypeChangePlainEnumValueOrderActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
     values = marshmallow.fields.Nested(
         nested="commercetools.schemas.AttributePlainEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         many=True,
     )
 
@@ -13242,6 +14604,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductTypeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13255,7 +14618,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
 
 
 class ProductTypeRemoveAttributeDefinitionActionSchema(ProductTypeUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13267,8 +14630,10 @@ class ProductTypeRemoveAttributeDefinitionActionSchema(ProductTypeUpdateActionSc
 
 
 class ProductTypeRemoveEnumValuesActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    keys = marshmallow.fields.String(many=True)
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    keys = marshmallow.fields.String(allow_none=True, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13280,8 +14645,10 @@ class ProductTypeRemoveEnumValuesActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
-    attribute_name = marshmallow.fields.String(data_key="attributeName")
-    input_tip = LocalizedStringField(missing=None, data_key="inputTip")
+    attribute_name = marshmallow.fields.String(
+        allow_none=True, data_key="attributeName"
+    )
+    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13293,7 +14660,7 @@ class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeSetKeyActionSchema(ProductTypeUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13319,7 +14686,9 @@ class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
         marshmallow.fields.Nested(
             nested="commercetools.schemas.CountryCodeSchema",
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -13336,7 +14705,9 @@ class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
         marshmallow.fields.Nested(
             nested="commercetools.schemas.CurrencyCodeSchema",
             unknown=marshmallow.EXCLUDE,
-        )
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -13351,8 +14722,11 @@ class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
 class ProjectChangeLanguagesActionSchema(ProjectUpdateActionSchema):
     languages = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.LocaleSchema", unknown=marshmallow.EXCLUDE
-        )
+            nested="commercetools.schemas.LocaleSchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
     )
 
     class Meta:
@@ -13365,7 +14739,9 @@ class ProjectChangeLanguagesActionSchema(ProjectUpdateActionSchema):
 
 
 class ProjectChangeMessagesEnabledActionSchema(ProjectUpdateActionSchema):
-    messages_enabled = marshmallow.fields.Bool(data_key="messagesEnabled")
+    messages_enabled = marshmallow.fields.Bool(
+        allow_none=True, data_key="messagesEnabled"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13377,7 +14753,7 @@ class ProjectChangeMessagesEnabledActionSchema(ProjectUpdateActionSchema):
 
 
 class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13397,6 +14773,7 @@ class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
             "CartValue": "commercetools.schemas.CartValueTypeSchema",
         },
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         data_key="shippingRateInputType",
     )
@@ -13414,6 +14791,7 @@ class ReviewReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReviewSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13427,7 +14805,9 @@ class ReviewReferenceSchema(ReferenceSchema):
 
 
 class ReviewSetAuthorNameActionSchema(ReviewUpdateActionSchema):
-    author_name = marshmallow.fields.String(missing=None, data_key="authorName")
+    author_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="authorName"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13439,8 +14819,8 @@ class ReviewSetAuthorNameActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetCustomFieldActionSchema(ReviewUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13452,10 +14832,11 @@ class ReviewSetCustomFieldActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13472,6 +14853,7 @@ class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13485,7 +14867,7 @@ class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetKeyActionSchema(ReviewUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13497,7 +14879,7 @@ class ReviewSetKeyActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetLocaleActionSchema(ReviewUpdateActionSchema):
-    locale = marshmallow.fields.String(missing=None)
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13509,7 +14891,7 @@ class ReviewSetLocaleActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetRatingActionSchema(ReviewUpdateActionSchema):
-    rating = marshmallow.fields.Integer(missing=None)
+    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13524,6 +14906,7 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
     target = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13537,7 +14920,7 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetTextActionSchema(ReviewUpdateActionSchema):
-    text = marshmallow.fields.String(missing=None)
+    text = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13549,7 +14932,7 @@ class ReviewSetTextActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetTitleActionSchema(ReviewUpdateActionSchema):
-    title = marshmallow.fields.String(missing=None)
+    title = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13564,9 +14947,10 @@ class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.ResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    force = marshmallow.fields.Bool(missing=None)
+    force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13581,10 +14965,13 @@ class ShippingMethodAddShippingRateActionSchema(ShippingMethodUpdateActionSchema
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="shippingRate",
     )
     zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13598,7 +14985,9 @@ class ShippingMethodAddShippingRateActionSchema(ShippingMethodUpdateActionSchema
 
 class ShippingMethodAddZoneActionSchema(ShippingMethodUpdateActionSchema):
     zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13611,7 +15000,7 @@ class ShippingMethodAddZoneActionSchema(ShippingMethodUpdateActionSchema):
 
 
 class ShippingMethodChangeIsDefaultActionSchema(ShippingMethodUpdateActionSchema):
-    is_default = marshmallow.fields.Bool(data_key="isDefault")
+    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13623,7 +15012,7 @@ class ShippingMethodChangeIsDefaultActionSchema(ShippingMethodUpdateActionSchema
 
 
 class ShippingMethodChangeNameActionSchema(ShippingMethodUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13638,6 +15027,7 @@ class ShippingMethodChangeTaxCategoryActionSchema(ShippingMethodUpdateActionSche
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="taxCategory",
     )
 
@@ -13654,6 +15044,7 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingMethodSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13670,10 +15061,13 @@ class ShippingMethodRemoveShippingRateActionSchema(ShippingMethodUpdateActionSch
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="shippingRate",
     )
     zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13687,7 +15081,9 @@ class ShippingMethodRemoveShippingRateActionSchema(ShippingMethodUpdateActionSch
 
 class ShippingMethodRemoveZoneActionSchema(ShippingMethodUpdateActionSchema):
     zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -13700,7 +15096,7 @@ class ShippingMethodRemoveZoneActionSchema(ShippingMethodUpdateActionSchema):
 
 
 class ShippingMethodSetDescriptionActionSchema(ShippingMethodUpdateActionSchema):
-    description = marshmallow.fields.String(missing=None)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13712,7 +15108,7 @@ class ShippingMethodSetDescriptionActionSchema(ShippingMethodUpdateActionSchema)
 
 
 class ShippingMethodSetKeyActionSchema(ShippingMethodUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13724,7 +15120,7 @@ class ShippingMethodSetKeyActionSchema(ShippingMethodUpdateActionSchema):
 
 
 class ShippingMethodSetPredicateActionSchema(ShippingMethodUpdateActionSchema):
-    predicate = marshmallow.fields.String(missing=None)
+    predicate = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13736,16 +15132,23 @@ class ShippingMethodSetPredicateActionSchema(ShippingMethodUpdateActionSchema):
 
 
 class ShoppingListAddLineItemActionSchema(ShoppingListUpdateActionSchema):
-    added_at = marshmallow.fields.DateTime(missing=None, data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    sku = marshmallow.fields.String(missing=None)
-    product_id = marshmallow.fields.String(missing=None, data_key="productId")
-    variant_id = marshmallow.fields.Integer(missing=None, data_key="variantId")
-    quantity = marshmallow.fields.Integer(missing=None)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13760,12 +15163,15 @@ class ShoppingListAddTextLineItemActionSchema(ShoppingListUpdateActionSchema):
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
-    description = LocalizedStringField(missing=None)
-    name = LocalizedStringField()
-    quantity = marshmallow.fields.Integer(missing=None)
-    added_at = marshmallow.fields.DateTime(missing=None, data_key="addedAt")
+    description = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(allow_none=True)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13777,8 +15183,8 @@ class ShoppingListAddTextLineItemActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListChangeLineItemQuantityActionSchema(ShoppingListUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    quantity = marshmallow.fields.Integer()
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13790,7 +15196,9 @@ class ShoppingListChangeLineItemQuantityActionSchema(ShoppingListUpdateActionSch
 
 
 class ShoppingListChangeLineItemsOrderActionSchema(ShoppingListUpdateActionSchema):
-    line_item_order = marshmallow.fields.String(many=True, data_key="lineItemOrder")
+    line_item_order = marshmallow.fields.String(
+        allow_none=True, many=True, data_key="lineItemOrder"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13802,7 +15210,7 @@ class ShoppingListChangeLineItemsOrderActionSchema(ShoppingListUpdateActionSchem
 
 
 class ShoppingListChangeNameActionSchema(ShoppingListUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13814,8 +15222,10 @@ class ShoppingListChangeNameActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListChangeTextLineItemNameActionSchema(ShoppingListUpdateActionSchema):
-    name = LocalizedStringField()
-    text_line_item_id = marshmallow.fields.String(data_key="textLineItemId")
+    name = LocalizedStringField(allow_none=True)
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13829,8 +15239,10 @@ class ShoppingListChangeTextLineItemNameActionSchema(ShoppingListUpdateActionSch
 class ShoppingListChangeTextLineItemQuantityActionSchema(
     ShoppingListUpdateActionSchema
 ):
-    quantity = marshmallow.fields.Integer()
-    text_line_item_id = marshmallow.fields.String(data_key="textLineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13843,7 +15255,7 @@ class ShoppingListChangeTextLineItemQuantityActionSchema(
 
 class ShoppingListChangeTextLineItemsOrderActionSchema(ShoppingListUpdateActionSchema):
     text_line_item_order = marshmallow.fields.String(
-        many=True, data_key="textLineItemOrder"
+        allow_none=True, many=True, data_key="textLineItemOrder"
     )
 
     class Meta:
@@ -13859,6 +15271,7 @@ class ShoppingListReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShoppingListSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13872,8 +15285,8 @@ class ShoppingListReferenceSchema(ReferenceSchema):
 
 
 class ShoppingListRemoveLineItemActionSchema(ShoppingListUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    quantity = marshmallow.fields.Integer(missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13885,8 +15298,10 @@ class ShoppingListRemoveLineItemActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListRemoveTextLineItemActionSchema(ShoppingListUpdateActionSchema):
-    quantity = marshmallow.fields.Integer(missing=None)
-    text_line_item_id = marshmallow.fields.String(data_key="textLineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13898,7 +15313,7 @@ class ShoppingListRemoveTextLineItemActionSchema(ShoppingListUpdateActionSchema)
 
 
 class ShoppingListSetAnonymousIdActionSchema(ShoppingListUpdateActionSchema):
-    anonymous_id = marshmallow.fields.String(data_key="anonymousId")
+    anonymous_id = marshmallow.fields.String(allow_none=True, data_key="anonymousId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13910,8 +15325,8 @@ class ShoppingListSetAnonymousIdActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListSetCustomFieldActionSchema(ShoppingListUpdateActionSchema):
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13923,10 +15338,11 @@ class ShoppingListSetCustomFieldActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListSetCustomTypeActionSchema(ShoppingListUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13943,6 +15359,7 @@ class ShoppingListSetCustomerActionSchema(ShoppingListUpdateActionSchema):
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -13959,7 +15376,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationActionSchema(
     ShoppingListUpdateActionSchema
 ):
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
     )
 
     class Meta:
@@ -13972,7 +15389,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationActionSchema(
 
 
 class ShoppingListSetDescriptionActionSchema(ShoppingListUpdateActionSchema):
-    description = LocalizedStringField(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13984,7 +15401,7 @@ class ShoppingListSetDescriptionActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListSetKeyActionSchema(ShoppingListUpdateActionSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13996,9 +15413,9 @@ class ShoppingListSetKeyActionSchema(ShoppingListUpdateActionSchema):
 
 
 class ShoppingListSetLineItemCustomFieldActionSchema(ShoppingListUpdateActionSchema):
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
-    name = marshmallow.fields.String()
-    value = marshmallow.fields.Raw(missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14010,11 +15427,12 @@ class ShoppingListSetLineItemCustomFieldActionSchema(ShoppingListUpdateActionSch
 
 
 class ShoppingListSetLineItemCustomTypeActionSchema(ShoppingListUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
-    line_item_id = marshmallow.fields.String(data_key="lineItemId")
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -14028,7 +15446,7 @@ class ShoppingListSetLineItemCustomTypeActionSchema(ShoppingListUpdateActionSche
 
 
 class ShoppingListSetSlugActionSchema(ShoppingListUpdateActionSchema):
-    slug = LocalizedStringField(missing=None)
+    slug = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14042,9 +15460,11 @@ class ShoppingListSetSlugActionSchema(ShoppingListUpdateActionSchema):
 class ShoppingListSetTextLineItemCustomFieldActionSchema(
     ShoppingListUpdateActionSchema
 ):
-    name = marshmallow.fields.String()
-    text_line_item_id = marshmallow.fields.String(data_key="textLineItemId")
-    value = marshmallow.fields.Raw(missing=None)
+    name = marshmallow.fields.String(allow_none=True)
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14056,11 +15476,14 @@ class ShoppingListSetTextLineItemCustomFieldActionSchema(
 
 
 class ShoppingListSetTextLineItemCustomTypeActionSchema(ShoppingListUpdateActionSchema):
-    fields = marshmallow.fields.String(missing=None)
-    text_line_item_id = marshmallow.fields.String(data_key="textLineItemId")
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -14076,8 +15499,10 @@ class ShoppingListSetTextLineItemCustomTypeActionSchema(ShoppingListUpdateAction
 class ShoppingListSetTextLineItemDescriptionActionSchema(
     ShoppingListUpdateActionSchema
 ):
-    description = LocalizedStringField(missing=None)
-    text_line_item_id = marshmallow.fields.String(data_key="textLineItemId")
+    description = LocalizedStringField(allow_none=True, missing=None)
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14101,7 +15526,7 @@ class StateAddRolesActionSchema(StateUpdateActionSchema):
 
 
 class StateChangeInitialActionSchema(StateUpdateActionSchema):
-    initial = marshmallow.fields.Bool()
+    initial = marshmallow.fields.Bool(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14113,7 +15538,7 @@ class StateChangeInitialActionSchema(StateUpdateActionSchema):
 
 
 class StateChangeKeyActionSchema(StateUpdateActionSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14140,6 +15565,7 @@ class StateReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -14165,7 +15591,7 @@ class StateRemoveRolesActionSchema(StateUpdateActionSchema):
 
 
 class StateSetDescriptionActionSchema(StateUpdateActionSchema):
-    description = LocalizedStringField()
+    description = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14177,7 +15603,7 @@ class StateSetDescriptionActionSchema(StateUpdateActionSchema):
 
 
 class StateSetNameActionSchema(StateUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14204,6 +15630,7 @@ class StateSetTransitionsActionSchema(StateUpdateActionSchema):
     transitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -14221,6 +15648,7 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
     changes = marshmallow.fields.Nested(
         nested="commercetools.schemas.ChangeSubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -14235,7 +15663,7 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
 
 
 class SubscriptionSetKeyActionSchema(SubscriptionUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14250,6 +15678,7 @@ class SubscriptionSetMessagesActionSchema(SubscriptionUpdateActionSchema):
     messages = marshmallow.fields.Nested(
         nested="commercetools.schemas.MessageSubscriptionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
         many=True,
     )
@@ -14267,6 +15696,7 @@ class TaxCategoryAddTaxRateActionSchema(TaxCategoryUpdateActionSchema):
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="taxRate",
     )
 
@@ -14280,7 +15710,7 @@ class TaxCategoryAddTaxRateActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TaxCategoryChangeNameActionSchema(TaxCategoryUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14295,6 +15725,7 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxCategorySchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -14308,7 +15739,7 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
 
 
 class TaxCategoryRemoveTaxRateActionSchema(TaxCategoryUpdateActionSchema):
-    tax_rate_id = marshmallow.fields.String(data_key="taxRateId")
+    tax_rate_id = marshmallow.fields.String(allow_none=True, data_key="taxRateId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14320,10 +15751,11 @@ class TaxCategoryRemoveTaxRateActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TaxCategoryReplaceTaxRateActionSchema(TaxCategoryUpdateActionSchema):
-    tax_rate_id = marshmallow.fields.String(data_key="taxRateId")
+    tax_rate_id = marshmallow.fields.String(allow_none=True, data_key="taxRateId")
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.TaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="taxRate",
     )
 
@@ -14337,7 +15769,7 @@ class TaxCategoryReplaceTaxRateActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TaxCategorySetDescriptionActionSchema(TaxCategoryUpdateActionSchema):
-    description = marshmallow.fields.String(missing=None)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14349,7 +15781,7 @@ class TaxCategorySetDescriptionActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TaxCategorySetKeyActionSchema(TaxCategoryUpdateActionSchema):
-    key = marshmallow.fields.String(missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14361,10 +15793,11 @@ class TaxCategorySetKeyActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TypeAddEnumValueActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -14380,6 +15813,7 @@ class TypeAddFieldDefinitionActionSchema(TypeUpdateActionSchema):
     field_definition = marshmallow.fields.Nested(
         nested="commercetools.schemas.FieldDefinitionSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         data_key="fieldDefinition",
     )
 
@@ -14393,10 +15827,11 @@ class TypeAddFieldDefinitionActionSchema(TypeUpdateActionSchema):
 
 
 class TypeAddLocalizedEnumValueActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -14409,8 +15844,8 @@ class TypeAddLocalizedEnumValueActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
-    keys = marshmallow.fields.String(many=True)
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    keys = marshmallow.fields.String(allow_none=True, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14422,8 +15857,8 @@ class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
-    label = LocalizedStringField()
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    label = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14435,7 +15870,9 @@ class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):
-    field_names = marshmallow.fields.String(many=True, data_key="fieldNames")
+    field_names = marshmallow.fields.String(
+        allow_none=True, many=True, data_key="fieldNames"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14447,7 +15884,7 @@ class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeKeyActionSchema(TypeUpdateActionSchema):
-    key = marshmallow.fields.String()
+    key = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14459,8 +15896,8 @@ class TypeChangeKeyActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
-    label = LocalizedStringField()
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    label = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14472,8 +15909,8 @@ class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeLocalizedEnumValueOrderActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
-    keys = marshmallow.fields.String(many=True)
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    keys = marshmallow.fields.String(allow_none=True, many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14485,7 +15922,7 @@ class TypeChangeLocalizedEnumValueOrderActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeNameActionSchema(TypeUpdateActionSchema):
-    name = LocalizedStringField()
+    name = LocalizedStringField(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14500,6 +15937,7 @@ class TypeReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -14513,7 +15951,7 @@ class TypeReferenceSchema(ReferenceSchema):
 
 
 class TypeRemoveFieldDefinitionActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14525,7 +15963,7 @@ class TypeRemoveFieldDefinitionActionSchema(TypeUpdateActionSchema):
 
 
 class TypeSetDescriptionActionSchema(TypeUpdateActionSchema):
-    description = LocalizedStringField(missing=None)
+    description = LocalizedStringField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14538,7 +15976,9 @@ class TypeSetDescriptionActionSchema(TypeUpdateActionSchema):
 
 class ZoneAddLocationActionSchema(ZoneUpdateActionSchema):
     location = marshmallow.fields.Nested(
-        nested="commercetools.schemas.LocationSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.LocationSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -14551,7 +15991,7 @@ class ZoneAddLocationActionSchema(ZoneUpdateActionSchema):
 
 
 class ZoneChangeNameActionSchema(ZoneUpdateActionSchema):
-    name = marshmallow.fields.String()
+    name = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14566,6 +16006,7 @@ class ZoneReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.ZoneSchema",
         unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -14580,7 +16021,9 @@ class ZoneReferenceSchema(ReferenceSchema):
 
 class ZoneRemoveLocationActionSchema(ZoneUpdateActionSchema):
     location = marshmallow.fields.Nested(
-        nested="commercetools.schemas.LocationSchema", unknown=marshmallow.EXCLUDE
+        nested="commercetools.schemas.LocationSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:
@@ -14593,7 +16036,7 @@ class ZoneRemoveLocationActionSchema(ZoneUpdateActionSchema):
 
 
 class ZoneSetDescriptionActionSchema(ZoneUpdateActionSchema):
-    description = marshmallow.fields.String(missing=None)
+    description = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE

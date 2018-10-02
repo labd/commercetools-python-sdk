@@ -64,7 +64,7 @@ class ProductService:
 
     def create(self, draft: types.ProductDraft) -> types.Product:
         return self._client._post(
-            "products", [], draft, schemas.ProductUpdateSchema, schemas.ProductSchema
+            "products", [], draft, schemas.ProductDraftSchema, schemas.ProductSchema
         )
 
     def update_by_id(

@@ -274,7 +274,7 @@ class ResourceClassGenerator:
 
         """
         # Create the arguments for the __init__ method
-        init_args = [ast.arg(arg="self", annotation=None)]
+        init_args = []
         for prop in self.properties:
             attribute_name = prop.attribute_name
             if not attribute_name:
@@ -292,14 +292,14 @@ class ResourceClassGenerator:
         init_func = ast.FunctionDef(
             name="__init__",
             args=ast.arguments(
-                args=init_args,
+                args=[ast.arg(arg="self", annotation=None)],
                 vararg=None,
-                kwonlyargs=[],
-                kw_defaults=[],
-                kwarg=None,
-                defaults=[
-                    ast.NameConstant(value=None) for _ in range(0, len(init_args) - 1)
+                kwonlyargs=init_args,
+                kw_defaults=[
+                    ast.NameConstant(value=None) for _ in range(0, len(init_args))
                 ],
+                kwarg=None,
+                defaults=[],
             ),
             body=[],
             decorator_list=[],

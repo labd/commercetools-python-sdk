@@ -37,6 +37,7 @@ class Address:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
@@ -134,6 +135,7 @@ class Asset:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         sources: typing.Optional[typing.List["AssetSource"]] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -171,7 +173,7 @@ class AssetDimensions:
     h: typing.Optional[int]
 
     def __init__(
-        self, w: typing.Optional[int] = None, h: typing.Optional[int] = None
+        self, *, w: typing.Optional[int] = None, h: typing.Optional[int] = None
     ) -> None:
         self.w = w
         self.h = h
@@ -191,6 +193,7 @@ class AssetDraft:
 
     def __init__(
         self,
+        *,
         sources: typing.Optional[typing.List["AssetSource"]] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -228,6 +231,7 @@ class AssetSource:
 
     def __init__(
         self,
+        *,
         uri: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
@@ -254,6 +258,7 @@ class Attribute:
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
@@ -277,6 +282,7 @@ class AttributeDefinition:
 
     def __init__(
         self,
+        *,
         type: typing.Optional["AttributeType"] = None,
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -324,6 +330,7 @@ class AttributeDefinitionDraft:
 
     def __init__(
         self,
+        *,
         type: typing.Optional["AttributeType"] = None,
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -365,6 +372,7 @@ class AttributeLocalizedEnumValue:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -381,7 +389,7 @@ class AttributePlainEnumValue:
     label: typing.Optional[str]
 
     def __init__(
-        self, key: typing.Optional[str] = None, label: typing.Optional[str] = None
+        self, *, key: typing.Optional[str] = None, label: typing.Optional[str] = None
     ) -> None:
         self.key = key
         self.label = label
@@ -394,7 +402,7 @@ class AttributePlainEnumValue:
 class AttributeType:
     name: typing.Optional[str]
 
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         self.name = name
 
     def __repr__(self) -> str:
@@ -427,6 +435,7 @@ class CartDiscountDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: typing.Optional["CartDiscountValue"] = None,
@@ -477,7 +486,7 @@ class CartDiscountDraft:
 class CartDiscountTarget:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -488,7 +497,7 @@ class CartDiscountTarget:
 class CartDiscountValue:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -522,6 +531,7 @@ class CartDraft:
 
     def __init__(
         self,
+        *,
         currency: typing.Optional["str"] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
@@ -619,6 +629,7 @@ class CategoryDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional["LocalizedString"] = None,
         slug: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -669,7 +680,7 @@ class CategoryDraft:
 class ChangeSubscription:
     resource_type_id: typing.Optional[str]
 
-    def __init__(self, resource_type_id: typing.Optional[str] = None) -> None:
+    def __init__(self, *, resource_type_id: typing.Optional[str] = None) -> None:
         self.resource_type_id = resource_type_id
 
     def __repr__(self) -> str:
@@ -688,6 +699,7 @@ class ChannelDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -725,7 +737,7 @@ class CustomFieldEnumValue:
     label: typing.Optional[str]
 
     def __init__(
-        self, key: typing.Optional[str] = None, label: typing.Optional[str] = None
+        self, *, key: typing.Optional[str] = None, label: typing.Optional[str] = None
     ) -> None:
         self.key = key
         self.label = label
@@ -741,6 +753,7 @@ class CustomFieldLocalizedEnumValue:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -761,6 +774,7 @@ class CustomFields:
 
     def __init__(
         self,
+        *,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -778,6 +792,7 @@ class CustomFieldsDraft:
 
     def __init__(
         self,
+        *,
         type: typing.Optional["ResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -808,6 +823,7 @@ class CustomLineItem:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
         money: typing.Optional["TypedMoney"] = None,
@@ -872,6 +888,7 @@ class CustomLineItemDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         money: typing.Optional["Money"] = None,
@@ -915,6 +932,7 @@ class CustomObjectDraft:
 
     def __init__(
         self,
+        *,
         container: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -943,6 +961,7 @@ class CustomerChangePassword:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         current_password: typing.Optional[str] = None,
@@ -968,6 +987,7 @@ class CustomerCreateEmailToken:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         ttl_minutes: typing.Optional[int] = None,
@@ -988,7 +1008,7 @@ class CustomerCreateEmailToken:
 class CustomerCreatePasswordResetToken:
     email: typing.Optional[str]
 
-    def __init__(self, email: typing.Optional[str] = None) -> None:
+    def __init__(self, *, email: typing.Optional[str] = None) -> None:
         self.email = email
 
     def __repr__(self) -> str:
@@ -1024,6 +1044,7 @@ class CustomerDraft:
 
     def __init__(
         self,
+        *,
         customer_number: typing.Optional[str] = None,
         email: typing.Optional[str] = None,
         password: typing.Optional[str] = None,
@@ -1113,6 +1134,7 @@ class CustomerEmailVerify:
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         token_value: typing.Optional[str] = None,
     ) -> None:
@@ -1134,6 +1156,7 @@ class CustomerGroupDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         group_name: typing.Optional[str] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -1158,6 +1181,7 @@ class CustomerResetPassword:
 
     def __init__(
         self,
+        *,
         token_value: typing.Optional[str] = None,
         new_password: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
@@ -1181,6 +1205,7 @@ class CustomerSignInResult:
 
     def __init__(
         self,
+        *,
         customer: typing.Optional["Customer"] = None,
         cart: typing.Optional[object] = None,
     ) -> None:
@@ -1201,6 +1226,7 @@ class CustomerSignin:
 
     def __init__(
         self,
+        *,
         email: typing.Optional[str] = None,
         password: typing.Optional[str] = None,
         anonymous_cart_id: typing.Optional[str] = None,
@@ -1237,6 +1263,7 @@ class CustomerToken:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
@@ -1275,6 +1302,7 @@ class Delivery:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -1303,7 +1331,7 @@ class DeliveryItem:
     quantity: typing.Optional[int]
 
     def __init__(
-        self, id: typing.Optional[str] = None, quantity: typing.Optional[int] = None
+        self, *, id: typing.Optional[str] = None, quantity: typing.Optional[int] = None
     ) -> None:
         self.id = id
         self.quantity = quantity
@@ -1316,7 +1344,7 @@ class DeliveryItem:
 class Destination:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1340,6 +1368,7 @@ class DiscountCodeDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         code: typing.Optional[str] = None,
@@ -1393,6 +1422,7 @@ class DiscountCodeInfo:
 
     def __init__(
         self,
+        *,
         discount_code: typing.Optional["DiscountCodeReference"] = None,
         state: typing.Optional["DiscountCodeState"] = None,
     ) -> None:
@@ -1413,6 +1443,7 @@ class DiscountedLineItemPortion:
 
     def __init__(
         self,
+        *,
         discount: typing.Optional["CartDiscountReference"] = None,
         discounted_amount: typing.Optional["Money"] = None,
     ) -> None:
@@ -1433,6 +1464,7 @@ class DiscountedLineItemPrice:
 
     def __init__(
         self,
+        *,
         value: typing.Optional["TypedMoney"] = None,
         included_discounts: typing.Optional[
             typing.List["DiscountedLineItemPortion"]
@@ -1455,6 +1487,7 @@ class DiscountedLineItemPriceDraft:
 
     def __init__(
         self,
+        *,
         value: typing.Optional["Money"] = None,
         included_discounts: typing.Optional[
             typing.List["DiscountedLineItemPortion"]
@@ -1477,6 +1510,7 @@ class DiscountedLineItemPriceForQuantity:
 
     def __init__(
         self,
+        *,
         quantity: typing.Optional[int] = None,
         discounted_price: typing.Optional["DiscountedLineItemPrice"] = None,
     ) -> None:
@@ -1497,6 +1531,7 @@ class DiscountedPrice:
 
     def __init__(
         self,
+        *,
         value: typing.Optional["Money"] = None,
         discount: typing.Optional["ProductDiscountReference"] = None,
     ) -> None:
@@ -1513,7 +1548,7 @@ class ErrorObject:
     message: typing.Optional[str]
 
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         self.code = code
         self.message = message
@@ -1532,6 +1567,7 @@ class ErrorResponse:
 
     def __init__(
         self,
+        *,
         status_code: typing.Optional[int] = None,
         message: typing.Optional[str] = None,
         error: typing.Optional[str] = None,
@@ -1561,7 +1597,7 @@ class ErrorResponse:
 class ExtensionDestination:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1576,6 +1612,7 @@ class ExtensionDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         destination: typing.Optional["ExtensionDestination"] = None,
         triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
@@ -1596,7 +1633,7 @@ class ExtensionDraft:
 class ExtensionHttpDestinationAuthentication:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1610,6 +1647,7 @@ class ExtensionInput:
 
     def __init__(
         self,
+        *,
         action: typing.Optional["ExtensionAction"] = None,
         resource: typing.Optional["Reference"] = None,
     ) -> None:
@@ -1627,6 +1665,7 @@ class ExtensionTrigger:
 
     def __init__(
         self,
+        *,
         resource_type_id: typing.Optional["ExtensionResourceTypeId"] = None,
         actions: typing.Optional[typing.List["ExtensionAction"]] = None,
     ) -> None:
@@ -1647,6 +1686,7 @@ class ExternalLineItemTotalPrice:
 
     def __init__(
         self,
+        *,
         price: typing.Optional["Money"] = None,
         total_price: typing.Optional["Money"] = None,
     ) -> None:
@@ -1667,6 +1707,7 @@ class ExternalTaxAmountDraft:
 
     def __init__(
         self,
+        *,
         total_gross: typing.Optional["Money"] = None,
         tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -1690,6 +1731,7 @@ class ExternalTaxRateDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         amount: typing.Optional[int] = None,
         country: typing.Optional[str] = None,
@@ -1713,7 +1755,7 @@ class ExternalTaxRateDraft:
 class FacetResult:
     type: typing.Optional["FacetTypes"]
 
-    def __init__(self, type: typing.Optional["FacetTypes"] = None) -> None:
+    def __init__(self, *, type: typing.Optional["FacetTypes"] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1735,6 +1777,7 @@ class FacetResultRange:
 
     def __init__(
         self,
+        *,
         from_: typing.Optional[int] = None,
         from_str: typing.Optional[str] = None,
         to: typing.Optional[int] = None,
@@ -1783,6 +1826,7 @@ class FacetResultTerm:
 
     def __init__(
         self,
+        *,
         term: typing.Optional[typing.Any] = None,
         count: typing.Optional[int] = None,
         product_count: typing.Optional[int] = None,
@@ -1809,6 +1853,7 @@ class FieldDefinition:
 
     def __init__(
         self,
+        *,
         type: typing.Optional[object] = None,
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -1832,7 +1877,7 @@ class FieldDefinition:
 class FieldType:
     name: typing.Optional[str]
 
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         self.name = name
 
     def __repr__(self) -> str:
@@ -1846,6 +1891,7 @@ class GeoJson:
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         coordinates: typing.Optional[list] = None,
     ) -> None:
@@ -1864,6 +1910,7 @@ class Image:
 
     def __init__(
         self,
+        *,
         url: typing.Optional[str] = None,
         dimensions: typing.Optional["ImageDimensions"] = None,
         label: typing.Optional[str] = None,
@@ -1886,7 +1933,7 @@ class ImageDimensions:
     h: typing.Optional[int]
 
     def __init__(
-        self, w: typing.Optional[int] = None, h: typing.Optional[int] = None
+        self, *, w: typing.Optional[int] = None, h: typing.Optional[int] = None
     ) -> None:
         self.w = w
         self.h = h
@@ -1906,6 +1953,7 @@ class InventoryEntryDraft:
 
     def __init__(
         self,
+        *,
         sku: typing.Optional[str] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         quantity_on_stock: typing.Optional[int] = None,
@@ -1941,6 +1989,7 @@ class ItemShippingDetails:
 
     def __init__(
         self,
+        *,
         targets: typing.Optional[typing.List["ItemShippingTarget"]] = None,
         valid: typing.Optional[bool] = None,
     ) -> None:
@@ -1956,7 +2005,7 @@ class ItemShippingDetailsDraft:
     targets: typing.Optional[typing.List["ItemShippingTarget"]]
 
     def __init__(
-        self, targets: typing.Optional[typing.List["ItemShippingTarget"]] = None
+        self, *, targets: typing.Optional[typing.List["ItemShippingTarget"]] = None
     ) -> None:
         self.targets = targets
 
@@ -1971,6 +2020,7 @@ class ItemShippingTarget:
 
     def __init__(
         self,
+        *,
         address_key: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
     ) -> None:
@@ -1991,6 +2041,7 @@ class ItemState:
 
     def __init__(
         self,
+        *,
         quantity: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
     ) -> None:
@@ -2027,6 +2078,7 @@ class LineItem:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         product_id: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -2112,6 +2164,7 @@ class LineItemDraft:
 
     def __init__(
         self,
+        *,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
@@ -2170,6 +2223,7 @@ class LineItemImportDraft:
 
     def __init__(
         self,
+        *,
         product_id: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
         variant: typing.Optional["ProductVariantImportDraft"] = None,
@@ -2216,7 +2270,10 @@ class Location:
     state: typing.Optional[str]
 
     def __init__(
-        self, country: typing.Optional["str"] = None, state: typing.Optional[str] = None
+        self,
+        *,
+        country: typing.Optional["str"] = None,
+        state: typing.Optional[str] = None,
     ) -> None:
         self.country = country
         self.state = state
@@ -2238,6 +2295,7 @@ class Message:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -2276,7 +2334,7 @@ class Message:
 class MessageConfiguration:
     enabled: typing.Optional[bool]
 
-    def __init__(self, enabled: typing.Optional[bool] = None) -> None:
+    def __init__(self, *, enabled: typing.Optional[bool] = None) -> None:
         self.enabled = enabled
 
     def __repr__(self) -> str:
@@ -2290,6 +2348,7 @@ class MessageSubscription:
 
     def __init__(
         self,
+        *,
         resource_type_id: typing.Optional[str] = None,
         types: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -2310,6 +2369,7 @@ class Money:
 
     def __init__(
         self,
+        *,
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
     ) -> None:
@@ -2341,6 +2401,7 @@ class MyCartDraft:
 
     def __init__(
         self,
+        *,
         currency: typing.Optional["str"] = None,
         customer_email: typing.Optional[str] = None,
         country: typing.Optional[str] = None,
@@ -2409,6 +2470,7 @@ class MyCustomerDraft:
 
     def __init__(
         self,
+        *,
         email: typing.Optional[str] = None,
         password: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
@@ -2473,6 +2535,7 @@ class MyLineItemDraft:
 
     def __init__(
         self,
+        *,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         quantity: typing.Optional[int] = None,
@@ -2510,7 +2573,7 @@ class MyOrderFromCartDraft:
     version: typing.Optional[int]
 
     def __init__(
-        self, id: typing.Optional[str] = None, version: typing.Optional[int] = None
+        self, *, id: typing.Optional[str] = None, version: typing.Optional[int] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -2528,6 +2591,7 @@ class OrderFromCartDraft:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         order_number: typing.Optional[str] = None,
@@ -2570,6 +2634,7 @@ class OrderImportDraft:
 
     def __init__(
         self,
+        *,
         order_number: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
@@ -2649,6 +2714,7 @@ class PagedQueryResponse:
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -2678,6 +2744,7 @@ class Parcel:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
@@ -2711,6 +2778,7 @@ class ParcelDraft:
 
     def __init__(
         self,
+        *,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -2736,6 +2804,7 @@ class ParcelMeasurements:
 
     def __init__(
         self,
+        *,
         height_in_millimeter: typing.Optional[int] = None,
         length_in_millimeter: typing.Optional[int] = None,
         width_in_millimeter: typing.Optional[int] = None,
@@ -2765,6 +2834,7 @@ class PayloadNotIncluded:
 
     def __init__(
         self,
+        *,
         reason: typing.Optional[str] = None,
         payload_type: typing.Optional[str] = None,
     ) -> None:
@@ -2798,6 +2868,7 @@ class PaymentDraft:
 
     def __init__(
         self,
+        *,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
@@ -2860,7 +2931,7 @@ class PaymentInfo:
     payments: typing.Optional[typing.List["PaymentReference"]]
 
     def __init__(
-        self, payments: typing.Optional[typing.List["PaymentReference"]] = None
+        self, *, payments: typing.Optional[typing.List["PaymentReference"]] = None
     ) -> None:
         self.payments = payments
 
@@ -2876,6 +2947,7 @@ class PaymentMethodInfo:
 
     def __init__(
         self,
+        *,
         payment_interface: typing.Optional[str] = None,
         method: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -2900,6 +2972,7 @@ class PaymentStatus:
 
     def __init__(
         self,
+        *,
         interface_code: typing.Optional[str] = None,
         interface_text: typing.Optional[str] = None,
         state: typing.Optional["StateReference"] = None,
@@ -2931,6 +3004,7 @@ class Price:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         value: typing.Optional["Money"] = None,
         country: typing.Optional["str"] = None,
@@ -2984,6 +3058,7 @@ class PriceDraft:
 
     def __init__(
         self,
+        *,
         value: typing.Optional["Money"] = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -3025,6 +3100,7 @@ class PriceFunction:
 
     def __init__(
         self,
+        *,
         currency_code: typing.Optional["str"] = None,
         function: typing.Optional[str] = None,
     ) -> None:
@@ -3045,6 +3121,7 @@ class PriceTier:
 
     def __init__(
         self,
+        *,
         minimum_quantity: typing.Optional[int] = None,
         value: typing.Optional["Money"] = None,
     ) -> None:
@@ -3067,6 +3144,7 @@ class ProductCatalogData:
 
     def __init__(
         self,
+        *,
         published: typing.Optional[bool] = None,
         current: typing.Optional["ProductData"] = None,
         staged: typing.Optional["ProductData"] = None,
@@ -3100,6 +3178,7 @@ class ProductData:
 
     def __init__(
         self,
+        *,
         name: typing.Optional["LocalizedString"] = None,
         categories: typing.Optional[typing.List["CategoryReference"]] = None,
         category_order_hints: typing.Optional["CategoryOrderHints"] = None,
@@ -3156,6 +3235,7 @@ class ProductDiscountDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: typing.Optional["ProductDiscountValue"] = None,
@@ -3199,6 +3279,7 @@ class ProductDiscountMatchQuery:
 
     def __init__(
         self,
+        *,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         staged: typing.Optional[bool] = None,
@@ -3220,7 +3301,7 @@ class ProductDiscountMatchQuery:
 class ProductDiscountValue:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -3248,6 +3329,7 @@ class ProductDraft:
 
     def __init__(
         self,
+        *,
         product_type: typing.Optional["ProductTypeReference"] = None,
         name: typing.Optional["LocalizedString"] = None,
         slug: typing.Optional["LocalizedString"] = None,
@@ -3315,6 +3397,7 @@ class ProductTypeDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
@@ -3351,6 +3434,7 @@ class ProductVariant:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -3406,6 +3490,7 @@ class ProductVariantAvailability:
 
     def __init__(
         self,
+        *,
         is_on_stock: typing.Optional[bool] = None,
         restockable_in_days: typing.Optional[int] = None,
         available_quantity: typing.Optional[int] = None,
@@ -3436,6 +3521,7 @@ class ProductVariantChannelAvailability:
 
     def __init__(
         self,
+        *,
         is_on_stock: typing.Optional[bool] = None,
         restockable_in_days: typing.Optional[int] = None,
         available_quantity: typing.Optional[int] = None,
@@ -3462,6 +3548,7 @@ class ProductVariantDraft:
 
     def __init__(
         self,
+        *,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
@@ -3500,6 +3587,7 @@ class ProductVariantImportDraft:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["Price"]] = None,
@@ -3534,6 +3622,7 @@ class Project:
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
@@ -3578,7 +3667,7 @@ class Project:
 class ReplicaCartDraft:
     reference: typing.Optional["Reference"]
 
-    def __init__(self, reference: typing.Optional["Reference"] = None) -> None:
+    def __init__(self, *, reference: typing.Optional["Reference"] = None) -> None:
         self.reference = reference
 
     def __repr__(self) -> str:
@@ -3594,6 +3683,7 @@ class Resource:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -3621,6 +3711,7 @@ class ResourceIdentifier:
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -3645,6 +3736,7 @@ class ReturnInfo:
 
     def __init__(
         self,
+        *,
         items: typing.Optional[typing.List["ReturnItem"]] = None,
         return_tracking_id: typing.Optional[str] = None,
         return_date: typing.Optional[datetime.datetime] = None,
@@ -3674,6 +3766,7 @@ class ReturnItem:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
         line_item_id: typing.Optional[str] = None,
@@ -3717,6 +3810,7 @@ class ReturnItemDraft:
 
     def __init__(
         self,
+        *,
         quantity: typing.Optional[int] = None,
         line_item_id: typing.Optional[str] = None,
         comment: typing.Optional[str] = None,
@@ -3750,6 +3844,7 @@ class ReviewDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         uniqueness_value: typing.Optional[str] = None,
         locale: typing.Optional[str] = None,
@@ -3803,6 +3898,7 @@ class ReviewRatingStatistics:
 
     def __init__(
         self,
+        *,
         average_rating: typing.Optional[int] = None,
         highest_rating: typing.Optional[int] = None,
         lowest_rating: typing.Optional[int] = None,
@@ -3843,6 +3939,7 @@ class ScopedPrice:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         value: typing.Optional["TypedMoney"] = None,
         current_value: typing.Optional["TypedMoney"] = None,
@@ -3890,6 +3987,7 @@ class SearchKeyword:
 
     def __init__(
         self,
+        *,
         text: typing.Optional[str] = None,
         suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
     ) -> None:
@@ -3918,6 +4016,7 @@ class ShippingInfo:
 
     def __init__(
         self,
+        *,
         shipping_method_name: typing.Optional[str] = None,
         price: typing.Optional["TypedMoney"] = None,
         shipping_rate: typing.Optional["ShippingRate"] = None,
@@ -3973,6 +4072,7 @@ class ShippingInfoDraft:
 
     def __init__(
         self,
+        *,
         shipping_method_name: typing.Optional[str] = None,
         price: typing.Optional["Money"] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None,
@@ -4025,6 +4125,7 @@ class ShippingMethodDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
@@ -4065,6 +4166,7 @@ class ShippingRate:
 
     def __init__(
         self,
+        *,
         price: typing.Optional["TypedMoney"] = None,
         free_above: typing.Optional["TypedMoney"] = None,
         is_matching: typing.Optional[bool] = None,
@@ -4092,6 +4194,7 @@ class ShippingRateDraft:
 
     def __init__(
         self,
+        *,
         price: typing.Optional["Money"] = None,
         free_above: typing.Optional["Money"] = None,
         tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None,
@@ -4112,7 +4215,7 @@ class ShippingRateDraft:
 class ShippingRateInput:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -4123,7 +4226,7 @@ class ShippingRateInput:
 class ShippingRateInputDraft:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -4134,7 +4237,7 @@ class ShippingRateInputDraft:
 class ShippingRateInputType:
     type: typing.Optional["ShippingRateTierType"]
 
-    def __init__(self, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -4145,7 +4248,7 @@ class ShippingRateInputType:
 class ShippingRatePriceTier:
     type: typing.Optional["ShippingRateTierType"]
 
-    def __init__(self, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -4167,6 +4270,7 @@ class ShoppingListDraft:
 
     def __init__(
         self,
+        *,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
@@ -4223,6 +4327,7 @@ class ShoppingListLineItem:
 
     def __init__(
         self,
+        *,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFields"] = None,
         deactivated_at: typing.Optional[datetime.datetime] = None,
@@ -4277,6 +4382,7 @@ class ShoppingListLineItemDraft:
 
     def __init__(
         self,
+        *,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         sku: typing.Optional[str] = None,
@@ -4317,6 +4423,7 @@ class StateDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         type: typing.Optional["StateTypeEnum"] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -4354,7 +4461,7 @@ class SubRate:
     amount: typing.Optional[int]
 
     def __init__(
-        self, name: typing.Optional[str] = None, amount: typing.Optional[int] = None
+        self, *, name: typing.Optional[str] = None, amount: typing.Optional[int] = None
     ) -> None:
         self.name = name
         self.amount = amount
@@ -4371,6 +4478,7 @@ class SubscriptionDelivery:
 
     def __init__(
         self,
+        *,
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
@@ -4395,6 +4503,7 @@ class SubscriptionDraft:
 
     def __init__(
         self,
+        *,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
         destination: typing.Optional["Destination"] = None,
         key: typing.Optional[str] = None,
@@ -4418,7 +4527,7 @@ class SubscriptionDraft:
 class SuggestTokenizer:
     type: typing.Optional[str]
 
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -4429,7 +4538,7 @@ class SuggestTokenizer:
 class Suggestion:
     text: typing.Optional[str]
 
-    def __init__(self, text: typing.Optional[str] = None) -> None:
+    def __init__(self, *, text: typing.Optional[str] = None) -> None:
         self.text = text
 
     def __repr__(self) -> str:
@@ -4444,6 +4553,7 @@ class SyncInfo:
 
     def __init__(
         self,
+        *,
         channel: typing.Optional["ChannelReference"] = None,
         external_id: typing.Optional[str] = None,
         synced_at: typing.Optional[datetime.datetime] = None,
@@ -4469,6 +4579,7 @@ class TaxCategoryDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
         rates: typing.Optional[typing.List["TaxRateDraft"]] = None,
@@ -4496,6 +4607,7 @@ class TaxPortion:
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         rate: typing.Optional[int] = None,
         amount: typing.Optional["Money"] = None,
@@ -4524,6 +4636,7 @@ class TaxRate:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         amount: typing.Optional[int] = None,
@@ -4566,6 +4679,7 @@ class TaxRateDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         amount: typing.Optional[int] = None,
         included_in_price: typing.Optional[bool] = None,
@@ -4601,6 +4715,7 @@ class TaxedItemPrice:
 
     def __init__(
         self,
+        *,
         total_net: typing.Optional["TypedMoney"] = None,
         total_gross: typing.Optional["TypedMoney"] = None,
     ) -> None:
@@ -4621,6 +4736,7 @@ class TaxedItemPriceDraft:
 
     def __init__(
         self,
+        *,
         total_net: typing.Optional["Money"] = None,
         total_gross: typing.Optional["Money"] = None,
     ) -> None:
@@ -4642,6 +4758,7 @@ class TaxedPrice:
 
     def __init__(
         self,
+        *,
         total_net: typing.Optional["Money"] = None,
         total_gross: typing.Optional["Money"] = None,
         tax_portions: typing.Optional[typing.List["TaxPortion"]] = None,
@@ -4669,6 +4786,7 @@ class TextLineItem:
 
     def __init__(
         self,
+        *,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFields"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -4707,6 +4825,7 @@ class TextLineItemDraft:
 
     def __init__(
         self,
+        *,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -4736,6 +4855,7 @@ class TrackingData:
 
     def __init__(
         self,
+        *,
         tracking_id: typing.Optional[str] = None,
         carrier: typing.Optional[str] = None,
         provider: typing.Optional[str] = None,
@@ -4772,6 +4892,7 @@ class Transaction:
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         timestamp: typing.Optional[datetime.datetime] = None,
         type: typing.Optional["TransactionType"] = None,
@@ -4810,6 +4931,7 @@ class TransactionDraft:
 
     def __init__(
         self,
+        *,
         timestamp: typing.Optional[datetime.datetime] = None,
         type: typing.Optional["TransactionType"] = None,
         amount: typing.Optional["Money"] = None,
@@ -4839,6 +4961,7 @@ class TypeDraft:
 
     def __init__(
         self,
+        *,
         key: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -4871,6 +4994,7 @@ class Update:
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -4885,7 +5009,7 @@ class Update:
 class UpdateAction:
     action: typing.Optional[str]
 
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         self.action = action
 
     def __repr__(self) -> str:
@@ -4900,6 +5024,7 @@ class VariantValues:
 
     def __init__(
         self,
+        *,
         sku: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["Price"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
@@ -4924,6 +5049,7 @@ class ZoneDraft:
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
         locations: typing.Optional[typing.List["Location"]] = None,
@@ -4947,6 +5073,7 @@ class ZoneRate:
 
     def __init__(
         self,
+        *,
         zone: typing.Optional["ZoneReference"] = None,
         shipping_rates: typing.Optional[typing.List["ShippingRate"]] = None,
     ) -> None:
@@ -4964,6 +5091,7 @@ class ZoneRateDraft:
 
     def __init__(
         self,
+        *,
         zone: typing.Optional["ZoneReference"] = None,
         shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]] = None,
     ) -> None:
@@ -4980,7 +5108,7 @@ class ZoneRateDraft:
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AccessDeniedError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="access_denied", message=message)
 
@@ -4995,7 +5123,7 @@ class AnonymousCartSignInMode(enum.Enum):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeBooleanType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="boolean")
 
     def __repr__(self) -> str:
@@ -5011,7 +5139,7 @@ class AttributeConstraintEnum(enum.Enum):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeDateTimeType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="datetime")
 
     def __repr__(self) -> str:
@@ -5020,7 +5148,7 @@ class AttributeDateTimeType(AttributeType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeDateType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="date")
 
     def __repr__(self) -> str:
@@ -5033,6 +5161,7 @@ class AttributeEnumType(AttributeType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None,
     ) -> None:
@@ -5045,7 +5174,7 @@ class AttributeEnumType(AttributeType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeLocalizableTextType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="ltext")
 
     def __repr__(self) -> str:
@@ -5058,6 +5187,7 @@ class AttributeLocalizedEnumType(AttributeType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None,
     ) -> None:
@@ -5073,7 +5203,7 @@ class AttributeLocalizedEnumType(AttributeType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeMoneyType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="money")
 
     def __repr__(self) -> str:
@@ -5086,6 +5216,7 @@ class AttributeNestedType(AttributeType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         type_reference: typing.Optional["ProductTypeReference"] = None,
     ) -> None:
@@ -5101,7 +5232,7 @@ class AttributeNestedType(AttributeType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeNumberType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="number")
 
     def __repr__(self) -> str:
@@ -5114,6 +5245,7 @@ class AttributeReferenceType(AttributeType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         reference_type_id: typing.Optional["ReferenceTypeId"] = None,
     ) -> None:
@@ -5133,6 +5265,7 @@ class AttributeSetType(AttributeType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         element_type: typing.Optional["AttributeType"] = None,
     ) -> None:
@@ -5148,7 +5281,7 @@ class AttributeSetType(AttributeType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeTextType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="text")
 
     def __repr__(self) -> str:
@@ -5157,7 +5290,7 @@ class AttributeTextType(AttributeType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class AttributeTimeType(AttributeType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="time")
 
     def __repr__(self) -> str:
@@ -5171,6 +5304,7 @@ class AzureEventGridDestination(Destination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         uri: typing.Optional[str] = None,
         access_key: typing.Optional[str] = None,
@@ -5193,6 +5327,7 @@ class AzureServiceBusDestination(Destination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         connection_string: typing.Optional[str] = None,
     ) -> None:
@@ -5237,6 +5372,7 @@ class Cart(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -5347,6 +5483,7 @@ class CartClassificationTier(ShippingRatePriceTier):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["ShippingRateTierType"] = None,
         value: typing.Optional[str] = None,
         price: typing.Optional["Money"] = None,
@@ -5372,6 +5509,7 @@ class CartClassificationType(ShippingRateInputType):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["ShippingRateTierType"] = None,
         values: typing.Optional[list] = None,
     ) -> None:
@@ -5400,6 +5538,7 @@ class CartDiscount(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -5468,7 +5607,10 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
     predicate: typing.Optional[str]
 
     def __init__(
-        self, type: typing.Optional[str] = None, predicate: typing.Optional[str] = None
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        predicate: typing.Optional[str] = None,
     ) -> None:
         self.predicate = predicate
         super().__init__(type="customLineItems")
@@ -5485,7 +5627,10 @@ class CartDiscountLineItemsTarget(CartDiscountTarget):
     predicate: typing.Optional[str]
 
     def __init__(
-        self, type: typing.Optional[str] = None, predicate: typing.Optional[str] = None
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        predicate: typing.Optional[str] = None,
     ) -> None:
         self.predicate = predicate
         super().__init__(type="lineItems")
@@ -5503,6 +5648,7 @@ class CartDiscountPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -5520,7 +5666,7 @@ class CartDiscountPagedQueryResponse(PagedQueryResponse):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountShippingCostTarget(CartDiscountTarget):
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         super().__init__(type="shipping")
 
     def __repr__(self) -> str:
@@ -5533,6 +5679,7 @@ class CartDiscountUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -5548,7 +5695,7 @@ class CartDiscountUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -5561,6 +5708,7 @@ class CartDiscountValueAbsolute(CartDiscountValue):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         money: typing.Optional[typing.List["Money"]] = None,
     ) -> None:
@@ -5580,6 +5728,7 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         product: typing.Optional["ProductReference"] = None,
         variant_id: typing.Optional[int] = None,
@@ -5610,7 +5759,10 @@ class CartDiscountValueRelative(CartDiscountValue):
     permyriad: typing.Optional[int]
 
     def __init__(
-        self, type: typing.Optional[str] = None, permyriad: typing.Optional[int] = None
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        permyriad: typing.Optional[int] = None,
     ) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
@@ -5633,6 +5785,7 @@ class CartPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -5659,6 +5812,7 @@ class CartScoreTier(ShippingRatePriceTier):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["ShippingRateTierType"] = None,
         score: typing.Optional[int] = None,
         price: typing.Optional["Money"] = None,
@@ -5680,7 +5834,7 @@ class CartScoreTier(ShippingRatePriceTier):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CartScoreType(ShippingRateInputType):
-    def __init__(self, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     def __repr__(self) -> str:
@@ -5699,6 +5853,7 @@ class CartUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -5711,7 +5866,7 @@ class CartUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CartUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -5726,6 +5881,7 @@ class CartValueTier(ShippingRatePriceTier):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["ShippingRateTierType"] = None,
         minimum_cent_amount: typing.Optional[int] = None,
         price: typing.Optional["Money"] = None,
@@ -5745,7 +5901,7 @@ class CartValueTier(ShippingRatePriceTier):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CartValueType(ShippingRateInputType):
-    def __init__(self, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     def __repr__(self) -> str:
@@ -5770,6 +5926,7 @@ class Category(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -5839,6 +5996,7 @@ class CategoryCreatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -5891,6 +6049,7 @@ class CategoryPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -5912,6 +6071,7 @@ class CategorySlugChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -5957,6 +6117,7 @@ class CategoryUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -5969,7 +6130,7 @@ class CategoryUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CategoryUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -5989,6 +6150,7 @@ class Channel(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6043,6 +6205,7 @@ class ChannelPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -6072,6 +6235,7 @@ class ChannelUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -6084,7 +6248,7 @@ class ChannelUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -6098,6 +6262,7 @@ class ClassificationShippingRateInput(ShippingRateInput):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -6119,7 +6284,7 @@ class ClassificationShippingRateInputDraft(ShippingRateInputDraft):
     key: typing.Optional[str]
 
     def __init__(
-        self, type: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, type: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(type="Classification")
@@ -6137,6 +6302,7 @@ class ConcurrentModificationError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         current_version: typing.Optional[int] = None,
@@ -6153,7 +6319,7 @@ class ConcurrentModificationError(ErrorObject):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldBooleanType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="Boolean")
 
     def __repr__(self) -> str:
@@ -6162,7 +6328,7 @@ class CustomFieldBooleanType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldDateTimeType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="DateTime")
 
     def __repr__(self) -> str:
@@ -6171,7 +6337,7 @@ class CustomFieldDateTimeType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldDateType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="Date")
 
     def __repr__(self) -> str:
@@ -6184,6 +6350,7 @@ class CustomFieldEnumType(FieldType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         values: typing.Optional[typing.List["CustomFieldEnumValue"]] = None,
     ) -> None:
@@ -6200,6 +6367,7 @@ class CustomFieldLocalizedEnumType(FieldType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]] = None,
     ) -> None:
@@ -6215,7 +6383,7 @@ class CustomFieldLocalizedEnumType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldLocalizedStringType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="LocalizedString")
 
     def __repr__(self) -> str:
@@ -6224,7 +6392,7 @@ class CustomFieldLocalizedStringType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldMoneyType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="Money")
 
     def __repr__(self) -> str:
@@ -6233,7 +6401,7 @@ class CustomFieldMoneyType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldNumberType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="Number")
 
     def __repr__(self) -> str:
@@ -6246,6 +6414,7 @@ class CustomFieldReferenceType(FieldType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         reference_type_id: typing.Optional["ReferenceTypeId"] = None,
     ) -> None:
@@ -6265,6 +6434,7 @@ class CustomFieldSetType(FieldType):
 
     def __init__(
         self,
+        *,
         name: typing.Optional[str] = None,
         element_type: typing.Optional["FieldType"] = None,
     ) -> None:
@@ -6280,7 +6450,7 @@ class CustomFieldSetType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldStringType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="String")
 
     def __repr__(self) -> str:
@@ -6289,7 +6459,7 @@ class CustomFieldStringType(FieldType):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomFieldTimeType(FieldType):
-    def __init__(self, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
         super().__init__(name="Time")
 
     def __repr__(self) -> str:
@@ -6306,6 +6476,7 @@ class CustomLineItemStateTransitionMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6365,6 +6536,7 @@ class CustomObject(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6404,6 +6576,7 @@ class CustomObjectPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -6425,6 +6598,7 @@ class CustomTokenizer(SuggestTokenizer):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         inputs: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -6462,6 +6636,7 @@ class Customer(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6558,6 +6733,7 @@ class CustomerAddressAddedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6603,6 +6779,7 @@ class CustomerAddressChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6648,6 +6825,7 @@ class CustomerAddressRemovedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6693,6 +6871,7 @@ class CustomerCompanyNameSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6738,6 +6917,7 @@ class CustomerCreatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6783,6 +6963,7 @@ class CustomerDateOfBirthSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6828,6 +7009,7 @@ class CustomerEmailChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6871,6 +7053,7 @@ class CustomerEmailChangedMessage(Message):
 class CustomerEmailVerifiedMessage(Message):
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6915,6 +7098,7 @@ class CustomerGroup(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -6954,6 +7138,7 @@ class CustomerGroupPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -6975,6 +7160,7 @@ class CustomerGroupSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7020,6 +7206,7 @@ class CustomerGroupUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -7035,7 +7222,7 @@ class CustomerGroupUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7048,6 +7235,7 @@ class CustomerPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -7069,6 +7257,7 @@ class CustomerUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -7081,7 +7270,7 @@ class CustomerUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7094,6 +7283,7 @@ class DeliveryAddedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7140,6 +7330,7 @@ class DeliveryAddressSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7189,6 +7380,7 @@ class DeliveryItemsUpdatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7237,6 +7429,7 @@ class DeliveryRemovedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7294,6 +7487,7 @@ class DiscountCode(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7360,7 +7554,7 @@ class DiscountCode(Resource):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeNonApplicableError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="DiscountCodeNonApplicable", message=message)
 
@@ -7377,6 +7571,7 @@ class DiscountCodePagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -7405,6 +7600,7 @@ class DiscountCodeUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -7420,7 +7616,7 @@ class DiscountCodeUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7433,6 +7629,7 @@ class DuplicateAttributeValueError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         attribute: typing.Optional["Attribute"] = None,
@@ -7454,6 +7651,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
@@ -7476,6 +7674,7 @@ class DuplicateFieldError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         field: typing.Optional[str] = None,
@@ -7498,6 +7697,7 @@ class DuplicatePriceScopeError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         conflicting_prices: typing.Optional[typing.List["Price"]] = None,
@@ -7518,6 +7718,7 @@ class DuplicateVariantValuesError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         variant_values: typing.Optional["VariantValues"] = None,
@@ -7541,6 +7742,7 @@ class Extension(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7582,6 +7784,7 @@ class ExtensionAWSLambdaDestination(ExtensionDestination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         arn: typing.Optional[str] = None,
         access_key: typing.Optional[str] = None,
@@ -7612,6 +7815,7 @@ class ExtensionAuthorizationHeaderAuthentication(
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         header_value: typing.Optional[str] = None,
     ) -> None:
@@ -7630,7 +7834,7 @@ class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthenticati
     key: typing.Optional[str]
 
     def __init__(
-        self, type: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, type: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(type="AzureFunctions")
@@ -7649,6 +7853,7 @@ class ExtensionHttpDestination(ExtensionDestination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         url: typing.Optional[str] = None,
         authentication: typing.Optional[
@@ -7673,6 +7878,7 @@ class ExtensionPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -7701,6 +7907,7 @@ class ExtensionUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -7713,7 +7920,7 @@ class ExtensionUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ExtensionUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7743,6 +7950,7 @@ class FilteredFacetResult(FacetResult):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["FacetTypes"] = None,
         count: typing.Optional[int] = None,
         product_count: typing.Optional[int] = None,
@@ -7763,6 +7971,7 @@ class FilteredFacetResult(FacetResult):
 class GeoJsonPoint(GeoJson):
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         coordinates: typing.Optional[list] = None,
     ) -> None:
@@ -7779,6 +7988,7 @@ class GoogleCloudPubSubDestination(Destination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         project_id: typing.Optional[str] = None,
         topic: typing.Optional[str] = None,
@@ -7798,7 +8008,7 @@ class GoogleCloudPubSubDestination(Destination):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InsufficientScopeError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="insufficient_scope", message=message)
 
@@ -7809,7 +8019,7 @@ class InsufficientScopeError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidCredentialsError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="InvalidCredentials", message=message)
 
@@ -7823,7 +8033,7 @@ class InvalidCredentialsError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidCurrentPasswordError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="InvalidCurrentPassword", message=message)
 
@@ -7842,6 +8052,7 @@ class InvalidFieldError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         field: typing.Optional[str] = None,
@@ -7873,6 +8084,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         subject: typing.Optional[str] = None,
@@ -7892,7 +8104,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidOperationError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="InvalidOperation", message=message)
 
@@ -7903,7 +8115,7 @@ class InvalidOperationError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidSubjectError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="InvalidSubject", message=message)
 
@@ -7914,7 +8126,7 @@ class InvalidSubjectError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidTokenError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="invalid_token", message=message)
 
@@ -7934,6 +8146,7 @@ class InventoryEntry(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -7986,6 +8199,7 @@ class InventoryEntryDeletedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8040,6 +8254,7 @@ class InventoryPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -8061,6 +8276,7 @@ class InventoryUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -8073,7 +8289,7 @@ class InventoryUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -8085,7 +8301,7 @@ class IronMqDestination(Destination):
     uri: typing.Optional[str]
 
     def __init__(
-        self, type: typing.Optional[str] = None, uri: typing.Optional[str] = None
+        self, *, type: typing.Optional[str] = None, uri: typing.Optional[str] = None
     ) -> None:
         self.uri = uri
         super().__init__(type="IronMQ")
@@ -8115,6 +8331,7 @@ class LineItemStateTransitionMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8185,6 +8402,7 @@ class MessageDelivery(SubscriptionDelivery):
 
     def __init__(
         self,
+        *,
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
@@ -8231,6 +8449,7 @@ class MessagePagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -8261,6 +8480,7 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         predicate: typing.Optional[str] = None,
         trigger_quantity: typing.Optional[int] = None,
@@ -8299,6 +8519,7 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         predicate: typing.Optional[str] = None,
         trigger_quantity: typing.Optional[int] = None,
@@ -8365,6 +8586,7 @@ class Order(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8494,6 +8716,7 @@ class OrderBillingAddressSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8539,6 +8762,7 @@ class OrderCreatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8584,6 +8808,7 @@ class OrderCustomerEmailSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8632,6 +8857,7 @@ class OrderCustomerSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8686,6 +8912,7 @@ class OrderDeletedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8731,6 +8958,7 @@ class OrderImportedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8776,6 +9004,7 @@ class OrderPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -8799,6 +9028,7 @@ class OrderPaymentChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8844,6 +9074,7 @@ class OrderReturnInfoAddedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8890,6 +9121,7 @@ class OrderReturnShipmentStateChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8938,6 +9170,7 @@ class OrderShipmentStateChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -8983,6 +9216,7 @@ class OrderShippingAddressSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9035,6 +9269,7 @@ class OrderStateChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9081,6 +9316,7 @@ class OrderStateTransitionMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9129,6 +9365,7 @@ class OrderUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -9141,7 +9378,7 @@ class OrderUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -9155,6 +9392,7 @@ class OutOfStockError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List[str]] = None,
@@ -9180,6 +9418,7 @@ class ParcelAddedToDeliveryMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9230,6 +9469,7 @@ class ParcelItemsUpdatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9283,6 +9523,7 @@ class ParcelMeasurementsUpdatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9335,6 +9576,7 @@ class ParcelRemovedFromDeliveryMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9385,6 +9627,7 @@ class ParcelTrackingDataUpdatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9450,6 +9693,7 @@ class Payment(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9525,6 +9769,7 @@ class PaymentCreatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9570,6 +9815,7 @@ class PaymentInteractionAddedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9615,6 +9861,7 @@ class PaymentPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -9645,6 +9892,7 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9694,6 +9942,7 @@ class PaymentStatusStateTransitionMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9742,6 +9991,7 @@ class PaymentTransactionAddedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9788,6 +10038,7 @@ class PaymentTransactionStateChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9836,6 +10087,7 @@ class PaymentUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -9848,7 +10100,7 @@ class PaymentUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -9862,6 +10114,7 @@ class PriceChangedError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List[str]] = None,
@@ -9891,6 +10144,7 @@ class Product(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9939,6 +10193,7 @@ class ProductCreatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -9985,6 +10240,7 @@ class ProductDeletedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10041,6 +10297,7 @@ class ProductDiscount(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10098,6 +10355,7 @@ class ProductDiscountPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -10119,6 +10377,7 @@ class ProductDiscountUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -10134,7 +10393,7 @@ class ProductDiscountUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductDiscountUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10147,6 +10406,7 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         money: typing.Optional[typing.List["Money"]] = None,
     ) -> None:
@@ -10162,7 +10422,7 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductDiscountValueExternal(ProductDiscountValue):
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         super().__init__(type="external")
 
     def __repr__(self) -> str:
@@ -10174,7 +10434,10 @@ class ProductDiscountValueRelative(ProductDiscountValue):
     permyriad: typing.Optional[int]
 
     def __init__(
-        self, type: typing.Optional[str] = None, permyriad: typing.Optional[int] = None
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        permyriad: typing.Optional[int] = None,
     ) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
@@ -10194,6 +10457,7 @@ class ProductImageAddedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10245,6 +10509,7 @@ class ProductPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -10283,6 +10548,7 @@ class ProductProjection(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10367,6 +10633,7 @@ class ProductProjectionPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -10389,6 +10656,7 @@ class ProductProjectionPagedSearchResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -10419,6 +10687,7 @@ class ProductPublishedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10470,6 +10739,7 @@ class ProductRevertedStagedChangesMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10515,6 +10785,7 @@ class ProductSlugChangedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10561,6 +10832,7 @@ class ProductStateTransitionMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10612,6 +10884,7 @@ class ProductType(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10654,6 +10927,7 @@ class ProductTypePagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -10675,6 +10949,7 @@ class ProductTypeUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -10690,7 +10965,7 @@ class ProductTypeUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10701,6 +10976,7 @@ class ProductTypeUpdateAction(UpdateAction):
 class ProductUnpublishedMessage(Message):
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10743,6 +11019,7 @@ class ProductUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -10755,7 +11032,7 @@ class ProductUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10778,6 +11055,7 @@ class ProductVariantDeletedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -10826,6 +11104,7 @@ class ProjectUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -10838,7 +11117,7 @@ class ProjectUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10851,6 +11130,7 @@ class RangeFacetResult(FacetResult):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["FacetTypes"] = None,
         ranges: typing.Optional[typing.List["FacetResultRange"]] = None,
     ) -> None:
@@ -10867,6 +11147,7 @@ class Reference(ResourceIdentifier):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -10912,6 +11193,7 @@ class RequiredFieldError(ErrorObject):
 
     def __init__(
         self,
+        *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         field: typing.Optional[str] = None,
@@ -10934,6 +11216,7 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
 
     def __init__(
         self,
+        *,
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
@@ -10968,6 +11251,7 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 
     def __init__(
         self,
+        *,
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
@@ -10998,7 +11282,7 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ResourceNotFoundError(ErrorObject):
     def __init__(
-        self, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
     ) -> None:
         super().__init__(code="ResourceNotFound", message=message)
 
@@ -11034,6 +11318,7 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
 
     def __init__(
         self,
+        *,
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
@@ -11095,6 +11380,7 @@ class Review(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11161,6 +11447,7 @@ class ReviewCreatedMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11206,6 +11493,7 @@ class ReviewPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -11232,6 +11520,7 @@ class ReviewRatingSetMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11291,6 +11580,7 @@ class ReviewStateTransitionMessage(Message):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11351,6 +11641,7 @@ class ReviewUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -11363,7 +11654,7 @@ class ReviewUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11381,7 +11672,7 @@ class ScoreShippingRateInput(ShippingRateInput):
     score: typing.Optional[int]
 
     def __init__(
-        self, type: typing.Optional[str] = None, score: typing.Optional[int] = None
+        self, *, type: typing.Optional[str] = None, score: typing.Optional[int] = None
     ) -> None:
         self.score = score
         super().__init__(type="Score")
@@ -11395,7 +11686,7 @@ class ScoreShippingRateInputDraft(ShippingRateInputDraft):
     score: typing.Optional[int]
 
     def __init__(
-        self, type: typing.Optional[str] = None, score: typing.Optional[int] = None
+        self, *, type: typing.Optional[str] = None, score: typing.Optional[int] = None
     ) -> None:
         self.score = score
         super().__init__(type="Score")
@@ -11438,6 +11729,7 @@ class ShippingMethod(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11489,6 +11781,7 @@ class ShippingMethodPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -11515,6 +11808,7 @@ class ShippingMethodUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -11530,7 +11824,7 @@ class ShippingMethodUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11558,6 +11852,7 @@ class ShoppingList(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11618,6 +11913,7 @@ class ShoppingListPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -11639,6 +11935,7 @@ class ShoppingListUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -11654,7 +11951,7 @@ class ShoppingListUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11669,6 +11966,7 @@ class SnsDestination(Destination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         access_key: typing.Optional[str] = None,
         access_secret: typing.Optional[str] = None,
@@ -11695,6 +11993,7 @@ class SqsDestination(Destination):
 
     def __init__(
         self,
+        *,
         type: typing.Optional[str] = None,
         access_key: typing.Optional[str] = None,
         access_secret: typing.Optional[str] = None,
@@ -11738,6 +12037,7 @@ class State(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11792,6 +12092,7 @@ class StatePagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -11827,6 +12128,7 @@ class StateUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -11839,7 +12141,7 @@ class StateUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class StateUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11855,6 +12157,7 @@ class Subscription(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -11897,6 +12200,7 @@ class SubscriptionPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -11918,6 +12222,7 @@ class SubscriptionUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -11933,7 +12238,7 @@ class SubscriptionUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class SubscriptionUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11961,6 +12266,7 @@ class TaxCategory(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -12003,6 +12309,7 @@ class TaxCategoryPagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -12024,6 +12331,7 @@ class TaxCategoryUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -12039,7 +12347,7 @@ class TaxCategoryUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -12063,6 +12371,7 @@ class TermFacetResult(FacetResult):
 
     def __init__(
         self,
+        *,
         type: typing.Optional["FacetTypes"] = None,
         data_type: typing.Optional["TermFacetResultType"] = None,
         missing: typing.Optional[int] = None,
@@ -12130,6 +12439,7 @@ class Type(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -12175,6 +12485,7 @@ class TypePagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -12198,6 +12509,7 @@ class TypeUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -12210,7 +12522,7 @@ class TypeUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class TypeUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -12224,6 +12536,7 @@ class TypedMoney(Money):
 
     def __init__(
         self,
+        *,
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
         type: typing.Optional["MoneyType"] = None,
@@ -12242,7 +12555,7 @@ class TypedMoney(Money):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class WhitespaceTokenizer(SuggestTokenizer):
-    def __init__(self, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         super().__init__(type="whitespace")
 
     def __repr__(self) -> str:
@@ -12257,6 +12570,7 @@ class Zone(Resource):
 
     def __init__(
         self,
+        *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -12296,6 +12610,7 @@ class ZonePagedQueryResponse(PagedQueryResponse):
 
     def __init__(
         self,
+        *,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -12319,6 +12634,7 @@ class ZoneUpdate(Update):
 
     def __init__(
         self,
+        *,
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
@@ -12331,7 +12647,7 @@ class ZoneUpdate(Update):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneUpdateAction(UpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -12350,6 +12666,7 @@ class CartAddCustomLineItemAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         money: typing.Optional["Money"] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -12389,7 +12706,7 @@ class CartAddDiscountCodeAction(CartUpdateAction):
     code: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, code: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, code: typing.Optional[str] = None
     ) -> None:
         self.code = code
         super().__init__(action="addDiscountCode")
@@ -12407,6 +12724,7 @@ class CartAddItemShippingAddressAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -12436,6 +12754,7 @@ class CartAddLineItemAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
@@ -12488,6 +12807,7 @@ class CartAddPaymentAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         payment: typing.Optional["PaymentReference"] = None,
     ) -> None:
@@ -12509,6 +12829,7 @@ class CartAddShoppingListAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         shopping_list: typing.Optional["ShoppingListReference"] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
@@ -12538,6 +12859,7 @@ class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateActio
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         targets_delta: typing.Optional[typing.List["ItemShippingTarget"]] = None,
@@ -12560,6 +12882,7 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         targets_delta: typing.Optional[typing.List["ItemShippingTarget"]] = None,
@@ -12582,6 +12905,7 @@ class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         money: typing.Optional["Money"] = None,
@@ -12604,6 +12928,7 @@ class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -12628,6 +12953,7 @@ class CartChangeLineItemQuantityAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -12659,6 +12985,7 @@ class CartChangeTaxCalculationModeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
     ) -> None:
@@ -12678,6 +13005,7 @@ class CartChangeTaxModeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
     ) -> None:
@@ -12697,6 +13025,7 @@ class CartChangeTaxRoundingModeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
     ) -> None:
@@ -12716,6 +13045,7 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         cart_predicate: typing.Optional[str] = None,
     ) -> None:
@@ -12735,6 +13065,7 @@ class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         is_active: typing.Optional[bool] = None,
     ) -> None:
@@ -12754,6 +13085,7 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -12773,6 +13105,7 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         requires_discount_code: typing.Optional[bool] = None,
     ) -> None:
@@ -12792,6 +13125,7 @@ class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         sort_order: typing.Optional[str] = None,
     ) -> None:
@@ -12811,6 +13145,7 @@ class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         stacking_mode: typing.Optional["StackingMode"] = None,
     ) -> None:
@@ -12830,6 +13165,7 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         target: typing.Optional["CartDiscountTarget"] = None,
     ) -> None:
@@ -12849,6 +13185,7 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         value: typing.Optional["CartDiscountValue"] = None,
     ) -> None:
@@ -12868,6 +13205,7 @@ class CartDiscountReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -12892,6 +13230,7 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -12915,6 +13254,7 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
@@ -12937,6 +13277,7 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -12956,6 +13297,7 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -12976,6 +13318,7 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
@@ -12997,6 +13340,7 @@ class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -13016,6 +13360,7 @@ class CartRecalculateAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         update_product_data: typing.Optional[bool] = None,
     ) -> None:
@@ -13035,6 +13380,7 @@ class CartReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -13058,6 +13404,7 @@ class CartRemoveCustomLineItemAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
     ) -> None:
@@ -13077,6 +13424,7 @@ class CartRemoveDiscountCodeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         discount_code: typing.Optional["DiscountCodeReference"] = None,
     ) -> None:
@@ -13096,6 +13444,7 @@ class CartRemoveItemShippingAddressAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
     ) -> None:
@@ -13119,6 +13468,7 @@ class CartRemoveLineItemAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -13153,6 +13503,7 @@ class CartRemovePaymentAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         payment: typing.Optional["PaymentReference"] = None,
     ) -> None:
@@ -13172,6 +13523,7 @@ class CartSetAnonymousIdAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
     ) -> None:
@@ -13191,6 +13543,7 @@ class CartSetBillingAddressAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -13211,6 +13564,7 @@ class CartSetCartTotalTaxAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         external_total_gross: typing.Optional["Money"] = None,
         external_tax_portions: typing.Optional[typing.List["TaxPortion"]] = None,
@@ -13232,6 +13586,7 @@ class CartSetCountryAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         country: typing.Optional["str"] = None,
     ) -> None:
@@ -13252,6 +13607,7 @@ class CartSetCustomFieldAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -13276,6 +13632,7 @@ class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
@@ -13301,6 +13658,7 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
@@ -13325,6 +13683,7 @@ class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
@@ -13347,6 +13706,7 @@ class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
@@ -13369,6 +13729,7 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -13393,6 +13754,7 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         shipping_method_name: typing.Optional[str] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None,
@@ -13425,6 +13787,7 @@ class CartSetCustomTypeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -13446,7 +13809,7 @@ class CartSetCustomerEmailAction(CartUpdateAction):
     email: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, email: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
     ) -> None:
         self.email = email
         super().__init__(action="setCustomerEmail")
@@ -13464,6 +13827,7 @@ class CartSetCustomerGroupAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
     ) -> None:
@@ -13483,6 +13847,7 @@ class CartSetCustomerIdAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
     ) -> None:
@@ -13502,6 +13867,7 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
     ) -> None:
@@ -13523,6 +13889,7 @@ class CartSetLineItemCustomFieldAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
@@ -13548,6 +13915,7 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
@@ -13572,6 +13940,7 @@ class CartSetLineItemPriceAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         external_price: typing.Optional["Money"] = None,
@@ -13594,6 +13963,7 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
@@ -13616,6 +13986,7 @@ class CartSetLineItemTaxAmountAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
@@ -13638,6 +14009,7 @@ class CartSetLineItemTaxRateAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -13660,6 +14032,7 @@ class CartSetLineItemTotalPriceAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -13680,7 +14053,10 @@ class CartSetLocaleAction(CartUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, locale: typing.Optional[str] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -13695,6 +14071,7 @@ class CartSetShippingAddressAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -13715,6 +14092,7 @@ class CartSetShippingMethodAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         shipping_method: typing.Optional["TypeReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -13736,6 +14114,7 @@ class CartSetShippingMethodTaxAmountAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
@@ -13755,6 +14134,7 @@ class CartSetShippingMethodTaxRateAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -13774,6 +14154,7 @@ class CartSetShippingRateInputAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
     ) -> None:
@@ -13793,6 +14174,7 @@ class CartUpdateItemShippingAddressAction(CartUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -13813,6 +14195,7 @@ class CategoryAddAssetAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset: typing.Optional["AssetDraft"] = None,
         position: typing.Optional[int] = None,
@@ -13837,6 +14220,7 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -13860,6 +14244,7 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_order: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -13879,6 +14264,7 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -13895,6 +14281,7 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         order_hint: typing.Optional[str] = None,
     ) -> None:
@@ -13914,6 +14301,7 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         parent: typing.Optional["CategoryReference"] = None,
     ) -> None:
@@ -13933,6 +14321,7 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         slug: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -13949,6 +14338,7 @@ class CategoryReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -13973,6 +14363,7 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -13998,6 +14389,7 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -14026,6 +14418,7 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -14053,6 +14446,7 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -14077,6 +14471,7 @@ class CategorySetAssetKeyAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -14101,6 +14496,7 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -14126,6 +14522,7 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
@@ -14150,6 +14547,7 @@ class CategorySetCustomFieldAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -14173,6 +14571,7 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -14195,6 +14594,7 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -14214,6 +14614,7 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
     ) -> None:
@@ -14232,7 +14633,7 @@ class CategorySetKeyAction(CategoryUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -14247,6 +14648,7 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -14266,6 +14668,7 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -14285,6 +14688,7 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -14302,6 +14706,7 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
 class CentPrecisionMoney(TypedMoney):
     def __init__(
         self,
+        *,
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
         type: typing.Optional["MoneyType"] = None,
@@ -14327,6 +14732,7 @@ class ChannelAddRolesAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
     ) -> None:
@@ -14343,6 +14749,7 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -14361,7 +14768,7 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="changeKey")
@@ -14376,6 +14783,7 @@ class ChannelChangeNameAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -14392,6 +14800,7 @@ class ChannelReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -14415,6 +14824,7 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
     ) -> None:
@@ -14434,6 +14844,7 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -14454,6 +14865,7 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -14477,6 +14889,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -14499,6 +14912,7 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         geo_location: typing.Optional["GeoJsonPoint"] = None,
     ) -> None:
@@ -14518,6 +14932,7 @@ class ChannelSetRolesAction(ChannelUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
     ) -> None:
@@ -14534,6 +14949,7 @@ class CustomObjectReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -14557,6 +14973,7 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -14576,6 +14993,7 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14595,6 +15013,7 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14615,6 +15034,7 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
@@ -14636,7 +15056,7 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
     email: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, email: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
     ) -> None:
         self.email = email
         super().__init__(action="changeEmail")
@@ -14653,7 +15073,7 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="changeName")
@@ -14671,6 +15091,7 @@ class CustomerGroupReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -14695,6 +15116,7 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -14718,6 +15140,7 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -14739,7 +15162,7 @@ class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -14754,6 +15177,7 @@ class CustomerReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -14777,6 +15201,7 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14796,6 +15221,7 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14815,6 +15241,7 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14834,6 +15261,7 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         company_name: typing.Optional[str] = None,
     ) -> None:
@@ -14854,6 +15282,7 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -14877,6 +15306,7 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -14899,6 +15329,7 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
     ) -> None:
@@ -14918,6 +15349,7 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer_number: typing.Optional[str] = None,
     ) -> None:
@@ -14937,6 +15369,7 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         date_of_birth: typing.Optional[datetime.date] = None,
     ) -> None:
@@ -14956,6 +15389,7 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14975,6 +15409,7 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_id: typing.Optional[str] = None,
     ) -> None:
@@ -14994,6 +15429,7 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
     ) -> None:
@@ -15013,6 +15449,7 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
     ) -> None:
@@ -15031,7 +15468,7 @@ class CustomerSetKeyAction(CustomerUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -15046,6 +15483,7 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
     ) -> None:
@@ -15064,7 +15502,10 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, locale: typing.Optional[str] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -15082,6 +15523,7 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
     ) -> None:
@@ -15101,6 +15543,7 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
     ) -> None:
@@ -15119,7 +15562,7 @@ class CustomerSetTitleAction(CustomerUpdateAction):
     title: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
     ) -> None:
         self.title = title
         super().__init__(action="setTitle")
@@ -15133,7 +15576,10 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
     vat_id: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, vat_id: typing.Optional[str] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None,
     ) -> None:
         self.vat_id = vat_id
         super().__init__(action="setVatId")
@@ -15151,6 +15597,7 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         cart_discounts: typing.Optional[typing.List["CartDiscountReference"]] = None,
     ) -> None:
@@ -15170,6 +15617,7 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         groups: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -15189,6 +15637,7 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         is_active: typing.Optional[bool] = None,
     ) -> None:
@@ -15208,6 +15657,7 @@ class DiscountCodeReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -15231,6 +15681,7 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         cart_predicate: typing.Optional[str] = None,
     ) -> None:
@@ -15251,6 +15702,7 @@ class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -15274,6 +15726,7 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -15296,6 +15749,7 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -15315,6 +15769,7 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         max_applications: typing.Optional[int] = None,
     ) -> None:
@@ -15334,6 +15789,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         max_applications_per_customer: typing.Optional[int] = None,
     ) -> None:
@@ -15353,6 +15809,7 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -15372,6 +15829,7 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -15392,6 +15850,7 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
@@ -15413,6 +15872,7 @@ class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -15432,6 +15892,7 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         destination: typing.Optional["ExtensionDestination"] = None,
     ) -> None:
@@ -15451,6 +15912,7 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
     ) -> None:
@@ -15469,7 +15931,7 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -15484,6 +15946,7 @@ class HighPrecisionMoney(TypedMoney):
 
     def __init__(
         self,
+        *,
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
         type: typing.Optional["MoneyType"] = None,
@@ -15516,7 +15979,10 @@ class InventoryAddQuantityAction(InventoryUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self, action: typing.Optional[str] = None, quantity: typing.Optional[int] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
     ) -> None:
         self.quantity = quantity
         super().__init__(action="addQuantity")
@@ -15533,7 +15999,10 @@ class InventoryChangeQuantityAction(InventoryUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self, action: typing.Optional[str] = None, quantity: typing.Optional[int] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
     ) -> None:
         self.quantity = quantity
         super().__init__(action="changeQuantity")
@@ -15551,6 +16020,7 @@ class InventoryEntryReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -15573,7 +16043,10 @@ class InventoryRemoveQuantityAction(InventoryUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self, action: typing.Optional[str] = None, quantity: typing.Optional[int] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
     ) -> None:
         self.quantity = quantity
         super().__init__(action="removeQuantity")
@@ -15592,6 +16065,7 @@ class InventorySetCustomFieldAction(InventoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -15615,6 +16089,7 @@ class InventorySetCustomTypeAction(InventoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -15637,6 +16112,7 @@ class InventorySetExpectedDeliveryAction(InventoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -15656,6 +16132,7 @@ class InventorySetRestockableInDaysAction(InventoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         restockable_in_days: typing.Optional[int] = None,
     ) -> None:
@@ -15675,6 +16152,7 @@ class InventorySetSupplyChannelAction(InventoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
     ) -> None:
@@ -15696,6 +16174,7 @@ class OrderAddDeliveryAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["Address"] = None,
@@ -15721,6 +16200,7 @@ class OrderAddItemShippingAddressAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -15743,6 +16223,7 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
@@ -15774,6 +16255,7 @@ class OrderAddPaymentAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         payment: typing.Optional["PaymentReference"] = None,
     ) -> None:
@@ -15795,6 +16277,7 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         return_tracking_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["ReturnItemDraft"]] = None,
@@ -15818,6 +16301,7 @@ class OrderChangeOrderStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         order_state: typing.Optional["OrderState"] = None,
     ) -> None:
@@ -15837,6 +16321,7 @@ class OrderChangePaymentStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
     ) -> None:
@@ -15856,6 +16341,7 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
     ) -> None:
@@ -15876,6 +16362,7 @@ class OrderImportCustomLineItemStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
@@ -15898,6 +16385,7 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
@@ -15919,6 +16407,7 @@ class OrderReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -15942,6 +16431,7 @@ class OrderRemoveDeliveryAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
     ) -> None:
@@ -15961,6 +16451,7 @@ class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
     ) -> None:
@@ -15980,6 +16471,7 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         parcel_id: typing.Optional[str] = None,
     ) -> None:
@@ -15999,6 +16491,7 @@ class OrderRemovePaymentAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         payment: typing.Optional["PaymentReference"] = None,
     ) -> None:
@@ -16018,6 +16511,7 @@ class OrderSetBillingAddressAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -16038,6 +16532,7 @@ class OrderSetCustomFieldAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -16062,6 +16557,7 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
@@ -16087,6 +16583,7 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
@@ -16111,6 +16608,7 @@ class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
@@ -16133,6 +16631,7 @@ class OrderSetCustomTypeAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -16154,7 +16653,7 @@ class OrderSetCustomerEmailAction(OrderUpdateAction):
     email: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, email: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
     ) -> None:
         self.email = email
         super().__init__(action="setCustomerEmail")
@@ -16172,6 +16671,7 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
     ) -> None:
@@ -16192,6 +16692,7 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
@@ -16214,6 +16715,7 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -16238,6 +16740,7 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
@@ -16263,6 +16766,7 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
@@ -16287,6 +16791,7 @@ class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
@@ -16307,7 +16812,10 @@ class OrderSetLocaleAction(OrderUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, locale: typing.Optional[str] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -16322,6 +16830,7 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         order_number: typing.Optional[str] = None,
     ) -> None:
@@ -16342,6 +16851,7 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         parcel_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -16365,6 +16875,7 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         parcel_id: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
@@ -16387,6 +16898,7 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         parcel_id: typing.Optional[str] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
@@ -16409,6 +16921,7 @@ class OrderSetReturnPaymentStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         return_item_id: typing.Optional[str] = None,
         payment_state: typing.Optional["ReturnPaymentState"] = None,
@@ -16431,6 +16944,7 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         return_item_id: typing.Optional[str] = None,
         shipment_state: typing.Optional["ReturnShipmentState"] = None,
@@ -16452,6 +16966,7 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -16475,6 +16990,7 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -16513,6 +17029,7 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -16548,6 +17065,7 @@ class OrderTransitionStateAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
@@ -16570,6 +17088,7 @@ class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
@@ -16591,6 +17110,7 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         channel: typing.Optional["ChannelReference"] = None,
         external_id: typing.Optional[str] = None,
@@ -16615,6 +17135,7 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
@@ -16637,6 +17158,7 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         transaction: typing.Optional["TransactionDraft"] = None,
     ) -> None:
@@ -16656,6 +17178,7 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         amount: typing.Optional["Money"] = None,
     ) -> None:
@@ -16676,6 +17199,7 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         transaction_id: typing.Optional[str] = None,
         interaction_id: typing.Optional[str] = None,
@@ -16698,6 +17222,7 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         transaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None,
@@ -16720,6 +17245,7 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         timestamp: typing.Optional[datetime.datetime] = None,
         transaction_id: typing.Optional[str] = None,
@@ -16741,6 +17267,7 @@ class PaymentReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -16764,6 +17291,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         amount: typing.Optional["Money"] = None,
     ) -> None:
@@ -16783,6 +17311,7 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         amount: typing.Optional["Money"] = None,
     ) -> None:
@@ -16802,6 +17331,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
     ) -> None:
@@ -16822,6 +17352,7 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         amount: typing.Optional["Money"] = None,
         until: typing.Optional[datetime.datetime] = None,
@@ -16845,6 +17376,7 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -16868,6 +17400,7 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -16890,6 +17423,7 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
@@ -16909,6 +17443,7 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
     ) -> None:
@@ -16928,6 +17463,7 @@ class PaymentSetInterfaceIdAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
     ) -> None:
@@ -16946,7 +17482,7 @@ class PaymentSetKeyAction(PaymentUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -16961,6 +17497,7 @@ class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         interface: typing.Optional[str] = None,
     ) -> None:
@@ -16979,7 +17516,10 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
     method: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, method: typing.Optional[str] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        method: typing.Optional[str] = None,
     ) -> None:
         self.method = method
         super().__init__(action="setMethodInfoMethod")
@@ -16997,6 +17537,7 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -17016,6 +17557,7 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         interface_code: typing.Optional[str] = None,
     ) -> None:
@@ -17035,6 +17577,7 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         interface_text: typing.Optional[str] = None,
     ) -> None:
@@ -17055,6 +17598,7 @@ class PaymentTransitionStateAction(PaymentUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
@@ -17081,6 +17625,7 @@ class ProductAddAssetAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset: typing.Optional["AssetDraft"] = None,
         sku: typing.Optional[str] = None,
@@ -17118,6 +17663,7 @@ class ProductAddExternalImageAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         image: typing.Optional["Image"] = None,
         sku: typing.Optional[str] = None,
@@ -17146,6 +17692,7 @@ class ProductAddPriceAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         price: typing.Optional["PriceDraft"] = None,
         sku: typing.Optional[str] = None,
@@ -17173,6 +17720,7 @@ class ProductAddToCategoryAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         category: typing.Optional["CategoryReference"] = None,
         order_hint: typing.Optional[str] = None,
@@ -17201,6 +17749,7 @@ class ProductAddVariantAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
@@ -17243,6 +17792,7 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
@@ -17283,6 +17833,7 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_order: typing.Optional[typing.List[str]] = None,
         sku: typing.Optional[str] = None,
@@ -17310,6 +17861,7 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -17334,6 +17886,7 @@ class ProductChangeNameAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
@@ -17358,6 +17911,7 @@ class ProductChangePriceAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         price: typing.Optional["PriceDraft"] = None,
         price_id: typing.Optional[str] = None,
@@ -17382,6 +17936,7 @@ class ProductChangeSlugAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         slug: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
@@ -17404,6 +17959,7 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         is_active: typing.Optional[bool] = None,
     ) -> None:
@@ -17423,6 +17979,7 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -17442,6 +17999,7 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         predicate: typing.Optional[str] = None,
     ) -> None:
@@ -17461,6 +18019,7 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         sort_order: typing.Optional[str] = None,
     ) -> None:
@@ -17480,6 +18039,7 @@ class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         value: typing.Optional["ProductDiscountValue"] = None,
     ) -> None:
@@ -17499,6 +18059,7 @@ class ProductDiscountReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -17522,6 +18083,7 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -17541,6 +18103,7 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -17561,6 +18124,7 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
@@ -17582,6 +18146,7 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -17602,6 +18167,7 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -17628,6 +18194,7 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         image_url: typing.Optional[str] = None,
         position: typing.Optional[int] = None,
@@ -17662,6 +18229,7 @@ class ProductPublishAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         scope: typing.Optional["ProductPublishScope"] = None,
     ) -> None:
@@ -17678,6 +18246,7 @@ class ProductReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -17705,6 +18274,7 @@ class ProductRemoveAssetAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
@@ -17740,6 +18310,7 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         category: typing.Optional["CategoryReference"] = None,
         staged: typing.Optional[bool] = None,
@@ -17765,6 +18336,7 @@ class ProductRemoveImageAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         image_url: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
@@ -17791,6 +18363,7 @@ class ProductRemovePriceAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         price_id: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -17815,6 +18388,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
@@ -17836,7 +18410,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRevertStagedChangesAction(ProductUpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action="revertStagedChanges")
 
     def __repr__(self) -> str:
@@ -17849,6 +18423,7 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
     ) -> None:
@@ -17874,6 +18449,7 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
@@ -17920,6 +18496,7 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
@@ -17965,6 +18542,7 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
@@ -18006,6 +18584,7 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
@@ -18045,6 +18624,7 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
@@ -18087,6 +18667,7 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         asset_id: typing.Optional[str] = None,
@@ -18128,6 +18709,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
@@ -18164,6 +18746,7 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -18189,6 +18772,7 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         category_id: typing.Optional[str] = None,
         order_hint: typing.Optional[str] = None,
@@ -18213,6 +18797,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
@@ -18237,6 +18822,7 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         price_id: typing.Optional[str] = None,
@@ -18264,6 +18850,7 @@ class ProductSetImageLabelAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -18297,7 +18884,7 @@ class ProductSetKeyAction(ProductUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -18313,6 +18900,7 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
@@ -18335,6 +18923,7 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
@@ -18357,6 +18946,7 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
@@ -18382,6 +18972,7 @@ class ProductSetPricesAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
         sku: typing.Optional[str] = None,
@@ -18410,6 +19001,7 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         price_id: typing.Optional[str] = None,
@@ -18438,6 +19030,7 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         price_id: typing.Optional[str] = None,
@@ -18466,6 +19059,7 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
@@ -18492,6 +19086,7 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
         staged: typing.Optional[bool] = None,
@@ -18515,6 +19110,7 @@ class ProductSetSkuAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -18540,6 +19136,7 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
     ) -> None:
@@ -18560,6 +19157,7 @@ class ProductTransitionStateAction(ProductUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
@@ -18582,6 +19180,7 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute: typing.Optional["AttributeDefinitionDraft"] = None,
     ) -> None:
@@ -18602,6 +19201,7 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         value: typing.Optional["AttributeLocalizedEnumValue"] = None,
@@ -18624,6 +19224,7 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         value: typing.Optional["AttributePlainEnumValue"] = None,
@@ -18646,6 +19247,7 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         new_value: typing.Optional["AttributeConstraintEnum"] = None,
@@ -18668,6 +19270,7 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         new_attribute_name: typing.Optional[str] = None,
@@ -18689,6 +19292,7 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None,
     ) -> None:
@@ -18708,6 +19312,7 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
     ) -> None:
@@ -18729,6 +19334,7 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -18753,6 +19359,7 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         new_value: typing.Optional[str] = None,
@@ -18775,6 +19382,7 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         is_searchable: typing.Optional[bool] = None,
@@ -18797,6 +19405,7 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -18819,6 +19428,7 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         new_value: typing.Optional["AttributeLocalizedEnumValue"] = None,
@@ -18841,6 +19451,7 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None,
@@ -18861,7 +19472,7 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="changeName")
@@ -18880,6 +19491,7 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         new_value: typing.Optional["AttributePlainEnumValue"] = None,
@@ -18902,6 +19514,7 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None,
@@ -18923,6 +19536,7 @@ class ProductTypeReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -18945,7 +19559,7 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="removeAttributeDefinition")
@@ -18964,6 +19578,7 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         keys: typing.Optional[typing.List[str]] = None,
@@ -18986,6 +19601,7 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         attribute_name: typing.Optional[str] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
@@ -19006,7 +19622,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -19017,7 +19633,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductUnpublishAction(ProductUpdateAction):
-    def __init__(self, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
         super().__init__(action="unpublish")
 
     def __repr__(self) -> str:
@@ -19030,6 +19646,7 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         countries: typing.Optional[typing.List["str"]] = None,
     ) -> None:
@@ -19049,6 +19666,7 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         currencies: typing.Optional[typing.List["str"]] = None,
     ) -> None:
@@ -19068,6 +19686,7 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         languages: typing.Optional[typing.List["str"]] = None,
     ) -> None:
@@ -19087,6 +19706,7 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         messages_enabled: typing.Optional[bool] = None,
     ) -> None:
@@ -19105,7 +19725,7 @@ class ProjectChangeNameAction(ProjectUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="changeName")
@@ -19120,6 +19740,7 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
     ) -> None:
@@ -19139,6 +19760,7 @@ class ReviewReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -19162,6 +19784,7 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         author_name: typing.Optional[str] = None,
     ) -> None:
@@ -19182,6 +19805,7 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -19205,6 +19829,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
@@ -19227,6 +19852,7 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
@@ -19245,7 +19871,7 @@ class ReviewSetKeyAction(ReviewUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -19259,7 +19885,10 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, locale: typing.Optional[str] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -19276,7 +19905,10 @@ class ReviewSetRatingAction(ReviewUpdateAction):
     rating: typing.Optional[int]
 
     def __init__(
-        self, action: typing.Optional[str] = None, rating: typing.Optional[int] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        rating: typing.Optional[int] = None,
     ) -> None:
         self.rating = rating
         super().__init__(action="setRating")
@@ -19294,6 +19926,7 @@ class ReviewSetTargetAction(ReviewUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
     ) -> None:
@@ -19312,7 +19945,7 @@ class ReviewSetTextAction(ReviewUpdateAction):
     text: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, text: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, text: typing.Optional[str] = None
     ) -> None:
         self.text = text
         super().__init__(action="setText")
@@ -19326,7 +19959,7 @@ class ReviewSetTitleAction(ReviewUpdateAction):
     title: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
     ) -> None:
         self.title = title
         super().__init__(action="setTitle")
@@ -19342,6 +19975,7 @@ class ReviewTransitionStateAction(ReviewUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
@@ -19365,6 +19999,7 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         zone: typing.Optional["ZoneReference"] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None,
@@ -19386,6 +20021,7 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         zone: typing.Optional["ZoneReference"] = None,
     ) -> None:
@@ -19405,6 +20041,7 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         is_default: typing.Optional[bool] = None,
     ) -> None:
@@ -19423,7 +20060,7 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="changeName")
@@ -19441,6 +20078,7 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
     ) -> None:
@@ -19460,6 +20098,7 @@ class ShippingMethodReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -19484,6 +20123,7 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         zone: typing.Optional["ZoneReference"] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None,
@@ -19505,6 +20145,7 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         zone: typing.Optional["ZoneReference"] = None,
     ) -> None:
@@ -19524,6 +20165,7 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
     ) -> None:
@@ -19542,7 +20184,7 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -19557,6 +20199,7 @@ class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         predicate: typing.Optional[str] = None,
     ) -> None:
@@ -19581,6 +20224,7 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -19622,6 +20266,7 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -19657,6 +20302,7 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -19678,6 +20324,7 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_order: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -19697,6 +20344,7 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -19717,6 +20365,7 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
         text_line_item_id: typing.Optional[str] = None,
@@ -19739,6 +20388,7 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
         text_line_item_id: typing.Optional[str] = None,
@@ -19760,6 +20410,7 @@ class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         text_line_item_order: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -19779,6 +20430,7 @@ class ShoppingListReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -19803,6 +20455,7 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
@@ -19825,6 +20478,7 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
         text_line_item_id: typing.Optional[str] = None,
@@ -19846,6 +20500,7 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
     ) -> None:
@@ -19866,6 +20521,7 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None,
@@ -19889,6 +20545,7 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
@@ -19911,6 +20568,7 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
@@ -19930,6 +20588,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
     ) -> None:
@@ -19949,6 +20608,7 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -19967,7 +20627,7 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -19984,6 +20644,7 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
@@ -20009,6 +20670,7 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
@@ -20032,6 +20694,7 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         slug: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -20053,6 +20716,7 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         text_line_item_id: typing.Optional[str] = None,
@@ -20078,6 +20742,7 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         text_line_item_id: typing.Optional[str] = None,
@@ -20102,6 +20767,7 @@ class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         text_line_item_id: typing.Optional[str] = None,
@@ -20123,6 +20789,7 @@ class StateAddRolesAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
     ) -> None:
@@ -20138,7 +20805,10 @@ class StateChangeInitialAction(StateUpdateAction):
     initial: typing.Optional[bool]
 
     def __init__(
-        self, action: typing.Optional[str] = None, initial: typing.Optional[bool] = None
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        initial: typing.Optional[bool] = None,
     ) -> None:
         self.initial = initial
         super().__init__(action="changeInitial")
@@ -20155,7 +20825,7 @@ class StateChangeKeyAction(StateUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="changeKey")
@@ -20170,6 +20840,7 @@ class StateChangeTypeAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         type: typing.Optional["StateTypeEnum"] = None,
     ) -> None:
@@ -20186,6 +20857,7 @@ class StateReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -20209,6 +20881,7 @@ class StateRemoveRolesAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
     ) -> None:
@@ -20225,6 +20898,7 @@ class StateSetDescriptionAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -20244,6 +20918,7 @@ class StateSetNameAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -20260,6 +20935,7 @@ class StateSetRolesAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
     ) -> None:
@@ -20276,6 +20952,7 @@ class StateSetTransitionsAction(StateUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         transitions: typing.Optional[typing.List["StateReference"]] = None,
     ) -> None:
@@ -20295,6 +20972,7 @@ class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         destination: typing.Optional["Destination"] = None,
     ) -> None:
@@ -20314,6 +20992,7 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
     ) -> None:
@@ -20332,7 +21011,7 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -20347,6 +21026,7 @@ class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
     ) -> None:
@@ -20366,6 +21046,7 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_rate: typing.Optional["TaxRateDraft"] = None,
     ) -> None:
@@ -20384,7 +21065,7 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="changeName")
@@ -20402,6 +21083,7 @@ class TaxCategoryReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -20425,6 +21107,7 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_rate_id: typing.Optional[str] = None,
     ) -> None:
@@ -20445,6 +21128,7 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         tax_rate_id: typing.Optional[str] = None,
         tax_rate: typing.Optional["TaxRateDraft"] = None,
@@ -20466,6 +21150,7 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
     ) -> None:
@@ -20484,7 +21169,7 @@ class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="setKey")
@@ -20500,6 +21185,7 @@ class TypeAddEnumValueAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
         value: typing.Optional["CustomFieldEnumValue"] = None,
@@ -20522,6 +21208,7 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_definition: typing.Optional["FieldDefinition"] = None,
     ) -> None:
@@ -20542,6 +21229,7 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
         value: typing.Optional["CustomFieldLocalizedEnumValue"] = None,
@@ -20565,6 +21253,7 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
         keys: typing.Optional[typing.List[str]] = None,
@@ -20588,6 +21277,7 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -20609,6 +21299,7 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_names: typing.Optional[typing.List[str]] = None,
     ) -> None:
@@ -20627,7 +21318,7 @@ class TypeChangeKeyAction(TypeUpdateAction):
     key: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         self.key = key
         super().__init__(action="changeKey")
@@ -20643,6 +21334,7 @@ class TypeChangeLabelAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
@@ -20666,6 +21358,7 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
         keys: typing.Optional[typing.List[str]] = None,
@@ -20687,6 +21380,7 @@ class TypeChangeNameAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -20703,6 +21397,7 @@ class TypeReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -20726,6 +21421,7 @@ class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         field_name: typing.Optional[str] = None,
     ) -> None:
@@ -20745,6 +21441,7 @@ class TypeSetDescriptionAction(TypeUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
@@ -20764,6 +21461,7 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         location: typing.Optional["Location"] = None,
     ) -> None:
@@ -20782,7 +21480,7 @@ class ZoneChangeNameAction(ZoneUpdateAction):
     name: typing.Optional[str]
 
     def __init__(
-        self, action: typing.Optional[str] = None, name: typing.Optional[str] = None
+        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
     ) -> None:
         self.name = name
         super().__init__(action="changeName")
@@ -20797,6 +21495,7 @@ class ZoneReference(Reference):
 
     def __init__(
         self,
+        *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -20820,6 +21519,7 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         location: typing.Optional["Location"] = None,
     ) -> None:
@@ -20839,6 +21539,7 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
 
     def __init__(
         self,
+        *,
         action: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
     ) -> None:

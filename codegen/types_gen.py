@@ -108,7 +108,12 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         # Cheating a bit here, but using ast nodes for this results in a lot of
         # code.
         repr_statement = ast.Return(
-            value=ast.Name(id="'" + resource.name + "(%s)' % (', '.join(f'{k}={v!r}' for k, v in self.items()))"))
+            value=ast.Name(
+                id="'"
+                + resource.name
+                + "(%s)' % (', '.join(f'{k}={v!r}' for k, v in self.items()))"
+            )
+        )
 
         node.body.append(repr_statement)
         class_node.body.append(node)

@@ -15691,27 +15691,27 @@ class InventorySetSupplyChannelAction(InventoryUpdateAction):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderAddDeliveryAction(OrderUpdateAction):
     items: typing.Optional[typing.List["DeliveryItem"]]
-    parcels: typing.Optional[typing.List["ParcelDraft"]]
     address: typing.Optional["Address"]
+    parcels: typing.Optional[typing.List["ParcelDraft"]]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         address: typing.Optional["Address"] = None,
+        parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
     ) -> None:
         self.items = items
-        self.parcels = parcels
         self.address = address
+        self.parcels = parcels
         super().__init__(action="addDelivery")
 
     def __repr__(self) -> str:
-        return "OrderAddDeliveryAction(action=%r, items=%r, parcels=%r, address=%r)" % (
+        return "OrderAddDeliveryAction(action=%r, items=%r, address=%r, parcels=%r)" % (
             self.action,
             self.items,
-            self.parcels,
             self.address,
+            self.parcels,
         )
 
 
@@ -15789,26 +15789,26 @@ class OrderAddPaymentAction(OrderUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderAddReturnInfoAction(OrderUpdateAction):
+    return_tracking_id: typing.Optional[str]
     items: typing.Optional[typing.List["ReturnItemDraft"]]
     return_date: typing.Optional[datetime.datetime]
-    return_tracking_id: typing.Optional[str]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
+        return_tracking_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["ReturnItemDraft"]] = None,
         return_date: typing.Optional[datetime.datetime] = None,
-        return_tracking_id: typing.Optional[str] = None,
     ) -> None:
+        self.return_tracking_id = return_tracking_id
         self.items = items
         self.return_date = return_date
-        self.return_tracking_id = return_tracking_id
         super().__init__(action="addReturnInfo")
 
     def __repr__(self) -> str:
         return (
-            "OrderAddReturnInfoAction(action=%r, items=%r, return_date=%r, return_tracking_id=%r)"
-            % (self.action, self.items, self.return_date, self.return_tracking_id)
+            "OrderAddReturnInfoAction(action=%r, return_tracking_id=%r, items=%r, return_date=%r)"
+            % (self.action, self.return_tracking_id, self.items, self.return_date)
         )
 
 
@@ -16082,25 +16082,25 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
     custom_line_item_id: typing.Optional[str]
-    fields: typing.Optional[str]
     type: typing.Optional["TypeReference"]
+    fields: typing.Optional[str]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional[str] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
-        self.fields = fields
         self.type = type
+        self.fields = fields
         super().__init__(action="setCustomLineItemCustomType")
 
     def __repr__(self) -> str:
         return (
-            "OrderSetCustomLineItemCustomTypeAction(action=%r, custom_line_item_id=%r, fields=%r, type=%r)"
-            % (self.action, self.custom_line_item_id, self.fields, self.type)
+            "OrderSetCustomLineItemCustomTypeAction(action=%r, custom_line_item_id=%r, type=%r, fields=%r)"
+            % (self.action, self.custom_line_item_id, self.type, self.fields)
         )
 
 
@@ -16128,24 +16128,24 @@ class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderSetCustomTypeAction(OrderUpdateAction):
-    fields: typing.Optional[str]
     type: typing.Optional["TypeReference"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional[object] = None,
     ) -> None:
-        self.fields = fields
         self.type = type
+        self.fields = fields
         super().__init__(action="setCustomType")
 
     def __repr__(self) -> str:
-        return "OrderSetCustomTypeAction(action=%r, fields=%r, type=%r)" % (
+        return "OrderSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
             self.action,
-            self.fields,
             self.type,
+            self.fields,
         )
 
 
@@ -16257,26 +16257,26 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
-    fields: typing.Optional[str]
     line_item_id: typing.Optional[str]
     type: typing.Optional["TypeReference"]
+    fields: typing.Optional[str]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional[str] = None,
     ) -> None:
-        self.fields = fields
         self.line_item_id = line_item_id
         self.type = type
+        self.fields = fields
         super().__init__(action="setLineItemCustomType")
 
     def __repr__(self) -> str:
         return (
-            "OrderSetLineItemCustomTypeAction(action=%r, fields=%r, line_item_id=%r, type=%r)"
-            % (self.action, self.fields, self.line_item_id, self.type)
+            "OrderSetLineItemCustomTypeAction(action=%r, line_item_id=%r, type=%r, fields=%r)"
+            % (self.action, self.line_item_id, self.type, self.fields)
         )
 
 
@@ -16404,23 +16404,23 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderSetReturnPaymentStateAction(OrderUpdateAction):
-    payment_state: typing.Optional["ReturnPaymentState"]
     return_item_id: typing.Optional[str]
+    payment_state: typing.Optional["ReturnPaymentState"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        payment_state: typing.Optional["ReturnPaymentState"] = None,
         return_item_id: typing.Optional[str] = None,
+        payment_state: typing.Optional["ReturnPaymentState"] = None,
     ) -> None:
-        self.payment_state = payment_state
         self.return_item_id = return_item_id
+        self.payment_state = payment_state
         super().__init__(action="setReturnPaymentState")
 
     def __repr__(self) -> str:
         return (
-            "OrderSetReturnPaymentStateAction(action=%r, payment_state=%r, return_item_id=%r)"
-            % (self.action, self.payment_state, self.return_item_id)
+            "OrderSetReturnPaymentStateAction(action=%r, return_item_id=%r, payment_state=%r)"
+            % (self.action, self.return_item_id, self.payment_state)
         )
 
 
@@ -16467,89 +16467,89 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
-    actual_transition_date: typing.Optional[datetime.datetime]
     custom_line_item_id: typing.Optional[str]
-    from_state: typing.Optional["StateReference"]
     quantity: typing.Optional[int]
+    from_state: typing.Optional["StateReference"]
     to_state: typing.Optional["StateReference"]
+    actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        actual_transition_date: typing.Optional[datetime.datetime] = None,
         custom_line_item_id: typing.Optional[str] = None,
-        from_state: typing.Optional["StateReference"] = None,
         quantity: typing.Optional[int] = None,
+        from_state: typing.Optional["StateReference"] = None,
         to_state: typing.Optional["StateReference"] = None,
+        actual_transition_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
-        self.actual_transition_date = actual_transition_date
         self.custom_line_item_id = custom_line_item_id
-        self.from_state = from_state
         self.quantity = quantity
+        self.from_state = from_state
         self.to_state = to_state
+        self.actual_transition_date = actual_transition_date
         super().__init__(action="transitionCustomLineItemState")
 
     def __repr__(self) -> str:
         return (
-            "OrderTransitionCustomLineItemStateAction(action=%r, actual_transition_date=%r, custom_line_item_id=%r, from_state=%r, quantity=%r, to_state=%r)"
+            "OrderTransitionCustomLineItemStateAction(action=%r, custom_line_item_id=%r, quantity=%r, from_state=%r, to_state=%r, actual_transition_date=%r)"
             % (
                 self.action,
-                self.actual_transition_date,
                 self.custom_line_item_id,
-                self.from_state,
                 self.quantity,
+                self.from_state,
                 self.to_state,
+                self.actual_transition_date,
             )
         )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderTransitionLineItemStateAction(OrderUpdateAction):
-    actual_transition_date: typing.Optional[datetime.datetime]
-    from_state: typing.Optional["StateReference"]
     line_item_id: typing.Optional[str]
     quantity: typing.Optional[int]
+    from_state: typing.Optional["StateReference"]
     to_state: typing.Optional["StateReference"]
+    actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        actual_transition_date: typing.Optional[datetime.datetime] = None,
-        from_state: typing.Optional["StateReference"] = None,
         line_item_id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
+        from_state: typing.Optional["StateReference"] = None,
         to_state: typing.Optional["StateReference"] = None,
+        actual_transition_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
-        self.actual_transition_date = actual_transition_date
-        self.from_state = from_state
         self.line_item_id = line_item_id
         self.quantity = quantity
+        self.from_state = from_state
         self.to_state = to_state
+        self.actual_transition_date = actual_transition_date
         super().__init__(action="transitionLineItemState")
 
     def __repr__(self) -> str:
         return (
-            "OrderTransitionLineItemStateAction(action=%r, actual_transition_date=%r, from_state=%r, line_item_id=%r, quantity=%r, to_state=%r)"
+            "OrderTransitionLineItemStateAction(action=%r, line_item_id=%r, quantity=%r, from_state=%r, to_state=%r, actual_transition_date=%r)"
             % (
                 self.action,
-                self.actual_transition_date,
-                self.from_state,
                 self.line_item_id,
                 self.quantity,
+                self.from_state,
                 self.to_state,
+                self.actual_transition_date,
             )
         )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderTransitionStateAction(OrderUpdateAction):
-    state: typing.Optional["ResourceIdentifier"]
+    state: typing.Optional["StateReference"]
     force: typing.Optional[bool]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        state: typing.Optional["ResourceIdentifier"] = None,
+        state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
     ) -> None:
         self.state = state
@@ -16610,24 +16610,24 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
-    fields: typing.Optional[str]
     type: typing.Optional["TypeReference"]
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
-        self.fields = fields
         self.type = type
+        self.fields = fields
         super().__init__(action="addInterfaceInteraction")
 
     def __repr__(self) -> str:
-        return "PaymentAddInterfaceInteractionAction(action=%r, fields=%r, type=%r)" % (
+        return "PaymentAddInterfaceInteractionAction(action=%r, type=%r, fields=%r)" % (
             self.action,
-            self.fields,
             self.type,
+            self.fields,
         )
 
 
@@ -16671,45 +16671,45 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
-    interaction_id: typing.Optional[str]
     transaction_id: typing.Optional[str]
+    interaction_id: typing.Optional[str]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        interaction_id: typing.Optional[str] = None,
         transaction_id: typing.Optional[str] = None,
+        interaction_id: typing.Optional[str] = None,
     ) -> None:
-        self.interaction_id = interaction_id
         self.transaction_id = transaction_id
+        self.interaction_id = interaction_id
         super().__init__(action="changeTransactionInteractionId")
 
     def __repr__(self) -> str:
         return (
-            "PaymentChangeTransactionInteractionIdAction(action=%r, interaction_id=%r, transaction_id=%r)"
-            % (self.action, self.interaction_id, self.transaction_id)
+            "PaymentChangeTransactionInteractionIdAction(action=%r, transaction_id=%r, interaction_id=%r)"
+            % (self.action, self.transaction_id, self.interaction_id)
         )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentChangeTransactionStateAction(PaymentUpdateAction):
-    state: typing.Optional["TransactionState"]
     transaction_id: typing.Optional[str]
+    state: typing.Optional["TransactionState"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None,
         transaction_id: typing.Optional[str] = None,
+        state: typing.Optional["TransactionState"] = None,
     ) -> None:
-        self.state = state
         self.transaction_id = transaction_id
+        self.state = state
         super().__init__(action="changeTransactionState")
 
     def __repr__(self) -> str:
         return (
-            "PaymentChangeTransactionStateAction(action=%r, state=%r, transaction_id=%r)"
-            % (self.action, self.state, self.transaction_id)
+            "PaymentChangeTransactionStateAction(action=%r, transaction_id=%r, state=%r)"
+            % (self.action, self.transaction_id, self.state)
         )
 
 
@@ -16863,24 +16863,24 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentSetCustomTypeAction(PaymentUpdateAction):
-    fields: typing.Optional[str]
     type: typing.Optional["TypeReference"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
         type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional[object] = None,
     ) -> None:
-        self.fields = fields
         self.type = type
+        self.fields = fields
         super().__init__(action="setCustomType")
 
     def __repr__(self) -> str:
-        return "PaymentSetCustomTypeAction(action=%r, fields=%r, type=%r)" % (
+        return "PaymentSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
             self.action,
-            self.fields,
             self.type,
+            self.fields,
         )
 
 
@@ -19026,12 +19026,12 @@ class ProductUnpublishAction(ProductUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeCountriesAction(ProjectUpdateAction):
-    countries: typing.Optional[list]
+    countries: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        countries: typing.Optional[list] = None,
+        countries: typing.Optional[typing.List["str"]] = None,
     ) -> None:
         self.countries = countries
         super().__init__(action="changeCountries")
@@ -19045,12 +19045,12 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeCurrenciesAction(ProjectUpdateAction):
-    currencies: typing.Optional[list]
+    currencies: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        currencies: typing.Optional[list] = None,
+        currencies: typing.Optional[typing.List["str"]] = None,
     ) -> None:
         self.currencies = currencies
         super().__init__(action="changeCurrencies")
@@ -19064,12 +19064,12 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
-    languages: typing.Optional[list]
+    languages: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        languages: typing.Optional[list] = None,
+        languages: typing.Optional[typing.List["str"]] = None,
     ) -> None:
         self.languages = languages
         super().__init__(action="changeLanguages")
@@ -19200,35 +19200,35 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetCustomTypeAction(ReviewUpdateAction):
-    fields: typing.Optional[str]
-    type: typing.Optional["ResourceIdentifier"]
+    type: typing.Optional["TypeReference"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
-        type: typing.Optional["ResourceIdentifier"] = None,
+        type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional[object] = None,
     ) -> None:
-        self.fields = fields
         self.type = type
+        self.fields = fields
         super().__init__(action="setCustomType")
 
     def __repr__(self) -> str:
-        return "ReviewSetCustomTypeAction(action=%r, fields=%r, type=%r)" % (
+        return "ReviewSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
             self.action,
-            self.fields,
             self.type,
+            self.fields,
         )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetCustomerAction(ReviewUpdateAction):
-    customer: typing.Optional["ResourceIdentifier"]
+    customer: typing.Optional["CustomerReference"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        customer: typing.Optional["ResourceIdentifier"] = None,
+        customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
         self.customer = customer
         super().__init__(action="setCustomer")
@@ -19290,12 +19290,12 @@ class ReviewSetRatingAction(ReviewUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetTargetAction(ReviewUpdateAction):
-    target: typing.Optional["ResourceIdentifier"]
+    target: typing.Optional["ProductReference"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        target: typing.Optional["ResourceIdentifier"] = None,
+        target: typing.Optional["ProductReference"] = None,
     ) -> None:
         self.target = target
         super().__init__(action="setTarget")
@@ -19337,13 +19337,13 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewTransitionStateAction(ReviewUpdateAction):
-    state: typing.Optional["ResourceIdentifier"]
+    state: typing.Optional["StateReference"]
     force: typing.Optional[bool]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        state: typing.Optional["ResourceIdentifier"] = None,
+        state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
     ) -> None:
         self.state = state
@@ -19360,23 +19360,23 @@ class ReviewTransitionStateAction(ReviewUpdateAction):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
-    shipping_rate: typing.Optional["ShippingRateDraft"]
     zone: typing.Optional["ZoneReference"]
+    shipping_rate: typing.Optional["ShippingRateDraft"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
         zone: typing.Optional["ZoneReference"] = None,
+        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
     ) -> None:
-        self.shipping_rate = shipping_rate
         self.zone = zone
+        self.shipping_rate = shipping_rate
         super().__init__(action="addShippingRate")
 
     def __repr__(self) -> str:
         return (
-            "ShippingMethodAddShippingRateAction(action=%r, shipping_rate=%r, zone=%r)"
-            % (self.action, self.shipping_rate, self.zone)
+            "ShippingMethodAddShippingRateAction(action=%r, zone=%r, shipping_rate=%r)"
+            % (self.action, self.zone, self.shipping_rate)
         )
 
 
@@ -19479,23 +19479,23 @@ class ShippingMethodReference(Reference):
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
-    shipping_rate: typing.Optional["ShippingRateDraft"]
     zone: typing.Optional["ZoneReference"]
+    shipping_rate: typing.Optional["ShippingRateDraft"]
 
     def __init__(
         self,
         action: typing.Optional[str] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
         zone: typing.Optional["ZoneReference"] = None,
+        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
     ) -> None:
-        self.shipping_rate = shipping_rate
         self.zone = zone
+        self.shipping_rate = shipping_rate
         super().__init__(action="removeShippingRate")
 
     def __repr__(self) -> str:
         return (
-            "ShippingMethodRemoveShippingRateAction(action=%r, shipping_rate=%r, zone=%r)"
-            % (self.action, self.shipping_rate, self.zone)
+            "ShippingMethodRemoveShippingRateAction(action=%r, zone=%r, shipping_rate=%r)"
+            % (self.action, self.zone, self.shipping_rate)
         )
 
 
@@ -20286,6 +20286,25 @@ class StateSetTransitionsAction(StateUpdateAction):
         return "StateSetTransitionsAction(action=%r, transitions=%r)" % (
             self.action,
             self.transitions,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
+    destination: typing.Optional["Destination"]
+
+    def __init__(
+        self,
+        action: typing.Optional[str] = None,
+        destination: typing.Optional["Destination"] = None,
+    ) -> None:
+        self.destination = destination
+        super().__init__(action="changeDestination")
+
+    def __repr__(self) -> str:
+        return "SubscriptionChangeDestinationAction(action=%r, destination=%r)" % (
+            self.action,
+            self.destination,
         )
 
 

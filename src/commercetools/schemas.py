@@ -9391,6 +9391,7 @@ class SubscriptionUpdateSchema(UpdateSchema):
         helpers.Discriminator(
             discriminator_field="action",
             discriminator_schemas={
+                "changeDestination": "commercetools.schemas.SubscriptionChangeDestinationActionSchema",
                 "setChanges": "commercetools.schemas.SubscriptionSetChangesActionSchema",
                 "setKey": "commercetools.schemas.SubscriptionSetKeyActionSchema",
                 "setMessages": "commercetools.schemas.SubscriptionSetMessagesActionSchema",
@@ -12282,18 +12283,18 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
         missing=None,
         many=True,
     )
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
     parcels = marshmallow.fields.Nested(
         nested="commercetools.schemas.ParcelDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         many=True,
-    )
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
     )
 
     class Meta:
@@ -12370,6 +12371,9 @@ class OrderAddPaymentActionSchema(OrderUpdateActionSchema):
 
 
 class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
+    return_tracking_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="returnTrackingId"
+    )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReturnItemDraftSchema",
         unknown=marshmallow.EXCLUDE,
@@ -12378,9 +12382,6 @@ class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
     )
     return_date = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="returnDate"
-    )
-    return_tracking_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="returnTrackingId"
     )
 
     class Meta:
@@ -12408,7 +12409,7 @@ class OrderChangeOrderStateActionSchema(OrderUpdateActionSchema):
 
 class OrderChangePaymentStateActionSchema(OrderUpdateActionSchema):
     payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, data_key="paymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
     )
 
     class Meta:
@@ -12422,7 +12423,7 @@ class OrderChangePaymentStateActionSchema(OrderUpdateActionSchema):
 
 class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
     shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, data_key="shipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
     )
 
     class Meta:
@@ -12591,13 +12592,13 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, data_key="customLineItemId"
     )
-    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
     )
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12630,13 +12631,13 @@ class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema)
 
 
 class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
-    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
     )
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12648,7 +12649,7 @@ class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetCustomerEmailActionSchema(OrderUpdateActionSchema):
-    email = marshmallow.fields.String(allow_none=True)
+    email = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12724,7 +12725,6 @@ class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
-    fields = marshmallow.fields.String(allow_none=True, missing=None)
     line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
@@ -12732,6 +12732,7 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
+    fields = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12774,7 +12775,9 @@ class OrderSetLocaleActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
-    order_number = marshmallow.fields.String(allow_none=True, data_key="orderNumber")
+    order_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderNumber"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12827,6 +12830,7 @@ class OrderSetParcelTrackingDataActionSchema(OrderUpdateActionSchema):
         nested="commercetools.schemas.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
+        missing=None,
         data_key="trackingData",
     )
 
@@ -12840,10 +12844,10 @@ class OrderSetParcelTrackingDataActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
     payment_state = marshmallow_enum.EnumField(
         types.ReturnPaymentState, by_value=True, data_key="paymentState"
     )
-    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -12887,24 +12891,24 @@ class OrderSetShippingAddressActionSchema(OrderUpdateActionSchema):
 
 
 class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
-    actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
-    )
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, data_key="customLineItemId"
     )
+    quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fromState",
     )
-    quantity = marshmallow.fields.Integer(allow_none=True)
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="toState",
+    )
+    actual_transition_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="actualTransitionDate"
     )
 
     class Meta:
@@ -12917,22 +12921,22 @@ class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 
 class OrderTransitionLineItemStateActionSchema(OrderUpdateActionSchema):
-    actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
-    )
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fromState",
     )
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
-    quantity = marshmallow.fields.Integer(allow_none=True)
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="toState",
+    )
+    actual_transition_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="actualTransitionDate"
     )
 
     class Meta:
@@ -12946,10 +12950,9 @@ class OrderTransitionLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderTransitionStateActionSchema(OrderUpdateActionSchema):
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ResourceIdentifierSchema",
+        nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
     )
     force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -13001,13 +13004,12 @@ class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
 
 
 class PaymentAddInterfaceInteractionActionSchema(PaymentUpdateActionSchema):
-    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
     )
+    fields = FieldContainerField(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13039,7 +13041,6 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
     )
 
     class Meta:
@@ -13052,11 +13053,11 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchema):
-    interaction_id = marshmallow.fields.String(
-        allow_none=True, data_key="interactionId"
-    )
     transaction_id = marshmallow.fields.String(
         allow_none=True, data_key="transactionId"
+    )
+    interaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="interactionId"
     )
 
     class Meta:
@@ -13069,10 +13070,10 @@ class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchem
 
 
 class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
-    state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
     transaction_id = marshmallow.fields.String(
         allow_none=True, data_key="transactionId"
     )
+    state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13195,13 +13196,13 @@ class PaymentSetCustomFieldActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetCustomTypeActionSchema(PaymentUpdateActionSchema):
-    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
     )
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13319,7 +13320,7 @@ class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
     interface_text = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceText"
+        allow_none=True, data_key="interfaceText"
     )
 
     class Meta:
@@ -13336,7 +13337,6 @@ class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
     )
     force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -14682,14 +14682,7 @@ class ProductUnpublishActionSchema(ProductUpdateActionSchema):
 
 
 class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
-    countries = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.CountryCodeSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-    )
+    countries = marshmallow.fields.String(many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14701,14 +14694,7 @@ class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
 
 
 class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
-    currencies = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.CurrencyCodeSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-    )
+    currencies = marshmallow.fields.String(many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14720,14 +14706,7 @@ class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
 
 
 class ProjectChangeLanguagesActionSchema(ProjectUpdateActionSchema):
-    languages = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.LocaleSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-    )
+    languages = marshmallow.fields.String(many=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14832,13 +14811,13 @@ class ReviewSetCustomFieldActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
-    fields = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ResourceIdentifierSchema",
+        nested="commercetools.schemas.TypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
     )
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14851,7 +14830,7 @@ class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
 
 class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ResourceIdentifierSchema",
+        nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -14904,7 +14883,7 @@ class ReviewSetRatingActionSchema(ReviewUpdateActionSchema):
 
 class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
     target = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ResourceIdentifierSchema",
+        nested="commercetools.schemas.ProductReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -14945,10 +14924,9 @@ class ReviewSetTitleActionSchema(ReviewUpdateActionSchema):
 
 class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ResourceIdentifierSchema",
+        nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
     )
     force = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -14962,16 +14940,16 @@ class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):
 
 
 class ShippingMethodAddShippingRateActionSchema(ShippingMethodUpdateActionSchema):
+    zone = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
-    )
-    zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
     )
 
     class Meta:
@@ -15058,16 +15036,16 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
 
 
 class ShippingMethodRemoveShippingRateActionSchema(ShippingMethodUpdateActionSchema):
+    zone = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ZoneReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
-    )
-    zone = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ZoneReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
     )
 
     class Meta:
@@ -15642,6 +15620,30 @@ class StateSetTransitionsActionSchema(StateUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.StateSetTransitionsAction(**data)
+
+
+class SubscriptionChangeDestinationActionSchema(SubscriptionUpdateActionSchema):
+    destination = helpers.Discriminator(
+        discriminator_field="type",
+        discriminator_schemas={
+            "EventGrid": "commercetools.schemas.AzureEventGridDestinationSchema",
+            "AzureServiceBus": "commercetools.schemas.AzureServiceBusDestinationSchema",
+            "GoogleCloudPubSub": "commercetools.schemas.GoogleCloudPubSubDestinationSchema",
+            "IronMQ": "commercetools.schemas.IronMqDestinationSchema",
+            "SNS": "commercetools.schemas.SnsDestinationSchema",
+            "SQS": "commercetools.schemas.SqsDestinationSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.SubscriptionChangeDestinationAction(**data)
 
 
 class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):

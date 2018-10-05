@@ -40,7 +40,7 @@ with open("README.md") as fh:
 
 setup(
     name="commercetools-python-sdk",
-    version="0.1.0",
+    version="0.2.0",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",

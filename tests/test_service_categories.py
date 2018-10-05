@@ -34,3 +34,43 @@ def test_category_get():
 
     category = client.categories.get_by_key(category.key)
     assert category
+
+
+@mock_commercetools
+def test_category_update():
+    from commercetools import Client, types
+
+    client = Client(
+        project_key="unittest",
+        client_id="client-id",
+        client_secret="client-secret",
+        scope=[],
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
+    )
+
+    category = client.categories.create(
+        types.CategoryDraft(
+            key="test-category",
+            slug=types.LocalizedString(nl='nl-slug')
+        )
+    )
+    assert category.key == 'test-category'
+
+    category = client.categories.update_by_id(
+        id=category.id,
+        version=category.version,
+        actions=[
+            types.CategoryChangeSlugAction(slug=types.LocalizedString(nl='nl-slug2'))
+        ]
+    )
+    assert category.key == 'test-category'
+
+    category = client.categories.update_by_key(
+        key='test-category',
+        version=category.version,
+        actions=[
+            types.CategoryChangeSlugAction(slug=types.LocalizedString(nl='nl-slug2'))
+        ]
+    )
+    assert category.key == 'test-category'

@@ -56,7 +56,11 @@ class ProductsBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/products/?(?P<path>.*)?"
 
     def query(self, request):
-        pass
+        data = {
+            'results': self.model.objects.values()
+        }
+        content = schemas.ProductPagedQueryResponseSchema().dumps(data)
+        return create_response(request, text=content)
 
     def create(self, request):
         obj = schemas.ProductDraftSchema().loads(request.body)

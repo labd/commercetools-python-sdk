@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 
-import wrapt
 import requests_mock
+import wrapt
 
 from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend
@@ -15,8 +15,13 @@ class BackendRepository:
         self.products = ProductsBackend()
 
     def register(self, adapter):
-        for backend in self.__dict__.values():
+        backends = [
+            'auth', 'categories', 'products'
+        ]
+        for backend_name in backends:
+            backend = getattr(self, backend_name)
             backend.register(adapter)
+        self.requests_mock = adapter
 
 
 @contextmanager
@@ -24,8 +29,7 @@ def backend_mocker(*args, **kwargs):
     with requests_mock.Mocker() as m:
         repo = BackendRepository()
         repo.register(m)
-
-        yield m
+        yield repo
 
 
 @wrapt.decorator

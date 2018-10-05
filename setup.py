@@ -1,6 +1,6 @@
 import re
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 install_requires = [
     "requests>=2.7.0",
@@ -55,7 +55,7 @@ setup(
     },
     entry_points={},
     package_dir={"": "src"},
-    packages=["commercetools"],
+    packages=find_packages('src'),
     include_package_data=True,
     license="MIT",
     classifiers=[

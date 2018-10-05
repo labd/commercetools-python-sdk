@@ -13,7 +13,7 @@ def client_environment_settings(monkeypatch):
     monkeypatch.setenv("CTP_AUTH_URL", "https://auth.sphere.io")
 
 
-def test_client_with_environment_settings_is_setup(client_environment_settings, mock_backend):
+def test_client_with_environment_settings_is_setup(client_environment_settings, commercetools_api):
     Client()
+    assert len(commercetools_api.requests_mock.request_history) == 1
 
-    assert len(mock_backend.request_history) == 1

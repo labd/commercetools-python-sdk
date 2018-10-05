@@ -4,6 +4,6 @@ from commercetools.testing import backend_mocker
 
 
 @pytest.fixture()
-def mock_backend():
+def commercetools_api():
     with backend_mocker() as m:
         yield m

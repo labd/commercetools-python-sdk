@@ -13,6 +13,7 @@ from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.products import ProductService
+from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
 
 env = os.environ.get
 
@@ -24,22 +25,67 @@ class CommercetoolsError(Exception):
 
 
 class Client:
-    def __init__(self, project_key: str=None, client_id: str=None, client_secret: str=None,
-                 scope: typing.List[str]=None, url: str=None, token_url: str=None) -> None:
-        project_key = project_key or env('CTP_PROJECT_KEY')
-        client_id = client_id or env('CTP_CLIENT_ID')
-        client_secret = client_secret or env('CTP_CLIENT_SECRET')
-        scope = scope or env('CTP_SCOPES', '').split(',')
-        url = url or env('CTP_API_URL')
-        token_url = token_url or env('CTP_AUTH_URL', '') + '/oauth/token'
+    def __init__(
+        self,
+        project_key: str = None,
+        client_id: str = None,
+        client_secret: str = None,
+        scope: typing.List[str] = None,
+        url: str = None,
+        token_url: str = None,
+        token_saver: BaseTokenSaver = None,
+    ) -> None:
 
-        self._url = url
-        client = BackendApplicationClient(client_id=client_id)
-        self._http_client = OAuth2Session(client=client)
-        self._http_client.fetch_token(
-            token_url=token_url, client_id=client_id, client_secret=client_secret
+        # Use environment variables as fallback
+        config = {
+            "project_key": project_key,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "url": url,
+            "token_url": token_url,
+            "scope": scope,
+        }
+        # Make sure we use the config vars
+        del project_key, client_id, client_secret, url, token_url, scope
+
+        self._prepare_config(config)
+        self._token_saver = token_saver or DefaultTokenSaver()
+        self._url = config["url"]
+        self._base_url = f"{config['url']}/{config['project_key']}/"
+
+        self._config = config
+
+        # Fetch token from the token saver
+        token = self._token_saver.get_token(
+            self._config["client_id"], self._config["scope"]
         )
-        self._base_url = f"{url}/{project_key}/"
+
+        client = BackendApplicationClient(
+            client_id=config["client_id"], scope=config["scope"]
+        )
+        self._http_client = OAuth2Session(
+            client=client,
+            scope=config["scope"],
+            auto_refresh_url=config["token_url"],
+            auto_refresh_kwargs={
+                "client_id": self._config["client_id"],
+                "client_secret": self._config["client_secret"],
+            },
+            token_updater=self._save_token,
+        )
+        if not token:
+            token = self._http_client.fetch_token(
+                token_url=config["token_url"],
+                scope=config["scope"],
+                client_id=config["client_id"],
+                client_secret=self._config["client_secret"],
+            )
+            self._save_token(token)
+
+    def _save_token(self, token):
+        self._token_saver.add_token(
+            self._config["client_id"], self._config["scope"], token
+        )
 
     def _get(
         self, endpoint: str, params: typing.Dict[str, typing.Any], schema_cls: SchemaABC
@@ -90,6 +136,35 @@ class Client:
             response.raise_for_status()
         obj = schemas.ErrorResponseSchema().loads(response.content)
         raise CommercetoolsError(obj.message, obj)
+
+    def _prepare_config(self, config) -> dict:
+        if not config.get("project_key"):
+            config["project_key"] = os.environ.get("CTP_PROJECT_KEY")
+
+        if not config.get("client_id"):
+            config["client_id"] = os.environ.get("CTP_CLIENT_ID")
+
+        if not config.get("client_secret"):
+            config["client_secret"] = os.environ.get("CTP_CLIENT_SECRET")
+
+        if not config.get("url"):
+            config["url"] = os.environ.get("CTP_API_URL")
+
+        if not config.get("token_url"):
+            config["token_url"] = os.environ.get("CTP_AUTH_URL")
+            if config["token_url"]:
+                config["token_url"] += "/oauth/token"
+
+        if not config["scope"]:
+            config["scope"] = os.environ.get("CTP_SCOPES")
+            if config["scope"]:
+                config["scope"] = config["scope"].split(",")
+            else:
+                config["scope"] = ["manage_project:%s" % config["project_key"]]
+
+        for key, value in config.items():
+            if value is None:
+                raise ValueError(f"No value set for {key}")
 
     @property
     def categories(self) -> CategoriesService:

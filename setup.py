@@ -18,6 +18,7 @@ docs_require = ["sphinx>=1.4.0"]
 
 tests_require = [
     "freezegun==0.3.8",
+    "freezegun==0.3.8",
     "mock==2.0.0",
     "pretend==1.0.8",
     "pytest-cov==2.5.1",

@@ -22,6 +22,9 @@ class BaseModel:
 class BaseBackend:
     path = None
 
+    def __init__(self):
+        self.model = self.model_class()
+
     def register(self, adapter):
         adapter.add_matcher(self._matcher)
 
@@ -50,9 +53,6 @@ class BaseBackend:
 class ServiceBackend(BaseBackend):
     hostnames = ["api.sphere.io"]
     model_class = None
-
-    def __init__(self):
-        self.model = self.model_class()
 
     @property
     def path_prefix(self):

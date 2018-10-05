@@ -1,4 +1,5 @@
 import pytest
+import requests_mock
 
 from requests.exceptions import HTTPError
 
@@ -34,6 +35,31 @@ def test_products_get():
 
     product = client.products.get_by_key(product.key)
     assert product
+
+
+@mock_commercetools
+def test_product_query():
+    from commercetools import Client, types
+
+    client = Client(
+        project_key="unittest",
+        client_id="client-id",
+        client_secret="client-secret",
+        scope=[],
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
+    )
+
+    client.products.create(
+        types.ProductDraft(key="test-product1")
+    )
+    client.products.create(
+        types.ProductDraft(key="test-product2")
+    )
+
+    result = client.products.query(sort='id asc')
+    assert len(result.results) == 2
+    assert result.total == 2
 
 
 @mock_commercetools

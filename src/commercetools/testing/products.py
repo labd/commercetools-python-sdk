@@ -3,7 +3,7 @@ import uuid
 
 from requests_mock import create_response
 
-from commercetools import schemas, types
+from commercetools import abstract, schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
@@ -56,7 +56,16 @@ class ProductsBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/products/?(?P<path>.*)?"
 
     def query(self, request):
-        pass
+        data = {k: v[0] for k, v in request.qs.items()}
+        obj = abstract.AbstractQuerySchema().load(data)
+        data = {
+            'count': len(self.model.objects),
+            'total': len(self.model.objects),
+            'offset': 0,
+            'results': self.model.objects
+        }
+        content = schemas.ProductPagedQueryResponseSchema().dumps(data)
+        return create_response(request, text=content)
 
     def create(self, request):
         obj = schemas.ProductDraftSchema().loads(request.body)

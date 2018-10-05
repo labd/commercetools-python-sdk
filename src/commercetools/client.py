@@ -45,7 +45,7 @@ class Client:
         self, endpoint: str, params: typing.Dict[str, typing.Any], schema_cls: SchemaABC
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
-        response = self._http_client.get(self._base_url + endpoint)
+        response = self._http_client.get(self._base_url + endpoint, params=params)
 
         if response.status_code == 200:
             return schema_cls().load(response.json())

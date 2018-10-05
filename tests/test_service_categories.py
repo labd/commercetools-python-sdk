@@ -37,6 +37,31 @@ def test_category_get():
 
 
 @mock_commercetools
+def test_category_query():
+    from commercetools import Client, types
+
+    client = Client(
+        project_key="unittest",
+        client_id="client-id",
+        client_secret="client-secret",
+        scope=[],
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
+    )
+
+    client.categories.create(
+        types.CategoryDraft(key="test-category1")
+    )
+    client.categories.create(
+        types.CategoryDraft(key="test-category2")
+    )
+
+    result = client.categories.query(sort='id asc')
+    assert len(result.results) == 2
+    assert result.total == 2
+
+
+@mock_commercetools
 def test_category_update():
     from commercetools import Client, types
 

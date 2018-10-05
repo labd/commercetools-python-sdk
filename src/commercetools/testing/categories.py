@@ -36,6 +36,8 @@ class CategoriesBackend(ServiceBackend):
             ("^$", "POST", self.create),
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
+            ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
+            ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
 
     @property
@@ -61,6 +63,22 @@ class CategoriesBackend(ServiceBackend):
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
+            content = schemas.CategorySchema().dumps(obj)
+            return create_response(request, text=content)
+        return create_response(request, status_code=404)
+
+    def update_by_id(self, request, id):
+        obj = self.model.get_by_id(id)
+        if obj:
+            schemas.CategoryUpdateSchema().loads(request.body)
+            content = schemas.CategorySchema().dumps(obj)
+            return create_response(request, text=content)
+        return create_response(request, status_code=404)
+
+    def update_by_key(self, request, key):
+        obj = self.model.get_by_key(key)
+        if obj:
+            schemas.CategoryUpdateSchema().loads(request.body)
             content = schemas.CategorySchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)

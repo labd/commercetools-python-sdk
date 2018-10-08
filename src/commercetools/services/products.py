@@ -5,6 +5,7 @@ from uuid import UUID
 from marshmallow import fields
 
 from commercetools import abstract, schemas, types
+from commercetools.typing import OptionalListStr
 
 __all__ = ["ProductService"]
 
@@ -35,8 +36,8 @@ class ProductService:
 
     def query(
         self,
-        where: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
+        where: OptionalListStr = None,
+        sort: OptionalListStr = None,
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,

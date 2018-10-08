@@ -4,6 +4,7 @@ from typing import List, Optional
 from marshmallow import fields
 
 from commercetools import abstract, schemas, types
+from commercetools.typing import OptionalListStr
 
 __all__ = ["CartService"]
 
@@ -29,8 +30,8 @@ class CartService:
 
     def query(
         self,
-        where: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
+        where: OptionalListStr = None,
+        sort: OptionalListStr = None,
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,

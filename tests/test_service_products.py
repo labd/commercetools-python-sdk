@@ -57,7 +57,13 @@ def test_product_query():
         types.ProductDraft(key="test-product2")
     )
 
+    # single sort query
     result = client.products.query(sort='id asc')
+    assert len(result.results) == 2
+    assert result.total == 2
+
+    # multiple sort queries
+    result = client.products.query(sort=['id asc', 'name asc'])
     assert len(result.results) == 2
     assert result.total == 2
 

@@ -1,3 +1,4 @@
+import typing
 import uuid
 from urllib.parse import parse_qs
 
@@ -8,7 +9,7 @@ from commercetools.testing.abstract import BaseBackend
 
 class AuthModel:
     def __init__(self):
-        self.tokens = []
+        self.tokens: typing.List[str] = []
 
     def add_token(self, token):
         self.tokens.append(token)

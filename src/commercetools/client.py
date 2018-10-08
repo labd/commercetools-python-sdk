@@ -137,7 +137,7 @@ class Client:
         obj = schemas.ErrorResponseSchema().loads(response.content)
         raise CommercetoolsError(obj.message, obj)
 
-    def _prepare_config(self, config) -> dict:
+    def _prepare_config(self, config) -> None:
         if not config.get("project_key"):
             config["project_key"] = os.environ.get("CTP_PROJECT_KEY")
 

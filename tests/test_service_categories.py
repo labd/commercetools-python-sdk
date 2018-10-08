@@ -56,7 +56,13 @@ def test_category_query():
         types.CategoryDraft(key="test-category2")
     )
 
+    # single sort query
     result = client.categories.query(sort='id asc')
+    assert len(result.results) == 2
+    assert result.total == 2
+
+    # multiple sort queries
+    result = client.categories.query(sort=['id asc', 'name asc'])
     assert len(result.results) == 2
     assert result.total == 2
 

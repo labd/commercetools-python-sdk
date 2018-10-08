@@ -45,8 +45,7 @@ class CategoriesBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/categories/?(?P<path>.*)?"
 
     def query(self, request):
-        data = {k: v[0] for k, v in request.qs.items()}
-        obj = abstract.AbstractQuerySchema().load(data)
+        obj = abstract.AbstractQuerySchema().load(request.qs)
         data = {
             'count': len(self.model.objects),
             'total': len(self.model.objects),

@@ -29,7 +29,6 @@ class DefaultTokenSaver(BaseTokenSaver):
         self.storage[name] = token
 
     def get_token(self, client_id, scopes):
-        print("RETURN TOKEN")
         name = self._create_token_hash(client_id, scopes)
         return self.storage.get(name)
 

@@ -48,12 +48,10 @@ class Client:
         # Make sure we use the config vars
         del project_key, client_id, client_secret, url, token_url, scope
 
-        self._prepare_config(config)
+        self._config = self._prepare_config(config)
         self._token_saver = token_saver or DefaultTokenSaver()
-        self._url = config["url"]
-        self._base_url = f"{config['url']}/{config['project_key']}/"
-
-        self._config = config
+        self._url = self._config["url"]
+        self._base_url = f"{self._config['url']}/{self._config['project_key']}/"
 
         # Fetch token from the token saver
         token = self._token_saver.get_token(
@@ -61,23 +59,25 @@ class Client:
         )
 
         client = BackendApplicationClient(
-            client_id=config["client_id"], scope=config["scope"]
+            client_id=self._config["client_id"], scope=self._config["scope"]
         )
         self._http_client = OAuth2Session(
             client=client,
-            scope=config["scope"],
-            auto_refresh_url=config["token_url"],
+            scope=self._config["scope"],
+            auto_refresh_url=self._config["token_url"],
             auto_refresh_kwargs={
                 "client_id": self._config["client_id"],
                 "client_secret": self._config["client_secret"],
             },
             token_updater=self._save_token,
         )
-        if not token:
+        if token:
+            self._http_client.token = token
+        else:
             token = self._http_client.fetch_token(
-                token_url=config["token_url"],
-                scope=config["scope"],
-                client_id=config["client_id"],
+                token_url=self._config["token_url"],
+                scope=self._config["scope"],
+                client_id=self._config["client_id"],
                 client_secret=self._config["client_secret"],
             )
             self._save_token(token)
@@ -165,6 +165,8 @@ class Client:
         for key, value in config.items():
             if value is None:
                 raise ValueError(f"No value set for {key}")
+
+        return config
 
     @property
     def categories(self) -> CategoriesService:

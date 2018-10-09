@@ -15,9 +15,7 @@ class BackendRepository:
         self.products = ProductsBackend()
 
     def register(self, adapter):
-        backends = [
-            'auth', 'categories', 'products'
-        ]
+        backends = ["auth", "categories", "products"]
         for backend_name in backends:
             backend = getattr(self, backend_name)
             backend.register(adapter)

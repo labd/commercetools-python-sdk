@@ -12,17 +12,16 @@ class BaseTokenSaver:
 
     def _create_token_hash(self, client_id, scopes):
         assert scopes is not None
-        return "%s:%s" % (client_id, ';'.join(scopes))
+        return "%s:%s" % (client_id, ";".join(scopes))
 
 
 class DefaultTokenSaver(BaseTokenSaver):
-
     @property
     def storage(self):
-        items = getattr(tls, 'tokens', None)
+        items = getattr(tls, "tokens", None)
         if items is None:
             items = {}
-            setattr(tls, 'tokens', items)
+            setattr(tls, "tokens", items)
         return items
 
     def add_token(self, client_id, scopes, token):
@@ -36,5 +35,5 @@ class DefaultTokenSaver(BaseTokenSaver):
 
     @classmethod
     def clear_cache(cls):
-        items = getattr(tls, 'tokens', {})
+        items = getattr(tls, "tokens", {})
         items.clear()

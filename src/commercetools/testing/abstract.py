@@ -1,11 +1,11 @@
 import re
-
 import requests_mock
+import typing
 
 
 class BaseModel:
     def __init__(self):
-        self.objects = {}
+        self.objects: typing.Dict = {}
 
     def add(self, id, obj):
         self.objects[id] = obj

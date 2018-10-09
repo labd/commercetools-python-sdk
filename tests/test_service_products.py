@@ -1,4 +1,5 @@
 import pytest
+import requests_mock
 
 from requests.exceptions import HTTPError
 
@@ -18,9 +19,7 @@ def test_products_get():
         token_url="https://auth.sphere.io/oauth/token",
     )
 
-    product = client.products.create(
-        types.ProductDraft(key="test-product")
-    )
+    product = client.products.create(types.ProductDraft(key="test-product"))
 
     assert product.id
     assert product.key == "test-product"
@@ -30,10 +29,37 @@ def test_products_get():
     assert product.key == "test-product"
 
     with pytest.raises(HTTPError) as e:
-        client.products.get_by_id('invalid')
+        client.products.get_by_id("invalid")
 
     product = client.products.get_by_key(product.key)
     assert product
+
+
+@mock_commercetools
+def test_product_query():
+    from commercetools import Client, types
+
+    client = Client(
+        project_key="unittest",
+        client_id="client-id",
+        client_secret="client-secret",
+        scope=[],
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
+    )
+
+    client.products.create(types.ProductDraft(key="test-product1"))
+    client.products.create(types.ProductDraft(key="test-product2"))
+
+    # single sort query
+    result = client.products.query(sort="id asc")
+    assert len(result.results) == 2
+    assert result.total == 2
+
+    # multiple sort queries
+    result = client.products.query(sort=["id asc", "name asc"])
+    assert len(result.results) == 2
+    assert result.total == 2
 
 
 @mock_commercetools
@@ -49,9 +75,7 @@ def test_product_update():
         token_url="https://auth.sphere.io/oauth/token",
     )
 
-    product = client.products.create(
-        types.ProductDraft(key="test-product")
-    )
+    product = client.products.create(types.ProductDraft(key="test-product"))
 
     assert product.id
     assert product.key == "test-product"
@@ -60,17 +84,16 @@ def test_product_update():
         id=product.id,
         version=product.version,
         actions=[
-            types.ProductChangeSlugAction(slug=types.LocalizedString(nl='nl-slug2'))
-        ]
+            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
     )
-    assert product.key == 'test-product'
+    assert product.key == "test-product"
 
     product = client.products.update_by_key(
-        key='test-product',
+        key="test-product",
         version=product.version,
         actions=[
-            types.ProductChangeSlugAction(slug=types.LocalizedString(nl='nl-slug2'))
-        ]
+            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
     )
-    assert product.key == 'test-product'
-
+    assert product.key == "test-product"

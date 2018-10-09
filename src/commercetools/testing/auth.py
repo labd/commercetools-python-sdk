@@ -1,3 +1,4 @@
+import typing
 import uuid
 from urllib.parse import parse_qs
 
@@ -8,7 +9,7 @@ from commercetools.testing.abstract import BaseBackend
 
 class AuthModel:
     def __init__(self):
-        self.tokens = []
+        self.tokens: typing.List[str] = []
 
     def add_token(self, token):
         self.tokens.append(token)
@@ -28,7 +29,7 @@ class AuthBackend(BaseBackend):
 
     def token(self, request):
         params = parse_qs(request.body)
-        if not params.get('client_id') and not params.get('client_secret'):
+        if not params.get("client_id") and not params.get("client_secret"):
             response = create_response(request, status_code=401)
             return response
         token = {

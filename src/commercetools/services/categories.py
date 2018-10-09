@@ -2,6 +2,7 @@ import typing
 from typing import List, Optional
 
 from commercetools import abstract, schemas, types
+from commercetools.typing import OptionalListStr
 
 __all__ = ["CategoriesService"]
 
@@ -26,8 +27,8 @@ class CategoriesService:
 
     def query(
         self,
-        where: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
+        where: OptionalListStr = None,
+        sort: OptionalListStr = None,
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -47,11 +48,7 @@ class CategoriesService:
 
     def create(self, draft: types.CategoryDraft) -> types.Category:
         return self._client._post(
-            "categories",
-            [],
-            draft,
-            schemas.CategoryDraftSchema,
-            schemas.CategorySchema,
+            "categories", [], draft, schemas.CategoryDraftSchema, schemas.CategorySchema
         )
 
     def update_by_id(

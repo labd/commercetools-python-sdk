@@ -9,4 +9,5 @@ __all__ = ["commercetools_api"]
 @pytest.fixture(autouse=True)
 def reset_token_cache():
     from commercetools.utils import DefaultTokenSaver
+
     DefaultTokenSaver.clear_cache()

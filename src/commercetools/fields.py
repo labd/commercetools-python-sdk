@@ -9,8 +9,9 @@ class PredicateList(fields.List):
     if they had been specified in a single where query parameter and combined
     with and.
     """
+
     def serialize(self, attr, obj, accessor=None):
         result = super().serialize(attr, obj, accessor)
         if result:
-            return ' and '.join(result)
+            return " and ".join(result)
         return result

@@ -29,7 +29,7 @@ class AuthBackend(BaseBackend):
 
     def token(self, request):
         params = parse_qs(request.body)
-        if not params.get('client_id') and not params.get('client_secret'):
+        if not params.get("client_id") and not params.get("client_secret"):
             response = create_response(request, status_code=401)
             return response
         token = {

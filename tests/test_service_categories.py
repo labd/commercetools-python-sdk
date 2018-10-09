@@ -18,9 +18,7 @@ def test_category_get():
         token_url="https://auth.sphere.io/oauth/token",
     )
 
-    category = client.categories.create(
-        types.CategoryDraft(key="test-category")
-    )
+    category = client.categories.create(types.CategoryDraft(key="test-category"))
 
     assert category.id
     assert category.key == "test-category"
@@ -30,7 +28,7 @@ def test_category_get():
     assert category.key == "test-category"
 
     with pytest.raises(HTTPError):
-        client.categories.get_by_id('invalid')
+        client.categories.get_by_id("invalid")
 
     category = client.categories.get_by_key(category.key)
     assert category
@@ -49,20 +47,16 @@ def test_category_query():
         token_url="https://auth.sphere.io/oauth/token",
     )
 
-    client.categories.create(
-        types.CategoryDraft(key="test-category1")
-    )
-    client.categories.create(
-        types.CategoryDraft(key="test-category2")
-    )
+    client.categories.create(types.CategoryDraft(key="test-category1"))
+    client.categories.create(types.CategoryDraft(key="test-category2"))
 
     # single sort query
-    result = client.categories.query(sort='id asc')
+    result = client.categories.query(sort="id asc")
     assert len(result.results) == 2
     assert result.total == 2
 
     # multiple sort queries
-    result = client.categories.query(sort=['id asc', 'name asc'])
+    result = client.categories.query(sort=["id asc", "name asc"])
     assert len(result.results) == 2
     assert result.total == 2
 
@@ -82,26 +76,25 @@ def test_category_update():
 
     category = client.categories.create(
         types.CategoryDraft(
-            key="test-category",
-            slug=types.LocalizedString(nl='nl-slug')
+            key="test-category", slug=types.LocalizedString(nl="nl-slug")
         )
     )
-    assert category.key == 'test-category'
+    assert category.key == "test-category"
 
     category = client.categories.update_by_id(
         id=category.id,
         version=category.version,
         actions=[
-            types.CategoryChangeSlugAction(slug=types.LocalizedString(nl='nl-slug2'))
-        ]
+            types.CategoryChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
     )
-    assert category.key == 'test-category'
+    assert category.key == "test-category"
 
     category = client.categories.update_by_key(
-        key='test-category',
+        key="test-category",
         version=category.version,
         actions=[
-            types.CategoryChangeSlugAction(slug=types.LocalizedString(nl='nl-slug2'))
-        ]
+            types.CategoryChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
     )
-    assert category.key == 'test-category'
+    assert category.key == "test-category"

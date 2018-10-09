@@ -48,11 +48,7 @@ class CategoriesService:
 
     def create(self, draft: types.CategoryDraft) -> types.Category:
         return self._client._post(
-            "categories",
-            [],
-            draft,
-            schemas.CategoryDraftSchema,
-            schemas.CategorySchema,
+            "categories", [], draft, schemas.CategoryDraftSchema, schemas.CategorySchema
         )
 
     def update_by_id(

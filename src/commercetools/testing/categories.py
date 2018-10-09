@@ -47,10 +47,10 @@ class CategoriesBackend(ServiceBackend):
     def query(self, request):
         obj = abstract.AbstractQuerySchema().load(request.qs)
         data = {
-            'count': len(self.model.objects),
-            'total': len(self.model.objects),
-            'offset': 0,
-            'results': self.model.objects.values()
+            "count": len(self.model.objects),
+            "total": len(self.model.objects),
+            "offset": 0,
+            "results": self.model.objects.values(),
         }
         content = schemas.CategoryPagedQueryResponseSchema().dumps(data)
         return create_response(request, text=content)

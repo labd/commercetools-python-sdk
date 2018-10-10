@@ -6,13 +6,14 @@ from marshmallow.base import SchemaABC
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 
-from commercetools import schemas
+from commercetools import schemas, types
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoriesService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.products import ProductService
+from commercetools.services.product_types import ProductTypeService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
 
 env = os.environ.get
@@ -97,6 +98,10 @@ class Client:
             return schema_cls().load(response.json())
         return self._process_error(response)
 
+    def _query(self, *args, **kwargs) -> types.PagedQueryResponse:
+        """Wrapper around _get method which defines a more specific return type"""
+        return self._get(*args, **kwargs)
+
     def _post(
         self,
         endpoint: str,
@@ -137,7 +142,7 @@ class Client:
         obj = schemas.ErrorResponseSchema().loads(response.content)
         raise CommercetoolsError(obj.message, obj)
 
-    def _prepare_config(self, config) -> None:
+    def _prepare_config(self, config: dict) -> dict:
         if not config.get("project_key"):
             config["project_key"] = os.environ.get("CTP_PROJECT_KEY")
 
@@ -191,3 +196,7 @@ class Client:
     @property
     def product_projections(self) -> ProductProjectionService:
         return ProductProjectionService(self)
+
+    @property
+    def product_types(self) -> ProductTypeService:
+        return ProductTypeService(self)

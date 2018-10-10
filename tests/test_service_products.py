@@ -1,24 +1,10 @@
 import pytest
 import requests_mock
-
+from commercetools import types
 from requests.exceptions import HTTPError
 
-from commercetools.testing import mock_commercetools
 
-
-@mock_commercetools
-def test_products_get():
-    from commercetools import Client, types
-
-    client = Client(
-        project_key="unittest",
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
-    )
-
+def test_products_get(client):
     product = client.products.create(types.ProductDraft(key="test-product"))
 
     assert product.id
@@ -35,19 +21,7 @@ def test_products_get():
     assert product
 
 
-@mock_commercetools
-def test_product_query():
-    from commercetools import Client, types
-
-    client = Client(
-        project_key="unittest",
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
-    )
-
+def test_product_query(client):
     client.products.create(types.ProductDraft(key="test-product1"))
     client.products.create(types.ProductDraft(key="test-product2"))
 
@@ -62,19 +36,7 @@ def test_product_query():
     assert result.total == 2
 
 
-@mock_commercetools
-def test_product_update():
-    from commercetools import Client, types
-
-    client = Client(
-        project_key="unittest",
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
-    )
-
+def test_product_update(client):
     product = client.products.create(types.ProductDraft(key="test-product"))
 
     assert product.id

@@ -24,6 +24,7 @@ class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
 
 class ProductProjectionsQuerySchema(_ProductProjectionsBaseSchema):
     where = fields.List(fields.String())
+    expand = fields.List(fields.String())
 
 
 class ProductProjectionsSearchSchema(_ProductProjectionsBaseSchema):

@@ -20,10 +20,10 @@ class PaymentQuerySchema(abstract.AbstractQuerySchema):
 
 class PaymentService(AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Payment]:
-        return self._client._get(f"payments/{id}", [], schemas.PaymentSchema)
+        return self._client._get(f"payments/{id}", {}, schemas.PaymentSchema)
 
     def get_by_key(self, key: str) -> types.Payment:
-        return self._client._get(f"payments/key={key}", [], schemas.PaymentSchema)
+        return self._client._get(f"payments/key={key}", {}, schemas.PaymentSchema)
 
     def query(
         self,
@@ -32,7 +32,7 @@ class PaymentService(AbstractService):
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-    ) -> List[types.Payment]:
+    ) -> types.PaymentPagedQueryResponse:
         params = PaymentQuerySchema().dump(
             {
                 "where": where,
@@ -48,7 +48,7 @@ class PaymentService(AbstractService):
 
     def create(self, draft: types.PaymentDraft) -> types.Payment:
         return self._client._post(
-            "payments", [], draft, schemas.PaymentUpdateSchema, schemas.PaymentSchema
+            "payments", {}, draft, schemas.PaymentUpdateSchema, schemas.PaymentSchema
         )
 
     def update_by_id(
@@ -57,7 +57,7 @@ class PaymentService(AbstractService):
         update_action = types.PaymentUpdate(version=version, actions=actions)
         return self._client._post(
             f"payments/{id}",
-            [],
+            {},
             update_action,
             schemas.PaymentUpdateSchema,
             schemas.PaymentSchema,
@@ -69,7 +69,7 @@ class PaymentService(AbstractService):
         update_action = types.PaymentUpdate(version=version, actions=actions)
         return self._client._post(
             f"payments/key={key}",
-            [],
+            {},
             update_action,
             schemas.PaymentUpdateSchema,
             schemas.PaymentSchema,

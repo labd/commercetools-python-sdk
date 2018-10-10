@@ -20,7 +20,7 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
 
 class CartService(AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Cart]:
-        return self._client._get(f"carts/{id}", [], schemas.CartSchema)
+        return self._client._get(f"carts/{id}", {}, schemas.CartSchema)
 
     def get_by_customer_id(self, customer_id: str) -> types.Cart:
         params = {"customerId": customer_id}
@@ -33,7 +33,7 @@ class CartService(AbstractService):
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-    ) -> List[types.Cart]:
+    ) -> types.CartPagedQueryResponse:
         params = CartQuerySchema().dump(
             {
                 "where": where,
@@ -47,7 +47,7 @@ class CartService(AbstractService):
 
     def create(self, draft: types.CartDraft) -> types.Cart:
         return self._client._post(
-            "carts", [], draft, schemas.CartUpdateSchema, schemas.CartSchema
+            "carts", {}, draft, schemas.CartUpdateSchema, schemas.CartSchema
         )
 
     def update(
@@ -56,7 +56,7 @@ class CartService(AbstractService):
         update_action = types.CartUpdate(version=version, actions=actions)
         return self._client._post(
             f"carts/{id}",
-            [],
+            {},
             update_action,
             schemas.CartUpdateSchema,
             schemas.CartSchema,
@@ -70,5 +70,5 @@ class CartService(AbstractService):
 
     def replicate(self, draft: types.ReplicaCartDraft) -> types.Cart:
         return self._client._post(
-            "carts", [], draft, schemas.CartUpdateSchema, schemas.CartSchema
+            "carts", {}, draft, schemas.CartUpdateSchema, schemas.CartSchema
         )

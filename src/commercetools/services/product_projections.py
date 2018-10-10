@@ -63,7 +63,7 @@ class ProductProjectionService(AbstractService):
         price_channel: typing.Optional[UUID] = None,
     ) -> Optional[types.ProductProjection]:
         return self._client._get(
-            f"product-projections/{id}", [], schemas.ProductProjectionSchema
+            f"product-projections/{id}", {}, schemas.ProductProjectionSchema
         )
 
     def get_by_key(
@@ -76,7 +76,7 @@ class ProductProjectionService(AbstractService):
         price_channel: typing.Optional[UUID] = None,
     ) -> types.ProductProjection:
         return self._client._get(
-            f"product-projections/key={key}", [], schemas.ProductProjectionSchema
+            f"product-projections/key={key}", {}, schemas.ProductProjectionSchema
         )
 
     def query(

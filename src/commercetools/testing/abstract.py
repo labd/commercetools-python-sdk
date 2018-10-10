@@ -52,7 +52,7 @@ class BaseBackend:
 
 class ServiceBackend(BaseBackend):
     hostnames = ["api.sphere.io"]
-    model_class = None
+    model_class: typing.Any = None
 
     @property
     def path_prefix(self):

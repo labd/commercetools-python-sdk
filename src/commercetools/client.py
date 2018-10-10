@@ -98,10 +98,6 @@ class Client:
             return schema_cls().load(response.json())
         return self._process_error(response)
 
-    def _query(self, *args, **kwargs) -> types.PagedQueryResponse:
-        """Wrapper around _get method which defines a more specific return type"""
-        return self._get(*args, **kwargs)
-
     def _post(
         self,
         endpoint: str,

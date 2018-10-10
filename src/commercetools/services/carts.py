@@ -5,6 +5,7 @@ from marshmallow import fields
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListStr
+from commercetools.services import AbstractService
 
 __all__ = ["CartService"]
 
@@ -17,10 +18,7 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class CartService:
-    def __init__(self, client):
-        self._client = client
-
+class CartService(AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Cart]:
         return self._client._get(f"carts/{id}", [], schemas.CartSchema)
 

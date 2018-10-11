@@ -2,22 +2,9 @@ import pytest
 
 from requests.exceptions import HTTPError
 
-from commercetools.testing import mock_commercetools
+from commercetools import types
 
-
-@mock_commercetools
-def test_category_get():
-    from commercetools import Client, types
-
-    client = Client(
-        project_key="unittest",
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
-    )
-
+def test_category_get(client):
     category = client.categories.create(types.CategoryDraft(key="test-category"))
 
     assert category.id
@@ -34,19 +21,7 @@ def test_category_get():
     assert category
 
 
-@mock_commercetools
-def test_category_query():
-    from commercetools import Client, types
-
-    client = Client(
-        project_key="unittest",
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
-    )
-
+def test_category_query(client):
     client.categories.create(types.CategoryDraft(key="test-category1"))
     client.categories.create(types.CategoryDraft(key="test-category2"))
 
@@ -61,19 +36,12 @@ def test_category_query():
     assert result.total == 2
 
 
-@mock_commercetools
-def test_category_update():
-    from commercetools import Client, types
-
-    client = Client(
-        project_key="unittest",
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
-    )
-
+def test_category_update(client):
+    """Test the return value of the update methods.
+    
+    It doesn't test the actual update itself.
+    TODO: See if this is worth testing since we're using a mocking backend
+    """
     category = client.categories.create(
         types.CategoryDraft(
             key="test-category", slug=types.LocalizedString(nl="nl-slug")

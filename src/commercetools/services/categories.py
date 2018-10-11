@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListStr
+from commercetools.services import AbstractService
 
 __all__ = ["CategoriesService"]
 
@@ -15,15 +16,12 @@ class CategoryQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class CategoriesService:
-    def __init__(self, client):
-        self._client = client
-
+class CategoriesService(AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Category]:
-        return self._client._get(f"categories/{id}", [], schemas.CategorySchema)
+        return self._client._get(f"categories/{id}", {}, schemas.CategorySchema)
 
     def get_by_key(self, key: str) -> types.Category:
-        return self._client._get(f"categories/key={key}", [], schemas.CategorySchema)
+        return self._client._get(f"categories/key={key}", {}, schemas.CategorySchema)
 
     def query(
         self,
@@ -32,7 +30,7 @@ class CategoriesService:
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-    ) -> List[types.Category]:
+    ) -> types.CategoryPagedQueryResponse:
         params = CategoryQuerySchema().dump(
             {
                 "where": where,
@@ -48,7 +46,7 @@ class CategoriesService:
 
     def create(self, draft: types.CategoryDraft) -> types.Category:
         return self._client._post(
-            "categories", [], draft, schemas.CategoryDraftSchema, schemas.CategorySchema
+            "categories", {}, draft, schemas.CategoryDraftSchema, schemas.CategorySchema
         )
 
     def update_by_id(
@@ -57,7 +55,7 @@ class CategoriesService:
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
             f"categories/{id}",
-            [],
+            {},
             update_action,
             schemas.CategoryUpdateSchema,
             schemas.CategorySchema,
@@ -69,7 +67,7 @@ class CategoriesService:
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
             f"categories/key={key}",
-            [],
+            {},
             update_action,
             schemas.CategoryUpdateSchema,
             schemas.CategorySchema,

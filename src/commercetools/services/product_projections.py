@@ -6,6 +6,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_dump
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID
+from commercetools.services import AbstractService
 
 __all__ = ["ProductProjectionService"]
 
@@ -51,10 +52,7 @@ class ProductProjectionsSearchSchema(_ProductProjectionsBaseSchema):
         return data
 
 
-class ProductProjectionService:
-    def __init__(self, client):
-        self._client = client
-
+class ProductProjectionService(AbstractService):
     def get_by_id(
         self,
         id: str,
@@ -65,7 +63,7 @@ class ProductProjectionService:
         price_channel: typing.Optional[UUID] = None,
     ) -> Optional[types.ProductProjection]:
         return self._client._get(
-            f"product-projections/{id}", [], schemas.ProductProjectionSchema
+            f"product-projections/{id}", {}, schemas.ProductProjectionSchema
         )
 
     def get_by_key(
@@ -78,7 +76,7 @@ class ProductProjectionService:
         price_channel: typing.Optional[UUID] = None,
     ) -> types.ProductProjection:
         return self._client._get(
-            f"product-projections/key={key}", [], schemas.ProductProjectionSchema
+            f"product-projections/key={key}", {}, schemas.ProductProjectionSchema
         )
 
     def query(

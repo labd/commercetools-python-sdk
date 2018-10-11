@@ -2262,7 +2262,7 @@ class LineItemImportDraft:
                 self.shipping_details,
             )
         )
-
+        
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class Location:
@@ -2283,7 +2283,61 @@ class Location:
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class Message:
+class Resource:
+    id: typing.Optional[str]
+    version: typing.Optional[int]
+    created_at: typing.Optional[datetime.datetime]
+    last_modified_at: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+    ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+
+    def __repr__(self) -> str:
+        return "Resource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
+            self.id,
+            self.version,
+            self.created_at,
+            self.last_modified_at,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ResourceIdentifier:
+    type_id: typing.Optional["ReferenceTypeId"]
+    id: typing.Optional[str]
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+    ) -> None:
+        self.type_id = type_id
+        self.id = id
+        self.key = key
+
+    def __repr__(self) -> str:
+        return "ResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
+            self.type_id,
+            self.id,
+            self.key,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class Message(Resource):
     id: typing.Optional[str]
     version: typing.Optional[int]
     created_at: typing.Optional[datetime.datetime]
@@ -3390,8 +3444,8 @@ class ProductDraft:
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeDraft:
-    key: typing.Optional[str]
     name: typing.Optional[str]
+    key: typing.Optional[str]
     description: typing.Optional[str]
     attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
 
@@ -3672,60 +3726,6 @@ class ReplicaCartDraft:
 
     def __repr__(self) -> str:
         return "ReplicaCartDraft(reference=%r)" % (self.reference,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Resource:
-    id: typing.Optional[str]
-    version: typing.Optional[int]
-    created_at: typing.Optional[datetime.datetime]
-    last_modified_at: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-    ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-
-    def __repr__(self) -> str:
-        return "Resource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
-            self.id,
-            self.version,
-            self.created_at,
-            self.last_modified_at,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ResourceIdentifier:
-    type_id: typing.Optional["ReferenceTypeId"]
-    id: typing.Optional[str]
-    key: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-    ) -> None:
-        self.type_id = type_id
-        self.id = id
-        self.key = key
-
-    def __repr__(self) -> str:
-        return "ResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
-            self.type_id,
-            self.id,
-            self.key,
-        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)

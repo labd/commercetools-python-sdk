@@ -5,6 +5,7 @@ from marshmallow import fields
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListStr
+from commercetools.services import AbstractService
 
 __all__ = ["CartService"]
 
@@ -17,12 +18,9 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class CartService:
-    def __init__(self, client):
-        self._client = client
-
+class CartService(AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Cart]:
-        return self._client._get(f"carts/{id}", [], schemas.CartSchema)
+        return self._client._get(f"carts/{id}", {}, schemas.CartSchema)
 
     def get_by_customer_id(self, customer_id: str) -> types.Cart:
         params = {"customerId": customer_id}
@@ -35,7 +33,7 @@ class CartService:
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-    ) -> List[types.Cart]:
+    ) -> types.CartPagedQueryResponse:
         params = CartQuerySchema().dump(
             {
                 "where": where,
@@ -49,7 +47,7 @@ class CartService:
 
     def create(self, draft: types.CartDraft) -> types.Cart:
         return self._client._post(
-            "carts", [], draft, schemas.CartUpdateSchema, schemas.CartSchema
+            "carts", {}, draft, schemas.CartUpdateSchema, schemas.CartSchema
         )
 
     def update(
@@ -58,7 +56,7 @@ class CartService:
         update_action = types.CartUpdate(version=version, actions=actions)
         return self._client._post(
             f"carts/{id}",
-            [],
+            {},
             update_action,
             schemas.CartUpdateSchema,
             schemas.CartSchema,
@@ -72,5 +70,5 @@ class CartService:
 
     def replicate(self, draft: types.ReplicaCartDraft) -> types.Cart:
         return self._client._post(
-            "carts", [], draft, schemas.CartUpdateSchema, schemas.CartSchema
+            "carts", {}, draft, schemas.CartUpdateSchema, schemas.CartSchema
         )

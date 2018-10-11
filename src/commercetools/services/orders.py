@@ -5,6 +5,7 @@ from marshmallow import fields
 
 from commercetools import abstract, schemas, types
 from commercetools.typing import OptionalListStr
+from commercetools.services import AbstractService
 
 __all__ = ["OrderService"]
 
@@ -17,15 +18,12 @@ class OrderQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class OrderService:
-    def __init__(self, client):
-        self._client = client
-
+class OrderService(AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Order]:
-        return self._client._get(f"orders/{id}", [], schemas.OrderSchema)
+        return self._client._get(f"orders/{id}", {}, schemas.OrderSchema)
 
     def get_by_key(self, key: str) -> types.Order:
-        return self._client._get(f"orders/key={key}", [], schemas.OrderSchema)
+        return self._client._get(f"orders/key={key}", {}, schemas.OrderSchema)
 
     def query(
         self,
@@ -34,7 +32,7 @@ class OrderService:
         expand: typing.Optional[str] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-    ) -> List[types.Order]:
+    ) -> types.OrderPagedQueryResponse:
         params = OrderQuerySchema().dump(
             {
                 "where": where,
@@ -50,7 +48,7 @@ class OrderService:
 
     def create(self, cart: types.OrderFromCartDraft) -> types.Order:
         return self._client._post(
-            "orders", [], cart, schemas.OrderFromCartDraftSchema, schemas.OrderSchema
+            "orders", {}, cart, schemas.OrderFromCartDraftSchema, schemas.OrderSchema
         )
 
     def update_by_id(
@@ -59,7 +57,7 @@ class OrderService:
         update_action = types.OrderUpdate(version=version, actions=actions)
         return self._client._post(
             f"orders/{id}",
-            [],
+            {},
             update_action,
             schemas.OrderUpdateSchema,
             schemas.OrderSchema,
@@ -71,7 +69,7 @@ class OrderService:
         update_action = types.OrderUpdate(version=version, actions=actions)
         return self._client._post(
             f"orders/key={key}",
-            [],
+            {},
             update_action,
             schemas.OrderUpdateSchema,
             schemas.OrderSchema,

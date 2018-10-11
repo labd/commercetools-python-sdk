@@ -2262,7 +2262,7 @@ class LineItemImportDraft:
                 self.shipping_details,
             )
         )
-        
+
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class Location:
@@ -2280,108 +2280,6 @@ class Location:
 
     def __repr__(self) -> str:
         return "Location(country=%r, state=%r)" % (self.country, self.state)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Resource:
-    id: typing.Optional[str]
-    version: typing.Optional[int]
-    created_at: typing.Optional[datetime.datetime]
-    last_modified_at: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-    ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-
-    def __repr__(self) -> str:
-        return "Resource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
-            self.id,
-            self.version,
-            self.created_at,
-            self.last_modified_at,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ResourceIdentifier:
-    type_id: typing.Optional["ReferenceTypeId"]
-    id: typing.Optional[str]
-    key: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-    ) -> None:
-        self.type_id = type_id
-        self.id = id
-        self.key = key
-
-    def __repr__(self) -> str:
-        return "ResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
-            self.type_id,
-            self.id,
-            self.key,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Message(Resource):
-    id: typing.Optional[str]
-    version: typing.Optional[int]
-    created_at: typing.Optional[datetime.datetime]
-    last_modified_at: typing.Optional[datetime.datetime]
-    sequence_number: typing.Optional[int]
-    resource: typing.Optional["Reference"]
-    resource_version: typing.Optional[int]
-    type: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-    ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.sequence_number = sequence_number
-        self.resource = resource
-        self.resource_version = resource_version
-        self.type = type
-
-    def __repr__(self) -> str:
-        return (
-            "Message(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-            )
-        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -3444,8 +3342,8 @@ class ProductDraft:
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeDraft:
-    name: typing.Optional[str]
     key: typing.Optional[str]
+    name: typing.Optional[str]
     description: typing.Optional[str]
     attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
 
@@ -3726,6 +3624,60 @@ class ReplicaCartDraft:
 
     def __repr__(self) -> str:
         return "ReplicaCartDraft(reference=%r)" % (self.reference,)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class Resource:
+    id: typing.Optional[str]
+    version: typing.Optional[int]
+    created_at: typing.Optional[datetime.datetime]
+    last_modified_at: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+    ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+
+    def __repr__(self) -> str:
+        return "Resource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
+            self.id,
+            self.version,
+            self.created_at,
+            self.last_modified_at,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ResourceIdentifier:
+    type_id: typing.Optional["ReferenceTypeId"]
+    id: typing.Optional[str]
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+    ) -> None:
+        self.type_id = type_id
+        self.id = id
+        self.key = key
+
+    def __repr__(self) -> str:
+        return "ResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
+            self.type_id,
+            self.id,
+            self.key,
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -5990,52 +5942,6 @@ class Category(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CategoryCreatedMessage(Message):
-    category: typing.Optional["Category"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        category: typing.Optional["Category"] = None,
-    ) -> None:
-        self.category = category
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CategoryCreated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CategoryCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, category=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.category,
-            )
-        )
-
-
 class CategoryOrderHints(typing.Dict[(str, str)]):
     def __repr__(self) -> str:
         return "CategoryOrderHints(%s)" % (
@@ -6062,52 +5968,6 @@ class CategoryPagedQueryResponse(PagedQueryResponse):
         return (
             "CategoryPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
             % (self.count, self.total, self.offset, self.results)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CategorySlugChangedMessage(Message):
-    slug: typing.Optional["LocalizedString"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-    ) -> None:
-        self.slug = slug
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CategorySlugChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CategorySlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, slug=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.slug,
-            )
         )
 
 
@@ -6467,68 +6327,6 @@ class CustomFieldTimeType(FieldType):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class CustomLineItemStateTransitionMessage(Message):
-    custom_line_item_id: typing.Optional[str]
-    transition_date: typing.Optional[datetime.datetime]
-    quantity: typing.Optional[int]
-    from_state: typing.Optional["StateReference"]
-    to_state: typing.Optional["StateReference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        transition_date: typing.Optional[datetime.datetime] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
-    ) -> None:
-        self.custom_line_item_id = custom_line_item_id
-        self.transition_date = transition_date
-        self.quantity = quantity
-        self.from_state = from_state
-        self.to_state = to_state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomLineItemStateTransition",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomLineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, custom_line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.custom_line_item_id,
-                self.transition_date,
-                self.quantity,
-                self.from_state,
-                self.to_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomObject(Resource):
     container: typing.Optional[str]
     key: typing.Optional[str]
@@ -6728,369 +6526,6 @@ class Customer(Resource):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerAddressAddedMessage(Message):
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
-        self.address = address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerAddressAdded",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerAddressAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.address,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerAddressChangedMessage(Message):
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
-        self.address = address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerAddressChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerAddressChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.address,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerAddressRemovedMessage(Message):
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
-        self.address = address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerAddressRemoved",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerAddressRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.address,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerCompanyNameSetMessage(Message):
-    company_name: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        company_name: typing.Optional[str] = None,
-    ) -> None:
-        self.company_name = company_name
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerCompanyNameSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerCompanyNameSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, company_name=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.company_name,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerCreatedMessage(Message):
-    customer: typing.Optional["Customer"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        customer: typing.Optional["Customer"] = None,
-    ) -> None:
-        self.customer = customer
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerCreated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, customer=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.customer,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerDateOfBirthSetMessage(Message):
-    date_of_birth: typing.Optional[datetime.date]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        date_of_birth: typing.Optional[datetime.date] = None,
-    ) -> None:
-        self.date_of_birth = date_of_birth
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerDateOfBirthSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerDateOfBirthSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, date_of_birth=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.date_of_birth,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerEmailChangedMessage(Message):
-    email: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-    ) -> None:
-        self.email = email
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerEmailChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerEmailChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, email=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.email,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerEmailVerifiedMessage(Message):
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-    ) -> None:
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerEmailVerified",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerEmailVerifiedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroup(Resource):
     key: typing.Optional[str]
     name: typing.Optional[str]
@@ -7151,52 +6586,6 @@ class CustomerGroupPagedQueryResponse(PagedQueryResponse):
         return (
             "CustomerGroupPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
             % (self.count, self.total, self.offset, self.results)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerGroupSetMessage(Message):
-    customer_group: typing.Optional["CustomerGroupReference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-    ) -> None:
-        self.customer_group = customer_group
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="CustomerGroupSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerGroupSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, customer_group=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.customer_group,
-            )
         )
 
 
@@ -7275,198 +6664,6 @@ class CustomerUpdateAction(UpdateAction):
 
     def __repr__(self) -> str:
         return "CustomerUpdateAction(action=%r)" % (self.action,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryAddedMessage(Message):
-    delivery: typing.Optional["Delivery"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-    ) -> None:
-        self.delivery = delivery
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="DeliveryAdded",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "DeliveryAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryAddressSetMessage(Message):
-    delivery_id: typing.Optional[str]
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.address = address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="DeliveryAddressSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "DeliveryAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, address=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery_id,
-                self.address,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryItemsUpdatedMessage(Message):
-    delivery_id: typing.Optional[str]
-    items: typing.Optional[typing.List["DeliveryItem"]]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.items = items
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="DeliveryItemsUpdated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "DeliveryItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, items=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery_id,
-                self.items,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryRemovedMessage(Message):
-    delivery: typing.Optional["Delivery"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-    ) -> None:
-        self.delivery = delivery
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="DeliveryRemoved",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "DeliveryRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery,
-            )
-        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -8078,6 +7275,17 @@ class InvalidFieldError(ErrorObject):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class InvalidInputError(ErrorObject):
+    def __init__(
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+    ) -> None:
+        super().__init__(code="InvalidInput", message=message)
+
+    def __repr__(self) -> str:
+        return "InvalidInputError(code=%r, message=%r)" % (self.code, self.message)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidItemShippingDetailsError(ErrorObject):
     subject: typing.Optional[str]
     item_id: typing.Optional[str]
@@ -8192,56 +7400,6 @@ class InventoryEntry(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class InventoryEntryDeletedMessage(Message):
-    sku: typing.Optional[str]
-    supply_channel: typing.Optional["ChannelReference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        sku: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
-    ) -> None:
-        self.sku = sku
-        self.supply_channel = supply_channel
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="InventoryEntryDeleted",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "InventoryEntryDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, sku=%r, supply_channel=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.sku,
-                self.supply_channel,
-            )
-        )
-
-
 class InventoryMode(enum.Enum):
     TRACK_ONLY = "TrackOnly"
     RESERVE_ON_ORDER = "ReserveOnOrder"
@@ -8321,13 +7479,19 @@ class LineItemPriceMode(enum.Enum):
     EXTERNAL_PRICE = "ExternalPrice"
 
 
+class LocalizedString(typing.Dict[(str, str)]):
+    def __repr__(self) -> str:
+        return "LocalizedString(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
+
+
 @attr.s(auto_attribs=True, init=False, repr=False)
-class LineItemStateTransitionMessage(Message):
-    line_item_id: typing.Optional[str]
-    transition_date: typing.Optional[datetime.datetime]
-    quantity: typing.Optional[int]
-    from_state: typing.Optional["StateReference"]
-    to_state: typing.Optional["StateReference"]
+class Message(Resource):
+    sequence_number: typing.Optional[int]
+    resource: typing.Optional["Reference"]
+    resource_version: typing.Optional[int]
+    type: typing.Optional[str]
 
     def __init__(
         self,
@@ -8340,31 +7504,21 @@ class LineItemStateTransitionMessage(Message):
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        transition_date: typing.Optional[datetime.datetime] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
     ) -> None:
-        self.line_item_id = line_item_id
-        self.transition_date = transition_date
-        self.quantity = quantity
-        self.from_state = from_state
-        self.to_state = to_state
+        self.sequence_number = sequence_number
+        self.resource = resource
+        self.resource_version = resource_version
+        self.type = type
         super().__init__(
             id=id,
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="LineItemStateTransition",
         )
 
     def __repr__(self) -> str:
         return (
-            "LineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            "Message(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r)"
             % (
                 self.id,
                 self.version,
@@ -8374,19 +7528,7 @@ class LineItemStateTransitionMessage(Message):
                 self.resource,
                 self.resource_version,
                 self.type,
-                self.line_item_id,
-                self.transition_date,
-                self.quantity,
-                self.from_state,
-                self.to_state,
             )
-        )
-
-
-class LocalizedString(typing.Dict[(str, str)]):
-    def __repr__(self) -> str:
-        return "LocalizedString(%s)" % (
-            ", ".join(f"{k}={v!r}" for k, v in self.items())
         )
 
 
@@ -8711,294 +7853,6 @@ class Order(Resource):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class OrderBillingAddressSetMessage(Message):
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
-        self.address = address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderBillingAddressSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderBillingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.address,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCreatedMessage(Message):
-    order: typing.Optional["Order"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None,
-    ) -> None:
-        self.order = order
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderCreated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.order,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCustomerEmailSetMessage(Message):
-    email: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-    ) -> None:
-        self.email = email
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderCustomerEmailSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomerEmailSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, email=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.email,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCustomerSetMessage(Message):
-    customer: typing.Optional["CustomerReference"]
-    customer_group: typing.Optional["CustomerGroupReference"]
-    old_customer: typing.Optional["CustomerReference"]
-    old_customer_group: typing.Optional["CustomerGroupReference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        customer: typing.Optional["CustomerReference"] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-        old_customer: typing.Optional["CustomerReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None,
-    ) -> None:
-        self.customer = customer
-        self.customer_group = customer_group
-        self.old_customer = old_customer
-        self.old_customer_group = old_customer_group
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderCustomerSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomerSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, customer=%r, customer_group=%r, old_customer=%r, old_customer_group=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.customer,
-                self.customer_group,
-                self.old_customer,
-                self.old_customer_group,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderDeletedMessage(Message):
-    order: typing.Optional["Order"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None,
-    ) -> None:
-        self.order = order
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderDeleted",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.order,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderImportedMessage(Message):
-    order: typing.Optional["Order"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None,
-    ) -> None:
-        self.order = order
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderImported",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderImportedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.order,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderPagedQueryResponse(PagedQueryResponse):
     results: typing.Optional[typing.Sequence["Order"]]
 
@@ -9022,341 +7876,11 @@ class OrderPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderPaymentChangedMessage(Message):
-    payment_state: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        payment_state: typing.Optional[str] = None,
-    ) -> None:
-        self.payment_state = payment_state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderPaymentStateChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderPaymentChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment_state=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.payment_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderReturnInfoAddedMessage(Message):
-    return_info: typing.Optional["ReturnInfo"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        return_info: typing.Optional["ReturnInfo"] = None,
-    ) -> None:
-        self.return_info = return_info
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ReturnInfoAdded",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderReturnInfoAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, return_info=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.return_info,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderReturnShipmentStateChangedMessage(Message):
-    return_item_id: typing.Optional[str]
-    return_shipment_state: typing.Optional["ReturnShipmentState"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        return_shipment_state: typing.Optional["ReturnShipmentState"] = None,
-    ) -> None:
-        self.return_item_id = return_item_id
-        self.return_shipment_state = return_shipment_state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderReturnShipmentStateChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderReturnShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, return_item_id=%r, return_shipment_state=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.return_item_id,
-                self.return_shipment_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderShipmentStateChangedMessage(Message):
-    shipment_state: typing.Optional["ShipmentState"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ShipmentState"] = None,
-    ) -> None:
-        self.shipment_state = shipment_state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderShipmentStateChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, shipment_state=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.shipment_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderShippingAddressSetMessage(Message):
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
-        self.address = address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderShippingAddressSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderShippingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.address,
-            )
-        )
-
-
 class OrderState(enum.Enum):
     OPEN = "Open"
     CONFIRMED = "Confirmed"
     COMPLETE = "Complete"
     CANCELLED = "Cancelled"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderStateChangedMessage(Message):
-    order_state: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        order_state: typing.Optional[str] = None,
-    ) -> None:
-        self.order_state = order_state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderStateChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order_state=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.order_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderStateTransitionMessage(Message):
-    state: typing.Optional["StateReference"]
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None,
-    ) -> None:
-        self.state = state
-        self.force = force
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderStateTransition",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, state=%r, force=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.state,
-                self.force,
-            )
-        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -9408,268 +7932,6 @@ class OutOfStockError(ErrorObject):
             self.message,
             self.line_items,
             self.skus,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelAddedToDeliveryMessage(Message):
-    delivery: typing.Optional["Delivery"]
-    parcel: typing.Optional["Parcel"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-        parcel: typing.Optional["Parcel"] = None,
-    ) -> None:
-        self.delivery = delivery
-        self.parcel = parcel
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ParcelAddedToDelivery",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelAddedToDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery=%r, parcel=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery,
-                self.parcel,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelItemsUpdatedMessage(Message):
-    parcel_id: typing.Optional[str]
-    delivery_id: typing.Optional[str]
-    items: typing.Optional[typing.List["DeliveryItem"]]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
-    ) -> None:
-        self.parcel_id = parcel_id
-        self.delivery_id = delivery_id
-        self.items = items
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ParcelItemsUpdated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, parcel_id=%r, delivery_id=%r, items=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.parcel_id,
-                self.delivery_id,
-                self.items,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelMeasurementsUpdatedMessage(Message):
-    delivery_id: typing.Optional[str]
-    parcel_id: typing.Optional[str]
-    measurements: typing.Optional["ParcelMeasurements"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        measurements: typing.Optional["ParcelMeasurements"] = None,
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.parcel_id = parcel_id
-        self.measurements = measurements
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ParcelMeasurementsUpdated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelMeasurementsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, parcel_id=%r, measurements=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery_id,
-                self.parcel_id,
-                self.measurements,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelRemovedFromDeliveryMessage(Message):
-    delivery_id: typing.Optional[str]
-    parcel: typing.Optional["Parcel"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel: typing.Optional["Parcel"] = None,
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.parcel = parcel
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ParcelRemovedFromDelivery",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelRemovedFromDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, parcel=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery_id,
-                self.parcel,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelTrackingDataUpdatedMessage(Message):
-    delivery_id: typing.Optional[str]
-    parcel_id: typing.Optional[str]
-    tracking_data: typing.Optional["TrackingData"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        tracking_data: typing.Optional["TrackingData"] = None,
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.parcel_id = parcel_id
-        self.tracking_data = tracking_data
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ParcelTrackingDataUpdated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelTrackingDataUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, parcel_id=%r, tracking_data=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.delivery_id,
-                self.parcel_id,
-                self.tracking_data,
-            )
         )
 
 
@@ -9764,98 +8026,6 @@ class Payment(Resource):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentCreatedMessage(Message):
-    payment: typing.Optional["Payment"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        payment: typing.Optional["Payment"] = None,
-    ) -> None:
-        self.payment = payment
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="PaymentCreated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.payment,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentInteractionAddedMessage(Message):
-    interaction: typing.Optional["CustomFields"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        interaction: typing.Optional["CustomFields"] = None,
-    ) -> None:
-        self.interaction = interaction
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="PaymentInteractionAdded",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentInteractionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, interaction=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.interaction,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentPagedQueryResponse(PagedQueryResponse):
     results: typing.Optional[typing.Sequence["Payment"]]
 
@@ -9883,202 +8053,6 @@ class PaymentState(enum.Enum):
     PENDING = "Pending"
     CREDIT_OWED = "CreditOwed"
     PAID = "Paid"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentStatusInterfaceCodeSetMessage(Message):
-    payment_id: typing.Optional[str]
-    interface_code: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        payment_id: typing.Optional[str] = None,
-        interface_code: typing.Optional[str] = None,
-    ) -> None:
-        self.payment_id = payment_id
-        self.interface_code = interface_code
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="PaymentStatusInterfaceCodeSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentStatusInterfaceCodeSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment_id=%r, interface_code=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.payment_id,
-                self.interface_code,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentStatusStateTransitionMessage(Message):
-    state: typing.Optional["StateReference"]
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None,
-    ) -> None:
-        self.state = state
-        self.force = force
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="PaymentStatusStateTransition",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentStatusStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, state=%r, force=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.state,
-                self.force,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentTransactionAddedMessage(Message):
-    transaction: typing.Optional["Transaction"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        transaction: typing.Optional["Transaction"] = None,
-    ) -> None:
-        self.transaction = transaction
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="PaymentTransactionAdded",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentTransactionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, transaction=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.transaction,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentTransactionStateChangedMessage(Message):
-    transaction_id: typing.Optional[str]
-    state: typing.Optional["TransactionState"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None,
-    ) -> None:
-        self.transaction_id = transaction_id
-        self.state = state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="PaymentTransactionStateChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentTransactionStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, transaction_id=%r, state=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.transaction_id,
-                self.state,
-            )
-        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -10183,102 +8157,6 @@ class Product(Resource):
                 self.tax_category,
                 self.state,
                 self.review_rating_statistics,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductCreatedMessage(Message):
-    product_projection: typing.Optional["ProductProjection"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        product_projection: typing.Optional["ProductProjection"] = None,
-    ) -> None:
-        self.product_projection = product_projection
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductCreated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, product_projection=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.product_projection,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductDeletedMessage(Message):
-    removed_image_urls: typing.Optional[list]
-    current_projection: typing.Optional["ProductProjection"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        current_projection: typing.Optional["ProductProjection"] = None,
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        self.current_projection = current_projection
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductDeleted",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r, current_projection=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.removed_image_urls,
-                self.current_projection,
             )
         )
 
@@ -10446,60 +8324,6 @@ class ProductDiscountValueRelative(ProductDiscountValue):
         return "ProductDiscountValueRelative(type=%r, permyriad=%r)" % (
             self.type,
             self.permyriad,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductImageAddedMessage(Message):
-    variant_id: typing.Optional[int]
-    image: typing.Optional["Image"]
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-        image: typing.Optional["Image"] = None,
-        staged: typing.Optional[bool] = None,
-    ) -> None:
-        self.variant_id = variant_id
-        self.image = image
-        self.staged = staged
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductImageAdded",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductImageAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, variant_id=%r, image=%r, staged=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.variant_id,
-                self.image,
-                self.staged,
-            )
         )
 
 
@@ -10680,202 +8504,6 @@ class ProductPublishScope(enum.Enum):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class ProductPublishedMessage(Message):
-    removed_image_urls: typing.Optional[list]
-    product_projection: typing.Optional["ProductProjection"]
-    scope: typing.Optional["ProductPublishScope"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        product_projection: typing.Optional["ProductProjection"] = None,
-        scope: typing.Optional["ProductPublishScope"] = None,
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        self.product_projection = product_projection
-        self.scope = scope
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductPublished",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductPublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r, product_projection=%r, scope=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.removed_image_urls,
-                self.product_projection,
-                self.scope,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductRevertedStagedChangesMessage(Message):
-    removed_image_urls: typing.Optional[list]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductRevertedStagedChanges",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductRevertedStagedChangesMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.removed_image_urls,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductSlugChangedMessage(Message):
-    slug: typing.Optional["LocalizedString"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-    ) -> None:
-        self.slug = slug
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductSlugChanged",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductSlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, slug=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.slug,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductStateTransitionMessage(Message):
-    state: typing.Optional["StateReference"]
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None,
-    ) -> None:
-        self.state = state
-        self.force = force
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductStateTransition",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, state=%r, force=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.state,
-                self.force,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductType(Resource):
     key: typing.Optional[str]
     name: typing.Optional[str]
@@ -10973,47 +8601,6 @@ class ProductTypeUpdateAction(UpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class ProductUnpublishedMessage(Message):
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-    ) -> None:
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductUnpublished",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductUnpublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductUpdate(Update):
     actions: typing.Optional[list]
 
@@ -11045,56 +8632,6 @@ class ProductVariantChannelAvailabilityMap(
     def __repr__(self) -> str:
         return "ProductVariantChannelAvailabilityMap(%s)" % (
             ", ".join(f"{k}={v!r}" for k, v in self.items())
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductVariantDeletedMessage(Message):
-    removed_image_urls: typing.Optional[list]
-    variant: typing.Optional["ProductVariant"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        variant: typing.Optional["ProductVariant"] = None,
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        self.variant = variant
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductVariantDeleted",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductVariantDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r, variant=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.removed_image_urls,
-                self.variant,
-            )
         )
 
 
@@ -11442,52 +8979,6 @@ class Review(Resource):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewCreatedMessage(Message):
-    review: typing.Optional["Review"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        review: typing.Optional["Review"] = None,
-    ) -> None:
-        self.review = review
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ReviewCreated",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, review=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.review,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewPagedQueryResponse(PagedQueryResponse):
     results: typing.Optional[typing.Sequence["Review"]]
 
@@ -11508,130 +8999,6 @@ class ReviewPagedQueryResponse(PagedQueryResponse):
             self.total,
             self.offset,
             self.results,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewRatingSetMessage(Message):
-    old_rating: typing.Optional[int]
-    new_rating: typing.Optional[int]
-    included_in_statistics: typing.Optional[bool]
-    target: typing.Optional["Reference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        old_rating: typing.Optional[int] = None,
-        new_rating: typing.Optional[int] = None,
-        included_in_statistics: typing.Optional[bool] = None,
-        target: typing.Optional["Reference"] = None,
-    ) -> None:
-        self.old_rating = old_rating
-        self.new_rating = new_rating
-        self.included_in_statistics = included_in_statistics
-        self.target = target
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ReviewRatingSet",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewRatingSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, old_rating=%r, new_rating=%r, included_in_statistics=%r, target=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.old_rating,
-                self.new_rating,
-                self.included_in_statistics,
-                self.target,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewStateTransitionMessage(Message):
-    old_state: typing.Optional["StateReference"]
-    new_state: typing.Optional["StateReference"]
-    old_included_in_statistics: typing.Optional[bool]
-    new_included_in_statistics: typing.Optional[bool]
-    target: typing.Optional["Reference"]
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        old_state: typing.Optional["StateReference"] = None,
-        new_state: typing.Optional["StateReference"] = None,
-        old_included_in_statistics: typing.Optional[bool] = None,
-        new_included_in_statistics: typing.Optional[bool] = None,
-        target: typing.Optional["Reference"] = None,
-        force: typing.Optional[bool] = None,
-    ) -> None:
-        self.old_state = old_state
-        self.new_state = new_state
-        self.old_included_in_statistics = old_included_in_statistics
-        self.new_included_in_statistics = new_included_in_statistics
-        self.target = target
-        self.force = force
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ReviewStateTransition",
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, old_state=%r, new_state=%r, old_included_in_statistics=%r, new_included_in_statistics=%r, target=%r, force=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.old_state,
-                self.new_state,
-                self.old_included_in_statistics,
-                self.new_included_in_statistics,
-                self.target,
-                self.force,
-            )
         )
 
 
@@ -14333,6 +11700,52 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class CategoryCreatedMessage(Message):
+    category: typing.Optional["Category"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        category: typing.Optional["Category"] = None,
+    ) -> None:
+        self.category = category
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CategoryCreated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CategoryCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, category=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.category,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class CategoryReference(Reference):
     obj: typing.Optional["Category"]
 
@@ -14703,6 +12116,52 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class CategorySlugChangedMessage(Message):
+    slug: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        slug: typing.Optional["LocalizedString"] = None,
+    ) -> None:
+        self.slug = slug
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CategorySlugChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CategorySlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, slug=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.slug,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class CentPrecisionMoney(TypedMoney):
     def __init__(
         self,
@@ -14944,6 +12403,68 @@ class ChannelSetRolesAction(ChannelUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class CustomLineItemStateTransitionMessage(Message):
+    custom_line_item_id: typing.Optional[str]
+    transition_date: typing.Optional[datetime.datetime]
+    quantity: typing.Optional[int]
+    from_state: typing.Optional["StateReference"]
+    to_state: typing.Optional["StateReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        custom_line_item_id: typing.Optional[str] = None,
+        transition_date: typing.Optional[datetime.datetime] = None,
+        quantity: typing.Optional[int] = None,
+        from_state: typing.Optional["StateReference"] = None,
+        to_state: typing.Optional["StateReference"] = None,
+    ) -> None:
+        self.custom_line_item_id = custom_line_item_id
+        self.transition_date = transition_date
+        self.quantity = quantity
+        self.from_state = from_state
+        self.to_state = to_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomLineItemStateTransition",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomLineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, custom_line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.custom_line_item_id,
+                self.transition_date,
+                self.quantity,
+                self.from_state,
+                self.to_state,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomObjectReference(Reference):
     obj: typing.Optional["CustomObject"]
 
@@ -15028,6 +12549,144 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerAddressAddedMessage(Message):
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+    ) -> None:
+        self.address = address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerAddressAdded",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerAddressAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerAddressChangedMessage(Message):
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+    ) -> None:
+        self.address = address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerAddressChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerAddressChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerAddressRemovedMessage(Message):
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+    ) -> None:
+        self.address = address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerAddressRemoved",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerAddressRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerChangeAddressAction(CustomerUpdateAction):
     address_id: typing.Optional[str]
     address: typing.Optional["Address"]
@@ -15065,6 +12724,231 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
         return "CustomerChangeEmailAction(action=%r, email=%r)" % (
             self.action,
             self.email,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerCompanyNameSetMessage(Message):
+    company_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        company_name: typing.Optional[str] = None,
+    ) -> None:
+        self.company_name = company_name
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerCompanyNameSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerCompanyNameSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, company_name=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.company_name,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerCreatedMessage(Message):
+    customer: typing.Optional["Customer"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        customer: typing.Optional["Customer"] = None,
+    ) -> None:
+        self.customer = customer
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerCreated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, customer=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.customer,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerDateOfBirthSetMessage(Message):
+    date_of_birth: typing.Optional[datetime.date]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None,
+    ) -> None:
+        self.date_of_birth = date_of_birth
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerDateOfBirthSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerDateOfBirthSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, date_of_birth=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.date_of_birth,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerEmailChangedMessage(Message):
+    email: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+    ) -> None:
+        self.email = email
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerEmailChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerEmailChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, email=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.email,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerEmailVerifiedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+    ) -> None:
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerEmailVerified",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerEmailVerifiedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+            )
         )
 
 
@@ -15169,6 +13053,52 @@ class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
 
     def __repr__(self) -> str:
         return "CustomerGroupSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerGroupSetMessage(Message):
+    customer_group: typing.Optional["CustomerGroupReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+    ) -> None:
+        self.customer_group = customer_group
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="CustomerGroupSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerGroupSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, customer_group=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.customer_group,
+            )
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -15588,6 +13518,198 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
         return "CustomerSetVatIdAction(action=%r, vat_id=%r)" % (
             self.action,
             self.vat_id,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryAddedMessage(Message):
+    delivery: typing.Optional["Delivery"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery: typing.Optional["Delivery"] = None,
+    ) -> None:
+        self.delivery = delivery
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="DeliveryAdded",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "DeliveryAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryAddressSetMessage(Message):
+    delivery_id: typing.Optional[str]
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.address = address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="DeliveryAddressSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "DeliveryAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, address=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery_id,
+                self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryItemsUpdatedMessage(Message):
+    delivery_id: typing.Optional[str]
+    items: typing.Optional[typing.List["DeliveryItem"]]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.items = items
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="DeliveryItemsUpdated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "DeliveryItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, items=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery_id,
+                self.items,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryRemovedMessage(Message):
+    delivery: typing.Optional["Delivery"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery: typing.Optional["Delivery"] = None,
+    ) -> None:
+        self.delivery = delivery
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="DeliveryRemoved",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "DeliveryRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery,
+            )
         )
 
 
@@ -16015,6 +14137,56 @@ class InventoryChangeQuantityAction(InventoryUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class InventoryEntryDeletedMessage(Message):
+    sku: typing.Optional[str]
+    supply_channel: typing.Optional["ChannelReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        sku: typing.Optional[str] = None,
+        supply_channel: typing.Optional["ChannelReference"] = None,
+    ) -> None:
+        self.sku = sku
+        self.supply_channel = supply_channel
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="InventoryEntryDeleted",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "InventoryEntryDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, sku=%r, supply_channel=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.sku,
+                self.supply_channel,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryEntryReference(Reference):
     obj: typing.Optional["InventoryEntry"]
 
@@ -16167,6 +14339,68 @@ class InventorySetSupplyChannelAction(InventoryUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class LineItemStateTransitionMessage(Message):
+    line_item_id: typing.Optional[str]
+    transition_date: typing.Optional[datetime.datetime]
+    quantity: typing.Optional[int]
+    from_state: typing.Optional["StateReference"]
+    to_state: typing.Optional["StateReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        transition_date: typing.Optional[datetime.datetime] = None,
+        quantity: typing.Optional[int] = None,
+        from_state: typing.Optional["StateReference"] = None,
+        to_state: typing.Optional["StateReference"] = None,
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.transition_date = transition_date
+        self.quantity = quantity
+        self.from_state = from_state
+        self.to_state = to_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="LineItemStateTransition",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "LineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.line_item_id,
+                self.transition_date,
+                self.quantity,
+                self.from_state,
+                self.to_state,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderAddDeliveryAction(OrderUpdateAction):
     items: typing.Optional[typing.List["DeliveryItem"]]
     address: typing.Optional["Address"]
@@ -16296,6 +14530,52 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class OrderBillingAddressSetMessage(Message):
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+    ) -> None:
+        self.address = address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderBillingAddressSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderBillingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderChangeOrderStateAction(OrderUpdateAction):
     order_state: typing.Optional["OrderState"]
 
@@ -16356,6 +14636,202 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCreatedMessage(Message):
+    order: typing.Optional["Order"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        order: typing.Optional["Order"] = None,
+    ) -> None:
+        self.order = order
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderCreated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.order,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomerEmailSetMessage(Message):
+    email: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+    ) -> None:
+        self.email = email
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderCustomerEmailSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomerEmailSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, email=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.email,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomerSetMessage(Message):
+    customer: typing.Optional["CustomerReference"]
+    customer_group: typing.Optional["CustomerGroupReference"]
+    old_customer: typing.Optional["CustomerReference"]
+    old_customer_group: typing.Optional["CustomerGroupReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        old_customer: typing.Optional["CustomerReference"] = None,
+        old_customer_group: typing.Optional["CustomerGroupReference"] = None,
+    ) -> None:
+        self.customer = customer
+        self.customer_group = customer_group
+        self.old_customer = old_customer
+        self.old_customer_group = old_customer_group
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderCustomerSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomerSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, customer=%r, customer_group=%r, old_customer=%r, old_customer_group=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.customer,
+                self.customer_group,
+                self.old_customer,
+                self.old_customer_group,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDeletedMessage(Message):
+    order: typing.Optional["Order"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        order: typing.Optional["Order"] = None,
+    ) -> None:
+        self.order = order
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderDeleted",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.order,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderImportCustomLineItemStateAction(OrderUpdateAction):
     custom_line_item_id: typing.Optional[str]
     state: typing.Optional[typing.List["ItemState"]]
@@ -16398,6 +14874,98 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
         return (
             "OrderImportLineItemStateAction(action=%r, line_item_id=%r, state=%r)"
             % (self.action, self.line_item_id, self.state)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderImportedMessage(Message):
+    order: typing.Optional["Order"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        order: typing.Optional["Order"] = None,
+    ) -> None:
+        self.order = order
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderImported",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderImportedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.order,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderPaymentChangedMessage(Message):
+    payment_state: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        payment_state: typing.Optional[str] = None,
+    ) -> None:
+        self.payment_state = payment_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderPaymentStateChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderPaymentChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.payment_state,
+            )
         )
 
 
@@ -16502,6 +15070,102 @@ class OrderRemovePaymentAction(OrderUpdateAction):
         return "OrderRemovePaymentAction(action=%r, payment=%r)" % (
             self.action,
             self.payment,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderReturnInfoAddedMessage(Message):
+    return_info: typing.Optional["ReturnInfo"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        return_info: typing.Optional["ReturnInfo"] = None,
+    ) -> None:
+        self.return_info = return_info
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ReturnInfoAdded",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderReturnInfoAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, return_info=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.return_info,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderReturnShipmentStateChangedMessage(Message):
+    return_item_id: typing.Optional[str]
+    return_shipment_state: typing.Optional["ReturnShipmentState"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        return_item_id: typing.Optional[str] = None,
+        return_shipment_state: typing.Optional["ReturnShipmentState"] = None,
+    ) -> None:
+        self.return_item_id = return_item_id
+        self.return_shipment_state = return_shipment_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderReturnShipmentStateChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderReturnShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, return_item_id=%r, return_shipment_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.return_item_id,
+                self.return_shipment_state,
+            )
         )
 
 
@@ -16981,6 +15645,194 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShipmentStateChangedMessage(Message):
+    shipment_state: typing.Optional["ShipmentState"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        shipment_state: typing.Optional["ShipmentState"] = None,
+    ) -> None:
+        self.shipment_state = shipment_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderShipmentStateChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, shipment_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.shipment_state,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingAddressSetMessage(Message):
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+    ) -> None:
+        self.address = address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderShippingAddressSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderStateChangedMessage(Message):
+    order_state: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        order_state: typing.Optional[str] = None,
+    ) -> None:
+        self.order_state = order_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderStateChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.order_state,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderStateTransitionMessage(Message):
+    state: typing.Optional["StateReference"]
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        state: typing.Optional["StateReference"] = None,
+        force: typing.Optional[bool] = None,
+    ) -> None:
+        self.state = state
+        self.force = force
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="OrderStateTransition",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, state=%r, force=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.state,
+                self.force,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
     custom_line_item_id: typing.Optional[str]
     quantity: typing.Optional[int]
@@ -17129,6 +15981,268 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelAddedToDeliveryMessage(Message):
+    delivery: typing.Optional["Delivery"]
+    parcel: typing.Optional["Parcel"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery: typing.Optional["Delivery"] = None,
+        parcel: typing.Optional["Parcel"] = None,
+    ) -> None:
+        self.delivery = delivery
+        self.parcel = parcel
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ParcelAddedToDelivery",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelAddedToDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery=%r, parcel=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery,
+                self.parcel,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelItemsUpdatedMessage(Message):
+    parcel_id: typing.Optional[str]
+    delivery_id: typing.Optional[str]
+    items: typing.Optional[typing.List["DeliveryItem"]]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        parcel_id: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+    ) -> None:
+        self.parcel_id = parcel_id
+        self.delivery_id = delivery_id
+        self.items = items
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ParcelItemsUpdated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, parcel_id=%r, delivery_id=%r, items=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.parcel_id,
+                self.delivery_id,
+                self.items,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelMeasurementsUpdatedMessage(Message):
+    delivery_id: typing.Optional[str]
+    parcel_id: typing.Optional[str]
+    measurements: typing.Optional["ParcelMeasurements"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        parcel_id: typing.Optional[str] = None,
+        measurements: typing.Optional["ParcelMeasurements"] = None,
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.parcel_id = parcel_id
+        self.measurements = measurements
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ParcelMeasurementsUpdated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelMeasurementsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, parcel_id=%r, measurements=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery_id,
+                self.parcel_id,
+                self.measurements,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelRemovedFromDeliveryMessage(Message):
+    delivery_id: typing.Optional[str]
+    parcel: typing.Optional["Parcel"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        parcel: typing.Optional["Parcel"] = None,
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.parcel = parcel
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ParcelRemovedFromDelivery",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelRemovedFromDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, parcel=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery_id,
+                self.parcel,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelTrackingDataUpdatedMessage(Message):
+    delivery_id: typing.Optional[str]
+    parcel_id: typing.Optional[str]
+    tracking_data: typing.Optional["TrackingData"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        parcel_id: typing.Optional[str] = None,
+        tracking_data: typing.Optional["TrackingData"] = None,
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.parcel_id = parcel_id
+        self.tracking_data = tracking_data
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ParcelTrackingDataUpdated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelTrackingDataUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, parcel_id=%r, tracking_data=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.delivery_id,
+                self.parcel_id,
+                self.tracking_data,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
     type: typing.Optional["TypeReference"]
     fields: typing.Optional["FieldContainer"]
@@ -17258,6 +16372,98 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
         return (
             "PaymentChangeTransactionTimestampAction(action=%r, timestamp=%r, transaction_id=%r)"
             % (self.action, self.timestamp, self.transaction_id)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentCreatedMessage(Message):
+    payment: typing.Optional["Payment"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        payment: typing.Optional["Payment"] = None,
+    ) -> None:
+        self.payment = payment
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="PaymentCreated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.payment,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentInteractionAddedMessage(Message):
+    interaction: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        interaction: typing.Optional["CustomFields"] = None,
+    ) -> None:
+        self.interaction = interaction
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="PaymentInteractionAdded",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentInteractionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, interaction=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.interaction,
+            )
         )
 
 
@@ -17588,6 +16794,202 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
         return "PaymentSetStatusInterfaceTextAction(action=%r, interface_text=%r)" % (
             self.action,
             self.interface_text,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentStatusInterfaceCodeSetMessage(Message):
+    payment_id: typing.Optional[str]
+    interface_code: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        payment_id: typing.Optional[str] = None,
+        interface_code: typing.Optional[str] = None,
+    ) -> None:
+        self.payment_id = payment_id
+        self.interface_code = interface_code
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="PaymentStatusInterfaceCodeSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentStatusInterfaceCodeSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment_id=%r, interface_code=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.payment_id,
+                self.interface_code,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentStatusStateTransitionMessage(Message):
+    state: typing.Optional["StateReference"]
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        state: typing.Optional["StateReference"] = None,
+        force: typing.Optional[bool] = None,
+    ) -> None:
+        self.state = state
+        self.force = force
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="PaymentStatusStateTransition",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentStatusStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, state=%r, force=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.state,
+                self.force,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentTransactionAddedMessage(Message):
+    transaction: typing.Optional["Transaction"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        transaction: typing.Optional["Transaction"] = None,
+    ) -> None:
+        self.transaction = transaction
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="PaymentTransactionAdded",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentTransactionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, transaction=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.transaction,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentTransactionStateChangedMessage(Message):
+    transaction_id: typing.Optional[str]
+    state: typing.Optional["TransactionState"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        transaction_id: typing.Optional[str] = None,
+        state: typing.Optional["TransactionState"] = None,
+    ) -> None:
+        self.transaction_id = transaction_id
+        self.state = state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="PaymentTransactionStateChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentTransactionStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, transaction_id=%r, state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.transaction_id,
+                self.state,
+            )
         )
 
 
@@ -17954,6 +17356,102 @@ class ProductChangeSlugAction(ProductUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ProductCreatedMessage(Message):
+    product_projection: typing.Optional["ProductProjection"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        product_projection: typing.Optional["ProductProjection"] = None,
+    ) -> None:
+        self.product_projection = product_projection
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductCreated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, product_projection=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.product_projection,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductDeletedMessage(Message):
+    removed_image_urls: typing.Optional[list]
+    current_projection: typing.Optional["ProductProjection"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+        current_projection: typing.Optional["ProductProjection"] = None,
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        self.current_projection = current_projection
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductDeleted",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r, current_projection=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.removed_image_urls,
+                self.current_projection,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
     is_active: typing.Optional[bool]
 
@@ -18161,6 +17659,60 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ProductImageAddedMessage(Message):
+    variant_id: typing.Optional[int]
+    image: typing.Optional["Image"]
+    staged: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        image: typing.Optional["Image"] = None,
+        staged: typing.Optional[bool] = None,
+    ) -> None:
+        self.variant_id = variant_id
+        self.image = image
+        self.staged = staged
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductImageAdded",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductImageAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, variant_id=%r, image=%r, staged=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.variant_id,
+                self.image,
+                self.staged,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductLegacySetSkuAction(ProductUpdateAction):
     sku: typing.Optional[str]
     variant_id: typing.Optional[int]
@@ -18238,6 +17790,60 @@ class ProductPublishAction(ProductUpdateAction):
 
     def __repr__(self) -> str:
         return "ProductPublishAction(action=%r, scope=%r)" % (self.action, self.scope)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductPublishedMessage(Message):
+    removed_image_urls: typing.Optional[list]
+    product_projection: typing.Optional["ProductProjection"]
+    scope: typing.Optional["ProductPublishScope"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+        product_projection: typing.Optional["ProductProjection"] = None,
+        scope: typing.Optional["ProductPublishScope"] = None,
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        self.product_projection = product_projection
+        self.scope = scope
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductPublished",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductPublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r, product_projection=%r, scope=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.removed_image_urls,
+                self.product_projection,
+                self.scope,
+            )
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -18434,6 +18040,52 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
         return "ProductRevertStagedVariantChangesAction(action=%r, variant_id=%r)" % (
             self.action,
             self.variant_id,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductRevertedStagedChangesMessage(Message):
+    removed_image_urls: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductRevertedStagedChanges",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductRevertedStagedChangesMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.removed_image_urls,
+            )
         )
 
 
@@ -19151,6 +18803,102 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ProductSlugChangedMessage(Message):
+    slug: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        slug: typing.Optional["LocalizedString"] = None,
+    ) -> None:
+        self.slug = slug
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductSlugChanged",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductSlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, slug=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.slug,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductStateTransitionMessage(Message):
+    state: typing.Optional["StateReference"]
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        state: typing.Optional["StateReference"] = None,
+        force: typing.Optional[bool] = None,
+    ) -> None:
+        self.state = state
+        self.force = force
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductStateTransition",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, state=%r, force=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.state,
+                self.force,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTransitionStateAction(ProductUpdateAction):
     state: typing.Optional["StateReference"]
     force: typing.Optional[bool]
@@ -19641,6 +19389,97 @@ class ProductUnpublishAction(ProductUpdateAction):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ProductUnpublishedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+    ) -> None:
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductUnpublished",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductUnpublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductVariantDeletedMessage(Message):
+    removed_image_urls: typing.Optional[list]
+    variant: typing.Optional["ProductVariant"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+        variant: typing.Optional["ProductVariant"] = None,
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        self.variant = variant
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductVariantDeleted",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductVariantDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, removed_image_urls=%r, variant=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.removed_image_urls,
+                self.variant,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeCountriesAction(ProjectUpdateAction):
     countries: typing.Optional[typing.List["str"]]
 
@@ -19751,6 +19590,110 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
         return (
             "ProjectSetShippingRateInputTypeAction(action=%r, shipping_rate_input_type=%r)"
             % (self.action, self.shipping_rate_input_type)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewCreatedMessage(Message):
+    review: typing.Optional["Review"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        review: typing.Optional["Review"] = None,
+    ) -> None:
+        self.review = review
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ReviewCreated",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, review=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.review,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewRatingSetMessage(Message):
+    old_rating: typing.Optional[int]
+    new_rating: typing.Optional[int]
+    included_in_statistics: typing.Optional[bool]
+    target: typing.Optional["Reference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        old_rating: typing.Optional[int] = None,
+        new_rating: typing.Optional[int] = None,
+        included_in_statistics: typing.Optional[bool] = None,
+        target: typing.Optional["Reference"] = None,
+    ) -> None:
+        self.old_rating = old_rating
+        self.new_rating = new_rating
+        self.included_in_statistics = included_in_statistics
+        self.target = target
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ReviewRatingSet",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewRatingSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, old_rating=%r, new_rating=%r, included_in_statistics=%r, target=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.old_rating,
+                self.new_rating,
+                self.included_in_statistics,
+                self.target,
+            )
         )
 
 
@@ -19966,6 +19909,72 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
     def __repr__(self) -> str:
         return "ReviewSetTitleAction(action=%r, title=%r)" % (self.action, self.title)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewStateTransitionMessage(Message):
+    old_state: typing.Optional["StateReference"]
+    new_state: typing.Optional["StateReference"]
+    old_included_in_statistics: typing.Optional[bool]
+    new_included_in_statistics: typing.Optional[bool]
+    target: typing.Optional["Reference"]
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        old_state: typing.Optional["StateReference"] = None,
+        new_state: typing.Optional["StateReference"] = None,
+        old_included_in_statistics: typing.Optional[bool] = None,
+        new_included_in_statistics: typing.Optional[bool] = None,
+        target: typing.Optional["Reference"] = None,
+        force: typing.Optional[bool] = None,
+    ) -> None:
+        self.old_state = old_state
+        self.new_state = new_state
+        self.old_included_in_statistics = old_included_in_statistics
+        self.new_included_in_statistics = new_included_in_statistics
+        self.target = target
+        self.force = force
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ReviewStateTransition",
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, old_state=%r, new_state=%r, old_included_in_statistics=%r, new_included_in_statistics=%r, target=%r, force=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.old_state,
+                self.new_state,
+                self.old_included_in_statistics,
+                self.new_included_in_statistics,
+                self.target,
+                self.force,
+            )
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)

@@ -1274,6 +1274,7 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "InvalidCredentials": "commercetools.schemas.InvalidCredentialsErrorSchema",
                 "InvalidCurrentPassword": "commercetools.schemas.InvalidCurrentPasswordErrorSchema",
                 "InvalidField": "commercetools.schemas.InvalidFieldErrorSchema",
+                "InvalidInput": "commercetools.schemas.InvalidInputErrorSchema",
                 "InvalidItemShippingDetails": "commercetools.schemas.InvalidItemShippingDetailsErrorSchema",
                 "InvalidOperation": "commercetools.schemas.InvalidOperationErrorSchema",
                 "InvalidSubject": "commercetools.schemas.InvalidSubjectErrorSchema",
@@ -1974,58 +1975,6 @@ class MessageConfigurationSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.MessageConfiguration(**data)
-
-
-class MessageSchema(marshmallow.Schema):
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-    sequence_number = marshmallow.fields.Integer(
-        allow_none=True, data_key="sequenceNumber"
-    )
-    resource = helpers.Discriminator(
-        discriminator_field="typeId",
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas.CartReferenceSchema",
-            "category": "commercetools.schemas.CategoryReferenceSchema",
-            "channel": "commercetools.schemas.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
-            "order": "commercetools.schemas.OrderReferenceSchema",
-            "payment": "commercetools.schemas.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas.ProductReferenceSchema",
-            "review": "commercetools.schemas.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas.StateReferenceSchema",
-            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas.TypeReferenceSchema",
-            "zone": "commercetools.schemas.ZoneReferenceSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    resource_version = marshmallow.fields.Integer(
-        allow_none=True, data_key="resourceVersion"
-    )
-    type = marshmallow.fields.String(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.Message(**data)
 
 
 class MessageSubscriptionSchema(marshmallow.Schema):
@@ -5385,22 +5334,6 @@ class CartValueTypeSchema(ShippingRateInputTypeSchema):
         return types.CartValueType(**data)
 
 
-class CategoryCreatedMessageSchema(MessageSchema):
-    category = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CategorySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CategoryCreatedMessage(**data)
-
-
 class CategoryPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategorySchema",
@@ -5467,18 +5400,6 @@ class CategorySchema(ResourceSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.Category(**data)
-
-
-class CategorySlugChangedMessageSchema(MessageSchema):
-    slug = LocalizedStringField(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CategorySlugChangedMessage(**data)
 
 
 class CategoryUpdateActionSchema(UpdateActionSchema):
@@ -5827,36 +5748,6 @@ class CustomFieldTimeTypeSchema(FieldTypeSchema):
         return types.CustomFieldTimeType(**data)
 
 
-class CustomLineItemStateTransitionMessageSchema(MessageSchema):
-    custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
-    )
-    transition_date = marshmallow.fields.DateTime(
-        allow_none=True, data_key="transitionDate"
-    )
-    quantity = marshmallow.fields.Integer(allow_none=True)
-    from_state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="fromState",
-    )
-    to_state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="toState",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomLineItemStateTransitionMessage(**data)
-
-
 class CustomObjectPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomObjectSchema",
@@ -5898,116 +5789,6 @@ class CustomTokenizerSchema(SuggestTokenizerSchema):
         return types.CustomTokenizer(**data)
 
 
-class CustomerAddressAddedMessageSchema(MessageSchema):
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerAddressAddedMessage(**data)
-
-
-class CustomerAddressChangedMessageSchema(MessageSchema):
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerAddressChangedMessage(**data)
-
-
-class CustomerAddressRemovedMessageSchema(MessageSchema):
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerAddressRemovedMessage(**data)
-
-
-class CustomerCompanyNameSetMessageSchema(MessageSchema):
-    company_name = marshmallow.fields.String(allow_none=True, data_key="companyName")
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerCompanyNameSetMessage(**data)
-
-
-class CustomerCreatedMessageSchema(MessageSchema):
-    customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerCreatedMessage(**data)
-
-
-class CustomerDateOfBirthSetMessageSchema(MessageSchema):
-    date_of_birth = marshmallow.fields.Date(allow_none=True, data_key="dateOfBirth")
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerDateOfBirthSetMessage(**data)
-
-
-class CustomerEmailChangedMessageSchema(MessageSchema):
-    email = marshmallow.fields.String(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerEmailChangedMessage(**data)
-
-
-class CustomerEmailVerifiedMessageSchema(MessageSchema):
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerEmailVerifiedMessage(**data)
-
-
 class CustomerGroupPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerGroupSchema",
@@ -6040,23 +5821,6 @@ class CustomerGroupSchema(ResourceSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.CustomerGroup(**data)
-
-
-class CustomerGroupSetMessageSchema(MessageSchema):
-    customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerGroupReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="customerGroup",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.CustomerGroupSetMessage(**data)
 
 
 class CustomerGroupUpdateActionSchema(UpdateActionSchema):
@@ -6234,74 +5998,6 @@ class CustomerUpdateSchema(UpdateSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.CustomerUpdate(**data)
-
-
-class DeliveryAddedMessageSchema(MessageSchema):
-    delivery = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliverySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.DeliveryAddedMessage(**data)
-
-
-class DeliveryAddressSetMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.DeliveryAddressSetMessage(**data)
-
-
-class DeliveryItemsUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
-    items = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliveryItemSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.DeliveryItemsUpdatedMessage(**data)
-
-
-class DeliveryRemovedMessageSchema(MessageSchema):
-    delivery = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliverySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.DeliveryRemovedMessage(**data)
 
 
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
@@ -6758,6 +6454,16 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
         return types.InvalidFieldError(**data)
 
 
+class InvalidInputErrorSchema(ErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.InvalidInputError(**data)
+
+
 class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
     subject = marshmallow.fields.String(allow_none=True)
     item_id = marshmallow.fields.String(allow_none=True, data_key="itemId")
@@ -6799,24 +6505,6 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
     def post_load(self, data):
         del data["code"]
         return types.InvalidTokenError(**data)
-
-
-class InventoryEntryDeletedMessageSchema(MessageSchema):
-    sku = marshmallow.fields.String(allow_none=True)
-    supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ChannelReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="supplyChannel",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.InventoryEntryDeletedMessage(**data)
 
 
 class InventoryEntrySchema(ResourceSchema):
@@ -6921,34 +6609,6 @@ class IronMqDestinationSchema(DestinationSchema):
         return types.IronMqDestination(**data)
 
 
-class LineItemStateTransitionMessageSchema(MessageSchema):
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
-    transition_date = marshmallow.fields.DateTime(
-        allow_none=True, data_key="transitionDate"
-    )
-    quantity = marshmallow.fields.Integer(allow_none=True)
-    from_state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="fromState",
-    )
-    to_state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="toState",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.LineItemStateTransitionMessage(**data)
-
-
 class MessageDeliverySchema(SubscriptionDeliverySchema):
     id = marshmallow.fields.String(allow_none=True)
     version = marshmallow.fields.Integer(allow_none=True)
@@ -7050,6 +6710,52 @@ class MessagePagedQueryResponseSchema(PagedQueryResponseSchema):
         return types.MessagePagedQueryResponse(**data)
 
 
+class MessageSchema(ResourceSchema):
+    sequence_number = marshmallow.fields.Integer(
+        allow_none=True, data_key="sequenceNumber"
+    )
+    resource = helpers.Discriminator(
+        discriminator_field="typeId",
+        discriminator_schemas={
+            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
+            "cart": "commercetools.schemas.CartReferenceSchema",
+            "category": "commercetools.schemas.CategoryReferenceSchema",
+            "channel": "commercetools.schemas.ChannelReferenceSchema",
+            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
+            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
+            "customer": "commercetools.schemas.CustomerReferenceSchema",
+            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
+            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
+            "order": "commercetools.schemas.OrderReferenceSchema",
+            "payment": "commercetools.schemas.PaymentReferenceSchema",
+            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
+            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
+            "product": "commercetools.schemas.ProductReferenceSchema",
+            "review": "commercetools.schemas.ReviewReferenceSchema",
+            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
+            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
+            "state": "commercetools.schemas.StateReferenceSchema",
+            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
+            "type": "commercetools.schemas.TypeReferenceSchema",
+            "zone": "commercetools.schemas.ZoneReferenceSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    resource_version = marshmallow.fields.Integer(
+        allow_none=True, data_key="resourceVersion"
+    )
+    type = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.Message(**data)
+
+
 class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
     predicate = marshmallow.fields.String(allow_none=True)
     trigger_quantity = marshmallow.fields.Integer(
@@ -7098,120 +6804,6 @@ class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
         return types.MultiBuyLineItemsTarget(**data)
 
 
-class OrderBillingAddressSetMessageSchema(MessageSchema):
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderBillingAddressSetMessage(**data)
-
-
-class OrderCreatedMessageSchema(MessageSchema):
-    order = marshmallow.fields.Nested(
-        nested="commercetools.schemas.OrderSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderCreatedMessage(**data)
-
-
-class OrderCustomerEmailSetMessageSchema(MessageSchema):
-    email = marshmallow.fields.String(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderCustomerEmailSetMessage(**data)
-
-
-class OrderCustomerSetMessageSchema(MessageSchema):
-    customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-    )
-    customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerGroupReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="customerGroup",
-    )
-    old_customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="oldCustomer",
-    )
-    old_customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomerGroupReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="oldCustomerGroup",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderCustomerSetMessage(**data)
-
-
-class OrderDeletedMessageSchema(MessageSchema):
-    order = marshmallow.fields.Nested(
-        nested="commercetools.schemas.OrderSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderDeletedMessage(**data)
-
-
-class OrderImportedMessageSchema(MessageSchema):
-    order = marshmallow.fields.Nested(
-        nested="commercetools.schemas.OrderSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderImportedMessage(**data)
-
-
 class OrderPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.OrderSchema",
@@ -7226,50 +6818,6 @@ class OrderPagedQueryResponseSchema(PagedQueryResponseSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.OrderPagedQueryResponse(**data)
-
-
-class OrderPaymentChangedMessageSchema(MessageSchema):
-    payment_state = marshmallow.fields.String(allow_none=True, data_key="paymentState")
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderPaymentChangedMessage(**data)
-
-
-class OrderReturnInfoAddedMessageSchema(MessageSchema):
-    return_info = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ReturnInfoSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="returnInfo",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderReturnInfoAddedMessage(**data)
-
-
-class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
-    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
-    return_shipment_state = marshmallow_enum.EnumField(
-        types.ReturnShipmentState, by_value=True, data_key="returnShipmentState"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderReturnShipmentStateChangedMessage(**data)
 
 
 class OrderSchema(ResourceSchema):
@@ -7449,65 +6997,6 @@ class OrderSchema(ResourceSchema):
         return types.Order(**data)
 
 
-class OrderShipmentStateChangedMessageSchema(MessageSchema):
-    shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, data_key="shipmentState"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderShipmentStateChangedMessage(**data)
-
-
-class OrderShippingAddressSetMessageSchema(MessageSchema):
-    address = marshmallow.fields.Nested(
-        nested="commercetools.schemas.AddressSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderShippingAddressSetMessage(**data)
-
-
-class OrderStateChangedMessageSchema(MessageSchema):
-    order_state = marshmallow.fields.String(allow_none=True, data_key="orderState")
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderStateChangedMessage(**data)
-
-
-class OrderStateTransitionMessageSchema(MessageSchema):
-    state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    force = marshmallow.fields.Bool(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.OrderStateTransitionMessage(**data)
-
-
 class OrderUpdateActionSchema(UpdateActionSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7591,136 +7080,6 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
     def post_load(self, data):
         del data["code"]
         return types.OutOfStockError(**data)
-
-
-class ParcelAddedToDeliveryMessageSchema(MessageSchema):
-    delivery = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliverySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    parcel = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ParcelSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ParcelAddedToDeliveryMessage(**data)
-
-
-class ParcelItemsUpdatedMessageSchema(MessageSchema):
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    items = marshmallow.fields.Nested(
-        nested="commercetools.schemas.DeliveryItemSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ParcelItemsUpdatedMessage(**data)
-
-
-class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
-    measurements = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ParcelMeasurementsSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ParcelMeasurementsUpdatedMessage(**data)
-
-
-class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
-    parcel = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ParcelSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ParcelRemovedFromDeliveryMessage(**data)
-
-
-class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
-    tracking_data = marshmallow.fields.Nested(
-        nested="commercetools.schemas.TrackingDataSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="trackingData",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ParcelTrackingDataUpdatedMessage(**data)
-
-
-class PaymentCreatedMessageSchema(MessageSchema):
-    payment = marshmallow.fields.Nested(
-        nested="commercetools.schemas.PaymentSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.PaymentCreatedMessage(**data)
-
-
-class PaymentInteractionAddedMessageSchema(MessageSchema):
-    interaction = marshmallow.fields.Nested(
-        nested="commercetools.schemas.CustomFieldsSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.PaymentInteractionAddedMessage(**data)
 
 
 class PaymentPagedQueryResponseSchema(PagedQueryResponseSchema):
@@ -7842,69 +7201,6 @@ class PaymentSchema(ResourceSchema):
         return types.Payment(**data)
 
 
-class PaymentStatusInterfaceCodeSetMessageSchema(MessageSchema):
-    payment_id = marshmallow.fields.String(allow_none=True, data_key="paymentId")
-    interface_code = marshmallow.fields.String(
-        allow_none=True, data_key="interfaceCode"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.PaymentStatusInterfaceCodeSetMessage(**data)
-
-
-class PaymentStatusStateTransitionMessageSchema(MessageSchema):
-    state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    force = marshmallow.fields.Bool(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.PaymentStatusStateTransitionMessage(**data)
-
-
-class PaymentTransactionAddedMessageSchema(MessageSchema):
-    transaction = marshmallow.fields.Nested(
-        nested="commercetools.schemas.TransactionSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.PaymentTransactionAddedMessage(**data)
-
-
-class PaymentTransactionStateChangedMessageSchema(MessageSchema):
-    transaction_id = marshmallow.fields.String(
-        allow_none=True, data_key="transactionId"
-    )
-    state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.PaymentTransactionStateChangedMessage(**data)
-
-
 class PaymentUpdateActionSchema(UpdateActionSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -7970,49 +7266,6 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
     def post_load(self, data):
         del data["code"]
         return types.PriceChangedError(**data)
-
-
-class ProductCreatedMessageSchema(MessageSchema):
-    product_projection = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductProjectionSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="productProjection",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductCreatedMessage(**data)
-
-
-class ProductDeletedMessageSchema(MessageSchema):
-    removed_image_urls = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-        data_key="removedImageUrls",
-    )
-    current_projection = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductProjectionSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="currentProjection",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductDeletedMessage(**data)
 
 
 class ProductDiscountPagedQueryResponseSchema(PagedQueryResponseSchema):
@@ -8169,24 +7422,6 @@ class ProductDiscountValueRelativeSchema(ProductDiscountValueSchema):
         return types.ProductDiscountValueRelative(**data)
 
 
-class ProductImageAddedMessageSchema(MessageSchema):
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
-    image = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ImageSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    staged = marshmallow.fields.Bool(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductImageAddedMessage(**data)
-
-
 class ProductPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ProductSchema",
@@ -8321,53 +7556,6 @@ class ProductProjectionSchema(ResourceSchema):
         return types.ProductProjection(**data)
 
 
-class ProductPublishedMessageSchema(MessageSchema):
-    removed_image_urls = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-        data_key="removedImageUrls",
-    )
-    product_projection = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductProjectionSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="productProjection",
-    )
-    scope = marshmallow_enum.EnumField(types.ProductPublishScope, by_value=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductPublishedMessage(**data)
-
-
-class ProductRevertedStagedChangesMessageSchema(MessageSchema):
-    removed_image_urls = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-        data_key="removedImageUrls",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductRevertedStagedChangesMessage(**data)
-
-
 class ProductSchema(ResourceSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     product_type = marshmallow.fields.Nested(
@@ -8409,35 +7597,6 @@ class ProductSchema(ResourceSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.Product(**data)
-
-
-class ProductSlugChangedMessageSchema(MessageSchema):
-    slug = LocalizedStringField(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductSlugChangedMessage(**data)
-
-
-class ProductStateTransitionMessageSchema(MessageSchema):
-    state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    force = marshmallow.fields.Bool(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductStateTransitionMessage(**data)
 
 
 class ProductTypePagedQueryResponseSchema(PagedQueryResponseSchema):
@@ -8526,16 +7685,6 @@ class ProductTypeUpdateSchema(UpdateSchema):
         return types.ProductTypeUpdate(**data)
 
 
-class ProductUnpublishedMessageSchema(MessageSchema):
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductUnpublishedMessage(**data)
-
-
 class ProductUpdateActionSchema(UpdateActionSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8610,31 +7759,6 @@ class ProductUpdateSchema(UpdateSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.ProductUpdate(**data)
-
-
-class ProductVariantDeletedMessageSchema(MessageSchema):
-    removed_image_urls = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-        data_key="removedImageUrls",
-    )
-    variant = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ProductVariantSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ProductVariantDeletedMessage(**data)
 
 
 class ProjectUpdateActionSchema(UpdateActionSchema):
@@ -8766,22 +7890,6 @@ class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
         return types.ResourceUpdatedDelivery(**data)
 
 
-class ReviewCreatedMessageSchema(MessageSchema):
-    review = marshmallow.fields.Nested(
-        nested="commercetools.schemas.ReviewSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ReviewCreatedMessage(**data)
-
-
 class ReviewPagedQueryResponseSchema(PagedQueryResponseSchema):
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas.ReviewSchema",
@@ -8796,50 +7904,6 @@ class ReviewPagedQueryResponseSchema(PagedQueryResponseSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.ReviewPagedQueryResponse(**data)
-
-
-class ReviewRatingSetMessageSchema(MessageSchema):
-    old_rating = marshmallow.fields.Integer(allow_none=True, data_key="oldRating")
-    new_rating = marshmallow.fields.Integer(allow_none=True, data_key="newRating")
-    included_in_statistics = marshmallow.fields.Bool(
-        allow_none=True, data_key="includedInStatistics"
-    )
-    target = helpers.Discriminator(
-        discriminator_field="typeId",
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas.CartReferenceSchema",
-            "category": "commercetools.schemas.CategoryReferenceSchema",
-            "channel": "commercetools.schemas.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
-            "order": "commercetools.schemas.OrderReferenceSchema",
-            "payment": "commercetools.schemas.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas.ProductReferenceSchema",
-            "review": "commercetools.schemas.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas.StateReferenceSchema",
-            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas.TypeReferenceSchema",
-            "zone": "commercetools.schemas.ZoneReferenceSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ReviewRatingSetMessage(**data)
 
 
 class ReviewSchema(ResourceSchema):
@@ -8888,64 +7952,6 @@ class ReviewSchema(ResourceSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.Review(**data)
-
-
-class ReviewStateTransitionMessageSchema(MessageSchema):
-    old_state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="oldState",
-    )
-    new_state = marshmallow.fields.Nested(
-        nested="commercetools.schemas.StateReferenceSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        data_key="newState",
-    )
-    old_included_in_statistics = marshmallow.fields.Bool(
-        allow_none=True, data_key="oldIncludedInStatistics"
-    )
-    new_included_in_statistics = marshmallow.fields.Bool(
-        allow_none=True, data_key="newIncludedInStatistics"
-    )
-    target = helpers.Discriminator(
-        discriminator_field="typeId",
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas.CartReferenceSchema",
-            "category": "commercetools.schemas.CategoryReferenceSchema",
-            "channel": "commercetools.schemas.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
-            "order": "commercetools.schemas.OrderReferenceSchema",
-            "payment": "commercetools.schemas.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas.ProductReferenceSchema",
-            "review": "commercetools.schemas.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas.StateReferenceSchema",
-            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas.TypeReferenceSchema",
-            "zone": "commercetools.schemas.ZoneReferenceSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-    )
-    force = marshmallow.fields.Bool(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type"]
-        return types.ReviewStateTransitionMessage(**data)
 
 
 class ReviewUpdateActionSchema(UpdateActionSchema):
@@ -11007,6 +10013,22 @@ class CategoryChangeSlugActionSchema(CategoryUpdateActionSchema):
         return types.CategoryChangeSlugAction(**data)
 
 
+class CategoryCreatedMessageSchema(MessageSchema):
+    category = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CategorySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CategoryCreatedMessage(**data)
+
+
 class CategoryReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CategorySchema",
@@ -11268,6 +10290,18 @@ class CategorySetMetaTitleActionSchema(CategoryUpdateActionSchema):
         return types.CategorySetMetaTitleAction(**data)
 
 
+class CategorySlugChangedMessageSchema(MessageSchema):
+    slug = LocalizedStringField(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CategorySlugChangedMessage(**data)
+
+
 class CentPrecisionMoneySchema(TypedMoneySchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -11433,6 +10467,36 @@ class ChannelSetRolesActionSchema(ChannelUpdateActionSchema):
         return types.ChannelSetRolesAction(**data)
 
 
+class CustomLineItemStateTransitionMessageSchema(MessageSchema):
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
+    )
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    from_state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="fromState",
+    )
+    to_state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="toState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomLineItemStateTransitionMessage(**data)
+
+
 class CustomObjectReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomObjectSchema",
@@ -11490,6 +10554,54 @@ class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
         return types.CustomerAddShippingAddressIdAction(**data)
 
 
+class CustomerAddressAddedMessageSchema(MessageSchema):
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerAddressAddedMessage(**data)
+
+
+class CustomerAddressChangedMessageSchema(MessageSchema):
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerAddressChangedMessage(**data)
+
+
+class CustomerAddressRemovedMessageSchema(MessageSchema):
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerAddressRemovedMessage(**data)
+
+
 class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
     address = marshmallow.fields.Nested(
@@ -11517,6 +10629,68 @@ class CustomerChangeEmailActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.CustomerChangeEmailAction(**data)
+
+
+class CustomerCompanyNameSetMessageSchema(MessageSchema):
+    company_name = marshmallow.fields.String(allow_none=True, data_key="companyName")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerCompanyNameSetMessage(**data)
+
+
+class CustomerCreatedMessageSchema(MessageSchema):
+    customer = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomerSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerCreatedMessage(**data)
+
+
+class CustomerDateOfBirthSetMessageSchema(MessageSchema):
+    date_of_birth = marshmallow.fields.Date(allow_none=True, data_key="dateOfBirth")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerDateOfBirthSetMessage(**data)
+
+
+class CustomerEmailChangedMessageSchema(MessageSchema):
+    email = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerEmailChangedMessage(**data)
+
+
+class CustomerEmailVerifiedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerEmailVerifiedMessage(**data)
 
 
 class CustomerGroupChangeNameActionSchema(CustomerGroupUpdateActionSchema):
@@ -11589,6 +10763,23 @@ class CustomerGroupSetKeyActionSchema(CustomerGroupUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.CustomerGroupSetKeyAction(**data)
+
+
+class CustomerGroupSetMessageSchema(MessageSchema):
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="customerGroup",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CustomerGroupSetMessage(**data)
 
 
 class CustomerReferenceSchema(ReferenceSchema):
@@ -11877,6 +11068,74 @@ class CustomerSetVatIdActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.CustomerSetVatIdAction(**data)
+
+
+class DeliveryAddedMessageSchema(MessageSchema):
+    delivery = marshmallow.fields.Nested(
+        nested="commercetools.schemas.DeliverySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryAddedMessage(**data)
+
+
+class DeliveryAddressSetMessageSchema(MessageSchema):
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryAddressSetMessage(**data)
+
+
+class DeliveryItemsUpdatedMessageSchema(MessageSchema):
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    items = marshmallow.fields.Nested(
+        nested="commercetools.schemas.DeliveryItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryItemsUpdatedMessage(**data)
+
+
+class DeliveryRemovedMessageSchema(MessageSchema):
+    delivery = marshmallow.fields.Nested(
+        nested="commercetools.schemas.DeliverySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryRemovedMessage(**data)
 
 
 class DiscountCodeChangeCartDiscountsActionSchema(DiscountCodeUpdateActionSchema):
@@ -12169,6 +11428,24 @@ class InventoryChangeQuantityActionSchema(InventoryUpdateActionSchema):
         return types.InventoryChangeQuantityAction(**data)
 
 
+class InventoryEntryDeletedMessageSchema(MessageSchema):
+    sku = marshmallow.fields.String(allow_none=True)
+    supply_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="supplyChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.InventoryEntryDeletedMessage(**data)
+
+
 class InventoryEntryReferenceSchema(ReferenceSchema):
     obj = marshmallow.fields.Nested(
         nested="commercetools.schemas.InventoryEntrySchema",
@@ -12273,6 +11550,34 @@ class InventorySetSupplyChannelActionSchema(InventoryUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.InventorySetSupplyChannelAction(**data)
+
+
+class LineItemStateTransitionMessageSchema(MessageSchema):
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    from_state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="fromState",
+    )
+    to_state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="toState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.LineItemStateTransitionMessage(**data)
 
 
 class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
@@ -12393,6 +11698,22 @@ class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
         return types.OrderAddReturnInfoAction(**data)
 
 
+class OrderBillingAddressSetMessageSchema(MessageSchema):
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderBillingAddressSetMessage(**data)
+
+
 class OrderChangeOrderStateActionSchema(OrderUpdateActionSchema):
     order_state = marshmallow_enum.EnumField(
         types.OrderState, by_value=True, data_key="orderState"
@@ -12435,6 +11756,88 @@ class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
         return types.OrderChangeShipmentStateAction(**data)
 
 
+class OrderCreatedMessageSchema(MessageSchema):
+    order = marshmallow.fields.Nested(
+        nested="commercetools.schemas.OrderSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderCreatedMessage(**data)
+
+
+class OrderCustomerEmailSetMessageSchema(MessageSchema):
+    email = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderCustomerEmailSetMessage(**data)
+
+
+class OrderCustomerSetMessageSchema(MessageSchema):
+    customer = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomerReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="customerGroup",
+    )
+    old_customer = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomerReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="oldCustomer",
+    )
+    old_customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="oldCustomerGroup",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderCustomerSetMessage(**data)
+
+
+class OrderDeletedMessageSchema(MessageSchema):
+    order = marshmallow.fields.Nested(
+        nested="commercetools.schemas.OrderSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderDeletedMessage(**data)
+
+
 class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, data_key="customLineItemId"
@@ -12471,6 +11874,34 @@ class OrderImportLineItemStateActionSchema(OrderUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.OrderImportLineItemStateAction(**data)
+
+
+class OrderImportedMessageSchema(MessageSchema):
+    order = marshmallow.fields.Nested(
+        nested="commercetools.schemas.OrderSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderImportedMessage(**data)
+
+
+class OrderPaymentChangedMessageSchema(MessageSchema):
+    payment_state = marshmallow.fields.String(allow_none=True, data_key="paymentState")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderPaymentChangedMessage(**data)
 
 
 class OrderReferenceSchema(ReferenceSchema):
@@ -12540,6 +11971,38 @@ class OrderRemovePaymentActionSchema(OrderUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.OrderRemovePaymentAction(**data)
+
+
+class OrderReturnInfoAddedMessageSchema(MessageSchema):
+    return_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ReturnInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="returnInfo",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderReturnInfoAddedMessage(**data)
+
+
+class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
+    return_shipment_state = marshmallow_enum.EnumField(
+        types.ReturnShipmentState, by_value=True, data_key="returnShipmentState"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderReturnShipmentStateChangedMessage(**data)
 
 
 class OrderSetBillingAddressActionSchema(OrderUpdateActionSchema):
@@ -12890,6 +12353,65 @@ class OrderSetShippingAddressActionSchema(OrderUpdateActionSchema):
         return types.OrderSetShippingAddressAction(**data)
 
 
+class OrderShipmentStateChangedMessageSchema(MessageSchema):
+    shipment_state = marshmallow_enum.EnumField(
+        types.ShipmentState, by_value=True, data_key="shipmentState"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderShipmentStateChangedMessage(**data)
+
+
+class OrderShippingAddressSetMessageSchema(MessageSchema):
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderShippingAddressSetMessage(**data)
+
+
+class OrderStateChangedMessageSchema(MessageSchema):
+    order_state = marshmallow.fields.String(allow_none=True, data_key="orderState")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderStateChangedMessage(**data)
+
+
+class OrderStateTransitionMessageSchema(MessageSchema):
+    state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    force = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderStateTransitionMessage(**data)
+
+
 class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, data_key="customLineItemId"
@@ -13003,6 +12525,104 @@ class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
         return types.OrderUpdateSyncInfoAction(**data)
 
 
+class ParcelAddedToDeliveryMessageSchema(MessageSchema):
+    delivery = marshmallow.fields.Nested(
+        nested="commercetools.schemas.DeliverySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    parcel = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ParcelSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ParcelAddedToDeliveryMessage(**data)
+
+
+class ParcelItemsUpdatedMessageSchema(MessageSchema):
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    items = marshmallow.fields.Nested(
+        nested="commercetools.schemas.DeliveryItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ParcelItemsUpdatedMessage(**data)
+
+
+class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    measurements = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ParcelMeasurementsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ParcelMeasurementsUpdatedMessage(**data)
+
+
+class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    parcel = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ParcelSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ParcelRemovedFromDeliveryMessage(**data)
+
+
+class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    tracking_data = marshmallow.fields.Nested(
+        nested="commercetools.schemas.TrackingDataSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="trackingData",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ParcelTrackingDataUpdatedMessage(**data)
+
+
 class PaymentAddInterfaceInteractionActionSchema(PaymentUpdateActionSchema):
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas.TypeReferenceSchema",
@@ -13097,6 +12717,38 @@ class PaymentChangeTransactionTimestampActionSchema(PaymentUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.PaymentChangeTransactionTimestampAction(**data)
+
+
+class PaymentCreatedMessageSchema(MessageSchema):
+    payment = marshmallow.fields.Nested(
+        nested="commercetools.schemas.PaymentSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.PaymentCreatedMessage(**data)
+
+
+class PaymentInteractionAddedMessageSchema(MessageSchema):
+    interaction = marshmallow.fields.Nested(
+        nested="commercetools.schemas.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.PaymentInteractionAddedMessage(**data)
 
 
 class PaymentReferenceSchema(ReferenceSchema):
@@ -13330,6 +12982,69 @@ class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.PaymentSetStatusInterfaceTextAction(**data)
+
+
+class PaymentStatusInterfaceCodeSetMessageSchema(MessageSchema):
+    payment_id = marshmallow.fields.String(allow_none=True, data_key="paymentId")
+    interface_code = marshmallow.fields.String(
+        allow_none=True, data_key="interfaceCode"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.PaymentStatusInterfaceCodeSetMessage(**data)
+
+
+class PaymentStatusStateTransitionMessageSchema(MessageSchema):
+    state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    force = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.PaymentStatusStateTransitionMessage(**data)
+
+
+class PaymentTransactionAddedMessageSchema(MessageSchema):
+    transaction = marshmallow.fields.Nested(
+        nested="commercetools.schemas.TransactionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.PaymentTransactionAddedMessage(**data)
+
+
+class PaymentTransactionStateChangedMessageSchema(MessageSchema):
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, data_key="transactionId"
+    )
+    state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.PaymentTransactionStateChangedMessage(**data)
 
 
 class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):
@@ -13570,6 +13285,49 @@ class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
         return types.ProductChangeSlugAction(**data)
 
 
+class ProductCreatedMessageSchema(MessageSchema):
+    product_projection = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ProductProjectionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="productProjection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductCreatedMessage(**data)
+
+
+class ProductDeletedMessageSchema(MessageSchema):
+    removed_image_urls = marshmallow.fields.List(
+        marshmallow.fields.Nested(
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+        data_key="removedImageUrls",
+    )
+    current_projection = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ProductProjectionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="currentProjection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductDeletedMessage(**data)
+
+
 class ProductDiscountChangeIsActiveActionSchema(ProductDiscountUpdateActionSchema):
     is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
 
@@ -13715,6 +13473,24 @@ class ProductDiscountSetValidUntilActionSchema(ProductDiscountUpdateActionSchema
         return types.ProductDiscountSetValidUntilAction(**data)
 
 
+class ProductImageAddedMessageSchema(MessageSchema):
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    image = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ImageSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    staged = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductImageAddedMessage(**data)
+
+
 class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
@@ -13758,6 +13534,33 @@ class ProductPublishActionSchema(ProductUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.ProductPublishAction(**data)
+
+
+class ProductPublishedMessageSchema(MessageSchema):
+    removed_image_urls = marshmallow.fields.List(
+        marshmallow.fields.Nested(
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+        data_key="removedImageUrls",
+    )
+    product_projection = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ProductProjectionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="productProjection",
+    )
+    scope = marshmallow_enum.EnumField(types.ProductPublishScope, by_value=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductPublishedMessage(**data)
 
 
 class ProductReferenceSchema(ReferenceSchema):
@@ -13880,6 +13683,26 @@ class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.ProductRevertStagedVariantChangesAction(**data)
+
+
+class ProductRevertedStagedChangesMessageSchema(MessageSchema):
+    removed_image_urls = marshmallow.fields.List(
+        marshmallow.fields.Nested(
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+        data_key="removedImageUrls",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductRevertedStagedChangesMessage(**data)
 
 
 class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
@@ -14308,6 +14131,35 @@ class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
         return types.ProductSetTaxCategoryAction(**data)
 
 
+class ProductSlugChangedMessageSchema(MessageSchema):
+    slug = LocalizedStringField(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductSlugChangedMessage(**data)
+
+
+class ProductStateTransitionMessageSchema(MessageSchema):
+    state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    force = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductStateTransitionMessage(**data)
+
+
 class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
@@ -14681,6 +14533,41 @@ class ProductUnpublishActionSchema(ProductUpdateActionSchema):
         return types.ProductUnpublishAction(**data)
 
 
+class ProductUnpublishedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductUnpublishedMessage(**data)
+
+
+class ProductVariantDeletedMessageSchema(MessageSchema):
+    removed_image_urls = marshmallow.fields.List(
+        marshmallow.fields.Nested(
+            nested="commercetools.schemas.anySchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+        data_key="removedImageUrls",
+    )
+    variant = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ProductVariantSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductVariantDeletedMessage(**data)
+
+
 class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
     countries = marshmallow.fields.String(many=True)
 
@@ -14764,6 +14651,66 @@ class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.ProjectSetShippingRateInputTypeAction(**data)
+
+
+class ReviewCreatedMessageSchema(MessageSchema):
+    review = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ReviewSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ReviewCreatedMessage(**data)
+
+
+class ReviewRatingSetMessageSchema(MessageSchema):
+    old_rating = marshmallow.fields.Integer(allow_none=True, data_key="oldRating")
+    new_rating = marshmallow.fields.Integer(allow_none=True, data_key="newRating")
+    included_in_statistics = marshmallow.fields.Bool(
+        allow_none=True, data_key="includedInStatistics"
+    )
+    target = helpers.Discriminator(
+        discriminator_field="typeId",
+        discriminator_schemas={
+            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
+            "cart": "commercetools.schemas.CartReferenceSchema",
+            "category": "commercetools.schemas.CategoryReferenceSchema",
+            "channel": "commercetools.schemas.ChannelReferenceSchema",
+            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
+            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
+            "customer": "commercetools.schemas.CustomerReferenceSchema",
+            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
+            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
+            "order": "commercetools.schemas.OrderReferenceSchema",
+            "payment": "commercetools.schemas.PaymentReferenceSchema",
+            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
+            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
+            "product": "commercetools.schemas.ProductReferenceSchema",
+            "review": "commercetools.schemas.ReviewReferenceSchema",
+            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
+            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
+            "state": "commercetools.schemas.StateReferenceSchema",
+            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
+            "type": "commercetools.schemas.TypeReferenceSchema",
+            "zone": "commercetools.schemas.ZoneReferenceSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ReviewRatingSetMessage(**data)
 
 
 class ReviewReferenceSchema(ReferenceSchema):
@@ -14920,6 +14867,64 @@ class ReviewSetTitleActionSchema(ReviewUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.ReviewSetTitleAction(**data)
+
+
+class ReviewStateTransitionMessageSchema(MessageSchema):
+    old_state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="oldState",
+    )
+    new_state = marshmallow.fields.Nested(
+        nested="commercetools.schemas.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="newState",
+    )
+    old_included_in_statistics = marshmallow.fields.Bool(
+        allow_none=True, data_key="oldIncludedInStatistics"
+    )
+    new_included_in_statistics = marshmallow.fields.Bool(
+        allow_none=True, data_key="newIncludedInStatistics"
+    )
+    target = helpers.Discriminator(
+        discriminator_field="typeId",
+        discriminator_schemas={
+            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
+            "cart": "commercetools.schemas.CartReferenceSchema",
+            "category": "commercetools.schemas.CategoryReferenceSchema",
+            "channel": "commercetools.schemas.ChannelReferenceSchema",
+            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
+            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
+            "customer": "commercetools.schemas.CustomerReferenceSchema",
+            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
+            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
+            "order": "commercetools.schemas.OrderReferenceSchema",
+            "payment": "commercetools.schemas.PaymentReferenceSchema",
+            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
+            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
+            "product": "commercetools.schemas.ProductReferenceSchema",
+            "review": "commercetools.schemas.ReviewReferenceSchema",
+            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
+            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
+            "state": "commercetools.schemas.StateReferenceSchema",
+            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
+            "type": "commercetools.schemas.TypeReferenceSchema",
+            "zone": "commercetools.schemas.ZoneReferenceSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    force = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ReviewStateTransitionMessage(**data)
 
 
 class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):

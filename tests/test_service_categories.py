@@ -4,7 +4,7 @@ from requests.exceptions import HTTPError
 
 from commercetools import types
 
-def test_category_get(client):
+def test_category_get_by_id(client):
     category = client.categories.create(types.CategoryDraft(key="test-category"))
 
     assert category.id
@@ -17,8 +17,19 @@ def test_category_get(client):
     with pytest.raises(HTTPError):
         client.categories.get_by_id("invalid")
 
-    category = client.categories.get_by_key(category.key)
-    assert category
+
+def test_category_get_by_key(client):
+    category = client.categories.create(types.CategoryDraft(key="test-category"))
+
+    assert category.id
+    assert category.key == "test-category"
+
+    category = client.categories.get_by_key("test-category")
+    assert category.id
+    assert category.key == "test-category"
+
+    with pytest.raises(HTTPError):
+        client.categories.get_by_key("invalid")
 
 
 def test_category_query(client):

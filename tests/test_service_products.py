@@ -4,7 +4,7 @@ from commercetools import types
 from requests.exceptions import HTTPError
 
 
-def test_products_get(client):
+def test_products_get_by_id(client):
     product = client.products.create(types.ProductDraft(key="test-product"))
 
     assert product.id
@@ -17,8 +17,19 @@ def test_products_get(client):
     with pytest.raises(HTTPError) as e:
         client.products.get_by_id("invalid")
 
-    product = client.products.get_by_key(product.key)
-    assert product
+
+def test_products_get_by_key(client):
+    product = client.products.create(types.ProductDraft(key="test-product"))
+
+    assert product.id
+    assert product.key == "test-product"
+
+    product = client.products.get_by_key("test-product")
+    assert product.id
+    assert product.key == "test-product"
+
+    with pytest.raises(HTTPError) as e:
+        client.products.get_by_key("invalid")
 
 
 def test_product_query(client):

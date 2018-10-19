@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 
 
 def test_product_projections_get_by_id(client):
-    product = client.product_projections.get_by_id('0001')
+    product = client.product_projections.get_by_id("0001")
     assert product.id == "0001"
     assert product.key == "product-1"
 
@@ -12,7 +12,7 @@ def test_product_projections_get_by_id(client):
 
 
 def test_product_projections_get_by_key(client):
-    product = client.product_projections.get_by_key('product-1')
+    product = client.product_projections.get_by_key("product-1")
     assert product.id == "0001"
     assert product.key == "product-1"
 

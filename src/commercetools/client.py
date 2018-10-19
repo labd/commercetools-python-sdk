@@ -6,14 +6,14 @@ from marshmallow.base import SchemaABC
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 
-from commercetools import schemas, types
+from commercetools import schemas
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoriesService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
-from commercetools.services.products import ProductService
 from commercetools.services.product_types import ProductTypeService
+from commercetools.services.products import ProductService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
 
 env = os.environ.get

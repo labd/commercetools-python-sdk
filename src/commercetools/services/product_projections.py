@@ -1,12 +1,12 @@
 import typing
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID
 
-from marshmallow import EXCLUDE, Schema, fields, post_dump
+from marshmallow import Schema, fields, post_dump
 
 from commercetools import abstract, schemas, types
-from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID
 from commercetools.services import AbstractService
+from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID
 
 __all__ = ["ProductProjectionService"]
 

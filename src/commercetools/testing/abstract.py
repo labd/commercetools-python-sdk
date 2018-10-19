@@ -1,6 +1,7 @@
 import re
-import requests_mock
 import typing
+
+import requests_mock
 
 
 class BaseModel:

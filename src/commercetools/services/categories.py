@@ -2,8 +2,8 @@ import typing
 from typing import List, Optional
 
 from commercetools import abstract, schemas, types
-from commercetools.typing import OptionalListStr
 from commercetools.services import AbstractService
+from commercetools.typing import OptionalListStr
 
 __all__ = ["CategoriesService"]
 

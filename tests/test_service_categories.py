@@ -4,6 +4,7 @@ from requests.exceptions import HTTPError
 
 from commercetools import types
 
+
 def test_category_get_by_id(client):
     category = client.categories.create(types.CategoryDraft(key="test-category"))
 

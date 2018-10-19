@@ -5,5 +5,5 @@ if TYPE_CHECKING:
 
 
 class AbstractService:
-    def __init__(self, client: 'Client') -> None:
+    def __init__(self, client: "Client") -> None:
         self._client = client

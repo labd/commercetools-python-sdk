@@ -1,5 +1,4 @@
 import datetime
-import uuid
 
 from requests_mock import create_response
 
@@ -10,8 +9,8 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class ProductProjectionsModel(BaseModel):
     def __init__(self):
         super().__init__()
-        self.add_projection('0001', 'product-1')
-        self.add_projection('0002', 'product-2')
+        self.add_projection("0001", "product-1")
+        self.add_projection("0002", "product-2")
 
     def add_projection(self, id, key):
         obj = types.ProductProjection(
@@ -22,6 +21,7 @@ class ProductProjectionsModel(BaseModel):
             last_modified_at=datetime.datetime.now(),
         )
         self.add(obj.id, obj)
+
 
 class ProductProjectionsBackend(ServiceBackend):
     service_path = "product_projections"

@@ -5,7 +5,6 @@ from requests_mock import create_response
 
 from commercetools import abstract, schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.types import PaymentDraft
 
 
 class PaymentsModel(BaseModel):
@@ -14,7 +13,7 @@ class PaymentsModel(BaseModel):
         self.objects[obj.id] = obj
         return obj
 
-    def convert_payment_draft(self, obj: PaymentDraft):
+    def convert_payment_draft(self, obj: types.PaymentDraft) -> types.Payment:
         payment = types.Payment(
             id=str(uuid.uuid4()),
             key=obj.key,
@@ -29,9 +28,24 @@ class PaymentsModel(BaseModel):
             anonymous_id=obj.anonymous_id,
             payment_method_info=obj.payment_method_info,
             payment_status=obj.payment_status,
-            transactions=obj.transactions
+            transactions=[
+                self.convert_transaction_draft(transaction)
+                for transaction in obj.transactions or []
+            ],
         )
         return payment
+
+    def convert_transaction_draft(
+        self, obj: types.TransactionDraft
+    ) -> types.Transaction:
+        return types.Transaction(
+            id=str(uuid.uuid4()),
+            timestamp=obj.timestamp,
+            type=obj.type,
+            amount=obj.amount,
+            interaction_id=obj.interaction_id,
+            state=obj.state,
+        )
 
 
 class PaymentsBackend(ServiceBackend):

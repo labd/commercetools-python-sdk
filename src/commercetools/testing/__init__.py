@@ -5,6 +5,7 @@ import wrapt
 
 from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend
+from commercetools.testing.payments import PaymentsBackend
 from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
@@ -14,6 +15,7 @@ class BackendRepository:
     def __init__(self):
         self.auth = AuthBackend()
         self.categories = CategoriesBackend()
+        self.payments = PaymentsBackend()
         self.products = ProductsBackend()
         self.product_projections = ProductProjectionsBackend(model=self.products.model)
         self.product_types = ProductTypesBackend()
@@ -22,6 +24,7 @@ class BackendRepository:
         backends = [
             "auth",
             "categories",
+            "payments",
             "products",
             "product_projections",
             "product_types",

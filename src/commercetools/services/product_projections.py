@@ -16,7 +16,7 @@ class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
     limit = fields.Int()
     offset = fields.Int()
 
-    staged = fields.Bool(data_key="staged", required=False)
+    staged = fields.Bool(data_key="staged", required=False, missing=False)
     price_currency = fields.String(data_key="priceCurrency")
     price_country = fields.String(data_key="priceCountry")
     price_customer_group = fields.UUID(data_key="priceCustomerGroup")

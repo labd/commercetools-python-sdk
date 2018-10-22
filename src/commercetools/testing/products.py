@@ -13,7 +13,15 @@ class ProductsModel(BaseModel):
         self.objects[obj.id] = obj
         return obj
 
-    def convert_product_draft(self, obj):
+    def convert_product_draft(self, obj: types.ProductDraft):
+        product = types.Product(
+            id=str(uuid.uuid4()),
+            key=obj.key,
+            version=1,
+            created_at=datetime.datetime.now(),
+            last_modified_at=datetime.datetime.now(),
+        )
+
         product_data = types.ProductData(
             name=obj.name,
             categories=obj.categories,
@@ -22,18 +30,15 @@ class ProductsModel(BaseModel):
             slug=obj.slug,
         )
 
-        product_catalog_data = types.ProductCatalogData(
-            staged=product_data, published=False
-        )
+        if obj.publish:
+            product.master_data = types.ProductCatalogData(
+                staged=None, current=product_data, published=True
+            )
+        else:
+            product.master_data = types.ProductCatalogData(
+                staged=product_data, current=None, published=False
+            )
 
-        product = types.Product(
-            id=str(uuid.uuid4()),
-            key=obj.key,
-            version=1,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
-            master_data=product_catalog_data,
-        )
         return product
 
 

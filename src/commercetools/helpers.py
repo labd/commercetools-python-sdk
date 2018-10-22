@@ -89,6 +89,9 @@ class Discriminator(Field):
         ]
 
     def _serialize(self, nested_obj, attr, obj):
+        if nested_obj is None:
+            return None
+
         discriminator_value = getattr(nested_obj, self.discriminator_field)
         if isinstance(discriminator_value, str):
             schema_name = self.discriminator_schemas[discriminator_value]
@@ -96,8 +99,6 @@ class Discriminator(Field):
             schema_name = self.discriminator_schemas[discriminator_value.value]
         schema = self.get_schema(schema_name)
 
-        if nested_obj is None:
-            return None
         if not self.__updated_fields:
             schema._update_fields(obj=nested_obj, many=self.many)
             self.__updated_fields = True

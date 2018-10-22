@@ -1,31 +1,12 @@
-import datetime
-
 from requests_mock import create_response
 
-from commercetools import abstract, schemas, types
-from commercetools.testing.abstract import BaseModel, ServiceBackend
-
-
-class ProductProjectionsModel(BaseModel):
-    def __init__(self):
-        super().__init__()
-        self.add_projection("0001", "product-1")
-        self.add_projection("0002", "product-2")
-
-    def add_projection(self, id, key):
-        obj = types.ProductProjection(
-            id=id,
-            version=1,
-            key=key,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
-        )
-        self.add(obj.id, obj)
+from commercetools import schemas, types
+from commercetools.services.product_projections import ProductProjectionsSearchSchema
+from commercetools.testing.abstract import ServiceBackend
 
 
 class ProductProjectionsBackend(ServiceBackend):
     service_path = "product_projections"
-    model_class = ProductProjectionsModel
 
     def urls(self):
         return [
@@ -39,12 +20,17 @@ class ProductProjectionsBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/product-projections/?(?P<path>.*)?"
 
     def query(self, request):
-        obj = abstract.AbstractQuerySchema().load(request.qs)
+        obj = ProductProjectionsSearchSchema().load(request.qs)
+        results = [
+            self._convert_product_projection(product, obj["staged"])
+            for product in self.model.objects.values()
+        ]
+        results = [x for x in results if x]
         data = {
-            "count": len(self.model.objects),
-            "total": len(self.model.objects),
+            "count": len(results),
+            "total": len(results),
             "offset": 0,
-            "results": self.model.objects.values(),
+            "results": results,
         }
         content = schemas.ProductProjectionPagedQueryResponseSchema().dumps(data)
         return create_response(request, text=content)
@@ -62,3 +48,40 @@ class ProductProjectionsBackend(ServiceBackend):
             content = schemas.ProductProjectionSchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)
+
+    def _convert_product_projection(
+        self, product: types.Product, staged: bool = False
+    ) -> types.ProductProjection:
+        """Convert a Product object to a ProductProjection object"""
+        if staged:
+            data = product.master_data.staged
+        else:
+            data = product.master_data.current
+
+        if data is None:
+            return
+
+        return types.ProductProjection(
+            id=product.id,
+            key=product.key,
+            version=product.version,
+            created_at=product.created_at,
+            last_modified_at=product.last_modified_at,
+            product_type=product.product_type,
+            name=data.name,
+            description=data.description,
+            slug=data.slug,
+            categories=data.categories,
+            category_order_hints=data.category_order_hints,
+            meta_title=data.meta_title,
+            meta_description=data.meta_description,
+            meta_keywords=data.meta_keywords,
+            search_keywords=data.search_keywords,
+            has_staged_changes=product.master_data.has_staged_changes,
+            published=product.master_data.published,
+            master_variant=data.master_variant,
+            variants=data.variants,
+            tax_category=product.tax_category,
+            state=product.state,
+            review_rating_statistics=product.review_rating_statistics,
+        )

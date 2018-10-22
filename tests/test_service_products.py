@@ -1,7 +1,8 @@
 import pytest
 import requests_mock
-from commercetools import types
 from requests.exceptions import HTTPError
+
+from commercetools import types
 
 
 def test_products_get_by_id(client):
@@ -49,7 +50,7 @@ def test_product_query(client):
 
 def test_product_update(client):
     """Test the return value of the update methods.
-    
+
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """

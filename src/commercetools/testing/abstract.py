@@ -23,8 +23,8 @@ class BaseModel:
 class BaseBackend:
     path = None
 
-    def __init__(self):
-        self.model = self.model_class()
+    def __init__(self, model=None):
+        self.model = model if model is not None else self.model_class()
 
     def register(self, adapter):
         adapter.add_matcher(self._matcher)

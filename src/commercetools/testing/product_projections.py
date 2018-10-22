@@ -1,3 +1,5 @@
+import typing
+
 from requests_mock import create_response
 
 from commercetools import schemas, types
@@ -51,15 +53,18 @@ class ProductProjectionsBackend(ServiceBackend):
 
     def _convert_product_projection(
         self, product: types.Product, staged: bool = False
-    ) -> types.ProductProjection:
+    ) -> typing.Optional[types.ProductProjection]:
         """Convert a Product object to a ProductProjection object"""
+        if product.master_data is None:
+            return None
+
         if staged:
             data = product.master_data.staged
         else:
             data = product.master_data.current
 
         if data is None:
-            return
+            return None
 
         return types.ProductProjection(
             id=product.id,

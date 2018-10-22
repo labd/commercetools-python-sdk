@@ -48,7 +48,7 @@ class PaymentService(AbstractService):
 
     def create(self, draft: types.PaymentDraft) -> types.Payment:
         return self._client._post(
-            "payments", {}, draft, schemas.PaymentUpdateSchema, schemas.PaymentSchema
+            "payments", {}, draft, schemas.PaymentDraftSchema, schemas.PaymentSchema
         )
 
     def update_by_id(

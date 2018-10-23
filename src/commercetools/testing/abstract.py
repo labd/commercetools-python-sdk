@@ -52,7 +52,7 @@ class BaseBackend:
 
 
 class ServiceBackend(BaseBackend):
-    hostnames = ["api.sphere.io"]
+    hostnames = ["api.sphere.io", "localhost"]
     model_class: typing.Any = None
 
     @property

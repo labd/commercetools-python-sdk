@@ -17,7 +17,7 @@ class AuthModel:
 
 class AuthBackend(BaseBackend):
     path_prefix = r"/oauth/(?P<path>.*)"
-    hostnames = ["auth.sphere.io"]
+    hostnames = ["auth.sphere.io", "localhost"]
     model_class = AuthModel
 
     @property

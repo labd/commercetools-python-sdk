@@ -58,6 +58,7 @@ class Client:
         token = self._token_saver.get_token(
             self._config["client_id"], self._config["scope"]
         )
+        token_oauth_url = f"{self._config['token_url']}/oauth/token"
 
         client = BackendApplicationClient(
             client_id=self._config["client_id"], scope=self._config["scope"]
@@ -65,7 +66,7 @@ class Client:
         self._http_client = OAuth2Session(
             client=client,
             scope=self._config["scope"],
-            auto_refresh_url=self._config["token_url"],
+            auto_refresh_url=token_oauth_url,
             auto_refresh_kwargs={
                 "client_id": self._config["client_id"],
                 "client_secret": self._config["client_secret"],
@@ -76,7 +77,7 @@ class Client:
             self._http_client.token = token
         else:
             token = self._http_client.fetch_token(
-                token_url=self._config["token_url"],
+                token_url=token_oauth_url,
                 scope=self._config["scope"],
                 client_id=self._config["client_id"],
                 client_secret=self._config["client_secret"],
@@ -153,8 +154,6 @@ class Client:
 
         if not config.get("token_url"):
             config["token_url"] = os.environ.get("CTP_AUTH_URL")
-            if config["token_url"]:
-                config["token_url"] += "/oauth/token"
 
         if not config["scope"]:
             config["scope"] = os.environ.get("CTP_SCOPES")

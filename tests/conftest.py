@@ -23,5 +23,5 @@ def client():
             client_secret="client-secret",
             scope=[],
             url="https://api.sphere.io",
-            token_url="https://auth.sphere.io/oauth/token",
+            token_url="https://auth.sphere.io",
         )

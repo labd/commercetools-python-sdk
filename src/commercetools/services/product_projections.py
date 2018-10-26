@@ -4,7 +4,7 @@ from uuid import UUID
 
 from marshmallow import Schema, fields, post_dump
 
-from commercetools import abstract, schemas, types
+from commercetools import abstract, schemas, types, helpers
 from commercetools.services import AbstractService
 from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID
 
@@ -12,7 +12,7 @@ __all__ = ["ProductProjectionService"]
 
 
 class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
-    sort = fields.List(fields.String())
+    sort = helpers.OptionalList(fields.String())
     limit = fields.Int()
     offset = fields.Int()
 
@@ -24,18 +24,18 @@ class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
 
 
 class ProductProjectionsQuerySchema(_ProductProjectionsBaseSchema):
-    where = fields.List(fields.String())
-    expand = fields.List(fields.String())
+    where = helpers.OptionalList(fields.String())
+    expand = helpers.OptionalList(fields.String())
 
 
 class ProductProjectionsSearchSchema(_ProductProjectionsBaseSchema):
     text = fields.Method("text_serialize")
     fuzzy = fields.Bool()
     fuzzy_level = fields.Integer(data_key="fuzzy.level")
-    filter = fields.List(fields.String())
-    filter_query = fields.List(fields.String(), data_key="filter.query")
-    filter_facets = fields.List(fields.String(), data_key="filter.facets")
-    facet = fields.List(fields.String())
+    filter = helpers.OptionalList(fields.String())
+    filter_query = helpers.OptionalList(fields.String(), data_key="filter.query")
+    filter_facets = helpers.OptionalList(fields.String(), data_key="filter.facets")
+    facet = helpers.OptionalList(fields.String())
     mark_matching_variants = fields.Bool(data_key="markMatchingVariants")
 
     def text_serialize(self, value):

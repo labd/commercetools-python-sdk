@@ -38,7 +38,7 @@ def test_product_query(client):
     client.products.create(types.ProductDraft(key="test-product2"))
 
     # single sort query
-    result = client.products.query(sort="id asc")
+    result = client.products.query(sort="id asc", limit=2)
     assert len(result.results) == 2
     assert result.total == 2
 

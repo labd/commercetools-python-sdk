@@ -1,10 +1,18 @@
 import typing
 
-from marshmallow import class_registry, missing
+from marshmallow import class_registry, missing, fields
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
 from marshmallow.utils import missing as missing_
 from marshmallow.utils import RAISE, is_collection
+
+
+class OptionalList(fields.List):
+    def _deserialize(self, value, attr, data):
+        if not isinstance(value, list):
+            value = [value]
+        result = super()._deserialize(value, attr, data)
+        return result
 
 
 class RegexField(Field):

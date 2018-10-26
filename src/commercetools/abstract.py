@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields, post_dump
 
+from commercetools.helpers import OptionalList
+
 
 class RemoveEmptyValuesMixin:
     @post_dump
@@ -23,8 +25,8 @@ class AbstractDeleteSchema(Schema, RemoveEmptyValuesMixin):
 
 
 class AbstractQuerySchema(Schema, RemoveEmptyValuesMixin):
-    where = fields.List(fields.String())
-    sort = fields.List(fields.String())
-    expand = fields.List(fields.String())
+    where = OptionalList(fields.String())
+    sort = OptionalList(fields.String())
+    expand = OptionalList(fields.String())
     limit = fields.Int()
     offset = fields.Int()

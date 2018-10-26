@@ -38,7 +38,8 @@ def test_product_projections_query(client):
     client.products.create(types.ProductDraft(key="product-3", publish=False))
 
     # single sort query
-    result = client.product_projections.query(sort="id asc")
+    result = client.product_projections.query(
+        sort="id asc", where=[f'slug(nl-NL="product-3")'], expand=["parent.category"])
     assert len(result.results) == 2
     assert result.total == 2
     assert result.results[0].key == "product-1"

@@ -17,6 +17,7 @@ class ProductsModel(BaseModel):
         product = types.Product(
             id=str(uuid.uuid4()),
             key=obj.key,
+            product_type=obj.product_type,
             version=1,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),

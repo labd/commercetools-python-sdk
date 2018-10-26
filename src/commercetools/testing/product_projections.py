@@ -3,7 +3,7 @@ import typing
 from requests_mock import create_response
 
 from commercetools import schemas, types
-from commercetools.services.product_projections import ProductProjectionsSearchSchema
+from commercetools.services.product_projections import ProductProjectionsQuerySchema
 from commercetools.testing.abstract import ServiceBackend
 
 
@@ -22,7 +22,7 @@ class ProductProjectionsBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/product-projections/?(?P<path>.*)?"
 
     def query(self, request):
-        obj = ProductProjectionsSearchSchema().load(request.qs)
+        obj = ProductProjectionsQuerySchema().load(request.qs)
         results = [
             self._convert_product_projection(product, obj["staged"])
             for product in self.model.objects.values()

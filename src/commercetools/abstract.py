@@ -23,8 +23,8 @@ class AbstractDeleteSchema(Schema, RemoveEmptyValuesMixin):
 
 
 class AbstractQuerySchema(Schema, RemoveEmptyValuesMixin):
-    where = fields.List(fields.String(required=False))
-    sort = fields.List(fields.String(required=False))
+    where = fields.List(fields.String())
+    sort = fields.List(fields.String())
     expand = fields.List(fields.String())
-    limit = fields.Int(required=False)
-    offset = fields.Int(required=False)
+    limit = fields.Int()
+    offset = fields.Int()

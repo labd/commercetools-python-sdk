@@ -1,11 +1,4 @@
-Python SDK for Commercetools
-============================
-
 .. start-no-pypi
-
-Status
-------
-
 .. image:: https://travis-ci.org/labd/commercetools-python-sdk.svg?branch=master
     :target: https://travis-ci.org/labd/commercetools-python-sdk
 
@@ -14,8 +7,11 @@ Status
 
 .. image:: https://img.shields.io/pypi/v/commercetools.svg
     :target: https://pypi.python.org/pypi/commercetools/
-
 .. end-no-pypi
+
+
+Python SDK for Commercetools
+============================
 
 This is an unofficial Python SDK for the Commercetools platform. It only
 supports Python 3.6+ and uses type annotation for an improved development

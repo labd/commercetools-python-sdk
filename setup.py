@@ -39,7 +39,7 @@ with open("README.md") as fh:
     )
 
 setup(
-    name="commercetools-python-sdk",
+    name="commercetools",
     version="1.0.0",
     description="SDK for Commercetools",
     long_description=long_description,
@@ -59,7 +59,7 @@ setup(
     include_package_data=True,
     license="MIT",
     classifiers=[
-        "Development Status :: 5 - Production/Stable"
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",

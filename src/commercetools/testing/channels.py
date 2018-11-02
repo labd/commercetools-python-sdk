@@ -19,6 +19,7 @@ class ChannelsModel(BaseModel):
             version=1,
             name=obj.name,
             description=obj.description,
+            roles=obj.roles,
             key=obj.key,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),

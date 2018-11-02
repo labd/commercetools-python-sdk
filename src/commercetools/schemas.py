@@ -562,8 +562,8 @@ class ChangeSubscriptionSchema(marshmallow.Schema):
 
 class ChannelDraftSchema(marshmallow.Schema):
     key = marshmallow.fields.String(allow_none=True)
-    roles = marshmallow_enum.EnumField(
-        types.ChannelRoleEnum, by_value=True, missing=None, many=True
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True, missing=None)
     )
     name = LocalizedStringField(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
@@ -1393,8 +1393,8 @@ class ExtensionTriggerSchema(marshmallow.Schema):
     resource_type_id = marshmallow_enum.EnumField(
         types.ExtensionResourceTypeId, by_value=True, data_key="resourceTypeId"
     )
-    actions = marshmallow_enum.EnumField(
-        types.ExtensionAction, by_value=True, many=True
+    actions = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ExtensionAction, by_value=True)
     )
 
     class Meta:
@@ -4091,8 +4091,8 @@ class StateDraftSchema(marshmallow.Schema):
     name = LocalizedStringField(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
     initial = marshmallow.fields.Bool(allow_none=True, missing=None)
-    roles = marshmallow_enum.EnumField(
-        types.StateRoleEnum, by_value=True, missing=None, many=True
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True, missing=None)
     )
     transitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
@@ -4571,8 +4571,9 @@ class TypeDraftSchema(marshmallow.Schema):
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True)
     description = LocalizedStringField(allow_none=True, missing=None)
-    resource_type_ids = marshmallow_enum.EnumField(
-        types.ResourceTypeId, by_value=True, many=True, data_key="resourceTypeIds"
+    resource_type_ids = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ResourceTypeId, by_value=True),
+        data_key="resourceTypeIds",
     )
     field_definitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.FieldDefinitionSchema",
@@ -5679,7 +5680,9 @@ class ChannelPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 class ChannelSchema(ResourceSchema):
     key = marshmallow.fields.String(allow_none=True)
-    roles = marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True)
+    )
     name = LocalizedStringField(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
     address = marshmallow.fields.Nested(
@@ -11139,8 +11142,8 @@ class StateSchema(ResourceSchema):
     description = LocalizedStringField(allow_none=True, missing=None)
     initial = marshmallow.fields.Bool(allow_none=True)
     built_in = marshmallow.fields.Bool(allow_none=True, data_key="builtIn")
-    roles = marshmallow_enum.EnumField(
-        types.StateRoleEnum, by_value=True, missing=None, many=True
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True, missing=None)
     )
     transitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
@@ -11397,8 +11400,9 @@ class TypeSchema(ResourceSchema):
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True)
     description = LocalizedStringField(allow_none=True, missing=None)
-    resource_type_ids = marshmallow_enum.EnumField(
-        types.ResourceTypeId, by_value=True, many=True, data_key="resourceTypeIds"
+    resource_type_ids = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ResourceTypeId, by_value=True),
+        data_key="resourceTypeIds",
     )
     field_definitions = marshmallow.fields.Nested(
         nested="commercetools.schemas.FieldDefinitionSchema",
@@ -13152,7 +13156,9 @@ class CentPrecisionMoneySchema(TypedMoneySchema):
 
 
 class ChannelAddRolesActionSchema(ChannelUpdateActionSchema):
-    roles = marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True)
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13217,7 +13223,9 @@ class ChannelReferenceSchema(ReferenceSchema):
 
 
 class ChannelRemoveRolesActionSchema(ChannelUpdateActionSchema):
-    roles = marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True)
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -13295,7 +13303,9 @@ class ChannelSetGeoLocationActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelSetRolesActionSchema(ChannelUpdateActionSchema):
-    roles = marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.ChannelRoleEnum, by_value=True)
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -15645,7 +15655,7 @@ class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="variantId"
     )
-    sku = marshmallow.fields.String(allow_none=True)
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
@@ -17635,7 +17645,9 @@ class StagedOrderSchema(OrderSchema):
 
 
 class StateAddRolesActionSchema(StateUpdateActionSchema):
-    roles = marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True)
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -17700,7 +17712,9 @@ class StateReferenceSchema(ReferenceSchema):
 
 
 class StateRemoveRolesActionSchema(StateUpdateActionSchema):
-    roles = marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True)
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -17736,7 +17750,9 @@ class StateSetNameActionSchema(StateUpdateActionSchema):
 
 
 class StateSetRolesActionSchema(StateUpdateActionSchema):
-    roles = marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True, many=True)
+    roles = marshmallow.fields.List(
+        marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True)
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

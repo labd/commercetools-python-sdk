@@ -222,14 +222,21 @@ class SchemaClassGenerator:
     def _create_schema_property(self, prop):
         node = self._get_property_field(prop)
 
+        if prop.many:
+            if prop.type.enum:
+                node = ast.Call(
+                    func=ast.Name(id="marshmallow.fields.List"),
+                    args=[node],
+                    keywords=[],
+                )
+            else:
+                node.keywords.append(
+                    ast.keyword(arg="many", value=ast.NameConstant(value=True))
+                )
+
         if prop.optional:
             node.keywords.append(
                 ast.keyword(arg="missing", value=ast.NameConstant(value=None))
-            )
-
-        if prop.many:
-            node.keywords.append(
-                ast.keyword(arg="many", value=ast.NameConstant(value=True))
             )
 
         if prop.attribute_name != prop.name and not prop.name.startswith("/"):

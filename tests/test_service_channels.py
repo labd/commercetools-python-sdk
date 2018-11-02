@@ -45,7 +45,7 @@ def test_channel_query(client):
 
 def test_channel_update(client):
     """Test the return value of the update methods.
-    
+
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
@@ -65,5 +65,3 @@ def test_channel_update(client):
             types.ChannelChangeNameAction(name=types.LocalizedString(nl="nl-channel2"))
         ],
     )
-    assert channel.key == "test-channel"
-    assert channel.name == "nl-channel2"

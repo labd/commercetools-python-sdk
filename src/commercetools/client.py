@@ -9,6 +9,7 @@ from requests_oauthlib import OAuth2Session
 from commercetools import schemas
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoriesService
+from commercetools.services.channels import ChannelService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
@@ -179,6 +180,10 @@ class Client:
     @property
     def carts(self) -> CartService:
         return CartService(self)
+
+    @property
+    def channels(self) -> ChannelService:
+        return ChannelService(self)
 
     @property
     def orders(self) -> OrderService:

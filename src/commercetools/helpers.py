@@ -107,13 +107,8 @@ class Discriminator(Field):
             schema_name = self.discriminator_schemas[discriminator_value.value]
         schema = self.get_schema(schema_name)
 
-        if not self.__updated_fields:
-            schema._update_fields(obj=nested_obj, many=self.many)
-            self.__updated_fields = True
         try:
-            return schema.dump(
-                nested_obj, many=self.many, update_fields=not self.__updated_fields
-            )
+            return schema.dump(nested_obj, many=self.many)
         except ValidationError as exc:
             raise ValidationError(exc.messages, data=obj, valid_data=exc.valid_data)
 

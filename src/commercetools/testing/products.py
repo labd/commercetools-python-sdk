@@ -3,7 +3,8 @@ import uuid
 
 from requests_mock import create_response
 
-from commercetools import abstract, schemas, types
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 

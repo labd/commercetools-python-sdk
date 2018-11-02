@@ -8,7 +8,7 @@ from requests_oauthlib import OAuth2Session
 
 from commercetools import schemas
 from commercetools.services.carts import CartService
-from commercetools.services.categories import CategoriesService
+from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
 from commercetools.services.custom_objects import CustomObjectService
 from commercetools.services.orders import OrderService
@@ -171,8 +171,8 @@ class Client:
         return config
 
     @property
-    def categories(self) -> CategoriesService:
-        return CategoriesService(self)
+    def categories(self) -> CategoryService:
+        return CategoryService(self)
 
     @property
     def custom_objects(self) -> CustomObjectService:

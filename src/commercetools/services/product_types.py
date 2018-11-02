@@ -1,7 +1,7 @@
 import typing
 
-from commercetools import abstract, schemas, types
-from commercetools.services import AbstractService
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListStr
 
 __all__ = ["ProductTypeService"]
@@ -15,7 +15,7 @@ class ProductTypeQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class ProductTypeService(AbstractService):
+class ProductTypeService(abstract.AbstractService):
     def get_by_id(self, id: str) -> types.ProductType:
         return self._client._get(f"product-types/{id}", {}, schemas.ProductTypeSchema)
 

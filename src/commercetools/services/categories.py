@@ -1,11 +1,11 @@
 import typing
 from typing import List, Optional
 
-from commercetools import abstract, schemas, types
-from commercetools.services import AbstractService
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListStr
 
-__all__ = ["CategoriesService"]
+__all__ = ["CategoryService"]
 
 
 class CategoryDeleteSchema(abstract.AbstractDeleteSchema):
@@ -16,7 +16,7 @@ class CategoryQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class CategoriesService(AbstractService):
+class CategoryService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Category]:
         return self._client._get(f"categories/{id}", {}, schemas.CategorySchema)
 

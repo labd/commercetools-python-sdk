@@ -1,8 +1,8 @@
 import typing
 from typing import List, Optional
 
-from commercetools import abstract, schemas, types
-from commercetools.services import AbstractService
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListStr
 
 __all__ = ["ChannelService"]
@@ -16,7 +16,7 @@ class ChannelQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class ChannelService(AbstractService):
+class ChannelService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Channel]:
         return self._client._get(f"channels/{id}", {}, schemas.ChannelSchema)
 

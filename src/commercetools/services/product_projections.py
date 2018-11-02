@@ -4,8 +4,8 @@ from uuid import UUID
 
 from marshmallow import Schema, fields, post_dump
 
-from commercetools import abstract, schemas, types, helpers
-from commercetools.services import AbstractService
+from commercetools import helpers, schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListUUID
 
 __all__ = ["ProductProjectionService"]
@@ -52,7 +52,7 @@ class ProductProjectionsSearchSchema(_ProductProjectionsBaseSchema):
         return data
 
 
-class ProductProjectionService(AbstractService):
+class ProductProjectionService(abstract.AbstractService):
     def get_by_id(
         self,
         id: str,

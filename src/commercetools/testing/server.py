@@ -5,8 +5,8 @@ from wsgiref.simple_server import make_server
 import requests
 import webob
 import webob.exc
-from requests_mock.request import _RequestObjectProxy
 from requests.packages.urllib3.response import HTTPResponse
+from requests_mock.request import _RequestObjectProxy
 
 from commercetools.testing import BackendRepository
 

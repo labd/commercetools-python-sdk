@@ -1,6 +1,8 @@
 import ast
 import typing
 
+import astunparse
+
 from .abstract_gen import AbstractModuleGenerator
 from .rammel import datatypes
 from .utils import enum_attr, merge_imports, reorder_class_definitions
@@ -205,11 +207,16 @@ class ResourceClassGenerator:
             ],
             body=[],
         )
+        # Docstring
+        doc_string = f"Corresponding marshmallow schema is :class:`commercetools.schemas.{self.resource.name}Schema`."
+        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string)))
 
         # Add the properties for the attr class
         for prop in self.resource.properties:
             node = self._create_property(prop)
             if node:
+                value = self._create_property_docstring(prop)
+                class_node.body.append(ast.Expr(value=ast.Name(id=f"#: {value}")))
                 class_node.body.append(node)
 
         init_func = self._create_init_method(class_node)
@@ -238,6 +245,33 @@ class ResourceClassGenerator:
             simple=1,
         )
         return node
+
+    def _create_property_docstring(self, prop):
+        parts = []
+
+        if prop.optional and prop.many:
+            parts.append("Optional list of")
+        elif prop.many:
+            parts.append("List of")
+        elif prop.optional:
+            parts.append("Optional")
+
+        if prop.type is None:
+            type_name = None
+        elif prop.type.name in BUILTIN_TYPES:
+            type_name = astunparse.unparse(BUILTIN_TYPES[prop.type.name]).strip()
+        elif prop.type.base and prop.type.base.name == "string" and not prop.type.enum:
+            type_name = "str"
+        else:
+            type_name = "commercetools.types.%s" % prop.type.name
+
+        if type_name:
+            parts.append(":class:`%s`" % type_name)
+
+        if prop.attribute_name != prop.name and not prop.name.startswith("/"):
+            parts.append(f"`(Named` ``{prop.name}`` `in Commercetools)`")
+
+        return " ".join(parts)
 
     def _get_annotation_for_property(self, prop: datatypes.Property):
         """Create an node which represents an annotation for a property"""

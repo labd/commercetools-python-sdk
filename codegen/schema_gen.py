@@ -150,6 +150,9 @@ class SchemaClassGenerator:
             body=[],
         )
 
+        doc_string = f"Marshmallow schema for :class:`commercetools.types.{self.resource.name}`."
+        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string)))
+
         # Add the field definitions
         for prop in self.resource.properties:
             node = self._create_schema_property(prop)

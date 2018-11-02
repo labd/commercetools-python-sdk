@@ -1,6 +1,6 @@
 import typing
 
-from marshmallow import class_registry, missing, fields
+from marshmallow import class_registry, fields, missing
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
 from marshmallow.utils import missing as missing_

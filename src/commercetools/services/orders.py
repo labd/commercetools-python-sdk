@@ -3,8 +3,8 @@ from typing import List, Optional
 
 from marshmallow import fields
 
-from commercetools import abstract, schemas, types
-from commercetools.services import AbstractService
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListStr
 
 __all__ = ["OrderService"]
@@ -18,7 +18,7 @@ class OrderQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class OrderService(AbstractService):
+class OrderService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Order]:
         return self._client._get(f"orders/{id}", {}, schemas.OrderSchema)
 

@@ -4,8 +4,8 @@ from uuid import UUID
 
 from marshmallow import fields
 
-from commercetools import abstract, schemas, types
-from commercetools.services import AbstractService
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListStr
 
 __all__ = ["ProductService"]
@@ -25,7 +25,7 @@ class ProductQuerySchema(abstract.AbstractQuerySchema):
     price_channel = fields.UUID(data_key="priceChannel", required=False)
 
 
-class ProductService(AbstractService):
+class ProductService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.Product]:
         return self._client._get(f"products/{id}", {}, schemas.ProductSchema)
 

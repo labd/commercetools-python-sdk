@@ -1,3 +1,6 @@
+.PHONY: docs
+
+
 install:
 	pip install -e .[test,codegen]
 
@@ -18,3 +21,6 @@ release:
 	rm -rf build/* dist/*
 	python setup.py sdist bdist_wheel
 	twine upload dist/*
+
+docs:
+	make -C docs html

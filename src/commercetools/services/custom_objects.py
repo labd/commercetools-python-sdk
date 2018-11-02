@@ -2,8 +2,8 @@ import typing
 from typing import Optional
 from uuid import UUID
 
-from commercetools import abstract, schemas, types
-from commercetools.services import AbstractService
+from commercetools import schemas, types
+from commercetools.services import abstract
 from commercetools.typing import OptionalListStr
 
 __all__ = ["CustomObjectService"]
@@ -17,11 +17,13 @@ class CustomObjectQuerySchema(abstract.AbstractQuerySchema):
     pass
 
 
-class CustomObjectService(AbstractService):
+class CustomObjectService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.CustomObject]:
         return self._client._get(f"custom-objects/{id}", {}, schemas.CustomObjectSchema)
 
-    def get_by_container_key(self, container: str, key: str) -> Optional[types.CustomObject]:
+    def get_by_container_key(
+        self, container: str, key: str
+    ) -> Optional[types.CustomObject]:
         return self._client._get(
             f"custom-objects/{container}/{key}", {}, schemas.CustomObjectSchema
         )

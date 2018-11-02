@@ -7,6 +7,8 @@ __pycache__/
 .python-version
 .idea/
 .vscode/
+.tox/
+.coverage.*
 
 # Dist files
 /build/

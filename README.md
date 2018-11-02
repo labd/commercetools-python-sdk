@@ -11,8 +11,11 @@ experience.
 
 The API is mostly generated using the commercetools api RAML file and uses the
 attr library for the dataobjects and marshmallow for the serialization and
-deserialization steps. 
+deserialization steps.
 
+# Installation
+
+    pip install commercetools
 
 # Example 
 

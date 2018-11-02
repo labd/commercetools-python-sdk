@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 install_requires = [
     "requests>=2.7.0",
     "pytz",
-    "requests-oauthlib>=1.0.0",
+    "requests-oauthlib>=1.1.0",
     "attrs>=18.2.0",
     "marshmallow>=3.0.0b17",
     "marshmallow-enum==1.4.1",
@@ -40,7 +40,7 @@ with open("README.rst") as fh:
 
 setup(
     name="commercetools",
-    version="1.0.0",
+    version="1.1.0",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",

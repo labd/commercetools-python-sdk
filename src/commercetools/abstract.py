@@ -28,5 +28,5 @@ class AbstractQuerySchema(Schema, RemoveEmptyValuesMixin):
     where = OptionalList(fields.String())
     sort = OptionalList(fields.String())
     expand = OptionalList(fields.String())
-    limit = fields.Int()
-    offset = fields.Int()
+    limit = OptionalList(fields.Int())
+    offset = OptionalList(fields.Int())

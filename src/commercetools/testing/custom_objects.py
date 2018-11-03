@@ -34,6 +34,7 @@ class CustomObjectsBackend(ServiceBackend):
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
+            ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
         ]
 
     @property
@@ -63,3 +64,24 @@ class CustomObjectsBackend(ServiceBackend):
             content = schemas.CustomObjectSchema().dumps(item)
             return create_response(request, text=content)
         return create_response(request, status_code=404)
+
+    def get_by_container_key(self, request, container: str, key: str):
+        id = (container, key)
+        item = self.model.objects.get(id)
+        if item:
+            content = schemas.CustomObjectSchema().dumps(item)
+            return create_response(request, text=content)
+        else:
+            content = schemas.ErrorResponseSchema().dumps(
+                types.ErrorResponse(
+                    status_code=404,
+                    message=f"The CustomObject with ID '({container},{key})'",
+                    errors=[
+                        types.InvalidSubjectError(
+                            code="InvalidSubject",
+                            message=f"The CustomObject with ID '({container},{key}' was not found.",
+                        )
+                    ],
+                )
+            )
+            return create_response(request, text=content, status_code=404)

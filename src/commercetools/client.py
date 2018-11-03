@@ -10,6 +10,7 @@ from commercetools import schemas
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoriesService
 from commercetools.services.channels import ChannelService
+from commercetools.services.custom_objects import CustomObjectService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
@@ -172,6 +173,10 @@ class Client:
     @property
     def categories(self) -> CategoriesService:
         return CategoriesService(self)
+
+    @property
+    def custom_objects(self) -> CustomObjectService:
+        return CustomObjectService(self)
 
     @property
     def products(self) -> ProductService:

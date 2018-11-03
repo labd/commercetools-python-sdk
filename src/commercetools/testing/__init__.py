@@ -6,6 +6,7 @@ import wrapt
 from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend
 from commercetools.testing.channels import ChannelsBackend
+from commercetools.testing.custom_objects import CustomObjectsBackend
 from commercetools.testing.payments import PaymentsBackend
 from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
@@ -17,6 +18,7 @@ class BackendRepository:
         self.auth = AuthBackend()
         self.categories = CategoriesBackend()
         self.channels = ChannelsBackend()
+        self.custom_objects = CustomObjectsBackend()
         self.payments = PaymentsBackend()
         self.products = ProductsBackend()
         self.product_projections = ProductProjectionsBackend(model=self.products.model)
@@ -27,6 +29,7 @@ class BackendRepository:
             "auth",
             "categories",
             "channels",
+            "custom_objects",
             "payments",
             "products",
             "product_projections",

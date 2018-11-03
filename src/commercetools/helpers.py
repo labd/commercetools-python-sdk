@@ -117,6 +117,9 @@ class Discriminator(Field):
             self.fail("type", input=value, type=value.__class__.__name__)
 
     def _load(self, value, data):
+        if not value:
+            return None
+
         discriminator_value = value[self.discriminator_field]
         schema_name = self.discriminator_schemas[discriminator_value]
         schema = self.get_schema(schema_name)

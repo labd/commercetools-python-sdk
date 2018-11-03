@@ -189,3 +189,5 @@ def test_extension_input_schema():
     result = schemas.ExtensionInputSchema().load(data)
     assert result.action == types.ExtensionAction.CREATE
     assert result.resource.type_id == types.ReferenceTypeId.ORDER
+
+    data = schemas.ExtensionInputSchema().dump(result)

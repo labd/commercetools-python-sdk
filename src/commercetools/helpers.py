@@ -100,7 +100,7 @@ class Discriminator(Field):
         if nested_obj is None:
             return None
 
-        discriminator_value = getattr(nested_obj, self.discriminator_field)
+        discriminator_value = getattr(nested_obj, self.discriminator_field[1])
         if isinstance(discriminator_value, str):
             schema_name = self.discriminator_schemas[discriminator_value]
         else:
@@ -120,7 +120,7 @@ class Discriminator(Field):
         if not value:
             return None
 
-        discriminator_value = value[self.discriminator_field]
+        discriminator_value = value[self.discriminator_field[0]]
         schema_name = self.discriminator_schemas[discriminator_value]
         schema = self.get_schema(schema_name)
 

@@ -341,7 +341,9 @@ class SchemaClassGenerator:
             func=ast.Name(id="helpers.Discriminator"),
             args=[],
             keywords=[
-                ast.keyword(arg="discriminator_field", value=ast.Str(s=field.name)),
+                ast.keyword(arg="discriminator_field", value=ast.Tuple(
+                    elts=[ast.Str(s=field.name), ast.Str(s=field.attribute_name)]
+                )),
                 ast.keyword(
                     arg="discriminator_schemas",
                     value=ast.Dict(

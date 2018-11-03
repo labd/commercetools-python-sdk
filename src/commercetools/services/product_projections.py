@@ -13,8 +13,8 @@ __all__ = ["ProductProjectionService"]
 
 class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
     sort = helpers.OptionalList(fields.String())
-    limit = helpers.OptionalList(fields.Int())
-    offset = helpers.OptionalList(fields.Int())
+    limit = fields.Int()
+    offset = fields.Int()
 
     staged = fields.Bool(data_key="staged", required=False, missing=False)
     price_currency = fields.String(data_key="priceCurrency")

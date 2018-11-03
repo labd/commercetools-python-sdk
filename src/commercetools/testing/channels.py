@@ -8,12 +8,12 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ChannelsModel(BaseModel):
-    def add(self, id, obj):
-        obj = self.add_channel(obj)
+    def add(self, obj):
+        obj = self.create_channel(obj)
         self.objects[obj.id] = obj
         return obj
 
-    def add_channel(self, obj):
+    def create_channel(self, obj: types.ChannelDraft) -> types.Channel:
         return types.Channel(
             id=str(uuid.uuid4()),
             version=1,
@@ -55,7 +55,7 @@ class ChannelsBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.ChannelDraftSchema().loads(request.body)
-        data = self.model.add(id, obj)
+        data = self.model.add(obj)
         content = schemas.ChannelSchema().dumps(data)
         return create_response(request, text=content)
 

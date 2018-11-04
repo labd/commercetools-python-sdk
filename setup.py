@@ -14,7 +14,11 @@ install_requires = [
 
 codegen_requires = ["PyYAML==3.13", "astunparse==1.6.1", "black==18.9b0", "isort"]
 
-docs_require = ["sphinx>=1.4.0"]
+docs_require = [
+    "sphinx>=1.4.0",
+    "sphinx-rtd-theme==0.4.2",
+    "sphinx-autodoc-typehints==1.3.0",
+]
 
 tests_require = [
     "freezegun==0.3.8",
@@ -55,7 +59,7 @@ setup(
     },
     entry_points={},
     package_dir={"": "src"},
-    packages=find_packages('src'),
+    packages=find_packages("src"),
     include_package_data=True,
     license="MIT",
     classifiers=[

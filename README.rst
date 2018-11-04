@@ -45,11 +45,11 @@ Example
     product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
     print(product)
 
+
 The client can also be configured by setting the following environment
 variables:
 
-
-.. code-block: sh
+.. code-block:: sh
 
     export CTP_PROJECT_KEY="<project key>"
     export CTP_CLIENT_SECRET="<client secret>"

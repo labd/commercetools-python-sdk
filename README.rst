@@ -7,6 +7,9 @@
 
 .. image:: https://img.shields.io/pypi/v/commercetools.svg
     :target: https://pypi.python.org/pypi/commercetools/
+.. image:: https://readthedocs.org/projects/commercetools-python-sdk/badge/?version=latest
+    :target: https://commercetools-python-sdk.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 .. end-no-pypi
 
 

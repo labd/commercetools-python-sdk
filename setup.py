@@ -15,7 +15,7 @@ install_requires = [
 codegen_requires = ["PyYAML==3.13", "astunparse==1.6.1", "black==18.9b0", "isort"]
 
 docs_require = [
-    "sphinx>=1.4.0",
+    "Sphinx>=1.8.1",
     "sphinx-rtd-theme==0.4.2",
     "sphinx-autodoc-typehints==1.3.0",
 ]

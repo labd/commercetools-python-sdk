@@ -4,6 +4,7 @@ from requests_mock import create_response
 
 from commercetools import schemas, types
 from commercetools.services.product_projections import ProductProjectionsQuerySchema
+from commercetools.testing import utils
 from commercetools.testing.abstract import ServiceBackend
 
 
@@ -22,12 +23,15 @@ class ProductProjectionsBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/product-projections/?(?P<path>.*)?"
 
     def query(self, request):
-        obj = ProductProjectionsQuerySchema().load(request.qs)
+        params = utils.parse_request_params(ProductProjectionsQuerySchema, request)
         results = [
-            self._convert_product_projection(product, obj["staged"])
+            self._convert_product_projection(product, params["staged"])
             for product in self.model.objects.values()
         ]
         results = [x for x in results if x]
+        if params.get("limit"):
+            results = results[:params["limit"]]
+
         data = {
             "count": len(results),
             "total": len(results),

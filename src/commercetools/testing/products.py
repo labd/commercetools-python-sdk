@@ -67,7 +67,7 @@ class ProductsBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[: params["limit"]]
+            results = results[:params["limit"]]
 
         data = {
             "count": len(results),

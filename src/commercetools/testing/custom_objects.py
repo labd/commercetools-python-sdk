@@ -5,6 +5,7 @@ from requests_mock import create_response
 
 from commercetools import schemas, types
 from commercetools.services import abstract
+from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
@@ -43,12 +44,16 @@ class CustomObjectsBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/custom-objects/?(?P<path>.*)?"
 
     def query(self, request):
-        obj = abstract.AbstractQuerySchema().load(request.qs)
+        params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
+        results = list(self.model.objects.values())
+        if params.get("limit"):
+            results = results[:params["limit"]]
+
         data = {
-            "count": len(self.model.objects),
+            "count": len(results),
             "total": len(self.model.objects),
             "offset": 0,
-            "results": self.model.objects.values(),
+            "results": results,
         }
         content = schemas.CustomObjectPagedQueryResponseSchema().dumps(data)
         return create_response(request, text=content)

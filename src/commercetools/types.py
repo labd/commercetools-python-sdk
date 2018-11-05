@@ -37,7 +37,7 @@ class Address:
     #: Optional :class:`str`
     state: typing.Optional[str]
     #: :class:`str`
-    country: typing.Optional["str"]
+    country: "str"
     #: Optional :class:`str`
     company: typing.Optional[str]
     #: Optional :class:`str`
@@ -77,7 +77,7 @@ class Address:
         city: typing.Optional[str] = None,
         region: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        country: typing.Optional["str"] = None,
+        country: "str" = None,
         company: typing.Optional[str] = None,
         department: typing.Optional[str] = None,
         building: typing.Optional[str] = None,
@@ -153,11 +153,11 @@ class Address:
 class Asset:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional list of :class:`str`
@@ -170,9 +170,9 @@ class Asset:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        sources: typing.List["AssetSource"] = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List[str]] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -205,13 +205,11 @@ class Asset:
 class AssetDimensions:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDimensionsSchema`."
     #: :class:`int`
-    w: typing.Optional[int]
+    w: int
     #: :class:`int`
-    h: typing.Optional[int]
+    h: int
 
-    def __init__(
-        self, *, w: typing.Optional[int] = None, h: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, w: int = None, h: int = None) -> None:
         self.w = w
         self.h = h
 
@@ -223,9 +221,9 @@ class AssetDimensions:
 class AssetDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDraftSchema`."
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional list of :class:`str`
@@ -238,8 +236,8 @@ class AssetDraft:
     def __init__(
         self,
         *,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        sources: typing.List["AssetSource"] = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List[str]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -270,7 +268,7 @@ class AssetDraft:
 class AssetSource:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSourceSchema`."
     #: :class:`str`
-    uri: typing.Optional[str]
+    uri: str
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.AssetDimensions`
@@ -281,7 +279,7 @@ class AssetSource:
     def __init__(
         self,
         *,
-        uri: typing.Optional[str] = None,
+        uri: str = None,
         key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
         content_type: typing.Optional[str] = None,
@@ -304,16 +302,11 @@ class AssetSource:
 class Attribute:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
+    value: typing.Any
 
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None,
-    ) -> None:
+    def __init__(self, *, name: str = None, value: typing.Any = None) -> None:
         self.name = name
         self.value = value
 
@@ -325,33 +318,33 @@ class Attribute:
 class AttributeDefinition:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionSchema`."
     #: :class:`commercetools.types.AttributeType`
-    type: typing.Optional["AttributeType"]
+    type: "AttributeType"
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
     #: :class:`bool` `(Named` ``isRequired`` `in Commercetools)`
-    is_required: typing.Optional[bool]
+    is_required: bool
     #: :class:`commercetools.types.AttributeConstraintEnum` `(Named` ``attributeConstraint`` `in Commercetools)`
-    attribute_constraint: typing.Optional["AttributeConstraintEnum"]
+    attribute_constraint: "AttributeConstraintEnum"
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
     input_tip: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.TextInputHint` `(Named` ``inputHint`` `in Commercetools)`
-    input_hint: typing.Optional["TextInputHint"]
+    input_hint: "TextInputHint"
     #: :class:`bool` `(Named` ``isSearchable`` `in Commercetools)`
-    is_searchable: typing.Optional[bool]
+    is_searchable: bool
 
     def __init__(
         self,
         *,
-        type: typing.Optional["AttributeType"] = None,
-        name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-        is_required: typing.Optional[bool] = None,
-        attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
+        type: "AttributeType" = None,
+        name: str = None,
+        label: "LocalizedString" = None,
+        is_required: bool = None,
+        attribute_constraint: "AttributeConstraintEnum" = None,
         input_tip: typing.Optional["LocalizedString"] = None,
-        input_hint: typing.Optional["TextInputHint"] = None,
-        is_searchable: typing.Optional[bool] = None,
+        input_hint: "TextInputHint" = None,
+        is_searchable: bool = None,
     ) -> None:
         self.type = type
         self.name = name
@@ -382,13 +375,13 @@ class AttributeDefinition:
 class AttributeDefinitionDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionDraftSchema`."
     #: :class:`commercetools.types.AttributeType`
-    type: typing.Optional["AttributeType"]
+    type: "AttributeType"
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
     #: :class:`bool` `(Named` ``isRequired`` `in Commercetools)`
-    is_required: typing.Optional[bool]
+    is_required: bool
     #: Optional :class:`commercetools.types.AttributeConstraintEnum` `(Named` ``attributeConstraint`` `in Commercetools)`
     attribute_constraint: typing.Optional["AttributeConstraintEnum"]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
@@ -401,10 +394,10 @@ class AttributeDefinitionDraft:
     def __init__(
         self,
         *,
-        type: typing.Optional["AttributeType"] = None,
-        name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-        is_required: typing.Optional[bool] = None,
+        type: "AttributeType" = None,
+        name: str = None,
+        label: "LocalizedString" = None,
+        is_required: bool = None,
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
@@ -439,16 +432,11 @@ class AttributeDefinitionDraft:
 class AttributeLocalizedEnumValue:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, key: str = None, label: "LocalizedString" = None) -> None:
         self.key = key
         self.label = label
 
@@ -460,13 +448,11 @@ class AttributeLocalizedEnumValue:
 class AttributePlainEnumValue:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributePlainEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str`
-    label: typing.Optional[str]
+    label: str
 
-    def __init__(
-        self, *, key: typing.Optional[str] = None, label: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, key: str = None, label: str = None) -> None:
         self.key = key
         self.label = label
 
@@ -478,9 +464,9 @@ class AttributePlainEnumValue:
 class AttributeType:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTypeSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         self.name = name
 
     def __repr__(self) -> str:
@@ -502,17 +488,17 @@ class AttributeValue:
 class CartDiscountDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
+    value: "CartDiscountValue"
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
-    cart_predicate: typing.Optional[str]
+    cart_predicate: str
     #: Optional :class:`commercetools.types.CartDiscountTarget`
     target: typing.Optional["CartDiscountTarget"]
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
     #: Optional :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: typing.Optional[bool]
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
@@ -520,7 +506,7 @@ class CartDiscountDraft:
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
     valid_until: typing.Optional[datetime.datetime]
     #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
-    requires_discount_code: typing.Optional[bool]
+    requires_discount_code: bool
     #: Optional :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
     stacking_mode: typing.Optional["StackingMode"]
     #: Optional :class:`commercetools.types.CustomFields`
@@ -529,16 +515,16 @@ class CartDiscountDraft:
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["CartDiscountValue"] = None,
-        cart_predicate: typing.Optional[str] = None,
+        value: "CartDiscountValue" = None,
+        cart_predicate: str = None,
         target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: typing.Optional[str] = None,
+        sort_order: str = None,
         is_active: typing.Optional[bool] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        requires_discount_code: typing.Optional[bool] = None,
+        requires_discount_code: bool = None,
         stacking_mode: typing.Optional["StackingMode"] = None,
         custom: typing.Optional["CustomFields"] = None,
     ) -> None:
@@ -579,9 +565,9 @@ class CartDiscountDraft:
 class CartDiscountTarget:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountTargetSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -592,9 +578,9 @@ class CartDiscountTarget:
 class CartDiscountValue:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -605,7 +591,7 @@ class CartDiscountValue:
 class CartDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDraftSchema`."
     #: :class:`str`
-    currency: typing.Optional["str"]
+    currency: "str"
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
     customer_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
@@ -652,7 +638,7 @@ class CartDraft:
     def __init__(
         self,
         *,
-        currency: typing.Optional["str"] = None,
+        currency: "str" = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -736,9 +722,9 @@ class CartDraft:
 class CategoryDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.CategoryReference`
@@ -763,8 +749,8 @@ class CategoryDraft:
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
+        slug: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         parent: typing.Optional["CategoryReference"] = None,
         order_hint: typing.Optional[str] = None,
@@ -813,9 +799,9 @@ class CategoryDraft:
 class ChangeSubscription:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChangeSubscriptionSchema`."
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
-    resource_type_id: typing.Optional[str]
+    resource_type_id: str
 
-    def __init__(self, *, resource_type_id: typing.Optional[str] = None) -> None:
+    def __init__(self, *, resource_type_id: str = None) -> None:
         self.resource_type_id = resource_type_id
 
     def __repr__(self) -> str:
@@ -826,7 +812,7 @@ class ChangeSubscription:
 class ChannelDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: Optional list of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.Optional[typing.List["ChannelRoleEnum"]]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -843,7 +829,7 @@ class ChannelDraft:
     def __init__(
         self,
         *,
-        key: typing.Optional[str] = None,
+        key: str = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -878,13 +864,11 @@ class ChannelDraft:
 class CustomFieldEnumValue:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str`
-    label: typing.Optional[str]
+    label: str
 
-    def __init__(
-        self, *, key: typing.Optional[str] = None, label: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, key: str = None, label: str = None) -> None:
         self.key = key
         self.label = label
 
@@ -896,16 +880,11 @@ class CustomFieldEnumValue:
 class CustomFieldLocalizedEnumValue:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, key: str = None, label: "LocalizedString" = None) -> None:
         self.key = key
         self.label = label
 
@@ -920,15 +899,12 @@ class CustomFieldLocalizedEnumValue:
 class CustomFields:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsSchema`."
     #: :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    type: "TypeReference"
     #: :class:`commercetools.types.FieldContainer`
-    fields: typing.Optional["FieldContainer"]
+    fields: "FieldContainer"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional["TypeReference"] = None,
-        fields: typing.Optional["FieldContainer"] = None,
+        self, *, type: "TypeReference" = None, fields: "FieldContainer" = None
     ) -> None:
         self.type = type
         self.fields = fields
@@ -941,14 +917,14 @@ class CustomFields:
 class CustomFieldsDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsDraftSchema`."
     #: :class:`commercetools.types.ResourceIdentifier`
-    type: typing.Optional["ResourceIdentifier"]
+    type: "ResourceIdentifier"
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["ResourceIdentifier"] = None,
+        type: "ResourceIdentifier" = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
         self.type = type
@@ -962,29 +938,27 @@ class CustomFieldsDraft:
 class CustomLineItem:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.TypedMoney`
-    money: typing.Optional["TypedMoney"]
+    money: "TypedMoney"
     #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedItemPrice"]
     #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["TypedMoney"]
+    total_price: "TypedMoney"
     #: :class:`str`
-    slug: typing.Optional[str]
+    slug: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: List of :class:`commercetools.types.ItemState`
-    state: typing.Optional[typing.List["ItemState"]]
+    state: typing.List["ItemState"]
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: typing.Optional["TaxRate"]
     #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
-    discounted_price_per_quantity: typing.Optional[
-        typing.List["DiscountedLineItemPriceForQuantity"]
-    ]
+    discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`commercetools.types.ItemShippingDetails` `(Named` ``shippingDetails`` `in Commercetools)`
@@ -993,18 +967,18 @@ class CustomLineItem:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        money: typing.Optional["TypedMoney"] = None,
+        id: str = None,
+        name: "LocalizedString" = None,
+        money: "TypedMoney" = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
-        total_price: typing.Optional["TypedMoney"] = None,
-        slug: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        state: typing.Optional[typing.List["ItemState"]] = None,
+        total_price: "TypedMoney" = None,
+        slug: str = None,
+        quantity: int = None,
+        state: typing.List["ItemState"] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
-        discounted_price_per_quantity: typing.Optional[
-            typing.List["DiscountedLineItemPriceForQuantity"]
+        discounted_price_per_quantity: typing.List[
+            "DiscountedLineItemPriceForQuantity"
         ] = None,
         custom: typing.Optional["CustomFields"] = None,
         shipping_details: typing.Optional["ItemShippingDetails"] = None,
@@ -1048,13 +1022,13 @@ class CustomLineItem:
 class CustomLineItemDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.Money`
-    money: typing.Optional["Money"]
+    money: "Money"
     #: :class:`str`
-    slug: typing.Optional[str]
+    slug: str
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -1067,10 +1041,10 @@ class CustomLineItemDraft:
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
-        quantity: typing.Optional[int] = None,
-        money: typing.Optional["Money"] = None,
-        slug: typing.Optional[str] = None,
+        name: "LocalizedString" = None,
+        quantity: int = None,
+        money: "Money" = None,
+        slug: str = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -1105,20 +1079,20 @@ class CustomLineItemDraft:
 class CustomObjectDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectDraftSchema`."
     #: :class:`str`
-    container: typing.Optional[str]
+    container: str
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
+    value: typing.Any
     #: Optional :class:`int`
     version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        container: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None,
+        container: str = None,
+        key: str = None,
+        value: typing.Any = None,
         version: typing.Optional[int] = None,
     ) -> None:
         self.container = container
@@ -1139,21 +1113,21 @@ class CustomObjectDraft:
 class CustomerChangePassword:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangePasswordSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`str` `(Named` ``currentPassword`` `in Commercetools)`
-    current_password: typing.Optional[str]
+    current_password: str
     #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
-    new_password: typing.Optional[str]
+    new_password: str
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        current_password: typing.Optional[str] = None,
-        new_password: typing.Optional[str] = None,
+        id: str = None,
+        version: int = None,
+        current_password: str = None,
+        new_password: str = None,
     ) -> None:
         self.id = id
         self.version = version
@@ -1171,18 +1145,18 @@ class CustomerChangePassword:
 class CustomerCreateEmailToken:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreateEmailTokenSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: Optional :class:`int`
     version: typing.Optional[int]
     #: :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
-    ttl_minutes: typing.Optional[int]
+    ttl_minutes: int
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
+        id: str = None,
         version: typing.Optional[int] = None,
-        ttl_minutes: typing.Optional[int] = None,
+        ttl_minutes: int = None,
     ) -> None:
         self.id = id
         self.version = version
@@ -1200,9 +1174,9 @@ class CustomerCreateEmailToken:
 class CustomerCreatePasswordResetToken:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatePasswordResetTokenSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
 
-    def __init__(self, *, email: typing.Optional[str] = None) -> None:
+    def __init__(self, *, email: str = None) -> None:
         self.email = email
 
     def __repr__(self) -> str:
@@ -1215,9 +1189,9 @@ class CustomerDraft:
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
@@ -1265,8 +1239,8 @@ class CustomerDraft:
         self,
         *,
         customer_number: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -1352,13 +1326,10 @@ class CustomerEmailVerify:
     #: Optional :class:`int`
     version: typing.Optional[int]
     #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
-    token_value: typing.Optional[str]
+    token_value: str
 
     def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        token_value: typing.Optional[str] = None,
+        self, *, version: typing.Optional[int] = None, token_value: str = None
     ) -> None:
         self.version = version
         self.token_value = token_value
@@ -1376,7 +1347,7 @@ class CustomerGroupDraft:
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str` `(Named` ``groupName`` `in Commercetools)`
-    group_name: typing.Optional[str]
+    group_name: str
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
 
@@ -1384,7 +1355,7 @@ class CustomerGroupDraft:
         self,
         *,
         key: typing.Optional[str] = None,
-        group_name: typing.Optional[str] = None,
+        group_name: str = None,
         custom: typing.Optional["CustomFields"] = None,
     ) -> None:
         self.key = key
@@ -1403,17 +1374,17 @@ class CustomerGroupDraft:
 class CustomerResetPassword:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerResetPasswordSchema`."
     #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
-    token_value: typing.Optional[str]
+    token_value: str
     #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
-    new_password: typing.Optional[str]
+    new_password: str
     #: Optional :class:`int`
     version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        token_value: typing.Optional[str] = None,
-        new_password: typing.Optional[str] = None,
+        token_value: str = None,
+        new_password: str = None,
         version: typing.Optional[int] = None,
     ) -> None:
         self.token_value = token_value
@@ -1432,15 +1403,12 @@ class CustomerResetPassword:
 class CustomerSignInResult:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSignInResultSchema`."
     #: :class:`commercetools.types.Customer`
-    customer: typing.Optional["Customer"]
+    customer: "Customer"
     #: Optional :class:`object`
     cart: typing.Optional[object]
 
     def __init__(
-        self,
-        *,
-        customer: typing.Optional["Customer"] = None,
-        cart: typing.Optional[object] = None,
+        self, *, customer: "Customer" = None, cart: typing.Optional[object] = None
     ) -> None:
         self.customer = customer
         self.cart = cart
@@ -1453,9 +1421,9 @@ class CustomerSignInResult:
 class CustomerSignin:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSigninSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``anonymousCartId`` `in Commercetools)`
     anonymous_cart_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.AnonymousCartSignInMode` `(Named` ``anonymousCartSignInMode`` `in Commercetools)`
@@ -1466,8 +1434,8 @@ class CustomerSignin:
     def __init__(
         self,
         *,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         anonymous_cart_id: typing.Optional[str] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
         anonymous_id: typing.Optional[str] = None,
@@ -1495,27 +1463,27 @@ class CustomerSignin:
 class CustomerToken:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerTokenSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: Optional :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
     last_modified_at: typing.Optional[datetime.datetime]
     #: :class:`str` `(Named` ``customerId`` `in Commercetools)`
-    customer_id: typing.Optional[str]
+    customer_id: str
     #: :class:`datetime.datetime` `(Named` ``expiresAt`` `in Commercetools)`
-    expires_at: typing.Optional[datetime.datetime]
+    expires_at: datetime.datetime
     #: :class:`str`
-    value: typing.Optional[str]
+    value: str
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        created_at: datetime.datetime = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
-        customer_id: typing.Optional[str] = None,
-        expires_at: typing.Optional[datetime.datetime] = None,
-        value: typing.Optional[str] = None,
+        customer_id: str = None,
+        expires_at: datetime.datetime = None,
+        value: str = None,
     ) -> None:
         self.id = id
         self.created_at = created_at
@@ -1542,23 +1510,23 @@ class CustomerToken:
 class Delivery:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliverySchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
     #: List of :class:`commercetools.types.Parcel`
-    parcels: typing.Optional[typing.List["Parcel"]]
+    parcels: typing.List["Parcel"]
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        parcels: typing.Optional[typing.List["Parcel"]] = None,
+        id: str = None,
+        created_at: datetime.datetime = None,
+        items: typing.List["DeliveryItem"] = None,
+        parcels: typing.List["Parcel"] = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
         self.id = id
@@ -1581,13 +1549,11 @@ class Delivery:
 class DeliveryItem:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self, *, id: typing.Optional[str] = None, quantity: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, id: str = None, quantity: int = None) -> None:
         self.id = id
         self.quantity = quantity
 
@@ -1599,9 +1565,9 @@ class DeliveryItem:
 class Destination:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DestinationSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1616,9 +1582,9 @@ class DiscountCodeDraft:
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`str`
-    code: typing.Optional[str]
+    code: str
     #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``cartDiscounts`` `in Commercetools)`
-    cart_discounts: typing.Optional[typing.List["CartDiscountReference"]]
+    cart_discounts: typing.List["CartDiscountReference"]
     #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: typing.Optional[str]
     #: Optional :class:`bool` `(Named` ``isActive`` `in Commercetools)`
@@ -1641,8 +1607,8 @@ class DiscountCodeDraft:
         *,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        code: typing.Optional[str] = None,
-        cart_discounts: typing.Optional[typing.List["CartDiscountReference"]] = None,
+        code: str = None,
+        cart_discounts: typing.List["CartDiscountReference"] = None,
         cart_predicate: typing.Optional[str] = None,
         is_active: typing.Optional[bool] = None,
         max_applications: typing.Optional[int] = None,
@@ -1689,15 +1655,15 @@ class DiscountCodeDraft:
 class DiscountCodeInfo:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeInfoSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
-    discount_code: typing.Optional["DiscountCodeReference"]
+    discount_code: "DiscountCodeReference"
     #: :class:`commercetools.types.DiscountCodeState`
-    state: typing.Optional["DiscountCodeState"]
+    state: "DiscountCodeState"
 
     def __init__(
         self,
         *,
-        discount_code: typing.Optional["DiscountCodeReference"] = None,
-        state: typing.Optional["DiscountCodeState"] = None,
+        discount_code: "DiscountCodeReference" = None,
+        state: "DiscountCodeState" = None,
     ) -> None:
         self.discount_code = discount_code
         self.state = state
@@ -1713,15 +1679,15 @@ class DiscountCodeInfo:
 class DiscountedLineItemPortion:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedLineItemPortionSchema`."
     #: :class:`commercetools.types.CartDiscountReference`
-    discount: typing.Optional["CartDiscountReference"]
+    discount: "CartDiscountReference"
     #: :class:`commercetools.types.Money` `(Named` ``discountedAmount`` `in Commercetools)`
-    discounted_amount: typing.Optional["Money"]
+    discounted_amount: "Money"
 
     def __init__(
         self,
         *,
-        discount: typing.Optional["CartDiscountReference"] = None,
-        discounted_amount: typing.Optional["Money"] = None,
+        discount: "CartDiscountReference" = None,
+        discounted_amount: "Money" = None,
     ) -> None:
         self.discount = discount
         self.discounted_amount = discounted_amount
@@ -1737,17 +1703,15 @@ class DiscountedLineItemPortion:
 class DiscountedLineItemPrice:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedLineItemPriceSchema`."
     #: :class:`commercetools.types.TypedMoney`
-    value: typing.Optional["TypedMoney"]
+    value: "TypedMoney"
     #: List of :class:`commercetools.types.DiscountedLineItemPortion` `(Named` ``includedDiscounts`` `in Commercetools)`
-    included_discounts: typing.Optional[typing.List["DiscountedLineItemPortion"]]
+    included_discounts: typing.List["DiscountedLineItemPortion"]
 
     def __init__(
         self,
         *,
-        value: typing.Optional["TypedMoney"] = None,
-        included_discounts: typing.Optional[
-            typing.List["DiscountedLineItemPortion"]
-        ] = None,
+        value: "TypedMoney" = None,
+        included_discounts: typing.List["DiscountedLineItemPortion"] = None,
     ) -> None:
         self.value = value
         self.included_discounts = included_discounts
@@ -1763,17 +1727,15 @@ class DiscountedLineItemPrice:
 class DiscountedLineItemPriceDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedLineItemPriceDraftSchema`."
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
     #: List of :class:`commercetools.types.DiscountedLineItemPortion` `(Named` ``includedDiscounts`` `in Commercetools)`
-    included_discounts: typing.Optional[typing.List["DiscountedLineItemPortion"]]
+    included_discounts: typing.List["DiscountedLineItemPortion"]
 
     def __init__(
         self,
         *,
-        value: typing.Optional["Money"] = None,
-        included_discounts: typing.Optional[
-            typing.List["DiscountedLineItemPortion"]
-        ] = None,
+        value: "Money" = None,
+        included_discounts: typing.List["DiscountedLineItemPortion"] = None,
     ) -> None:
         self.value = value
         self.included_discounts = included_discounts
@@ -1789,15 +1751,15 @@ class DiscountedLineItemPriceDraft:
 class DiscountedLineItemPriceForQuantity:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedLineItemPriceForQuantitySchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.DiscountedLineItemPrice` `(Named` ``discountedPrice`` `in Commercetools)`
-    discounted_price: typing.Optional["DiscountedLineItemPrice"]
+    discounted_price: "DiscountedLineItemPrice"
 
     def __init__(
         self,
         *,
-        quantity: typing.Optional[int] = None,
-        discounted_price: typing.Optional["DiscountedLineItemPrice"] = None,
+        quantity: int = None,
+        discounted_price: "DiscountedLineItemPrice" = None,
     ) -> None:
         self.quantity = quantity
         self.discounted_price = discounted_price
@@ -1813,15 +1775,12 @@ class DiscountedLineItemPriceForQuantity:
 class DiscountedPrice:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedPriceSchema`."
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
     #: :class:`commercetools.types.ProductDiscountReference`
-    discount: typing.Optional["ProductDiscountReference"]
+    discount: "ProductDiscountReference"
 
     def __init__(
-        self,
-        *,
-        value: typing.Optional["Money"] = None,
-        discount: typing.Optional["ProductDiscountReference"] = None,
+        self, *, value: "Money" = None, discount: "ProductDiscountReference" = None
     ) -> None:
         self.value = value
         self.discount = discount
@@ -1834,13 +1793,11 @@ class DiscountedPrice:
 class ErrorObject:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorObjectSchema`."
     #: :class:`str`
-    code: typing.Optional[str]
+    code: str
     #: :class:`str`
-    message: typing.Optional[str]
+    message: str
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         self.code = code
         self.message = message
 
@@ -1852,9 +1809,9 @@ class ErrorObject:
 class ErrorResponse:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorResponseSchema`."
     #: :class:`int` `(Named` ``statusCode`` `in Commercetools)`
-    status_code: typing.Optional[int]
+    status_code: int
     #: :class:`str`
-    message: typing.Optional[str]
+    message: str
     #: Optional :class:`str`
     error: typing.Optional[str]
     #: Optional :class:`str`
@@ -1865,8 +1822,8 @@ class ErrorResponse:
     def __init__(
         self,
         *,
-        status_code: typing.Optional[int] = None,
-        message: typing.Optional[str] = None,
+        status_code: int = None,
+        message: str = None,
         error: typing.Optional[str] = None,
         error_description: typing.Optional[str] = None,
         errors: typing.Optional[list] = None,
@@ -1894,9 +1851,9 @@ class ErrorResponse:
 class ExtensionDestination:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionDestinationSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1909,16 +1866,16 @@ class ExtensionDraft:
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ExtensionDestination`
-    destination: typing.Optional["ExtensionDestination"]
+    destination: "ExtensionDestination"
     #: List of :class:`commercetools.types.ExtensionTrigger`
-    triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    triggers: typing.List["ExtensionTrigger"]
 
     def __init__(
         self,
         *,
         key: typing.Optional[str] = None,
-        destination: typing.Optional["ExtensionDestination"] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        destination: "ExtensionDestination" = None,
+        triggers: typing.List["ExtensionTrigger"] = None,
     ) -> None:
         self.key = key
         self.destination = destination
@@ -1936,9 +1893,9 @@ class ExtensionDraft:
 class ExtensionHttpDestinationAuthentication:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionHttpDestinationAuthenticationSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -1949,15 +1906,12 @@ class ExtensionHttpDestinationAuthentication:
 class ExtensionInput:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionInputSchema`."
     #: :class:`commercetools.types.ExtensionAction`
-    action: typing.Optional["ExtensionAction"]
+    action: "ExtensionAction"
     #: :class:`commercetools.types.Reference`
-    resource: typing.Optional["Reference"]
+    resource: "Reference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional["ExtensionAction"] = None,
-        resource: typing.Optional["Reference"] = None,
+        self, *, action: "ExtensionAction" = None, resource: "Reference" = None
     ) -> None:
         self.action = action
         self.resource = resource
@@ -1970,15 +1924,15 @@ class ExtensionInput:
 class ExtensionTrigger:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionTriggerSchema`."
     #: :class:`commercetools.types.ExtensionResourceTypeId` `(Named` ``resourceTypeId`` `in Commercetools)`
-    resource_type_id: typing.Optional["ExtensionResourceTypeId"]
+    resource_type_id: "ExtensionResourceTypeId"
     #: List of :class:`commercetools.types.ExtensionAction`
-    actions: typing.Optional[typing.List["ExtensionAction"]]
+    actions: typing.List["ExtensionAction"]
 
     def __init__(
         self,
         *,
-        resource_type_id: typing.Optional["ExtensionResourceTypeId"] = None,
-        actions: typing.Optional[typing.List["ExtensionAction"]] = None,
+        resource_type_id: "ExtensionResourceTypeId" = None,
+        actions: typing.List["ExtensionAction"] = None,
     ) -> None:
         self.resource_type_id = resource_type_id
         self.actions = actions
@@ -1994,16 +1948,11 @@ class ExtensionTrigger:
 class ExternalLineItemTotalPrice:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExternalLineItemTotalPriceSchema`."
     #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
+    price: "Money"
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    total_price: "Money"
 
-    def __init__(
-        self,
-        *,
-        price: typing.Optional["Money"] = None,
-        total_price: typing.Optional["Money"] = None,
-    ) -> None:
+    def __init__(self, *, price: "Money" = None, total_price: "Money" = None) -> None:
         self.price = price
         self.total_price = total_price
 
@@ -2018,15 +1967,12 @@ class ExternalLineItemTotalPrice:
 class ExternalTaxAmountDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExternalTaxAmountDraftSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``totalGross`` `in Commercetools)`
-    total_gross: typing.Optional["Money"]
+    total_gross: "Money"
     #: :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
-    tax_rate: typing.Optional["ExternalTaxRateDraft"]
+    tax_rate: "ExternalTaxRateDraft"
 
     def __init__(
-        self,
-        *,
-        total_gross: typing.Optional["Money"] = None,
-        tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
+        self, *, total_gross: "Money" = None, tax_rate: "ExternalTaxRateDraft" = None
     ) -> None:
         self.total_gross = total_gross
         self.tax_rate = tax_rate
@@ -2042,11 +1988,11 @@ class ExternalTaxAmountDraft:
 class ExternalTaxRateDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExternalTaxRateDraftSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`int`
     amount: typing.Optional[int]
     #: :class:`str`
-    country: typing.Optional[str]
+    country: str
     #: Optional :class:`str`
     state: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
@@ -2055,9 +2001,9 @@ class ExternalTaxRateDraft:
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
+        name: str = None,
         amount: typing.Optional[int] = None,
-        country: typing.Optional[str] = None,
+        country: str = None,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
     ) -> None:
@@ -2078,9 +2024,9 @@ class ExternalTaxRateDraft:
 class FacetResult:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultSchema`."
     #: :class:`commercetools.types.FacetTypes`
-    type: typing.Optional["FacetTypes"]
+    type: "FacetTypes"
 
-    def __init__(self, *, type: typing.Optional["FacetTypes"] = None) -> None:
+    def __init__(self, *, type: "FacetTypes" = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -2091,39 +2037,39 @@ class FacetResult:
 class FacetResultRange:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultRangeSchema`."
     #: :class:`int` `(Named` ``from`` `in Commercetools)`
-    from_: typing.Optional[int]
+    from_: int
     #: :class:`str` `(Named` ``fromStr`` `in Commercetools)`
-    from_str: typing.Optional[str]
+    from_str: str
     #: :class:`int`
-    to: typing.Optional[int]
+    to: int
     #: :class:`str` `(Named` ``toStr`` `in Commercetools)`
-    to_str: typing.Optional[str]
+    to_str: str
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
     product_count: typing.Optional[int]
     #: :class:`int`
-    total: typing.Optional[int]
+    total: int
     #: :class:`int`
-    min: typing.Optional[int]
+    min: int
     #: :class:`int`
-    max: typing.Optional[int]
+    max: int
     #: :class:`int`
-    mean: typing.Optional[int]
+    mean: int
 
     def __init__(
         self,
         *,
-        from_: typing.Optional[int] = None,
-        from_str: typing.Optional[str] = None,
-        to: typing.Optional[int] = None,
-        to_str: typing.Optional[str] = None,
-        count: typing.Optional[int] = None,
+        from_: int = None,
+        from_str: str = None,
+        to: int = None,
+        to_str: str = None,
+        count: int = None,
         product_count: typing.Optional[int] = None,
-        total: typing.Optional[int] = None,
-        min: typing.Optional[int] = None,
-        max: typing.Optional[int] = None,
-        mean: typing.Optional[int] = None,
+        total: int = None,
+        min: int = None,
+        max: int = None,
+        mean: int = None,
     ) -> None:
         self.from_ = from_
         self.from_str = from_str
@@ -2158,17 +2104,17 @@ class FacetResultRange:
 class FacetResultTerm:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultTermSchema`."
     #: :class:`typing.Any`
-    term: typing.Optional[typing.Any]
+    term: typing.Any
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
     product_count: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        term: typing.Optional[typing.Any] = None,
-        count: typing.Optional[int] = None,
+        term: typing.Any = None,
+        count: int = None,
         product_count: typing.Optional[int] = None,
     ) -> None:
         self.term = term
@@ -2187,23 +2133,23 @@ class FacetResultTerm:
 class FieldDefinition:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldDefinitionSchema`."
     #: :class:`object`
-    type: typing.Optional[object]
+    type: object
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
     #: :class:`bool`
-    required: typing.Optional[bool]
+    required: bool
     #: Optional :class:`str` `(Named` ``inputHint`` `in Commercetools)`
     input_hint: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[object] = None,
-        name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-        required: typing.Optional[bool] = None,
+        type: object = None,
+        name: str = None,
+        label: "LocalizedString" = None,
+        required: bool = None,
         input_hint: typing.Optional[str] = None,
     ) -> None:
         self.type = type
@@ -2223,9 +2169,9 @@ class FieldDefinition:
 class FieldType:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldTypeSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         self.name = name
 
     def __repr__(self) -> str:
@@ -2236,16 +2182,11 @@ class FieldType:
 class GeoJson:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
     #: :class:`list`
-    coordinates: typing.Optional[list]
+    coordinates: list
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        coordinates: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, coordinates: list = None) -> None:
         self.type = type
         self.coordinates = coordinates
 
@@ -2257,17 +2198,17 @@ class GeoJson:
 class Image:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ImageSchema`."
     #: :class:`str`
-    url: typing.Optional[str]
+    url: str
     #: :class:`commercetools.types.ImageDimensions`
-    dimensions: typing.Optional["ImageDimensions"]
+    dimensions: "ImageDimensions"
     #: Optional :class:`str`
     label: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        url: typing.Optional[str] = None,
-        dimensions: typing.Optional["ImageDimensions"] = None,
+        url: str = None,
+        dimensions: "ImageDimensions" = None,
         label: typing.Optional[str] = None,
     ) -> None:
         self.url = url
@@ -2286,13 +2227,11 @@ class Image:
 class ImageDimensions:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ImageDimensionsSchema`."
     #: :class:`int`
-    w: typing.Optional[int]
+    w: int
     #: :class:`int`
-    h: typing.Optional[int]
+    h: int
 
-    def __init__(
-        self, *, w: typing.Optional[int] = None, h: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, w: int = None, h: int = None) -> None:
         self.w = w
         self.h = h
 
@@ -2304,11 +2243,11 @@ class ImageDimensions:
 class InventoryEntryDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDraftSchema`."
     #: :class:`str`
-    sku: typing.Optional[str]
+    sku: str
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
     #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
-    quantity_on_stock: typing.Optional[int]
+    quantity_on_stock: int
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
@@ -2319,9 +2258,9 @@ class InventoryEntryDraft:
     def __init__(
         self,
         *,
-        sku: typing.Optional[str] = None,
+        sku: str = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
-        quantity_on_stock: typing.Optional[int] = None,
+        quantity_on_stock: int = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -2351,15 +2290,12 @@ class InventoryEntryDraft:
 class ItemShippingDetails:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ItemShippingDetailsSchema`."
     #: List of :class:`commercetools.types.ItemShippingTarget`
-    targets: typing.Optional[typing.List["ItemShippingTarget"]]
+    targets: typing.List["ItemShippingTarget"]
     #: :class:`bool`
-    valid: typing.Optional[bool]
+    valid: bool
 
     def __init__(
-        self,
-        *,
-        targets: typing.Optional[typing.List["ItemShippingTarget"]] = None,
-        valid: typing.Optional[bool] = None,
+        self, *, targets: typing.List["ItemShippingTarget"] = None, valid: bool = None
     ) -> None:
         self.targets = targets
         self.valid = valid
@@ -2372,11 +2308,9 @@ class ItemShippingDetails:
 class ItemShippingDetailsDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ItemShippingDetailsDraftSchema`."
     #: List of :class:`commercetools.types.ItemShippingTarget`
-    targets: typing.Optional[typing.List["ItemShippingTarget"]]
+    targets: typing.List["ItemShippingTarget"]
 
-    def __init__(
-        self, *, targets: typing.Optional[typing.List["ItemShippingTarget"]] = None
-    ) -> None:
+    def __init__(self, *, targets: typing.List["ItemShippingTarget"] = None) -> None:
         self.targets = targets
 
     def __repr__(self) -> str:
@@ -2387,16 +2321,11 @@ class ItemShippingDetailsDraft:
 class ItemShippingTarget:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ItemShippingTargetSchema`."
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
-    address_key: typing.Optional[str]
+    address_key: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        address_key: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, address_key: str = None, quantity: int = None) -> None:
         self.address_key = address_key
         self.quantity = quantity
 
@@ -2411,16 +2340,11 @@ class ItemShippingTarget:
 class ItemState:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ItemStateSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
 
-    def __init__(
-        self,
-        *,
-        quantity: typing.Optional[int] = None,
-        state: typing.Optional["StateReference"] = None,
-    ) -> None:
+    def __init__(self, *, quantity: int = None, state: "StateReference" = None) -> None:
         self.quantity = quantity
         self.state = state
 
@@ -2432,27 +2356,27 @@ class ItemState:
 class LineItem:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
+    product_id: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``productSlug`` `in Commercetools)`
     product_slug: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
+    product_type: "ProductTypeReference"
     #: :class:`commercetools.types.ProductVariant`
-    variant: typing.Optional["ProductVariant"]
+    variant: "ProductVariant"
     #: :class:`commercetools.types.Price`
-    price: typing.Optional["Price"]
+    price: "Price"
     #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedItemPrice"]
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    total_price: "Money"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: List of :class:`commercetools.types.ItemState`
-    state: typing.Optional[typing.List["ItemState"]]
+    state: typing.List["ItemState"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: typing.Optional["TaxRate"]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
@@ -2460,13 +2384,11 @@ class LineItem:
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
     distribution_channel: typing.Optional["ChannelReference"]
     #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
-    discounted_price_per_quantity: typing.Optional[
-        typing.List["DiscountedLineItemPriceForQuantity"]
-    ]
+    discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
     #: :class:`commercetools.types.LineItemPriceMode` `(Named` ``priceMode`` `in Commercetools)`
-    price_mode: typing.Optional["LineItemPriceMode"]
+    price_mode: "LineItemPriceMode"
     #: :class:`commercetools.types.LineItemMode` `(Named` ``lineItemMode`` `in Commercetools)`
-    line_item_mode: typing.Optional["LineItemMode"]
+    line_item_mode: "LineItemMode"
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`commercetools.types.ItemShippingDetails` `(Named` ``shippingDetails`` `in Commercetools)`
@@ -2475,25 +2397,25 @@ class LineItem:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        product_id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        product_id: str = None,
+        name: "LocalizedString" = None,
         product_slug: typing.Optional["LocalizedString"] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        variant: typing.Optional["ProductVariant"] = None,
-        price: typing.Optional["Price"] = None,
+        product_type: "ProductTypeReference" = None,
+        variant: "ProductVariant" = None,
+        price: "Price" = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
-        total_price: typing.Optional["Money"] = None,
-        quantity: typing.Optional[int] = None,
-        state: typing.Optional[typing.List["ItemState"]] = None,
+        total_price: "Money" = None,
+        quantity: int = None,
+        state: typing.List["ItemState"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
-        discounted_price_per_quantity: typing.Optional[
-            typing.List["DiscountedLineItemPriceForQuantity"]
+        discounted_price_per_quantity: typing.List[
+            "DiscountedLineItemPriceForQuantity"
         ] = None,
-        price_mode: typing.Optional["LineItemPriceMode"] = None,
-        line_item_mode: typing.Optional["LineItemMode"] = None,
+        price_mode: "LineItemPriceMode" = None,
+        line_item_mode: "LineItemMode" = None,
         custom: typing.Optional["CustomFields"] = None,
         shipping_details: typing.Optional["ItemShippingDetails"] = None,
     ) -> None:
@@ -2622,13 +2544,13 @@ class LineItemImportDraft:
     #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
     product_id: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.ProductVariantImportDraft`
-    variant: typing.Optional["ProductVariantImportDraft"]
+    variant: "ProductVariantImportDraft"
     #: :class:`commercetools.types.PriceDraft`
-    price: typing.Optional["PriceDraft"]
+    price: "PriceDraft"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: Optional list of :class:`commercetools.types.ItemState`
     state: typing.Optional[typing.List["ItemState"]]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
@@ -2644,10 +2566,10 @@ class LineItemImportDraft:
         self,
         *,
         product_id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        variant: typing.Optional["ProductVariantImportDraft"] = None,
-        price: typing.Optional["PriceDraft"] = None,
-        quantity: typing.Optional[int] = None,
+        name: "LocalizedString" = None,
+        variant: "ProductVariantImportDraft" = None,
+        price: "PriceDraft" = None,
+        quantity: int = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -2687,15 +2609,12 @@ class LineItemImportDraft:
 class Location:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LocationSchema`."
     #: :class:`str`
-    country: typing.Optional["str"]
+    country: "str"
     #: Optional :class:`str`
     state: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        country: typing.Optional["str"] = None,
-        state: typing.Optional[str] = None,
+        self, *, country: "str" = None, state: typing.Optional[str] = None
     ) -> None:
         self.country = country
         self.state = state
@@ -2708,9 +2627,9 @@ class Location:
 class MessageConfiguration:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationSchema`."
     #: :class:`bool`
-    enabled: typing.Optional[bool]
+    enabled: bool
 
-    def __init__(self, *, enabled: typing.Optional[bool] = None) -> None:
+    def __init__(self, *, enabled: bool = None) -> None:
         self.enabled = enabled
 
     def __repr__(self) -> str:
@@ -2721,9 +2640,9 @@ class MessageConfiguration:
 class MessagePayload:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePayloadSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -2734,14 +2653,14 @@ class MessagePayload:
 class MessageSubscription:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSubscriptionSchema`."
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
-    resource_type_id: typing.Optional[str]
+    resource_type_id: str
     #: Optional list of :class:`str`
     types: typing.Optional[typing.List[str]]
 
     def __init__(
         self,
         *,
-        resource_type_id: typing.Optional[str] = None,
+        resource_type_id: str = None,
         types: typing.Optional[typing.List[str]] = None,
     ) -> None:
         self.resource_type_id = resource_type_id
@@ -2758,16 +2677,11 @@ class MessageSubscription:
 class Money:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MoneySchema`."
     #: :class:`int` `(Named` ``centAmount`` `in Commercetools)`
-    cent_amount: typing.Optional[int]
+    cent_amount: int
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
-    currency_code: typing.Optional["str"]
+    currency_code: "str"
 
-    def __init__(
-        self,
-        *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-    ) -> None:
+    def __init__(self, *, cent_amount: int = None, currency_code: "str" = None) -> None:
         self.cent_amount = cent_amount
         self.currency_code = currency_code
 
@@ -2782,7 +2696,7 @@ class Money:
 class MyCartDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartDraftSchema`."
     #: :class:`str`
-    currency: typing.Optional["str"]
+    currency: "str"
     #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
     customer_email: typing.Optional[str]
     #: Optional :class:`str`
@@ -2811,7 +2725,7 @@ class MyCartDraft:
     def __init__(
         self,
         *,
-        currency: typing.Optional["str"] = None,
+        currency: "str" = None,
         customer_email: typing.Optional[str] = None,
         country: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
@@ -2864,9 +2778,9 @@ class MyCartDraft:
 class MyCustomerDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerDraftSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
@@ -2895,8 +2809,8 @@ class MyCustomerDraft:
     def __init__(
         self,
         *,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -2951,11 +2865,11 @@ class MyCustomerDraft:
 class MyLineItemDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyLineItemDraftSchema`."
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
+    product_id: str
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
@@ -2968,9 +2882,9 @@ class MyLineItemDraft:
     def __init__(
         self,
         *,
-        product_id: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-        quantity: typing.Optional[int] = None,
+        product_id: str = None,
+        variant_id: int = None,
+        quantity: int = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -3003,13 +2917,11 @@ class MyLineItemDraft:
 class MyOrderFromCartDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyOrderFromCartDraftSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
 
-    def __init__(
-        self, *, id: typing.Optional[str] = None, version: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, id: str = None, version: int = None) -> None:
         self.id = id
         self.version = version
 
@@ -3021,15 +2933,12 @@ class MyOrderFromCartDraft:
 class OrderEditApply:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditApplySchema`."
     #: :class:`int` `(Named` ``editVersion`` `in Commercetools)`
-    edit_version: typing.Optional[int]
+    edit_version: int
     #: :class:`int` `(Named` ``resourceVersion`` `in Commercetools)`
-    resource_version: typing.Optional[int]
+    resource_version: int
 
     def __init__(
-        self,
-        *,
-        edit_version: typing.Optional[int] = None,
-        resource_version: typing.Optional[int] = None,
+        self, *, edit_version: int = None, resource_version: int = None
     ) -> None:
         self.edit_version = edit_version
         self.resource_version = resource_version
@@ -3047,9 +2956,9 @@ class OrderEditDraft:
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.OrderReference`
-    resource: typing.Optional["OrderReference"]
+    resource: "OrderReference"
     #: List of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
-    staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]]
+    staged_actions: typing.List["StagedOrderUpdateAction"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`str`
@@ -3061,8 +2970,8 @@ class OrderEditDraft:
         self,
         *,
         key: typing.Optional[str] = None,
-        resource: typing.Optional["OrderReference"] = None,
-        staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
+        resource: "OrderReference" = None,
+        staged_actions: typing.List["StagedOrderUpdateAction"] = None,
         custom: typing.Optional["CustomFields"] = None,
         comment: typing.Optional[str] = None,
         dry_run: typing.Optional[bool] = None,
@@ -3092,9 +3001,9 @@ class OrderEditDraft:
 class OrderEditResult:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditResultSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -3105,18 +3014,18 @@ class OrderEditResult:
 class OrderExcerpt:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderExcerptSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    total_price: "Money"
     #: :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
-    taxed_price: typing.Optional["TaxedPrice"]
+    taxed_price: "TaxedPrice"
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
 
     def __init__(
         self,
         *,
-        total_price: typing.Optional["Money"] = None,
-        taxed_price: typing.Optional["TaxedPrice"] = None,
-        version: typing.Optional[int] = None,
+        total_price: "Money" = None,
+        taxed_price: "TaxedPrice" = None,
+        version: int = None,
     ) -> None:
         self.total_price = total_price
         self.taxed_price = taxed_price
@@ -3134,9 +3043,9 @@ class OrderExcerpt:
 class OrderFromCartDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderFromCartDraftSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
     order_number: typing.Optional[str]
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
@@ -3145,8 +3054,8 @@ class OrderFromCartDraft:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
+        id: str = None,
+        version: int = None,
         order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
     ) -> None:
@@ -3176,7 +3085,7 @@ class OrderImportDraft:
     #: Optional list of :class:`commercetools.types.CustomLineItemDraft` `(Named` ``customLineItems`` `in Commercetools)`
     custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]]
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    total_price: "Money"
     #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedPrice"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
@@ -3214,7 +3123,7 @@ class OrderImportDraft:
         customer_email: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["LineItemImportDraft"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]] = None,
-        total_price: typing.Optional["Money"] = None,
+        total_price: "Money" = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
@@ -3283,21 +3192,21 @@ class OrderImportDraft:
 class PagedQueryResponse:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PagedQueryResponseSchema`."
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Resource`
-    results: typing.Optional[typing.Sequence["Resource"]]
+    results: typing.Sequence["Resource"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Resource"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Resource"] = None,
     ) -> None:
         self.count = count
         self.total = total
@@ -3317,9 +3226,9 @@ class PagedQueryResponse:
 class Parcel:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
@@ -3330,8 +3239,8 @@ class Parcel:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        created_at: datetime.datetime = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -3425,16 +3334,11 @@ class ParcelMeasurements:
 class PayloadNotIncluded:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PayloadNotIncludedSchema`."
     #: :class:`str`
-    reason: typing.Optional[str]
+    reason: str
     #: :class:`str` `(Named` ``payloadType`` `in Commercetools)`
-    payload_type: typing.Optional[str]
+    payload_type: str
 
-    def __init__(
-        self,
-        *,
-        reason: typing.Optional[str] = None,
-        payload_type: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, reason: str = None, payload_type: str = None) -> None:
         self.reason = reason
         self.payload_type = payload_type
 
@@ -3457,7 +3361,7 @@ class PaymentDraft:
     #: Optional :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
     interface_id: typing.Optional[str]
     #: :class:`commercetools.types.Money` `(Named` ``amountPlanned`` `in Commercetools)`
-    amount_planned: typing.Optional["Money"]
+    amount_planned: "Money"
     #: Optional :class:`commercetools.types.Money` `(Named` ``amountAuthorized`` `in Commercetools)`
     amount_authorized: typing.Optional["Money"]
     #: Optional :class:`str` `(Named` ``authorizedUntil`` `in Commercetools)`
@@ -3486,7 +3390,7 @@ class PaymentDraft:
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: typing.Optional["Money"] = None,
+        amount_planned: "Money" = None,
         amount_authorized: typing.Optional["Money"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["Money"] = None,
@@ -3543,11 +3447,9 @@ class PaymentDraft:
 class PaymentInfo:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInfoSchema`."
     #: List of :class:`commercetools.types.PaymentReference`
-    payments: typing.Optional[typing.List["PaymentReference"]]
+    payments: typing.List["PaymentReference"]
 
-    def __init__(
-        self, *, payments: typing.Optional[typing.List["PaymentReference"]] = None
-    ) -> None:
+    def __init__(self, *, payments: typing.List["PaymentReference"] = None) -> None:
         self.payments = payments
 
     def __repr__(self) -> str:
@@ -3618,7 +3520,7 @@ class Price:
     #: Optional :class:`str`
     id: typing.Optional[str]
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -3640,7 +3542,7 @@ class Price:
         self,
         *,
         id: typing.Optional[str] = None,
-        value: typing.Optional["Money"] = None,
+        value: "Money" = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -3683,7 +3585,7 @@ class Price:
 class PriceDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceDraftSchema`."
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -3702,7 +3604,7 @@ class PriceDraft:
     def __init__(
         self,
         *,
-        value: typing.Optional["Money"] = None,
+        value: "Money" = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -3740,16 +3642,11 @@ class PriceDraft:
 class PriceFunction:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceFunctionSchema`."
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
-    currency_code: typing.Optional["str"]
+    currency_code: "str"
     #: :class:`str`
-    function: typing.Optional[str]
+    function: str
 
-    def __init__(
-        self,
-        *,
-        currency_code: typing.Optional["str"] = None,
-        function: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, currency_code: "str" = None, function: str = None) -> None:
         self.currency_code = currency_code
         self.function = function
 
@@ -3764,16 +3661,11 @@ class PriceFunction:
 class PriceTier:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierSchema`."
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
-    minimum_quantity: typing.Optional[int]
+    minimum_quantity: int
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
 
-    def __init__(
-        self,
-        *,
-        minimum_quantity: typing.Optional[int] = None,
-        value: typing.Optional["Money"] = None,
-    ) -> None:
+    def __init__(self, *, minimum_quantity: int = None, value: "Money" = None) -> None:
         self.minimum_quantity = minimum_quantity
         self.value = value
 
@@ -3788,21 +3680,21 @@ class PriceTier:
 class ProductCatalogData:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCatalogDataSchema`."
     #: :class:`bool`
-    published: typing.Optional[bool]
+    published: bool
     #: :class:`commercetools.types.ProductData`
-    current: typing.Optional["ProductData"]
+    current: "ProductData"
     #: :class:`commercetools.types.ProductData`
-    staged: typing.Optional["ProductData"]
+    staged: "ProductData"
     #: :class:`bool` `(Named` ``hasStagedChanges`` `in Commercetools)`
-    has_staged_changes: typing.Optional[bool]
+    has_staged_changes: bool
 
     def __init__(
         self,
         *,
-        published: typing.Optional[bool] = None,
-        current: typing.Optional["ProductData"] = None,
-        staged: typing.Optional["ProductData"] = None,
-        has_staged_changes: typing.Optional[bool] = None,
+        published: bool = None,
+        current: "ProductData" = None,
+        staged: "ProductData" = None,
+        has_staged_changes: bool = None,
     ) -> None:
         self.published = published
         self.current = current
@@ -3820,15 +3712,15 @@ class ProductCatalogData:
 class ProductData:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDataSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: List of :class:`commercetools.types.CategoryReference`
-    categories: typing.Optional[typing.List["CategoryReference"]]
+    categories: typing.List["CategoryReference"]
     #: Optional :class:`commercetools.types.CategoryOrderHints` `(Named` ``categoryOrderHints`` `in Commercetools)`
     category_order_hints: typing.Optional["CategoryOrderHints"]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
     meta_title: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaDescription`` `in Commercetools)`
@@ -3836,26 +3728,26 @@ class ProductData:
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaKeywords`` `in Commercetools)`
     meta_keywords: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductVariant` `(Named` ``masterVariant`` `in Commercetools)`
-    master_variant: typing.Optional["ProductVariant"]
+    master_variant: "ProductVariant"
     #: List of :class:`commercetools.types.ProductVariant`
-    variants: typing.Optional[typing.List["ProductVariant"]]
+    variants: typing.List["ProductVariant"]
     #: :class:`commercetools.types.SearchKeywords` `(Named` ``searchKeywords`` `in Commercetools)`
-    search_keywords: typing.Optional["SearchKeywords"]
+    search_keywords: "SearchKeywords"
 
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
-        categories: typing.Optional[typing.List["CategoryReference"]] = None,
+        name: "LocalizedString" = None,
+        categories: typing.List["CategoryReference"] = None,
         category_order_hints: typing.Optional["CategoryOrderHints"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        slug: "LocalizedString" = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        master_variant: typing.Optional["ProductVariant"] = None,
-        variants: typing.Optional[typing.List["ProductVariant"]] = None,
-        search_keywords: typing.Optional["SearchKeywords"] = None,
+        master_variant: "ProductVariant" = None,
+        variants: typing.List["ProductVariant"] = None,
+        search_keywords: "SearchKeywords" = None,
     ) -> None:
         self.name = name
         self.categories = categories
@@ -3892,17 +3784,17 @@ class ProductData:
 class ProductDiscountDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductDiscountValue`
-    value: typing.Optional["ProductDiscountValue"]
+    value: "ProductDiscountValue"
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -3911,12 +3803,12 @@ class ProductDiscountDraft:
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["ProductDiscountValue"] = None,
-        predicate: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
+        value: "ProductDiscountValue" = None,
+        predicate: str = None,
+        sort_order: str = None,
+        is_active: bool = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -3949,21 +3841,21 @@ class ProductDiscountDraft:
 class ProductDiscountMatchQuery:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountMatchQuerySchema`."
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
+    product_id: str
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: :class:`bool`
-    staged: typing.Optional[bool]
+    staged: bool
     #: :class:`commercetools.types.Price`
-    price: typing.Optional["Price"]
+    price: "Price"
 
     def __init__(
         self,
         *,
-        product_id: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-        staged: typing.Optional[bool] = None,
-        price: typing.Optional["Price"] = None,
+        product_id: str = None,
+        variant_id: int = None,
+        staged: bool = None,
+        price: "Price" = None,
     ) -> None:
         self.product_id = product_id
         self.variant_id = variant_id
@@ -3981,9 +3873,9 @@ class ProductDiscountMatchQuery:
 class ProductDiscountValue:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -3996,9 +3888,9 @@ class ProductDraft:
     #: Optional :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
     product_type: typing.Optional["ProductTypeReference"]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -4030,8 +3922,8 @@ class ProductDraft:
         self,
         *,
         product_type: typing.Optional["ProductTypeReference"] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
+        slug: "LocalizedString" = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         categories: typing.Optional[typing.List["CategoryReference"]] = None,
@@ -4093,9 +3985,9 @@ class ProductTypeDraft:
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`str`
-    description: typing.Optional[str]
+    description: str
     #: Optional list of :class:`commercetools.types.AttributeDefinitionDraft`
     attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
 
@@ -4103,8 +3995,8 @@ class ProductTypeDraft:
         self,
         *,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        name: str = None,
+        description: str = None,
         attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None,
     ) -> None:
         self.key = key
@@ -4125,7 +4017,7 @@ class ProductTypeDraft:
 class ProductVariant:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantSchema`."
     #: :class:`int`
-    id: typing.Optional[int]
+    id: int
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`str`
@@ -4152,7 +4044,7 @@ class ProductVariant:
     def __init__(
         self,
         *,
-        id: typing.Optional[int] = None,
+        id: int = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["Price"]] = None,
@@ -4350,38 +4242,38 @@ class ProductVariantImportDraft:
 class Project:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: List of :class:`str`
-    countries: typing.Optional[typing.List["str"]]
+    countries: typing.List["str"]
     #: List of :class:`str`
-    currencies: typing.Optional[typing.List["str"]]
+    currencies: typing.List["str"]
     #: List of :class:`str`
-    languages: typing.Optional[typing.List["str"]]
+    languages: typing.List["str"]
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: Optional :class:`str` `(Named` ``trialUntil`` `in Commercetools)`
     trial_until: typing.Optional[str]
     #: :class:`commercetools.types.MessageConfiguration`
-    messages: typing.Optional["MessageConfiguration"]
+    messages: "MessageConfiguration"
     #: Optional :class:`commercetools.types.ShippingRateInputType` `(Named` ``shippingRateInputType`` `in Commercetools)`
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
 
     def __init__(
         self,
         *,
-        version: typing.Optional[int] = None,
-        key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        countries: typing.Optional[typing.List["str"]] = None,
-        currencies: typing.Optional[typing.List["str"]] = None,
-        languages: typing.Optional[typing.List["str"]] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
+        version: int = None,
+        key: str = None,
+        name: str = None,
+        countries: typing.List["str"] = None,
+        currencies: typing.List["str"] = None,
+        languages: typing.List["str"] = None,
+        created_at: datetime.datetime = None,
         trial_until: typing.Optional[str] = None,
-        messages: typing.Optional["MessageConfiguration"] = None,
+        messages: "MessageConfiguration" = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
     ) -> None:
         self.version = version
@@ -4417,9 +4309,9 @@ class Project:
 class ReplicaCartDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReplicaCartDraftSchema`."
     #: :class:`commercetools.types.Reference`
-    reference: typing.Optional["Reference"]
+    reference: "Reference"
 
-    def __init__(self, *, reference: typing.Optional["Reference"] = None) -> None:
+    def __init__(self, *, reference: "Reference" = None) -> None:
         self.reference = reference
 
     def __repr__(self) -> str:
@@ -4430,21 +4322,21 @@ class ReplicaCartDraft:
 class Resource:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
     ) -> None:
         self.id = id
         self.version = version
@@ -4493,7 +4385,7 @@ class ResourceIdentifier:
 class ReturnInfo:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnInfoSchema`."
     #: List of :class:`commercetools.types.ReturnItem`
-    items: typing.Optional[typing.List["ReturnItem"]]
+    items: typing.List["ReturnItem"]
     #: Optional :class:`str` `(Named` ``returnTrackingId`` `in Commercetools)`
     return_tracking_id: typing.Optional[str]
     #: Optional :class:`datetime.datetime` `(Named` ``returnDate`` `in Commercetools)`
@@ -4502,7 +4394,7 @@ class ReturnInfo:
     def __init__(
         self,
         *,
-        items: typing.Optional[typing.List["ReturnItem"]] = None,
+        items: typing.List["ReturnItem"] = None,
         return_tracking_id: typing.Optional[str] = None,
         return_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -4522,33 +4414,33 @@ class ReturnInfo:
 class ReturnItem:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnItemSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`str`
     comment: typing.Optional[str]
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
-    shipment_state: typing.Optional["ReturnShipmentState"]
+    shipment_state: "ReturnShipmentState"
     #: :class:`commercetools.types.ReturnPaymentState` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional["ReturnPaymentState"]
+    payment_state: "ReturnPaymentState"
     #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_at: datetime.datetime
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        line_item_id: typing.Optional[str] = None,
+        id: str = None,
+        quantity: int = None,
+        line_item_id: str = None,
         comment: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ReturnShipmentState"] = None,
-        payment_state: typing.Optional["ReturnPaymentState"] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
+        shipment_state: "ReturnShipmentState" = None,
+        payment_state: "ReturnPaymentState" = None,
+        last_modified_at: datetime.datetime = None,
+        created_at: datetime.datetime = None,
     ) -> None:
         self.id = id
         self.quantity = quantity
@@ -4579,21 +4471,21 @@ class ReturnItem:
 class ReturnItemDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnItemDraftSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`str`
     comment: typing.Optional[str]
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
-    shipment_state: typing.Optional["ReturnShipmentState"]
+    shipment_state: "ReturnShipmentState"
 
     def __init__(
         self,
         *,
-        quantity: typing.Optional[int] = None,
-        line_item_id: typing.Optional[str] = None,
+        quantity: int = None,
+        line_item_id: str = None,
         comment: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ReturnShipmentState"] = None,
+        shipment_state: "ReturnShipmentState" = None,
     ) -> None:
         self.quantity = quantity
         self.line_item_id = line_item_id
@@ -4683,24 +4575,24 @@ class ReviewDraft:
 class ReviewRatingStatistics:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingStatisticsSchema`."
     #: :class:`int` `(Named` ``averageRating`` `in Commercetools)`
-    average_rating: typing.Optional[int]
+    average_rating: int
     #: :class:`int` `(Named` ``highestRating`` `in Commercetools)`
-    highest_rating: typing.Optional[int]
+    highest_rating: int
     #: :class:`int` `(Named` ``lowestRating`` `in Commercetools)`
-    lowest_rating: typing.Optional[int]
+    lowest_rating: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: :class:`object` `(Named` ``ratingsDistribution`` `in Commercetools)`
-    ratings_distribution: typing.Optional[object]
+    ratings_distribution: object
 
     def __init__(
         self,
         *,
-        average_rating: typing.Optional[int] = None,
-        highest_rating: typing.Optional[int] = None,
-        lowest_rating: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
-        ratings_distribution: typing.Optional[object] = None,
+        average_rating: int = None,
+        highest_rating: int = None,
+        lowest_rating: int = None,
+        count: int = None,
+        ratings_distribution: object = None,
     ) -> None:
         self.average_rating = average_rating
         self.highest_rating = highest_rating
@@ -4725,11 +4617,11 @@ class ReviewRatingStatistics:
 class ScopedPrice:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ScopedPriceSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`commercetools.types.TypedMoney`
-    value: typing.Optional["TypedMoney"]
+    value: "TypedMoney"
     #: :class:`commercetools.types.TypedMoney` `(Named` ``currentValue`` `in Commercetools)`
-    current_value: typing.Optional["TypedMoney"]
+    current_value: "TypedMoney"
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -4748,9 +4640,9 @@ class ScopedPrice:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        value: typing.Optional["TypedMoney"] = None,
-        current_value: typing.Optional["TypedMoney"] = None,
+        id: str = None,
+        value: "TypedMoney" = None,
+        current_value: "TypedMoney" = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -4792,14 +4684,14 @@ class ScopedPrice:
 class SearchKeyword:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SearchKeywordSchema`."
     #: :class:`str`
-    text: typing.Optional[str]
+    text: str
     #: Optional :class:`commercetools.types.SuggestTokenizer` `(Named` ``suggestTokenizer`` `in Commercetools)`
     suggest_tokenizer: typing.Optional["SuggestTokenizer"]
 
     def __init__(
         self,
         *,
-        text: typing.Optional[str] = None,
+        text: str = None,
         suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
     ) -> None:
         self.text = text
@@ -4816,11 +4708,11 @@ class SearchKeyword:
 class ShippingInfo:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingInfoSchema`."
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
-    shipping_method_name: typing.Optional[str]
+    shipping_method_name: str
     #: :class:`commercetools.types.TypedMoney`
-    price: typing.Optional["TypedMoney"]
+    price: "TypedMoney"
     #: :class:`commercetools.types.ShippingRate` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRate"]
+    shipping_rate: "ShippingRate"
     #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedItemPrice"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
@@ -4834,21 +4726,21 @@ class ShippingInfo:
     #: Optional :class:`commercetools.types.DiscountedLineItemPrice` `(Named` ``discountedPrice`` `in Commercetools)`
     discounted_price: typing.Optional["DiscountedLineItemPrice"]
     #: :class:`commercetools.types.ShippingMethodState` `(Named` ``shippingMethodState`` `in Commercetools)`
-    shipping_method_state: typing.Optional["ShippingMethodState"]
+    shipping_method_state: "ShippingMethodState"
 
     def __init__(
         self,
         *,
-        shipping_method_name: typing.Optional[str] = None,
-        price: typing.Optional["TypedMoney"] = None,
-        shipping_rate: typing.Optional["ShippingRate"] = None,
+        shipping_method_name: str = None,
+        price: "TypedMoney" = None,
+        shipping_rate: "ShippingRate" = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         shipping_method: typing.Optional["ShippingMethodReference"] = None,
         deliveries: typing.Optional[typing.List["Delivery"]] = None,
         discounted_price: typing.Optional["DiscountedLineItemPrice"] = None,
-        shipping_method_state: typing.Optional["ShippingMethodState"] = None,
+        shipping_method_state: "ShippingMethodState" = None,
     ) -> None:
         self.shipping_method_name = shipping_method_name
         self.price = price
@@ -4883,11 +4775,11 @@ class ShippingInfo:
 class ShippingInfoDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingInfoDraftSchema`."
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
-    shipping_method_name: typing.Optional[str]
+    shipping_method_name: str
     #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
+    price: "Money"
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRateDraft"]
+    shipping_rate: "ShippingRateDraft"
     #: Optional :class:`commercetools.types.TaxedItemPriceDraft` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedItemPriceDraft"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
@@ -4906,9 +4798,9 @@ class ShippingInfoDraft:
     def __init__(
         self,
         *,
-        shipping_method_name: typing.Optional[str] = None,
-        price: typing.Optional["Money"] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        shipping_method_name: str = None,
+        price: "Money" = None,
+        shipping_rate: "ShippingRateDraft" = None,
         taxed_price: typing.Optional["TaxedItemPriceDraft"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
@@ -4952,15 +4844,15 @@ class ShippingMethodDraft:
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    tax_category: "TaxCategoryReference"
     #: List of :class:`commercetools.types.ZoneRateDraft` `(Named` ``zoneRates`` `in Commercetools)`
-    zone_rates: typing.Optional[typing.List["ZoneRateDraft"]]
+    zone_rates: typing.List["ZoneRateDraft"]
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
-    is_default: typing.Optional[bool]
+    is_default: bool
     #: Optional :class:`str`
     predicate: typing.Optional[str]
 
@@ -4968,11 +4860,11 @@ class ShippingMethodDraft:
         self,
         *,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
-        zone_rates: typing.Optional[typing.List["ZoneRateDraft"]] = None,
-        is_default: typing.Optional[bool] = None,
+        tax_category: "TaxCategoryReference" = None,
+        zone_rates: typing.List["ZoneRateDraft"] = None,
+        is_default: bool = None,
         predicate: typing.Optional[str] = None,
     ) -> None:
         self.key = key
@@ -5002,21 +4894,21 @@ class ShippingMethodDraft:
 class ShippingRate:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateSchema`."
     #: :class:`commercetools.types.TypedMoney`
-    price: typing.Optional["TypedMoney"]
+    price: "TypedMoney"
     #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``freeAbove`` `in Commercetools)`
     free_above: typing.Optional["TypedMoney"]
     #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
     is_matching: typing.Optional[bool]
     #: List of :class:`commercetools.types.ShippingRatePriceTier`
-    tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
+    tiers: typing.List["ShippingRatePriceTier"]
 
     def __init__(
         self,
         *,
-        price: typing.Optional["TypedMoney"] = None,
+        price: "TypedMoney" = None,
         free_above: typing.Optional["TypedMoney"] = None,
         is_matching: typing.Optional[bool] = None,
-        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None,
+        tiers: typing.List["ShippingRatePriceTier"] = None,
     ) -> None:
         self.price = price
         self.free_above = free_above
@@ -5036,7 +4928,7 @@ class ShippingRate:
 class ShippingRateDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateDraftSchema`."
     #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
+    price: "Money"
     #: Optional :class:`commercetools.types.Money` `(Named` ``freeAbove`` `in Commercetools)`
     free_above: typing.Optional["Money"]
     #: Optional list of :class:`commercetools.types.ShippingRatePriceTier`
@@ -5045,7 +4937,7 @@ class ShippingRateDraft:
     def __init__(
         self,
         *,
-        price: typing.Optional["Money"] = None,
+        price: "Money" = None,
         free_above: typing.Optional["Money"] = None,
         tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None,
     ) -> None:
@@ -5065,9 +4957,9 @@ class ShippingRateDraft:
 class ShippingRateInput:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -5078,9 +4970,9 @@ class ShippingRateInput:
 class ShippingRateInputDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputDraftSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -5091,9 +4983,9 @@ class ShippingRateInputDraft:
 class ShippingRateInputType:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputTypeSchema`."
     #: :class:`commercetools.types.ShippingRateTierType`
-    type: typing.Optional["ShippingRateTierType"]
+    type: "ShippingRateTierType"
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -5104,9 +4996,9 @@ class ShippingRateInputType:
 class ShippingRatePriceTier:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRatePriceTierSchema`."
     #: :class:`commercetools.types.ShippingRateTierType`
-    type: typing.Optional["ShippingRateTierType"]
+    type: "ShippingRateTierType"
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -5129,7 +5021,7 @@ class ShoppingListDraft:
     #: Optional list of :class:`commercetools.types.ShoppingListLineItemDraft` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     slug: typing.Optional["LocalizedString"]
     #: Optional list of :class:`commercetools.types.TextLineItemDraft` `(Named` ``textLineItems`` `in Commercetools)`
@@ -5146,7 +5038,7 @@ class ShoppingListDraft:
         description: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
         anonymous_id: typing.Optional[str] = None,
@@ -5184,23 +5076,23 @@ class ShoppingListDraft:
 class ShoppingListLineItem:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemSchema`."
     #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
-    added_at: typing.Optional[datetime.datetime]
+    added_at: datetime.datetime
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`datetime.datetime` `(Named` ``deactivatedAt`` `in Commercetools)`
     deactivated_at: typing.Optional[datetime.datetime]
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
+    product_id: str
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``productSlug`` `in Commercetools)`
     product_slug: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
+    product_type: "ProductTypeReference"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: Optional :class:`commercetools.types.ProductVariant`
     variant: typing.Optional["ProductVariant"]
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -5209,15 +5101,15 @@ class ShoppingListLineItem:
     def __init__(
         self,
         *,
-        added_at: typing.Optional[datetime.datetime] = None,
+        added_at: datetime.datetime = None,
         custom: typing.Optional["CustomFields"] = None,
         deactivated_at: typing.Optional[datetime.datetime] = None,
-        id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        product_id: typing.Optional[str] = None,
+        id: str = None,
+        name: "LocalizedString" = None,
+        product_id: str = None,
         product_slug: typing.Optional["LocalizedString"] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        quantity: typing.Optional[int] = None,
+        product_type: "ProductTypeReference" = None,
+        quantity: int = None,
         variant: typing.Optional["ProductVariant"] = None,
         variant_id: typing.Optional[int] = None,
     ) -> None:
@@ -5303,9 +5195,9 @@ class ShoppingListLineItemDraft:
 class StagedOrderUpdateAction:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
 
     def __repr__(self) -> str:
@@ -5316,9 +5208,9 @@ class StagedOrderUpdateAction:
 class StateDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.StateTypeEnum`
-    type: typing.Optional["StateTypeEnum"]
+    type: "StateTypeEnum"
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -5333,8 +5225,8 @@ class StateDraft:
     def __init__(
         self,
         *,
-        key: typing.Optional[str] = None,
-        type: typing.Optional["StateTypeEnum"] = None,
+        key: str = None,
+        type: "StateTypeEnum" = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         initial: typing.Optional[bool] = None,
@@ -5368,13 +5260,11 @@ class StateDraft:
 class SubRate:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubRateSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`int`
-    amount: typing.Optional[int]
+    amount: int
 
-    def __init__(
-        self, *, name: typing.Optional[str] = None, amount: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, name: str = None, amount: int = None) -> None:
         self.name = name
         self.amount = amount
 
@@ -5386,18 +5276,18 @@ class SubRate:
 class SubscriptionDelivery:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionDeliverySchema`."
     #: :class:`str` `(Named` ``projectKey`` `in Commercetools)`
-    project_key: typing.Optional[str]
+    project_key: str
     #: :class:`str` `(Named` ``notificationType`` `in Commercetools)`
-    notification_type: typing.Optional[str]
+    notification_type: str
     #: :class:`commercetools.types.Reference`
-    resource: typing.Optional["Reference"]
+    resource: "Reference"
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
     ) -> None:
         self.project_key = project_key
         self.notification_type = notification_type
@@ -5416,7 +5306,7 @@ class SubscriptionDraft:
     #: Optional list of :class:`commercetools.types.ChangeSubscription`
     changes: typing.Optional[typing.List["ChangeSubscription"]]
     #: :class:`commercetools.types.Destination`
-    destination: typing.Optional["Destination"]
+    destination: "Destination"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.MessageSubscription`
@@ -5426,7 +5316,7 @@ class SubscriptionDraft:
         self,
         *,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
-        destination: typing.Optional["Destination"] = None,
+        destination: "Destination" = None,
         key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
     ) -> None:
@@ -5448,9 +5338,9 @@ class SubscriptionDraft:
 class SuggestTokenizer:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestTokenizerSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
 
     def __repr__(self) -> str:
@@ -5461,9 +5351,9 @@ class SuggestTokenizer:
 class Suggestion:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestionSchema`."
     #: :class:`str`
-    text: typing.Optional[str]
+    text: str
 
-    def __init__(self, *, text: typing.Optional[str] = None) -> None:
+    def __init__(self, *, text: str = None) -> None:
         self.text = text
 
     def __repr__(self) -> str:
@@ -5474,18 +5364,18 @@ class Suggestion:
 class SyncInfo:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SyncInfoSchema`."
     #: :class:`commercetools.types.ChannelReference`
-    channel: typing.Optional["ChannelReference"]
+    channel: "ChannelReference"
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: :class:`datetime.datetime` `(Named` ``syncedAt`` `in Commercetools)`
-    synced_at: typing.Optional[datetime.datetime]
+    synced_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        channel: typing.Optional["ChannelReference"] = None,
+        channel: "ChannelReference" = None,
         external_id: typing.Optional[str] = None,
-        synced_at: typing.Optional[datetime.datetime] = None,
+        synced_at: datetime.datetime = None,
     ) -> None:
         self.channel = channel
         self.external_id = external_id
@@ -5503,20 +5393,20 @@ class SyncInfo:
 class TaxCategoryDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryDraftSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: List of :class:`commercetools.types.TaxRateDraft`
-    rates: typing.Optional[typing.List["TaxRateDraft"]]
+    rates: typing.List["TaxRateDraft"]
     #: Optional :class:`str`
     key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        rates: typing.Optional[typing.List["TaxRateDraft"]] = None,
+        rates: typing.List["TaxRateDraft"] = None,
         key: typing.Optional[str] = None,
     ) -> None:
         self.name = name
@@ -5539,16 +5429,16 @@ class TaxPortion:
     #: Optional :class:`str`
     name: typing.Optional[str]
     #: :class:`int`
-    rate: typing.Optional[int]
+    rate: int
     #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    amount: "Money"
 
     def __init__(
         self,
         *,
         name: typing.Optional[str] = None,
-        rate: typing.Optional[int] = None,
-        amount: typing.Optional["Money"] = None,
+        rate: int = None,
+        amount: "Money" = None,
     ) -> None:
         self.name = name
         self.rate = rate
@@ -5568,13 +5458,13 @@ class TaxRate:
     #: Optional :class:`str`
     id: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`int`
-    amount: typing.Optional[int]
+    amount: int
     #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
-    included_in_price: typing.Optional[bool]
+    included_in_price: bool
     #: :class:`str`
-    country: typing.Optional["str"]
+    country: "str"
     #: Optional :class:`str`
     state: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
@@ -5584,10 +5474,10 @@ class TaxRate:
         self,
         *,
         id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        amount: typing.Optional[int] = None,
-        included_in_price: typing.Optional[bool] = None,
-        country: typing.Optional["str"] = None,
+        name: str = None,
+        amount: int = None,
+        included_in_price: bool = None,
+        country: "str" = None,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
     ) -> None:
@@ -5618,13 +5508,13 @@ class TaxRate:
 class TaxRateDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateDraftSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`int`
     amount: typing.Optional[int]
     #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
-    included_in_price: typing.Optional[bool]
+    included_in_price: bool
     #: :class:`str`
-    country: typing.Optional["str"]
+    country: "str"
     #: Optional :class:`str`
     state: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
@@ -5633,10 +5523,10 @@ class TaxRateDraft:
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
+        name: str = None,
         amount: typing.Optional[int] = None,
-        included_in_price: typing.Optional[bool] = None,
-        country: typing.Optional["str"] = None,
+        included_in_price: bool = None,
+        country: "str" = None,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
     ) -> None:
@@ -5665,15 +5555,12 @@ class TaxRateDraft:
 class TaxedItemPrice:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxedItemPriceSchema`."
     #: :class:`commercetools.types.TypedMoney` `(Named` ``totalNet`` `in Commercetools)`
-    total_net: typing.Optional["TypedMoney"]
+    total_net: "TypedMoney"
     #: :class:`commercetools.types.TypedMoney` `(Named` ``totalGross`` `in Commercetools)`
-    total_gross: typing.Optional["TypedMoney"]
+    total_gross: "TypedMoney"
 
     def __init__(
-        self,
-        *,
-        total_net: typing.Optional["TypedMoney"] = None,
-        total_gross: typing.Optional["TypedMoney"] = None,
+        self, *, total_net: "TypedMoney" = None, total_gross: "TypedMoney" = None
     ) -> None:
         self.total_net = total_net
         self.total_gross = total_gross
@@ -5689,15 +5576,12 @@ class TaxedItemPrice:
 class TaxedItemPriceDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxedItemPriceDraftSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``totalNet`` `in Commercetools)`
-    total_net: typing.Optional["Money"]
+    total_net: "Money"
     #: :class:`commercetools.types.Money` `(Named` ``totalGross`` `in Commercetools)`
-    total_gross: typing.Optional["Money"]
+    total_gross: "Money"
 
     def __init__(
-        self,
-        *,
-        total_net: typing.Optional["Money"] = None,
-        total_gross: typing.Optional["Money"] = None,
+        self, *, total_net: "Money" = None, total_gross: "Money" = None
     ) -> None:
         self.total_net = total_net
         self.total_gross = total_gross
@@ -5713,18 +5597,18 @@ class TaxedItemPriceDraft:
 class TaxedPrice:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxedPriceSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``totalNet`` `in Commercetools)`
-    total_net: typing.Optional["Money"]
+    total_net: "Money"
     #: :class:`commercetools.types.Money` `(Named` ``totalGross`` `in Commercetools)`
-    total_gross: typing.Optional["Money"]
+    total_gross: "Money"
     #: List of :class:`commercetools.types.TaxPortion` `(Named` ``taxPortions`` `in Commercetools)`
-    tax_portions: typing.Optional[typing.List["TaxPortion"]]
+    tax_portions: typing.List["TaxPortion"]
 
     def __init__(
         self,
         *,
-        total_net: typing.Optional["Money"] = None,
-        total_gross: typing.Optional["Money"] = None,
-        tax_portions: typing.Optional[typing.List["TaxPortion"]] = None,
+        total_net: "Money" = None,
+        total_gross: "Money" = None,
+        tax_portions: typing.List["TaxPortion"] = None,
     ) -> None:
         self.total_net = total_net
         self.total_gross = total_gross
@@ -5742,27 +5626,27 @@ class TaxedPrice:
 class TextLineItem:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemSchema`."
     #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
-    added_at: typing.Optional[datetime.datetime]
+    added_at: datetime.datetime
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
     def __init__(
         self,
         *,
-        added_at: typing.Optional[datetime.datetime] = None,
+        added_at: datetime.datetime = None,
         custom: typing.Optional["CustomFields"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        quantity: typing.Optional[int] = None,
+        id: str = None,
+        name: "LocalizedString" = None,
+        quantity: int = None,
     ) -> None:
         self.added_at = added_at
         self.custom = custom
@@ -5795,7 +5679,7 @@ class TextLineItemDraft:
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`int`
     quantity: typing.Optional[int]
 
@@ -5805,7 +5689,7 @@ class TextLineItemDraft:
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         quantity: typing.Optional[int] = None,
     ) -> None:
         self.added_at = added_at
@@ -5867,13 +5751,13 @@ class TrackingData:
 class Transaction:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TransactionSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: Optional :class:`datetime.datetime`
     timestamp: typing.Optional[datetime.datetime]
     #: :class:`commercetools.types.TransactionType`
-    type: typing.Optional["TransactionType"]
+    type: "TransactionType"
     #: :class:`commercetools.types.TypedMoney`
-    amount: typing.Optional["TypedMoney"]
+    amount: "TypedMoney"
     #: Optional :class:`str` `(Named` ``interactionId`` `in Commercetools)`
     interaction_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.TransactionState`
@@ -5882,10 +5766,10 @@ class Transaction:
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
+        id: str = None,
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: typing.Optional["TransactionType"] = None,
-        amount: typing.Optional["TypedMoney"] = None,
+        type: "TransactionType" = None,
+        amount: "TypedMoney" = None,
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None,
     ) -> None:
@@ -5916,9 +5800,9 @@ class TransactionDraft:
     #: Optional :class:`datetime.datetime`
     timestamp: typing.Optional[datetime.datetime]
     #: :class:`commercetools.types.TransactionType`
-    type: typing.Optional["TransactionType"]
+    type: "TransactionType"
     #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    amount: "Money"
     #: Optional :class:`str` `(Named` ``interactionId`` `in Commercetools)`
     interaction_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.TransactionState`
@@ -5928,8 +5812,8 @@ class TransactionDraft:
         self,
         *,
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: typing.Optional["TransactionType"] = None,
-        amount: typing.Optional["Money"] = None,
+        type: "TransactionType" = None,
+        amount: "Money" = None,
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None,
     ) -> None:
@@ -5950,23 +5834,23 @@ class TransactionDraft:
 class TypeDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: List of :class:`commercetools.types.ResourceTypeId` `(Named` ``resourceTypeIds`` `in Commercetools)`
-    resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]]
+    resource_type_ids: typing.List["ResourceTypeId"]
     #: Optional list of :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinitions`` `in Commercetools)`
     field_definitions: typing.Optional[typing.List["FieldDefinition"]]
 
     def __init__(
         self,
         *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        key: str = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
+        resource_type_ids: typing.List["ResourceTypeId"] = None,
         field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
     ) -> None:
         self.key = key
@@ -5992,16 +5876,11 @@ class TypeDraft:
 class Update:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
 
@@ -6013,9 +5892,9 @@ class Update:
 class UpdateAction:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
 
     def __repr__(self) -> str:
@@ -6028,16 +5907,16 @@ class VariantValues:
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: List of :class:`commercetools.types.Price`
-    prices: typing.Optional[typing.List["Price"]]
+    prices: typing.List["Price"]
     #: List of :class:`commercetools.types.Attribute`
-    attributes: typing.Optional[typing.List["Attribute"]]
+    attributes: typing.List["Attribute"]
 
     def __init__(
         self,
         *,
         sku: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["Price"]] = None,
-        attributes: typing.Optional[typing.List["Attribute"]] = None,
+        prices: typing.List["Price"] = None,
+        attributes: typing.List["Attribute"] = None,
     ) -> None:
         self.sku = sku
         self.prices = prices
@@ -6055,18 +5934,18 @@ class VariantValues:
 class ZoneDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneDraftSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: List of :class:`commercetools.types.Location`
-    locations: typing.Optional[typing.List["Location"]]
+    locations: typing.List["Location"]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        locations: typing.Optional[typing.List["Location"]] = None,
+        locations: typing.List["Location"] = None,
     ) -> None:
         self.name = name
         self.description = description
@@ -6084,15 +5963,15 @@ class ZoneDraft:
 class ZoneRate:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateSchema`."
     #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    zone: "ZoneReference"
     #: List of :class:`commercetools.types.ShippingRate` `(Named` ``shippingRates`` `in Commercetools)`
-    shipping_rates: typing.Optional[typing.List["ShippingRate"]]
+    shipping_rates: typing.List["ShippingRate"]
 
     def __init__(
         self,
         *,
-        zone: typing.Optional["ZoneReference"] = None,
-        shipping_rates: typing.Optional[typing.List["ShippingRate"]] = None,
+        zone: "ZoneReference" = None,
+        shipping_rates: typing.List["ShippingRate"] = None,
     ) -> None:
         self.zone = zone
         self.shipping_rates = shipping_rates
@@ -6105,15 +5984,15 @@ class ZoneRate:
 class ZoneRateDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateDraftSchema`."
     #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    zone: "ZoneReference"
     #: List of :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRates`` `in Commercetools)`
-    shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]]
+    shipping_rates: typing.List["ShippingRateDraft"]
 
     def __init__(
         self,
         *,
-        zone: typing.Optional["ZoneReference"] = None,
-        shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]] = None,
+        zone: "ZoneReference" = None,
+        shipping_rates: typing.List["ShippingRateDraft"] = None,
     ) -> None:
         self.zone = zone
         self.shipping_rates = shipping_rates
@@ -6129,9 +6008,7 @@ class ZoneRateDraft:
 class AccessDeniedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AccessDeniedErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="access_denied", message=message)
 
     def __repr__(self) -> str:
@@ -6147,7 +6024,7 @@ class AnonymousCartSignInMode(enum.Enum):
 class AttributeBooleanType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeBooleanTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="boolean")
 
     def __repr__(self) -> str:
@@ -6169,7 +6046,7 @@ class AttributeConstraintEnumDraft(enum.Enum):
 class AttributeDateTimeType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="datetime")
 
     def __repr__(self) -> str:
@@ -6180,7 +6057,7 @@ class AttributeDateTimeType(AttributeType):
 class AttributeDateType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="date")
 
     def __repr__(self) -> str:
@@ -6191,13 +6068,10 @@ class AttributeDateType(AttributeType):
 class AttributeEnumType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeEnumTypeSchema`."
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
-    values: typing.Optional[typing.List["AttributePlainEnumValue"]]
+    values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None,
+        self, *, name: str = None, values: typing.List["AttributePlainEnumValue"] = None
     ) -> None:
         self.values = values
         super().__init__(name="enum")
@@ -6210,7 +6084,7 @@ class AttributeEnumType(AttributeType):
 class AttributeLocalizableTextType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizableTextTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="ltext")
 
     def __repr__(self) -> str:
@@ -6221,13 +6095,13 @@ class AttributeLocalizableTextType(AttributeType):
 class AttributeLocalizedEnumType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumTypeSchema`."
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
-    values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]]
+    values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None,
+        name: str = None,
+        values: typing.List["AttributeLocalizedEnumValue"] = None,
     ) -> None:
         self.values = values
         super().__init__(name="lenum")
@@ -6243,7 +6117,7 @@ class AttributeLocalizedEnumType(AttributeType):
 class AttributeMoneyType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeMoneyTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="money")
 
     def __repr__(self) -> str:
@@ -6254,13 +6128,10 @@ class AttributeMoneyType(AttributeType):
 class AttributeNestedType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNestedTypeSchema`."
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``typeReference`` `in Commercetools)`
-    type_reference: typing.Optional["ProductTypeReference"]
+    type_reference: "ProductTypeReference"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        type_reference: typing.Optional["ProductTypeReference"] = None,
+        self, *, name: str = None, type_reference: "ProductTypeReference" = None
     ) -> None:
         self.type_reference = type_reference
         super().__init__(name="nested")
@@ -6276,7 +6147,7 @@ class AttributeNestedType(AttributeType):
 class AttributeNumberType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNumberTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="number")
 
     def __repr__(self) -> str:
@@ -6287,13 +6158,10 @@ class AttributeNumberType(AttributeType):
 class AttributeReferenceType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeReferenceTypeSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
-    reference_type_id: typing.Optional["ReferenceTypeId"]
+    reference_type_id: "ReferenceTypeId"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        reference_type_id: typing.Optional["ReferenceTypeId"] = None,
+        self, *, name: str = None, reference_type_id: "ReferenceTypeId" = None
     ) -> None:
         self.reference_type_id = reference_type_id
         super().__init__(name="reference")
@@ -6309,13 +6177,10 @@ class AttributeReferenceType(AttributeType):
 class AttributeSetType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSetTypeSchema`."
     #: :class:`commercetools.types.AttributeType` `(Named` ``elementType`` `in Commercetools)`
-    element_type: typing.Optional["AttributeType"]
+    element_type: "AttributeType"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        element_type: typing.Optional["AttributeType"] = None,
+        self, *, name: str = None, element_type: "AttributeType" = None
     ) -> None:
         self.element_type = element_type
         super().__init__(name="set")
@@ -6331,7 +6196,7 @@ class AttributeSetType(AttributeType):
 class AttributeTextType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTextTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="text")
 
     def __repr__(self) -> str:
@@ -6342,7 +6207,7 @@ class AttributeTextType(AttributeType):
 class AttributeTimeType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="time")
 
     def __repr__(self) -> str:
@@ -6353,16 +6218,12 @@ class AttributeTimeType(AttributeType):
 class AzureEventGridDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AzureEventGridDestinationSchema`."
     #: :class:`str`
-    uri: typing.Optional[str]
+    uri: str
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        uri: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
+        self, *, type: str = None, uri: str = None, access_key: str = None
     ) -> None:
         self.uri = uri
         self.access_key = access_key
@@ -6380,14 +6241,9 @@ class AzureEventGridDestination(Destination):
 class AzureServiceBusDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AzureServiceBusDestinationSchema`."
     #: :class:`str` `(Named` ``connectionString`` `in Commercetools)`
-    connection_string: typing.Optional[str]
+    connection_string: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        connection_string: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, connection_string: str = None) -> None:
         self.connection_string = connection_string
         super().__init__(type="AzureServiceBus")
 
@@ -6408,15 +6264,15 @@ class Cart(Resource):
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
     #: List of :class:`commercetools.types.LineItem` `(Named` ``lineItems`` `in Commercetools)`
-    line_items: typing.Optional[typing.List["LineItem"]]
+    line_items: typing.List["LineItem"]
     #: List of :class:`commercetools.types.CustomLineItem` `(Named` ``customLineItems`` `in Commercetools)`
-    custom_line_items: typing.Optional[typing.List["CustomLineItem"]]
+    custom_line_items: typing.List["CustomLineItem"]
     #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["TypedMoney"]
+    total_price: "TypedMoney"
     #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedPrice"]
     #: :class:`commercetools.types.CartState` `(Named` ``cartState`` `in Commercetools)`
-    cart_state: typing.Optional["CartState"]
+    cart_state: "CartState"
     #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
     shipping_address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``billingAddress`` `in Commercetools)`
@@ -6424,11 +6280,11 @@ class Cart(Resource):
     #: Optional :class:`commercetools.types.InventoryMode` `(Named` ``inventoryMode`` `in Commercetools)`
     inventory_mode: typing.Optional["InventoryMode"]
     #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
-    tax_mode: typing.Optional["TaxMode"]
+    tax_mode: "TaxMode"
     #: :class:`commercetools.types.RoundingMode` `(Named` ``taxRoundingMode`` `in Commercetools)`
-    tax_rounding_mode: typing.Optional["RoundingMode"]
+    tax_rounding_mode: "RoundingMode"
     #: :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
-    tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    tax_calculation_mode: "TaxCalculationMode"
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: typing.Optional["CustomerGroupReference"]
     #: Optional :class:`str`
@@ -6446,9 +6302,9 @@ class Cart(Resource):
     #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
     delete_days_after_last_modification: typing.Optional[int]
     #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``refusedGifts`` `in Commercetools)`
-    refused_gifts: typing.Optional[typing.List["CartDiscountReference"]]
+    refused_gifts: typing.List["CartDiscountReference"]
     #: :class:`commercetools.types.CartOrigin`
-    origin: typing.Optional["CartOrigin"]
+    origin: "CartOrigin"
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
@@ -6457,24 +6313,24 @@ class Cart(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["LineItem"]] = None,
-        custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
-        total_price: typing.Optional["TypedMoney"] = None,
+        line_items: typing.List["LineItem"] = None,
+        custom_line_items: typing.List["CustomLineItem"] = None,
+        total_price: "TypedMoney" = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
-        cart_state: typing.Optional["CartState"] = None,
+        cart_state: "CartState" = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
-        tax_mode: typing.Optional["TaxMode"] = None,
-        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
-        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        tax_mode: "TaxMode" = None,
+        tax_rounding_mode: "RoundingMode" = None,
+        tax_calculation_mode: "TaxCalculationMode" = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         country: typing.Optional["str"] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
@@ -6483,8 +6339,8 @@ class Cart(Resource):
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        refused_gifts: typing.Optional[typing.List["CartDiscountReference"]] = None,
-        origin: typing.Optional["CartOrigin"] = None,
+        refused_gifts: typing.List["CartDiscountReference"] = None,
+        origin: "CartOrigin" = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
     ) -> None:
@@ -6563,18 +6419,18 @@ class Cart(Resource):
 class CartClassificationTier(ShippingRatePriceTier):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTierSchema`."
     #: :class:`str`
-    value: typing.Optional[str]
+    value: str
     #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
+    price: "Money"
     #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
     is_matching: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        value: typing.Optional[str] = None,
-        price: typing.Optional["Money"] = None,
+        type: "ShippingRateTierType" = None,
+        value: str = None,
+        price: "Money" = None,
         is_matching: typing.Optional[bool] = None,
     ) -> None:
         self.value = value
@@ -6595,13 +6451,10 @@ class CartClassificationTier(ShippingRatePriceTier):
 class CartClassificationType(ShippingRateInputType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTypeSchema`."
     #: :class:`list`
-    values: typing.Optional[list]
+    values: list
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        values: typing.Optional[list] = None,
+        self, *, type: "ShippingRateTierType" = None, values: list = None
     ) -> None:
         self.values = values
         super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
@@ -6614,51 +6467,51 @@ class CartClassificationType(ShippingRateInputType):
 class CartDiscount(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
+    value: "CartDiscountValue"
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
-    cart_predicate: typing.Optional[str]
+    cart_predicate: str
     #: Optional :class:`commercetools.types.CartDiscountTarget`
     target: typing.Optional["CartDiscountTarget"]
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
     valid_until: typing.Optional[datetime.datetime]
     #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
-    requires_discount_code: typing.Optional[bool]
+    requires_discount_code: bool
     #: List of :class:`commercetools.types.Reference`
-    references: typing.Optional[typing.List["Reference"]]
+    references: typing.List["Reference"]
     #: :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
-    stacking_mode: typing.Optional["StackingMode"]
+    stacking_mode: "StackingMode"
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["CartDiscountValue"] = None,
-        cart_predicate: typing.Optional[str] = None,
+        value: "CartDiscountValue" = None,
+        cart_predicate: str = None,
         target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
+        sort_order: str = None,
+        is_active: bool = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        requires_discount_code: typing.Optional[bool] = None,
-        references: typing.Optional[typing.List["Reference"]] = None,
-        stacking_mode: typing.Optional["StackingMode"] = None,
+        requires_discount_code: bool = None,
+        references: typing.List["Reference"] = None,
+        stacking_mode: "StackingMode" = None,
         custom: typing.Optional["CustomFields"] = None,
     ) -> None:
         self.name = name
@@ -6710,14 +6563,9 @@ class CartDiscount(Resource):
 class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountCustomLineItemsTargetSchema`."
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, predicate: str = None) -> None:
         self.predicate = predicate
         super().__init__(type="customLineItems")
 
@@ -6732,14 +6580,9 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
 class CartDiscountLineItemsTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountLineItemsTargetSchema`."
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, predicate: str = None) -> None:
         self.predicate = predicate
         super().__init__(type="lineItems")
 
@@ -6754,15 +6597,15 @@ class CartDiscountLineItemsTarget(CartDiscountTarget):
 class CartDiscountPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.CartDiscount`
-    results: typing.Optional[typing.Sequence["CartDiscount"]]
+    results: typing.Sequence["CartDiscount"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["CartDiscount"]] = None,
+        offset: int = None,
+        results: typing.Sequence["CartDiscount"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -6778,7 +6621,7 @@ class CartDiscountPagedQueryResponse(PagedQueryResponse):
 class CartDiscountShippingCostTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountShippingCostTargetSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="shipping")
 
     def __repr__(self) -> str:
@@ -6789,14 +6632,9 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
 class CartDiscountUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -6811,7 +6649,7 @@ class CartDiscountUpdate(Update):
 class CartDiscountUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -6822,14 +6660,9 @@ class CartDiscountUpdateAction(UpdateAction):
 class CartDiscountValueAbsolute(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueAbsoluteSchema`."
     #: List of :class:`commercetools.types.Money`
-    money: typing.Optional[typing.List["Money"]]
+    money: typing.List["Money"]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        money: typing.Optional[typing.List["Money"]] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, money: typing.List["Money"] = None) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -6841,9 +6674,9 @@ class CartDiscountValueAbsolute(CartDiscountValue):
 class CartDiscountValueGiftLineItem(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueGiftLineItemSchema`."
     #: :class:`commercetools.types.ProductReference`
-    product: typing.Optional["ProductReference"]
+    product: "ProductReference"
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
@@ -6852,9 +6685,9 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        product: typing.Optional["ProductReference"] = None,
-        variant_id: typing.Optional[int] = None,
+        type: str = None,
+        product: "ProductReference" = None,
+        variant_id: int = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
     ) -> None:
@@ -6881,14 +6714,9 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 class CartDiscountValueRelative(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueRelativeSchema`."
     #: :class:`int`
-    permyriad: typing.Optional[int]
+    permyriad: int
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        permyriad: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -6908,15 +6736,15 @@ class CartOrigin(enum.Enum):
 class CartPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Cart`
-    results: typing.Optional[typing.Sequence["Cart"]]
+    results: typing.Sequence["Cart"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Cart"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Cart"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -6934,7 +6762,7 @@ class CartPagedQueryResponse(PagedQueryResponse):
 class CartScoreTier(ShippingRatePriceTier):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTierSchema`."
     #: :class:`int`
-    score: typing.Optional[int]
+    score: int
     #: Optional :class:`commercetools.types.Money`
     price: typing.Optional["Money"]
     #: Optional :class:`commercetools.types.PriceFunction` `(Named` ``priceFunction`` `in Commercetools)`
@@ -6945,8 +6773,8 @@ class CartScoreTier(ShippingRatePriceTier):
     def __init__(
         self,
         *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        score: typing.Optional[int] = None,
+        type: "ShippingRateTierType" = None,
+        score: int = None,
         price: typing.Optional["Money"] = None,
         price_function: typing.Optional["PriceFunction"] = None,
         is_matching: typing.Optional[bool] = None,
@@ -6968,7 +6796,7 @@ class CartScoreTier(ShippingRatePriceTier):
 class CartScoreType(ShippingRateInputType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTypeSchema`."
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     def __repr__(self) -> str:
@@ -6985,14 +6813,9 @@ class CartState(enum.Enum):
 class CartUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -7004,7 +6827,7 @@ class CartUpdate(Update):
 class CartUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7015,18 +6838,18 @@ class CartUpdateAction(UpdateAction):
 class CartValueTier(ShippingRatePriceTier):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTierSchema`."
     #: :class:`int` `(Named` ``minimumCentAmount`` `in Commercetools)`
-    minimum_cent_amount: typing.Optional[int]
+    minimum_cent_amount: int
     #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
+    price: "Money"
     #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
     is_matching: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        minimum_cent_amount: typing.Optional[int] = None,
-        price: typing.Optional["Money"] = None,
+        type: "ShippingRateTierType" = None,
+        minimum_cent_amount: int = None,
+        price: "Money" = None,
         is_matching: typing.Optional[bool] = None,
     ) -> None:
         self.minimum_cent_amount = minimum_cent_amount
@@ -7045,7 +6868,7 @@ class CartValueTier(ShippingRatePriceTier):
 class CartValueType(ShippingRateInputType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTypeSchema`."
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     def __repr__(self) -> str:
@@ -7056,17 +6879,17 @@ class CartValueType(ShippingRateInputType):
 class Category(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: List of :class:`commercetools.types.CategoryReference`
-    ancestors: typing.Optional[typing.List["CategoryReference"]]
+    ancestors: typing.List["CategoryReference"]
     #: Optional :class:`commercetools.types.CategoryReference`
     parent: typing.Optional["CategoryReference"]
     #: :class:`str` `(Named` ``orderHint`` `in Commercetools)`
-    order_hint: typing.Optional[str]
+    order_hint: str
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
@@ -7085,16 +6908,16 @@ class Category(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        name: "LocalizedString" = None,
+        slug: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        ancestors: typing.Optional[typing.List["CategoryReference"]] = None,
+        ancestors: typing.List["CategoryReference"] = None,
         parent: typing.Optional["CategoryReference"] = None,
-        order_hint: typing.Optional[str] = None,
+        order_hint: str = None,
         external_id: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
@@ -7152,14 +6975,9 @@ class Category(Resource):
 class CategoryCreatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryCreatedMessageSchema`."
     #: :class:`commercetools.types.Category`
-    category: typing.Optional["Category"]
+    category: "Category"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        category: typing.Optional["Category"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, category: "Category" = None) -> None:
         self.category = category
         super().__init__(type="CategoryCreated")
 
@@ -7181,15 +6999,15 @@ class CategoryOrderHints(typing.Dict[(str, str)]):
 class CategoryPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Category`
-    results: typing.Optional[typing.Sequence["Category"]]
+    results: typing.Sequence["Category"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Category"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Category"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -7205,14 +7023,9 @@ class CategoryPagedQueryResponse(PagedQueryResponse):
 class CategorySlugChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySlugChangedMessageSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, slug: "LocalizedString" = None) -> None:
         self.slug = slug
         super().__init__(type="CategorySlugChanged")
 
@@ -7224,14 +7037,9 @@ class CategorySlugChangedMessage(MessagePayload):
 class CategoryUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -7243,7 +7051,7 @@ class CategoryUpdate(Update):
 class CategoryUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7254,9 +7062,9 @@ class CategoryUpdateAction(UpdateAction):
 class Channel(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -7273,12 +7081,12 @@ class Channel(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        key: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        key: str = None,
+        roles: typing.List["ChannelRoleEnum"] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         address: typing.Optional["Address"] = None,
@@ -7325,15 +7133,15 @@ class Channel(Resource):
 class ChannelPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Channel`
-    results: typing.Optional[typing.Sequence["Channel"]]
+    results: typing.Sequence["Channel"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Channel"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Channel"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -7357,14 +7165,9 @@ class ChannelRoleEnum(enum.Enum):
 class ChannelUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -7376,7 +7179,7 @@ class ChannelUpdate(Update):
 class ChannelUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -7387,16 +7190,12 @@ class ChannelUpdateAction(UpdateAction):
 class ClassificationShippingRateInput(ShippingRateInput):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ClassificationShippingRateInputSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
+        self, *, type: str = None, key: str = None, label: "LocalizedString" = None
     ) -> None:
         self.key = key
         self.label = label
@@ -7414,11 +7213,9 @@ class ClassificationShippingRateInput(ShippingRateInput):
 class ClassificationShippingRateInputDraft(ShippingRateInputDraft):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ClassificationShippingRateInputDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(type="Classification")
 
@@ -7438,8 +7235,8 @@ class ConcurrentModificationError(ErrorObject):
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
+        code: str = None,
+        message: str = None,
         current_version: typing.Optional[int] = None,
     ) -> None:
         self.current_version = current_version
@@ -7456,7 +7253,7 @@ class ConcurrentModificationError(ErrorObject):
 class CustomFieldBooleanType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldBooleanTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Boolean")
 
     def __repr__(self) -> str:
@@ -7467,7 +7264,7 @@ class CustomFieldBooleanType(FieldType):
 class CustomFieldDateTimeType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="DateTime")
 
     def __repr__(self) -> str:
@@ -7478,7 +7275,7 @@ class CustomFieldDateTimeType(FieldType):
 class CustomFieldDateType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Date")
 
     def __repr__(self) -> str:
@@ -7489,13 +7286,10 @@ class CustomFieldDateType(FieldType):
 class CustomFieldEnumType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumTypeSchema`."
     #: List of :class:`commercetools.types.CustomFieldEnumValue`
-    values: typing.Optional[typing.List["CustomFieldEnumValue"]]
+    values: typing.List["CustomFieldEnumValue"]
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["CustomFieldEnumValue"]] = None,
+        self, *, name: str = None, values: typing.List["CustomFieldEnumValue"] = None
     ) -> None:
         self.values = values
         super().__init__(name="Enum")
@@ -7508,13 +7302,13 @@ class CustomFieldEnumType(FieldType):
 class CustomFieldLocalizedEnumType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumTypeSchema`."
     #: List of :class:`commercetools.types.CustomFieldLocalizedEnumValue`
-    values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]]
+    values: typing.List["CustomFieldLocalizedEnumValue"]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]] = None,
+        name: str = None,
+        values: typing.List["CustomFieldLocalizedEnumValue"] = None,
     ) -> None:
         self.values = values
         super().__init__(name="LocalizedEnum")
@@ -7530,7 +7324,7 @@ class CustomFieldLocalizedEnumType(FieldType):
 class CustomFieldLocalizedStringType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedStringTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="LocalizedString")
 
     def __repr__(self) -> str:
@@ -7541,7 +7335,7 @@ class CustomFieldLocalizedStringType(FieldType):
 class CustomFieldMoneyType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldMoneyTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Money")
 
     def __repr__(self) -> str:
@@ -7552,7 +7346,7 @@ class CustomFieldMoneyType(FieldType):
 class CustomFieldNumberType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldNumberTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Number")
 
     def __repr__(self) -> str:
@@ -7563,13 +7357,10 @@ class CustomFieldNumberType(FieldType):
 class CustomFieldReferenceType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldReferenceTypeSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
-    reference_type_id: typing.Optional["ReferenceTypeId"]
+    reference_type_id: "ReferenceTypeId"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        reference_type_id: typing.Optional["ReferenceTypeId"] = None,
+        self, *, name: str = None, reference_type_id: "ReferenceTypeId" = None
     ) -> None:
         self.reference_type_id = reference_type_id
         super().__init__(name="Reference")
@@ -7585,14 +7376,9 @@ class CustomFieldReferenceType(FieldType):
 class CustomFieldSetType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldSetTypeSchema`."
     #: :class:`commercetools.types.FieldType` `(Named` ``elementType`` `in Commercetools)`
-    element_type: typing.Optional["FieldType"]
+    element_type: "FieldType"
 
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        element_type: typing.Optional["FieldType"] = None,
-    ) -> None:
+    def __init__(self, *, name: str = None, element_type: "FieldType" = None) -> None:
         self.element_type = element_type
         super().__init__(name="Set")
 
@@ -7607,7 +7393,7 @@ class CustomFieldSetType(FieldType):
 class CustomFieldStringType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldStringTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="String")
 
     def __repr__(self) -> str:
@@ -7618,7 +7404,7 @@ class CustomFieldStringType(FieldType):
 class CustomFieldTimeType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Time")
 
     def __repr__(self) -> str:
@@ -7629,25 +7415,25 @@ class CustomFieldTimeType(FieldType):
 class CustomLineItemStateTransitionMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemStateTransitionMessageSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
-    transition_date: typing.Optional[datetime.datetime]
+    transition_date: datetime.datetime
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
+    from_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
+    to_state: "StateReference"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        transition_date: typing.Optional[datetime.datetime] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
+        type: str = None,
+        custom_line_item_id: str = None,
+        transition_date: datetime.datetime = None,
+        quantity: int = None,
+        from_state: "StateReference" = None,
+        to_state: "StateReference" = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.transition_date = transition_date
@@ -7674,22 +7460,22 @@ class CustomLineItemStateTransitionMessage(MessagePayload):
 class CustomObject(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."
     #: :class:`str`
-    container: typing.Optional[str]
+    container: str
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
+    value: typing.Any
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        container: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        container: str = None,
+        key: str = None,
+        value: typing.Any = None,
     ) -> None:
         self.container = container
         self.key = key
@@ -7720,15 +7506,15 @@ class CustomObject(Resource):
 class CustomObjectPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.CustomObject`
-    results: typing.Optional[typing.Sequence["CustomObject"]]
+    results: typing.Sequence["CustomObject"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["CustomObject"]] = None,
+        offset: int = None,
+        results: typing.Sequence["CustomObject"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -7744,14 +7530,9 @@ class CustomObjectPagedQueryResponse(PagedQueryResponse):
 class CustomTokenizer(SuggestTokenizer):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomTokenizerSchema`."
     #: List of :class:`str`
-    inputs: typing.Optional[typing.List[str]]
+    inputs: typing.List[str]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        inputs: typing.Optional[typing.List[str]] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, inputs: typing.List[str] = None) -> None:
         self.inputs = inputs
         super().__init__(type="custom")
 
@@ -7765,9 +7546,9 @@ class Customer(Resource):
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
@@ -7783,7 +7564,7 @@ class Customer(Resource):
     #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
     vat_id: typing.Optional[str]
     #: List of :class:`commercetools.types.Address`
-    addresses: typing.Optional[typing.List["Address"]]
+    addresses: typing.List["Address"]
     #: Optional :class:`str` `(Named` ``defaultShippingAddressId`` `in Commercetools)`
     default_shipping_address_id: typing.Optional[str]
     #: Optional list of :class:`str` `(Named` ``shippingAddressIds`` `in Commercetools)`
@@ -7793,7 +7574,7 @@ class Customer(Resource):
     #: Optional list of :class:`str` `(Named` ``billingAddressIds`` `in Commercetools)`
     billing_address_ids: typing.Optional[typing.List[str]]
     #: :class:`bool` `(Named` ``isEmailVerified`` `in Commercetools)`
-    is_email_verified: typing.Optional[bool]
+    is_email_verified: bool
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -7810,13 +7591,13 @@ class Customer(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         customer_number: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -7824,12 +7605,12 @@ class Customer(Resource):
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
         vat_id: typing.Optional[str] = None,
-        addresses: typing.Optional[typing.List["Address"]] = None,
+        addresses: typing.List["Address"] = None,
         default_shipping_address_id: typing.Optional[str] = None,
         shipping_address_ids: typing.Optional[typing.List[str]] = None,
         default_billing_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List[str]] = None,
-        is_email_verified: typing.Optional[bool] = None,
+        is_email_verified: bool = None,
         external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -7904,14 +7685,9 @@ class Customer(Resource):
 class CustomerAddressAddedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressAddedMessageSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(type="CustomerAddressAdded")
 
@@ -7926,14 +7702,9 @@ class CustomerAddressAddedMessage(MessagePayload):
 class CustomerAddressChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressChangedMessageSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(type="CustomerAddressChanged")
 
@@ -7948,14 +7719,9 @@ class CustomerAddressChangedMessage(MessagePayload):
 class CustomerAddressRemovedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressRemovedMessageSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(type="CustomerAddressRemoved")
 
@@ -7970,14 +7736,9 @@ class CustomerAddressRemovedMessage(MessagePayload):
 class CustomerCompanyNameSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCompanyNameSetMessageSchema`."
     #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
-    company_name: typing.Optional[str]
+    company_name: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        company_name: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, company_name: str = None) -> None:
         self.company_name = company_name
         super().__init__(type="CustomerCompanyNameSet")
 
@@ -7992,14 +7753,9 @@ class CustomerCompanyNameSetMessage(MessagePayload):
 class CustomerCreatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatedMessageSchema`."
     #: :class:`commercetools.types.Customer`
-    customer: typing.Optional["Customer"]
+    customer: "Customer"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        customer: typing.Optional["Customer"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, customer: "Customer" = None) -> None:
         self.customer = customer
         super().__init__(type="CustomerCreated")
 
@@ -8014,13 +7770,10 @@ class CustomerCreatedMessage(MessagePayload):
 class CustomerDateOfBirthSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDateOfBirthSetMessageSchema`."
     #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
-    date_of_birth: typing.Optional[datetime.date]
+    date_of_birth: datetime.date
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        date_of_birth: typing.Optional[datetime.date] = None,
+        self, *, type: str = None, date_of_birth: datetime.date = None
     ) -> None:
         self.date_of_birth = date_of_birth
         super().__init__(type="CustomerDateOfBirthSet")
@@ -8036,11 +7789,9 @@ class CustomerDateOfBirthSetMessage(MessagePayload):
 class CustomerEmailChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailChangedMessageSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, email: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, email: str = None) -> None:
         self.email = email
         super().__init__(type="CustomerEmailChanged")
 
@@ -8055,7 +7806,7 @@ class CustomerEmailChangedMessage(MessagePayload):
 class CustomerEmailVerifiedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifiedMessageSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="CustomerEmailVerified")
 
     def __repr__(self) -> str:
@@ -8068,19 +7819,19 @@ class CustomerGroup(Resource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         custom: typing.Optional["CustomFields"] = None,
     ) -> None:
         self.key = key
@@ -8112,15 +7863,15 @@ class CustomerGroup(Resource):
 class CustomerGroupPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.CustomerGroup`
-    results: typing.Optional[typing.Sequence["CustomerGroup"]]
+    results: typing.Sequence["CustomerGroup"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["CustomerGroup"]] = None,
+        offset: int = None,
+        results: typing.Sequence["CustomerGroup"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -8136,13 +7887,10 @@ class CustomerGroupPagedQueryResponse(PagedQueryResponse):
 class CustomerGroupSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetMessageSchema`."
     #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
+    customer_group: "CustomerGroupReference"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        self, *, type: str = None, customer_group: "CustomerGroupReference" = None
     ) -> None:
         self.customer_group = customer_group
         super().__init__(type="CustomerGroupSet")
@@ -8158,14 +7906,9 @@ class CustomerGroupSetMessage(MessagePayload):
 class CustomerGroupUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -8180,7 +7923,7 @@ class CustomerGroupUpdate(Update):
 class CustomerGroupUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -8191,15 +7934,15 @@ class CustomerGroupUpdateAction(UpdateAction):
 class CustomerPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Customer`
-    results: typing.Optional[typing.Sequence["Customer"]]
+    results: typing.Sequence["Customer"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Customer"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Customer"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -8215,14 +7958,9 @@ class CustomerPagedQueryResponse(PagedQueryResponse):
 class CustomerUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -8234,7 +7972,7 @@ class CustomerUpdate(Update):
 class CustomerUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -8245,14 +7983,9 @@ class CustomerUpdateAction(UpdateAction):
 class DeliveryAddedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddedMessageSchema`."
     #: :class:`commercetools.types.Delivery`
-    delivery: typing.Optional["Delivery"]
+    delivery: "Delivery"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, delivery: "Delivery" = None) -> None:
         self.delivery = delivery
         super().__init__(type="DeliveryAdded")
 
@@ -8264,15 +7997,15 @@ class DeliveryAddedMessage(MessagePayload):
 class DeliveryAddressSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddressSetMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
+        type: str = None,
+        delivery_id: str = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
         self.delivery_id = delivery_id
@@ -8291,16 +8024,16 @@ class DeliveryAddressSetMessage(MessagePayload):
 class DeliveryItemsUpdatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        type: str = None,
+        delivery_id: str = None,
+        items: typing.List["DeliveryItem"] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
@@ -8318,14 +8051,9 @@ class DeliveryItemsUpdatedMessage(MessagePayload):
 class DeliveryRemovedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryRemovedMessageSchema`."
     #: :class:`commercetools.types.Delivery`
-    delivery: typing.Optional["Delivery"]
+    delivery: "Delivery"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, delivery: "Delivery" = None) -> None:
         self.delivery = delivery
         super().__init__(type="DeliveryRemoved")
 
@@ -8344,15 +8072,15 @@ class DiscountCode(Resource):
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`str`
-    code: typing.Optional[str]
+    code: str
     #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``cartDiscounts`` `in Commercetools)`
-    cart_discounts: typing.Optional[typing.List["CartDiscountReference"]]
+    cart_discounts: typing.List["CartDiscountReference"]
     #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: typing.Optional[str]
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
     #: List of :class:`commercetools.types.Reference`
-    references: typing.Optional[typing.List["Reference"]]
+    references: typing.List["Reference"]
     #: Optional :class:`int` `(Named` ``maxApplications`` `in Commercetools)`
     max_applications: typing.Optional[int]
     #: Optional :class:`int` `(Named` ``maxApplicationsPerCustomer`` `in Commercetools)`
@@ -8360,7 +8088,7 @@ class DiscountCode(Resource):
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: List of :class:`str`
-    groups: typing.Optional[typing.List[str]]
+    groups: typing.List[str]
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -8369,21 +8097,21 @@ class DiscountCode(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        code: typing.Optional[str] = None,
-        cart_discounts: typing.Optional[typing.List["CartDiscountReference"]] = None,
+        code: str = None,
+        cart_discounts: typing.List["CartDiscountReference"] = None,
         cart_predicate: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-        references: typing.Optional[typing.List["Reference"]] = None,
+        is_active: bool = None,
+        references: typing.List["Reference"] = None,
         max_applications: typing.Optional[int] = None,
         max_applications_per_customer: typing.Optional[int] = None,
         custom: typing.Optional["CustomFields"] = None,
-        groups: typing.Optional[typing.List[str]] = None,
+        groups: typing.List[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -8436,9 +8164,7 @@ class DiscountCode(Resource):
 class DiscountCodeNonApplicableError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeNonApplicableErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="DiscountCodeNonApplicable", message=message)
 
     def __repr__(self) -> str:
@@ -8452,15 +8178,15 @@ class DiscountCodeNonApplicableError(ErrorObject):
 class DiscountCodePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.DiscountCode`
-    results: typing.Optional[typing.Sequence["DiscountCode"]]
+    results: typing.Sequence["DiscountCode"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["DiscountCode"]] = None,
+        offset: int = None,
+        results: typing.Sequence["DiscountCode"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -8483,14 +8209,9 @@ class DiscountCodeState(enum.Enum):
 class DiscountCodeUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -8505,7 +8226,7 @@ class DiscountCodeUpdate(Update):
 class DiscountCodeUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -8516,14 +8237,10 @@ class DiscountCodeUpdateAction(UpdateAction):
 class DuplicateAttributeValueError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateAttributeValueErrorSchema`."
     #: :class:`commercetools.types.Attribute`
-    attribute: typing.Optional["Attribute"]
+    attribute: "Attribute"
 
     def __init__(
-        self,
-        *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        attribute: typing.Optional["Attribute"] = None,
+        self, *, code: str = None, message: str = None, attribute: "Attribute" = None
     ) -> None:
         self.attribute = attribute
         super().__init__(code="DuplicateAttributeValue", message=message)
@@ -8540,14 +8257,14 @@ class DuplicateAttributeValueError(ErrorObject):
 class DuplicateAttributeValuesError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateAttributeValuesErrorSchema`."
     #: List of :class:`commercetools.types.Attribute`
-    attributes: typing.Optional[typing.List["Attribute"]]
+    attributes: typing.List["Attribute"]
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        attributes: typing.Optional[typing.List["Attribute"]] = None,
+        code: str = None,
+        message: str = None,
+        attributes: typing.List["Attribute"] = None,
     ) -> None:
         self.attributes = attributes
         super().__init__(code="DuplicateAttributeValues", message=message)
@@ -8571,8 +8288,8 @@ class DuplicateFieldError(ErrorObject):
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
+        code: str = None,
+        message: str = None,
         field: typing.Optional[str] = None,
         duplicate_value: typing.Optional[typing.Any] = None,
     ) -> None:
@@ -8591,14 +8308,14 @@ class DuplicateFieldError(ErrorObject):
 class DuplicatePriceScopeError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicatePriceScopeErrorSchema`."
     #: List of :class:`commercetools.types.Price` `(Named` ``conflictingPrices`` `in Commercetools)`
-    conflicting_prices: typing.Optional[typing.List["Price"]]
+    conflicting_prices: typing.List["Price"]
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        conflicting_prices: typing.Optional[typing.List["Price"]] = None,
+        code: str = None,
+        message: str = None,
+        conflicting_prices: typing.List["Price"] = None,
     ) -> None:
         self.conflicting_prices = conflicting_prices
         super().__init__(code="DuplicatePriceScope", message=message)
@@ -8614,14 +8331,14 @@ class DuplicatePriceScopeError(ErrorObject):
 class DuplicateVariantValuesError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateVariantValuesErrorSchema`."
     #: :class:`commercetools.types.VariantValues` `(Named` ``variantValues`` `in Commercetools)`
-    variant_values: typing.Optional["VariantValues"]
+    variant_values: "VariantValues"
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        variant_values: typing.Optional["VariantValues"] = None,
+        code: str = None,
+        message: str = None,
+        variant_values: "VariantValues" = None,
     ) -> None:
         self.variant_values = variant_values
         super().__init__(code="DuplicateVariantValues", message=message)
@@ -8640,20 +8357,20 @@ class Extension(Resource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ExtensionDestination`
-    destination: typing.Optional["ExtensionDestination"]
+    destination: "ExtensionDestination"
     #: List of :class:`commercetools.types.ExtensionTrigger`
-    triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    triggers: typing.List["ExtensionTrigger"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        destination: typing.Optional["ExtensionDestination"] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        destination: "ExtensionDestination" = None,
+        triggers: typing.List["ExtensionTrigger"] = None,
     ) -> None:
         self.key = key
         self.destination = destination
@@ -8684,19 +8401,19 @@ class Extension(Resource):
 class ExtensionAWSLambdaDestination(ExtensionDestination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAWSLambdaDestinationSchema`."
     #: :class:`str`
-    arn: typing.Optional[str]
+    arn: str
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
-    access_secret: typing.Optional[str]
+    access_secret: str
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        arn: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
-        access_secret: typing.Optional[str] = None,
+        type: str = None,
+        arn: str = None,
+        access_key: str = None,
+        access_secret: str = None,
     ) -> None:
         self.arn = arn
         self.access_key = access_key
@@ -8721,14 +8438,9 @@ class ExtensionAuthorizationHeaderAuthentication(
 ):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAuthorizationHeaderAuthenticationSchema`."
     #: :class:`str` `(Named` ``headerValue`` `in Commercetools)`
-    header_value: typing.Optional[str]
+    header_value: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        header_value: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, header_value: str = None) -> None:
         self.header_value = header_value
         super().__init__(type="AuthorizationHeader")
 
@@ -8743,11 +8455,9 @@ class ExtensionAuthorizationHeaderAuthentication(
 class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthentication):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAzureFunctionsAuthenticationSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(type="AzureFunctions")
 
@@ -8762,15 +8472,15 @@ class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthenticati
 class ExtensionHttpDestination(ExtensionDestination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionHttpDestinationSchema`."
     #: :class:`str`
-    url: typing.Optional[str]
+    url: str
     #: Optional :class:`commercetools.types.ExtensionHttpDestinationAuthentication`
     authentication: typing.Optional["ExtensionHttpDestinationAuthentication"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        url: typing.Optional[str] = None,
+        type: str = None,
+        url: str = None,
         authentication: typing.Optional[
             "ExtensionHttpDestinationAuthentication"
         ] = None,
@@ -8791,15 +8501,15 @@ class ExtensionHttpDestination(ExtensionDestination):
 class ExtensionPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Extension`
-    results: typing.Optional[typing.Sequence["Extension"]]
+    results: typing.Sequence["Extension"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Extension"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Extension"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -8822,14 +8532,9 @@ class ExtensionResourceTypeId(enum.Enum):
 class ExtensionUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -8841,7 +8546,7 @@ class ExtensionUpdate(Update):
 class ExtensionUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -8868,15 +8573,15 @@ class FieldContainer(typing.Dict[(str, typing.Any)]):
 class FilteredFacetResult(FacetResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FilteredFacetResultSchema`."
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
     product_count: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        count: typing.Optional[int] = None,
+        type: "FacetTypes" = None,
+        count: int = None,
         product_count: typing.Optional[int] = None,
     ) -> None:
         self.count = count
@@ -8895,12 +8600,7 @@ class FilteredFacetResult(FacetResult):
 class GeoJsonPoint(GeoJson):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonPointSchema`."
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        coordinates: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, coordinates: list = None) -> None:
         super().__init__(type="Point", coordinates=coordinates)
 
     def __repr__(self) -> str:
@@ -8911,16 +8611,12 @@ class GeoJsonPoint(GeoJson):
 class GoogleCloudPubSubDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GoogleCloudPubSubDestinationSchema`."
     #: :class:`str` `(Named` ``projectId`` `in Commercetools)`
-    project_id: typing.Optional[str]
+    project_id: str
     #: :class:`str`
-    topic: typing.Optional[str]
+    topic: str
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        topic: typing.Optional[str] = None,
+        self, *, type: str = None, project_id: str = None, topic: str = None
     ) -> None:
         self.project_id = project_id
         self.topic = topic
@@ -8938,9 +8634,7 @@ class GoogleCloudPubSubDestination(Destination):
 class InsufficientScopeError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InsufficientScopeErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="insufficient_scope", message=message)
 
     def __repr__(self) -> str:
@@ -8951,9 +8645,7 @@ class InsufficientScopeError(ErrorObject):
 class InvalidCredentialsError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidCredentialsErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidCredentials", message=message)
 
     def __repr__(self) -> str:
@@ -8967,9 +8659,7 @@ class InvalidCredentialsError(ErrorObject):
 class InvalidCurrentPasswordError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidCurrentPasswordErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidCurrentPassword", message=message)
 
     def __repr__(self) -> str:
@@ -8983,19 +8673,19 @@ class InvalidCurrentPasswordError(ErrorObject):
 class InvalidFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidFieldErrorSchema`."
     #: :class:`str`
-    field: typing.Optional[str]
+    field: str
     #: :class:`typing.Any` `(Named` ``invalidValue`` `in Commercetools)`
-    invalid_value: typing.Optional[typing.Any]
+    invalid_value: typing.Any
     #: Optional :class:`list` `(Named` ``allowedValues`` `in Commercetools)`
     allowed_values: typing.Optional[list]
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        field: typing.Optional[str] = None,
-        invalid_value: typing.Optional[typing.Any] = None,
+        code: str = None,
+        message: str = None,
+        field: str = None,
+        invalid_value: typing.Any = None,
         allowed_values: typing.Optional[list] = None,
     ) -> None:
         self.field = field
@@ -9020,9 +8710,7 @@ class InvalidFieldError(ErrorObject):
 class InvalidInputError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidInputErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidInput", message=message)
 
     def __repr__(self) -> str:
@@ -9033,17 +8721,17 @@ class InvalidInputError(ErrorObject):
 class InvalidItemShippingDetailsError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidItemShippingDetailsErrorSchema`."
     #: :class:`str`
-    subject: typing.Optional[str]
+    subject: str
     #: :class:`str` `(Named` ``itemId`` `in Commercetools)`
-    item_id: typing.Optional[str]
+    item_id: str
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        subject: typing.Optional[str] = None,
-        item_id: typing.Optional[str] = None,
+        code: str = None,
+        message: str = None,
+        subject: str = None,
+        item_id: str = None,
     ) -> None:
         self.subject = subject
         self.item_id = item_id
@@ -9060,9 +8748,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
 class InvalidOperationError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidOperationErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidOperation", message=message)
 
     def __repr__(self) -> str:
@@ -9073,9 +8759,7 @@ class InvalidOperationError(ErrorObject):
 class InvalidSubjectError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidSubjectErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidSubject", message=message)
 
     def __repr__(self) -> str:
@@ -9086,9 +8770,7 @@ class InvalidSubjectError(ErrorObject):
 class InvalidTokenError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidTokenErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="invalid_token", message=message)
 
     def __repr__(self) -> str:
@@ -9099,13 +8781,13 @@ class InvalidTokenError(ErrorObject):
 class InventoryEntry(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySchema`."
     #: :class:`str`
-    sku: typing.Optional[str]
+    sku: str
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
     #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
-    quantity_on_stock: typing.Optional[int]
+    quantity_on_stock: int
     #: :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
-    available_quantity: typing.Optional[int]
+    available_quantity: int
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
@@ -9116,14 +8798,14 @@ class InventoryEntry(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sku: typing.Optional[str] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        sku: str = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
-        quantity_on_stock: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None,
+        quantity_on_stock: int = None,
+        available_quantity: int = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -9165,16 +8847,16 @@ class InventoryEntry(Resource):
 class InventoryEntryDeletedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDeletedMessageSchema`."
     #: :class:`str`
-    sku: typing.Optional[str]
+    sku: str
     #: :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
+    supply_channel: "ChannelReference"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        sku: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
+        type: str = None,
+        sku: str = None,
+        supply_channel: "ChannelReference" = None,
     ) -> None:
         self.sku = sku
         self.supply_channel = supply_channel
@@ -9198,15 +8880,15 @@ class InventoryMode(enum.Enum):
 class InventoryPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.InventoryEntry`
-    results: typing.Optional[typing.Sequence["InventoryEntry"]]
+    results: typing.Sequence["InventoryEntry"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["InventoryEntry"]] = None,
+        offset: int = None,
+        results: typing.Sequence["InventoryEntry"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -9222,14 +8904,9 @@ class InventoryPagedQueryResponse(PagedQueryResponse):
 class InventoryUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -9241,7 +8918,7 @@ class InventoryUpdate(Update):
 class InventoryUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -9252,11 +8929,9 @@ class InventoryUpdateAction(UpdateAction):
 class IronMqDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.IronMqDestinationSchema`."
     #: :class:`str`
-    uri: typing.Optional[str]
+    uri: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, uri: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, uri: str = None) -> None:
         self.uri = uri
         super().__init__(type="IronMQ")
 
@@ -9279,25 +8954,25 @@ class LineItemPriceMode(enum.Enum):
 class LineItemStateTransitionMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessageSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
-    transition_date: typing.Optional[datetime.datetime]
+    transition_date: datetime.datetime
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
+    from_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
+    to_state: "StateReference"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        transition_date: typing.Optional[datetime.datetime] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
+        type: str = None,
+        line_item_id: str = None,
+        transition_date: datetime.datetime = None,
+        quantity: int = None,
+        from_state: "StateReference" = None,
+        to_state: "StateReference" = None,
     ) -> None:
         self.line_item_id = line_item_id
         self.transition_date = transition_date
@@ -9331,25 +9006,25 @@ class LocalizedString(typing.Dict[(str, str)]):
 class MessageContext(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageContextSchema`."
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
-    sequence_number: typing.Optional[int]
+    sequence_number: int
     #: :class:`commercetools.types.Reference`
-    resource: typing.Optional["Reference"]
+    resource: "Reference"
     #: :class:`int` `(Named` ``resourceVersion`` `in Commercetools)`
-    resource_version: typing.Optional[int]
+    resource_version: int
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        sequence_number: int = None,
+        resource: "Reference" = None,
+        resource_version: int = None,
+        type: str = None,
     ) -> None:
         self.sequence_number = sequence_number
         self.resource = resource
@@ -9382,33 +9057,33 @@ class MessageContext(Resource):
 class MessageDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageDeliverySchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_at: datetime.datetime
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
-    sequence_number: typing.Optional[int]
+    sequence_number: int
     #: :class:`int` `(Named` ``resourceVersion`` `in Commercetools)`
-    resource_version: typing.Optional[int]
+    resource_version: int
     #: :class:`commercetools.types.PayloadNotIncluded` `(Named` ``payloadNotIncluded`` `in Commercetools)`
-    payload_not_included: typing.Optional["PayloadNotIncluded"]
+    payload_not_included: "PayloadNotIncluded"
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource_version: typing.Optional[int] = None,
-        payload_not_included: typing.Optional["PayloadNotIncluded"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        sequence_number: int = None,
+        resource_version: int = None,
+        payload_not_included: "PayloadNotIncluded" = None,
     ) -> None:
         self.id = id
         self.version = version
@@ -9443,15 +9118,15 @@ class MessageDelivery(SubscriptionDelivery):
 class MessagePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Message`
-    results: typing.Optional[typing.Sequence["Message"]]
+    results: typing.Sequence["Message"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Message"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Message"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -9472,25 +9147,25 @@ class MoneyType(enum.Enum):
 class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MultiBuyCustomLineItemsTargetSchema`."
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
     #: :class:`int` `(Named` ``triggerQuantity`` `in Commercetools)`
-    trigger_quantity: typing.Optional[int]
+    trigger_quantity: int
     #: :class:`int` `(Named` ``discountedQuantity`` `in Commercetools)`
-    discounted_quantity: typing.Optional[int]
+    discounted_quantity: int
     #: Optional :class:`int` `(Named` ``maxOccurrence`` `in Commercetools)`
     max_occurrence: typing.Optional[int]
     #: :class:`commercetools.types.SelectionMode` `(Named` ``selectionMode`` `in Commercetools)`
-    selection_mode: typing.Optional["SelectionMode"]
+    selection_mode: "SelectionMode"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None,
-        trigger_quantity: typing.Optional[int] = None,
-        discounted_quantity: typing.Optional[int] = None,
+        type: str = None,
+        predicate: str = None,
+        trigger_quantity: int = None,
+        discounted_quantity: int = None,
         max_occurrence: typing.Optional[int] = None,
-        selection_mode: typing.Optional["SelectionMode"] = None,
+        selection_mode: "SelectionMode" = None,
     ) -> None:
         self.predicate = predicate
         self.trigger_quantity = trigger_quantity
@@ -9517,25 +9192,25 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
 class MultiBuyLineItemsTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MultiBuyLineItemsTargetSchema`."
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
     #: :class:`int` `(Named` ``triggerQuantity`` `in Commercetools)`
-    trigger_quantity: typing.Optional[int]
+    trigger_quantity: int
     #: :class:`int` `(Named` ``discountedQuantity`` `in Commercetools)`
-    discounted_quantity: typing.Optional[int]
+    discounted_quantity: int
     #: Optional :class:`int` `(Named` ``maxOccurrence`` `in Commercetools)`
     max_occurrence: typing.Optional[int]
     #: :class:`commercetools.types.SelectionMode` `(Named` ``selectionMode`` `in Commercetools)`
-    selection_mode: typing.Optional["SelectionMode"]
+    selection_mode: "SelectionMode"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None,
-        trigger_quantity: typing.Optional[int] = None,
-        discounted_quantity: typing.Optional[int] = None,
+        type: str = None,
+        predicate: str = None,
+        trigger_quantity: int = None,
+        discounted_quantity: int = None,
         max_occurrence: typing.Optional[int] = None,
-        selection_mode: typing.Optional["SelectionMode"] = None,
+        selection_mode: "SelectionMode" = None,
     ) -> None:
         self.predicate = predicate
         self.trigger_quantity = trigger_quantity
@@ -9572,11 +9247,11 @@ class Order(Resource):
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
     #: List of :class:`commercetools.types.LineItem` `(Named` ``lineItems`` `in Commercetools)`
-    line_items: typing.Optional[typing.List["LineItem"]]
+    line_items: typing.List["LineItem"]
     #: List of :class:`commercetools.types.CustomLineItem` `(Named` ``customLineItems`` `in Commercetools)`
-    custom_line_items: typing.Optional[typing.List["CustomLineItem"]]
+    custom_line_items: typing.List["CustomLineItem"]
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    total_price: "Money"
     #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedPrice"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
@@ -9592,7 +9267,7 @@ class Order(Resource):
     #: Optional :class:`str`
     country: typing.Optional[str]
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional["OrderState"]
+    order_state: "OrderState"
     #: Optional :class:`commercetools.types.StateReference`
     state: typing.Optional["StateReference"]
     #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
@@ -9602,13 +9277,13 @@ class Order(Resource):
     #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
     shipping_info: typing.Optional["ShippingInfo"]
     #: List of :class:`commercetools.types.SyncInfo` `(Named` ``syncInfo`` `in Commercetools)`
-    sync_info: typing.Optional[typing.List["SyncInfo"]]
+    sync_info: typing.List["SyncInfo"]
     #: Optional list of :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
     return_info: typing.Optional[typing.List["ReturnInfo"]]
     #: Optional list of :class:`commercetools.types.DiscountCodeInfo` `(Named` ``discountCodes`` `in Commercetools)`
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
     #: :class:`int` `(Named` ``lastMessageSequenceNumber`` `in Commercetools)`
-    last_message_sequence_number: typing.Optional[int]
+    last_message_sequence_number: int
     #: Optional :class:`commercetools.types.CartReference`
     cart: typing.Optional["CartReference"]
     #: Optional :class:`commercetools.types.CustomFields`
@@ -9620,7 +9295,7 @@ class Order(Resource):
     #: Optional :class:`commercetools.types.InventoryMode` `(Named` ``inventoryMode`` `in Commercetools)`
     inventory_mode: typing.Optional["InventoryMode"]
     #: :class:`commercetools.types.CartOrigin`
-    origin: typing.Optional["CartOrigin"]
+    origin: "CartOrigin"
     #: Optional :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
     tax_calculation_mode: typing.Optional["TaxCalculationMode"]
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
@@ -9631,18 +9306,18 @@ class Order(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         order_number: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["LineItem"]] = None,
-        custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
-        total_price: typing.Optional["Money"] = None,
+        line_items: typing.List["LineItem"] = None,
+        custom_line_items: typing.List["CustomLineItem"] = None,
+        total_price: "Money" = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
@@ -9650,21 +9325,21 @@ class Order(Resource):
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         country: typing.Optional[str] = None,
-        order_state: typing.Optional["OrderState"] = None,
+        order_state: "OrderState" = None,
         state: typing.Optional["StateReference"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
-        sync_info: typing.Optional[typing.List["SyncInfo"]] = None,
+        sync_info: typing.List["SyncInfo"] = None,
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: typing.Optional[int] = None,
+        last_message_sequence_number: int = None,
         cart: typing.Optional["CartReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
-        origin: typing.Optional["CartOrigin"] = None,
+        origin: "CartOrigin" = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
@@ -9758,14 +9433,9 @@ class Order(Resource):
 class OrderBillingAddressSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessageSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(type="OrderBillingAddressSet")
 
@@ -9780,14 +9450,9 @@ class OrderBillingAddressSetMessage(MessagePayload):
 class OrderCreatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCreatedMessageSchema`."
     #: :class:`commercetools.types.Order`
-    order: typing.Optional["Order"]
+    order: "Order"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, order: "Order" = None) -> None:
         self.order = order
         super().__init__(type="OrderCreated")
 
@@ -9799,11 +9464,9 @@ class OrderCreatedMessage(MessagePayload):
 class OrderCustomerEmailSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessageSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, email: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, email: str = None) -> None:
         self.email = email
         super().__init__(type="OrderCustomerEmailSet")
 
@@ -9829,7 +9492,7 @@ class OrderCustomerSetMessage(MessagePayload):
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
+        type: str = None,
         customer: typing.Optional["CustomerReference"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         old_customer: typing.Optional["CustomerReference"] = None,
@@ -9858,14 +9521,9 @@ class OrderCustomerSetMessage(MessagePayload):
 class OrderDeletedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDeletedMessageSchema`."
     #: :class:`commercetools.types.Order`
-    order: typing.Optional["Order"]
+    order: "Order"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, order: "Order" = None) -> None:
         self.order = order
         super().__init__(type="OrderDeleted")
 
@@ -9877,34 +9535,34 @@ class OrderDeletedMessage(MessagePayload):
 class OrderEdit(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSchema`."
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_at: datetime.datetime
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.OrderReference`
-    resource: typing.Optional["OrderReference"]
+    resource: "OrderReference"
     #: List of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
-    staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]]
+    staged_actions: typing.List["StagedOrderUpdateAction"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: :class:`commercetools.types.OrderEditResult`
-    result: typing.Optional["OrderEditResult"]
+    result: "OrderEditResult"
     #: Optional :class:`str`
     comment: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        resource: typing.Optional["OrderReference"] = None,
-        staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
+        resource: "OrderReference" = None,
+        staged_actions: typing.List["StagedOrderUpdateAction"] = None,
         custom: typing.Optional["CustomFields"] = None,
-        result: typing.Optional["OrderEditResult"] = None,
+        result: "OrderEditResult" = None,
         comment: typing.Optional[str] = None,
     ) -> None:
         self.created_at = created_at
@@ -9944,19 +9602,19 @@ class OrderEdit(Resource):
 class OrderEditApplied(OrderEditResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedSchema`."
     #: :class:`datetime.datetime` `(Named` ``appliedAt`` `in Commercetools)`
-    applied_at: typing.Optional[datetime.datetime]
+    applied_at: datetime.datetime
     #: :class:`commercetools.types.OrderExcerpt` `(Named` ``excerptBeforeEdit`` `in Commercetools)`
-    excerpt_before_edit: typing.Optional["OrderExcerpt"]
+    excerpt_before_edit: "OrderExcerpt"
     #: :class:`commercetools.types.OrderExcerpt` `(Named` ``excerptAfterEdit`` `in Commercetools)`
-    excerpt_after_edit: typing.Optional["OrderExcerpt"]
+    excerpt_after_edit: "OrderExcerpt"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        applied_at: typing.Optional[datetime.datetime] = None,
-        excerpt_before_edit: typing.Optional["OrderExcerpt"] = None,
-        excerpt_after_edit: typing.Optional["OrderExcerpt"] = None,
+        type: str = None,
+        applied_at: datetime.datetime = None,
+        excerpt_before_edit: "OrderExcerpt" = None,
+        excerpt_after_edit: "OrderExcerpt" = None,
     ) -> None:
         self.applied_at = applied_at
         self.excerpt_before_edit = excerpt_before_edit
@@ -9979,16 +9637,16 @@ class OrderEditApplied(OrderEditResult):
 class OrderEditAppliedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedMessageSchema`."
     #: :class:`commercetools.types.OrderEditReference`
-    edit: typing.Optional["OrderEditReference"]
+    edit: "OrderEditReference"
     #: :class:`commercetools.types.OrderEditApplied`
-    result: typing.Optional["OrderEditApplied"]
+    result: "OrderEditApplied"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        edit: typing.Optional["OrderEditReference"] = None,
-        result: typing.Optional["OrderEditApplied"] = None,
+        type: str = None,
+        edit: "OrderEditReference" = None,
+        result: "OrderEditApplied" = None,
     ) -> None:
         self.edit = edit
         self.result = result
@@ -10006,7 +9664,7 @@ class OrderEditAppliedMessage(MessagePayload):
 class OrderEditNotProcessed(OrderEditResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditNotProcessedSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="NotProcessed")
 
     def __repr__(self) -> str:
@@ -10017,15 +9675,15 @@ class OrderEditNotProcessed(OrderEditResult):
 class OrderEditPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.OrderEdit`
-    results: typing.Optional[typing.Sequence["OrderEdit"]]
+    results: typing.Sequence["OrderEdit"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["OrderEdit"]] = None,
+        offset: int = None,
+        results: typing.Sequence["OrderEdit"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -10041,13 +9699,10 @@ class OrderEditPagedQueryResponse(PagedQueryResponse):
 class OrderEditPreviewFailure(OrderEditResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPreviewFailureSchema`."
     #: List of :class:`commercetools.types.ErrorObject`
-    errors: typing.Optional[typing.List["ErrorObject"]]
+    errors: typing.List["ErrorObject"]
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        errors: typing.Optional[typing.List["ErrorObject"]] = None,
+        self, *, type: str = None, errors: typing.List["ErrorObject"] = None
     ) -> None:
         self.errors = errors
         super().__init__(type="PreviewFailure")
@@ -10060,16 +9715,16 @@ class OrderEditPreviewFailure(OrderEditResult):
 class OrderEditPreviewSuccess(OrderEditResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPreviewSuccessSchema`."
     #: :class:`commercetools.types.StagedOrder`
-    preview: typing.Optional["StagedOrder"]
+    preview: "StagedOrder"
     #: List of :class:`commercetools.types.MessagePayload` `(Named` ``messagePayloads`` `in Commercetools)`
-    message_payloads: typing.Optional[typing.List["MessagePayload"]]
+    message_payloads: typing.List["MessagePayload"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        preview: typing.Optional["StagedOrder"] = None,
-        message_payloads: typing.Optional[typing.List["MessagePayload"]] = None,
+        type: str = None,
+        preview: "StagedOrder" = None,
+        message_payloads: typing.List["MessagePayload"] = None,
     ) -> None:
         self.preview = preview
         self.message_payloads = message_payloads
@@ -10087,16 +9742,16 @@ class OrderEditPreviewSuccess(OrderEditResult):
 class OrderEditUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditUpdateSchema`."
     #: List of :class:`commercetools.types.OrderEditUpdateAction`
-    actions: typing.Optional[typing.List["OrderEditUpdateAction"]]
+    actions: typing.List["OrderEditUpdateAction"]
     #: :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
-    dry_run: typing.Optional[bool]
+    dry_run: bool
 
     def __init__(
         self,
         *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[typing.List["OrderEditUpdateAction"]] = None,
-        dry_run: typing.Optional[bool] = None,
+        version: int = None,
+        actions: typing.List["OrderEditUpdateAction"] = None,
+        dry_run: bool = None,
     ) -> None:
         self.actions = actions
         self.dry_run = dry_run
@@ -10114,7 +9769,7 @@ class OrderEditUpdate(Update):
 class OrderEditUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10125,14 +9780,9 @@ class OrderEditUpdateAction(UpdateAction):
 class OrderImportedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportedMessageSchema`."
     #: :class:`commercetools.types.Order`
-    order: typing.Optional["Order"]
+    order: "Order"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, order: "Order" = None) -> None:
         self.order = order
         super().__init__(type="OrderImported")
 
@@ -10144,15 +9794,15 @@ class OrderImportedMessage(MessagePayload):
 class OrderPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Order`
-    results: typing.Optional[typing.Sequence["Order"]]
+    results: typing.Sequence["Order"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Order"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Order"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -10170,14 +9820,9 @@ class OrderPagedQueryResponse(PagedQueryResponse):
 class OrderPaymentChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentChangedMessageSchema`."
     #: :class:`str` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional[str]
+    payment_state: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        payment_state: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, payment_state: str = None) -> None:
         self.payment_state = payment_state
         super().__init__(type="OrderPaymentStateChanged")
 
@@ -10192,14 +9837,9 @@ class OrderPaymentChangedMessage(MessagePayload):
 class OrderReturnInfoAddedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnInfoAddedMessageSchema`."
     #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
-    return_info: typing.Optional["ReturnInfo"]
+    return_info: "ReturnInfo"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        return_info: typing.Optional["ReturnInfo"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, return_info: "ReturnInfo" = None) -> None:
         self.return_info = return_info
         super().__init__(type="ReturnInfoAdded")
 
@@ -10214,16 +9854,16 @@ class OrderReturnInfoAddedMessage(MessagePayload):
 class OrderReturnShipmentStateChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnShipmentStateChangedMessageSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
-    return_item_id: typing.Optional[str]
+    return_item_id: str
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``returnShipmentState`` `in Commercetools)`
-    return_shipment_state: typing.Optional["ReturnShipmentState"]
+    return_shipment_state: "ReturnShipmentState"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        return_shipment_state: typing.Optional["ReturnShipmentState"] = None,
+        type: str = None,
+        return_item_id: str = None,
+        return_shipment_state: "ReturnShipmentState" = None,
     ) -> None:
         self.return_item_id = return_item_id
         self.return_shipment_state = return_shipment_state
@@ -10240,13 +9880,10 @@ class OrderReturnShipmentStateChangedMessage(MessagePayload):
 class OrderShipmentStateChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessageSchema`."
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
-    shipment_state: typing.Optional["ShipmentState"]
+    shipment_state: "ShipmentState"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ShipmentState"] = None,
+        self, *, type: str = None, shipment_state: "ShipmentState" = None
     ) -> None:
         self.shipment_state = shipment_state
         super().__init__(type="OrderShipmentStateChanged")
@@ -10262,14 +9899,9 @@ class OrderShipmentStateChangedMessage(MessagePayload):
 class OrderShippingAddressSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessageSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(type="OrderShippingAddressSet")
 
@@ -10291,14 +9923,9 @@ class OrderState(enum.Enum):
 class OrderStateChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessageSchema`."
     #: :class:`str` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional[str]
+    order_state: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order_state: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, order_state: str = None) -> None:
         self.order_state = order_state
         super().__init__(type="OrderStateChanged")
 
@@ -10313,16 +9940,12 @@ class OrderStateChangedMessage(MessagePayload):
 class OrderStateTransitionMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: :class:`bool`
-    force: typing.Optional[bool]
+    force: bool
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None,
+        self, *, type: str = None, state: "StateReference" = None, force: bool = None
     ) -> None:
         self.state = state
         self.force = force
@@ -10340,14 +9963,9 @@ class OrderStateTransitionMessage(MessagePayload):
 class OrderUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -10359,7 +9977,7 @@ class OrderUpdate(Update):
 class OrderUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10370,17 +9988,17 @@ class OrderUpdateAction(UpdateAction):
 class OutOfStockError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OutOfStockErrorSchema`."
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
-    line_items: typing.Optional[typing.List[str]]
+    line_items: typing.List[str]
     #: List of :class:`str`
-    skus: typing.Optional[typing.List[str]]
+    skus: typing.List[str]
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List[str]] = None,
-        skus: typing.Optional[typing.List[str]] = None,
+        code: str = None,
+        message: str = None,
+        line_items: typing.List[str] = None,
+        skus: typing.List[str] = None,
     ) -> None:
         self.line_items = line_items
         self.skus = skus
@@ -10399,16 +10017,12 @@ class OutOfStockError(ErrorObject):
 class ParcelAddedToDeliveryMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessageSchema`."
     #: :class:`commercetools.types.Delivery`
-    delivery: typing.Optional["Delivery"]
+    delivery: "Delivery"
     #: :class:`commercetools.types.Parcel`
-    parcel: typing.Optional["Parcel"]
+    parcel: "Parcel"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-        parcel: typing.Optional["Parcel"] = None,
+        self, *, type: str = None, delivery: "Delivery" = None, parcel: "Parcel" = None
     ) -> None:
         self.delivery = delivery
         self.parcel = parcel
@@ -10426,19 +10040,19 @@ class ParcelAddedToDeliveryMessage(MessagePayload):
 class ParcelItemsUpdatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelItemsUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: typing.Optional[str]
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        type: str = None,
+        parcel_id: str = None,
         delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        items: typing.List["DeliveryItem"] = None,
     ) -> None:
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
@@ -10456,18 +10070,18 @@ class ParcelItemsUpdatedMessage(MessagePayload):
 class ParcelMeasurementsUpdatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        type: str = None,
+        delivery_id: str = None,
+        parcel_id: str = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
     ) -> None:
         self.delivery_id = delivery_id
@@ -10486,16 +10100,12 @@ class ParcelMeasurementsUpdatedMessage(MessagePayload):
 class ParcelRemovedFromDeliveryMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelRemovedFromDeliveryMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: :class:`commercetools.types.Parcel`
-    parcel: typing.Optional["Parcel"]
+    parcel: "Parcel"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel: typing.Optional["Parcel"] = None,
+        self, *, type: str = None, delivery_id: str = None, parcel: "Parcel" = None
     ) -> None:
         self.delivery_id = delivery_id
         self.parcel = parcel
@@ -10512,18 +10122,18 @@ class ParcelRemovedFromDeliveryMessage(MessagePayload):
 class ParcelTrackingDataUpdatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelTrackingDataUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        type: str = None,
+        delivery_id: str = None,
+        parcel_id: str = None,
         tracking_data: typing.Optional["TrackingData"] = None,
     ) -> None:
         self.delivery_id = delivery_id
@@ -10550,7 +10160,7 @@ class Payment(Resource):
     #: Optional :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
     interface_id: typing.Optional[str]
     #: :class:`commercetools.types.TypedMoney` `(Named` ``amountPlanned`` `in Commercetools)`
-    amount_planned: typing.Optional["TypedMoney"]
+    amount_planned: "TypedMoney"
     #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``amountAuthorized`` `in Commercetools)`
     amount_authorized: typing.Optional["TypedMoney"]
     #: Optional :class:`str` `(Named` ``authorizedUntil`` `in Commercetools)`
@@ -10560,13 +10170,13 @@ class Payment(Resource):
     #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``amountRefunded`` `in Commercetools)`
     amount_refunded: typing.Optional["TypedMoney"]
     #: :class:`commercetools.types.PaymentMethodInfo` `(Named` ``paymentMethodInfo`` `in Commercetools)`
-    payment_method_info: typing.Optional["PaymentMethodInfo"]
+    payment_method_info: "PaymentMethodInfo"
     #: :class:`commercetools.types.PaymentStatus` `(Named` ``paymentStatus`` `in Commercetools)`
-    payment_status: typing.Optional["PaymentStatus"]
+    payment_status: "PaymentStatus"
     #: List of :class:`commercetools.types.Transaction`
-    transactions: typing.Optional[typing.List["Transaction"]]
+    transactions: typing.List["Transaction"]
     #: List of :class:`commercetools.types.CustomFields` `(Named` ``interfaceInteractions`` `in Commercetools)`
-    interface_interactions: typing.Optional[typing.List["CustomFields"]]
+    interface_interactions: typing.List["CustomFields"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`str`
@@ -10575,23 +10185,23 @@ class Payment(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: typing.Optional["TypedMoney"] = None,
+        amount_planned: "TypedMoney" = None,
         amount_authorized: typing.Optional["TypedMoney"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["TypedMoney"] = None,
         amount_refunded: typing.Optional["TypedMoney"] = None,
-        payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
-        payment_status: typing.Optional["PaymentStatus"] = None,
-        transactions: typing.Optional[typing.List["Transaction"]] = None,
-        interface_interactions: typing.Optional[typing.List["CustomFields"]] = None,
+        payment_method_info: "PaymentMethodInfo" = None,
+        payment_status: "PaymentStatus" = None,
+        transactions: typing.List["Transaction"] = None,
+        interface_interactions: typing.List["CustomFields"] = None,
         custom: typing.Optional["CustomFields"] = None,
         key: typing.Optional[str] = None,
     ) -> None:
@@ -10648,14 +10258,9 @@ class Payment(Resource):
 class PaymentCreatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentCreatedMessageSchema`."
     #: :class:`commercetools.types.Payment`
-    payment: typing.Optional["Payment"]
+    payment: "Payment"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        payment: typing.Optional["Payment"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, payment: "Payment" = None) -> None:
         self.payment = payment
         super().__init__(type="PaymentCreated")
 
@@ -10667,14 +10272,9 @@ class PaymentCreatedMessage(MessagePayload):
 class PaymentInteractionAddedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInteractionAddedMessageSchema`."
     #: :class:`commercetools.types.CustomFields`
-    interaction: typing.Optional["CustomFields"]
+    interaction: "CustomFields"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        interaction: typing.Optional["CustomFields"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, interaction: "CustomFields" = None) -> None:
         self.interaction = interaction
         super().__init__(type="PaymentInteractionAdded")
 
@@ -10689,15 +10289,15 @@ class PaymentInteractionAddedMessage(MessagePayload):
 class PaymentPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Payment`
-    results: typing.Optional[typing.Sequence["Payment"]]
+    results: typing.Sequence["Payment"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Payment"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Payment"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -10721,16 +10321,12 @@ class PaymentState(enum.Enum):
 class PaymentStatusInterfaceCodeSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusInterfaceCodeSetMessageSchema`."
     #: :class:`str` `(Named` ``paymentId`` `in Commercetools)`
-    payment_id: typing.Optional[str]
+    payment_id: str
     #: :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
-    interface_code: typing.Optional[str]
+    interface_code: str
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        payment_id: typing.Optional[str] = None,
-        interface_code: typing.Optional[str] = None,
+        self, *, type: str = None, payment_id: str = None, interface_code: str = None
     ) -> None:
         self.payment_id = payment_id
         self.interface_code = interface_code
@@ -10747,16 +10343,12 @@ class PaymentStatusInterfaceCodeSetMessage(MessagePayload):
 class PaymentStatusStateTransitionMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: :class:`bool`
-    force: typing.Optional[bool]
+    force: bool
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None,
+        self, *, type: str = None, state: "StateReference" = None, force: bool = None
     ) -> None:
         self.state = state
         self.force = force
@@ -10774,14 +10366,9 @@ class PaymentStatusStateTransitionMessage(MessagePayload):
 class PaymentTransactionAddedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionAddedMessageSchema`."
     #: :class:`commercetools.types.Transaction`
-    transaction: typing.Optional["Transaction"]
+    transaction: "Transaction"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        transaction: typing.Optional["Transaction"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, transaction: "Transaction" = None) -> None:
         self.transaction = transaction
         super().__init__(type="PaymentTransactionAdded")
 
@@ -10796,16 +10383,16 @@ class PaymentTransactionAddedMessage(MessagePayload):
 class PaymentTransactionStateChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionStateChangedMessageSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`commercetools.types.TransactionState`
-    state: typing.Optional["TransactionState"]
+    state: "TransactionState"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None,
+        type: str = None,
+        transaction_id: str = None,
+        state: "TransactionState" = None,
     ) -> None:
         self.transaction_id = transaction_id
         self.state = state
@@ -10822,14 +10409,9 @@ class PaymentTransactionStateChangedMessage(MessagePayload):
 class PaymentUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -10841,7 +10423,7 @@ class PaymentUpdate(Update):
 class PaymentUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -10852,17 +10434,17 @@ class PaymentUpdateAction(UpdateAction):
 class PriceChangedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceChangedErrorSchema`."
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
-    line_items: typing.Optional[typing.List[str]]
+    line_items: typing.List[str]
     #: :class:`bool`
-    shipping: typing.Optional[bool]
+    shipping: bool
 
     def __init__(
         self,
         *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List[str]] = None,
-        shipping: typing.Optional[bool] = None,
+        code: str = None,
+        message: str = None,
+        line_items: typing.List[str] = None,
+        shipping: bool = None,
     ) -> None:
         self.line_items = line_items
         self.shipping = shipping
@@ -10883,9 +10465,9 @@ class Product(Resource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
+    product_type: "ProductTypeReference"
     #: :class:`commercetools.types.ProductCatalogData` `(Named` ``masterData`` `in Commercetools)`
-    master_data: typing.Optional["ProductCatalogData"]
+    master_data: "ProductCatalogData"
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.StateReference`
@@ -10896,13 +10478,13 @@ class Product(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        master_data: typing.Optional["ProductCatalogData"] = None,
+        product_type: "ProductTypeReference" = None,
+        master_data: "ProductCatalogData" = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
@@ -10942,13 +10524,10 @@ class Product(Resource):
 class ProductCreatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessageSchema`."
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
-    product_projection: typing.Optional["ProductProjection"]
+    product_projection: "ProductProjection"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        product_projection: typing.Optional["ProductProjection"] = None,
+        self, *, type: str = None, product_projection: "ProductProjection" = None
     ) -> None:
         self.product_projection = product_projection
         super().__init__(type="ProductCreated")
@@ -10964,16 +10543,16 @@ class ProductCreatedMessage(MessagePayload):
 class ProductDeletedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDeletedMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
+    removed_image_urls: list
     #: :class:`commercetools.types.ProductProjection` `(Named` ``currentProjection`` `in Commercetools)`
-    current_projection: typing.Optional["ProductProjection"]
+    current_projection: "ProductProjection"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        current_projection: typing.Optional["ProductProjection"] = None,
+        type: str = None,
+        removed_image_urls: list = None,
+        current_projection: "ProductProjection" = None,
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
@@ -10990,19 +10569,19 @@ class ProductDeletedMessage(MessagePayload):
 class ProductDiscount(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductDiscountValue`
-    value: typing.Optional["ProductDiscountValue"]
+    value: "ProductDiscountValue"
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
     #: List of :class:`commercetools.types.Reference`
-    references: typing.Optional[typing.List["Reference"]]
+    references: typing.List["Reference"]
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -11011,17 +10590,17 @@ class ProductDiscount(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["ProductDiscountValue"] = None,
-        predicate: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-        references: typing.Optional[typing.List["Reference"]] = None,
+        value: "ProductDiscountValue" = None,
+        predicate: str = None,
+        sort_order: str = None,
+        is_active: bool = None,
+        references: typing.List["Reference"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -11066,15 +10645,15 @@ class ProductDiscount(Resource):
 class ProductDiscountPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ProductDiscount`
-    results: typing.Optional[typing.Sequence["ProductDiscount"]]
+    results: typing.Sequence["ProductDiscount"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ProductDiscount"]] = None,
+        offset: int = None,
+        results: typing.Sequence["ProductDiscount"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -11090,14 +10669,9 @@ class ProductDiscountPagedQueryResponse(PagedQueryResponse):
 class ProductDiscountUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -11112,7 +10686,7 @@ class ProductDiscountUpdate(Update):
 class ProductDiscountUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11123,14 +10697,9 @@ class ProductDiscountUpdateAction(UpdateAction):
 class ProductDiscountValueAbsolute(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteSchema`."
     #: List of :class:`commercetools.types.Money`
-    money: typing.Optional[typing.List["Money"]]
+    money: typing.List["Money"]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        money: typing.Optional[typing.List["Money"]] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, money: typing.List["Money"] = None) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -11145,7 +10714,7 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 class ProductDiscountValueExternal(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueExternalSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="external")
 
     def __repr__(self) -> str:
@@ -11156,14 +10725,9 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 class ProductDiscountValueRelative(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueRelativeSchema`."
     #: :class:`int`
-    permyriad: typing.Optional[int]
+    permyriad: int
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        permyriad: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -11178,19 +10742,19 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 class ProductImageAddedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductImageAddedMessageSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: :class:`commercetools.types.Image`
-    image: typing.Optional["Image"]
+    image: "Image"
     #: :class:`bool`
-    staged: typing.Optional[bool]
+    staged: bool
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-        image: typing.Optional["Image"] = None,
-        staged: typing.Optional[bool] = None,
+        type: str = None,
+        variant_id: int = None,
+        image: "Image" = None,
+        staged: bool = None,
     ) -> None:
         self.variant_id = variant_id
         self.image = image
@@ -11208,15 +10772,15 @@ class ProductImageAddedMessage(MessagePayload):
 class ProductPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Product`
-    results: typing.Optional[typing.Sequence["Product"]]
+    results: typing.Sequence["Product"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Product"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Product"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -11234,15 +10798,15 @@ class ProductProjection(Resource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
+    product_type: "ProductTypeReference"
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: List of :class:`commercetools.types.CategoryReference`
-    categories: typing.Optional[typing.List["CategoryReference"]]
+    categories: typing.List["CategoryReference"]
     #: Optional :class:`commercetools.types.CategoryOrderHints` `(Named` ``categoryOrderHints`` `in Commercetools)`
     category_order_hints: typing.Optional["CategoryOrderHints"]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
@@ -11258,9 +10822,9 @@ class ProductProjection(Resource):
     #: Optional :class:`bool`
     published: typing.Optional[bool]
     #: :class:`commercetools.types.ProductVariant` `(Named` ``masterVariant`` `in Commercetools)`
-    master_variant: typing.Optional["ProductVariant"]
+    master_variant: "ProductVariant"
     #: List of :class:`commercetools.types.ProductVariant`
-    variants: typing.Optional[typing.List["ProductVariant"]]
+    variants: typing.List["ProductVariant"]
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.StateReference`
@@ -11271,16 +10835,16 @@ class ProductProjection(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        product_type: "ProductTypeReference" = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-        categories: typing.Optional[typing.List["CategoryReference"]] = None,
+        slug: "LocalizedString" = None,
+        categories: typing.List["CategoryReference"] = None,
         category_order_hints: typing.Optional["CategoryOrderHints"] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
@@ -11288,8 +10852,8 @@ class ProductProjection(Resource):
         search_keywords: typing.Optional["SearchKeywords"] = None,
         has_staged_changes: typing.Optional[bool] = None,
         published: typing.Optional[bool] = None,
-        master_variant: typing.Optional["ProductVariant"] = None,
-        variants: typing.Optional[typing.List["ProductVariant"]] = None,
+        master_variant: "ProductVariant" = None,
+        variants: typing.List["ProductVariant"] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
@@ -11353,15 +10917,15 @@ class ProductProjection(Resource):
 class ProductProjectionPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ProductProjection`
-    results: typing.Optional[typing.Sequence["ProductProjection"]]
+    results: typing.Sequence["ProductProjection"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ProductProjection"]] = None,
+        offset: int = None,
+        results: typing.Sequence["ProductProjection"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -11377,18 +10941,18 @@ class ProductProjectionPagedQueryResponse(PagedQueryResponse):
 class ProductProjectionPagedSearchResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedSearchResponseSchema`."
     #: List of :class:`commercetools.types.ProductProjection`
-    results: typing.Optional[typing.List["ProductProjection"]]
+    results: typing.List["ProductProjection"]
     #: :class:`commercetools.types.FacetResults`
-    facets: typing.Optional["FacetResults"]
+    facets: "FacetResults"
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.List["ProductProjection"]] = None,
-        facets: typing.Optional["FacetResults"] = None,
+        offset: int = None,
+        results: typing.List["ProductProjection"] = None,
+        facets: "FacetResults" = None,
     ) -> None:
         self.results = results
         self.facets = facets
@@ -11410,19 +10974,19 @@ class ProductPublishScope(enum.Enum):
 class ProductPublishedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishedMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
+    removed_image_urls: list
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
-    product_projection: typing.Optional["ProductProjection"]
+    product_projection: "ProductProjection"
     #: :class:`commercetools.types.ProductPublishScope`
-    scope: typing.Optional["ProductPublishScope"]
+    scope: "ProductPublishScope"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        product_projection: typing.Optional["ProductProjection"] = None,
-        scope: typing.Optional["ProductPublishScope"] = None,
+        type: str = None,
+        removed_image_urls: list = None,
+        product_projection: "ProductProjection" = None,
+        scope: "ProductPublishScope" = None,
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
@@ -11440,14 +11004,9 @@ class ProductPublishedMessage(MessagePayload):
 class ProductRevertedStagedChangesMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
+    removed_image_urls: list
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, removed_image_urls: list = None) -> None:
         self.removed_image_urls = removed_image_urls
         super().__init__(type="ProductRevertedStagedChanges")
 
@@ -11462,14 +11021,9 @@ class ProductRevertedStagedChangesMessage(MessagePayload):
 class ProductSlugChangedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSlugChangedMessageSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, slug: "LocalizedString" = None) -> None:
         self.slug = slug
         super().__init__(type="ProductSlugChanged")
 
@@ -11481,16 +11035,12 @@ class ProductSlugChangedMessage(MessagePayload):
 class ProductStateTransitionMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: :class:`bool`
-    force: typing.Optional[bool]
+    force: bool
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None,
+        self, *, type: str = None, state: "StateReference" = None, force: bool = None
     ) -> None:
         self.state = state
         self.force = force
@@ -11510,22 +11060,22 @@ class ProductType(Resource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`str`
-    description: typing.Optional[str]
+    description: str
     #: Optional list of :class:`commercetools.types.AttributeDefinition`
     attributes: typing.Optional[typing.List["AttributeDefinition"]]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        name: str = None,
+        description: str = None,
         attributes: typing.Optional[typing.List["AttributeDefinition"]] = None,
     ) -> None:
         self.key = key
@@ -11559,15 +11109,15 @@ class ProductType(Resource):
 class ProductTypePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ProductType`
-    results: typing.Optional[typing.Sequence["ProductType"]]
+    results: typing.Sequence["ProductType"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ProductType"]] = None,
+        offset: int = None,
+        results: typing.Sequence["ProductType"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -11583,14 +11133,9 @@ class ProductTypePagedQueryResponse(PagedQueryResponse):
 class ProductTypeUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -11605,7 +11150,7 @@ class ProductTypeUpdate(Update):
 class ProductTypeUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11616,7 +11161,7 @@ class ProductTypeUpdateAction(UpdateAction):
 class ProductUnpublishedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishedMessageSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="ProductUnpublished")
 
     def __repr__(self) -> str:
@@ -11627,14 +11172,9 @@ class ProductUnpublishedMessage(MessagePayload):
 class ProductUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -11646,7 +11186,7 @@ class ProductUpdate(Update):
 class ProductUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11666,16 +11206,16 @@ class ProductVariantChannelAvailabilityMap(
 class ProductVariantDeletedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
+    removed_image_urls: list
     #: :class:`commercetools.types.ProductVariant`
-    variant: typing.Optional["ProductVariant"]
+    variant: "ProductVariant"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        variant: typing.Optional["ProductVariant"] = None,
+        type: str = None,
+        removed_image_urls: list = None,
+        variant: "ProductVariant" = None,
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.variant = variant
@@ -11692,14 +11232,9 @@ class ProductVariantDeletedMessage(MessagePayload):
 class ProjectUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -11711,7 +11246,7 @@ class ProjectUpdate(Update):
 class ProjectUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -11722,13 +11257,13 @@ class ProjectUpdateAction(UpdateAction):
 class RangeFacetResult(FacetResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.RangeFacetResultSchema`."
     #: List of :class:`commercetools.types.FacetResultRange`
-    ranges: typing.Optional[typing.List["FacetResultRange"]]
+    ranges: typing.List["FacetResultRange"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        ranges: typing.Optional[typing.List["FacetResultRange"]] = None,
+        type: "FacetTypes" = None,
+        ranges: typing.List["FacetResultRange"] = None,
     ) -> None:
         self.ranges = ranges
         super().__init__(type=FacetTypes.RANGE)
@@ -11790,14 +11325,10 @@ class ReferenceTypeId(enum.Enum):
 class RequiredFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.RequiredFieldErrorSchema`."
     #: :class:`str`
-    field: typing.Optional[str]
+    field: str
 
     def __init__(
-        self,
-        *,
-        code: typing.Optional[str] = None,
-        message: typing.Optional[str] = None,
-        field: typing.Optional[str] = None,
+        self, *, code: str = None, message: str = None, field: str = None
     ) -> None:
         self.field = field
         super().__init__(code="RequiredField", message=message)
@@ -11814,18 +11345,18 @@ class RequiredFieldError(ErrorObject):
 class ResourceCreatedDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceCreatedDeliverySchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
-    modified_at: typing.Optional[datetime.datetime]
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
-        version: typing.Optional[int] = None,
-        modified_at: typing.Optional[datetime.datetime] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
+        version: int = None,
+        modified_at: datetime.datetime = None,
     ) -> None:
         self.version = version
         self.modified_at = modified_at
@@ -11852,18 +11383,18 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
 class ResourceDeletedDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceDeletedDeliverySchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
-    modified_at: typing.Optional[datetime.datetime]
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
-        version: typing.Optional[int] = None,
-        modified_at: typing.Optional[datetime.datetime] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
+        version: int = None,
+        modified_at: datetime.datetime = None,
     ) -> None:
         self.version = version
         self.modified_at = modified_at
@@ -11890,9 +11421,7 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 class ResourceNotFoundError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceNotFoundErrorSchema`."
 
-    def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="ResourceNotFound", message=message)
 
     def __repr__(self) -> str:
@@ -11923,21 +11452,21 @@ class ResourceTypeId(enum.Enum):
 class ResourceUpdatedDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceUpdatedDeliverySchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`int` `(Named` ``oldVersion`` `in Commercetools)`
-    old_version: typing.Optional[int]
+    old_version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
-    modified_at: typing.Optional[datetime.datetime]
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
-        version: typing.Optional[int] = None,
-        old_version: typing.Optional[int] = None,
-        modified_at: typing.Optional[datetime.datetime] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
+        version: int = None,
+        old_version: int = None,
+        modified_at: datetime.datetime = None,
     ) -> None:
         self.version = version
         self.old_version = old_version
@@ -11994,7 +11523,7 @@ class Review(Resource):
     #: Optional :class:`commercetools.types.ProductReference`
     target: typing.Optional["ProductReference"]
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
-    included_in_statistics: typing.Optional[bool]
+    included_in_statistics: bool
     #: Optional :class:`int`
     rating: typing.Optional[int]
     #: Optional :class:`commercetools.types.StateReference`
@@ -12007,10 +11536,10 @@ class Review(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
         uniqueness_value: typing.Optional[str] = None,
         locale: typing.Optional[str] = None,
@@ -12018,7 +11547,7 @@ class Review(Resource):
         title: typing.Optional[str] = None,
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
-        included_in_statistics: typing.Optional[bool] = None,
+        included_in_statistics: bool = None,
         rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
@@ -12071,14 +11600,9 @@ class Review(Resource):
 class ReviewCreatedMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewCreatedMessageSchema`."
     #: :class:`commercetools.types.Review`
-    review: typing.Optional["Review"]
+    review: "Review"
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        review: typing.Optional["Review"] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, review: "Review" = None) -> None:
         self.review = review
         super().__init__(type="ReviewCreated")
 
@@ -12090,15 +11614,15 @@ class ReviewCreatedMessage(MessagePayload):
 class ReviewPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Review`
-    results: typing.Optional[typing.Sequence["Review"]]
+    results: typing.Sequence["Review"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Review"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Review"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -12116,22 +11640,22 @@ class ReviewPagedQueryResponse(PagedQueryResponse):
 class ReviewRatingSetMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessageSchema`."
     #: :class:`int` `(Named` ``oldRating`` `in Commercetools)`
-    old_rating: typing.Optional[int]
+    old_rating: int
     #: :class:`int` `(Named` ``newRating`` `in Commercetools)`
-    new_rating: typing.Optional[int]
+    new_rating: int
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
-    included_in_statistics: typing.Optional[bool]
+    included_in_statistics: bool
     #: :class:`commercetools.types.Reference`
-    target: typing.Optional["Reference"]
+    target: "Reference"
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        old_rating: typing.Optional[int] = None,
-        new_rating: typing.Optional[int] = None,
-        included_in_statistics: typing.Optional[bool] = None,
-        target: typing.Optional["Reference"] = None,
+        type: str = None,
+        old_rating: int = None,
+        new_rating: int = None,
+        included_in_statistics: bool = None,
+        target: "Reference" = None,
     ) -> None:
         self.old_rating = old_rating
         self.new_rating = new_rating
@@ -12156,28 +11680,28 @@ class ReviewRatingSetMessage(MessagePayload):
 class ReviewStateTransitionMessage(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference` `(Named` ``oldState`` `in Commercetools)`
-    old_state: typing.Optional["StateReference"]
+    old_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``newState`` `in Commercetools)`
-    new_state: typing.Optional["StateReference"]
+    new_state: "StateReference"
     #: :class:`bool` `(Named` ``oldIncludedInStatistics`` `in Commercetools)`
-    old_included_in_statistics: typing.Optional[bool]
+    old_included_in_statistics: bool
     #: :class:`bool` `(Named` ``newIncludedInStatistics`` `in Commercetools)`
-    new_included_in_statistics: typing.Optional[bool]
+    new_included_in_statistics: bool
     #: :class:`commercetools.types.Reference`
-    target: typing.Optional["Reference"]
+    target: "Reference"
     #: :class:`bool`
-    force: typing.Optional[bool]
+    force: bool
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        old_state: typing.Optional["StateReference"] = None,
-        new_state: typing.Optional["StateReference"] = None,
-        old_included_in_statistics: typing.Optional[bool] = None,
-        new_included_in_statistics: typing.Optional[bool] = None,
-        target: typing.Optional["Reference"] = None,
-        force: typing.Optional[bool] = None,
+        type: str = None,
+        old_state: "StateReference" = None,
+        new_state: "StateReference" = None,
+        old_included_in_statistics: bool = None,
+        new_included_in_statistics: bool = None,
+        target: "Reference" = None,
+        force: bool = None,
     ) -> None:
         self.old_state = old_state
         self.new_state = new_state
@@ -12206,14 +11730,9 @@ class ReviewStateTransitionMessage(MessagePayload):
 class ReviewUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -12225,7 +11744,7 @@ class ReviewUpdate(Update):
 class ReviewUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -12242,11 +11761,9 @@ class RoundingMode(enum.Enum):
 class ScoreShippingRateInput(ShippingRateInput):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ScoreShippingRateInputSchema`."
     #: :class:`int`
-    score: typing.Optional[int]
+    score: int
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, score: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, score: int = None) -> None:
         self.score = score
         super().__init__(type="Score")
 
@@ -12258,11 +11775,9 @@ class ScoreShippingRateInput(ShippingRateInput):
 class ScoreShippingRateInputDraft(ShippingRateInputDraft):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ScoreShippingRateInputDraftSchema`."
     #: :class:`int`
-    score: typing.Optional[int]
+    score: int
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, score: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, score: int = None) -> None:
         self.score = score
         super().__init__(type="Score")
 
@@ -12298,31 +11813,31 @@ class ShippingMethod(Resource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    tax_category: "TaxCategoryReference"
     #: List of :class:`commercetools.types.ZoneRate` `(Named` ``zoneRates`` `in Commercetools)`
-    zone_rates: typing.Optional[typing.List["ZoneRate"]]
+    zone_rates: typing.List["ZoneRate"]
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
-    is_default: typing.Optional[bool]
+    is_default: bool
     #: Optional :class:`str`
     predicate: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
-        zone_rates: typing.Optional[typing.List["ZoneRate"]] = None,
-        is_default: typing.Optional[bool] = None,
+        tax_category: "TaxCategoryReference" = None,
+        zone_rates: typing.List["ZoneRate"] = None,
+        is_default: bool = None,
         predicate: typing.Optional[str] = None,
     ) -> None:
         self.key = key
@@ -12362,15 +11877,15 @@ class ShippingMethod(Resource):
 class ShippingMethodPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ShippingMethod`
-    results: typing.Optional[typing.Sequence["ShippingMethod"]]
+    results: typing.Sequence["ShippingMethod"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ShippingMethod"]] = None,
+        offset: int = None,
+        results: typing.Sequence["ShippingMethod"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -12391,14 +11906,9 @@ class ShippingMethodState(enum.Enum):
 class ShippingMethodUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -12413,7 +11923,7 @@ class ShippingMethodUpdate(Update):
 class ShippingMethodUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -12442,7 +11952,7 @@ class ShoppingList(Resource):
     #: Optional list of :class:`commercetools.types.ShoppingListLineItem` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.Optional[typing.List["ShoppingListLineItem"]]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     slug: typing.Optional["LocalizedString"]
     #: Optional list of :class:`commercetools.types.TextLineItem` `(Named` ``textLineItems`` `in Commercetools)`
@@ -12453,17 +11963,17 @@ class ShoppingList(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         custom: typing.Optional["CustomFields"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
         description: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["ShoppingListLineItem"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
         anonymous_id: typing.Optional[str] = None,
@@ -12511,15 +12021,15 @@ class ShoppingList(Resource):
 class ShoppingListPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ShoppingList`
-    results: typing.Optional[typing.Sequence["ShoppingList"]]
+    results: typing.Sequence["ShoppingList"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ShoppingList"]] = None,
+        offset: int = None,
+        results: typing.Sequence["ShoppingList"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -12535,14 +12045,9 @@ class ShoppingListPagedQueryResponse(PagedQueryResponse):
 class ShoppingListUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -12557,7 +12062,7 @@ class ShoppingListUpdate(Update):
 class ShoppingListUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -12568,19 +12073,19 @@ class ShoppingListUpdateAction(UpdateAction):
 class SnsDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SnsDestinationSchema`."
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
-    access_secret: typing.Optional[str]
+    access_secret: str
     #: :class:`str` `(Named` ``topicArn`` `in Commercetools)`
-    topic_arn: typing.Optional[str]
+    topic_arn: str
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
-        access_secret: typing.Optional[str] = None,
-        topic_arn: typing.Optional[str] = None,
+        type: str = None,
+        access_key: str = None,
+        access_secret: str = None,
+        topic_arn: str = None,
     ) -> None:
         self.access_key = access_key
         self.access_secret = access_secret
@@ -12598,22 +12103,22 @@ class SnsDestination(Destination):
 class SqsDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SqsDestinationSchema`."
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
-    access_secret: typing.Optional[str]
+    access_secret: str
     #: :class:`str` `(Named` ``queueURL`` `in Commercetools)`
-    queue_url: typing.Optional[str]
+    queue_url: str
     #: :class:`str`
-    region: typing.Optional[str]
+    region: str
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
-        access_secret: typing.Optional[str] = None,
-        queue_url: typing.Optional[str] = None,
-        region: typing.Optional[str] = None,
+        type: str = None,
+        access_key: str = None,
+        access_secret: str = None,
+        queue_url: str = None,
+        region: str = None,
     ) -> None:
         self.access_key = access_key
         self.access_secret = access_secret
@@ -12643,13 +12148,13 @@ class StackingMode(enum.Enum):
 class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddCustomLineItemActionSchema`."
     #: :class:`commercetools.types.Money`
-    money: typing.Optional["Money"]
+    money: "Money"
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`str`
-    slug: typing.Optional[str]
+    slug: str
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -12660,11 +12165,11 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        money: typing.Optional["Money"] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        quantity: typing.Optional[int] = None,
-        slug: typing.Optional[str] = None,
+        action: str = None,
+        money: "Money" = None,
+        name: "LocalizedString" = None,
+        quantity: int = None,
+        slug: str = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -12707,7 +12212,7 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["Address"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
@@ -12728,11 +12233,9 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
 class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddDiscountCodeActionSchema`."
     #: :class:`str`
-    code: typing.Optional[str]
+    code: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, code: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, code: str = None) -> None:
         self.code = code
         super().__init__(action="addDiscountCode")
 
@@ -12747,14 +12250,9 @@ class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
 class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -12794,7 +12292,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -12844,7 +12342,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
 class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
@@ -12855,8 +12353,8 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
+        action: str = None,
+        delivery_id: str = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -12884,13 +12382,10 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
 class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddPaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    payment: "PaymentReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None,
+        self, *, action: str = None, payment: "PaymentReference" = None
     ) -> None:
         self.payment = payment
         super().__init__(action="addPayment")
@@ -12908,16 +12403,16 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
     #: Optional :class:`str` `(Named` ``returnTrackingId`` `in Commercetools)`
     return_tracking_id: typing.Optional[str]
     #: List of :class:`commercetools.types.ReturnItemDraft`
-    items: typing.Optional[typing.List["ReturnItemDraft"]]
+    items: typing.List["ReturnItemDraft"]
     #: Optional :class:`datetime.datetime` `(Named` ``returnDate`` `in Commercetools)`
     return_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         return_tracking_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["ReturnItemDraft"]] = None,
+        items: typing.List["ReturnItemDraft"] = None,
         return_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.return_tracking_id = return_tracking_id
@@ -12936,7 +12431,7 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
 class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddShoppingListActionSchema`."
     #: :class:`commercetools.types.ShoppingListReference` `(Named` ``shoppingList`` `in Commercetools)`
-    shopping_list: typing.Optional["ShoppingListReference"]
+    shopping_list: "ShoppingListReference"
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
@@ -12945,8 +12440,8 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        shopping_list: typing.Optional["ShoppingListReference"] = None,
+        action: str = None,
+        shopping_list: "ShoppingListReference" = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
     ) -> None:
@@ -12971,16 +12466,16 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
 class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`commercetools.types.Money`
-    money: typing.Optional["Money"]
+    money: "Money"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        money: typing.Optional["Money"] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        money: "Money" = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.money = money
@@ -12997,16 +12492,16 @@ class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
 class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        quantity: int = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
@@ -13023,9 +12518,9 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
     external_price: typing.Optional["Money"]
     #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
@@ -13034,9 +12529,9 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
+        action: str = None,
+        line_item_id: str = None,
+        quantity: int = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ) -> None:
@@ -13063,14 +12558,9 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
 class StagedOrderChangeOrderStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeOrderStateActionSchema`."
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional["OrderState"]
+    order_state: "OrderState"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        order_state: typing.Optional["OrderState"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, order_state: "OrderState" = None) -> None:
         self.order_state = order_state
         super().__init__(action="changeOrderState")
 
@@ -13090,7 +12580,7 @@ class StagedOrderChangePaymentStateAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         payment_state: typing.Optional["PaymentState"] = None,
     ) -> None:
         self.payment_state = payment_state
@@ -13112,7 +12602,7 @@ class StagedOrderChangeShipmentStateAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
     ) -> None:
         self.shipment_state = shipment_state
@@ -13129,13 +12619,10 @@ class StagedOrderChangeShipmentStateAction(StagedOrderUpdateAction):
 class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema`."
     #: :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
-    tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    tax_calculation_mode: "TaxCalculationMode"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        self, *, action: str = None, tax_calculation_mode: "TaxCalculationMode" = None
     ) -> None:
         self.tax_calculation_mode = tax_calculation_mode
         super().__init__(action="changeTaxCalculationMode")
@@ -13151,14 +12638,9 @@ class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
 class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeTaxModeActionSchema`."
     #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
-    tax_mode: typing.Optional["TaxMode"]
+    tax_mode: "TaxMode"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_mode: typing.Optional["TaxMode"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, tax_mode: "TaxMode" = None) -> None:
         self.tax_mode = tax_mode
         super().__init__(action="changeTaxMode")
 
@@ -13173,13 +12655,10 @@ class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
 class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema`."
     #: :class:`commercetools.types.RoundingMode` `(Named` ``taxRoundingMode`` `in Commercetools)`
-    tax_rounding_mode: typing.Optional["RoundingMode"]
+    tax_rounding_mode: "RoundingMode"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
+        self, *, action: str = None, tax_rounding_mode: "RoundingMode" = None
     ) -> None:
         self.tax_rounding_mode = tax_rounding_mode
         super().__init__(action="changeTaxRoundingMode")
@@ -13195,16 +12674,16 @@ class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
 class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: List of :class:`commercetools.types.ItemState`
-    state: typing.Optional[typing.List["ItemState"]]
+    state: typing.List["ItemState"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        state: typing.Optional[typing.List["ItemState"]] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        state: typing.List["ItemState"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.state = state
@@ -13221,16 +12700,16 @@ class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
 class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderImportLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: List of :class:`commercetools.types.ItemState`
-    state: typing.Optional[typing.List["ItemState"]]
+    state: typing.List["ItemState"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        state: typing.Optional[typing.List["ItemState"]] = None,
+        action: str = None,
+        line_item_id: str = None,
+        state: typing.List["ItemState"] = None,
     ) -> None:
         self.line_item_id = line_item_id
         self.state = state
@@ -13247,14 +12726,9 @@ class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
 class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, custom_line_item_id: str = None) -> None:
         self.custom_line_item_id = custom_line_item_id
         super().__init__(action="removeCustomLineItem")
 
@@ -13269,14 +12743,9 @@ class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
 class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveDeliveryActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, delivery_id: str = None) -> None:
         self.delivery_id = delivery_id
         super().__init__(action="removeDelivery")
 
@@ -13291,13 +12760,10 @@ class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
 class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
-    discount_code: typing.Optional["DiscountCodeReference"]
+    discount_code: "DiscountCodeReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        discount_code: typing.Optional["DiscountCodeReference"] = None,
+        self, *, action: str = None, discount_code: "DiscountCodeReference" = None
     ) -> None:
         self.discount_code = discount_code
         super().__init__(action="removeDiscountCode")
@@ -13313,14 +12779,9 @@ class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
 class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema`."
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
-    address_key: typing.Optional[str]
+    address_key: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_key: str = None) -> None:
         self.address_key = address_key
         super().__init__(action="removeItemShippingAddress")
 
@@ -13335,7 +12796,7 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveLineItemActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`int`
     quantity: typing.Optional[int]
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
@@ -13348,8 +12809,8 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -13380,14 +12841,9 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
 class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, parcel_id: str = None) -> None:
         self.parcel_id = parcel_id
         super().__init__(action="removeParcelFromDelivery")
 
@@ -13402,13 +12858,10 @@ class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
 class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemovePaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    payment: "PaymentReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None,
+        self, *, action: str = None, payment: "PaymentReference" = None
     ) -> None:
         self.payment = payment
         super().__init__(action="removePayment")
@@ -13427,10 +12880,7 @@ class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setBillingAddress")
@@ -13449,10 +12899,7 @@ class StagedOrderSetCountryAction(StagedOrderUpdateAction):
     country: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        country: typing.Optional[str] = None,
+        self, *, action: str = None, country: typing.Optional[str] = None
     ) -> None:
         self.country = country
         super().__init__(action="setCountry")
@@ -13468,15 +12915,15 @@ class StagedOrderSetCountryAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -13495,18 +12942,18 @@ class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -13525,7 +12972,7 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -13534,8 +12981,8 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -13555,15 +13002,15 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -13581,15 +13028,15 @@ class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction)
 class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxAmountDraft` `(Named` ``externalTaxAmount`` `in Commercetools)`
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -13607,15 +13054,15 @@ class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -13633,9 +13080,9 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema`."
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
-    shipping_method_name: typing.Optional[str]
+    shipping_method_name: str
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRateDraft"]
+    shipping_rate: "ShippingRateDraft"
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -13644,9 +13091,9 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        shipping_method_name: typing.Optional[str] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        action: str = None,
+        shipping_method_name: str = None,
+        shipping_rate: "ShippingRateDraft" = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -13680,7 +13127,7 @@ class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -13703,7 +13150,7 @@ class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
     email: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
+        self, *, action: str = None, email: typing.Optional[str] = None
     ) -> None:
         self.email = email
         super().__init__(action="setCustomerEmail")
@@ -13724,7 +13171,7 @@ class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
     ) -> None:
         self.customer_group = customer_group
@@ -13744,10 +13191,7 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
     customer_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        customer_id: typing.Optional[str] = None,
+        self, *, action: str = None, customer_id: typing.Optional[str] = None
     ) -> None:
         self.customer_id = customer_id
         super().__init__(action="setCustomerId")
@@ -13763,15 +13207,15 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
 class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
+        action: str = None,
+        delivery_id: str = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
         self.delivery_id = delivery_id
@@ -13789,16 +13233,16 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
 class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        action: str = None,
+        delivery_id: str = None,
+        items: typing.List["DeliveryItem"] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
@@ -13815,18 +13259,18 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -13845,7 +13289,7 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -13854,8 +13298,8 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -13875,15 +13319,15 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemPriceActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
     external_price: typing.Optional["Money"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_price: typing.Optional["Money"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -13901,15 +13345,15 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -13927,15 +13371,15 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxAmountDraft` `(Named` ``externalTaxAmount`` `in Commercetools)`
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -13953,15 +13397,15 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -13979,15 +13423,15 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -14008,10 +13452,7 @@ class StagedOrderSetLocaleAction(StagedOrderUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None,
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -14030,10 +13471,7 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
     order_number: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        order_number: typing.Optional[str] = None,
+        self, *, action: str = None, order_number: typing.Optional[str] = None
     ) -> None:
         self.order_number = order_number
         super().__init__(action="setOrderNumber")
@@ -14049,15 +13487,15 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
 class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``externalTotalGross`` `in Commercetools)`
-    external_total_gross: typing.Optional["Money"]
+    external_total_gross: "Money"
     #: Optional list of :class:`commercetools.types.TaxPortion` `(Named` ``externalTaxPortions`` `in Commercetools)`
     external_tax_portions: typing.Optional[typing.List["TaxPortion"]]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        external_total_gross: typing.Optional["Money"] = None,
+        action: str = None,
+        external_total_gross: "Money" = None,
         external_tax_portions: typing.Optional[typing.List["TaxPortion"]] = None,
     ) -> None:
         self.external_total_gross = external_total_gross
@@ -14075,16 +13513,16 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
 class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetParcelItemsActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        action: str = None,
+        parcel_id: str = None,
+        items: typing.List["DeliveryItem"] = None,
     ) -> None:
         self.parcel_id = parcel_id
         self.items = items
@@ -14102,15 +13540,15 @@ class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
 class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        action: str = None,
+        parcel_id: str = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
     ) -> None:
         self.parcel_id = parcel_id
@@ -14128,15 +13566,15 @@ class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
 class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        action: str = None,
+        parcel_id: str = None,
         tracking_data: typing.Optional["TrackingData"] = None,
     ) -> None:
         self.parcel_id = parcel_id
@@ -14154,16 +13592,16 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
 class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
-    return_item_id: typing.Optional[str]
+    return_item_id: str
     #: :class:`commercetools.types.ReturnPaymentState` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional["ReturnPaymentState"]
+    payment_state: "ReturnPaymentState"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        payment_state: typing.Optional["ReturnPaymentState"] = None,
+        action: str = None,
+        return_item_id: str = None,
+        payment_state: "ReturnPaymentState" = None,
     ) -> None:
         self.return_item_id = return_item_id
         self.payment_state = payment_state
@@ -14180,16 +13618,16 @@ class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
 class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
-    return_item_id: typing.Optional[str]
+    return_item_id: str
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
-    shipment_state: typing.Optional["ReturnShipmentState"]
+    shipment_state: "ReturnShipmentState"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ReturnShipmentState"] = None,
+        action: str = None,
+        return_item_id: str = None,
+        shipment_state: "ReturnShipmentState" = None,
     ) -> None:
         self.return_item_id = return_item_id
         self.shipment_state = shipment_state
@@ -14209,10 +13647,7 @@ class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setShippingAddress")
@@ -14230,11 +13665,11 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
 ):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
-    shipping_method_name: typing.Optional[str]
+    shipping_method_name: str
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRateDraft"]
+    shipping_rate: "ShippingRateDraft"
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -14243,10 +13678,10 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-        shipping_method_name: typing.Optional[str] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        action: str = None,
+        address: "Address" = None,
+        shipping_method_name: str = None,
+        shipping_rate: "ShippingRateDraft" = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -14275,7 +13710,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
 class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
     #: Optional :class:`commercetools.types.ShippingMethodReference` `(Named` ``shippingMethod`` `in Commercetools)`
     shipping_method: typing.Optional["ShippingMethodReference"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -14284,8 +13719,8 @@ class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateActi
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        action: str = None,
+        address: "Address" = None,
         shipping_method: typing.Optional["ShippingMethodReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -14312,7 +13747,7 @@ class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipping_method: typing.Optional["TypeReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -14336,7 +13771,7 @@ class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
         self.external_tax_amount = external_tax_amount
@@ -14358,7 +13793,7 @@ class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
         self.external_tax_rate = external_tax_rate
@@ -14380,7 +13815,7 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
     ) -> None:
         self.shipping_rate_input = shipping_rate_input
@@ -14397,24 +13832,24 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
 class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
+    from_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
+    to_state: "StateReference"
     #: Optional :class:`datetime.datetime` `(Named` ``actualTransitionDate`` `in Commercetools)`
     actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        quantity: int = None,
+        from_state: "StateReference" = None,
+        to_state: "StateReference" = None,
         actual_transition_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -14442,24 +13877,24 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
 class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
+    from_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
+    to_state: "StateReference"
     #: Optional :class:`datetime.datetime` `(Named` ``actualTransitionDate`` `in Commercetools)`
     actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        line_item_id: str = None,
+        quantity: int = None,
+        from_state: "StateReference" = None,
+        to_state: "StateReference" = None,
         actual_transition_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -14487,15 +13922,15 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
 class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        state: "StateReference" = None,
         force: typing.Optional[bool] = None,
     ) -> None:
         self.state = state
@@ -14514,14 +13949,9 @@ class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
 class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 
@@ -14536,7 +13966,7 @@ class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema`."
     #: :class:`commercetools.types.ChannelReference`
-    channel: typing.Optional["ChannelReference"]
+    channel: "ChannelReference"
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: Optional :class:`datetime.datetime` `(Named` ``syncedAt`` `in Commercetools)`
@@ -14545,8 +13975,8 @@ class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        channel: typing.Optional["ChannelReference"] = None,
+        action: str = None,
+        channel: "ChannelReference" = None,
         external_id: typing.Optional[str] = None,
         synced_at: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -14566,17 +13996,17 @@ class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
 class State(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.StateTypeEnum`
-    type: typing.Optional["StateTypeEnum"]
+    type: "StateTypeEnum"
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`bool`
-    initial: typing.Optional[bool]
+    initial: bool
     #: :class:`bool` `(Named` ``builtIn`` `in Commercetools)`
-    built_in: typing.Optional[bool]
+    built_in: bool
     #: Optional list of :class:`commercetools.types.StateRoleEnum`
     roles: typing.Optional[typing.List["StateRoleEnum"]]
     #: Optional list of :class:`commercetools.types.StateReference`
@@ -14585,16 +14015,16 @@ class State(Resource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        key: typing.Optional[str] = None,
-        type: typing.Optional["StateTypeEnum"] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        key: str = None,
+        type: "StateTypeEnum" = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        initial: typing.Optional[bool] = None,
-        built_in: typing.Optional[bool] = None,
+        initial: bool = None,
+        built_in: bool = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
         transitions: typing.Optional[typing.List["StateReference"]] = None,
     ) -> None:
@@ -14637,15 +14067,15 @@ class State(Resource):
 class StatePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StatePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.State`
-    results: typing.Optional[typing.Sequence["State"]]
+    results: typing.Sequence["State"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["State"]] = None,
+        offset: int = None,
+        results: typing.Sequence["State"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -14675,14 +14105,9 @@ class StateTypeEnum(enum.Enum):
 class StateUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -14694,7 +14119,7 @@ class StateUpdate(Update):
 class StateUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -14705,25 +14130,25 @@ class StateUpdateAction(UpdateAction):
 class Subscription(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSchema`."
     #: List of :class:`commercetools.types.ChangeSubscription`
-    changes: typing.Optional[typing.List["ChangeSubscription"]]
+    changes: typing.List["ChangeSubscription"]
     #: :class:`commercetools.types.Destination`
-    destination: typing.Optional["Destination"]
+    destination: "Destination"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: List of :class:`commercetools.types.MessageSubscription`
-    messages: typing.Optional[typing.List["MessageSubscription"]]
+    messages: typing.List["MessageSubscription"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
-        destination: typing.Optional["Destination"] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        changes: typing.List["ChangeSubscription"] = None,
+        destination: "Destination" = None,
         key: typing.Optional[str] = None,
-        messages: typing.Optional[typing.List["MessageSubscription"]] = None,
+        messages: typing.List["MessageSubscription"] = None,
     ) -> None:
         self.changes = changes
         self.destination = destination
@@ -14756,15 +14181,15 @@ class Subscription(Resource):
 class SubscriptionPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Subscription`
-    results: typing.Optional[typing.Sequence["Subscription"]]
+    results: typing.Sequence["Subscription"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Subscription"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Subscription"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -14780,14 +14205,9 @@ class SubscriptionPagedQueryResponse(PagedQueryResponse):
 class SubscriptionUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -14802,7 +14222,7 @@ class SubscriptionUpdate(Update):
 class SubscriptionUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -14825,24 +14245,24 @@ class TaxCalculationMode(enum.Enum):
 class TaxCategory(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: List of :class:`commercetools.types.TaxRate`
-    rates: typing.Optional[typing.List["TaxRate"]]
+    rates: typing.List["TaxRate"]
     #: Optional :class:`str`
     key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        name: typing.Optional[str] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        rates: typing.Optional[typing.List["TaxRate"]] = None,
+        rates: typing.List["TaxRate"] = None,
         key: typing.Optional[str] = None,
     ) -> None:
         self.name = name
@@ -14876,15 +14296,15 @@ class TaxCategory(Resource):
 class TaxCategoryPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.TaxCategory`
-    results: typing.Optional[typing.Sequence["TaxCategory"]]
+    results: typing.Sequence["TaxCategory"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["TaxCategory"]] = None,
+        offset: int = None,
+        results: typing.Sequence["TaxCategory"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -14900,14 +14320,9 @@ class TaxCategoryPagedQueryResponse(PagedQueryResponse):
 class TaxCategoryUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -14922,7 +14337,7 @@ class TaxCategoryUpdate(Update):
 class TaxCategoryUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -14940,25 +14355,25 @@ class TaxMode(enum.Enum):
 class TermFacetResult(FacetResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TermFacetResultSchema`."
     #: :class:`commercetools.types.TermFacetResultType` `(Named` ``dataType`` `in Commercetools)`
-    data_type: typing.Optional["TermFacetResultType"]
+    data_type: "TermFacetResultType"
     #: :class:`int`
-    missing: typing.Optional[int]
+    missing: int
     #: :class:`int`
-    total: typing.Optional[int]
+    total: int
     #: :class:`int`
-    other: typing.Optional[int]
+    other: int
     #: List of :class:`commercetools.types.FacetResultTerm`
-    terms: typing.Optional[typing.List["FacetResultTerm"]]
+    terms: typing.List["FacetResultTerm"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        data_type: typing.Optional["TermFacetResultType"] = None,
-        missing: typing.Optional[int] = None,
-        total: typing.Optional[int] = None,
-        other: typing.Optional[int] = None,
-        terms: typing.Optional[typing.List["FacetResultTerm"]] = None,
+        type: "FacetTypes" = None,
+        data_type: "TermFacetResultType" = None,
+        missing: int = None,
+        total: int = None,
+        other: int = None,
+        terms: typing.List["FacetResultTerm"] = None,
     ) -> None:
         self.data_type = data_type
         self.missing = missing
@@ -15014,28 +14429,28 @@ class TransactionType(enum.Enum):
 class Type(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: List of :class:`commercetools.types.ResourceTypeId` `(Named` ``resourceTypeIds`` `in Commercetools)`
-    resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]]
+    resource_type_ids: typing.List["ResourceTypeId"]
     #: List of :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinitions`` `in Commercetools)`
-    field_definitions: typing.Optional[typing.List["FieldDefinition"]]
+    field_definitions: typing.List["FieldDefinition"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        key: str = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
-        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
+        resource_type_ids: typing.List["ResourceTypeId"] = None,
+        field_definitions: typing.List["FieldDefinition"] = None,
     ) -> None:
         self.key = key
         self.name = name
@@ -15070,15 +14485,15 @@ class Type(Resource):
 class TypePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Type`
-    results: typing.Optional[typing.Sequence["Type"]]
+    results: typing.Sequence["Type"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Type"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Type"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -15096,14 +14511,9 @@ class TypePagedQueryResponse(PagedQueryResponse):
 class TypeUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -15115,7 +14525,7 @@ class TypeUpdate(Update):
 class TypeUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -15126,17 +14536,17 @@ class TypeUpdateAction(UpdateAction):
 class TypedMoney(Money):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneySchema`."
     #: :class:`commercetools.types.MoneyType`
-    type: typing.Optional["MoneyType"]
+    type: "MoneyType"
     #: :class:`int` `(Named` ``fractionDigits`` `in Commercetools)`
-    fraction_digits: typing.Optional[int]
+    fraction_digits: int
 
     def __init__(
         self,
         *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        type: "MoneyType" = None,
+        fraction_digits: int = None,
     ) -> None:
         self.type = type
         self.fraction_digits = fraction_digits
@@ -15153,7 +14563,7 @@ class TypedMoney(Money):
 class WhitespaceTokenizer(SuggestTokenizer):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.WhitespaceTokenizerSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="whitespace")
 
     def __repr__(self) -> str:
@@ -15164,22 +14574,22 @@ class WhitespaceTokenizer(SuggestTokenizer):
 class Zone(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: List of :class:`commercetools.types.Location`
-    locations: typing.Optional[typing.List["Location"]]
+    locations: typing.List["Location"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        name: typing.Optional[str] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        locations: typing.Optional[typing.List["Location"]] = None,
+        locations: typing.List["Location"] = None,
     ) -> None:
         self.name = name
         self.description = description
@@ -15210,15 +14620,15 @@ class Zone(Resource):
 class ZonePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZonePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Zone`
-    results: typing.Optional[typing.Sequence["Zone"]]
+    results: typing.Sequence["Zone"]
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Zone"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Zone"] = None,
     ) -> None:
         self.results = results
         super().__init__(count=count, total=total, offset=offset, results=results)
@@ -15236,14 +14646,9 @@ class ZonePagedQueryResponse(PagedQueryResponse):
 class ZoneUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateSchema`."
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.actions = actions
         super().__init__(version=version, actions=actions)
 
@@ -15255,7 +14660,7 @@ class ZoneUpdate(Update):
 class ZoneUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action=action)
 
     def __repr__(self) -> str:
@@ -15266,13 +14671,13 @@ class ZoneUpdateAction(UpdateAction):
 class CartAddCustomLineItemAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddCustomLineItemActionSchema`."
     #: :class:`commercetools.types.Money`
-    money: typing.Optional["Money"]
+    money: "Money"
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`str`
-    slug: typing.Optional[str]
+    slug: str
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -15283,11 +14688,11 @@ class CartAddCustomLineItemAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        money: typing.Optional["Money"] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        quantity: typing.Optional[int] = None,
-        slug: typing.Optional[str] = None,
+        action: str = None,
+        money: "Money" = None,
+        name: "LocalizedString" = None,
+        quantity: int = None,
+        slug: str = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -15321,11 +14726,9 @@ class CartAddCustomLineItemAction(CartUpdateAction):
 class CartAddDiscountCodeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddDiscountCodeActionSchema`."
     #: :class:`str`
-    code: typing.Optional[str]
+    code: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, code: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, code: str = None) -> None:
         self.code = code
         super().__init__(action="addDiscountCode")
 
@@ -15340,14 +14743,9 @@ class CartAddDiscountCodeAction(CartUpdateAction):
 class CartAddItemShippingAddressAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -15387,7 +14785,7 @@ class CartAddLineItemAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -15437,13 +14835,10 @@ class CartAddLineItemAction(CartUpdateAction):
 class CartAddPaymentAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddPaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    payment: "PaymentReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None,
+        self, *, action: str = None, payment: "PaymentReference" = None
     ) -> None:
         self.payment = payment
         super().__init__(action="addPayment")
@@ -15459,7 +14854,7 @@ class CartAddPaymentAction(CartUpdateAction):
 class CartAddShoppingListAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddShoppingListActionSchema`."
     #: :class:`commercetools.types.ShoppingListReference` `(Named` ``shoppingList`` `in Commercetools)`
-    shopping_list: typing.Optional["ShoppingListReference"]
+    shopping_list: "ShoppingListReference"
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
@@ -15468,8 +14863,8 @@ class CartAddShoppingListAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        shopping_list: typing.Optional["ShoppingListReference"] = None,
+        action: str = None,
+        shopping_list: "ShoppingListReference" = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
     ) -> None:
@@ -15494,16 +14889,16 @@ class CartAddShoppingListAction(CartUpdateAction):
 class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartApplyDeltaToCustomLineItemShippingDetailsTargetsActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: List of :class:`commercetools.types.ItemShippingTarget` `(Named` ``targetsDelta`` `in Commercetools)`
-    targets_delta: typing.Optional[typing.List["ItemShippingTarget"]]
+    targets_delta: typing.List["ItemShippingTarget"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        targets_delta: typing.Optional[typing.List["ItemShippingTarget"]] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        targets_delta: typing.List["ItemShippingTarget"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.targets_delta = targets_delta
@@ -15520,16 +14915,16 @@ class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateActio
 class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartApplyDeltaToLineItemShippingDetailsTargetsActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: List of :class:`commercetools.types.ItemShippingTarget` `(Named` ``targetsDelta`` `in Commercetools)`
-    targets_delta: typing.Optional[typing.List["ItemShippingTarget"]]
+    targets_delta: typing.List["ItemShippingTarget"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        targets_delta: typing.Optional[typing.List["ItemShippingTarget"]] = None,
+        action: str = None,
+        line_item_id: str = None,
+        targets_delta: typing.List["ItemShippingTarget"] = None,
     ) -> None:
         self.line_item_id = line_item_id
         self.targets_delta = targets_delta
@@ -15546,16 +14941,16 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
 class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartChangeCustomLineItemMoneyActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`commercetools.types.Money`
-    money: typing.Optional["Money"]
+    money: "Money"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        money: typing.Optional["Money"] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        money: "Money" = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.money = money
@@ -15572,16 +14967,16 @@ class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
 class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartChangeCustomLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        quantity: int = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
@@ -15598,9 +14993,9 @@ class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
 class CartChangeLineItemQuantityAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartChangeLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
     external_price: typing.Optional["Money"]
     #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
@@ -15609,9 +15004,9 @@ class CartChangeLineItemQuantityAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
+        action: str = None,
+        line_item_id: str = None,
+        quantity: int = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ) -> None:
@@ -15638,13 +15033,10 @@ class CartChangeLineItemQuantityAction(CartUpdateAction):
 class CartChangeTaxCalculationModeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartChangeTaxCalculationModeActionSchema`."
     #: :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
-    tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    tax_calculation_mode: "TaxCalculationMode"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        self, *, action: str = None, tax_calculation_mode: "TaxCalculationMode" = None
     ) -> None:
         self.tax_calculation_mode = tax_calculation_mode
         super().__init__(action="changeTaxCalculationMode")
@@ -15660,14 +15052,9 @@ class CartChangeTaxCalculationModeAction(CartUpdateAction):
 class CartChangeTaxModeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartChangeTaxModeActionSchema`."
     #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
-    tax_mode: typing.Optional["TaxMode"]
+    tax_mode: "TaxMode"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_mode: typing.Optional["TaxMode"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, tax_mode: "TaxMode" = None) -> None:
         self.tax_mode = tax_mode
         super().__init__(action="changeTaxMode")
 
@@ -15682,13 +15069,10 @@ class CartChangeTaxModeAction(CartUpdateAction):
 class CartChangeTaxRoundingModeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartChangeTaxRoundingModeActionSchema`."
     #: :class:`commercetools.types.RoundingMode` `(Named` ``taxRoundingMode`` `in Commercetools)`
-    tax_rounding_mode: typing.Optional["RoundingMode"]
+    tax_rounding_mode: "RoundingMode"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
+        self, *, action: str = None, tax_rounding_mode: "RoundingMode" = None
     ) -> None:
         self.tax_rounding_mode = tax_rounding_mode
         super().__init__(action="changeTaxRoundingMode")
@@ -15704,14 +15088,9 @@ class CartChangeTaxRoundingModeAction(CartUpdateAction):
 class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeCartPredicateActionSchema`."
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
-    cart_predicate: typing.Optional[str]
+    cart_predicate: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        cart_predicate: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, cart_predicate: str = None) -> None:
         self.cart_predicate = cart_predicate
         super().__init__(action="changeCartPredicate")
 
@@ -15726,14 +15105,9 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeIsActiveActionSchema`."
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -15748,14 +15122,9 @@ class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
 class CartDiscountChangeNameAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -15770,13 +15139,10 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
 class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeRequiresDiscountCodeActionSchema`."
     #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
-    requires_discount_code: typing.Optional[bool]
+    requires_discount_code: bool
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        requires_discount_code: typing.Optional[bool] = None,
+        self, *, action: str = None, requires_discount_code: bool = None
     ) -> None:
         self.requires_discount_code = requires_discount_code
         super().__init__(action="changeRequiresDiscountCode")
@@ -15792,14 +15158,9 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
 class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeSortOrderActionSchema`."
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, sort_order: str = None) -> None:
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -15814,13 +15175,10 @@ class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
 class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeStackingModeActionSchema`."
     #: :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
-    stacking_mode: typing.Optional["StackingMode"]
+    stacking_mode: "StackingMode"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        stacking_mode: typing.Optional["StackingMode"] = None,
+        self, *, action: str = None, stacking_mode: "StackingMode" = None
     ) -> None:
         self.stacking_mode = stacking_mode
         super().__init__(action="changeStackingMode")
@@ -15836,13 +15194,10 @@ class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
 class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeTargetActionSchema`."
     #: :class:`commercetools.types.CartDiscountTarget`
-    target: typing.Optional["CartDiscountTarget"]
+    target: "CartDiscountTarget"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        target: typing.Optional["CartDiscountTarget"] = None,
+        self, *, action: str = None, target: "CartDiscountTarget" = None
     ) -> None:
         self.target = target
         super().__init__(action="changeTarget")
@@ -15858,13 +15213,10 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 class CartDiscountChangeValueAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeValueActionSchema`."
     #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
+    value: "CartDiscountValue"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        value: typing.Optional["CartDiscountValue"] = None,
+        self, *, action: str = None, value: "CartDiscountValue" = None
     ) -> None:
         self.value = value
         super().__init__(action="changeValue")
@@ -15906,15 +15258,15 @@ class CartDiscountReference(Reference):
 class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -15940,7 +15292,7 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
     ) -> None:
@@ -15965,7 +15317,7 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description
@@ -15987,7 +15339,7 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.valid_from = valid_from
@@ -16011,7 +15363,7 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -16035,7 +15387,7 @@ class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.valid_until = valid_until
@@ -16055,10 +15407,7 @@ class CartRecalculateAction(CartUpdateAction):
     update_product_data: typing.Optional[bool]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        update_product_data: typing.Optional[bool] = None,
+        self, *, action: str = None, update_product_data: typing.Optional[bool] = None
     ) -> None:
         self.update_product_data = update_product_data
         super().__init__(action="recalculate")
@@ -16100,14 +15449,9 @@ class CartReference(Reference):
 class CartRemoveCustomLineItemAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartRemoveCustomLineItemActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, custom_line_item_id: str = None) -> None:
         self.custom_line_item_id = custom_line_item_id
         super().__init__(action="removeCustomLineItem")
 
@@ -16122,13 +15466,10 @@ class CartRemoveCustomLineItemAction(CartUpdateAction):
 class CartRemoveDiscountCodeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartRemoveDiscountCodeActionSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
-    discount_code: typing.Optional["DiscountCodeReference"]
+    discount_code: "DiscountCodeReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        discount_code: typing.Optional["DiscountCodeReference"] = None,
+        self, *, action: str = None, discount_code: "DiscountCodeReference" = None
     ) -> None:
         self.discount_code = discount_code
         super().__init__(action="removeDiscountCode")
@@ -16144,14 +15485,9 @@ class CartRemoveDiscountCodeAction(CartUpdateAction):
 class CartRemoveItemShippingAddressAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartRemoveItemShippingAddressActionSchema`."
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
-    address_key: typing.Optional[str]
+    address_key: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_key: str = None) -> None:
         self.address_key = address_key
         super().__init__(action="removeItemShippingAddress")
 
@@ -16166,7 +15502,7 @@ class CartRemoveItemShippingAddressAction(CartUpdateAction):
 class CartRemoveLineItemAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartRemoveLineItemActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`int`
     quantity: typing.Optional[int]
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
@@ -16179,8 +15515,8 @@ class CartRemoveLineItemAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -16211,13 +15547,10 @@ class CartRemoveLineItemAction(CartUpdateAction):
 class CartRemovePaymentAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartRemovePaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    payment: "PaymentReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None,
+        self, *, action: str = None, payment: "PaymentReference" = None
     ) -> None:
         self.payment = payment
         super().__init__(action="removePayment")
@@ -16236,10 +15569,7 @@ class CartSetAnonymousIdAction(CartUpdateAction):
     anonymous_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        anonymous_id: typing.Optional[str] = None,
+        self, *, action: str = None, anonymous_id: typing.Optional[str] = None
     ) -> None:
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
@@ -16258,10 +15588,7 @@ class CartSetBillingAddressAction(CartUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setBillingAddress")
@@ -16277,15 +15604,15 @@ class CartSetBillingAddressAction(CartUpdateAction):
 class CartSetCartTotalTaxAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCartTotalTaxActionSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``externalTotalGross`` `in Commercetools)`
-    external_total_gross: typing.Optional["Money"]
+    external_total_gross: "Money"
     #: Optional list of :class:`commercetools.types.TaxPortion` `(Named` ``externalTaxPortions`` `in Commercetools)`
     external_tax_portions: typing.Optional[typing.List["TaxPortion"]]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        external_total_gross: typing.Optional["Money"] = None,
+        action: str = None,
+        external_total_gross: "Money" = None,
         external_tax_portions: typing.Optional[typing.List["TaxPortion"]] = None,
     ) -> None:
         self.external_total_gross = external_total_gross
@@ -16306,10 +15633,7 @@ class CartSetCountryAction(CartUpdateAction):
     country: typing.Optional["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        country: typing.Optional["str"] = None,
+        self, *, action: str = None, country: typing.Optional["str"] = None
     ) -> None:
         self.country = country
         super().__init__(action="setCountry")
@@ -16325,15 +15649,15 @@ class CartSetCountryAction(CartUpdateAction):
 class CartSetCustomFieldAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -16352,18 +15676,18 @@ class CartSetCustomFieldAction(CartUpdateAction):
 class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -16382,7 +15706,7 @@ class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
 class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -16391,8 +15715,8 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -16412,15 +15736,15 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
 class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -16438,15 +15762,15 @@ class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
 class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomLineItemTaxAmountActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxAmountDraft` `(Named` ``externalTaxAmount`` `in Commercetools)`
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -16464,15 +15788,15 @@ class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
 class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomLineItemTaxRateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -16490,9 +15814,9 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
 class CartSetCustomShippingMethodAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomShippingMethodActionSchema`."
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
-    shipping_method_name: typing.Optional[str]
+    shipping_method_name: str
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRateDraft"]
+    shipping_rate: "ShippingRateDraft"
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -16501,9 +15825,9 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        shipping_method_name: typing.Optional[str] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        action: str = None,
+        shipping_method_name: str = None,
+        shipping_rate: "ShippingRateDraft" = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -16537,7 +15861,7 @@ class CartSetCustomTypeAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -16557,11 +15881,9 @@ class CartSetCustomTypeAction(CartUpdateAction):
 class CartSetCustomerEmailAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomerEmailActionSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, email: str = None) -> None:
         self.email = email
         super().__init__(action="setCustomerEmail")
 
@@ -16581,7 +15903,7 @@ class CartSetCustomerGroupAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
     ) -> None:
         self.customer_group = customer_group
@@ -16601,10 +15923,7 @@ class CartSetCustomerIdAction(CartUpdateAction):
     customer_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        customer_id: typing.Optional[str] = None,
+        self, *, action: str = None, customer_id: typing.Optional[str] = None
     ) -> None:
         self.customer_id = customer_id
         super().__init__(action="setCustomerId")
@@ -16625,7 +15944,7 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
     ) -> None:
         self.delete_days_after_last_modification = delete_days_after_last_modification
@@ -16642,18 +15961,18 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
 class CartSetLineItemCustomFieldAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -16672,7 +15991,7 @@ class CartSetLineItemCustomFieldAction(CartUpdateAction):
 class CartSetLineItemCustomTypeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -16681,8 +16000,8 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -16702,15 +16021,15 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
 class CartSetLineItemPriceAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemPriceActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
     external_price: typing.Optional["Money"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_price: typing.Optional["Money"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -16728,15 +16047,15 @@ class CartSetLineItemPriceAction(CartUpdateAction):
 class CartSetLineItemShippingDetailsAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -16754,15 +16073,15 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
 class CartSetLineItemTaxAmountAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemTaxAmountActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxAmountDraft` `(Named` ``externalTaxAmount`` `in Commercetools)`
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -16780,15 +16099,15 @@ class CartSetLineItemTaxAmountAction(CartUpdateAction):
 class CartSetLineItemTaxRateAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemTaxRateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -16806,15 +16125,15 @@ class CartSetLineItemTaxRateAction(CartUpdateAction):
 class CartSetLineItemTotalPriceAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemTotalPriceActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -16835,10 +16154,7 @@ class CartSetLocaleAction(CartUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None,
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -16854,10 +16170,7 @@ class CartSetShippingAddressAction(CartUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setShippingAddress")
@@ -16880,7 +16193,7 @@ class CartSetShippingMethodAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipping_method: typing.Optional["TypeReference"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
@@ -16904,7 +16217,7 @@ class CartSetShippingMethodTaxAmountAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ) -> None:
         self.external_tax_amount = external_tax_amount
@@ -16926,7 +16239,7 @@ class CartSetShippingMethodTaxRateAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ) -> None:
         self.external_tax_rate = external_tax_rate
@@ -16948,7 +16261,7 @@ class CartSetShippingRateInputAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
     ) -> None:
         self.shipping_rate_input = shipping_rate_input
@@ -16965,14 +16278,9 @@ class CartSetShippingRateInputAction(CartUpdateAction):
 class CartUpdateItemShippingAddressAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartUpdateItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 
@@ -16987,15 +16295,15 @@ class CartUpdateItemShippingAddressAction(CartUpdateAction):
 class CategoryAddAssetAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryAddAssetActionSchema`."
     #: :class:`commercetools.types.AssetDraft`
-    asset: typing.Optional["AssetDraft"]
+    asset: "AssetDraft"
     #: Optional :class:`int`
     position: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        asset: typing.Optional["AssetDraft"] = None,
+        action: str = None,
+        asset: "AssetDraft" = None,
         position: typing.Optional[int] = None,
     ) -> None:
         self.asset = asset
@@ -17018,15 +16326,15 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -17044,13 +16352,10 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
 class CategoryChangeAssetOrderAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeAssetOrderActionSchema`."
     #: List of :class:`str` `(Named` ``assetOrder`` `in Commercetools)`
-    asset_order: typing.Optional[typing.List[str]]
+    asset_order: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        asset_order: typing.Optional[typing.List[str]] = None,
+        self, *, action: str = None, asset_order: typing.List[str] = None
     ) -> None:
         self.asset_order = asset_order
         super().__init__(action="changeAssetOrder")
@@ -17066,14 +16371,9 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
 class CategoryChangeNameAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -17085,14 +16385,9 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 class CategoryChangeOrderHintAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeOrderHintActionSchema`."
     #: :class:`str` `(Named` ``orderHint`` `in Commercetools)`
-    order_hint: typing.Optional[str]
+    order_hint: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        order_hint: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, order_hint: str = None) -> None:
         self.order_hint = order_hint
         super().__init__(action="changeOrderHint")
 
@@ -17107,13 +16402,10 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
 class CategoryChangeParentAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeParentActionSchema`."
     #: :class:`commercetools.types.CategoryReference`
-    parent: typing.Optional["CategoryReference"]
+    parent: "CategoryReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        parent: typing.Optional["CategoryReference"] = None,
+        self, *, action: str = None, parent: "CategoryReference" = None
     ) -> None:
         self.parent = parent
         super().__init__(action="changeParent")
@@ -17129,14 +16421,9 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 class CategoryChangeSlugAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeSlugActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, slug: "LocalizedString" = None) -> None:
         self.slug = slug
         super().__init__(action="changeSlug")
 
@@ -17181,7 +16468,7 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
     ) -> None:
@@ -17205,17 +16492,17 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.asset_id = asset_id
@@ -17239,18 +16526,18 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    type: "TypeReference"
     #: :class:`object`
-    fields: typing.Optional[object]
+    fields: object
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
-        fields: typing.Optional[object] = None,
+        type: "TypeReference" = None,
+        fields: object = None,
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -17278,7 +16565,7 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -17299,15 +16586,15 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
 class CategorySetAssetKeyAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetKeyActionSchema`."
     #: :class:`str` `(Named` ``assetId`` `in Commercetools)`
-    asset_id: typing.Optional[str]
+    asset_id: str
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        asset_id: typing.Optional[str] = None,
+        action: str = None,
+        asset_id: str = None,
         asset_key: typing.Optional[str] = None,
     ) -> None:
         self.asset_id = asset_id
@@ -17330,15 +16617,15 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
+        sources: typing.List["AssetSource"] = None,
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -17365,7 +16652,7 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         tags: typing.Optional[typing.List[str]] = None,
@@ -17386,15 +16673,15 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
 class CategorySetCustomFieldAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -17420,7 +16707,7 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -17445,7 +16732,7 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description
@@ -17465,10 +16752,7 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
     external_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None,
+        self, *, action: str = None, external_id: typing.Optional[str] = None
     ) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
@@ -17486,9 +16770,7 @@ class CategorySetKeyAction(CategoryUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -17505,7 +16787,7 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.meta_description = meta_description
@@ -17527,7 +16809,7 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.meta_keywords = meta_keywords
@@ -17549,7 +16831,7 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_title: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.meta_title = meta_title
@@ -17569,10 +16851,10 @@ class CentPrecisionMoney(TypedMoney):
     def __init__(
         self,
         *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        type: "MoneyType" = None,
+        fraction_digits: int = None,
     ) -> None:
         super().__init__(
             cent_amount=cent_amount,
@@ -17592,13 +16874,10 @@ class CentPrecisionMoney(TypedMoney):
 class ChannelAddRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelAddRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
+        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="addRoles")
@@ -17611,13 +16890,10 @@ class ChannelAddRolesAction(ChannelUpdateAction):
 class ChannelChangeDescriptionAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeDescriptionActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
+    description: "LocalizedString"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None,
+        self, *, action: str = None, description: "LocalizedString" = None
     ) -> None:
         self.description = description
         super().__init__(action="changeDescription")
@@ -17633,11 +16909,9 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 class ChannelChangeKeyAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeKeyActionSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -17649,14 +16923,9 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
 class ChannelChangeNameAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -17694,13 +16963,10 @@ class ChannelReference(Reference):
 class ChannelRemoveRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelRemoveRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
+        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="removeRoles")
@@ -17719,10 +16985,7 @@ class ChannelSetAddressAction(ChannelUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setAddress")
@@ -17738,15 +17001,15 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 class ChannelSetCustomFieldAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -17772,7 +17035,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -17797,7 +17060,7 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         geo_location: typing.Optional["GeoJsonPoint"] = None,
     ) -> None:
         self.geo_location = geo_location
@@ -17814,13 +17077,10 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
 class ChannelSetRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
+        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="setRoles")
@@ -17859,14 +17119,9 @@ class CustomObjectReference(Reference):
 class CustomerAddAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="addAddress")
 
@@ -17881,14 +17136,9 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddBillingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="addBillingAddressId")
 
@@ -17903,14 +17153,9 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddShippingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="addShippingAddressId")
 
@@ -17925,16 +17170,12 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 class CustomerChangeAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeAddressActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address_id: str = None, address: "Address" = None
     ) -> None:
         self.address_id = address_id
         self.address = address
@@ -17952,11 +17193,9 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 class CustomerChangeEmailAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeEmailActionSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, email: str = None) -> None:
         self.email = email
         super().__init__(action="changeEmail")
 
@@ -17971,11 +17210,9 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -18016,15 +17253,15 @@ class CustomerGroupReference(Reference):
 class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -18050,7 +17287,7 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -18072,9 +17309,7 @@ class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -18112,14 +17347,9 @@ class CustomerReference(Reference):
 class CustomerRemoveAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveAddressActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="removeAddress")
 
@@ -18134,14 +17364,9 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveBillingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="removeBillingAddressId")
 
@@ -18156,14 +17381,9 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveShippingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="removeShippingAddressId")
 
@@ -18181,10 +17401,7 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
     company_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        company_name: typing.Optional[str] = None,
+        self, *, action: str = None, company_name: typing.Optional[str] = None
     ) -> None:
         self.company_name = company_name
         super().__init__(action="setCompanyName")
@@ -18200,15 +17417,15 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -18234,7 +17451,7 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -18259,7 +17476,7 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
     ) -> None:
         self.customer_group = customer_group
@@ -18279,10 +17496,7 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
     customer_number: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        customer_number: typing.Optional[str] = None,
+        self, *, action: str = None, customer_number: typing.Optional[str] = None
     ) -> None:
         self.customer_number = customer_number
         super().__init__(action="setCustomerNumber")
@@ -18303,7 +17517,7 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         date_of_birth: typing.Optional[datetime.date] = None,
     ) -> None:
         self.date_of_birth = date_of_birth
@@ -18323,10 +17537,7 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     address_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
+        self, *, action: str = None, address_id: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
         super().__init__(action="setDefaultBillingAddress")
@@ -18345,10 +17556,7 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     address_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
+        self, *, action: str = None, address_id: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
         super().__init__(action="setDefaultShippingAddress")
@@ -18367,10 +17575,7 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
     external_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None,
+        self, *, action: str = None, external_id: typing.Optional[str] = None
     ) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
@@ -18389,10 +17594,7 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
     first_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        first_name: typing.Optional[str] = None,
+        self, *, action: str = None, first_name: typing.Optional[str] = None
     ) -> None:
         self.first_name = first_name
         super().__init__(action="setFirstName")
@@ -18410,9 +17612,7 @@ class CustomerSetKeyAction(CustomerUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -18427,10 +17627,7 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
     last_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        last_name: typing.Optional[str] = None,
+        self, *, action: str = None, last_name: typing.Optional[str] = None
     ) -> None:
         self.last_name = last_name
         super().__init__(action="setLastName")
@@ -18449,10 +17646,7 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None,
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -18471,10 +17665,7 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
     middle_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        middle_name: typing.Optional[str] = None,
+        self, *, action: str = None, middle_name: typing.Optional[str] = None
     ) -> None:
         self.middle_name = middle_name
         super().__init__(action="setMiddleName")
@@ -18493,10 +17684,7 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
     salutation: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        salutation: typing.Optional[str] = None,
+        self, *, action: str = None, salutation: typing.Optional[str] = None
     ) -> None:
         self.salutation = salutation
         super().__init__(action="setSalutation")
@@ -18515,7 +17703,7 @@ class CustomerSetTitleAction(CustomerUpdateAction):
     title: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+        self, *, action: str = None, title: typing.Optional[str] = None
     ) -> None:
         self.title = title
         super().__init__(action="setTitle")
@@ -18531,10 +17719,7 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
     vat_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        vat_id: typing.Optional[str] = None,
+        self, *, action: str = None, vat_id: typing.Optional[str] = None
     ) -> None:
         self.vat_id = vat_id
         super().__init__(action="setVatId")
@@ -18550,13 +17735,13 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
 class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeCartDiscountsActionSchema`."
     #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``cartDiscounts`` `in Commercetools)`
-    cart_discounts: typing.Optional[typing.List["CartDiscountReference"]]
+    cart_discounts: typing.List["CartDiscountReference"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        cart_discounts: typing.Optional[typing.List["CartDiscountReference"]] = None,
+        action: str = None,
+        cart_discounts: typing.List["CartDiscountReference"] = None,
     ) -> None:
         self.cart_discounts = cart_discounts
         super().__init__(action="changeCartDiscounts")
@@ -18572,14 +17757,9 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
 class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeGroupsActionSchema`."
     #: List of :class:`str`
-    groups: typing.Optional[typing.List[str]]
+    groups: typing.List[str]
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        groups: typing.Optional[typing.List[str]] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, groups: typing.List[str] = None) -> None:
         self.groups = groups
         super().__init__(action="changeGroups")
 
@@ -18594,14 +17774,9 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
 class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeIsActiveActionSchema`."
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -18645,10 +17820,7 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
     cart_predicate: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        cart_predicate: typing.Optional[str] = None,
+        self, *, action: str = None, cart_predicate: typing.Optional[str] = None
     ) -> None:
         self.cart_predicate = cart_predicate
         super().__init__(action="setCartPredicate")
@@ -18664,15 +17836,15 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
 class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -18698,7 +17870,7 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -18723,7 +17895,7 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description
@@ -18743,10 +17915,7 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
     max_applications: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        max_applications: typing.Optional[int] = None,
+        self, *, action: str = None, max_applications: typing.Optional[int] = None
     ) -> None:
         self.max_applications = max_applications
         super().__init__(action="setMaxApplications")
@@ -18767,7 +17936,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         max_applications_per_customer: typing.Optional[int] = None,
     ) -> None:
         self.max_applications_per_customer = max_applications_per_customer
@@ -18787,10 +17956,7 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
     name: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.name = name
         super().__init__(action="setName")
@@ -18811,7 +17977,7 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.valid_from = valid_from
@@ -18835,7 +18001,7 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -18859,7 +18025,7 @@ class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.valid_until = valid_until
@@ -18876,13 +18042,10 @@ class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
 class ExtensionChangeDestinationAction(ExtensionUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionChangeDestinationActionSchema`."
     #: :class:`commercetools.types.ExtensionDestination`
-    destination: typing.Optional["ExtensionDestination"]
+    destination: "ExtensionDestination"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        destination: typing.Optional["ExtensionDestination"] = None,
+        self, *, action: str = None, destination: "ExtensionDestination" = None
     ) -> None:
         self.destination = destination
         super().__init__(action="changeDestination")
@@ -18898,13 +18061,10 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
 class ExtensionChangeTriggersAction(ExtensionUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionChangeTriggersActionSchema`."
     #: List of :class:`commercetools.types.ExtensionTrigger`
-    triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    triggers: typing.List["ExtensionTrigger"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        self, *, action: str = None, triggers: typing.List["ExtensionTrigger"] = None
     ) -> None:
         self.triggers = triggers
         super().__init__(action="changeTriggers")
@@ -18922,9 +18082,7 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -18936,16 +18094,16 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
 class HighPrecisionMoney(TypedMoney):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneySchema`."
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
-    precise_amount: typing.Optional[int]
+    precise_amount: int
 
     def __init__(
         self,
         *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
-        precise_amount: typing.Optional[int] = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        type: "MoneyType" = None,
+        fraction_digits: int = None,
+        precise_amount: int = None,
     ) -> None:
         self.precise_amount = precise_amount
         super().__init__(
@@ -18972,14 +18130,9 @@ class HighPrecisionMoney(TypedMoney):
 class InventoryAddQuantityAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryAddQuantityActionSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, quantity: int = None) -> None:
         self.quantity = quantity
         super().__init__(action="addQuantity")
 
@@ -18994,14 +18147,9 @@ class InventoryAddQuantityAction(InventoryUpdateAction):
 class InventoryChangeQuantityAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryChangeQuantityActionSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, quantity: int = None) -> None:
         self.quantity = quantity
         super().__init__(action="changeQuantity")
 
@@ -19042,14 +18190,9 @@ class InventoryEntryReference(Reference):
 class InventoryRemoveQuantityAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryRemoveQuantityActionSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, quantity: int = None) -> None:
         self.quantity = quantity
         super().__init__(action="removeQuantity")
 
@@ -19064,15 +18207,15 @@ class InventoryRemoveQuantityAction(InventoryUpdateAction):
 class InventorySetCustomFieldAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -19098,7 +18241,7 @@ class InventorySetCustomTypeAction(InventoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -19123,7 +18266,7 @@ class InventorySetExpectedDeliveryAction(InventoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.expected_delivery = expected_delivery
@@ -19143,10 +18286,7 @@ class InventorySetRestockableInDaysAction(InventoryUpdateAction):
     restockable_in_days: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        restockable_in_days: typing.Optional[int] = None,
+        self, *, action: str = None, restockable_in_days: typing.Optional[int] = None
     ) -> None:
         self.restockable_in_days = restockable_in_days
         super().__init__(action="setRestockableInDays")
@@ -19167,7 +18307,7 @@ class InventorySetSupplyChannelAction(InventoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
     ) -> None:
         self.supply_channel = supply_channel
@@ -19187,14 +18327,14 @@ class Message(MessageContext):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        sequence_number: int = None,
+        resource: "Reference" = None,
+        resource_version: int = None,
+        type: str = None,
     ) -> None:
         super().__init__(
             id=id,
@@ -19236,7 +18376,7 @@ class OrderAddDeliveryAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["Address"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
@@ -19259,14 +18399,9 @@ class OrderAddDeliveryAction(OrderUpdateAction):
 class OrderAddItemShippingAddressAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -19281,7 +18416,7 @@ class OrderAddItemShippingAddressAction(OrderUpdateAction):
 class OrderAddParcelToDeliveryAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddParcelToDeliveryActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
@@ -19292,8 +18427,8 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
+        action: str = None,
+        delivery_id: str = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
@@ -19321,13 +18456,10 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
 class OrderAddPaymentAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddPaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    payment: "PaymentReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None,
+        self, *, action: str = None, payment: "PaymentReference" = None
     ) -> None:
         self.payment = payment
         super().__init__(action="addPayment")
@@ -19345,16 +18477,16 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
     #: Optional :class:`str` `(Named` ``returnTrackingId`` `in Commercetools)`
     return_tracking_id: typing.Optional[str]
     #: List of :class:`commercetools.types.ReturnItemDraft`
-    items: typing.Optional[typing.List["ReturnItemDraft"]]
+    items: typing.List["ReturnItemDraft"]
     #: Optional :class:`datetime.datetime` `(Named` ``returnDate`` `in Commercetools)`
     return_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         return_tracking_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["ReturnItemDraft"]] = None,
+        items: typing.List["ReturnItemDraft"] = None,
         return_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.return_tracking_id = return_tracking_id
@@ -19373,14 +18505,9 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
 class OrderChangeOrderStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderChangeOrderStateActionSchema`."
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional["OrderState"]
+    order_state: "OrderState"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        order_state: typing.Optional["OrderState"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, order_state: "OrderState" = None) -> None:
         self.order_state = order_state
         super().__init__(action="changeOrderState")
 
@@ -19400,7 +18527,7 @@ class OrderChangePaymentStateAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         payment_state: typing.Optional["PaymentState"] = None,
     ) -> None:
         self.payment_state = payment_state
@@ -19422,7 +18549,7 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
     ) -> None:
         self.shipment_state = shipment_state
@@ -19439,13 +18566,10 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
 class OrderEditAddStagedActionAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAddStagedActionActionSchema`."
     #: :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedAction`` `in Commercetools)`
-    staged_action: typing.Optional["StagedOrderUpdateAction"]
+    staged_action: "StagedOrderUpdateAction"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        staged_action: typing.Optional["StagedOrderUpdateAction"] = None,
+        self, *, action: str = None, staged_action: "StagedOrderUpdateAction" = None
     ) -> None:
         self.staged_action = staged_action
         super().__init__(action="addStagedAction")
@@ -19490,10 +18614,7 @@ class OrderEditSetCommentAction(OrderEditUpdateAction):
     comment: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        comment: typing.Optional[str] = None,
+        self, *, action: str = None, comment: typing.Optional[str] = None
     ) -> None:
         self.comment = comment
         super().__init__(action="setComment")
@@ -19509,15 +18630,15 @@ class OrderEditSetCommentAction(OrderEditUpdateAction):
 class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -19543,7 +18664,7 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional[object] = None,
     ) -> None:
@@ -19565,9 +18686,7 @@ class OrderEditSetKeyAction(OrderEditUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -19579,13 +18698,13 @@ class OrderEditSetKeyAction(OrderEditUpdateAction):
 class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetStagedActionsActionSchema`."
     #: List of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
-    staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]]
+    staged_actions: typing.List["StagedOrderUpdateAction"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
+        action: str = None,
+        staged_actions: typing.List["StagedOrderUpdateAction"] = None,
     ) -> None:
         self.staged_actions = staged_actions
         super().__init__(action="setStagedActions")
@@ -19601,16 +18720,16 @@ class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
 class OrderImportCustomLineItemStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportCustomLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: List of :class:`commercetools.types.ItemState`
-    state: typing.Optional[typing.List["ItemState"]]
+    state: typing.List["ItemState"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        state: typing.Optional[typing.List["ItemState"]] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        state: typing.List["ItemState"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.state = state
@@ -19627,16 +18746,16 @@ class OrderImportCustomLineItemStateAction(OrderUpdateAction):
 class OrderImportLineItemStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: List of :class:`commercetools.types.ItemState`
-    state: typing.Optional[typing.List["ItemState"]]
+    state: typing.List["ItemState"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        state: typing.Optional[typing.List["ItemState"]] = None,
+        action: str = None,
+        line_item_id: str = None,
+        state: typing.List["ItemState"] = None,
     ) -> None:
         self.line_item_id = line_item_id
         self.state = state
@@ -19679,14 +18798,9 @@ class OrderReference(Reference):
 class OrderRemoveDeliveryAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemoveDeliveryActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, delivery_id: str = None) -> None:
         self.delivery_id = delivery_id
         super().__init__(action="removeDelivery")
 
@@ -19701,14 +18815,9 @@ class OrderRemoveDeliveryAction(OrderUpdateAction):
 class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemoveItemShippingAddressActionSchema`."
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
-    address_key: typing.Optional[str]
+    address_key: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address_key: str = None) -> None:
         self.address_key = address_key
         super().__init__(action="removeItemShippingAddress")
 
@@ -19723,14 +18832,9 @@ class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
 class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemoveParcelFromDeliveryActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, parcel_id: str = None) -> None:
         self.parcel_id = parcel_id
         super().__init__(action="removeParcelFromDelivery")
 
@@ -19745,13 +18849,10 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 class OrderRemovePaymentAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemovePaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    payment: "PaymentReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None,
+        self, *, action: str = None, payment: "PaymentReference" = None
     ) -> None:
         self.payment = payment
         super().__init__(action="removePayment")
@@ -19770,10 +18871,7 @@ class OrderSetBillingAddressAction(OrderUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setBillingAddress")
@@ -19789,15 +18887,15 @@ class OrderSetBillingAddressAction(OrderUpdateAction):
 class OrderSetCustomFieldAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -19816,18 +18914,18 @@ class OrderSetCustomFieldAction(OrderUpdateAction):
 class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -19846,7 +18944,7 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
 class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -19855,8 +18953,8 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -19876,15 +18974,15 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
 class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -19909,7 +19007,7 @@ class OrderSetCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -19932,7 +19030,7 @@ class OrderSetCustomerEmailAction(OrderUpdateAction):
     email: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
+        self, *, action: str = None, email: typing.Optional[str] = None
     ) -> None:
         self.email = email
         super().__init__(action="setCustomerEmail")
@@ -19951,10 +19049,7 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
     customer_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        customer_id: typing.Optional[str] = None,
+        self, *, action: str = None, customer_id: typing.Optional[str] = None
     ) -> None:
         self.customer_id = customer_id
         super().__init__(action="setCustomerId")
@@ -19970,15 +19065,15 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 class OrderSetDeliveryAddressAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetDeliveryAddressActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
+        action: str = None,
+        delivery_id: str = None,
         address: typing.Optional["Address"] = None,
     ) -> None:
         self.delivery_id = delivery_id
@@ -19996,16 +19091,16 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
 class OrderSetDeliveryItemsAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetDeliveryItemsActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
+    delivery_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        action: str = None,
+        delivery_id: str = None,
+        items: typing.List["DeliveryItem"] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
@@ -20023,18 +19118,18 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
 class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -20053,7 +19148,7 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
 class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -20062,8 +19157,8 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -20083,15 +19178,15 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
 class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -20112,10 +19207,7 @@ class OrderSetLocaleAction(OrderUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None,
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -20131,10 +19223,7 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
     order_number: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        order_number: typing.Optional[str] = None,
+        self, *, action: str = None, order_number: typing.Optional[str] = None
     ) -> None:
         self.order_number = order_number
         super().__init__(action="setOrderNumber")
@@ -20150,16 +19239,16 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
 class OrderSetParcelItemsAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetParcelItemsActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
+    items: typing.List["DeliveryItem"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        action: str = None,
+        parcel_id: str = None,
+        items: typing.List["DeliveryItem"] = None,
     ) -> None:
         self.parcel_id = parcel_id
         self.items = items
@@ -20177,15 +19266,15 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
 class OrderSetParcelMeasurementsAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetParcelMeasurementsActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        action: str = None,
+        parcel_id: str = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
     ) -> None:
         self.parcel_id = parcel_id
@@ -20203,15 +19292,15 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
 class OrderSetParcelTrackingDataAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetParcelTrackingDataActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
+    parcel_id: str
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
+        action: str = None,
+        parcel_id: str = None,
         tracking_data: typing.Optional["TrackingData"] = None,
     ) -> None:
         self.parcel_id = parcel_id
@@ -20229,16 +19318,16 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
 class OrderSetReturnPaymentStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetReturnPaymentStateActionSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
-    return_item_id: typing.Optional[str]
+    return_item_id: str
     #: :class:`commercetools.types.ReturnPaymentState` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional["ReturnPaymentState"]
+    payment_state: "ReturnPaymentState"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        payment_state: typing.Optional["ReturnPaymentState"] = None,
+        action: str = None,
+        return_item_id: str = None,
+        payment_state: "ReturnPaymentState" = None,
     ) -> None:
         self.return_item_id = return_item_id
         self.payment_state = payment_state
@@ -20255,16 +19344,16 @@ class OrderSetReturnPaymentStateAction(OrderUpdateAction):
 class OrderSetReturnShipmentStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetReturnShipmentStateActionSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
-    return_item_id: typing.Optional[str]
+    return_item_id: str
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
-    shipment_state: typing.Optional["ReturnShipmentState"]
+    shipment_state: "ReturnShipmentState"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ReturnShipmentState"] = None,
+        action: str = None,
+        return_item_id: str = None,
+        shipment_state: "ReturnShipmentState" = None,
     ) -> None:
         self.return_item_id = return_item_id
         self.shipment_state = shipment_state
@@ -20284,10 +19373,7 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setShippingAddress")
@@ -20303,24 +19389,24 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderTransitionCustomLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
+    custom_line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
+    from_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
+    to_state: "StateReference"
     #: Optional :class:`datetime.datetime` `(Named` ``actualTransitionDate`` `in Commercetools)`
     actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        custom_line_item_id: str = None,
+        quantity: int = None,
+        from_state: "StateReference" = None,
+        to_state: "StateReference" = None,
         actual_transition_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -20348,24 +19434,24 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
 class OrderTransitionLineItemStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderTransitionLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
     #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
+    from_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
+    to_state: "StateReference"
     #: Optional :class:`datetime.datetime` `(Named` ``actualTransitionDate`` `in Commercetools)`
     actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        line_item_id: str = None,
+        quantity: int = None,
+        from_state: "StateReference" = None,
+        to_state: "StateReference" = None,
         actual_transition_date: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -20393,15 +19479,15 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
 class OrderTransitionStateAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        state: "StateReference" = None,
         force: typing.Optional[bool] = None,
     ) -> None:
         self.state = state
@@ -20420,14 +19506,9 @@ class OrderTransitionStateAction(OrderUpdateAction):
 class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 
@@ -20442,7 +19523,7 @@ class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
 class OrderUpdateSyncInfoAction(OrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateSyncInfoActionSchema`."
     #: :class:`commercetools.types.ChannelReference`
-    channel: typing.Optional["ChannelReference"]
+    channel: "ChannelReference"
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: Optional :class:`datetime.datetime` `(Named` ``syncedAt`` `in Commercetools)`
@@ -20451,8 +19532,8 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        channel: typing.Optional["ChannelReference"] = None,
+        action: str = None,
+        channel: "ChannelReference" = None,
         external_id: typing.Optional[str] = None,
         synced_at: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -20472,15 +19553,15 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
 class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentAddInterfaceInteractionActionSchema`."
     #: :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    type: "TypeReference"
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        action: str = None,
+        type: "TypeReference" = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
         self.type = type
@@ -20499,13 +19580,10 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
 class PaymentAddTransactionAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentAddTransactionActionSchema`."
     #: :class:`commercetools.types.TransactionDraft`
-    transaction: typing.Optional["TransactionDraft"]
+    transaction: "TransactionDraft"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        transaction: typing.Optional["TransactionDraft"] = None,
+        self, *, action: str = None, transaction: "TransactionDraft" = None
     ) -> None:
         self.transaction = transaction
         super().__init__(action="addTransaction")
@@ -20521,14 +19599,9 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
 class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeAmountPlannedActionSchema`."
     #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    amount: "Money"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        amount: typing.Optional["Money"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, amount: "Money" = None) -> None:
         self.amount = amount
         super().__init__(action="changeAmountPlanned")
 
@@ -20543,16 +19616,16 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionInteractionIdActionSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`str` `(Named` ``interactionId`` `in Commercetools)`
-    interaction_id: typing.Optional[str]
+    interaction_id: str
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        interaction_id: typing.Optional[str] = None,
+        action: str = None,
+        transaction_id: str = None,
+        interaction_id: str = None,
     ) -> None:
         self.transaction_id = transaction_id
         self.interaction_id = interaction_id
@@ -20569,16 +19642,16 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
 class PaymentChangeTransactionStateAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionStateActionSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`commercetools.types.TransactionState`
-    state: typing.Optional["TransactionState"]
+    state: "TransactionState"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None,
+        action: str = None,
+        transaction_id: str = None,
+        state: "TransactionState" = None,
     ) -> None:
         self.transaction_id = transaction_id
         self.state = state
@@ -20595,16 +19668,16 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
 class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionTimestampActionSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`datetime.datetime`
-    timestamp: typing.Optional[datetime.datetime]
+    timestamp: datetime.datetime
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        timestamp: typing.Optional[datetime.datetime] = None,
+        action: str = None,
+        transaction_id: str = None,
+        timestamp: datetime.datetime = None,
     ) -> None:
         self.transaction_id = transaction_id
         self.timestamp = timestamp
@@ -20650,10 +19723,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
     amount: typing.Optional["Money"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        amount: typing.Optional["Money"] = None,
+        self, *, action: str = None, amount: typing.Optional["Money"] = None
     ) -> None:
         self.amount = amount
         super().__init__(action="setAmountPaid")
@@ -20672,10 +19742,7 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
     amount: typing.Optional["Money"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        amount: typing.Optional["Money"] = None,
+        self, *, action: str = None, amount: typing.Optional["Money"] = None
     ) -> None:
         self.amount = amount
         super().__init__(action="setAmountRefunded")
@@ -20694,10 +19761,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
     anonymous_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        anonymous_id: typing.Optional[str] = None,
+        self, *, action: str = None, anonymous_id: typing.Optional[str] = None
     ) -> None:
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
@@ -20720,7 +19784,7 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         amount: typing.Optional["Money"] = None,
         until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -20740,15 +19804,15 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
 class PaymentSetCustomFieldAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -20774,7 +19838,7 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -20799,7 +19863,7 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
         self.customer = customer
@@ -20819,10 +19883,7 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
     external_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None,
+        self, *, action: str = None, external_id: typing.Optional[str] = None
     ) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
@@ -20838,14 +19899,9 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 class PaymentSetInterfaceIdAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetInterfaceIdActionSchema`."
     #: :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
-    interface_id: typing.Optional[str]
+    interface_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, interface_id: str = None) -> None:
         self.interface_id = interface_id
         super().__init__(action="setInterfaceId")
 
@@ -20862,9 +19918,7 @@ class PaymentSetKeyAction(PaymentUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -20876,14 +19930,9 @@ class PaymentSetKeyAction(PaymentUpdateAction):
 class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetMethodInfoInterfaceActionSchema`."
     #: :class:`str`
-    interface: typing.Optional[str]
+    interface: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, interface: str = None) -> None:
         self.interface = interface
         super().__init__(action="setMethodInfoInterface")
 
@@ -20901,10 +19950,7 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
     method: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        method: typing.Optional[str] = None,
+        self, *, action: str = None, method: typing.Optional[str] = None
     ) -> None:
         self.method = method
         super().__init__(action="setMethodInfoMethod")
@@ -20923,10 +19969,7 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
     name: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.name = name
         super().__init__(action="setMethodInfoName")
@@ -20945,10 +19988,7 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
     interface_code: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface_code: typing.Optional[str] = None,
+        self, *, action: str = None, interface_code: typing.Optional[str] = None
     ) -> None:
         self.interface_code = interface_code
         super().__init__(action="setStatusInterfaceCode")
@@ -20964,14 +20004,9 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetStatusInterfaceTextActionSchema`."
     #: :class:`str` `(Named` ``interfaceText`` `in Commercetools)`
-    interface_text: typing.Optional[str]
+    interface_text: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface_text: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, interface_text: str = None) -> None:
         self.interface_text = interface_text
         super().__init__(action="setStatusInterfaceText")
 
@@ -20986,15 +20021,15 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 class PaymentTransitionStateAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        state: "StateReference" = None,
         force: typing.Optional[bool] = None,
     ) -> None:
         self.state = state
@@ -21019,18 +20054,18 @@ class ProductAddAssetAction(ProductUpdateAction):
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: :class:`commercetools.types.AssetDraft`
-    asset: typing.Optional["AssetDraft"]
+    asset: "AssetDraft"
     #: Optional :class:`int`
     position: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset: typing.Optional["AssetDraft"] = None,
+        asset: "AssetDraft" = None,
         position: typing.Optional[int] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -21062,17 +20097,17 @@ class ProductAddExternalImageAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`commercetools.types.Image`
-    image: typing.Optional["Image"]
+    image: "Image"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        image: typing.Optional["Image"] = None,
+        image: "Image" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -21096,17 +20131,17 @@ class ProductAddPriceAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`commercetools.types.PriceDraft`
-    price: typing.Optional["PriceDraft"]
+    price: "PriceDraft"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        price: typing.Optional["PriceDraft"] = None,
+        price: "PriceDraft" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -21126,7 +20161,7 @@ class ProductAddPriceAction(ProductUpdateAction):
 class ProductAddToCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddToCategoryActionSchema`."
     #: :class:`commercetools.types.CategoryReference`
-    category: typing.Optional["CategoryReference"]
+    category: "CategoryReference"
     #: Optional :class:`str` `(Named` ``orderHint`` `in Commercetools)`
     order_hint: typing.Optional[str]
     #: Optional :class:`bool`
@@ -21135,8 +20170,8 @@ class ProductAddToCategoryAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        category: typing.Optional["CategoryReference"] = None,
+        action: str = None,
+        category: "CategoryReference" = None,
         order_hint: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -21171,7 +20206,7 @@ class ProductAddVariantAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
@@ -21216,18 +20251,18 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -21262,16 +20297,16 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: List of :class:`str` `(Named` ``assetOrder`` `in Commercetools)`
-    asset_order: typing.Optional[typing.List[str]]
+    asset_order: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset_order: typing.Optional[typing.List[str]] = None,
+        asset_order: typing.List[str] = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -21299,7 +20334,7 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -21320,15 +20355,15 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
 class ProductChangeNameAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        name: "LocalizedString" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.name = name
@@ -21347,18 +20382,18 @@ class ProductChangeNameAction(ProductUpdateAction):
 class ProductChangePriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangePriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: :class:`commercetools.types.PriceDraft`
-    price: typing.Optional["PriceDraft"]
+    price: "PriceDraft"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
-        price: typing.Optional["PriceDraft"] = None,
+        action: str = None,
+        price_id: str = None,
+        price: "PriceDraft" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.price_id = price_id
@@ -21377,15 +20412,15 @@ class ProductChangePriceAction(ProductUpdateAction):
 class ProductChangeSlugAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeSlugActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        slug: "LocalizedString" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.slug = slug
@@ -21404,14 +20439,9 @@ class ProductChangeSlugAction(ProductUpdateAction):
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeIsActiveActionSchema`."
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -21426,14 +20456,9 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -21448,14 +20473,9 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangePredicateActionSchema`."
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, predicate: str = None) -> None:
         self.predicate = predicate
         super().__init__(action="changePredicate")
 
@@ -21470,14 +20490,9 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeSortOrderActionSchema`."
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, sort_order: str = None) -> None:
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -21492,13 +20507,10 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeValueActionSchema`."
     #: :class:`commercetools.types.ProductDiscountValue`
-    value: typing.Optional["ProductDiscountValue"]
+    value: "ProductDiscountValue"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        value: typing.Optional["ProductDiscountValue"] = None,
+        self, *, action: str = None, value: "ProductDiscountValue" = None
     ) -> None:
         self.value = value
         super().__init__(action="changeValue")
@@ -21545,7 +20557,7 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description
@@ -21567,7 +20579,7 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.valid_from = valid_from
@@ -21591,7 +20603,7 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
@@ -21615,7 +20627,7 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_until: typing.Optional[datetime.datetime] = None,
     ) -> None:
         self.valid_until = valid_until
@@ -21634,14 +20646,14 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
+        variant_id: int = None,
     ) -> None:
         self.sku = sku
         self.variant_id = variant_id
@@ -21663,20 +20675,20 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`str` `(Named` ``imageUrl`` `in Commercetools)`
-    image_url: typing.Optional[str]
+    image_url: str
     #: :class:`int`
-    position: typing.Optional[int]
+    position: int
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        image_url: typing.Optional[str] = None,
-        position: typing.Optional[int] = None,
+        image_url: str = None,
+        position: int = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -21709,7 +20721,7 @@ class ProductPublishAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         scope: typing.Optional["ProductPublishScope"] = None,
     ) -> None:
         self.scope = scope
@@ -21762,7 +20774,7 @@ class ProductRemoveAssetAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -21794,15 +20806,15 @@ class ProductRemoveAssetAction(ProductUpdateAction):
 class ProductRemoveFromCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveFromCategoryActionSchema`."
     #: :class:`commercetools.types.CategoryReference`
-    category: typing.Optional["CategoryReference"]
+    category: "CategoryReference"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        category: typing.Optional["CategoryReference"] = None,
+        action: str = None,
+        category: "CategoryReference" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.category = category
@@ -21825,17 +20837,17 @@ class ProductRemoveImageAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`str` `(Named` ``imageUrl`` `in Commercetools)`
-    image_url: typing.Optional[str]
+    image_url: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        image_url: typing.Optional[str] = None,
+        image_url: str = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -21855,15 +20867,15 @@ class ProductRemoveImageAction(ProductUpdateAction):
 class ProductRemovePriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovePriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.price_id = price_id
@@ -21891,7 +20903,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -21914,7 +20926,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
 class ProductRevertStagedChangesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedChangesActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action="revertStagedChanges")
 
     def __repr__(self) -> str:
@@ -21925,14 +20937,9 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
 class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedVariantChangesActionSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, variant_id: int = None) -> None:
         self.variant_id = variant_id
         super().__init__(action="revertStagedVariantChanges")
 
@@ -21957,20 +20964,20 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -22012,21 +21019,21 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    type: "TypeReference"
     #: :class:`object`
-    fields: typing.Optional[object]
+    fields: object
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
-        fields: typing.Optional[object] = None,
+        type: "TypeReference" = None,
+        fields: object = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -22072,7 +21079,7 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -22113,18 +21120,18 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: :class:`str` `(Named` ``assetId`` `in Commercetools)`
-    asset_id: typing.Optional[str]
+    asset_id: str
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset_id: typing.Optional[str] = None,
+        asset_id: str = None,
         asset_key: typing.Optional[str] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -22162,18 +21169,18 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
+        sources: typing.List["AssetSource"] = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -22217,7 +21224,7 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -22256,7 +21263,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
     #: Optional :class:`bool`
@@ -22265,10 +21272,10 @@ class ProductSetAttributeAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22297,7 +21304,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
 class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAttributeInAllVariantsActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
     #: Optional :class:`bool`
@@ -22306,8 +21313,8 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22327,7 +21334,7 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
 class ProductSetCategoryOrderHintAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetCategoryOrderHintActionSchema`."
     #: :class:`str` `(Named` ``categoryId`` `in Commercetools)`
-    category_id: typing.Optional[str]
+    category_id: str
     #: Optional :class:`str` `(Named` ``orderHint`` `in Commercetools)`
     order_hint: typing.Optional[str]
     #: Optional :class:`bool`
@@ -22336,8 +21343,8 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        category_id: typing.Optional[str] = None,
+        action: str = None,
+        category_id: str = None,
         order_hint: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22364,7 +21371,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22384,7 +21391,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetDiscountedPriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: Optional :class:`commercetools.types.DiscountedPrice`
@@ -22393,8 +21400,8 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
     ) -> None:
@@ -22418,7 +21425,7 @@ class ProductSetImageLabelAction(ProductUpdateAction):
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: :class:`str` `(Named` ``imageUrl`` `in Commercetools)`
-    image_url: typing.Optional[str]
+    image_url: str
     #: Optional :class:`str`
     label: typing.Optional[str]
     #: Optional :class:`bool`
@@ -22427,10 +21434,10 @@ class ProductSetImageLabelAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
-        image_url: typing.Optional[str] = None,
+        image_url: str = None,
         label: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22461,9 +21468,7 @@ class ProductSetKeyAction(ProductUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -22482,7 +21487,7 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22508,7 +21513,7 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22534,7 +21539,7 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22558,17 +21563,17 @@ class ProductSetPricesAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: List of :class:`commercetools.types.PriceDraft`
-    prices: typing.Optional[typing.List["PriceDraft"]]
+    prices: typing.List["PriceDraft"]
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["PriceDraft"]] = None,
+        prices: typing.List["PriceDraft"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -22588,21 +21593,21 @@ class ProductSetPricesAction(ProductUpdateAction):
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.price_id = price_id
@@ -22622,7 +21627,7 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: Optional :class:`commercetools.types.TypeReference`
@@ -22633,8 +21638,8 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
@@ -22667,7 +21672,7 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -22690,15 +21695,15 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
 class ProductSetSearchKeywordsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSearchKeywordsActionSchema`."
     #: :class:`commercetools.types.SearchKeywords` `(Named` ``searchKeywords`` `in Commercetools)`
-    search_keywords: typing.Optional["SearchKeywords"]
+    search_keywords: "SearchKeywords"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        search_keywords: typing.Optional["SearchKeywords"] = None,
+        action: str = None,
+        search_keywords: "SearchKeywords" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.search_keywords = search_keywords
@@ -22716,7 +21721,7 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 class ProductSetSkuAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSkuActionSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`bool`
@@ -22725,8 +21730,8 @@ class ProductSetSkuAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
+        action: str = None,
+        variant_id: int = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -22753,7 +21758,7 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
     ) -> None:
         self.tax_category = tax_category
@@ -22777,7 +21782,7 @@ class ProductTransitionStateAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         state: typing.Optional["StateReference"] = None,
         force: typing.Optional[bool] = None,
     ) -> None:
@@ -22797,13 +21802,10 @@ class ProductTransitionStateAction(ProductUpdateAction):
 class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddAttributeDefinitionActionSchema`."
     #: :class:`commercetools.types.AttributeDefinitionDraft`
-    attribute: typing.Optional["AttributeDefinitionDraft"]
+    attribute: "AttributeDefinitionDraft"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        attribute: typing.Optional["AttributeDefinitionDraft"] = None,
+        self, *, action: str = None, attribute: "AttributeDefinitionDraft" = None
     ) -> None:
         self.attribute = attribute
         super().__init__(action="addAttributeDefinition")
@@ -22819,16 +21821,16 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddLocalizedEnumValueActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributeLocalizedEnumValue`
-    value: typing.Optional["AttributeLocalizedEnumValue"]
+    value: "AttributeLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        value: typing.Optional["AttributeLocalizedEnumValue"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        value: "AttributeLocalizedEnumValue" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.value = value
@@ -22845,16 +21847,16 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
 class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddPlainEnumValueActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributePlainEnumValue`
-    value: typing.Optional["AttributePlainEnumValue"]
+    value: "AttributePlainEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        value: typing.Optional["AttributePlainEnumValue"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        value: "AttributePlainEnumValue" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.value = value
@@ -22871,16 +21873,16 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeConstraintActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributeConstraintEnumDraft` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["AttributeConstraintEnumDraft"]
+    new_value: "AttributeConstraintEnumDraft"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["AttributeConstraintEnumDraft"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "AttributeConstraintEnumDraft" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -22897,16 +21899,16 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeNameActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`str` `(Named` ``newAttributeName`` `in Commercetools)`
-    new_attribute_name: typing.Optional[str]
+    new_attribute_name: str
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_attribute_name: typing.Optional[str] = None,
+        action: str = None,
+        attribute_name: str = None,
+        new_attribute_name: str = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.new_attribute_name = new_attribute_name
@@ -22923,13 +21925,13 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderActionSchema`."
     #: List of :class:`commercetools.types.AttributeDefinition`
-    attributes: typing.Optional[typing.List["AttributeDefinition"]]
+    attributes: typing.List["AttributeDefinition"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attributes: typing.Optional[typing.List["AttributeDefinition"]] = None,
+        action: str = None,
+        attributes: typing.List["AttributeDefinition"] = None,
     ) -> None:
         self.attributes = attributes
         super().__init__(action="changeAttributeOrder")
@@ -22945,14 +21947,9 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
 class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeDescriptionActionSchema`."
     #: :class:`str`
-    description: typing.Optional[str]
+    description: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, description: str = None) -> None:
         self.description = description
         super().__init__(action="changeDescription")
 
@@ -22967,19 +21964,19 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeEnumKeyActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str` `(Named` ``newKey`` `in Commercetools)`
-    new_key: typing.Optional[str]
+    new_key: str
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        new_key: typing.Optional[str] = None,
+        action: str = None,
+        attribute_name: str = None,
+        key: str = None,
+        new_key: str = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.key = key
@@ -22997,16 +21994,16 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
 class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeInputHintActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.TextInputHint` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["TextInputHint"]
+    new_value: "TextInputHint"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["TextInputHint"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "TextInputHint" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -23023,16 +22020,16 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
 class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeIsSearchableActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`bool` `(Named` ``isSearchable`` `in Commercetools)`
-    is_searchable: typing.Optional[bool]
+    is_searchable: bool
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        is_searchable: typing.Optional[bool] = None,
+        action: str = None,
+        attribute_name: str = None,
+        is_searchable: bool = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.is_searchable = is_searchable
@@ -23049,16 +22046,16 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
 class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        label: "LocalizedString" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.label = label
@@ -23075,16 +22072,16 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
 class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributeLocalizedEnumValue` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["AttributeLocalizedEnumValue"]
+    new_value: "AttributeLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["AttributeLocalizedEnumValue"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "AttributeLocalizedEnumValue" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -23101,16 +22098,16 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
 class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
-    values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]]
+    values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None,
+        action: str = None,
+        attribute_name: str = None,
+        values: typing.List["AttributeLocalizedEnumValue"] = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.values = values
@@ -23127,11 +22124,9 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 class ProductTypeChangeNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -23146,16 +22141,16 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
 class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributePlainEnumValue` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["AttributePlainEnumValue"]
+    new_value: "AttributePlainEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["AttributePlainEnumValue"] = None,
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "AttributePlainEnumValue" = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -23172,16 +22167,16 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
 class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
-    values: typing.Optional[typing.List["AttributePlainEnumValue"]]
+    values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None,
+        action: str = None,
+        attribute_name: str = None,
+        values: typing.List["AttributePlainEnumValue"] = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.values = values
@@ -23224,11 +22219,9 @@ class ProductTypeReference(Reference):
 class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveAttributeDefinitionActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="removeAttributeDefinition")
 
@@ -23243,16 +22236,16 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveEnumValuesActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: List of :class:`str`
-    keys: typing.Optional[typing.List[str]]
+    keys: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        keys: typing.Optional[typing.List[str]] = None,
+        action: str = None,
+        attribute_name: str = None,
+        keys: typing.List[str] = None,
     ) -> None:
         self.attribute_name = attribute_name
         self.keys = keys
@@ -23269,15 +22262,15 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
 class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSetInputTipActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
     input_tip: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
+        action: str = None,
+        attribute_name: str = None,
         input_tip: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.attribute_name = attribute_name
@@ -23297,9 +22290,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -23311,7 +22302,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
 class ProductUnpublishAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action="unpublish")
 
     def __repr__(self) -> str:
@@ -23322,13 +22313,10 @@ class ProductUnpublishAction(ProductUpdateAction):
 class ProjectChangeCountriesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCountriesActionSchema`."
     #: List of :class:`str`
-    countries: typing.Optional[typing.List["str"]]
+    countries: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        countries: typing.Optional[typing.List["str"]] = None,
+        self, *, action: str = None, countries: typing.List["str"] = None
     ) -> None:
         self.countries = countries
         super().__init__(action="changeCountries")
@@ -23344,13 +22332,10 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 class ProjectChangeCurrenciesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCurrenciesActionSchema`."
     #: List of :class:`str`
-    currencies: typing.Optional[typing.List["str"]]
+    currencies: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        currencies: typing.Optional[typing.List["str"]] = None,
+        self, *, action: str = None, currencies: typing.List["str"] = None
     ) -> None:
         self.currencies = currencies
         super().__init__(action="changeCurrencies")
@@ -23366,13 +22351,10 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeLanguagesActionSchema`."
     #: List of :class:`str`
-    languages: typing.Optional[typing.List["str"]]
+    languages: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        languages: typing.Optional[typing.List["str"]] = None,
+        self, *, action: str = None, languages: typing.List["str"] = None
     ) -> None:
         self.languages = languages
         super().__init__(action="changeLanguages")
@@ -23388,14 +22370,9 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
 class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesEnabledActionSchema`."
     #: :class:`bool` `(Named` ``messagesEnabled`` `in Commercetools)`
-    messages_enabled: typing.Optional[bool]
+    messages_enabled: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        messages_enabled: typing.Optional[bool] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, messages_enabled: bool = None) -> None:
         self.messages_enabled = messages_enabled
         super().__init__(action="changeMessagesEnabled")
 
@@ -23410,11 +22387,9 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 class ProjectChangeNameAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -23431,7 +22406,7 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
     ) -> None:
         self.shipping_rate_input_type = shipping_rate_input_type
@@ -23477,10 +22452,7 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
     author_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        author_name: typing.Optional[str] = None,
+        self, *, action: str = None, author_name: typing.Optional[str] = None
     ) -> None:
         self.author_name = author_name
         super().__init__(action="setAuthorName")
@@ -23496,15 +22468,15 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 class ReviewSetCustomFieldAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -23530,7 +22502,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -23555,7 +22527,7 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
         self.customer = customer
@@ -23574,9 +22546,7 @@ class ReviewSetKeyAction(ReviewUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -23591,10 +22561,7 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None,
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -23613,10 +22580,7 @@ class ReviewSetRatingAction(ReviewUpdateAction):
     rating: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        rating: typing.Optional[int] = None,
+        self, *, action: str = None, rating: typing.Optional[int] = None
     ) -> None:
         self.rating = rating
         super().__init__(action="setRating")
@@ -23635,10 +22599,7 @@ class ReviewSetTargetAction(ReviewUpdateAction):
     target: typing.Optional["ProductReference"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        target: typing.Optional["ProductReference"] = None,
+        self, *, action: str = None, target: typing.Optional["ProductReference"] = None
     ) -> None:
         self.target = target
         super().__init__(action="setTarget")
@@ -23657,7 +22618,7 @@ class ReviewSetTextAction(ReviewUpdateAction):
     text: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, text: typing.Optional[str] = None
+        self, *, action: str = None, text: typing.Optional[str] = None
     ) -> None:
         self.text = text
         super().__init__(action="setText")
@@ -23673,7 +22634,7 @@ class ReviewSetTitleAction(ReviewUpdateAction):
     title: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+        self, *, action: str = None, title: typing.Optional[str] = None
     ) -> None:
         self.title = title
         super().__init__(action="setTitle")
@@ -23686,15 +22647,15 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 class ReviewTransitionStateAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    state: "StateReference"
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
+        action: str = None,
+        state: "StateReference" = None,
         force: typing.Optional[bool] = None,
     ) -> None:
         self.state = state
@@ -23713,16 +22674,16 @@ class ReviewTransitionStateAction(ReviewUpdateAction):
 class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddShippingRateActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    zone: "ZoneReference"
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRateDraft"]
+    shipping_rate: "ShippingRateDraft"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        action: str = None,
+        zone: "ZoneReference" = None,
+        shipping_rate: "ShippingRateDraft" = None,
     ) -> None:
         self.zone = zone
         self.shipping_rate = shipping_rate
@@ -23739,14 +22700,9 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
 class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddZoneActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    zone: "ZoneReference"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, zone: "ZoneReference" = None) -> None:
         self.zone = zone
         super().__init__(action="addZone")
 
@@ -23761,14 +22717,9 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
 class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeIsDefaultActionSchema`."
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
-    is_default: typing.Optional[bool]
+    is_default: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        is_default: typing.Optional[bool] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, is_default: bool = None) -> None:
         self.is_default = is_default
         super().__init__(action="changeIsDefault")
 
@@ -23783,11 +22734,9 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -23802,13 +22751,10 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
 class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeTaxCategoryActionSchema`."
     #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    tax_category: "TaxCategoryReference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        self, *, action: str = None, tax_category: "TaxCategoryReference" = None
     ) -> None:
         self.tax_category = tax_category
         super().__init__(action="changeTaxCategory")
@@ -23850,16 +22796,16 @@ class ShippingMethodReference(Reference):
 class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveShippingRateActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    zone: "ZoneReference"
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
-    shipping_rate: typing.Optional["ShippingRateDraft"]
+    shipping_rate: "ShippingRateDraft"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None,
-        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        action: str = None,
+        zone: "ZoneReference" = None,
+        shipping_rate: "ShippingRateDraft" = None,
     ) -> None:
         self.zone = zone
         self.shipping_rate = shipping_rate
@@ -23876,14 +22822,9 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
 class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveZoneActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    zone: "ZoneReference"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, zone: "ZoneReference" = None) -> None:
         self.zone = zone
         super().__init__(action="removeZone")
 
@@ -23901,10 +22842,7 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
     description: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        self, *, action: str = None, description: typing.Optional[str] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -23922,9 +22860,7 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -23939,10 +22875,7 @@ class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
     predicate: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None,
+        self, *, action: str = None, predicate: typing.Optional[str] = None
     ) -> None:
         self.predicate = predicate
         super().__init__(action="setPredicate")
@@ -23973,7 +22906,7 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -24008,7 +22941,7 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
 class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListAddTextLineItemActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional :class:`int`
@@ -24021,8 +22954,8 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
@@ -24053,16 +22986,12 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
 class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
+        self, *, action: str = None, line_item_id: str = None, quantity: int = None
     ) -> None:
         self.line_item_id = line_item_id
         self.quantity = quantity
@@ -24079,13 +23008,10 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
 class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeLineItemsOrderActionSchema`."
     #: List of :class:`str` `(Named` ``lineItemOrder`` `in Commercetools)`
-    line_item_order: typing.Optional[typing.List[str]]
+    line_item_order: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        line_item_order: typing.Optional[typing.List[str]] = None,
+        self, *, action: str = None, line_item_order: typing.List[str] = None
     ) -> None:
         self.line_item_order = line_item_order
         super().__init__(action="changeLineItemsOrder")
@@ -24101,14 +23027,9 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
 class ShoppingListChangeNameAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -24123,16 +23044,16 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
 class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemNameActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
-    text_line_item_id: typing.Optional[str]
+    text_line_item_id: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        text_line_item_id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        text_line_item_id: str = None,
+        name: "LocalizedString" = None,
     ) -> None:
         self.text_line_item_id = text_line_item_id
         self.name = name
@@ -24149,16 +23070,12 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
 class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
-    text_line_item_id: typing.Optional[str]
+    text_line_item_id: str
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        text_line_item_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
+        self, *, action: str = None, text_line_item_id: str = None, quantity: int = None
     ) -> None:
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
@@ -24175,13 +23092,10 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
 class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemsOrderActionSchema`."
     #: List of :class:`str` `(Named` ``textLineItemOrder`` `in Commercetools)`
-    text_line_item_order: typing.Optional[typing.List[str]]
+    text_line_item_order: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        text_line_item_order: typing.Optional[typing.List[str]] = None,
+        self, *, action: str = None, text_line_item_order: typing.List[str] = None
     ) -> None:
         self.text_line_item_order = text_line_item_order
         super().__init__(action="changeTextLineItemsOrder")
@@ -24223,15 +23137,15 @@ class ShoppingListReference(Reference):
 class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListRemoveLineItemActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`int`
     quantity: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         quantity: typing.Optional[int] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -24249,15 +23163,15 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
 class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListRemoveTextLineItemActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
-    text_line_item_id: typing.Optional[str]
+    text_line_item_id: str
     #: Optional :class:`int`
     quantity: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        text_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        text_line_item_id: str = None,
         quantity: typing.Optional[int] = None,
     ) -> None:
         self.text_line_item_id = text_line_item_id
@@ -24278,10 +23192,7 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
     anonymous_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        anonymous_id: typing.Optional[str] = None,
+        self, *, action: str = None, anonymous_id: typing.Optional[str] = None
     ) -> None:
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
@@ -24297,15 +23208,15 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
 class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.name = name
@@ -24331,7 +23242,7 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -24356,7 +23267,7 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer: typing.Optional["CustomerReference"] = None,
     ) -> None:
         self.customer = customer
@@ -24378,7 +23289,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
     ) -> None:
         self.delete_days_after_last_modification = delete_days_after_last_modification
@@ -24400,7 +23311,7 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description
@@ -24419,9 +23330,7 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -24433,18 +23342,18 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
 class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.line_item_id = line_item_id
@@ -24463,7 +23372,7 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
 class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -24472,8 +23381,8 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -24496,10 +23405,7 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
     slug: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        self, *, action: str = None, slug: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.slug = slug
         super().__init__(action="setSlug")
@@ -24515,18 +23421,18 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
 class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
-    text_line_item_id: typing.Optional[str]
+    text_line_item_id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        text_line_item_id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        text_line_item_id: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.text_line_item_id = text_line_item_id
@@ -24545,7 +23451,7 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
 class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
-    text_line_item_id: typing.Optional[str]
+    text_line_item_id: str
     #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -24554,8 +23460,8 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        text_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        text_line_item_id: str = None,
         type: typing.Optional["TypeReference"] = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
@@ -24575,15 +23481,15 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
 class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemDescriptionActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
-    text_line_item_id: typing.Optional[str]
+    text_line_item_id: str
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        text_line_item_id: typing.Optional[str] = None,
+        action: str = None,
+        text_line_item_id: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.text_line_item_id = text_line_item_id
@@ -24604,18 +23510,18 @@ class StagedOrder(Order):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         order_number: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["LineItem"]] = None,
-        custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
-        total_price: typing.Optional["Money"] = None,
+        line_items: typing.List["LineItem"] = None,
+        custom_line_items: typing.List["CustomLineItem"] = None,
+        total_price: "Money" = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
@@ -24623,21 +23529,21 @@ class StagedOrder(Order):
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         country: typing.Optional[str] = None,
-        order_state: typing.Optional["OrderState"] = None,
+        order_state: "OrderState" = None,
         state: typing.Optional["StateReference"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
-        sync_info: typing.Optional[typing.List["SyncInfo"]] = None,
+        sync_info: typing.List["SyncInfo"] = None,
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: typing.Optional[int] = None,
+        last_message_sequence_number: int = None,
         cart: typing.Optional["CartReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
-        origin: typing.Optional["CartOrigin"] = None,
+        origin: "CartOrigin" = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
@@ -24731,13 +23637,10 @@ class StagedOrder(Order):
 class StateAddRolesAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateAddRolesActionSchema`."
     #: List of :class:`commercetools.types.StateRoleEnum`
-    roles: typing.Optional[typing.List["StateRoleEnum"]]
+    roles: typing.List["StateRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
+        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="addRoles")
@@ -24750,14 +23653,9 @@ class StateAddRolesAction(StateUpdateAction):
 class StateChangeInitialAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeInitialActionSchema`."
     #: :class:`bool`
-    initial: typing.Optional[bool]
+    initial: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        initial: typing.Optional[bool] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, initial: bool = None) -> None:
         self.initial = initial
         super().__init__(action="changeInitial")
 
@@ -24772,11 +23670,9 @@ class StateChangeInitialAction(StateUpdateAction):
 class StateChangeKeyAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeKeyActionSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -24788,14 +23684,9 @@ class StateChangeKeyAction(StateUpdateAction):
 class StateChangeTypeAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeTypeActionSchema`."
     #: :class:`commercetools.types.StateTypeEnum`
-    type: typing.Optional["StateTypeEnum"]
+    type: "StateTypeEnum"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        type: typing.Optional["StateTypeEnum"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, type: "StateTypeEnum" = None) -> None:
         self.type = type
         super().__init__(action="changeType")
 
@@ -24833,13 +23724,10 @@ class StateReference(Reference):
 class StateRemoveRolesAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateRemoveRolesActionSchema`."
     #: List of :class:`commercetools.types.StateRoleEnum`
-    roles: typing.Optional[typing.List["StateRoleEnum"]]
+    roles: typing.List["StateRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
+        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="removeRoles")
@@ -24852,13 +23740,10 @@ class StateRemoveRolesAction(StateUpdateAction):
 class StateSetDescriptionAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetDescriptionActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
+    description: "LocalizedString"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None,
+        self, *, action: str = None, description: "LocalizedString" = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -24874,14 +23759,9 @@ class StateSetDescriptionAction(StateUpdateAction):
 class StateSetNameAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="setName")
 
@@ -24893,13 +23773,10 @@ class StateSetNameAction(StateUpdateAction):
 class StateSetRolesAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetRolesActionSchema`."
     #: List of :class:`commercetools.types.StateRoleEnum`
-    roles: typing.Optional[typing.List["StateRoleEnum"]]
+    roles: typing.List["StateRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
+        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="setRoles")
@@ -24917,7 +23794,7 @@ class StateSetTransitionsAction(StateUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         transitions: typing.Optional[typing.List["StateReference"]] = None,
     ) -> None:
         self.transitions = transitions
@@ -24934,13 +23811,10 @@ class StateSetTransitionsAction(StateUpdateAction):
 class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionChangeDestinationActionSchema`."
     #: :class:`commercetools.types.Destination`
-    destination: typing.Optional["Destination"]
+    destination: "Destination"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        destination: typing.Optional["Destination"] = None,
+        self, *, action: str = None, destination: "Destination" = None
     ) -> None:
         self.destination = destination
         super().__init__(action="changeDestination")
@@ -24961,7 +23835,7 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
     ) -> None:
         self.changes = changes
@@ -24980,9 +23854,7 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -24999,7 +23871,7 @@ class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
     ) -> None:
         self.messages = messages
@@ -25016,14 +23888,9 @@ class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
 class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryAddTaxRateActionSchema`."
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
-    tax_rate: typing.Optional["TaxRateDraft"]
+    tax_rate: "TaxRateDraft"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_rate: typing.Optional["TaxRateDraft"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, tax_rate: "TaxRateDraft" = None) -> None:
         self.tax_rate = tax_rate
         super().__init__(action="addTaxRate")
 
@@ -25038,11 +23905,9 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
 class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -25083,14 +23948,9 @@ class TaxCategoryReference(Reference):
 class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryRemoveTaxRateActionSchema`."
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
-    tax_rate_id: typing.Optional[str]
+    tax_rate_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        tax_rate_id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, tax_rate_id: str = None) -> None:
         self.tax_rate_id = tax_rate_id
         super().__init__(action="removeTaxRate")
 
@@ -25105,16 +23965,16 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryReplaceTaxRateActionSchema`."
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
-    tax_rate_id: typing.Optional[str]
+    tax_rate_id: str
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
-    tax_rate: typing.Optional["TaxRateDraft"]
+    tax_rate: "TaxRateDraft"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        tax_rate_id: typing.Optional[str] = None,
-        tax_rate: typing.Optional["TaxRateDraft"] = None,
+        action: str = None,
+        tax_rate_id: str = None,
+        tax_rate: "TaxRateDraft" = None,
     ) -> None:
         self.tax_rate_id = tax_rate_id
         self.tax_rate = tax_rate
@@ -25134,10 +23994,7 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
     description: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        self, *, action: str = None, description: typing.Optional[str] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -25155,9 +24012,7 @@ class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -25169,16 +24024,16 @@ class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
 class TypeAddEnumValueAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddEnumValueActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.CustomFieldEnumValue`
-    value: typing.Optional["CustomFieldEnumValue"]
+    value: "CustomFieldEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        value: typing.Optional["CustomFieldEnumValue"] = None,
+        action: str = None,
+        field_name: str = None,
+        value: "CustomFieldEnumValue" = None,
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -25196,13 +24051,10 @@ class TypeAddEnumValueAction(TypeUpdateAction):
 class TypeAddFieldDefinitionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddFieldDefinitionActionSchema`."
     #: :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinition`` `in Commercetools)`
-    field_definition: typing.Optional["FieldDefinition"]
+    field_definition: "FieldDefinition"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        field_definition: typing.Optional["FieldDefinition"] = None,
+        self, *, action: str = None, field_definition: "FieldDefinition" = None
     ) -> None:
         self.field_definition = field_definition
         super().__init__(action="addFieldDefinition")
@@ -25218,16 +24070,16 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddLocalizedEnumValueActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.CustomFieldLocalizedEnumValue`
-    value: typing.Optional["CustomFieldLocalizedEnumValue"]
+    value: "CustomFieldLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        value: typing.Optional["CustomFieldLocalizedEnumValue"] = None,
+        action: str = None,
+        field_name: str = None,
+        value: "CustomFieldLocalizedEnumValue" = None,
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -25245,16 +24097,16 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: List of :class:`str`
-    keys: typing.Optional[typing.List[str]]
+    keys: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        keys: typing.Optional[typing.List[str]] = None,
+        action: str = None,
+        field_name: str = None,
+        keys: typing.List[str] = None,
     ) -> None:
         self.field_name = field_name
         self.keys = keys
@@ -25272,16 +24124,16 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
 class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        field_name: str = None,
+        label: "LocalizedString" = None,
     ) -> None:
         self.field_name = field_name
         self.label = label
@@ -25298,13 +24150,10 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
 class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionOrderActionSchema`."
     #: List of :class:`str` `(Named` ``fieldNames`` `in Commercetools)`
-    field_names: typing.Optional[typing.List[str]]
+    field_names: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        field_names: typing.Optional[typing.List[str]] = None,
+        self, *, action: str = None, field_names: typing.List[str] = None
     ) -> None:
         self.field_names = field_names
         super().__init__(action="changeFieldDefinitionOrder")
@@ -25320,11 +24169,9 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 class TypeChangeKeyAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeKeyActionSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -25336,16 +24183,16 @@ class TypeChangeKeyAction(TypeUpdateAction):
 class TypeChangeLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        field_name: str = None,
+        label: "LocalizedString" = None,
     ) -> None:
         self.field_name = field_name
         self.label = label
@@ -25363,16 +24210,16 @@ class TypeChangeLabelAction(TypeUpdateAction):
 class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: List of :class:`str`
-    keys: typing.Optional[typing.List[str]]
+    keys: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        keys: typing.Optional[typing.List[str]] = None,
+        action: str = None,
+        field_name: str = None,
+        keys: typing.List[str] = None,
     ) -> None:
         self.field_name = field_name
         self.keys = keys
@@ -25389,14 +24236,9 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
 class TypeChangeNameAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -25434,14 +24276,9 @@ class TypeReference(Reference):
 class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeRemoveFieldDefinitionActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, field_name: str = None) -> None:
         self.field_name = field_name
         super().__init__(action="removeFieldDefinition")
 
@@ -25461,7 +24298,7 @@ class TypeSetDescriptionAction(TypeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description
@@ -25478,14 +24315,9 @@ class TypeSetDescriptionAction(TypeUpdateAction):
 class ZoneAddLocationAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneAddLocationActionSchema`."
     #: :class:`commercetools.types.Location`
-    location: typing.Optional["Location"]
+    location: "Location"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        location: typing.Optional["Location"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, location: "Location" = None) -> None:
         self.location = location
         super().__init__(action="addLocation")
 
@@ -25500,11 +24332,9 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 class ZoneChangeNameAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -25542,14 +24372,9 @@ class ZoneReference(Reference):
 class ZoneRemoveLocationAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRemoveLocationActionSchema`."
     #: :class:`commercetools.types.Location`
-    location: typing.Optional["Location"]
+    location: "Location"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        location: typing.Optional["Location"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, location: "Location" = None) -> None:
         self.location = location
         super().__init__(action="removeLocation")
 
@@ -25567,10 +24392,7 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
     description: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        self, *, action: str = None, description: typing.Optional[str] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")

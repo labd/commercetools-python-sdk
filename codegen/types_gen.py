@@ -297,11 +297,12 @@ class ResourceClassGenerator:
                 slice=ast.Index(value=annotation_type),
             )
 
-        # Wrap it in a typing.Optional[T]
-        annotation_type = ast.Subscript(
-            value=ast.Attribute(value=ast.Name(id="typing"), attr="Optional"),
-            slice=ast.Index(value=annotation_type),
-        )
+        if prop.optional:
+            # Wrap it in a typing.Optional[T]
+            annotation_type = ast.Subscript(
+                value=ast.Attribute(value=ast.Name(id="typing"), attr="Optional"),
+                slice=ast.Index(value=annotation_type),
+            )
 
         return annotation_type
 

@@ -47,7 +47,6 @@ def test_product_query(client):
     assert len(result.results) == 2
     assert result.total == 2
 
-
 def test_product_update(client):
     """Test the return value of the update methods.
 

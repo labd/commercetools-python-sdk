@@ -38,7 +38,7 @@ def test_category_query(client):
     client.categories.create(types.CategoryDraft(key="test-category2"))
 
     # single sort query
-    result = client.categories.query(sort="id asc")
+    result = client.categories.query(sort="id asc", limit=10)
     assert len(result.results) == 2
     assert result.total == 2
 
@@ -50,7 +50,7 @@ def test_category_query(client):
 
 def test_category_update(client):
     """Test the return value of the update methods.
-    
+
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """

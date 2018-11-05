@@ -6,6 +6,7 @@ from requests_mock import create_response
 from commercetools import schemas, types
 from commercetools.services import abstract
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import flatten_multivaluedict
 
 
 class CategoriesModel(BaseModel):
@@ -46,7 +47,7 @@ class CategoriesBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/categories/?(?P<path>.*)?"
 
     def query(self, request):
-        obj = abstract.AbstractQuerySchema().load(request.qs)
+        obj = abstract.AbstractQuerySchema().load(flatten_multivaluedict(request.qs))
         data = {
             "count": len(self.model.objects),
             "total": len(self.model.objects),

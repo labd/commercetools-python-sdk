@@ -16,6 +16,7 @@ from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
+from commercetools.services.project import ProjectService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
 
 env = os.environ.get
@@ -179,10 +180,6 @@ class Client:
         return CustomObjectService(self)
 
     @property
-    def products(self) -> ProductService:
-        return ProductService(self)
-
-    @property
     def carts(self) -> CartService:
         return CartService(self)
 
@@ -193,6 +190,14 @@ class Client:
     @property
     def orders(self) -> OrderService:
         return OrderService(self)
+
+    @property
+    def products(self) -> ProductService:
+        return ProductService(self)
+
+    @property
+    def project(self) -> ProjectService:
+        return ProjectService(self)
 
     @property
     def payments(self) -> PaymentService:

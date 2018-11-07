@@ -92,3 +92,11 @@ Client.products
     :undoc-members:
     :show-inheritance:
 
+
+Client.project
+~~~~~~~~~~~~~~
+
+.. autoclass:: commercetools.services.project.ProjectService
+    :members:
+    :undoc-members:
+    :show-inheritance:

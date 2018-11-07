@@ -11,6 +11,7 @@ from commercetools.testing.payments import PaymentsBackend
 from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
+from commercetools.testing.project import ProjectBackend
 
 
 class BackendRepository:
@@ -20,6 +21,7 @@ class BackendRepository:
         self.channels = ChannelsBackend()
         self.custom_objects = CustomObjectsBackend()
         self.payments = PaymentsBackend()
+        self.project = ProjectBackend()
         self.products = ProductsBackend()
         self.product_projections = ProductProjectionsBackend(model=self.products.model)
         self.product_types = ProductTypesBackend()
@@ -34,6 +36,7 @@ class BackendRepository:
             "products",
             "product_projections",
             "product_types",
+            "project",
         ]
         for backend_name in backends:
             backend = getattr(self, backend_name)

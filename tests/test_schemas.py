@@ -1,5 +1,6 @@
 from commercetools import schemas, types
 
+
 def test_extension_input_schema():
     data = {
         "action": "Create",
@@ -164,7 +165,10 @@ def test_extension_input_schema():
                 ],
                 "transactionFee": True,
                 "discountCodes": [],
-                "cart": {"typeId": "cart", "id": "737c2868-55bd-4c44-a332-f3b93122bfd7"},
+                "cart": {
+                    "typeId": "cart",
+                    "id": "737c2868-55bd-4c44-a332-f3b93122bfd7",
+                },
                 "shippingAddress": {
                     "id": "2x5-gO75",
                     "streetName": "Kanaalweg",
@@ -191,3 +195,30 @@ def test_extension_input_schema():
     assert result.resource.type_id == types.ReferenceTypeId.ORDER
 
     data = schemas.ExtensionInputSchema().dump(result)
+
+
+def test_project_schema():
+    data = {
+        "key": "unittest",
+        "name": "SDK Test",
+        "countries": ["AT", "NL", "CH", "BE", "GB", "DE", "IT", "LU", "ES"],
+        "currencies": ["EUR", "GBP", "CHF"],
+        "languages": [
+            "en-GB",
+            "de-DE",
+            "fr-FR",
+            "nl-BE",
+            "nl-NL",
+            "fr-BE",
+            "it-IT",
+            "es-ES",
+            "pt-PT",
+        ],
+        "createdAt": "2018-10-24T08:58:22.935Z",
+        "trialUntil": "2018-12",
+        "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
+        "version": 9,
+    }
+
+    result = schemas.ProjectSchema().load(data)
+    data = schemas.ProjectSchema().dump(result)

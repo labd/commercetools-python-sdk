@@ -37,10 +37,15 @@ class BaseBackend:
 
         match = re.match(self.path_prefix, request.path)
         if match:
-            request_path = match.groupdict()["path"]
+            try:
+                request_path = match.groupdict()["path"]
+            except KeyError:
+                request_path = ""
 
             for path, method, callback in self.urls():
                 path_match = re.match(path, request_path)
+
+                # Call the view
                 if path_match and request.method == method:
                     response = callback(request, **path_match.groupdict())
                     if response is None:

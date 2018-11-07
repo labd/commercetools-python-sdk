@@ -131,3 +131,25 @@ class ProductService(abstract.AbstractService):
         return self._client._delete(
             f"products/key={key}", params, schemas.ProductSchema
         )
+
+    def upload_image(
+        self,
+        product_id: str,
+        fh: typing.BinaryIO,
+        sku: str=None,
+        filename: str='img',
+        staged: bool=True,
+    ):
+        params = {
+            'filename': filename,
+            'staged': staged,
+        }
+        if sku:
+            params['sku'] = sku
+
+        return self._client._upload(
+            f"products/{product_id}/images",
+            params,
+            file=fh,
+            response_schema_cls=schemas.ProductSchema,
+        )

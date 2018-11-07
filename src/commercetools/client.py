@@ -122,6 +122,22 @@ class Client:
             return response_schema_cls().load(response.json())
         return self._process_error(response)
 
+    def _upload(
+        self,
+        endpoint: str,
+        params: typing.Dict[str, str],
+        file: typing.IO,
+        response_schema_cls: SchemaABC,
+    ) -> typing.Any:
+        """Retrieve a single object from the commercetools platform"""
+        response = self._http_client.post(
+            self._base_url + endpoint, data=file.read(), params=params
+        )
+
+        if response.status_code in (200, 201):
+            return response_schema_cls().load(response.json())
+        return self._process_error(response)
+
     def _delete(
         self,
         endpoint: str,

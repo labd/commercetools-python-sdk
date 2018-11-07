@@ -226,15 +226,15 @@ class SchemaClassGenerator:
         node = self._get_property_field(prop)
 
         if prop.many:
-            if prop.type.enum:
+            if node.func.id == "marshmallow.fields.Nested":
+                node.keywords.append(
+                    ast.keyword(arg="many", value=ast.NameConstant(value=True))
+                )
+            else:
                 node = ast.Call(
                     func=ast.Name(id="marshmallow.fields.List"),
                     args=[node],
                     keywords=[],
-                )
-            else:
-                node.keywords.append(
-                    ast.keyword(arg="many", value=ast.NameConstant(value=True))
                 )
 
         if prop.optional:

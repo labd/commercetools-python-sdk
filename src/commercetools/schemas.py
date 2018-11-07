@@ -101,7 +101,9 @@ class AssetDraftSchema(marshmallow.Schema):
     )
     name = LocalizedStringField(allow_none=True)
     description = LocalizedStringField(allow_none=True, missing=None)
-    tags = marshmallow.fields.String(allow_none=True, many=True, missing=None)
+    tags = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
@@ -129,7 +131,9 @@ class AssetSchema(marshmallow.Schema):
     )
     name = LocalizedStringField(allow_none=True)
     description = LocalizedStringField(allow_none=True, missing=None)
-    tags = marshmallow.fields.String(allow_none=True, many=True, missing=None)
+    tags = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -898,14 +902,18 @@ class CustomerDraftSchema(marshmallow.Schema):
     default_shipping_address = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="defaultShippingAddress"
     )
-    shipping_addresses = marshmallow.fields.Integer(
-        allow_none=True, many=True, missing=None, data_key="shippingAddresses"
+    shipping_addresses = marshmallow.fields.List(
+        marshmallow.fields.Integer(allow_none=True),
+        missing=None,
+        data_key="shippingAddresses",
     )
     default_billing_address = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="defaultBillingAddress"
     )
-    billing_addresses = marshmallow.fields.Integer(
-        allow_none=True, many=True, missing=None, data_key="billingAddresses"
+    billing_addresses = marshmallow.fields.List(
+        marshmallow.fields.Integer(allow_none=True),
+        missing=None,
+        data_key="billingAddresses",
     )
     is_email_verified = marshmallow.fields.Bool(
         allow_none=True, missing=None, data_key="isEmailVerified"
@@ -2070,7 +2078,9 @@ class MessageSubscriptionSchema(marshmallow.Schema):
     resource_type_id = marshmallow.fields.String(
         allow_none=True, data_key="resourceTypeId"
     )
-    types = marshmallow.fields.String(allow_none=True, many=True, missing=None)
+    types = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2289,82 +2299,83 @@ class OrderEditDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    staged_actions = helpers.Discriminator(
-        discriminator_field=("action", "action"),
-        discriminator_schemas={
-            "addCustomLineItem": "commercetools.schemas.StagedOrderAddCustomLineItemActionSchema",
-            "addDelivery": "commercetools.schemas.StagedOrderAddDeliveryActionSchema",
-            "addDiscountCode": "commercetools.schemas.StagedOrderAddDiscountCodeActionSchema",
-            "addItemShippingAddress": "commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema",
-            "addLineItem": "commercetools.schemas.StagedOrderAddLineItemActionSchema",
-            "addParcelToDelivery": "commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema",
-            "addPayment": "commercetools.schemas.StagedOrderAddPaymentActionSchema",
-            "addReturnInfo": "commercetools.schemas.StagedOrderAddReturnInfoActionSchema",
-            "addShoppingList": "commercetools.schemas.StagedOrderAddShoppingListActionSchema",
-            "changeCustomLineItemMoney": "commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema",
-            "changeCustomLineItemQuantity": "commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema",
-            "changeLineItemQuantity": "commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema",
-            "changeOrderState": "commercetools.schemas.StagedOrderChangeOrderStateActionSchema",
-            "changePaymentState": "commercetools.schemas.StagedOrderChangePaymentStateActionSchema",
-            "changeShipmentState": "commercetools.schemas.StagedOrderChangeShipmentStateActionSchema",
-            "changeTaxCalculationMode": "commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema",
-            "changeTaxMode": "commercetools.schemas.StagedOrderChangeTaxModeActionSchema",
-            "changeTaxRoundingMode": "commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema",
-            "importCustomLineItemState": "commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema",
-            "importLineItemState": "commercetools.schemas.StagedOrderImportLineItemStateActionSchema",
-            "removeCustomLineItem": "commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema",
-            "removeDelivery": "commercetools.schemas.StagedOrderRemoveDeliveryActionSchema",
-            "removeDiscountCode": "commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema",
-            "removeItemShippingAddress": "commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema",
-            "removeLineItem": "commercetools.schemas.StagedOrderRemoveLineItemActionSchema",
-            "removeParcelFromDelivery": "commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema",
-            "removePayment": "commercetools.schemas.StagedOrderRemovePaymentActionSchema",
-            "setBillingAddress": "commercetools.schemas.StagedOrderSetBillingAddressActionSchema",
-            "setCountry": "commercetools.schemas.StagedOrderSetCountryActionSchema",
-            "setCustomField": "commercetools.schemas.StagedOrderSetCustomFieldActionSchema",
-            "setCustomLineItemCustomField": "commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema",
-            "setCustomLineItemCustomType": "commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema",
-            "setCustomLineItemShippingDetails": "commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema",
-            "setCustomLineItemTaxAmount": "commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema",
-            "setCustomLineItemTaxRate": "commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema",
-            "setCustomShippingMethod": "commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema",
-            "setCustomType": "commercetools.schemas.StagedOrderSetCustomTypeActionSchema",
-            "setCustomerEmail": "commercetools.schemas.StagedOrderSetCustomerEmailActionSchema",
-            "setCustomerGroup": "commercetools.schemas.StagedOrderSetCustomerGroupActionSchema",
-            "setCustomerId": "commercetools.schemas.StagedOrderSetCustomerIdActionSchema",
-            "setDeliveryAddress": "commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema",
-            "setDeliveryItems": "commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema",
-            "setLineItemCustomField": "commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema",
-            "setLineItemCustomType": "commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema",
-            "setLineItemPrice": "commercetools.schemas.StagedOrderSetLineItemPriceActionSchema",
-            "setLineItemShippingDetails": "commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema",
-            "setLineItemTaxAmount": "commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema",
-            "setLineItemTaxRate": "commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema",
-            "setLineItemTotalPrice": "commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema",
-            "setLocale": "commercetools.schemas.StagedOrderSetLocaleActionSchema",
-            "setOrderNumber": "commercetools.schemas.StagedOrderSetOrderNumberActionSchema",
-            "setOrderTotalTax": "commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema",
-            "setParcelItems": "commercetools.schemas.StagedOrderSetParcelItemsActionSchema",
-            "setParcelMeasurements": "commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema",
-            "setParcelTrackingData": "commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema",
-            "setReturnPaymentState": "commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema",
-            "setReturnShipmentState": "commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema",
-            "setShippingAddress": "commercetools.schemas.StagedOrderSetShippingAddressActionSchema",
-            "setShippingAddressAndCustomShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema",
-            "setShippingAddressAndShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema",
-            "setShippingMethod": "commercetools.schemas.StagedOrderSetShippingMethodActionSchema",
-            "setShippingMethodTaxAmount": "commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema",
-            "setShippingMethodTaxRate": "commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema",
-            "setShippingRateInput": "commercetools.schemas.StagedOrderSetShippingRateInputActionSchema",
-            "transitionCustomLineItemState": "commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema",
-            "transitionLineItemState": "commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema",
-            "transitionState": "commercetools.schemas.StagedOrderTransitionStateActionSchema",
-            "updateItemShippingAddress": "commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema",
-            "updateSyncInfo": "commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    staged_actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addCustomLineItem": "commercetools.schemas.StagedOrderAddCustomLineItemActionSchema",
+                "addDelivery": "commercetools.schemas.StagedOrderAddDeliveryActionSchema",
+                "addDiscountCode": "commercetools.schemas.StagedOrderAddDiscountCodeActionSchema",
+                "addItemShippingAddress": "commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema",
+                "addLineItem": "commercetools.schemas.StagedOrderAddLineItemActionSchema",
+                "addParcelToDelivery": "commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema",
+                "addPayment": "commercetools.schemas.StagedOrderAddPaymentActionSchema",
+                "addReturnInfo": "commercetools.schemas.StagedOrderAddReturnInfoActionSchema",
+                "addShoppingList": "commercetools.schemas.StagedOrderAddShoppingListActionSchema",
+                "changeCustomLineItemMoney": "commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema",
+                "changeCustomLineItemQuantity": "commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema",
+                "changeLineItemQuantity": "commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema",
+                "changeOrderState": "commercetools.schemas.StagedOrderChangeOrderStateActionSchema",
+                "changePaymentState": "commercetools.schemas.StagedOrderChangePaymentStateActionSchema",
+                "changeShipmentState": "commercetools.schemas.StagedOrderChangeShipmentStateActionSchema",
+                "changeTaxCalculationMode": "commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema",
+                "changeTaxMode": "commercetools.schemas.StagedOrderChangeTaxModeActionSchema",
+                "changeTaxRoundingMode": "commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema",
+                "importCustomLineItemState": "commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema",
+                "importLineItemState": "commercetools.schemas.StagedOrderImportLineItemStateActionSchema",
+                "removeCustomLineItem": "commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema",
+                "removeDelivery": "commercetools.schemas.StagedOrderRemoveDeliveryActionSchema",
+                "removeDiscountCode": "commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema",
+                "removeItemShippingAddress": "commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema",
+                "removeLineItem": "commercetools.schemas.StagedOrderRemoveLineItemActionSchema",
+                "removeParcelFromDelivery": "commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema",
+                "removePayment": "commercetools.schemas.StagedOrderRemovePaymentActionSchema",
+                "setBillingAddress": "commercetools.schemas.StagedOrderSetBillingAddressActionSchema",
+                "setCountry": "commercetools.schemas.StagedOrderSetCountryActionSchema",
+                "setCustomField": "commercetools.schemas.StagedOrderSetCustomFieldActionSchema",
+                "setCustomLineItemCustomField": "commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema",
+                "setCustomLineItemCustomType": "commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema",
+                "setCustomLineItemShippingDetails": "commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema",
+                "setCustomLineItemTaxAmount": "commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema",
+                "setCustomLineItemTaxRate": "commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema",
+                "setCustomShippingMethod": "commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema",
+                "setCustomType": "commercetools.schemas.StagedOrderSetCustomTypeActionSchema",
+                "setCustomerEmail": "commercetools.schemas.StagedOrderSetCustomerEmailActionSchema",
+                "setCustomerGroup": "commercetools.schemas.StagedOrderSetCustomerGroupActionSchema",
+                "setCustomerId": "commercetools.schemas.StagedOrderSetCustomerIdActionSchema",
+                "setDeliveryAddress": "commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema",
+                "setDeliveryItems": "commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema",
+                "setLineItemCustomField": "commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema",
+                "setLineItemCustomType": "commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema",
+                "setLineItemPrice": "commercetools.schemas.StagedOrderSetLineItemPriceActionSchema",
+                "setLineItemShippingDetails": "commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema",
+                "setLineItemTaxAmount": "commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema",
+                "setLineItemTaxRate": "commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema",
+                "setLineItemTotalPrice": "commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema",
+                "setLocale": "commercetools.schemas.StagedOrderSetLocaleActionSchema",
+                "setOrderNumber": "commercetools.schemas.StagedOrderSetOrderNumberActionSchema",
+                "setOrderTotalTax": "commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema",
+                "setParcelItems": "commercetools.schemas.StagedOrderSetParcelItemsActionSchema",
+                "setParcelMeasurements": "commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema",
+                "setParcelTrackingData": "commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema",
+                "setReturnPaymentState": "commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema",
+                "setReturnShipmentState": "commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema",
+                "setShippingAddress": "commercetools.schemas.StagedOrderSetShippingAddressActionSchema",
+                "setShippingAddressAndCustomShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema",
+                "setShippingAddressAndShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema",
+                "setShippingMethod": "commercetools.schemas.StagedOrderSetShippingMethodActionSchema",
+                "setShippingMethodTaxAmount": "commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema",
+                "setShippingMethodTaxRate": "commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema",
+                "setShippingRateInput": "commercetools.schemas.StagedOrderSetShippingRateInputActionSchema",
+                "transitionCustomLineItemState": "commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema",
+                "transitionLineItemState": "commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema",
+                "transitionState": "commercetools.schemas.StagedOrderTransitionStateActionSchema",
+                "updateItemShippingAddress": "commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema",
+                "updateSyncInfo": "commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
         data_key="stagedActions",
     )
     custom = marshmallow.fields.Nested(
@@ -3420,9 +3431,9 @@ class ProjectSchema(marshmallow.Schema):
     version = marshmallow.fields.Integer(allow_none=True)
     key = marshmallow.fields.String(allow_none=True)
     name = marshmallow.fields.String(allow_none=True)
-    countries = marshmallow.fields.String(many=True)
-    currencies = marshmallow.fields.String(many=True)
-    languages = marshmallow.fields.String(many=True)
+    countries = marshmallow.fields.List(marshmallow.fields.String())
+    currencies = marshmallow.fields.List(marshmallow.fields.String())
+    languages = marshmallow.fields.List(marshmallow.fields.String())
     created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
     trial_until = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="trialUntil"
@@ -3972,16 +3983,17 @@ class ShippingRateDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="freeAbove",
     )
-    tiers = helpers.Discriminator(
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "CartClassification": "commercetools.schemas.CartClassificationTierSchema",
-            "CartScore": "commercetools.schemas.CartScoreTierSchema",
-            "CartValue": "commercetools.schemas.CartValueTierSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    tiers = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "CartClassification": "commercetools.schemas.CartClassificationTierSchema",
+                "CartScore": "commercetools.schemas.CartScoreTierSchema",
+                "CartValue": "commercetools.schemas.CartValueTierSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
         missing=None,
     )
 
@@ -4070,16 +4082,17 @@ class ShippingRateSchema(marshmallow.Schema):
     is_matching = marshmallow.fields.Bool(
         allow_none=True, missing=None, data_key="isMatching"
     )
-    tiers = helpers.Discriminator(
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "CartClassification": "commercetools.schemas.CartClassificationTierSchema",
-            "CartScore": "commercetools.schemas.CartScoreTierSchema",
-            "CartValue": "commercetools.schemas.CartValueTierSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    tiers = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "CartClassification": "commercetools.schemas.CartClassificationTierSchema",
+                "CartScore": "commercetools.schemas.CartScoreTierSchema",
+                "CartValue": "commercetools.schemas.CartValueTierSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
 
     class Meta:
@@ -5236,35 +5249,36 @@ class CartDiscountSchema(ResourceSchema):
     requires_discount_code = marshmallow.fields.Bool(
         allow_none=True, data_key="requiresDiscountCode"
     )
-    references = helpers.Discriminator(
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas.CartReferenceSchema",
-            "category": "commercetools.schemas.CategoryReferenceSchema",
-            "channel": "commercetools.schemas.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
-            "order-edit": "commercetools.schemas.OrderEditReferenceSchema",
-            "order": "commercetools.schemas.OrderReferenceSchema",
-            "payment": "commercetools.schemas.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas.ProductReferenceSchema",
-            "review": "commercetools.schemas.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas.StateReferenceSchema",
-            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas.TypeReferenceSchema",
-            "zone": "commercetools.schemas.ZoneReferenceSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    references = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("typeId", "type_id"),
+            discriminator_schemas={
+                "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
+                "cart": "commercetools.schemas.CartReferenceSchema",
+                "category": "commercetools.schemas.CategoryReferenceSchema",
+                "channel": "commercetools.schemas.ChannelReferenceSchema",
+                "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
+                "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
+                "customer": "commercetools.schemas.CustomerReferenceSchema",
+                "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
+                "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
+                "order-edit": "commercetools.schemas.OrderEditReferenceSchema",
+                "order": "commercetools.schemas.OrderReferenceSchema",
+                "payment": "commercetools.schemas.PaymentReferenceSchema",
+                "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
+                "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
+                "product": "commercetools.schemas.ProductReferenceSchema",
+                "review": "commercetools.schemas.ReviewReferenceSchema",
+                "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
+                "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
+                "state": "commercetools.schemas.StateReferenceSchema",
+                "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
+                "type": "commercetools.schemas.TypeReferenceSchema",
+                "zone": "commercetools.schemas.ZoneReferenceSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
     stacking_mode = marshmallow_enum.EnumField(
         types.StackingMode, by_value=True, data_key="stackingMode"
@@ -6272,7 +6286,7 @@ class CustomObjectSchema(ResourceSchema):
 
 class CustomTokenizerSchema(SuggestTokenizerSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomTokenizer`."
-    inputs = marshmallow.fields.String(allow_none=True, many=True)
+    inputs = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6543,14 +6557,18 @@ class CustomerSchema(ResourceSchema):
     default_shipping_address_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="defaultShippingAddressId"
     )
-    shipping_address_ids = marshmallow.fields.String(
-        allow_none=True, many=True, missing=None, data_key="shippingAddressIds"
+    shipping_address_ids = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        missing=None,
+        data_key="shippingAddressIds",
     )
     default_billing_address_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="defaultBillingAddressId"
     )
-    billing_address_ids = marshmallow.fields.String(
-        allow_none=True, many=True, missing=None, data_key="billingAddressIds"
+    billing_address_ids = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        missing=None,
+        data_key="billingAddressIds",
     )
     is_email_verified = marshmallow.fields.Bool(
         allow_none=True, data_key="isEmailVerified"
@@ -6758,35 +6776,36 @@ class DiscountCodeSchema(ResourceSchema):
         allow_none=True, missing=None, data_key="cartPredicate"
     )
     is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
-    references = helpers.Discriminator(
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas.CartReferenceSchema",
-            "category": "commercetools.schemas.CategoryReferenceSchema",
-            "channel": "commercetools.schemas.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
-            "order-edit": "commercetools.schemas.OrderEditReferenceSchema",
-            "order": "commercetools.schemas.OrderReferenceSchema",
-            "payment": "commercetools.schemas.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas.ProductReferenceSchema",
-            "review": "commercetools.schemas.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas.StateReferenceSchema",
-            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas.TypeReferenceSchema",
-            "zone": "commercetools.schemas.ZoneReferenceSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    references = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("typeId", "type_id"),
+            discriminator_schemas={
+                "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
+                "cart": "commercetools.schemas.CartReferenceSchema",
+                "category": "commercetools.schemas.CategoryReferenceSchema",
+                "channel": "commercetools.schemas.ChannelReferenceSchema",
+                "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
+                "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
+                "customer": "commercetools.schemas.CustomerReferenceSchema",
+                "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
+                "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
+                "order-edit": "commercetools.schemas.OrderEditReferenceSchema",
+                "order": "commercetools.schemas.OrderReferenceSchema",
+                "payment": "commercetools.schemas.PaymentReferenceSchema",
+                "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
+                "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
+                "product": "commercetools.schemas.ProductReferenceSchema",
+                "review": "commercetools.schemas.ReviewReferenceSchema",
+                "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
+                "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
+                "state": "commercetools.schemas.StateReferenceSchema",
+                "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
+                "type": "commercetools.schemas.TypeReferenceSchema",
+                "zone": "commercetools.schemas.ZoneReferenceSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
     max_applications = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="maxApplications"
@@ -6800,7 +6819,7 @@ class DiscountCodeSchema(ResourceSchema):
         allow_none=True,
         missing=None,
     )
-    groups = marshmallow.fields.String(allow_none=True, many=True)
+    groups = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
     valid_from = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="validFrom"
     )
@@ -7743,34 +7762,35 @@ class OrderEditPagedQueryResponseSchema(PagedQueryResponseSchema):
 
 class OrderEditPreviewFailureSchema(OrderEditResultSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditPreviewFailure`."
-    errors = helpers.Discriminator(
-        discriminator_field=("code", "code"),
-        discriminator_schemas={
-            "access_denied": "commercetools.schemas.AccessDeniedErrorSchema",
-            "ConcurrentModification": "commercetools.schemas.ConcurrentModificationErrorSchema",
-            "DiscountCodeNonApplicable": "commercetools.schemas.DiscountCodeNonApplicableErrorSchema",
-            "DuplicateAttributeValue": "commercetools.schemas.DuplicateAttributeValueErrorSchema",
-            "DuplicateAttributeValues": "commercetools.schemas.DuplicateAttributeValuesErrorSchema",
-            "DuplicateField": "commercetools.schemas.DuplicateFieldErrorSchema",
-            "DuplicatePriceScope": "commercetools.schemas.DuplicatePriceScopeErrorSchema",
-            "DuplicateVariantValues": "commercetools.schemas.DuplicateVariantValuesErrorSchema",
-            "insufficient_scope": "commercetools.schemas.InsufficientScopeErrorSchema",
-            "InvalidCredentials": "commercetools.schemas.InvalidCredentialsErrorSchema",
-            "InvalidCurrentPassword": "commercetools.schemas.InvalidCurrentPasswordErrorSchema",
-            "InvalidField": "commercetools.schemas.InvalidFieldErrorSchema",
-            "InvalidInput": "commercetools.schemas.InvalidInputErrorSchema",
-            "InvalidItemShippingDetails": "commercetools.schemas.InvalidItemShippingDetailsErrorSchema",
-            "InvalidOperation": "commercetools.schemas.InvalidOperationErrorSchema",
-            "InvalidSubject": "commercetools.schemas.InvalidSubjectErrorSchema",
-            "invalid_token": "commercetools.schemas.InvalidTokenErrorSchema",
-            "OutOfStock": "commercetools.schemas.OutOfStockErrorSchema",
-            "PriceChanged": "commercetools.schemas.PriceChangedErrorSchema",
-            "RequiredField": "commercetools.schemas.RequiredFieldErrorSchema",
-            "ResourceNotFound": "commercetools.schemas.ResourceNotFoundErrorSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    errors = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("code", "code"),
+            discriminator_schemas={
+                "access_denied": "commercetools.schemas.AccessDeniedErrorSchema",
+                "ConcurrentModification": "commercetools.schemas.ConcurrentModificationErrorSchema",
+                "DiscountCodeNonApplicable": "commercetools.schemas.DiscountCodeNonApplicableErrorSchema",
+                "DuplicateAttributeValue": "commercetools.schemas.DuplicateAttributeValueErrorSchema",
+                "DuplicateAttributeValues": "commercetools.schemas.DuplicateAttributeValuesErrorSchema",
+                "DuplicateField": "commercetools.schemas.DuplicateFieldErrorSchema",
+                "DuplicatePriceScope": "commercetools.schemas.DuplicatePriceScopeErrorSchema",
+                "DuplicateVariantValues": "commercetools.schemas.DuplicateVariantValuesErrorSchema",
+                "insufficient_scope": "commercetools.schemas.InsufficientScopeErrorSchema",
+                "InvalidCredentials": "commercetools.schemas.InvalidCredentialsErrorSchema",
+                "InvalidCurrentPassword": "commercetools.schemas.InvalidCurrentPasswordErrorSchema",
+                "InvalidField": "commercetools.schemas.InvalidFieldErrorSchema",
+                "InvalidInput": "commercetools.schemas.InvalidInputErrorSchema",
+                "InvalidItemShippingDetails": "commercetools.schemas.InvalidItemShippingDetailsErrorSchema",
+                "InvalidOperation": "commercetools.schemas.InvalidOperationErrorSchema",
+                "InvalidSubject": "commercetools.schemas.InvalidSubjectErrorSchema",
+                "invalid_token": "commercetools.schemas.InvalidTokenErrorSchema",
+                "OutOfStock": "commercetools.schemas.OutOfStockErrorSchema",
+                "PriceChanged": "commercetools.schemas.PriceChangedErrorSchema",
+                "RequiredField": "commercetools.schemas.RequiredFieldErrorSchema",
+                "ResourceNotFound": "commercetools.schemas.ResourceNotFoundErrorSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
 
     class Meta:
@@ -7789,68 +7809,69 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    message_payloads = helpers.Discriminator(
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "CategoryCreated": "commercetools.schemas.CategoryCreatedMessageSchema",
-            "CategorySlugChanged": "commercetools.schemas.CategorySlugChangedMessageSchema",
-            "CustomLineItemStateTransition": "commercetools.schemas.CustomLineItemStateTransitionMessageSchema",
-            "CustomerAddressAdded": "commercetools.schemas.CustomerAddressAddedMessageSchema",
-            "CustomerAddressChanged": "commercetools.schemas.CustomerAddressChangedMessageSchema",
-            "CustomerAddressRemoved": "commercetools.schemas.CustomerAddressRemovedMessageSchema",
-            "CustomerCompanyNameSet": "commercetools.schemas.CustomerCompanyNameSetMessageSchema",
-            "CustomerCreated": "commercetools.schemas.CustomerCreatedMessageSchema",
-            "CustomerDateOfBirthSet": "commercetools.schemas.CustomerDateOfBirthSetMessageSchema",
-            "CustomerEmailChanged": "commercetools.schemas.CustomerEmailChangedMessageSchema",
-            "CustomerEmailVerified": "commercetools.schemas.CustomerEmailVerifiedMessageSchema",
-            "CustomerGroupSet": "commercetools.schemas.CustomerGroupSetMessageSchema",
-            "DeliveryAdded": "commercetools.schemas.DeliveryAddedMessageSchema",
-            "DeliveryAddressSet": "commercetools.schemas.DeliveryAddressSetMessageSchema",
-            "DeliveryItemsUpdated": "commercetools.schemas.DeliveryItemsUpdatedMessageSchema",
-            "DeliveryRemoved": "commercetools.schemas.DeliveryRemovedMessageSchema",
-            "InventoryEntryDeleted": "commercetools.schemas.InventoryEntryDeletedMessageSchema",
-            "LineItemStateTransition": "commercetools.schemas.LineItemStateTransitionMessageSchema",
-            "OrderBillingAddressSet": "commercetools.schemas.OrderBillingAddressSetMessageSchema",
-            "OrderCreated": "commercetools.schemas.OrderCreatedMessageSchema",
-            "OrderCustomerEmailSet": "commercetools.schemas.OrderCustomerEmailSetMessageSchema",
-            "OrderCustomerSet": "commercetools.schemas.OrderCustomerSetMessageSchema",
-            "OrderDeleted": "commercetools.schemas.OrderDeletedMessageSchema",
-            "OrderEditApplied": "commercetools.schemas.OrderEditAppliedMessageSchema",
-            "OrderImported": "commercetools.schemas.OrderImportedMessageSchema",
-            "OrderPaymentStateChanged": "commercetools.schemas.OrderPaymentChangedMessageSchema",
-            "ReturnInfoAdded": "commercetools.schemas.OrderReturnInfoAddedMessageSchema",
-            "OrderReturnShipmentStateChanged": "commercetools.schemas.OrderReturnShipmentStateChangedMessageSchema",
-            "OrderShipmentStateChanged": "commercetools.schemas.OrderShipmentStateChangedMessageSchema",
-            "OrderShippingAddressSet": "commercetools.schemas.OrderShippingAddressSetMessageSchema",
-            "OrderStateChanged": "commercetools.schemas.OrderStateChangedMessageSchema",
-            "OrderStateTransition": "commercetools.schemas.OrderStateTransitionMessageSchema",
-            "ParcelAddedToDelivery": "commercetools.schemas.ParcelAddedToDeliveryMessageSchema",
-            "ParcelItemsUpdated": "commercetools.schemas.ParcelItemsUpdatedMessageSchema",
-            "ParcelMeasurementsUpdated": "commercetools.schemas.ParcelMeasurementsUpdatedMessageSchema",
-            "ParcelRemovedFromDelivery": "commercetools.schemas.ParcelRemovedFromDeliveryMessageSchema",
-            "ParcelTrackingDataUpdated": "commercetools.schemas.ParcelTrackingDataUpdatedMessageSchema",
-            "PaymentCreated": "commercetools.schemas.PaymentCreatedMessageSchema",
-            "PaymentInteractionAdded": "commercetools.schemas.PaymentInteractionAddedMessageSchema",
-            "PaymentStatusInterfaceCodeSet": "commercetools.schemas.PaymentStatusInterfaceCodeSetMessageSchema",
-            "PaymentStatusStateTransition": "commercetools.schemas.PaymentStatusStateTransitionMessageSchema",
-            "PaymentTransactionAdded": "commercetools.schemas.PaymentTransactionAddedMessageSchema",
-            "PaymentTransactionStateChanged": "commercetools.schemas.PaymentTransactionStateChangedMessageSchema",
-            "ProductCreated": "commercetools.schemas.ProductCreatedMessageSchema",
-            "ProductDeleted": "commercetools.schemas.ProductDeletedMessageSchema",
-            "ProductImageAdded": "commercetools.schemas.ProductImageAddedMessageSchema",
-            "ProductPublished": "commercetools.schemas.ProductPublishedMessageSchema",
-            "ProductRevertedStagedChanges": "commercetools.schemas.ProductRevertedStagedChangesMessageSchema",
-            "ProductSlugChanged": "commercetools.schemas.ProductSlugChangedMessageSchema",
-            "ProductStateTransition": "commercetools.schemas.ProductStateTransitionMessageSchema",
-            "ProductUnpublished": "commercetools.schemas.ProductUnpublishedMessageSchema",
-            "ProductVariantDeleted": "commercetools.schemas.ProductVariantDeletedMessageSchema",
-            "ReviewCreated": "commercetools.schemas.ReviewCreatedMessageSchema",
-            "ReviewRatingSet": "commercetools.schemas.ReviewRatingSetMessageSchema",
-            "ReviewStateTransition": "commercetools.schemas.ReviewStateTransitionMessageSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    message_payloads = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "CategoryCreated": "commercetools.schemas.CategoryCreatedMessageSchema",
+                "CategorySlugChanged": "commercetools.schemas.CategorySlugChangedMessageSchema",
+                "CustomLineItemStateTransition": "commercetools.schemas.CustomLineItemStateTransitionMessageSchema",
+                "CustomerAddressAdded": "commercetools.schemas.CustomerAddressAddedMessageSchema",
+                "CustomerAddressChanged": "commercetools.schemas.CustomerAddressChangedMessageSchema",
+                "CustomerAddressRemoved": "commercetools.schemas.CustomerAddressRemovedMessageSchema",
+                "CustomerCompanyNameSet": "commercetools.schemas.CustomerCompanyNameSetMessageSchema",
+                "CustomerCreated": "commercetools.schemas.CustomerCreatedMessageSchema",
+                "CustomerDateOfBirthSet": "commercetools.schemas.CustomerDateOfBirthSetMessageSchema",
+                "CustomerEmailChanged": "commercetools.schemas.CustomerEmailChangedMessageSchema",
+                "CustomerEmailVerified": "commercetools.schemas.CustomerEmailVerifiedMessageSchema",
+                "CustomerGroupSet": "commercetools.schemas.CustomerGroupSetMessageSchema",
+                "DeliveryAdded": "commercetools.schemas.DeliveryAddedMessageSchema",
+                "DeliveryAddressSet": "commercetools.schemas.DeliveryAddressSetMessageSchema",
+                "DeliveryItemsUpdated": "commercetools.schemas.DeliveryItemsUpdatedMessageSchema",
+                "DeliveryRemoved": "commercetools.schemas.DeliveryRemovedMessageSchema",
+                "InventoryEntryDeleted": "commercetools.schemas.InventoryEntryDeletedMessageSchema",
+                "LineItemStateTransition": "commercetools.schemas.LineItemStateTransitionMessageSchema",
+                "OrderBillingAddressSet": "commercetools.schemas.OrderBillingAddressSetMessageSchema",
+                "OrderCreated": "commercetools.schemas.OrderCreatedMessageSchema",
+                "OrderCustomerEmailSet": "commercetools.schemas.OrderCustomerEmailSetMessageSchema",
+                "OrderCustomerSet": "commercetools.schemas.OrderCustomerSetMessageSchema",
+                "OrderDeleted": "commercetools.schemas.OrderDeletedMessageSchema",
+                "OrderEditApplied": "commercetools.schemas.OrderEditAppliedMessageSchema",
+                "OrderImported": "commercetools.schemas.OrderImportedMessageSchema",
+                "OrderPaymentStateChanged": "commercetools.schemas.OrderPaymentChangedMessageSchema",
+                "ReturnInfoAdded": "commercetools.schemas.OrderReturnInfoAddedMessageSchema",
+                "OrderReturnShipmentStateChanged": "commercetools.schemas.OrderReturnShipmentStateChangedMessageSchema",
+                "OrderShipmentStateChanged": "commercetools.schemas.OrderShipmentStateChangedMessageSchema",
+                "OrderShippingAddressSet": "commercetools.schemas.OrderShippingAddressSetMessageSchema",
+                "OrderStateChanged": "commercetools.schemas.OrderStateChangedMessageSchema",
+                "OrderStateTransition": "commercetools.schemas.OrderStateTransitionMessageSchema",
+                "ParcelAddedToDelivery": "commercetools.schemas.ParcelAddedToDeliveryMessageSchema",
+                "ParcelItemsUpdated": "commercetools.schemas.ParcelItemsUpdatedMessageSchema",
+                "ParcelMeasurementsUpdated": "commercetools.schemas.ParcelMeasurementsUpdatedMessageSchema",
+                "ParcelRemovedFromDelivery": "commercetools.schemas.ParcelRemovedFromDeliveryMessageSchema",
+                "ParcelTrackingDataUpdated": "commercetools.schemas.ParcelTrackingDataUpdatedMessageSchema",
+                "PaymentCreated": "commercetools.schemas.PaymentCreatedMessageSchema",
+                "PaymentInteractionAdded": "commercetools.schemas.PaymentInteractionAddedMessageSchema",
+                "PaymentStatusInterfaceCodeSet": "commercetools.schemas.PaymentStatusInterfaceCodeSetMessageSchema",
+                "PaymentStatusStateTransition": "commercetools.schemas.PaymentStatusStateTransitionMessageSchema",
+                "PaymentTransactionAdded": "commercetools.schemas.PaymentTransactionAddedMessageSchema",
+                "PaymentTransactionStateChanged": "commercetools.schemas.PaymentTransactionStateChangedMessageSchema",
+                "ProductCreated": "commercetools.schemas.ProductCreatedMessageSchema",
+                "ProductDeleted": "commercetools.schemas.ProductDeletedMessageSchema",
+                "ProductImageAdded": "commercetools.schemas.ProductImageAddedMessageSchema",
+                "ProductPublished": "commercetools.schemas.ProductPublishedMessageSchema",
+                "ProductRevertedStagedChanges": "commercetools.schemas.ProductRevertedStagedChangesMessageSchema",
+                "ProductSlugChanged": "commercetools.schemas.ProductSlugChangedMessageSchema",
+                "ProductStateTransition": "commercetools.schemas.ProductStateTransitionMessageSchema",
+                "ProductUnpublished": "commercetools.schemas.ProductUnpublishedMessageSchema",
+                "ProductVariantDeleted": "commercetools.schemas.ProductVariantDeletedMessageSchema",
+                "ReviewCreated": "commercetools.schemas.ReviewCreatedMessageSchema",
+                "ReviewRatingSet": "commercetools.schemas.ReviewRatingSetMessageSchema",
+                "ReviewStateTransition": "commercetools.schemas.ReviewStateTransitionMessageSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
         data_key="messagePayloads",
     )
 
@@ -7875,82 +7896,83 @@ class OrderEditSchema(ResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    staged_actions = helpers.Discriminator(
-        discriminator_field=("action", "action"),
-        discriminator_schemas={
-            "addCustomLineItem": "commercetools.schemas.StagedOrderAddCustomLineItemActionSchema",
-            "addDelivery": "commercetools.schemas.StagedOrderAddDeliveryActionSchema",
-            "addDiscountCode": "commercetools.schemas.StagedOrderAddDiscountCodeActionSchema",
-            "addItemShippingAddress": "commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema",
-            "addLineItem": "commercetools.schemas.StagedOrderAddLineItemActionSchema",
-            "addParcelToDelivery": "commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema",
-            "addPayment": "commercetools.schemas.StagedOrderAddPaymentActionSchema",
-            "addReturnInfo": "commercetools.schemas.StagedOrderAddReturnInfoActionSchema",
-            "addShoppingList": "commercetools.schemas.StagedOrderAddShoppingListActionSchema",
-            "changeCustomLineItemMoney": "commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema",
-            "changeCustomLineItemQuantity": "commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema",
-            "changeLineItemQuantity": "commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema",
-            "changeOrderState": "commercetools.schemas.StagedOrderChangeOrderStateActionSchema",
-            "changePaymentState": "commercetools.schemas.StagedOrderChangePaymentStateActionSchema",
-            "changeShipmentState": "commercetools.schemas.StagedOrderChangeShipmentStateActionSchema",
-            "changeTaxCalculationMode": "commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema",
-            "changeTaxMode": "commercetools.schemas.StagedOrderChangeTaxModeActionSchema",
-            "changeTaxRoundingMode": "commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema",
-            "importCustomLineItemState": "commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema",
-            "importLineItemState": "commercetools.schemas.StagedOrderImportLineItemStateActionSchema",
-            "removeCustomLineItem": "commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema",
-            "removeDelivery": "commercetools.schemas.StagedOrderRemoveDeliveryActionSchema",
-            "removeDiscountCode": "commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema",
-            "removeItemShippingAddress": "commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema",
-            "removeLineItem": "commercetools.schemas.StagedOrderRemoveLineItemActionSchema",
-            "removeParcelFromDelivery": "commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema",
-            "removePayment": "commercetools.schemas.StagedOrderRemovePaymentActionSchema",
-            "setBillingAddress": "commercetools.schemas.StagedOrderSetBillingAddressActionSchema",
-            "setCountry": "commercetools.schemas.StagedOrderSetCountryActionSchema",
-            "setCustomField": "commercetools.schemas.StagedOrderSetCustomFieldActionSchema",
-            "setCustomLineItemCustomField": "commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema",
-            "setCustomLineItemCustomType": "commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema",
-            "setCustomLineItemShippingDetails": "commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema",
-            "setCustomLineItemTaxAmount": "commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema",
-            "setCustomLineItemTaxRate": "commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema",
-            "setCustomShippingMethod": "commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema",
-            "setCustomType": "commercetools.schemas.StagedOrderSetCustomTypeActionSchema",
-            "setCustomerEmail": "commercetools.schemas.StagedOrderSetCustomerEmailActionSchema",
-            "setCustomerGroup": "commercetools.schemas.StagedOrderSetCustomerGroupActionSchema",
-            "setCustomerId": "commercetools.schemas.StagedOrderSetCustomerIdActionSchema",
-            "setDeliveryAddress": "commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema",
-            "setDeliveryItems": "commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema",
-            "setLineItemCustomField": "commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema",
-            "setLineItemCustomType": "commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema",
-            "setLineItemPrice": "commercetools.schemas.StagedOrderSetLineItemPriceActionSchema",
-            "setLineItemShippingDetails": "commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema",
-            "setLineItemTaxAmount": "commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema",
-            "setLineItemTaxRate": "commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema",
-            "setLineItemTotalPrice": "commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema",
-            "setLocale": "commercetools.schemas.StagedOrderSetLocaleActionSchema",
-            "setOrderNumber": "commercetools.schemas.StagedOrderSetOrderNumberActionSchema",
-            "setOrderTotalTax": "commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema",
-            "setParcelItems": "commercetools.schemas.StagedOrderSetParcelItemsActionSchema",
-            "setParcelMeasurements": "commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema",
-            "setParcelTrackingData": "commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema",
-            "setReturnPaymentState": "commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema",
-            "setReturnShipmentState": "commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema",
-            "setShippingAddress": "commercetools.schemas.StagedOrderSetShippingAddressActionSchema",
-            "setShippingAddressAndCustomShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema",
-            "setShippingAddressAndShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema",
-            "setShippingMethod": "commercetools.schemas.StagedOrderSetShippingMethodActionSchema",
-            "setShippingMethodTaxAmount": "commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema",
-            "setShippingMethodTaxRate": "commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema",
-            "setShippingRateInput": "commercetools.schemas.StagedOrderSetShippingRateInputActionSchema",
-            "transitionCustomLineItemState": "commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema",
-            "transitionLineItemState": "commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema",
-            "transitionState": "commercetools.schemas.StagedOrderTransitionStateActionSchema",
-            "updateItemShippingAddress": "commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema",
-            "updateSyncInfo": "commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    staged_actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addCustomLineItem": "commercetools.schemas.StagedOrderAddCustomLineItemActionSchema",
+                "addDelivery": "commercetools.schemas.StagedOrderAddDeliveryActionSchema",
+                "addDiscountCode": "commercetools.schemas.StagedOrderAddDiscountCodeActionSchema",
+                "addItemShippingAddress": "commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema",
+                "addLineItem": "commercetools.schemas.StagedOrderAddLineItemActionSchema",
+                "addParcelToDelivery": "commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema",
+                "addPayment": "commercetools.schemas.StagedOrderAddPaymentActionSchema",
+                "addReturnInfo": "commercetools.schemas.StagedOrderAddReturnInfoActionSchema",
+                "addShoppingList": "commercetools.schemas.StagedOrderAddShoppingListActionSchema",
+                "changeCustomLineItemMoney": "commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema",
+                "changeCustomLineItemQuantity": "commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema",
+                "changeLineItemQuantity": "commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema",
+                "changeOrderState": "commercetools.schemas.StagedOrderChangeOrderStateActionSchema",
+                "changePaymentState": "commercetools.schemas.StagedOrderChangePaymentStateActionSchema",
+                "changeShipmentState": "commercetools.schemas.StagedOrderChangeShipmentStateActionSchema",
+                "changeTaxCalculationMode": "commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema",
+                "changeTaxMode": "commercetools.schemas.StagedOrderChangeTaxModeActionSchema",
+                "changeTaxRoundingMode": "commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema",
+                "importCustomLineItemState": "commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema",
+                "importLineItemState": "commercetools.schemas.StagedOrderImportLineItemStateActionSchema",
+                "removeCustomLineItem": "commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema",
+                "removeDelivery": "commercetools.schemas.StagedOrderRemoveDeliveryActionSchema",
+                "removeDiscountCode": "commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema",
+                "removeItemShippingAddress": "commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema",
+                "removeLineItem": "commercetools.schemas.StagedOrderRemoveLineItemActionSchema",
+                "removeParcelFromDelivery": "commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema",
+                "removePayment": "commercetools.schemas.StagedOrderRemovePaymentActionSchema",
+                "setBillingAddress": "commercetools.schemas.StagedOrderSetBillingAddressActionSchema",
+                "setCountry": "commercetools.schemas.StagedOrderSetCountryActionSchema",
+                "setCustomField": "commercetools.schemas.StagedOrderSetCustomFieldActionSchema",
+                "setCustomLineItemCustomField": "commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema",
+                "setCustomLineItemCustomType": "commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema",
+                "setCustomLineItemShippingDetails": "commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema",
+                "setCustomLineItemTaxAmount": "commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema",
+                "setCustomLineItemTaxRate": "commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema",
+                "setCustomShippingMethod": "commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema",
+                "setCustomType": "commercetools.schemas.StagedOrderSetCustomTypeActionSchema",
+                "setCustomerEmail": "commercetools.schemas.StagedOrderSetCustomerEmailActionSchema",
+                "setCustomerGroup": "commercetools.schemas.StagedOrderSetCustomerGroupActionSchema",
+                "setCustomerId": "commercetools.schemas.StagedOrderSetCustomerIdActionSchema",
+                "setDeliveryAddress": "commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema",
+                "setDeliveryItems": "commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema",
+                "setLineItemCustomField": "commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema",
+                "setLineItemCustomType": "commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema",
+                "setLineItemPrice": "commercetools.schemas.StagedOrderSetLineItemPriceActionSchema",
+                "setLineItemShippingDetails": "commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema",
+                "setLineItemTaxAmount": "commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema",
+                "setLineItemTaxRate": "commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema",
+                "setLineItemTotalPrice": "commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema",
+                "setLocale": "commercetools.schemas.StagedOrderSetLocaleActionSchema",
+                "setOrderNumber": "commercetools.schemas.StagedOrderSetOrderNumberActionSchema",
+                "setOrderTotalTax": "commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema",
+                "setParcelItems": "commercetools.schemas.StagedOrderSetParcelItemsActionSchema",
+                "setParcelMeasurements": "commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema",
+                "setParcelTrackingData": "commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema",
+                "setReturnPaymentState": "commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema",
+                "setReturnShipmentState": "commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema",
+                "setShippingAddress": "commercetools.schemas.StagedOrderSetShippingAddressActionSchema",
+                "setShippingAddressAndCustomShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema",
+                "setShippingAddressAndShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema",
+                "setShippingMethod": "commercetools.schemas.StagedOrderSetShippingMethodActionSchema",
+                "setShippingMethodTaxAmount": "commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema",
+                "setShippingMethodTaxRate": "commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema",
+                "setShippingRateInput": "commercetools.schemas.StagedOrderSetShippingRateInputActionSchema",
+                "transitionCustomLineItemState": "commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema",
+                "transitionLineItemState": "commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema",
+                "transitionState": "commercetools.schemas.StagedOrderTransitionStateActionSchema",
+                "updateItemShippingAddress": "commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema",
+                "updateSyncInfo": "commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
         data_key="stagedActions",
     )
     custom = marshmallow.fields.Nested(
@@ -7994,19 +8016,20 @@ class OrderEditUpdateActionSchema(UpdateActionSchema):
 
 class OrderEditUpdateSchema(UpdateSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditUpdate`."
-    actions = helpers.Discriminator(
-        discriminator_field=("action", "action"),
-        discriminator_schemas={
-            "addStagedAction": "commercetools.schemas.OrderEditAddStagedActionActionSchema",
-            "setComment": "commercetools.schemas.OrderEditSetCommentActionSchema",
-            "setCustomField": "commercetools.schemas.OrderEditSetCustomFieldActionSchema",
-            "setCustomType": "commercetools.schemas.OrderEditSetCustomTypeActionSchema",
-            "setKey": "commercetools.schemas.OrderEditSetKeyActionSchema",
-            "setStagedActions": "commercetools.schemas.OrderEditSetStagedActionsActionSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addStagedAction": "commercetools.schemas.OrderEditAddStagedActionActionSchema",
+                "setComment": "commercetools.schemas.OrderEditSetCommentActionSchema",
+                "setCustomField": "commercetools.schemas.OrderEditSetCustomFieldActionSchema",
+                "setCustomType": "commercetools.schemas.OrderEditSetCustomTypeActionSchema",
+                "setKey": "commercetools.schemas.OrderEditSetKeyActionSchema",
+                "setStagedActions": "commercetools.schemas.OrderEditSetStagedActionsActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
     dry_run = marshmallow.fields.Bool(allow_none=True, data_key="dryRun")
 
@@ -8415,10 +8438,10 @@ class OrderUpdateSchema(UpdateSchema):
 
 class OutOfStockErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.OutOfStockError`."
-    line_items = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="lineItems"
+    line_items = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="lineItems"
     )
-    skus = marshmallow.fields.String(allow_none=True, many=True)
+    skus = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -8811,8 +8834,8 @@ class PaymentUpdateSchema(UpdateSchema):
 
 class PriceChangedErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.PriceChangedError`."
-    line_items = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="lineItems"
+    line_items = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="lineItems"
     )
     shipping = marshmallow.fields.Bool(allow_none=True)
 
@@ -8904,35 +8927,36 @@ class ProductDiscountSchema(ResourceSchema):
     predicate = marshmallow.fields.String(allow_none=True)
     sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
     is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
-    references = helpers.Discriminator(
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas.CartReferenceSchema",
-            "category": "commercetools.schemas.CategoryReferenceSchema",
-            "channel": "commercetools.schemas.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
-            "order-edit": "commercetools.schemas.OrderEditReferenceSchema",
-            "order": "commercetools.schemas.OrderReferenceSchema",
-            "payment": "commercetools.schemas.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas.ProductReferenceSchema",
-            "review": "commercetools.schemas.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas.StateReferenceSchema",
-            "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas.TypeReferenceSchema",
-            "zone": "commercetools.schemas.ZoneReferenceSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    references = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("typeId", "type_id"),
+            discriminator_schemas={
+                "cart-discount": "commercetools.schemas.CartDiscountReferenceSchema",
+                "cart": "commercetools.schemas.CartReferenceSchema",
+                "category": "commercetools.schemas.CategoryReferenceSchema",
+                "channel": "commercetools.schemas.ChannelReferenceSchema",
+                "key-value-document": "commercetools.schemas.CustomObjectReferenceSchema",
+                "customer-group": "commercetools.schemas.CustomerGroupReferenceSchema",
+                "customer": "commercetools.schemas.CustomerReferenceSchema",
+                "discount-code": "commercetools.schemas.DiscountCodeReferenceSchema",
+                "inventory-entry": "commercetools.schemas.InventoryEntryReferenceSchema",
+                "order-edit": "commercetools.schemas.OrderEditReferenceSchema",
+                "order": "commercetools.schemas.OrderReferenceSchema",
+                "payment": "commercetools.schemas.PaymentReferenceSchema",
+                "product-discount": "commercetools.schemas.ProductDiscountReferenceSchema",
+                "product-type": "commercetools.schemas.ProductTypeReferenceSchema",
+                "product": "commercetools.schemas.ProductReferenceSchema",
+                "review": "commercetools.schemas.ReviewReferenceSchema",
+                "shipping-method": "commercetools.schemas.ShippingMethodReferenceSchema",
+                "shopping-list": "commercetools.schemas.ShoppingListReferenceSchema",
+                "state": "commercetools.schemas.StateReferenceSchema",
+                "tax-category": "commercetools.schemas.TaxCategoryReferenceSchema",
+                "type": "commercetools.schemas.TypeReferenceSchema",
+                "zone": "commercetools.schemas.ZoneReferenceSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="validFrom"
@@ -13430,8 +13454,8 @@ class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
 
 class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategoryChangeAssetOrderAction`."
-    asset_order = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="assetOrder"
+    asset_order = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="assetOrder"
     )
 
     class Meta:
@@ -13646,7 +13670,9 @@ class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
     asset_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="assetKey"
     )
-    tags = marshmallow.fields.String(allow_none=True, many=True, missing=None)
+    tags = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -14459,7 +14485,7 @@ class DiscountCodeChangeCartDiscountsActionSchema(DiscountCodeUpdateActionSchema
 
 class DiscountCodeChangeGroupsActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeChangeGroupsAction`."
-    groups = marshmallow.fields.String(allow_none=True, many=True)
+    groups = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -15208,82 +15234,83 @@ class OrderEditSetKeyActionSchema(OrderEditUpdateActionSchema):
 
 class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditSetStagedActionsAction`."
-    staged_actions = helpers.Discriminator(
-        discriminator_field=("action", "action"),
-        discriminator_schemas={
-            "addCustomLineItem": "commercetools.schemas.StagedOrderAddCustomLineItemActionSchema",
-            "addDelivery": "commercetools.schemas.StagedOrderAddDeliveryActionSchema",
-            "addDiscountCode": "commercetools.schemas.StagedOrderAddDiscountCodeActionSchema",
-            "addItemShippingAddress": "commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema",
-            "addLineItem": "commercetools.schemas.StagedOrderAddLineItemActionSchema",
-            "addParcelToDelivery": "commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema",
-            "addPayment": "commercetools.schemas.StagedOrderAddPaymentActionSchema",
-            "addReturnInfo": "commercetools.schemas.StagedOrderAddReturnInfoActionSchema",
-            "addShoppingList": "commercetools.schemas.StagedOrderAddShoppingListActionSchema",
-            "changeCustomLineItemMoney": "commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema",
-            "changeCustomLineItemQuantity": "commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema",
-            "changeLineItemQuantity": "commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema",
-            "changeOrderState": "commercetools.schemas.StagedOrderChangeOrderStateActionSchema",
-            "changePaymentState": "commercetools.schemas.StagedOrderChangePaymentStateActionSchema",
-            "changeShipmentState": "commercetools.schemas.StagedOrderChangeShipmentStateActionSchema",
-            "changeTaxCalculationMode": "commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema",
-            "changeTaxMode": "commercetools.schemas.StagedOrderChangeTaxModeActionSchema",
-            "changeTaxRoundingMode": "commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema",
-            "importCustomLineItemState": "commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema",
-            "importLineItemState": "commercetools.schemas.StagedOrderImportLineItemStateActionSchema",
-            "removeCustomLineItem": "commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema",
-            "removeDelivery": "commercetools.schemas.StagedOrderRemoveDeliveryActionSchema",
-            "removeDiscountCode": "commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema",
-            "removeItemShippingAddress": "commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema",
-            "removeLineItem": "commercetools.schemas.StagedOrderRemoveLineItemActionSchema",
-            "removeParcelFromDelivery": "commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema",
-            "removePayment": "commercetools.schemas.StagedOrderRemovePaymentActionSchema",
-            "setBillingAddress": "commercetools.schemas.StagedOrderSetBillingAddressActionSchema",
-            "setCountry": "commercetools.schemas.StagedOrderSetCountryActionSchema",
-            "setCustomField": "commercetools.schemas.StagedOrderSetCustomFieldActionSchema",
-            "setCustomLineItemCustomField": "commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema",
-            "setCustomLineItemCustomType": "commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema",
-            "setCustomLineItemShippingDetails": "commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema",
-            "setCustomLineItemTaxAmount": "commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema",
-            "setCustomLineItemTaxRate": "commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema",
-            "setCustomShippingMethod": "commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema",
-            "setCustomType": "commercetools.schemas.StagedOrderSetCustomTypeActionSchema",
-            "setCustomerEmail": "commercetools.schemas.StagedOrderSetCustomerEmailActionSchema",
-            "setCustomerGroup": "commercetools.schemas.StagedOrderSetCustomerGroupActionSchema",
-            "setCustomerId": "commercetools.schemas.StagedOrderSetCustomerIdActionSchema",
-            "setDeliveryAddress": "commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema",
-            "setDeliveryItems": "commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema",
-            "setLineItemCustomField": "commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema",
-            "setLineItemCustomType": "commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema",
-            "setLineItemPrice": "commercetools.schemas.StagedOrderSetLineItemPriceActionSchema",
-            "setLineItemShippingDetails": "commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema",
-            "setLineItemTaxAmount": "commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema",
-            "setLineItemTaxRate": "commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema",
-            "setLineItemTotalPrice": "commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema",
-            "setLocale": "commercetools.schemas.StagedOrderSetLocaleActionSchema",
-            "setOrderNumber": "commercetools.schemas.StagedOrderSetOrderNumberActionSchema",
-            "setOrderTotalTax": "commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema",
-            "setParcelItems": "commercetools.schemas.StagedOrderSetParcelItemsActionSchema",
-            "setParcelMeasurements": "commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema",
-            "setParcelTrackingData": "commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema",
-            "setReturnPaymentState": "commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema",
-            "setReturnShipmentState": "commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema",
-            "setShippingAddress": "commercetools.schemas.StagedOrderSetShippingAddressActionSchema",
-            "setShippingAddressAndCustomShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema",
-            "setShippingAddressAndShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema",
-            "setShippingMethod": "commercetools.schemas.StagedOrderSetShippingMethodActionSchema",
-            "setShippingMethodTaxAmount": "commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema",
-            "setShippingMethodTaxRate": "commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema",
-            "setShippingRateInput": "commercetools.schemas.StagedOrderSetShippingRateInputActionSchema",
-            "transitionCustomLineItemState": "commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema",
-            "transitionLineItemState": "commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema",
-            "transitionState": "commercetools.schemas.StagedOrderTransitionStateActionSchema",
-            "updateItemShippingAddress": "commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema",
-            "updateSyncInfo": "commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema",
-        },
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    staged_actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addCustomLineItem": "commercetools.schemas.StagedOrderAddCustomLineItemActionSchema",
+                "addDelivery": "commercetools.schemas.StagedOrderAddDeliveryActionSchema",
+                "addDiscountCode": "commercetools.schemas.StagedOrderAddDiscountCodeActionSchema",
+                "addItemShippingAddress": "commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema",
+                "addLineItem": "commercetools.schemas.StagedOrderAddLineItemActionSchema",
+                "addParcelToDelivery": "commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema",
+                "addPayment": "commercetools.schemas.StagedOrderAddPaymentActionSchema",
+                "addReturnInfo": "commercetools.schemas.StagedOrderAddReturnInfoActionSchema",
+                "addShoppingList": "commercetools.schemas.StagedOrderAddShoppingListActionSchema",
+                "changeCustomLineItemMoney": "commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema",
+                "changeCustomLineItemQuantity": "commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema",
+                "changeLineItemQuantity": "commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema",
+                "changeOrderState": "commercetools.schemas.StagedOrderChangeOrderStateActionSchema",
+                "changePaymentState": "commercetools.schemas.StagedOrderChangePaymentStateActionSchema",
+                "changeShipmentState": "commercetools.schemas.StagedOrderChangeShipmentStateActionSchema",
+                "changeTaxCalculationMode": "commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema",
+                "changeTaxMode": "commercetools.schemas.StagedOrderChangeTaxModeActionSchema",
+                "changeTaxRoundingMode": "commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema",
+                "importCustomLineItemState": "commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema",
+                "importLineItemState": "commercetools.schemas.StagedOrderImportLineItemStateActionSchema",
+                "removeCustomLineItem": "commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema",
+                "removeDelivery": "commercetools.schemas.StagedOrderRemoveDeliveryActionSchema",
+                "removeDiscountCode": "commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema",
+                "removeItemShippingAddress": "commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema",
+                "removeLineItem": "commercetools.schemas.StagedOrderRemoveLineItemActionSchema",
+                "removeParcelFromDelivery": "commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema",
+                "removePayment": "commercetools.schemas.StagedOrderRemovePaymentActionSchema",
+                "setBillingAddress": "commercetools.schemas.StagedOrderSetBillingAddressActionSchema",
+                "setCountry": "commercetools.schemas.StagedOrderSetCountryActionSchema",
+                "setCustomField": "commercetools.schemas.StagedOrderSetCustomFieldActionSchema",
+                "setCustomLineItemCustomField": "commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema",
+                "setCustomLineItemCustomType": "commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema",
+                "setCustomLineItemShippingDetails": "commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema",
+                "setCustomLineItemTaxAmount": "commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema",
+                "setCustomLineItemTaxRate": "commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema",
+                "setCustomShippingMethod": "commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema",
+                "setCustomType": "commercetools.schemas.StagedOrderSetCustomTypeActionSchema",
+                "setCustomerEmail": "commercetools.schemas.StagedOrderSetCustomerEmailActionSchema",
+                "setCustomerGroup": "commercetools.schemas.StagedOrderSetCustomerGroupActionSchema",
+                "setCustomerId": "commercetools.schemas.StagedOrderSetCustomerIdActionSchema",
+                "setDeliveryAddress": "commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema",
+                "setDeliveryItems": "commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema",
+                "setLineItemCustomField": "commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema",
+                "setLineItemCustomType": "commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema",
+                "setLineItemPrice": "commercetools.schemas.StagedOrderSetLineItemPriceActionSchema",
+                "setLineItemShippingDetails": "commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema",
+                "setLineItemTaxAmount": "commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema",
+                "setLineItemTaxRate": "commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema",
+                "setLineItemTotalPrice": "commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema",
+                "setLocale": "commercetools.schemas.StagedOrderSetLocaleActionSchema",
+                "setOrderNumber": "commercetools.schemas.StagedOrderSetOrderNumberActionSchema",
+                "setOrderTotalTax": "commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema",
+                "setParcelItems": "commercetools.schemas.StagedOrderSetParcelItemsActionSchema",
+                "setParcelMeasurements": "commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema",
+                "setParcelTrackingData": "commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema",
+                "setReturnPaymentState": "commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema",
+                "setReturnShipmentState": "commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema",
+                "setShippingAddress": "commercetools.schemas.StagedOrderSetShippingAddressActionSchema",
+                "setShippingAddressAndCustomShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema",
+                "setShippingAddressAndShippingMethod": "commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema",
+                "setShippingMethod": "commercetools.schemas.StagedOrderSetShippingMethodActionSchema",
+                "setShippingMethodTaxAmount": "commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema",
+                "setShippingMethodTaxRate": "commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema",
+                "setShippingRateInput": "commercetools.schemas.StagedOrderSetShippingRateInputActionSchema",
+                "transitionCustomLineItemState": "commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema",
+                "transitionLineItemState": "commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema",
+                "transitionState": "commercetools.schemas.StagedOrderTransitionStateActionSchema",
+                "updateItemShippingAddress": "commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema",
+                "updateSyncInfo": "commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
         data_key="stagedActions",
     )
 
@@ -16421,8 +16448,8 @@ class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
-    asset_order = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="assetOrder"
+    asset_order = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="assetOrder"
     )
 
     class Meta:
@@ -16973,7 +17000,9 @@ class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
     asset_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="assetKey"
     )
-    tags = marshmallow.fields.String(allow_none=True, many=True, missing=None)
+    tags = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -17627,7 +17656,7 @@ class ProductTypeRemoveEnumValuesActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
         allow_none=True, data_key="attributeName"
     )
-    keys = marshmallow.fields.String(allow_none=True, many=True)
+    keys = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -17681,7 +17710,7 @@ class ProductUnpublishActionSchema(ProductUpdateActionSchema):
 
 class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProjectChangeCountriesAction`."
-    countries = marshmallow.fields.String(many=True)
+    countries = marshmallow.fields.List(marshmallow.fields.String())
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -17694,7 +17723,7 @@ class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
 
 class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProjectChangeCurrenciesAction`."
-    currencies = marshmallow.fields.String(many=True)
+    currencies = marshmallow.fields.List(marshmallow.fields.String())
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -17707,7 +17736,7 @@ class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
 
 class ProjectChangeLanguagesActionSchema(ProjectUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProjectChangeLanguagesAction`."
-    languages = marshmallow.fields.String(many=True)
+    languages = marshmallow.fields.List(marshmallow.fields.String())
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -18205,8 +18234,8 @@ class ShoppingListChangeLineItemQuantityActionSchema(ShoppingListUpdateActionSch
 
 class ShoppingListChangeLineItemsOrderActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeLineItemsOrderAction`."
-    line_item_order = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="lineItemOrder"
+    line_item_order = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="lineItemOrder"
     )
 
     class Meta:
@@ -18267,8 +18296,8 @@ class ShoppingListChangeTextLineItemQuantityActionSchema(
 
 class ShoppingListChangeTextLineItemsOrderActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeTextLineItemsOrderAction`."
-    text_line_item_order = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="textLineItemOrder"
+    text_line_item_order = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="textLineItemOrder"
     )
 
     class Meta:
@@ -18942,7 +18971,7 @@ class TypeAddLocalizedEnumValueActionSchema(TypeUpdateActionSchema):
 class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeEnumValueOrderAction`."
     field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
-    keys = marshmallow.fields.String(allow_none=True, many=True)
+    keys = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -18969,8 +18998,8 @@ class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeFieldDefinitionOrderAction`."
-    field_names = marshmallow.fields.String(
-        allow_none=True, many=True, data_key="fieldNames"
+    field_names = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="fieldNames"
     )
 
     class Meta:
@@ -19012,7 +19041,7 @@ class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
 class TypeChangeLocalizedEnumValueOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeLocalizedEnumValueOrderAction`."
     field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
-    keys = marshmallow.fields.String(allow_none=True, many=True)
+    keys = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
         unknown = marshmallow.EXCLUDE

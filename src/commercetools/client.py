@@ -19,8 +19,6 @@ from commercetools.services.products import ProductService
 from commercetools.services.project import ProjectService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
 
-env = os.environ.get
-
 
 class CommercetoolsError(Exception):
     def __init__(self, message, response) -> None:

@@ -18,6 +18,7 @@ from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
 from commercetools.services.project import ProjectService
 from commercetools.services.tax_categories import TaxCategoryService
+from commercetools.services.types import TypeService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
 
 
@@ -229,3 +230,7 @@ class Client:
     @property
     def tax_categories(self) -> TaxCategoryService:
         return TaxCategoryService(self)
+
+    @property
+    def types(self) -> TypeService:
+        return TypeService(self)

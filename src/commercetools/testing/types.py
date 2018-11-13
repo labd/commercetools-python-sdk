@@ -9,45 +9,28 @@ from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
-class ProductsModel(BaseModel):
+class TypesModel(BaseModel):
     def add(self, id, obj):
-        obj = self.convert_product_draft(obj, id)
+        obj = self.add_type(obj, id)
         self.objects[obj.id] = obj
         return obj
 
-    def convert_product_draft(self, obj: types.ProductDraft, id=None):
-        product = types.Product(
+    def add_type(self, obj, id=None):
+        return types.Type(
             id=id or str(uuid.uuid4()),
-            key=obj.key,
-            product_type=obj.product_type,
             version=1,
+            name=obj.name,
+            description=obj.description,
+            key=obj.key,
+            resource_type_ids=obj.resource_type_ids,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),
         )
 
-        product_data = types.ProductData(
-            name=obj.name,
-            categories=obj.categories,
-            category_order_hints=obj.category_order_hints,
-            description=obj.description,
-            slug=obj.slug,
-        )
 
-        if obj.publish:
-            product.master_data = types.ProductCatalogData(
-                staged=None, current=product_data, published=True
-            )
-        else:
-            product.master_data = types.ProductCatalogData(
-                staged=product_data, current=None, published=False
-            )
-
-        return product
-
-
-class ProductsBackend(ServiceBackend):
-    service_path = "products"
-    model_class = ProductsModel
+class TypesBackend(ServiceBackend):
+    service_path = "types"
+    model_class = TypesModel
 
     def urls(self):
         return [
@@ -61,7 +44,7 @@ class ProductsBackend(ServiceBackend):
 
     @property
     def path_prefix(self):
-        return r"/(?P<project>[^/]+)/products/?(?P<path>.*)?"
+        return r"/(?P<project>[^/]+)/types/?(?P<path>.*)?"
 
     def query(self, request):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
@@ -75,41 +58,41 @@ class ProductsBackend(ServiceBackend):
             "offset": 0,
             "results": results,
         }
-        content = schemas.ProductPagedQueryResponseSchema().dumps(data)
+        content = schemas.TypePagedQueryResponseSchema().dumps(data)
         return create_response(request, text=content)
 
     def create(self, request):
-        obj = schemas.ProductDraftSchema().loads(request.body)
+        obj = schemas.TypeDraftSchema().loads(request.body)
         data = self.model.add(id, obj)
-        content = schemas.ProductSchema().dumps(data)
+        content = schemas.TypeSchema().dumps(data)
         return create_response(request, text=content)
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            content = schemas.ProductSchema().dumps(obj)
+            content = schemas.TypeSchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)
 
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            content = schemas.ProductSchema().dumps(obj)
+            content = schemas.TypeSchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)
 
     def update_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            schemas.ProductUpdateSchema().loads(request.body)
-            content = schemas.ProductSchema().dumps(obj)
+            schemas.TypeUpdateSchema().loads(request.body)
+            content = schemas.TypeSchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)
 
     def update_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            schemas.ProductUpdateSchema().loads(request.body)
-            content = schemas.ProductSchema().dumps(obj)
+            schemas.TypeUpdateSchema().loads(request.body)
+            content = schemas.TypeSchema().dumps(obj)
             return create_response(request, text=content)
         return create_response(request, status_code=404)

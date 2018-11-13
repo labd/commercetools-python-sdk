@@ -11,13 +11,13 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 class PaymentsModel(BaseModel):
     def add(self, id, obj):
-        obj = self.convert_payment_draft(obj)
+        obj = self.convert_payment_draft(obj, id)
         self.objects[obj.id] = obj
         return obj
 
-    def convert_payment_draft(self, obj: types.PaymentDraft) -> types.Payment:
+    def convert_payment_draft(self, obj: types.PaymentDraft, id=None) -> types.Payment:
         payment = types.Payment(
-            id=str(uuid.uuid4()),
+            id=id or str(uuid.uuid4()),
             key=obj.key,
             version=1,
             created_at=datetime.datetime.now(),

@@ -11,13 +11,13 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 class ProductTypesModel(BaseModel):
     def add(self, id, obj):
-        obj = self.add_product_type(obj)
+        obj = self.add_product_type(obj, id)
         self.objects[obj.id] = obj
         return obj
 
-    def add_product_type(self, obj):
+    def add_product_type(self, obj, id=None):
         return types.ProductType(
-            id=str(uuid.uuid4()),
+            id=id or str(uuid.uuid4()),
             version=1,
             name=obj.name,
             description=obj.description,

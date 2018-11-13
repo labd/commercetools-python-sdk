@@ -12,7 +12,7 @@ from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
 from commercetools.testing.project import ProjectBackend
-
+from commercetools.testing.types import TypesBackend
 
 class BackendRepository:
     def __init__(self):
@@ -25,6 +25,7 @@ class BackendRepository:
         self.products = ProductsBackend()
         self.product_projections = ProductProjectionsBackend(model=self.products.model)
         self.product_types = ProductTypesBackend()
+        self.types = TypesBackend()
 
     def register(self, adapter):
         backends = [
@@ -37,6 +38,7 @@ class BackendRepository:
             "product_projections",
             "product_types",
             "project",
+            "types",
         ]
         for backend_name in backends:
             backend = getattr(self, backend_name)

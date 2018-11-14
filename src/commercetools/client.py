@@ -11,6 +11,7 @@ from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
 from commercetools.services.custom_objects import CustomObjectService
+from commercetools.services.inventory import InventoryService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
@@ -200,8 +201,20 @@ class Client:
         return CartService(self)
 
     @property
+    def cart_discounts(self):
+        raise NotImplementedError()
+
+    @property
     def channels(self) -> ChannelService:
         return ChannelService(self)
+
+    @property
+    def discount_codes(self):
+        raise NotImplementedError()
+
+    @property
+    def inventory(self):
+        raise InventoryService(self)
 
     @property
     def orders(self) -> OrderService:
@@ -210,6 +223,10 @@ class Client:
     @property
     def products(self) -> ProductService:
         return ProductService(self)
+
+    @property
+    def product_discounts(self):
+        raise NotImplementedError()
 
     @property
     def project(self) -> ProjectService:
@@ -226,6 +243,10 @@ class Client:
     @property
     def product_types(self) -> ProductTypeService:
         return ProductTypeService(self)
+
+    @property
+    def reviews(self):
+        raise NotImplementedError()
 
     @property
     def tax_categories(self) -> TaxCategoryService:

@@ -48,6 +48,15 @@ Client.custom_objects
     :show-inheritance:
 
 
+Client.inventory
+~~~~~~~~~~~~~~~~
+
+.. autoclass:: commercetools.services.channels.InventoryService
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 Client.orders
 ~~~~~~~~~~~~~
 

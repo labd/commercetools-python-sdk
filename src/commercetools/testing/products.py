@@ -31,6 +31,7 @@ class ProductsModel(BaseModel):
             category_order_hints=obj.category_order_hints,
             description=obj.description,
             slug=obj.slug,
+            master_variant=obj.master_variant,
         )
 
         if obj.publish:

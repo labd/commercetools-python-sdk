@@ -30,17 +30,17 @@ class ProductsModel(BaseModel):
             categories=obj.categories,
             category_order_hints=obj.category_order_hints,
             description=obj.description,
-            slug=obj.slug,
             master_variant=obj.master_variant,
+            slug=obj.slug or types.LocalizedString(),
         )
 
         if obj.publish:
             product.master_data = types.ProductCatalogData(
-                staged=None, current=product_data, published=True
+                staged=None, current=product_data, published=True,
             )
         else:
             product.master_data = types.ProductCatalogData(
-                staged=product_data, current=None, published=False
+                staged=product_data, current=None, published=False,
             )
 
         return product

@@ -1,6 +1,5 @@
 import typing
 from typing import Optional
-from uuid import UUID
 
 from commercetools import schemas, types
 from commercetools.services import abstract

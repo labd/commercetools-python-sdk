@@ -214,7 +214,7 @@ class Client:
 
     @property
     def inventory(self):
-        raise InventoryService(self)
+        return InventoryService(self)
 
     @property
     def orders(self) -> OrderService:

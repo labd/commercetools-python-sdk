@@ -17,11 +17,11 @@ class InventoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class InventoryService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Inventory]:
+    def get_by_id(self, id: str) -> Optional[types.InventoryEntry]:
         return self._client._get(f"inventory/{id}", {}, schemas.InventorySchema)
 
-    def get_by_key(self, key: str) -> types.Inventory:
-        return self._client._get(f"inventory/key={key}", {}, schemas.InventorySchema)
+    def get_by_key(self, key: str) -> types.InventoryEntry:
+        return self._client._get(f"inventory/key={key}", {}, schemas.InventoryEntrySchema)
 
     def query(
         self,
@@ -44,27 +44,27 @@ class InventoryService(abstract.AbstractService):
             "inventory", params, schemas.InventoryPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.InventoryDraft) -> types.Inventory:
+    def create(self, draft: types.InventoryEntryDraft) -> types.InventoryEntry:
         return self._client._post(
-            "inventory", {}, draft, schemas.InventoryDraftSchema, schemas.InventorySchema
+            "inventory", {}, draft, schemas.InventoryEntryDraftSchema, schemas.InventoryEntrySchema
         )
 
     def update_by_id(
         self, id: str, version: int, actions: List[types.InventoryUpdateAction]
-    ) -> types.Inventory:
+    ) -> types.InventoryEntry:
         update_action = types.InventoryUpdate(version=version, actions=actions)
         return self._client._post(
             f"inventory/{id}",
             {},
             update_action,
             schemas.InventoryUpdateSchema,
-            schemas.InventorySchema,
+            schemas.InventoryEntrySchema,
         )
 
     def delete_by_id(
         self, id: str, version: int, data_erasure: bool = False
-    ) -> types.Inventory:
+    ) -> types.InventoryEntry:
         params = InventoryDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
         )
-        return self._client._delete(f"inventory/{id}", params, schemas.InventorySchema)
+        return self._client._delete(f"inventory/{id}", params, schemas.InventoryEntrySchema)

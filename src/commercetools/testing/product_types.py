@@ -16,8 +16,9 @@ class ProductTypesModel(BaseModel):
         return obj
 
     def add_product_type(self, obj, id=None):
+        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.ProductType(
-            id=id or str(uuid.uuid4()),
+            id=object_id,
             version=1,
             name=obj.name,
             description=obj.description,
@@ -62,7 +63,7 @@ class ProductTypesBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.ProductTypeDraftSchema().loads(request.body)
-        data = self.model.add(id, obj)
+        data = self.model.add(None, obj)
         content = schemas.ProductTypeSchema().dumps(data)
         return create_response(request, text=content)
 

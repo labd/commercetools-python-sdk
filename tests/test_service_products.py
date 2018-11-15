@@ -1,3 +1,4 @@
+import uuid
 import pytest
 import requests_mock
 from requests.exceptions import HTTPError
@@ -55,7 +56,7 @@ def test_product_update(client):
     """
     product = client.products.create(types.ProductDraft(key="test-product"))
 
-    assert product.id
+    assert uuid.UUID(product.id)
     assert product.key == "test-product"
 
     product = client.products.update_by_id(

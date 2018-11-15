@@ -16,8 +16,10 @@ class ProductsModel(BaseModel):
         return obj
 
     def convert_product_draft(self, obj: types.ProductDraft, id=None):
+        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
+
         product = types.Product(
-            id=id or str(uuid.uuid4()),
+            id=object_id,
             key=obj.key,
             product_type=obj.product_type,
             version=1,
@@ -81,7 +83,7 @@ class ProductsBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.ProductDraftSchema().loads(request.body)
-        data = self.model.add(id, obj)
+        data = self.model.add(None, obj)
         content = schemas.ProductSchema().dumps(data)
         return create_response(request, text=content)
 

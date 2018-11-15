@@ -4,6 +4,8 @@ import typing
 import requests
 from marshmallow.base import SchemaABC
 from oauthlib.oauth2 import BackendApplicationClient
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from requests_oauthlib import OAuth2Session
 
 from commercetools import schemas
@@ -77,6 +79,13 @@ class Client:
             },
             token_updater=self._save_token,
         )
+
+        # Register retry handling for Connection errors and 502, 503, 504.
+        retry = Retry(status=3, connect=3, status_forcelist=[502, 503, 504])
+        adapter = HTTPAdapter(max_retries=retry)
+        self._http_client.mount("http://", adapter)
+        self._http_client.mount("https://", adapter)
+
         if token:
             self._http_client.token = token
         else:
@@ -156,6 +165,7 @@ class Client:
     def _process_error(self, response: requests.Response) -> None:
         if not response.content:
             response.raise_for_status()
+        print(response.content)
         obj = schemas.ErrorResponseSchema().loads(response.content)
         raise CommercetoolsError(obj.message, obj)
 

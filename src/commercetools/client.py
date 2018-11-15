@@ -165,7 +165,6 @@ class Client:
     def _process_error(self, response: requests.Response) -> None:
         if not response.content:
             response.raise_for_status()
-        print(response.content)
         obj = schemas.ErrorResponseSchema().loads(response.content)
         raise CommercetoolsError(obj.message, obj)
 

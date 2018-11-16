@@ -1,4 +1,6 @@
+import uuid
 import re
+from commercetools import types
 import typing
 
 import requests_mock
@@ -10,14 +12,18 @@ class BaseModel:
 
     def add(self, obj, id=None):
         obj = self._create_from_draft(obj, id)
-        self.objects[obj.id] = obj
+        key = uuid.UUID(obj.id)
+        self.objects[key] = obj
         return obj
 
     def _create_from_draft(self, obj, id=None):
         raise NotImplementedError()
 
     def get_by_id(self, id):
-        return self.objects.get(id)
+        try:
+            return self.objects.get(uuid.UUID(id))
+        except ValueError:
+            return None
 
     def get_by_key(self, key):
         for obj in self.objects.values():

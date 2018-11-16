@@ -17,7 +17,7 @@ codegen_requires = ["PyYAML==3.13", "astunparse==1.6.1", "black==18.9b0", "isort
 docs_require = [
     "Sphinx>=1.8.1",
     "sphinx-rtd-theme==0.4.2",
-    "sphinx-autodoc-typehints==1.3.0",
+    "sphinx-autodoc-typehints==1.4.0",
 ]
 
 tests_require = [
@@ -44,7 +44,7 @@ with open("README.rst") as fh:
 
 setup(
     name="commercetools",
-    version="1.3.0",
+    version="1.4.0",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",

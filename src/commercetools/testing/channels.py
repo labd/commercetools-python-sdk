@@ -28,7 +28,7 @@ class ChannelsModel(BaseModel):
 
 
 class ChannelsBackend(ServiceBackend):
-    service_path = "categories"
+    service_path = "channels"
     model_class = ChannelsModel
 
     def urls(self):
@@ -38,10 +38,6 @@ class ChannelsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
-
-    @property
-    def path_prefix(self):
-        return r"/(?P<project>[^/]+)/channels/?(?P<path>.*)?"
 
     def query(self, request):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)

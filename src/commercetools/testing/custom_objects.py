@@ -38,10 +38,6 @@ class CustomObjectsBackend(ServiceBackend):
             ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
         ]
 
-    @property
-    def path_prefix(self):
-        return r"/(?P<project>[^/]+)/custom-objects/?(?P<path>.*)?"
-
     def query(self, request):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())

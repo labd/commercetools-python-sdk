@@ -9,7 +9,7 @@ from commercetools.testing.abstract import ServiceBackend
 
 
 class ProductProjectionsBackend(ServiceBackend):
-    service_path = "product_projections"
+    service_path = "product-projections"
 
     def urls(self):
         return [
@@ -17,10 +17,6 @@ class ProductProjectionsBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
         ]
-
-    @property
-    def path_prefix(self):
-        return r"/(?P<project>[^/]+)/product-projections/?(?P<path>.*)?"
 
     def query(self, request):
         params = utils.parse_request_params(ProductProjectionsQuerySchema, request)

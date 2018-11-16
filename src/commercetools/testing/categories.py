@@ -38,10 +38,6 @@ class CategoriesBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
 
-    @property
-    def path_prefix(self):
-        return r"/(?P<project>[^/]+)/categories/?(?P<path>.*)?"
-
     def query(self, request):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())

@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import requests_mock
 import wrapt
 
+from commercetools.testing.abstract import BaseBackend
 from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend
 from commercetools.testing.channels import ChannelsBackend
@@ -29,21 +30,10 @@ class BackendRepository:
         self.types = TypesBackend()
 
     def register(self, adapter):
-        backends = [
-            "auth",
-            "categories",
-            "channels",
-            "custom_objects",
-            "payments",
-            "products",
-            "product_projections",
-            "product_types",
-            "project",
-            "types",
-        ]
-        for backend_name in backends:
-            backend = getattr(self, backend_name)
-            backend.register(adapter)
+        # Bit of a hack, but it works and makes life easier so hey :-)
+        for name, value in self.__dict__.items():
+            if isinstance(value, BaseBackend):
+                value.register(adapter)
         self.requests_mock = adapter
 
 

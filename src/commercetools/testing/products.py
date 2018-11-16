@@ -1,4 +1,5 @@
 import datetime
+import typing
 import uuid
 
 from requests_mock import create_response
@@ -10,16 +11,13 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ProductsModel(BaseModel):
-    def add(self, id, obj):
-        obj = self.convert_product_draft(obj, id)
-        self.objects[obj.id] = obj
-        return obj
-
-    def convert_product_draft(self, obj: types.ProductDraft, id=None):
+    def _create_from_draft(
+        self, obj: types.ProductDraft, id: typing.Optional[str] = None
+    ) -> types.Product:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
 
         product = types.Product(
-            id=object_id,
+            id=str(object_id),
             key=obj.key,
             product_type=obj.product_type,
             version=1,
@@ -38,11 +36,11 @@ class ProductsModel(BaseModel):
 
         if obj.publish:
             product.master_data = types.ProductCatalogData(
-                staged=None, current=product_data, published=True,
+                staged=None, current=product_data, published=True
             )
         else:
             product.master_data = types.ProductCatalogData(
-                staged=product_data, current=None, published=False,
+                staged=product_data, current=None, published=False
             )
 
         return product
@@ -70,7 +68,7 @@ class ProductsBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),
@@ -83,7 +81,7 @@ class ProductsBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.ProductDraftSchema().loads(request.body)
-        data = self.model.add(None, obj)
+        data = self.model.add(obj)
         content = schemas.ProductSchema().dumps(data)
         return create_response(request, text=content)
 

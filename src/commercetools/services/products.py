@@ -136,16 +136,13 @@ class ProductService(abstract.AbstractService):
         self,
         product_id: str,
         fh: typing.BinaryIO,
-        sku: str=None,
-        filename: str='img',
-        staged: bool=True,
+        sku: str = None,
+        filename: str = "img",
+        staged: bool = True,
     ):
-        params = {
-            'filename': filename,
-            'staged': staged,
-        }
+        params = {"filename": filename, "staged": staged}
         if sku:
-            params['sku'] = sku
+            params["sku"] = sku
 
         return self._client._upload(
             f"products/{product_id}/images",

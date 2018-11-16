@@ -1,4 +1,5 @@
 import datetime
+import typing
 import uuid
 
 from requests_mock import create_response
@@ -10,14 +11,12 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ChannelsModel(BaseModel):
-    def add(self, obj):
-        obj = self.create_channel(obj)
-        self.objects[obj.id] = obj
-        return obj
-
-    def create_channel(self, obj: types.ChannelDraft) -> types.Channel:
+    def _create_from_draft(
+        self, obj: types.ChannelDraft, id: typing.Optional[str] = None
+    ) -> types.CustomObject:
+        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Channel(
-            id=str(uuid.uuid4()),
+            id=str(object_id),
             version=1,
             name=obj.name,
             description=obj.description,
@@ -48,7 +47,7 @@ class ChannelsBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),

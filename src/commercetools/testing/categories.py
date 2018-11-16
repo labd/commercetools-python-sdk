@@ -5,19 +5,15 @@ from requests_mock import create_response
 
 from commercetools import schemas, types
 from commercetools.services import abstract
-from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing import utils
+from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CategoriesModel(BaseModel):
-    def add(self, id, obj):
-        obj = self.add_category(obj)
-        self.objects[obj.id] = obj
-        return obj
-
-    def add_category(self, obj):
+    def _create_from_draft(self, obj: types.CategoryDraft, id: str) -> types.Category:
+        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Category(
-            id=str(uuid.uuid4()),
+            id=str(object_id),
             version=1,
             name=obj.name,
             description=obj.description,
@@ -50,7 +46,7 @@ class CategoriesBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),
@@ -63,7 +59,7 @@ class CategoriesBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.CategoryDraftSchema().loads(request.body)
-        data = self.model.add(id, obj)
+        data = self.model.add(obj)
         content = schemas.CategorySchema().dumps(data)
         return create_response(request, text=content)
 

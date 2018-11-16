@@ -21,7 +21,9 @@ class TaxCategoryService(abstract.AbstractService):
         return self._client._get(f"tax-categories/{id}", {}, schemas.TaxCategorySchema)
 
     def get_by_key(self, key: str) -> Optional[types.TaxCategory]:
-        return self._client._get(f"tax-categories/key={key}", {}, schemas.TaxCategorySchema)
+        return self._client._get(
+            f"tax-categories/key={key}", {}, schemas.TaxCategorySchema
+        )
 
     def query(
         self,
@@ -46,7 +48,11 @@ class TaxCategoryService(abstract.AbstractService):
 
     def create(self, draft: types.TaxCategoryDraft) -> types.Channel:
         return self._client._post(
-            "tax-categories", {}, draft, schemas.TaxCategoryDraftSchema, schemas.TaxCategorySchema
+            "tax-categories",
+            {},
+            draft,
+            schemas.TaxCategoryDraftSchema,
+            schemas.TaxCategorySchema,
         )
 
     def update_by_id(
@@ -63,4 +69,6 @@ class TaxCategoryService(abstract.AbstractService):
 
     def delete_by_id(self, id: str, version: int) -> types.TaxCategory:
         params = TaxCategoryDeleteSchema().dump({"version": version})
-        return self._client._delete(f"tax-categories/{id}", params, schemas.TaxCategorySchema)
+        return self._client._delete(
+            f"tax-categories/{id}", params, schemas.TaxCategorySchema
+        )

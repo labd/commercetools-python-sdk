@@ -8,8 +8,13 @@ class BaseModel:
     def __init__(self):
         self.objects: typing.Dict = {}
 
-    def add(self, id, obj):
-        self.objects[id] = obj
+    def add(self, obj, id=None):
+        obj = self._create_from_draft(obj, id)
+        self.objects[obj.id] = obj
+        return obj
+
+    def _create_from_draft(self, obj, id=None):
+        raise NotImplementedError()
 
     def get_by_id(self, id):
         return self.objects.get(id)

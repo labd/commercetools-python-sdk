@@ -14,6 +14,7 @@ from commercetools.testing.products import ProductsBackend
 from commercetools.testing.project import ProjectBackend
 from commercetools.testing.types import TypesBackend
 
+
 class BackendRepository:
     def __init__(self):
         self.auth = AuthBackend()

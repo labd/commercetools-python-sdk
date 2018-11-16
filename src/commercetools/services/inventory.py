@@ -21,7 +21,9 @@ class InventoryService(abstract.AbstractService):
         return self._client._get(f"inventory/{id}", {}, schemas.InventorySchema)
 
     def get_by_key(self, key: str) -> types.InventoryEntry:
-        return self._client._get(f"inventory/key={key}", {}, schemas.InventoryEntrySchema)
+        return self._client._get(
+            f"inventory/key={key}", {}, schemas.InventoryEntrySchema
+        )
 
     def query(
         self,
@@ -46,7 +48,11 @@ class InventoryService(abstract.AbstractService):
 
     def create(self, draft: types.InventoryEntryDraft) -> types.InventoryEntry:
         return self._client._post(
-            "inventory", {}, draft, schemas.InventoryEntryDraftSchema, schemas.InventoryEntrySchema
+            "inventory",
+            {},
+            draft,
+            schemas.InventoryEntryDraftSchema,
+            schemas.InventoryEntrySchema,
         )
 
     def update_by_id(
@@ -67,4 +73,6 @@ class InventoryService(abstract.AbstractService):
         params = InventoryDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
         )
-        return self._client._delete(f"inventory/{id}", params, schemas.InventoryEntrySchema)
+        return self._client._delete(
+            f"inventory/{id}", params, schemas.InventoryEntrySchema
+        )

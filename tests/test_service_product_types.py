@@ -1,7 +1,8 @@
 import pytest
 import requests_mock
-from commercetools import types
 from requests.exceptions import HTTPError
+
+from commercetools import types
 
 
 def product_types_get_by_id(client):

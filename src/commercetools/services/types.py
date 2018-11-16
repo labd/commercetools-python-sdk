@@ -20,9 +20,7 @@ class TypeService(abstract.AbstractService):
         return self._client._get(f"types/{id}", {}, schemas.TypeSchema)
 
     def get_by_key(self, key: str) -> types.Type:
-        return self._client._get(
-            f"types/key={key}", {}, schemas.TypeSchema
-        )
+        return self._client._get(f"types/key={key}", {}, schemas.TypeSchema)
 
     def query(
         self,
@@ -41,17 +39,11 @@ class TypeService(abstract.AbstractService):
                 "offset": offset,
             }
         )
-        return self._client._get(
-            "types", params, schemas.TypePagedQueryResponseSchema
-        )
+        return self._client._get("types", params, schemas.TypePagedQueryResponseSchema)
 
     def create(self, draft: types.TypeDraft) -> types.Type:
         return self._client._post(
-            "types",
-            {},
-            draft,
-            schemas.TypeDraftSchema,
-            schemas.TypeSchema,
+            "types", {}, draft, schemas.TypeDraftSchema, schemas.TypeSchema
         )
 
     def update_by_id(
@@ -67,10 +59,7 @@ class TypeService(abstract.AbstractService):
         )
 
     def update_by_key(
-        self,
-        key: str,
-        version: int,
-        actions: typing.List[types.TypeUpdateAction],
+        self, key: str, version: int, actions: typing.List[types.TypeUpdateAction]
     ) -> types.Type:
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
@@ -83,12 +72,8 @@ class TypeService(abstract.AbstractService):
 
     def delete_by_id(self, id: str, version: int) -> types.Type:
         params = TypeDeleteSchema().dump({"version": version})
-        return self._client._delete(
-            f"types/{id}", params, schemas.TypeSchema
-        )
+        return self._client._delete(f"types/{id}", params, schemas.TypeSchema)
 
     def delete_by_key(self, key: str, version: int) -> types.Type:
         params = TypeDeleteSchema().dump({"version": version})
-        return self._client._delete(
-            f"types/key={key}", params, schemas.TypeSchema
-        )
+        return self._client._delete(f"types/key={key}", params, schemas.TypeSchema)

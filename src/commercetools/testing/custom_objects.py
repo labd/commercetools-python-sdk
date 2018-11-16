@@ -1,4 +1,5 @@
 import datetime
+import typing
 import uuid
 
 from requests_mock import create_response
@@ -10,14 +11,12 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CustomObjectsModel(BaseModel):
-    def add(self, obj):
-        obj = self.create_custom_object(obj)
-        self.objects[(obj.container, obj.key)] = obj
-        return obj
-
-    def create_custom_object(self, obj: types.CustomObjectDraft) -> types.CustomObject:
+    def _create_from_draft(
+        self, obj: types.CustomObjectDraft, id: typing.Optional[str] = None
+    ) -> types.CustomObject:
+        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.CustomObject(
-            id=str(uuid.uuid4()),
+            id=str(object_id),
             version=1,
             key=obj.key,
             container=obj.container,
@@ -47,7 +46,7 @@ class CustomObjectsBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),

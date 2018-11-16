@@ -1,4 +1,5 @@
 import datetime
+import typing
 import uuid
 
 from requests_mock import create_response
@@ -10,14 +11,12 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class PaymentsModel(BaseModel):
-    def add(self, id, obj):
-        obj = self.convert_payment_draft(obj, id)
-        self.objects[obj.id] = obj
-        return obj
-
-    def convert_payment_draft(self, obj: types.PaymentDraft, id=None) -> types.Payment:
+    def _create_from_draft(
+        self, obj: types.PaymentDraft, id: typing.Optional[str] = None
+    ) -> types.Payment:
+        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         payment = types.Payment(
-            id=id or str(uuid.uuid4()),
+            id=str(object_id),
             key=obj.key,
             version=1,
             created_at=datetime.datetime.now(),
@@ -31,13 +30,13 @@ class PaymentsModel(BaseModel):
             payment_method_info=obj.payment_method_info,
             payment_status=obj.payment_status,
             transactions=[
-                self.convert_transaction_draft(transaction)
+                self._create_transaction_draft(transaction)
                 for transaction in obj.transactions or []
             ],
         )
         return payment
 
-    def convert_transaction_draft(
+    def _create_transaction_draft(
         self, obj: types.TransactionDraft
     ) -> types.Transaction:
         return types.Transaction(
@@ -72,7 +71,7 @@ class PaymentsBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),
@@ -85,7 +84,7 @@ class PaymentsBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.PaymentDraftSchema().loads(request.body)
-        data = self.model.add(id, obj)
+        data = self.model.add(obj)
         content = schemas.PaymentSchema().dumps(data)
         return create_response(request, text=content)
 

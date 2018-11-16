@@ -16,6 +16,10 @@ mypy:
 coverage:
 	pytest --cov=commercetools
 
+format:
+	black src/ tests/
+	isort --recursive src tests
+
 release:
 	pip install twine wheel
 	rm -rf build/* dist/*

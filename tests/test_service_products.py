@@ -1,4 +1,5 @@
 import uuid
+
 import pytest
 import requests_mock
 from requests.exceptions import HTTPError
@@ -47,6 +48,7 @@ def test_product_query(client):
     result = client.products.query(sort=["id asc", "name asc"])
     assert len(result.results) == 2
     assert result.total == 2
+
 
 def test_product_update(client):
     """Test the return value of the update methods.

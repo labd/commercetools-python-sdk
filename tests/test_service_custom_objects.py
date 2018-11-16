@@ -1,5 +1,4 @@
 import pytest
-
 from requests.exceptions import HTTPError
 
 from commercetools import types

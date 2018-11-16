@@ -1,7 +1,8 @@
 import pytest
+
 from commercetools import Client
-from commercetools.testing import backend_mocker
 from commercetools.contrib.pytest import commercetools_api
+from commercetools.testing import backend_mocker
 
 # Tricks flake8 into silencing redefining fixtures warnings.
 __all__ = ["commercetools_api"]

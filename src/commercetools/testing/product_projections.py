@@ -30,7 +30,7 @@ class ProductProjectionsBackend(ServiceBackend):
         ]
         results = [x for x in results if x]
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),

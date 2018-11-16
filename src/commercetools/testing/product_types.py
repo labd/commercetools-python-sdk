@@ -1,4 +1,5 @@
 import datetime
+import typing
 import uuid
 
 from requests_mock import create_response
@@ -10,15 +11,12 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ProductTypesModel(BaseModel):
-    def add(self, id, obj):
-        obj = self.add_product_type(obj, id)
-        self.objects[obj.id] = obj
-        return obj
-
-    def add_product_type(self, obj, id=None):
+    def _create_from_draft(
+        self, obj: types.ProductTypeDraft, id: typing.Optional[str] = None
+    ) -> types.ProductType:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.ProductType(
-            id=object_id,
+            id=str(object_id),
             version=1,
             name=obj.name,
             description=obj.description,
@@ -50,7 +48,7 @@ class ProductTypesBackend(ServiceBackend):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
         results = list(self.model.objects.values())
         if params.get("limit"):
-            results = results[:params["limit"]]
+            results = results[: params["limit"]]
 
         data = {
             "count": len(results),
@@ -63,7 +61,7 @@ class ProductTypesBackend(ServiceBackend):
 
     def create(self, request):
         obj = schemas.ProductTypeDraftSchema().loads(request.body)
-        data = self.model.add(None, obj)
+        data = self.model.add(obj)
         content = schemas.ProductTypeSchema().dumps(data)
         return create_response(request, text=content)
 

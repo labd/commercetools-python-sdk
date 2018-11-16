@@ -1,15 +1,15 @@
 import pytest
-
 from requests.exceptions import HTTPError
 
 from commercetools import types
 
 
 def test_channel_get_by_id(client):
-    channel = client.channels.create(types.ChannelDraft(
-        key="test-channel",
-        roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
-    ))
+    channel = client.channels.create(
+        types.ChannelDraft(
+            key="test-channel", roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
+        )
+    )
 
     assert channel.id
     assert channel.key == "test-channel"
@@ -23,14 +23,16 @@ def test_channel_get_by_id(client):
 
 
 def test_channel_query(client):
-    client.channels.create(types.ChannelDraft(
-        key="test-channel1",
-        roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
-    ))
-    client.channels.create(types.ChannelDraft(
-        key="test-channel2",
-        roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
-    ))
+    client.channels.create(
+        types.ChannelDraft(
+            key="test-channel1", roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
+        )
+    )
+    client.channels.create(
+        types.ChannelDraft(
+            key="test-channel2", roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
+        )
+    )
 
     # single sort query
     result = client.channels.query(sort="id asc")
@@ -53,7 +55,7 @@ def test_channel_update(client):
         types.ChannelDraft(
             key="test-channel",
             name=types.LocalizedString(nl="nl-channel"),
-            roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY]
+            roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY],
         )
     )
     assert channel.key == "test-channel"

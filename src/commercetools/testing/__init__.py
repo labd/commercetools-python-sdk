@@ -14,6 +14,7 @@ from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
 from commercetools.testing.project import ProjectBackend
+from commercetools.testing.tax_categories import TaxCategoryBackend
 from commercetools.testing.types import TypesBackend
 
 
@@ -23,13 +24,14 @@ class BackendRepository:
         self.categories = CategoriesBackend()
         self.channels = ChannelsBackend()
         self.custom_objects = CustomObjectsBackend()
+        self.inventory = InventoryEntryBackend()
         self.payments = PaymentsBackend()
         self.project = ProjectBackend()
         self.products = ProductsBackend()
         self.product_projections = ProductProjectionsBackend(model=self.products.model)
         self.product_types = ProductTypesBackend()
+        self.tax_categories = TaxCategoryBackend()
         self.types = TypesBackend()
-        self.inventory = InventoryEntryBackend()
 
     def register(self, adapter):
         # Bit of a hack, but it works and makes life easier so hey :-)

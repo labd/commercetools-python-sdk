@@ -8,6 +8,7 @@ from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend
 from commercetools.testing.channels import ChannelsBackend
 from commercetools.testing.custom_objects import CustomObjectsBackend
+from commercetools.testing.inventory import InventoryEntryBackend
 from commercetools.testing.payments import PaymentsBackend
 from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
@@ -28,6 +29,7 @@ class BackendRepository:
         self.product_projections = ProductProjectionsBackend(model=self.products.model)
         self.product_types = ProductTypesBackend()
         self.types = TypesBackend()
+        self.inventory = InventoryEntryBackend()
 
     def register(self, adapter):
         # Bit of a hack, but it works and makes life easier so hey :-)

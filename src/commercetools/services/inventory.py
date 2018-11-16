@@ -18,12 +18,7 @@ class InventoryQuerySchema(abstract.AbstractQuerySchema):
 
 class InventoryService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.InventoryEntry]:
-        return self._client._get(f"inventory/{id}", {}, schemas.InventorySchema)
-
-    def get_by_key(self, key: str) -> types.InventoryEntry:
-        return self._client._get(
-            f"inventory/key={key}", {}, schemas.InventoryEntrySchema
-        )
+        return self._client._get(f"inventory/{id}", {}, schemas.InventoryEntrySchema)
 
     def query(
         self,

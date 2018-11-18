@@ -11,6 +11,9 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CustomObjectsModel(BaseModel):
+    def _generate_key(self, obj):
+        return (obj.container, obj.key)
+
     def _create_from_draft(
         self, obj: types.CustomObjectDraft, id: typing.Optional[str] = None
     ) -> types.CustomObject:

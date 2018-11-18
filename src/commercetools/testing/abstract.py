@@ -12,9 +12,12 @@ class BaseModel:
 
     def add(self, obj, id=None):
         obj = self._create_from_draft(obj, id)
-        key = uuid.UUID(obj.id)
+        key = self._generate_key(obj)
         self.objects[key] = obj
         return obj
+
+    def _generate_key(self, obj):
+        return uuid.UUID(obj.id)
 
     def _create_from_draft(self, obj, id=None):
         raise NotImplementedError()

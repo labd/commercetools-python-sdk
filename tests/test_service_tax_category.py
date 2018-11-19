@@ -28,9 +28,7 @@ def test_tax_category_update_by_id(client):
     tax_category = client.tax_categories.update_by_id(
         tax_category.id,
         version=tax_category.version,
-        actions=[
-            types.TaxCategorySetDescriptionAction(description="Some text")
-        ],
+        actions=[types.TaxCategorySetDescriptionAction(description="Some text")],
     )
     assert tax_category.id
     assert tax_category.name == "Hoog"

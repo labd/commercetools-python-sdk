@@ -28,9 +28,7 @@ def test_inventory_update_by_id(client):
     inventory = client.inventory.update_by_id(
         inventory.id,
         version=inventory.version,
-        actions=[
-            types.InventoryRemoveQuantityAction(quantity=10)
-        ],
+        actions=[types.InventoryRemoveQuantityAction(quantity=10)],
     )
     assert inventory.id
     assert inventory.quantity_on_stock == 10  # should be 0

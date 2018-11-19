@@ -1,4 +1,5 @@
 import logging
+import threading
 import typing
 from wsgiref.simple_server import make_server
 
@@ -22,17 +23,27 @@ class HttpAdapter:
 
     def match(self, request: _RequestObjectProxy) -> typing.Optional[HTTPResponse]:
         for matcher in self._matchers:
-            response = matcher(request)
+            response = matcher(request, skip_port_check=True)
             if response:
                 return response
         return None
 
 
 class Server:
-    def __init__(self):
+    """Run a real HTTP server with the mocked endpoints."""
+
+    def __init__(self, repository=None):
         self.adapter = HttpAdapter()
-        self.repository = BackendRepository()
+        self.repository = repository or BackendRepository()
         self.repository.register(self.adapter)
+        self.api_url = None
+        self.is_running = threading.Event()
+
+    def run(self):
+        srv = make_server("localhost", 8989, self)
+        self.api_url = "http://localhost:8989"
+        self.is_running.set()
+        srv.serve_forever()
 
     def __call__(self, environ, start_response):
         request = self._create_request(environ)

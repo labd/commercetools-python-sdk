@@ -38,12 +38,14 @@ class BackendRepository:
         for name, value in self.__dict__.items():
             if isinstance(value, BaseBackend):
                 value.register(adapter)
-        self.requests_mock = adapter
+
+        if isinstance(adapter, requests_mock.mocker.Mocker):
+            self.requests_mock = adapter
 
 
 @contextmanager
 def backend_mocker(*args, **kwargs):
-    with requests_mock.Mocker() as m:
+    with requests_mock.Mocker(real_http=True) as m:
         repo = BackendRepository()
         repo.register(m)
         yield repo

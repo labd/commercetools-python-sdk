@@ -1,7 +1,6 @@
-import uuid
 import re
-from commercetools import types
 import typing
+import uuid
 
 import requests_mock
 
@@ -43,7 +42,10 @@ class BaseBackend:
     def register(self, adapter):
         adapter.add_matcher(self._matcher)
 
-    def _matcher(self, request):
+    def _matcher(self, request, skip_port_check=False):
+        if not skip_port_check and request.port != 443:
+            return
+
         if request.hostname not in self.hostnames:
             return
             if not request.route_kwargs["path"]:

@@ -20,6 +20,13 @@ class AuthBackend(BaseBackend):
     hostnames = ["auth.sphere.io", "localhost"]
     model_class = AuthModel
 
+    def __init__(self, *args, **kwargs):
+        self._expire_time = 172800
+        super().__init__(*args, **kwargs)
+
+    def set_expire_time(self, value):
+        self._expire_time = value
+
     @property
     def url_prefix(self):
         return r"/oauth/(?P<path>.*)"
@@ -32,9 +39,10 @@ class AuthBackend(BaseBackend):
         if not params.get("client_id") and not params.get("client_secret"):
             response = create_response(request, status_code=401)
             return response
+
         token = {
             "access_token": str(uuid.uuid4()),
-            "expires_in": 172800,
+            "expires_in": self._expire_time,
             "scope": params["scope"],
             "token_type": "Bearer",
         }

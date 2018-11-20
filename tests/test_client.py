@@ -1,3 +1,4 @@
+import time
 import pytest
 from freezegun import freeze_time
 
@@ -22,28 +23,27 @@ def test_client_with_environment_settings_is_setup(
 
 
 def test_auto_refresh(commercetools_api):
-    with freeze_time("2018-10-05 12:00:00"):
-        client = Client(
-            client_id="unittest",
-            client_secret="mysecret",
-            project_key="test",
-            url="https://api.sphere.io",
-            token_url="https://auth.sphere.io",
-        )
-        client.products.query()
-        with freeze_time("2018-11-01"):
-            client.products.query()
+    commercetools_api.auth.set_expire_time(1)
 
-            with freeze_time("2018-12-01"):
-                client.products.query()
+    client = Client(
+        client_id="unittest",
+        client_secret="mysecret",
+        project_key="test",
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io",
+    )
+    client.products.query()
+    time.sleep(1)
+    client.products.query()
+    client.products.query()
 
     auth_headers = set()
     for request in commercetools_api.requests_mock.request_history:
         if request.url.startswith("https://api.sphere.io/"):
             auth_headers.add(request.headers["Authorization"])
 
-    assert len(auth_headers) == 3
-    assert len(commercetools_api.auth.model.tokens) == 3
+    assert len(auth_headers) == 2
+    assert len(commercetools_api.auth.model.tokens) == 2
 
 
 def test_cache_token(commercetools_api):

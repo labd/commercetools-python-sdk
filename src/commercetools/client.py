@@ -31,6 +31,13 @@ class CommercetoolsError(Exception):
         self.response = response
 
 
+class RefreshingOAuth2Session(OAuth2Session):
+    def refresh_token(self, token_url, **kwargs):
+        kwargs.update(self.auto_refresh_kwargs)
+        kwargs["scope"] = self.scope
+        return self.fetch_token(token_url, **kwargs)
+
+
 class Client:
     def __init__(
         self,
@@ -69,7 +76,7 @@ class Client:
         client = BackendApplicationClient(
             client_id=self._config["client_id"], scope=self._config["scope"]
         )
-        self._http_client = OAuth2Session(
+        self._http_client = RefreshingOAuth2Session(
             client=client,
             scope=self._config["scope"],
             auto_refresh_url=token_oauth_url,

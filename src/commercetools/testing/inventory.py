@@ -52,7 +52,7 @@ class InventoryEntryBackend(ServiceBackend):
             "offset": 0,
             "results": results,
         }
-        content = schemas.InventoryEntryPagedQueryResponseSchema().dumps(data)
+        content = schemas.InventoryPagedQueryResponseSchema().dumps(data)
         return create_response(request, text=content)
 
     def create(self, request):

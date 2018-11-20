@@ -9,6 +9,7 @@ install_requires = [
     "attrs>=18.2.0",
     "marshmallow>=3.0.0b17",
     "marshmallow-enum==1.4.1",
+    "WebOb==1.8.4",
     "wrapt==1.10.0",
 ]
 

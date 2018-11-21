@@ -25,6 +25,7 @@ class InventoryEntryModel(BaseModel):
             restockable_in_days=obj.restockable_in_days,
             sku=obj.sku,
             supply_channel=obj.supply_channel,
+            custom=utils.create_from_draft(obj.custom),
         )
 
 

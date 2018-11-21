@@ -21,6 +21,7 @@ class CategoriesModel(BaseModel):
             key=obj.key,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),
+            custom=utils.create_from_draft(obj.custom),
         )
 
 

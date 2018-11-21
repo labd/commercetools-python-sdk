@@ -13,7 +13,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class InventoryEntryModel(BaseModel):
     def _create_from_draft(
         self, obj: types.InventoryEntryDraft, id: typing.Optional[str] = None
-    ) -> types.CustomObject:
+    ) -> types.InventoryEntry:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.InventoryEntry(
             id=str(object_id),

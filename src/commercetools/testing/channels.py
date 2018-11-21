@@ -13,7 +13,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class ChannelsModel(BaseModel):
     def _create_from_draft(
         self, obj: types.ChannelDraft, id: typing.Optional[str] = None
-    ) -> types.CustomObject:
+    ) -> types.Channel:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Channel(
             id=str(object_id),

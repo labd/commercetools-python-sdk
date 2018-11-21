@@ -15,7 +15,7 @@ class TaxCategoryModel(BaseModel):
         self, obj: types.TaxCategoryDraft, id: typing.Optional[str] = None
     ) -> types.TaxCategory:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        obj = types.TaxCategory(
+        return types.TaxCategory(
             id=str(object_id),
             key=obj.key,
             version=1,
@@ -24,7 +24,6 @@ class TaxCategoryModel(BaseModel):
             name=obj.name,
             description=obj.description,
         )
-        return obj
 
 
 class TaxCategoryBackend(ServiceBackend):

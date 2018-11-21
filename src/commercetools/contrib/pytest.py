@@ -1,8 +1,7 @@
-import re
 import threading
+import typing
 
 import pytest
-import requests_mock
 
 from commercetools import Client
 from commercetools.testing import backend_mocker
@@ -16,7 +15,7 @@ def commercetools_api():
 
 
 @pytest.fixture
-def commercetools_client(commercetools_api) -> Client:
+def commercetools_client(commercetools_api) -> typing.Generator[Client, None, None]:
     yield Client(
         project_key="unittest",
         client_id="client-id",

@@ -1,4 +1,5 @@
 import datetime
+import typing
 import uuid
 
 from requests_mock import create_response
@@ -10,7 +11,9 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CategoriesModel(BaseModel):
-    def _create_from_draft(self, obj: types.CategoryDraft, id: str) -> types.Category:
+    def _create_from_draft(
+        self, obj: types.CategoryDraft, id: typing.Optional[str] = None
+    ) -> types.Category:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Category(
             id=str(object_id),

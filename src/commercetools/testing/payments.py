@@ -33,6 +33,7 @@ class PaymentsModel(BaseModel):
                 self._create_transaction_draft(transaction)
                 for transaction in obj.transactions or []
             ],
+            custom=utils.create_from_draft(obj.custom),
         )
         return payment
 

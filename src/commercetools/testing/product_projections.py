@@ -14,11 +14,31 @@ class ProductProjectionsBackend(ServiceBackend):
     def urls(self):
         return [
             ("^$", "GET", self.query),
+            ("^search", "POST", self.search),
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
         ]
 
     def query(self, request):
+        params = utils.parse_request_params(ProductProjectionsQuerySchema, request)
+        results = [
+            self._convert_product_projection(product, params["staged"])
+            for product in self.model.objects.values()
+        ]
+        results = [x for x in results if x]
+        if params.get("limit"):
+            results = results[: params["limit"]]
+
+        data = {
+            "count": len(results),
+            "total": len(results),
+            "offset": 0,
+            "results": results,
+        }
+        content = schemas.ProductProjectionPagedQueryResponseSchema().dumps(data)
+        return create_response(request, text=content)
+
+    def search(self, request):
         params = utils.parse_request_params(ProductProjectionsQuerySchema, request)
         results = [
             self._convert_product_projection(product, params["staged"])

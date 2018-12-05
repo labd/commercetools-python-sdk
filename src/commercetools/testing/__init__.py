@@ -20,6 +20,8 @@ from commercetools.testing.types import TypesBackend
 
 class BackendRepository:
     def __init__(self):
+        requests_mock.mock.case_sensitive = True
+
         self.auth = AuthBackend()
         self.categories = CategoriesBackend()
         self.channels = ChannelsBackend()

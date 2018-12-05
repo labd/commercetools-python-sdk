@@ -75,38 +75,40 @@ class ProductProjectionsBackend(ServiceBackend):
         self, product: types.Product, staged: bool = False
     ) -> typing.Optional[types.ProductProjection]:
         """Convert a Product object to a ProductProjection object"""
-        if product.master_data is None:
+        if product["masterData"] is None:
             return None
 
         if staged:
-            data = product.master_data.staged
+            data = product["masterData"]["staged"]
         else:
-            data = product.master_data.current
+            data = product["masterData"]["current"]
 
         if data is None:
             return None
 
-        return types.ProductProjection(
-            id=product.id,
-            key=product.key,
-            version=product.version,
-            created_at=product.created_at,
-            last_modified_at=product.last_modified_at,
-            product_type=product.product_type,
-            name=data.name,
-            description=data.description,
-            slug=data.slug,
-            categories=data.categories,
-            category_order_hints=data.category_order_hints,
-            meta_title=data.meta_title,
-            meta_description=data.meta_description,
-            meta_keywords=data.meta_keywords,
-            search_keywords=data.search_keywords,
-            has_staged_changes=product.master_data.has_staged_changes,
-            published=product.master_data.published,
-            master_variant=data.master_variant,
-            variants=data.variants,
-            tax_category=product.tax_category,
-            state=product.state,
-            review_rating_statistics=product.review_rating_statistics,
+        return schemas.ProductProjectionSchema().load(
+            {
+                "id": product["id"],
+                "key": product["key"],
+                "version": product["version"],
+                "createdAt": product["createdAt"],
+                "lastModifiedAt": product["lastModifiedAt"],
+                "productType": product["productType"],
+                "name": data["name"],
+                "description": data["description"],
+                "slug": data["slug"],
+                "categories": data["categories"],
+                "categoryOrderHints": data["categoryOrderHints"],
+                "metaTitle": data["metaTitle"],
+                "metaDescription": data["metaDescription"],
+                "metaKeywords": data["metaKeywords"],
+                "searchKeywords": data["searchKeywords"],
+                "hasStagedChanges": product["masterData"]["hasStagedChanges"],
+                "published": product["masterData"]["published"],
+                "masterVariant": data["masterVariant"],
+                "variants": data["variants"],
+                "taxCategory": product["taxCategory"],
+                "state": product["state"],
+                "reviewRatingStatistics": product["reviewRatingStatistics"],
+            }
         )

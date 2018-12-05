@@ -5,12 +5,12 @@ import uuid
 from requests_mock import create_response
 
 from commercetools import schemas, types
-from commercetools.services import abstract
-from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CustomObjectsModel(BaseModel):
+    _resource_schema = schemas.CustomObjectSchema
+
     def _generate_key(self, obj):
         return (obj.container, obj.key)
 
@@ -32,6 +32,8 @@ class CustomObjectsModel(BaseModel):
 class CustomObjectsBackend(ServiceBackend):
     service_path = "custom-objects"
     model_class = CustomObjectsModel
+    _schema_draft = schemas.CustomObjectDraftSchema
+    _schema_query_response = schemas.CustomObjectPagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -41,40 +43,19 @@ class CustomObjectsBackend(ServiceBackend):
             ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
         ]
 
-    def query(self, request):
-        params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
-        results = list(self.model.objects.values())
-        if params.get("limit"):
-            results = results[: params["limit"]]
-
-        data = {
-            "count": len(results),
-            "total": len(self.model.objects),
-            "offset": 0,
-            "results": results,
-        }
-        content = schemas.CustomObjectPagedQueryResponseSchema().dumps(data)
-        return create_response(request, text=content)
-
-    def create(self, request):
-        obj = schemas.CustomObjectDraftSchema().loads(request.body)
-        data = self.model.add(obj)
-        content = schemas.CustomObjectSchema().dumps(data)
-        return create_response(request, text=content)
-
     def get_by_id(self, request, id):
-        item = next((obj for obj in self.model.objects.values() if obj.id == id), None)
+        item = next(
+            (obj for obj in self.model.objects.values() if obj["id"] == id), None
+        )
         if item:
-            content = schemas.CustomObjectSchema().dumps(item)
-            return create_response(request, text=content)
+            return create_response(request, json=item)
         return create_response(request, status_code=404)
 
     def get_by_container_key(self, request, container: str, key: str):
         id = (container, key)
         item = self.model.objects.get(id)
         if item:
-            content = schemas.CustomObjectSchema().dumps(item)
-            return create_response(request, text=content)
+            return create_response(request, json=item)
         else:
             content = schemas.ErrorResponseSchema().dumps(
                 types.ErrorResponse(

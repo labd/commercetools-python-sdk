@@ -11,6 +11,8 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ChannelsModel(BaseModel):
+    _resource_schema = schemas.ChannelSchema
+
     def _create_from_draft(
         self, obj: types.ChannelDraft, id: typing.Optional[str] = None
     ) -> types.Channel:
@@ -31,6 +33,8 @@ class ChannelsModel(BaseModel):
 class ChannelsBackend(ServiceBackend):
     service_path = "channels"
     model_class = ChannelsModel
+    _schema_draft = schemas.ChannelDraftSchema
+    _schema_query_response = schemas.ChannelPagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -39,39 +43,3 @@ class ChannelsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
-
-    def query(self, request):
-        params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
-        results = list(self.model.objects.values())
-        if params.get("limit"):
-            results = results[: params["limit"]]
-
-        data = {
-            "count": len(results),
-            "total": len(self.model.objects),
-            "offset": 0,
-            "results": results,
-        }
-        content = schemas.ChannelPagedQueryResponseSchema().dumps(data)
-        return create_response(request, text=content)
-
-    def create(self, request):
-        obj = schemas.ChannelDraftSchema().loads(request.body)
-        data = self.model.add(obj)
-        content = schemas.ChannelSchema().dumps(data)
-        return create_response(request, text=content)
-
-    def get_by_id(self, request, id):
-        obj = self.model.get_by_id(id)
-        if obj:
-            content = schemas.ChannelSchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)
-
-    def update_by_id(self, request, id):
-        obj = self.model.get_by_id(id)
-        if obj:
-            schemas.ChannelUpdateSchema().loads(request.body)
-            content = schemas.ChannelSchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)

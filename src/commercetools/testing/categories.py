@@ -11,6 +11,8 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CategoriesModel(BaseModel):
+    _resource_schema = schemas.CategorySchema
+
     def _create_from_draft(
         self, obj: types.CategoryDraft, id: typing.Optional[str] = None
     ) -> types.Category:
@@ -31,6 +33,8 @@ class CategoriesModel(BaseModel):
 class CategoriesBackend(ServiceBackend):
     service_path = "categories"
     model_class = CategoriesModel
+    _schema_draft = schemas.CategoryDraftSchema
+    _schema_query_response = schemas.CategoryPagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -41,54 +45,3 @@ class CategoriesBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
-
-    def query(self, request):
-        params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
-        results = list(self.model.objects.values())
-        if params.get("limit"):
-            results = results[: params["limit"]]
-
-        data = {
-            "count": len(results),
-            "total": len(self.model.objects),
-            "offset": 0,
-            "results": results,
-        }
-        content = schemas.CategoryPagedQueryResponseSchema().dumps(data)
-        return create_response(request, text=content)
-
-    def create(self, request):
-        obj = schemas.CategoryDraftSchema().loads(request.body)
-        data = self.model.add(obj)
-        content = schemas.CategorySchema().dumps(data)
-        return create_response(request, text=content)
-
-    def get_by_id(self, request, id):
-        obj = self.model.get_by_id(id)
-        if obj:
-            content = schemas.CategorySchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)
-
-    def get_by_key(self, request, key):
-        obj = self.model.get_by_key(key)
-        if obj:
-            content = schemas.CategorySchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)
-
-    def update_by_id(self, request, id):
-        obj = self.model.get_by_id(id)
-        if obj:
-            schemas.CategoryUpdateSchema().loads(request.body)
-            content = schemas.CategorySchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)
-
-    def update_by_key(self, request, key):
-        obj = self.model.get_by_key(key)
-        if obj:
-            schemas.CategoryUpdateSchema().loads(request.body)
-            content = schemas.CategorySchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)

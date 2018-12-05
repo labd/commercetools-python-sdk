@@ -50,6 +50,54 @@ def test_product_query(client):
     assert result.total == 2
 
 
+def test_product_query_where(client):
+    client.products.create(
+        types.ProductDraft(
+            key="test-product1",
+            master_variant=types.ProductVariantDraft(
+                prices=[
+                    types.PriceDraft(
+                        country="NL",
+                        value=types.Money(cent_amount=8750, currency_code="EUR"),
+                    )
+                ]
+            ),
+        )
+    )
+    client.products.create(
+        types.ProductDraft(
+            key="test-product-2",
+            master_variant=types.ProductVariantDraft(
+                prices=[
+                    types.PriceDraft(
+                        country="UK",
+                        value=types.Money(cent_amount=8750, currency_code="EUR"),
+                    )
+                ]
+            ),
+        )
+    )
+    client.products.create(types.ProductDraft(key="test-product2"))
+
+    result = client.products.query(
+        where="masterData(staged(masterVariant(prices(country='NL'))))"
+    )
+    assert len(result.results) == 1
+    assert result.total == 1
+
+    result = client.products.query(
+        where="masterData(staged(masterVariant(prices(country='UK'))))"
+    )
+    assert len(result.results) == 1
+    assert result.total == 1
+
+    result = client.products.query(
+        where="masterData(staged(masterVariant(prices(country='UK' or country='NL'))))"
+    )
+    assert len(result.results) == 2
+    assert result.total == 2
+
+
 def test_product_update(client):
     """Test the return value of the update methods.
 

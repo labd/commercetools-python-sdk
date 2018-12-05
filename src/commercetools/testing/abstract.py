@@ -7,6 +7,7 @@ from requests_mock import create_response
 
 from commercetools.services import abstract
 from commercetools.testing import utils
+from commercetools.testing.predicates import PredicateFilter
 
 
 class BaseModel:
@@ -32,7 +33,9 @@ class BaseModel:
         objects = list(self.objects.values())
         if not where:
             return objects
-        return objects
+        where_clause = " AND ".join(where)
+        predicate_filter = PredicateFilter(where_clause)
+        return [obj for obj in objects if predicate_filter.match(obj)]
 
     def get_by_id(self, id):
         try:

@@ -2709,12 +2709,47 @@ class MessageConfiguration:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationSchema`."
     #: :class:`bool`
     enabled: typing.Optional[bool]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
+    delete_days_after_creation: typing.Optional[int]
 
-    def __init__(self, *, enabled: typing.Optional[bool] = None) -> None:
+    def __init__(
+        self,
+        *,
+        enabled: typing.Optional[bool] = None,
+        delete_days_after_creation: typing.Optional[int] = None,
+    ) -> None:
         self.enabled = enabled
+        self.delete_days_after_creation = delete_days_after_creation
 
     def __repr__(self) -> str:
-        return "MessageConfiguration(enabled=%r)" % (self.enabled,)
+        return "MessageConfiguration(enabled=%r, delete_days_after_creation=%r)" % (
+            self.enabled,
+            self.delete_days_after_creation,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class MessageConfigurationDraft:
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationDraftSchema`."
+    #: :class:`bool`
+    enabled: typing.Optional[bool]
+    #: :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
+    delete_days_after_creation: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        enabled: typing.Optional[bool] = None,
+        delete_days_after_creation: typing.Optional[int] = None,
+    ) -> None:
+        self.enabled = enabled
+        self.delete_days_after_creation = delete_days_after_creation
+
+    def __repr__(self) -> str:
+        return (
+            "MessageConfigurationDraft(enabled=%r, delete_days_after_creation=%r)"
+            % (self.enabled, self.delete_days_after_creation)
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -3048,10 +3083,10 @@ class OrderEditDraft:
     key: typing.Optional[str]
     #: :class:`commercetools.types.OrderReference`
     resource: typing.Optional["OrderReference"]
-    #: List of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
+    #: Optional list of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
     staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]]
-    #: Optional :class:`commercetools.types.CustomFields`
-    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`str`
     comment: typing.Optional[str]
     #: Optional :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
@@ -3063,7 +3098,7 @@ class OrderEditDraft:
         key: typing.Optional[str] = None,
         resource: typing.Optional["OrderReference"] = None,
         staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
-        custom: typing.Optional["CustomFields"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
         comment: typing.Optional[str] = None,
         dry_run: typing.Optional[bool] = None,
     ) -> None:
@@ -3106,7 +3141,7 @@ class OrderExcerpt:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderExcerptSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
     total_price: typing.Optional["Money"]
-    #: :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedPrice"]
     #: :class:`int`
     version: typing.Optional[int]
@@ -4525,8 +4560,8 @@ class ReturnItem:
     id: typing.Optional[str]
     #: :class:`int`
     quantity: typing.Optional[int]
-    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
+    #: :class:`str`
+    type: typing.Optional[str]
     #: Optional :class:`str`
     comment: typing.Optional[str]
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
@@ -4543,7 +4578,7 @@ class ReturnItem:
         *,
         id: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
-        line_item_id: typing.Optional[str] = None,
+        type: typing.Optional[str] = None,
         comment: typing.Optional[str] = None,
         shipment_state: typing.Optional["ReturnShipmentState"] = None,
         payment_state: typing.Optional["ReturnPaymentState"] = None,
@@ -4552,7 +4587,7 @@ class ReturnItem:
     ) -> None:
         self.id = id
         self.quantity = quantity
-        self.line_item_id = line_item_id
+        self.type = type
         self.comment = comment
         self.shipment_state = shipment_state
         self.payment_state = payment_state
@@ -4561,11 +4596,11 @@ class ReturnItem:
 
     def __repr__(self) -> str:
         return (
-            "ReturnItem(id=%r, quantity=%r, line_item_id=%r, comment=%r, shipment_state=%r, payment_state=%r, last_modified_at=%r, created_at=%r)"
+            "ReturnItem(id=%r, quantity=%r, type=%r, comment=%r, shipment_state=%r, payment_state=%r, last_modified_at=%r, created_at=%r)"
             % (
                 self.id,
                 self.quantity,
-                self.line_item_id,
+                self.type,
                 self.comment,
                 self.shipment_state,
                 self.payment_state,
@@ -4580,8 +4615,10 @@ class ReturnItemDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnItemDraftSchema`."
     #: :class:`int`
     quantity: typing.Optional[int]
-    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    #: Optional :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
+    custom_line_item_id: typing.Optional[str]
     #: Optional :class:`str`
     comment: typing.Optional[str]
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
@@ -4592,18 +4629,26 @@ class ReturnItemDraft:
         *,
         quantity: typing.Optional[int] = None,
         line_item_id: typing.Optional[str] = None,
+        custom_line_item_id: typing.Optional[str] = None,
         comment: typing.Optional[str] = None,
         shipment_state: typing.Optional["ReturnShipmentState"] = None,
     ) -> None:
         self.quantity = quantity
         self.line_item_id = line_item_id
+        self.custom_line_item_id = custom_line_item_id
         self.comment = comment
         self.shipment_state = shipment_state
 
     def __repr__(self) -> str:
         return (
-            "ReturnItemDraft(quantity=%r, line_item_id=%r, comment=%r, shipment_state=%r)"
-            % (self.quantity, self.line_item_id, self.comment, self.shipment_state)
+            "ReturnItemDraft(quantity=%r, line_item_id=%r, custom_line_item_id=%r, comment=%r, shipment_state=%r)"
+            % (
+                self.quantity,
+                self.line_item_id,
+                self.custom_line_item_id,
+                self.comment,
+                self.shipment_state,
+            )
         )
 
 
@@ -6054,6 +6099,8 @@ class VariantValues:
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
     #: :class:`str`
     name: typing.Optional[str]
     #: Optional :class:`str`
@@ -6064,16 +6111,19 @@ class ZoneDraft:
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
         locations: typing.Optional[typing.List["Location"]] = None,
     ) -> None:
+        self.key = key
         self.name = name
         self.description = description
         self.locations = locations
 
     def __repr__(self) -> str:
-        return "ZoneDraft(name=%r, description=%r, locations=%r)" % (
+        return "ZoneDraft(key=%r, name=%r, description=%r, locations=%r)" % (
+            self.key,
             self.name,
             self.description,
             self.locations,
@@ -7626,6 +7676,54 @@ class CustomFieldTimeType(FieldType):
 
     def __repr__(self) -> str:
         return "CustomFieldTimeType(name=%r)" % (self.name,)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomLineItemReturnItem(ReturnItem):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemReturnItemSchema`."
+    #: :class:`str` `(Named` ``customlineItemId`` `in Commercetools)`
+    customline_item_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        comment: typing.Optional[str] = None,
+        shipment_state: typing.Optional["ReturnShipmentState"] = None,
+        payment_state: typing.Optional["ReturnPaymentState"] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        customline_item_id: typing.Optional[str] = None,
+    ) -> None:
+        self.customline_item_id = customline_item_id
+        super().__init__(
+            id=id,
+            quantity=quantity,
+            type=type,
+            comment=comment,
+            shipment_state=shipment_state,
+            payment_state=payment_state,
+            last_modified_at=last_modified_at,
+            created_at=created_at,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CustomLineItemReturnItem(id=%r, quantity=%r, type=%r, comment=%r, shipment_state=%r, payment_state=%r, last_modified_at=%r, created_at=%r, customline_item_id=%r)"
+            % (
+                self.id,
+                self.quantity,
+                self.type,
+                self.comment,
+                self.shipment_state,
+                self.payment_state,
+                self.last_modified_at,
+                self.created_at,
+                self.customline_item_id,
+            )
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -9292,6 +9390,54 @@ class LineItemPriceMode(enum.Enum):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class LineItemReturnItem(ReturnItem):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemReturnItemSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        comment: typing.Optional[str] = None,
+        shipment_state: typing.Optional["ReturnShipmentState"] = None,
+        payment_state: typing.Optional["ReturnPaymentState"] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        line_item_id: typing.Optional[str] = None,
+    ) -> None:
+        self.line_item_id = line_item_id
+        super().__init__(
+            id=id,
+            quantity=quantity,
+            type=type,
+            comment=comment,
+            shipment_state=shipment_state,
+            payment_state=payment_state,
+            last_modified_at=last_modified_at,
+            created_at=created_at,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "LineItemReturnItem(id=%r, quantity=%r, type=%r, comment=%r, shipment_state=%r, payment_state=%r, last_modified_at=%r, created_at=%r, line_item_id=%r)"
+            % (
+                self.id,
+                self.quantity,
+                self.type,
+                self.comment,
+                self.shipment_state,
+                self.payment_state,
+                self.last_modified_at,
+                self.created_at,
+                self.line_item_id,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class LineItemStateTransitionMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessagePayloadSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -9479,6 +9625,22 @@ class MessagePagedQueryResponse(PagedQueryResponse):
         )
 
 
+@attr.s(auto_attribs=True, init=False, repr=False)
+class MissingTaxRateForCountryError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MissingTaxRateForCountryErrorSchema`."
+
+    def __init__(
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+    ) -> None:
+        super().__init__(code="MissingTaxRateForCountry", message=message)
+
+    def __repr__(self) -> str:
+        return "MissingTaxRateForCountryError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
 class MoneyType(enum.Enum):
     CENT_PRECISION = "centPrecision"
     HIGH_PRECISION = "highPrecision"
@@ -9571,6 +9733,22 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
                 self.max_occurrence,
                 self.selection_mode,
             )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class NoMatchingProductDiscountFoundError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.NoMatchingProductDiscountFoundErrorSchema`."
+
+    def __init__(
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+    ) -> None:
+        super().__init__(code="NoMatchingProductDiscountFound", message=message)
+
+    def __repr__(self) -> str:
+        return "NoMatchingProductDiscountFoundError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
         )
 
 
@@ -9812,6 +9990,45 @@ class OrderCreatedMessagePayload(MessagePayload):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
+    custom_line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
+    discounted_price_per_quantity: typing.Optional[
+        typing.List["DiscountedLineItemPriceForQuantity"]
+    ]
+    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        custom_line_item_id: typing.Optional[str] = None,
+        discounted_price_per_quantity: typing.Optional[
+            typing.List["DiscountedLineItemPriceForQuantity"]
+        ] = None,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
+    ) -> None:
+        self.custom_line_item_id = custom_line_item_id
+        self.discounted_price_per_quantity = discounted_price_per_quantity
+        self.taxed_price = taxed_price
+        super().__init__(type="OrderCustomLineItemDiscountSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomLineItemDiscountSetMessagePayload(type=%r, custom_line_item_id=%r, discounted_price_per_quantity=%r, taxed_price=%r)"
+            % (
+                self.type,
+                self.custom_line_item_id,
+                self.discounted_price_per_quantity,
+                self.taxed_price,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderCustomerEmailSetMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessagePayloadSchema`."
     #: :class:`str`
@@ -9887,6 +10104,80 @@ class OrderDeletedMessagePayload(MessagePayload):
 
     def __repr__(self) -> str:
         return "OrderDeletedMessagePayload(type=%r, order=%r)" % (self.type, self.order)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(type="OrderDiscountCodeAdded")
+
+    def __repr__(self) -> str:
+        return "OrderDiscountCodeAddedMessagePayload(type=%r, discount_code=%r)" % (
+            self.type,
+            self.discount_code,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessagePayloadSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(type="OrderDiscountCodeRemoved")
+
+    def __repr__(self) -> str:
+        return "OrderDiscountCodeRemovedMessagePayload(type=%r, discount_code=%r)" % (
+            self.type,
+            self.discount_code,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessagePayloadSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+    #: :class:`commercetools.types.DiscountCodeState`
+    state: typing.Optional["DiscountCodeState"]
+    #: Optional :class:`commercetools.types.DiscountCodeState` `(Named` ``oldState`` `in Commercetools)`
+    old_state: typing.Optional["DiscountCodeState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+        state: typing.Optional["DiscountCodeState"] = None,
+        old_state: typing.Optional["DiscountCodeState"] = None,
+    ) -> None:
+        self.discount_code = discount_code
+        self.state = state
+        self.old_state = old_state
+        super().__init__(type="OrderDiscountCodeStateSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderDiscountCodeStateSetMessagePayload(type=%r, discount_code=%r, state=%r, old_state=%r)"
+            % (self.type, self.discount_code, self.state, self.old_state)
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -10160,6 +10451,50 @@ class OrderImportedMessagePayload(MessagePayload):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class OrderLineItemDiscountSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
+    discounted_price_per_quantity: typing.Optional[
+        typing.List["DiscountedLineItemPriceForQuantity"]
+    ]
+    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        discounted_price_per_quantity: typing.Optional[
+            typing.List["DiscountedLineItemPriceForQuantity"]
+        ] = None,
+        total_price: typing.Optional["Money"] = None,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.discounted_price_per_quantity = discounted_price_per_quantity
+        self.total_price = total_price
+        self.taxed_price = taxed_price
+        super().__init__(type="OrderLineItemDiscountSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderLineItemDiscountSetMessagePayload(type=%r, line_item_id=%r, discounted_price_per_quantity=%r, total_price=%r, taxed_price=%r)"
+            % (
+                self.type,
+                self.line_item_id,
+                self.discounted_price_per_quantity,
+                self.total_price,
+                self.taxed_price,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Order`
@@ -10296,6 +10631,58 @@ class OrderShippingAddressSetMessagePayload(MessagePayload):
         return "OrderShippingAddressSetMessagePayload(type=%r, address=%r)" % (
             self.type,
             self.address,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingInfoSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
+    shipping_info: typing.Optional["ShippingInfo"]
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``oldShippingInfo`` `in Commercetools)`
+    old_shipping_info: typing.Optional["ShippingInfo"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        shipping_info: typing.Optional["ShippingInfo"] = None,
+        old_shipping_info: typing.Optional["ShippingInfo"] = None,
+    ) -> None:
+        self.shipping_info = shipping_info
+        self.old_shipping_info = old_shipping_info
+        super().__init__(type="OrderShippingInfoSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingInfoSetMessagePayload(type=%r, shipping_info=%r, old_shipping_info=%r)"
+            % (self.type, self.shipping_info, self.old_shipping_info)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingRateInputSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
+    shipping_rate_input: typing.Optional["ShippingRateInput"]
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``oldShippingRateInput`` `in Commercetools)`
+    old_shipping_rate_input: typing.Optional["ShippingRateInput"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+    ) -> None:
+        self.shipping_rate_input = shipping_rate_input
+        self.old_shipping_rate_input = old_shipping_rate_input
+        super().__init__(type="OrderShippingRateInputSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingRateInputSetMessagePayload(type=%r, shipping_rate_input=%r, old_shipping_rate_input=%r)"
+            % (self.type, self.shipping_rate_input, self.old_shipping_rate_input)
         )
 
 
@@ -11784,6 +12171,30 @@ class Reference(ResourceIdentifier):
         )
 
 
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ReferenceExistsError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceExistsErrorSchema`."
+    #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``referencedBy`` `in Commercetools)`
+    referenced_by: typing.Optional["ReferenceTypeId"]
+
+    def __init__(
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        referenced_by: typing.Optional["ReferenceTypeId"] = None,
+    ) -> None:
+        self.referenced_by = referenced_by
+        super().__init__(code="ReferenceExists", message=message)
+
+    def __repr__(self) -> str:
+        return "ReferenceExistsError(code=%r, message=%r, referenced_by=%r)" % (
+            self.code,
+            self.message,
+            self.referenced_by,
+        )
+
+
 class ReferenceTypeId(enum.Enum):
     CART = "cart"
     CART_DISCOUNT = "cart-discount"
@@ -11928,6 +12339,7 @@ class ResourceTypeId(enum.Enum):
     CHANNEL = "channel"
     CUSTOMER = "customer"
     ORDER = "order"
+    ORDER_EDIT = "order-edit"
     INVENTORY_ENTRY = "inventory-entry"
     LINE_ITEM = "line-item"
     CUSTOM_LINE_ITEM = "custom-line-item"
@@ -12385,6 +12797,22 @@ class ShippingMethod(Resource):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ShippingMethodDoesNotMatchCartError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodDoesNotMatchCartErrorSchema`."
+
+    def __init__(
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+    ) -> None:
+        super().__init__(code="ShippingMethodDoesNotMatchCart", message=message)
+
+    def __repr__(self) -> str:
+        return "ShippingMethodDoesNotMatchCartError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ShippingMethod`
@@ -12672,7 +13100,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     money: typing.Optional["Money"]
     #: :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
-    #: :class:`int`
+    #: Optional :class:`int`
     quantity: typing.Optional[int]
     #: :class:`str`
     slug: typing.Optional[str]
@@ -15189,6 +15617,8 @@ class WhitespaceTokenizer(SuggestTokenizer):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class Zone(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
     #: :class:`str`
     name: typing.Optional[str]
     #: Optional :class:`str`
@@ -15203,10 +15633,12 @@ class Zone(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
         locations: typing.Optional[typing.List["Location"]] = None,
     ) -> None:
+        self.key = key
         self.name = name
         self.description = description
         self.locations = locations
@@ -15219,12 +15651,13 @@ class Zone(Resource):
 
     def __repr__(self) -> str:
         return (
-            "Zone(id=%r, version=%r, created_at=%r, last_modified_at=%r, name=%r, description=%r, locations=%r)"
+            "Zone(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, name=%r, description=%r, locations=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.key,
                 self.name,
                 self.description,
                 self.locations,
@@ -17312,9 +17745,9 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
-    #: :class:`commercetools.types.TypeReference`
+    #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
-    #: :class:`object`
+    #: Optional :class:`object`
     fields: typing.Optional[object]
 
     def __init__(
@@ -20429,6 +20862,68 @@ class OrderCreatedMessage(Message):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomLineItemDiscountSetMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessageSchema`."
+    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
+    custom_line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
+    discounted_price_per_quantity: typing.Optional[
+        typing.List["DiscountedLineItemPriceForQuantity"]
+    ]
+    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        custom_line_item_id: typing.Optional[str] = None,
+        discounted_price_per_quantity: typing.Optional[
+            typing.List["DiscountedLineItemPriceForQuantity"]
+        ] = None,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
+    ) -> None:
+        self.custom_line_item_id = custom_line_item_id
+        self.discounted_price_per_quantity = discounted_price_per_quantity
+        self.taxed_price = taxed_price
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomLineItemDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, custom_line_item_id=%r, discounted_price_per_quantity=%r, taxed_price=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.custom_line_item_id,
+                self.discounted_price_per_quantity,
+                self.taxed_price,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderCustomerEmailSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessageSchema`."
     #: :class:`str`
@@ -20583,6 +21078,160 @@ class OrderDeletedMessage(Message):
                 self.resource_version,
                 self.type,
                 self.order,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeAddedMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessageSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderDiscountCodeAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, discount_code=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.discount_code,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeRemovedMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessageSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderDiscountCodeRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, discount_code=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.discount_code,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeStateSetMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessageSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+    #: :class:`commercetools.types.DiscountCodeState`
+    state: typing.Optional["DiscountCodeState"]
+    #: Optional :class:`commercetools.types.DiscountCodeState` `(Named` ``oldState`` `in Commercetools)`
+    old_state: typing.Optional["DiscountCodeState"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+        state: typing.Optional["DiscountCodeState"] = None,
+        old_state: typing.Optional["DiscountCodeState"] = None,
+    ) -> None:
+        self.discount_code = discount_code
+        self.state = state
+        self.old_state = old_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderDiscountCodeStateSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, discount_code=%r, state=%r, old_state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.discount_code,
+                self.state,
+                self.old_state,
             )
         )
 
@@ -20898,6 +21547,73 @@ class OrderImportedMessage(Message):
                 self.resource_version,
                 self.type,
                 self.order,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderLineItemDiscountSetMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessageSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
+    discounted_price_per_quantity: typing.Optional[
+        typing.List["DiscountedLineItemPriceForQuantity"]
+    ]
+    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        discounted_price_per_quantity: typing.Optional[
+            typing.List["DiscountedLineItemPriceForQuantity"]
+        ] = None,
+        total_price: typing.Optional["Money"] = None,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.discounted_price_per_quantity = discounted_price_per_quantity
+        self.total_price = total_price
+        self.taxed_price = taxed_price
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderLineItemDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, line_item_id=%r, discounted_price_per_quantity=%r, total_price=%r, taxed_price=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.line_item_id,
+                self.discounted_price_per_quantity,
+                self.total_price,
+                self.taxed_price,
             )
         )
 
@@ -21793,6 +22509,112 @@ class OrderShippingAddressSetMessage(Message):
                 self.resource_version,
                 self.type,
                 self.address,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingInfoSetMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessageSchema`."
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
+    shipping_info: typing.Optional["ShippingInfo"]
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``oldShippingInfo`` `in Commercetools)`
+    old_shipping_info: typing.Optional["ShippingInfo"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        shipping_info: typing.Optional["ShippingInfo"] = None,
+        old_shipping_info: typing.Optional["ShippingInfo"] = None,
+    ) -> None:
+        self.shipping_info = shipping_info
+        self.old_shipping_info = old_shipping_info
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingInfoSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, shipping_info=%r, old_shipping_info=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.shipping_info,
+                self.old_shipping_info,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingRateInputSetMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessageSchema`."
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
+    shipping_rate_input: typing.Optional["ShippingRateInput"]
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``oldShippingRateInput`` `in Commercetools)`
+    old_shipping_rate_input: typing.Optional["ShippingRateInput"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+    ) -> None:
+        self.shipping_rate_input = shipping_rate_input
+        self.old_shipping_rate_input = old_shipping_rate_input
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingRateInputSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, shipping_rate_input=%r, old_shipping_rate_input=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.shipping_rate_input,
+                self.old_shipping_rate_input,
             )
         )
 
@@ -24458,9 +25280,9 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
-    #: :class:`commercetools.types.TypeReference`
+    #: Optional :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
-    #: :class:`object`
+    #: Optional :class:`object`
     fields: typing.Optional[object]
 
     def __init__(
@@ -26025,6 +26847,28 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
         return "ProjectChangeLanguagesAction(action=%r, languages=%r)" % (
             self.action,
             self.languages,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesConfigurationActionSchema`."
+    #: :class:`commercetools.types.MessageConfigurationDraft` `(Named` ``messagesConfiguration`` `in Commercetools)`
+    messages_configuration: typing.Optional["MessageConfigurationDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        messages_configuration: typing.Optional["MessageConfigurationDraft"] = None,
+    ) -> None:
+        self.messages_configuration = messages_configuration
+        super().__init__(action="changeMessagesConfiguration")
+
+    def __repr__(self) -> str:
+        return (
+            "ProjectChangeMessagesConfigurationAction(action=%r, messages_configuration=%r)"
+            % (self.action, self.messages_configuration)
         )
 
 
@@ -28408,3 +29252,19 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
             self.action,
             self.description,
         )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ZoneSetKeyAction(ZoneUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSetKeyActionSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+    ) -> None:
+        self.key = key
+        super().__init__(action="setKey")
+
+    def __repr__(self) -> str:
+        return "ZoneSetKeyAction(action=%r, key=%r)" % (self.action, self.key)

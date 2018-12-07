@@ -8,12 +8,14 @@ from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend
 from commercetools.testing.channels import ChannelsBackend
 from commercetools.testing.custom_objects import CustomObjectsBackend
+from commercetools.testing.extensions import ExtensionsBackend
 from commercetools.testing.inventory import InventoryEntryBackend
 from commercetools.testing.payments import PaymentsBackend
 from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
 from commercetools.testing.project import ProjectBackend
+from commercetools.testing.subscriptions import SubscriptionsBackend
 from commercetools.testing.tax_categories import TaxCategoryBackend
 from commercetools.testing.types import TypesBackend
 
@@ -26,6 +28,7 @@ class BackendRepository:
         self.categories = CategoriesBackend()
         self.channels = ChannelsBackend()
         self.custom_objects = CustomObjectsBackend()
+        self.extensions = ExtensionsBackend()
         self.inventory = InventoryEntryBackend()
         self.payments = PaymentsBackend()
         self.project = ProjectBackend()
@@ -34,6 +37,7 @@ class BackendRepository:
         self.product_types = ProductTypesBackend()
         self.tax_categories = TaxCategoryBackend()
         self.types = TypesBackend()
+        self.subscriptions = SubscriptionsBackend()
 
     def register(self, adapter):
         # Bit of a hack, but it works and makes life easier so hey :-)

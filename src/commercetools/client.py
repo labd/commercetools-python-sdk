@@ -13,6 +13,7 @@ from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
 from commercetools.services.custom_objects import CustomObjectService
+from commercetools.services.extensions import ExtensionService
 from commercetools.services.inventory import InventoryService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
@@ -20,6 +21,7 @@ from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
 from commercetools.services.project import ProjectService
+from commercetools.services.subscriptions import SubscriptionService
 from commercetools.services.tax_categories import TaxCategoryService
 from commercetools.services.types import TypeService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
@@ -229,6 +231,10 @@ class Client:
         raise NotImplementedError()
 
     @property
+    def extensions(self) -> ExtensionService:
+        return ExtensionService(self)
+
+    @property
     def inventory(self):
         return InventoryService(self)
 
@@ -259,6 +265,10 @@ class Client:
     @property
     def product_types(self) -> ProductTypeService:
         return ProductTypeService(self)
+
+    @property
+    def subscriptions(self) -> SubscriptionService:
+        return SubscriptionService(self)
 
     @property
     def reviews(self):

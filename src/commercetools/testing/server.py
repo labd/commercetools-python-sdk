@@ -24,7 +24,7 @@ class HttpAdapter:
     def match(self, request: _RequestObjectProxy) -> typing.Optional[HTTPResponse]:
         for matcher in self._matchers:
             response = matcher(request, skip_port_check=True)
-            if response:
+            if response is not None:
                 return response
         return None
 
@@ -69,7 +69,7 @@ class Server:
         )
 
     def _create_response(self, response) -> webob.Response:
-        if response:
+        if response is not None:
             return webob.Response(
                 body=response.text,
                 charset="utf-8",

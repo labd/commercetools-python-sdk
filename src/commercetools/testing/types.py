@@ -7,6 +7,8 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class TypesModel(BaseModel):
+    _resource_schema = schemas.TypeSchema
+
     def _create_from_draft(
         self, obj: types.TypeDraft, id: typing.Optional[str] = None
     ) -> types.Type:
@@ -17,9 +19,10 @@ class TypesModel(BaseModel):
             name=obj.name,
             description=obj.description,
             key=obj.key,
-            resource_type_ids=obj.resource_type_ids,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),
+            resource_type_ids=obj.resource_type_ids,
+            field_definitions=obj.field_definitions,
         )
 
 

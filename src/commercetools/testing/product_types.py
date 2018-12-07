@@ -21,6 +21,7 @@ class ProductTypesModel(BaseModel):
             key=obj.key,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),
+            attributes=obj.attributes,
         )
 
 

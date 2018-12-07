@@ -1,3 +1,4 @@
+import base64
 import typing
 import uuid
 from urllib.parse import parse_qs
@@ -13,6 +14,9 @@ class AuthModel:
 
     def add_token(self, token):
         self.tokens.append(token)
+
+    def is_valid(self, client_id, client_secret):
+        return True
 
 
 class AuthBackend(BaseBackend):
@@ -36,16 +40,30 @@ class AuthBackend(BaseBackend):
 
     def token(self, request):
         params = parse_qs(request.body)
-        if not params.get("client_id") and not params.get("client_secret"):
+
+        if request.headers.get("Authorization"):
+            auth_type, auth_info = request.headers["Authorization"].split()
+            if auth_type != "Basic":
+                response = create_response(request, status_code=401)
+                return response
+
+            client_id, client_secret = str(base64.b64decode(auth_info)).split(":")
+        elif params.get("client_id") and params.get("client_secret"):
+            client_id = params.get("client_id")
+            client_secret = params.get("client_secret")
+        else:
             response = create_response(request, status_code=401)
             return response
 
-        token = {
-            "access_token": str(uuid.uuid4()),
-            "expires_in": self._expire_time,
-            "scope": params["scope"],
-            "token_type": "Bearer",
-        }
-        self.model.add_token(token)
-        response = create_response(request, json=token)
-        return response
+        scope = params.get("scope", "manage_project:todo")
+
+        if self.model.is_valid(client_id, client_secret):
+            token = {
+                "access_token": str(uuid.uuid4()),
+                "expires_in": self._expire_time,
+                "scope": scope,
+                "token_type": "Bearer",
+            }
+            self.model.add_token(token)
+            response = create_response(request, json=token)
+            return response

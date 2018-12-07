@@ -15,6 +15,9 @@ class BaseModel:
 
     def __init__(self):
         self.objects: typing.Dict = {}
+        assert (
+            self._resource_schema
+        ), f"{self.__class__.__name__} has no resource schema defined"
 
     def add(self, obj, id=None):
         obj = self._create_from_draft(obj, id)
@@ -47,6 +50,15 @@ class BaseModel:
         for obj in self.objects.values():
             if obj["key"] == key:
                 return obj
+
+    def delete_by_id(self, id):
+        obj = self.objects.pop(uuid.UUID(id))
+        return obj
+
+    def delete_by_key(self, key):
+        for obj_id, obj in self.objects.items():
+            if obj["key"] == key:
+                return self.objects.pop(obj_id)
 
 
 class BaseBackend:
@@ -139,6 +151,18 @@ class ServiceBackend(BaseBackend):
 
     def update_by_key(self, request, key):
         obj = self.model.get_by_key(key)
+        if obj:
+            return create_response(request, json=obj)
+        return create_response(request, status_code=404)
+
+    def delete_by_id(self, request, id):
+        obj = self.model.delete_by_id(id)
+        if obj:
+            return create_response(request, json=obj)
+        return create_response(request, status_code=404)
+
+    def delete_by_key(self, request, key):
+        obj = self.model.delete_by_key(key)
         if obj:
             return create_response(request, json=obj)
         return create_response(request, status_code=404)

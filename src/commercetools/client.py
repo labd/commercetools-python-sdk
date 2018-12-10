@@ -21,6 +21,7 @@ from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
 from commercetools.services.project import ProjectService
+from commercetools.services.shipping_methods import ShippingMethodService
 from commercetools.services.subscriptions import SubscriptionService
 from commercetools.services.tax_categories import TaxCategoryService
 from commercetools.services.types import TypeService
@@ -265,6 +266,10 @@ class Client:
     @property
     def product_types(self) -> ProductTypeService:
         return ProductTypeService(self)
+
+    @property
+    def shipping_methods(self) -> ShippingMethodService:
+        return ShippingMethodService(self)
 
     @property
     def subscriptions(self) -> SubscriptionService:

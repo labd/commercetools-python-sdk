@@ -150,6 +150,103 @@ class Address:
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class ApiClient:
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: :class:`str`
+    scope: typing.Optional[str]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: :class:`datetime.date` `(Named` ``lastUsedAt`` `in Commercetools)`
+    last_used_at: typing.Optional[datetime.date]
+    #: Optional :class:`str`
+    secret: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_used_at: typing.Optional[datetime.date] = None,
+        secret: typing.Optional[str] = None,
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.scope = scope
+        self.created_at = created_at
+        self.last_used_at = last_used_at
+        self.secret = secret
+
+    def __repr__(self) -> str:
+        return (
+            "ApiClient(id=%r, name=%r, scope=%r, created_at=%r, last_used_at=%r, secret=%r)"
+            % (
+                self.id,
+                self.name,
+                self.scope,
+                self.created_at,
+                self.last_used_at,
+                self.secret,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ApiClientDraft:
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientDraftSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: :class:`str`
+    scope: typing.Optional[str]
+
+    def __init__(
+        self, *, name: typing.Optional[str] = None, scope: typing.Optional[str] = None
+    ) -> None:
+        self.name = name
+        self.scope = scope
+
+    def __repr__(self) -> str:
+        return "ApiClientDraft(name=%r, scope=%r)" % (self.name, self.scope)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ApiClientPagedQueryResponse:
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
+    #: List of :class:`commercetools.types.ApiClient`
+    results: typing.Optional[typing.Sequence["ApiClient"]]
+
+    def __init__(
+        self,
+        *,
+        count: typing.Optional[int] = None,
+        total: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        results: typing.Optional[typing.Sequence["ApiClient"]] = None,
+    ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
+        self.results = results
+
+    def __repr__(self) -> str:
+        return (
+            "ApiClientPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
+            % (self.count, self.total, self.offset, self.results)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class Asset:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSchema`."
     #: :class:`str`
@@ -1575,6 +1672,19 @@ class Delivery:
             self.parcels,
             self.address,
         )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryFormat:
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryFormatSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+
+    def __repr__(self) -> str:
+        return "DeliveryFormat(type=%r)" % (self.type,)
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -5466,6 +5576,8 @@ class SubscriptionDraft:
     key: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.MessageSubscription`
     messages: typing.Optional[typing.List["MessageSubscription"]]
+    #: Optional :class:`commercetools.types.DeliveryFormat`
+    format: typing.Optional["DeliveryFormat"]
 
     def __init__(
         self,
@@ -5474,18 +5586,18 @@ class SubscriptionDraft:
         destination: typing.Optional["Destination"] = None,
         key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
+        format: typing.Optional["DeliveryFormat"] = None,
     ) -> None:
         self.changes = changes
         self.destination = destination
         self.key = key
         self.messages = messages
+        self.format = format
 
     def __repr__(self) -> str:
-        return "SubscriptionDraft(changes=%r, destination=%r, key=%r, messages=%r)" % (
-            self.changes,
-            self.destination,
-            self.key,
-            self.messages,
+        return (
+            "SubscriptionDraft(changes=%r, destination=%r, key=%r, messages=%r, format=%r)"
+            % (self.changes, self.destination, self.key, self.messages, self.format)
         )
 
 
@@ -8391,6 +8503,28 @@ class DeliveryAddressSetMessagePayload(MessagePayload):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryCloudEventsFormat(DeliveryFormat):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryCloudEventsFormatSchema`."
+    #: :class:`str` `(Named` ``cloudEventsVersion`` `in Commercetools)`
+    cloud_events_version: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        cloud_events_version: typing.Optional[str] = None,
+    ) -> None:
+        self.cloud_events_version = cloud_events_version
+        super().__init__(type="CloudEvents")
+
+    def __repr__(self) -> str:
+        return "DeliveryCloudEventsFormat(type=%r, cloud_events_version=%r)" % (
+            self.type,
+            self.cloud_events_version,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
 class DeliveryItemsUpdatedMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessagePayloadSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -8414,6 +8548,17 @@ class DeliveryItemsUpdatedMessagePayload(MessagePayload):
             "DeliveryItemsUpdatedMessagePayload(type=%r, delivery_id=%r, items=%r)"
             % (self.type, self.delivery_id, self.items)
         )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryPlatformFormat(DeliveryFormat):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryPlatformFormatSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="Platform")
+
+    def __repr__(self) -> str:
+        return "DeliveryPlatformFormat(type=%r)" % (self.type,)
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
@@ -13055,7 +13200,7 @@ class SqsDestination(Destination):
     access_key: typing.Optional[str]
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
     access_secret: typing.Optional[str]
-    #: :class:`str` `(Named` ``queueURL`` `in Commercetools)`
+    #: :class:`str` `(Named` ``queueUrl`` `in Commercetools)`
     queue_url: typing.Optional[str]
     #: :class:`str`
     region: typing.Optional[str]
@@ -15166,6 +15311,8 @@ class Subscription(Resource):
     key: typing.Optional[str]
     #: List of :class:`commercetools.types.MessageSubscription`
     messages: typing.Optional[typing.List["MessageSubscription"]]
+    #: :class:`commercetools.types.DeliveryFormat`
+    format: typing.Optional["DeliveryFormat"]
 
     def __init__(
         self,
@@ -15178,11 +15325,13 @@ class Subscription(Resource):
         destination: typing.Optional["Destination"] = None,
         key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
+        format: typing.Optional["DeliveryFormat"] = None,
     ) -> None:
         self.changes = changes
         self.destination = destination
         self.key = key
         self.messages = messages
+        self.format = format
         super().__init__(
             id=id,
             version=version,
@@ -15192,7 +15341,7 @@ class Subscription(Resource):
 
     def __repr__(self) -> str:
         return (
-            "Subscription(id=%r, version=%r, created_at=%r, last_modified_at=%r, changes=%r, destination=%r, key=%r, messages=%r)"
+            "Subscription(id=%r, version=%r, created_at=%r, last_modified_at=%r, changes=%r, destination=%r, key=%r, messages=%r, format=%r)"
             % (
                 self.id,
                 self.version,
@@ -15202,6 +15351,7 @@ class Subscription(Resource):
                 self.destination,
                 self.key,
                 self.messages,
+                self.format,
             )
         )
 

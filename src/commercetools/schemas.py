@@ -78,6 +78,56 @@ class AddressSchema(marshmallow.Schema):
         return types.Address(**data)
 
 
+class ApiClientDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ApiClientDraft`."
+    name = marshmallow.fields.String(allow_none=True)
+    scope = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ApiClientDraft(**data)
+
+
+class ApiClientPagedQueryResponseSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ApiClientPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
+    results = marshmallow.fields.Nested(
+        nested="commercetools.schemas.ApiClientSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ApiClientPagedQueryResponse(**data)
+
+
+class ApiClientSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ApiClient`."
+    id = marshmallow.fields.String(allow_none=True)
+    name = marshmallow.fields.String(allow_none=True)
+    scope = marshmallow.fields.String(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_used_at = marshmallow.fields.Date(allow_none=True, data_key="lastUsedAt")
+    secret = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ApiClient(**data)
+
+
 class AssetDimensionsSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.AssetDimensions`."
     w = marshmallow.fields.Integer(allow_none=True)
@@ -1051,6 +1101,19 @@ class CustomerTokenSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.CustomerToken(**data)
+
+
+class DeliveryFormatSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.DeliveryFormat`."
+    type = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryFormat(**data)
 
 
 class DeliveryItemSchema(marshmallow.Schema):
@@ -4380,6 +4443,16 @@ class SubscriptionDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
     )
+    format = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "CloudEvents": "commercetools.schemas.DeliveryCloudEventsFormatSchema",
+            "Platform": "commercetools.schemas.DeliveryPlatformFormatSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -6740,6 +6813,21 @@ class DeliveryAddressSetMessagePayloadSchema(MessagePayloadSchema):
         return types.DeliveryAddressSetMessagePayload(**data)
 
 
+class DeliveryCloudEventsFormatSchema(DeliveryFormatSchema):
+    "Marshmallow schema for :class:`commercetools.types.DeliveryCloudEventsFormat`."
+    cloud_events_version = marshmallow.fields.String(
+        allow_none=True, data_key="cloudEventsVersion"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryCloudEventsFormat(**data)
+
+
 class DeliveryItemsUpdatedMessagePayloadSchema(MessagePayloadSchema):
     "Marshmallow schema for :class:`commercetools.types.DeliveryItemsUpdatedMessagePayload`."
     delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
@@ -6757,6 +6845,18 @@ class DeliveryItemsUpdatedMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data):
         del data["type"]
         return types.DeliveryItemsUpdatedMessagePayload(**data)
+
+
+class DeliveryPlatformFormatSchema(DeliveryFormatSchema):
+    "Marshmallow schema for :class:`commercetools.types.DeliveryPlatformFormat`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.DeliveryPlatformFormat(**data)
 
 
 class DeliveryRemovedMessagePayloadSchema(MessagePayloadSchema):
@@ -10489,7 +10589,7 @@ class SqsDestinationSchema(DestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.SqsDestination`."
     access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
     access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
-    queue_url = marshmallow.fields.String(allow_none=True, data_key="queueURL")
+    queue_url = marshmallow.fields.String(allow_none=True, data_key="queueUrl")
     region = marshmallow.fields.String(allow_none=True)
 
     class Meta:
@@ -12099,6 +12199,15 @@ class SubscriptionSchema(ResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
+    )
+    format = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "CloudEvents": "commercetools.schemas.DeliveryCloudEventsFormatSchema",
+            "Platform": "commercetools.schemas.DeliveryPlatformFormatSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
     )
 
     class Meta:

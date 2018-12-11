@@ -51,7 +51,7 @@ Client.custom_objects
 Client.inventory
 ~~~~~~~~~~~~~~~~
 
-.. autoclass:: commercetools.services.channels.InventoryService
+.. autoclass:: commercetools.services.inventory.InventoryService
     :members:
     :undoc-members:
     :show-inheritance:

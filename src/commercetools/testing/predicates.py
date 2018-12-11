@@ -10,7 +10,8 @@ token_pat = re.compile(
         (?:\d+\.\d+) |       # Floats
         (?:\d+) |            # Integers
         "(?:\\.|[^"\\])*" |  # Double quoted strings
-        '(?:\\.|[^'\\])*'    # Single quoted strings
+        '(?:\\.|[^'\\])*' |  # Single quoted strings
+        (?:true|false)       # Booleans
     )
     |
     (
@@ -304,8 +305,13 @@ class LiteralToken(Symbol):
     def ast(self, context=None):
         if self.value.isdigit():
             return ast.Num(n=int(self.value))
+        if self.value in ["true", "false"]:
+            return ast.NameConstant(self.parse_bool(self.value))
         else:
             return ast.Str(s=self.value[1:-1])
+
+    def parse_bool(self, value) -> bool:
+        return value == "true"
 
 
 class LogicalToken(Symbol):

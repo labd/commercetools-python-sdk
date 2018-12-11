@@ -18,6 +18,8 @@ from commercetools.testing import predicates
         'name in ("Peter", "Barbara")',
         "name is not defined",
         "geoLocation within circle(13.37770, 52.51627, 1000)",
+        "isDefault = true",
+        "isDefault = false",
         'variants(attributes(name="attribute-name" and value(centAmount > 999 and centAmount < 1001 and currencyCode="EUR")))',
     ],
 )

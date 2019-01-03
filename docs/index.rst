@@ -27,7 +27,7 @@ Example
         client_secret="<your-client-secret>",
         scope=["<scopes>"],
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
 
     product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")

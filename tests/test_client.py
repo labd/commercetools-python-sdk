@@ -13,7 +13,7 @@ def client_environment_settings(monkeypatch):
     monkeypatch.setenv("CTP_CLIENT_SECRET", "client_secret")
     monkeypatch.setenv("CTP_CLIENT_SCOPES", "some_scope")
     monkeypatch.setenv("CTP_API_URL", "https://api.shere.io")
-    monkeypatch.setenv("CTP_AUTH_URL", "https://auth.sphere.io")
+    monkeypatch.setenv("CTP_AUTH_URL", "https://auth.sphere.io/oauth/token")
 
 
 def test_client_with_environment_settings_is_setup(
@@ -31,7 +31,7 @@ def test_auto_refresh(commercetools_api):
         client_secret="mysecret",
         project_key="test",
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
     client.products.query()
     time.sleep(1)
@@ -53,7 +53,7 @@ def test_cache_token(commercetools_api):
         client_secret="none",
         project_key="test",
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1
 
@@ -62,6 +62,6 @@ def test_cache_token(commercetools_api):
         client_secret="none",
         project_key="test",
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1

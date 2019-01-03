@@ -74,7 +74,7 @@ class Client:
         token = self._token_saver.get_token(
             self._config["client_id"], self._config["scope"]
         )
-        token_oauth_url = f"{self._config['token_url']}/oauth/token"
+        token_oauth_url = self._config['token_url']
 
         client = BackendApplicationClient(
             client_id=self._config["client_id"], scope=self._config["scope"]

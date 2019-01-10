@@ -35,7 +35,7 @@
  - Workaround a bug in marshmallow_enum ini combination with many=True
 
 1.0.0 (2018-11-02)
-===================
+==================
 This is the initial opensource release of the Commercetools Python SDK.
 
  - Add travis support in combination with tox

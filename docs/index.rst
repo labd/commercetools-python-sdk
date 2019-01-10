@@ -57,6 +57,10 @@ And then constructing a client without arguments:
     product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
     print(product)
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Usage Documentation
+
 
 .. toctree::
    :maxdepth: 2
@@ -66,3 +70,9 @@ And then constructing a client without arguments:
    api/commercetools.types
    api/commercetools.schemas
    api/commercetools.utils
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Changelog
+
+   changes

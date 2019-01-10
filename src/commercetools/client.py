@@ -1,3 +1,4 @@
+import urllib
 import os
 import typing
 
@@ -42,6 +43,20 @@ class RefreshingOAuth2Session(OAuth2Session):
 
 
 class Client:
+    """The Commercetools Client, used to interact with the Commercetools API.
+
+    :param project_key: the key for the project with which you want to interact
+    :param client_id: the oauth2 client id
+    :param client_secret: the oauth2 client secret
+    :param scope: the oauth2 scope. If None then 'manage_project:{project_key}'
+    :param url: the api endpoint
+    :param token_url: the oauth2 token url endpoint. This should be the full
+     path to the token url.
+    :param token_saver: optional custom token saver to store and retrieve the
+     oauth2 tokens.
+
+    """
+
     def __init__(
         self,
         project_key: str = None,
@@ -65,7 +80,7 @@ class Client:
         # Make sure we use the config vars
         del project_key, client_id, client_secret, url, token_url, scope
 
-        self._config = self._prepare_config(config)
+        self._config = self._read_env_vars(config)
         self._token_saver = token_saver or DefaultTokenSaver()
         self._url = self._config["url"]
         self._base_url = f"{self._config['url']}/{self._config['project_key']}/"
@@ -74,7 +89,6 @@ class Client:
         token = self._token_saver.get_token(
             self._config["client_id"], self._config["scope"]
         )
-        token_oauth_url = f"{self._config['token_url']}/oauth/token"
 
         client = BackendApplicationClient(
             client_id=self._config["client_id"], scope=self._config["scope"]
@@ -82,7 +96,7 @@ class Client:
         self._http_client = RefreshingOAuth2Session(
             client=client,
             scope=self._config["scope"],
-            auto_refresh_url=token_oauth_url,
+            auto_refresh_url=self._config["token_url"],
             auto_refresh_kwargs={
                 "client_id": self._config["client_id"],
                 "client_secret": self._config["client_secret"],
@@ -100,7 +114,7 @@ class Client:
             self._http_client.token = token
         else:
             token = self._http_client.fetch_token(
-                token_url=token_oauth_url,
+                token_url=self._config["token_url"],
                 scope=self._config["scope"],
                 client_id=self._config["client_id"],
                 client_secret=self._config["client_secret"],
@@ -178,7 +192,7 @@ class Client:
         obj = schemas.ErrorResponseSchema().loads(response.content)
         raise CommercetoolsError(obj.message, obj)
 
-    def _prepare_config(self, config: dict) -> dict:
+    def _read_env_vars(self, config: dict) -> dict:
         if not config.get("project_key"):
             config["project_key"] = os.environ.get("CTP_PROJECT_KEY")
 
@@ -193,6 +207,16 @@ class Client:
 
         if not config.get("token_url"):
             config["token_url"] = os.environ.get("CTP_AUTH_URL")
+
+            # When the token_url is passed via environment variables we
+            # check if we need to append /oauth/token to the url. This is
+            # required since commercetools doesn't do this when outputting
+            # the settings when you create an API Client.
+            parts = urllib.parse.urlparse(config["token_url"])
+            if parts.path == "":
+                config["token_url"] = urllib.parse.urlunparse(
+                    (*parts[:2], "/oauth/token", *parts[3:])
+                )
 
         if not config["scope"]:
             config["scope"] = os.environ.get("CTP_SCOPES")

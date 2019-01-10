@@ -26,14 +26,12 @@ from commercetools.testing.types import TypesBackend
 
 class Storage:
     def __init__(self):
-        self._stores = {}
+        self._stores: typing.Dict[str, typing.Dict[uuid.UUID, typing.Any]] = {}
 
-    def init_store(self, name: str) -> typing.Dict[str, typing.Any]:
+    def init_store(self, name: str) -> typing.Dict[uuid.UUID, typing.Any]:
         return self._stores.setdefault(name, {})
 
-    def get_by_resource_identifier(
-        self, obj: "commercetools.types.ResourceIdentifier"
-    ) -> typing.Optional[typing.Any]:
+    def get_by_resource_identifier(self, obj: typing.Any) -> typing.Optional[typing.Any]:
         store = self._stores[obj.type_id.value]
 
         try:
@@ -41,11 +39,12 @@ class Storage:
                 key = uuid.UUID(obj.id)
                 return store[key]
         except KeyError:
-            raise
+            raise ValueError("No resource found with id %r", obj.id)
         if obj.key:
-            for item in store:
+            for item in store.values():
                 if item.key == obj.key:
                     return item
+        raise ValueError("No resource found")
 
 
 class BackendRepository:

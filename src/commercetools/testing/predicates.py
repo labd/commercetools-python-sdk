@@ -32,10 +32,10 @@ token_pat = re.compile(
 class Tokenizer:
     def __init__(self, parser):
         self.parser = parser
-        self.combined_tokens = []
+        self.combined_tokens: typing.List[typing.List[str]] = []
         self._iterator = None
 
-    def register_token_combination(self, tokens):
+    def register_token_combination(self, tokens: typing.List[str]):
         self.combined_tokens.append(tokens)
 
     def tokenize(self, program):
@@ -116,7 +116,7 @@ class Symbol:
 
 class Parser:
     def __init__(self):
-        self.symbol_table = {}
+        self.symbol_table: typing.Dict[str, typing.Type[Symbol]] = {}
         self._peek = None
         self.tokenizer = Tokenizer(self)
 
@@ -324,8 +324,8 @@ class LogicalToken(Symbol):
 
 
 class NameToken(Symbol):
-    identifier = "(name)"
-    lbp = 0
+    identifier: str = "(name)"
+    lbp: int = 0
 
     def nud(self):
         return self
@@ -386,7 +386,7 @@ parser.define("(end)")
 
 class Context:
     def __init__(self):
-        self.stack = []
+        self.stack: typing.List[str] = []
 
 
 class PredicateFilter:

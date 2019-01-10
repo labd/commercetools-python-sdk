@@ -41,6 +41,9 @@ class AuthBackend(BaseBackend):
     def token(self, request):
         params = parse_qs(request.body)
 
+        client_id: typing.Optional[str] = None
+        client_secret: typing.Optional[str] = None
+
         if request.headers.get("Authorization"):
             auth_type, auth_info = request.headers["Authorization"].split()
             if auth_type != "Basic":

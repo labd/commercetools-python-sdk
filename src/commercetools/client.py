@@ -1,13 +1,13 @@
-import urllib
 import os
 import typing
+import urllib.parse
 
 import requests
 from marshmallow.base import SchemaABC
 from oauthlib.oauth2 import BackendApplicationClient
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 from requests_oauthlib import OAuth2Session
+from urllib3.util.retry import Retry
 
 from commercetools import schemas
 from commercetools.services.carts import CartService

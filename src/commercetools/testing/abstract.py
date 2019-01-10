@@ -14,7 +14,7 @@ from commercetools.testing.predicates import PredicateFilter
 
 
 class BaseModel:
-    _resource_schema: typing.Optional[ResourceSchema] = None
+    _resource_schema: typing.Type[ResourceSchema]
 
     def __init__(self):
         self.objects: typing.Dict = {}

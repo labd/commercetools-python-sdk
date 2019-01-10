@@ -7,6 +7,43 @@ from requests.exceptions import HTTPError
 from commercetools import types
 
 
+def test_products_create(client):
+    custom_type = client.types.create(
+        types.TypeDraft(
+            name=types.LocalizedString(en="myType"),
+            resource_type_ids=[types.ResourceTypeId.ASSET],
+        )
+    )
+    assert custom_type.id
+
+    draft = types.ProductDraft(
+        key="test-product",
+        publish=True,
+        master_variant=types.ProductVariantDraft(
+            assets=[
+                types.AssetDraft(
+                    custom=types.CustomFieldsDraft(
+                        type=types.ResourceIdentifier(
+                            type_id=types.ReferenceTypeId.TYPE, id=custom_type.id
+                        ),
+                        fields=types.FieldContainer(foo="bar"),
+                    )
+                )
+            ],
+            prices=[
+                types.PriceDraft(
+                    value=types.Money(cent_amount=1000, currency_code="EUR"),
+                    country="NL",
+                )
+            ],
+        ),
+    )
+    product = client.products.create(draft)
+    assert product.id
+    assert product.master_data.current.master_variant.assets
+    assert product.master_data.current.master_variant.prices
+
+
 def test_products_get_by_id(client):
     product = client.products.create(types.ProductDraft(key="test-product"))
 

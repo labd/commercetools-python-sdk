@@ -54,8 +54,7 @@ def test_shipping_method_update(client):
     """
     shipping_method = client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping-method",
-            name="test shipping method",
+            key="test-shipping-method", name="test shipping method"
         )
     )
     assert shipping_method.key == "test-shipping-method"
@@ -63,9 +62,7 @@ def test_shipping_method_update(client):
     shipping_method = client.shipping_methods.update_by_id(
         id=shipping_method.id,
         version=shipping_method.version,
-        actions=[
-            types.ShippingMethodChangeNameAction(name="shipping-method-2")
-        ],
+        actions=[types.ShippingMethodChangeNameAction(name="shipping-method-2")],
     )
 
     assert shipping_method.key == "test-shipping-method"

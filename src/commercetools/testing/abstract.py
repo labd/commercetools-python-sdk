@@ -4,7 +4,6 @@ import uuid
 
 import marshmallow
 import requests_mock
-
 from requests_mock import create_response
 
 from commercetools.schemas import ResourceSchema

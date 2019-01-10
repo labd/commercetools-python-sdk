@@ -2,16 +2,19 @@ import re
 import typing
 import uuid
 
+import marshmallow
 import requests_mock
+
 from requests_mock import create_response
 
+from commercetools.schemas import ResourceSchema
 from commercetools.services import abstract
 from commercetools.testing import utils
 from commercetools.testing.predicates import PredicateFilter
 
 
 class BaseModel:
-    _resource_schema = None
+    _resource_schema: typing.Optional[ResourceSchema] = None
 
     def __init__(self):
         self.objects: typing.Dict = {}
@@ -103,8 +106,8 @@ class BaseBackend:
 class ServiceBackend(BaseBackend):
     hostnames = ["api.sphere.io", "localhost"]
     model_class: typing.Any = None
-    _schema_draft = None
-    _schema_query_response = None
+    _schema_draft: typing.Optional[marshmallow.Schema] = None
+    _schema_query_response: typing.Optional[marshmallow.Schema] = None
 
     @property
     def path_prefix(self):

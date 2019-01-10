@@ -1,6 +1,7 @@
 import ast
 import logging
 import re
+import typing
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ class Tokenizer:
         return next(self._iterator)
 
     def _get_tokens(self, program):
-        buf = []
+        buf: typing.List[str] = []
         for match in token_pat.finditer(program):
             value, identifier, symbol = match.groups()
 
@@ -92,8 +93,8 @@ class Tokenizer:
 
 
 class Symbol:
-    identifier = None
-    lbp = None
+    identifier: typing.Optional[str] = None
+    lbp: typing.Optional[int] = None
 
     def __init__(self, parser, value):
         self.value = value

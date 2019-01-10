@@ -73,6 +73,6 @@ And then constructing a client without arguments:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Changelog
+   :caption: Changes
 
    changes

@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+import uuid
 import typing
 
 import requests_mock
@@ -29,6 +30,24 @@ class Storage:
 
     def init_store(self, name: str) -> typing.Dict[str, typing.Any]:
         return self._stores.setdefault(name, {})
+
+    def get_by_resource_identifier(
+        self, obj: "commercetools.types.ResourceIdentifier"
+    ) -> typing.Optional[typing.Any]:
+        store = self._stores[obj.type_id.value]
+
+        try:
+            if obj.id:
+                key = uuid.UUID(obj.id)
+                return store[key]
+        except KeyError:
+            raise
+        if obj.key:
+            for item in store:
+                if item.key == obj.key:
+                    return item
+
+
 class BackendRepository:
     def __init__(self):
         requests_mock.mock.case_sensitive = True

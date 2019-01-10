@@ -8,9 +8,9 @@ install_requires = [
     "requests-oauthlib>=1.0.0",
     "attrs>=18.2.0",
     "marshmallow>=3.0.0b17",
-    "marshmallow-enum==1.4.1",
-    "WebOb==1.8.4",
-    "wrapt==1.10.0",
+    "marshmallow-enum>=1.4.1",
+    "WebOb>=1.8.4",
+    "wrapt>=1.10.0",
 ]
 
 codegen_requires = ["PyYAML==3.13", "astunparse==1.6.1", "black==18.9b0", "isort"]
@@ -18,7 +18,7 @@ codegen_requires = ["PyYAML==3.13", "astunparse==1.6.1", "black==18.9b0", "isort
 docs_require = [
     "Sphinx>=1.8.1",
     "sphinx-rtd-theme==0.4.2",
-    "sphinx-autodoc-typehints==1.4.0",
+    "sphinx-autodoc-typehints==1.6.0",
 ]
 
 tests_require = [

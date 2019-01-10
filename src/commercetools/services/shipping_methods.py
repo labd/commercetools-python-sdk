@@ -18,7 +18,9 @@ class ShippingMethodQuerySchema(abstract.AbstractQuerySchema):
 
 class ShippingMethodService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.ShippingMethod]:
-        return self._client._get(f"shipping-methods/{id}", {}, schemas.ShippingMethodSchema)
+        return self._client._get(
+            f"shipping-methods/{id}", {}, schemas.ShippingMethodSchema
+        )
 
     def query(
         self,
@@ -37,11 +39,17 @@ class ShippingMethodService(abstract.AbstractService):
                 "offset": offset,
             }
         )
-        return self._client._get("shipping-methods", params, schemas.ShippingMethodPagedQueryResponseSchema)
+        return self._client._get(
+            "shipping-methods", params, schemas.ShippingMethodPagedQueryResponseSchema
+        )
 
     def create(self, draft: types.ShippingMethodDraft) -> types.ShippingMethod:
         return self._client._post(
-            "shipping-methods", {}, draft, schemas.ShippingMethodDraftSchema, schemas.ShippingMethodSchema
+            "shipping-methods",
+            {},
+            draft,
+            schemas.ShippingMethodDraftSchema,
+            schemas.ShippingMethodSchema,
         )
 
     def update_by_id(
@@ -69,7 +77,7 @@ class ShippingMethodService(abstract.AbstractService):
         )
 
     def delete(self, id: str, version: int) -> types.ShippingMethod:
-        params = ShippingMethodDeleteSchema().dump(
-            {"version": version}
+        params = ShippingMethodDeleteSchema().dump({"version": version})
+        return self._client._delete(
+            f"shipping-methods/{id}", params, schemas.ShippingMethodSchema
         )
-        return self._client._delete(f"shipping-methods/{id}", params, schemas.ShippingMethodSchema)

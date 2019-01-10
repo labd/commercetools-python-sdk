@@ -1,0 +1,97 @@
+1.5.0 (2018-12-11)
+==================
+ - Add ability to run the mock server standalone using:
+    `python -m commercetools.testing.server`
+ - Add paginator class
+ - Add support for delete operations in the mock services
+ - Support oauth2 authentication via basic auth and querystring in the mock
+   service
+ - Properly support predicate filtering in the mock endpoints using a custom
+   query parser.
+
+
+1.4.0 (2018-11-16)
+==================
+ - Add HTTP retry logic for status codes 502, 503, 504 (retry 3 times).
+ - Add Client.products.upload_image() endpoint
+ - Add Inventory endpoints
+
+
+1.3.0 (2018-11-05)
+==================
+ - Add documentation via read the docs
+
+
+1.2.0 (2018-11-03)
+==================
+ - Add support for custom objects (including mock endpoints)
+ - Fix handling of discriminator fields
+
+
+1.1.0 (2018-11-02)
+==================
+ - Add support for channels endpoint
+ - Fix packaging issues
+ - Workaround a bug in marshmallow_enum ini combination with many=True
+
+1.0.0 (2018-11-02)
+===================
+This is the initial opensource release of the Commercetools Python SDK.
+
+ - Add travis support in combination with tox
+ - Properly support passing list and scalar values to where, sort and expand
+
+
+0.6.0 (2018-10-26)
+==================
+ - Fix project projections mock service
+ - Store product type in the product mock service
+
+
+0.5.1 (2018-10-25)
+==================
+ - No longer require full token url, instead append /oauth/token automatically
+
+
+0.5.0 (2018-10-24)
+==================
+ - Sync with latest commercetools api reference
+ - Update product projections mock endpoint to use same products as product
+   mock endpoint.
+ - Update payment and transaction endpoints
+ - Add ability to run the mock server standalone using:
+    `python -m commercetools.testing.server`
+
+
+0.4.1 (2018-10-19)
+==================
+ - Add mock endpoint for product projections
+
+
+0.4.0 (2018-10-11)
+==================
+ - Add support for expand parameter in product projections endpoint
+ - Add support for product types
+ - Sync with latest commercetools api reference
+
+
+0.3.1 (2018-10-09)
+==================
+ - Use the cached oauth2 token if present
+
+
+0.3.0 (2018-10-09)
+==================
+ - Implement ability to customize the oauth2 token saver and implement a proper
+   default mechanism which uses threading.local()
+
+
+0.2.0 (2018-10-05)
+==================
+ - Add categories mock endpoint for testing
+ - Update product and category unittests
+
+
+0.1.0 (2018-10-02)
+==================
+Initial release of a code generated Python SDK.

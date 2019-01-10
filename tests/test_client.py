@@ -31,7 +31,7 @@ def test_auto_refresh(commercetools_api):
         client_secret="mysecret",
         project_key="test",
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
     client.products.query()
     time.sleep(1)
@@ -53,7 +53,7 @@ def test_cache_token(commercetools_api):
         client_secret="none",
         project_key="test",
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1
 
@@ -62,6 +62,6 @@ def test_cache_token(commercetools_api):
         client_secret="none",
         project_key="test",
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1

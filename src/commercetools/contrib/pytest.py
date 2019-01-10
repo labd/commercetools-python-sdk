@@ -22,7 +22,7 @@ def commercetools_client(commercetools_api) -> typing.Generator[Client, None, No
         client_secret="client-secret",
         scope=[],
         url="https://api.sphere.io",
-        token_url="https://auth.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
     )
 
 

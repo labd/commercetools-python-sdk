@@ -1,6 +1,6 @@
 2.0.0 (unreleased)
 ------------------
- - When creating the client the token url should now be a compete URL. When
+ - When creating the client the token url should now be a complete URL. When
    using environment variables it will automatically append /oauth/token if the
    url has no path specified. See #27
  - Add a changelog :-)

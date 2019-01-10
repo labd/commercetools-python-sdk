@@ -2,15 +2,13 @@ import datetime
 import typing
 import uuid
 
-from requests_mock import create_response
-
 from commercetools import schemas, types
-from commercetools.services import abstract
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CategoriesModel(BaseModel):
+    _primary_type_name = "category"
     _resource_schema = schemas.CategorySchema
 
     def _create_from_draft(

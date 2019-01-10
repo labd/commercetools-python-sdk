@@ -7,6 +7,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ExtensionsModel(BaseModel):
+    _primary_type_name = "extension"
     _resource_schema = schemas.ExtensionSchema
 
     def _create_from_draft(

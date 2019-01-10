@@ -16,8 +16,9 @@ from commercetools.testing.predicates import PredicateFilter
 class BaseModel:
     _resource_schema: typing.Type[ResourceSchema]
 
-    def __init__(self):
-        self.objects: typing.Dict = {}
+    def __init__(self, storage):
+        self._storage = storage
+        self.objects = storage.init_store(self._primary_type_name)
         assert (
             self._resource_schema
         ), f"{self.__class__.__name__} has no resource schema defined"
@@ -67,8 +68,13 @@ class BaseModel:
 class BaseBackend:
     path = None
 
-    def __init__(self, model=None):
-        self.model = model if model is not None else self.model_class()
+    def __init__(self, storage=None, model=None):
+        if model:
+            self.model = model
+        elif storage:
+            self.model = self.model_class(storage)
+        else:
+            self.model = self.model_class()
 
     def register(self, adapter):
         adapter.add_matcher(self._matcher)

@@ -26,7 +26,7 @@ class AuthBackend(BaseBackend):
 
     def __init__(self, *args, **kwargs):
         self._expire_time = 172800
-        super().__init__(*args, **kwargs)
+        super().__init__()
 
     def set_expire_time(self, value):
         self._expire_time = value

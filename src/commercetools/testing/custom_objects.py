@@ -9,6 +9,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CustomObjectsModel(BaseModel):
+    _primary_type_name = "custom-object"
     _resource_schema = schemas.CustomObjectSchema
 
     def _generate_key(self, obj):

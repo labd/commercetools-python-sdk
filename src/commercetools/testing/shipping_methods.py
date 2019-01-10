@@ -8,6 +8,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ShippingMethodsModel(BaseModel):
+    _primary_type_name = "shipping-method"
     _resource_schema = schemas.ShippingMethodSchema
 
     def _create_from_draft(

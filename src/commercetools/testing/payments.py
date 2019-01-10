@@ -8,6 +8,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class PaymentsModel(BaseModel):
+    _primary_type_name = "payment"
     _resource_schema = schemas.PaymentSchema
 
     def _create_from_draft(

@@ -2,16 +2,14 @@ import datetime
 import typing
 import uuid
 
-from requests_mock import create_response
-
 from commercetools import schemas, types
-from commercetools.services import abstract
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ChannelsModel(BaseModel):
     _resource_schema = schemas.ChannelSchema
+    _primary_type_name = "channel"
 
     def _create_from_draft(
         self, obj: types.ChannelDraft, id: typing.Optional[str] = None

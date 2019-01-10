@@ -7,6 +7,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class TaxCategoryModel(BaseModel):
+    _primary_type_name = "tax-category"
     _resource_schema = schemas.TaxCategorySchema
 
     def _create_from_draft(

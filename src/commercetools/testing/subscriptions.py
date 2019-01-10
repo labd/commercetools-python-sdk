@@ -9,6 +9,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class SubscriptionsModel(BaseModel):
+    _primary_type_name = "subscription"
     _resource_schema = schemas.SubscriptionSchema
 
     def _create_from_draft(

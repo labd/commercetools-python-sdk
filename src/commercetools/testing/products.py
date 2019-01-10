@@ -7,6 +7,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ProductsModel(BaseModel):
+    _primary_type_name = 'product'
     _resource_schema = schemas.ProductSchema
 
     def _create_from_draft(

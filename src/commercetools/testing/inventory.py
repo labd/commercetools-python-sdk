@@ -8,6 +8,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class InventoryEntryModel(BaseModel):
+    _primary_type_name = "inventory-entry"
     _resource_schema = schemas.InventoryEntrySchema
 
     def _create_from_draft(

@@ -21,6 +21,7 @@ from commercetools.services.payments import PaymentService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
+from commercetools.services.product_discounts import ProductDiscountService
 from commercetools.services.project import ProjectService
 from commercetools.services.shipping_methods import ShippingMethodService
 from commercetools.services.subscriptions import SubscriptionService
@@ -272,8 +273,8 @@ class Client:
         return ProductService(self)
 
     @property
-    def product_discounts(self):
-        raise NotImplementedError()
+    def product_discounts(self) -> ProductDiscountService:
+        return ProductDiscountService(self)
 
     @property
     def project(self) -> ProjectService:

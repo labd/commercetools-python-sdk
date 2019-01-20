@@ -1,4 +1,10 @@
-2.0.0 (unreleased)
+2.1.0 (unreleased)
+------------------
+ - Add `commercetools.predicate.QueryPredicate()` which can be used to construct
+   query predicate strings using Python code.
+
+
+2.0.0 (2019-01-20)
 ------------------
  - When creating the client the token url should now be a complete URL. When
    using environment variables it will automatically append /oauth/token if the

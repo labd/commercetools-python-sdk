@@ -5,7 +5,7 @@ from requests.exceptions import HTTPError
 from commercetools import types
 
 
-def product_types_get_by_id(client):
+def test_product_types_get_by_id(client):
     product_type = client.product_types.create(
         types.ProductTypeDraft(key="test-product-type")
     )
@@ -21,7 +21,7 @@ def product_types_get_by_id(client):
         client.product_types.get_by_id("invalid")
 
 
-def product_types_get_by_key(client):
+def test_product_types_get_by_key(client):
     product_type = client.product_types.create(
         types.ProductTypeDraft(key="test-product-type")
     )
@@ -54,7 +54,7 @@ def test_product_type_query(client):
 
 def test_product_update(client):
     """Test the return value of the update methods.
-    
+
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """

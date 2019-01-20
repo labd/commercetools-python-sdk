@@ -14,6 +14,7 @@ from commercetools.testing.custom_objects import CustomObjectsBackend
 from commercetools.testing.extensions import ExtensionsBackend
 from commercetools.testing.inventory import InventoryEntryBackend
 from commercetools.testing.payments import PaymentsBackend
+from commercetools.testing.product_discounts import ProductDiscountsBackend
 from commercetools.testing.product_projections import ProductProjectionsBackend
 from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
@@ -62,6 +63,7 @@ class BackendRepository:
         self.payments = PaymentsBackend(self._storage)
         self.project = ProjectBackend()
         self.products = ProductsBackend(self._storage)
+        self.product_discounts = ProductDiscountsBackend(self._storage)
         self.product_projections = ProductProjectionsBackend(
             self._storage, model=self.products.model
         )

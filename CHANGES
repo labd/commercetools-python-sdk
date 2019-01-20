@@ -4,6 +4,7 @@
    using environment variables it will automatically append /oauth/token if the
    url has no path specified. See #27
  - Add a changelog :-)
+ - Add support for the product discounts api endpoints
 
 
 1.5.0 (2018-12-11)

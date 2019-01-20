@@ -57,6 +57,10 @@ class QueryPredicate:
     def _clause(self, lhs, operator, rhs):
         assert operator in self._operators
 
+        if isinstance(rhs, dict):
+            rhs = self.__class__(**rhs)
+            return "%s(%s)" % (lhs, rhs)
+
         if isinstance(rhs, self.__class__):
             return "%s(%s)" % (lhs, rhs)
 

@@ -17,8 +17,16 @@ def test_two_filters():
 
 
 def test_dict_format():
-    obj = QueryPredicate(**{'masterVariant__slug__en-GB': "something"})
+    obj = QueryPredicate(**{"masterVariant__slug__en-GB": "something"})
     assert str(obj) == 'masterVariant(slug(en-GB = "something"))'
+
+
+def test_nested_dict():
+    obj = QueryPredicate(masterVariant={"slug__en-GB": "something", "prices": 100})
+    assert str(obj) == 'masterVariant(slug(en-GB = "something") AND prices = 100)'
+
+    obj = QueryPredicate(supplyChannel={"id": 100, "sku": "S001"})
+    assert str(obj) == 'supplyChannel(id = 100 AND sku = "S001")'
 
 
 def test_is_defined():

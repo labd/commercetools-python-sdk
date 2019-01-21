@@ -186,7 +186,6 @@ class Infix(Symbol):
         self.first = left
         rbp = self.lbp - int(self.rightAssoc)
         self.second = self.parser.expression(rbp)
-
         return self
 
     def __repr__(self):
@@ -288,7 +287,9 @@ class LParen(Symbol):
                 elts=[item.ast(context) for item in self.first], ctx=ast.Load()
             )
         context.stack.append(self.first.value)
-        return self.second[0].ast(context)
+        node = self.second[0].ast(context)
+        context.stack.pop()
+        return node
 
     def __repr__(self):
         out = [self.first, self.second]
@@ -387,6 +388,9 @@ parser.define("(end)")
 class Context:
     def __init__(self):
         self.stack: typing.List[str] = []
+
+    def __repr__(self):
+        return 'Context(stack=%r)' % self.stack
 
 
 class PredicateFilter:

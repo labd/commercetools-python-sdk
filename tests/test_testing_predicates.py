@@ -25,3 +25,35 @@ from commercetools.testing import predicates
 )
 def test_tokenize(predicate):
     predicates.PredicateFilter(predicate)
+
+
+@pytest.mark.parametrize(
+    "predicate,paths",
+    [
+        (
+            'slug(nl-be = "test-categorie") and parent is not defined',
+            [['slug', 'nl-be'], ['parent']]
+        ),
+        (
+            'slug(nl-uk = "test-categorie" or nl-nl = "test-categorie")',
+            [['slug', 'nl-uk'], ['slug', 'nl-nl']]
+        ),
+    ])
+def test_filter(predicate, paths):
+    pf = predicates.PredicateFilter(predicate)
+
+    found_paths = []
+
+    org_filter_field = pf.filter_field
+
+    def mock_filter_field(obj, path, operator, value):
+        found_paths.append(path)
+        return org_filter_field(obj, path, operator, value)
+
+    pf.filter_field = mock_filter_field
+    pf.match({
+        'slug': {
+            'nl-BE': 'test-categorie'
+        }
+    })
+    assert paths == found_paths

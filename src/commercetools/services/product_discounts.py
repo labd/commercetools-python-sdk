@@ -53,7 +53,12 @@ class ProductDiscountService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.ProductDiscountUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.ProductDiscountUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.ProductDiscount:
         update_action = types.ProductDiscountUpdate(version=version, actions=actions)
         return self._client._post(
@@ -62,10 +67,16 @@ class ProductDiscountService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ProductDiscountUpdateSchema,
             response_schema_cls=schemas.ProductDiscountSchema,
+            force_update=force_update,
         )
 
     def delete_by_id(
-        self, id: str, version: int, data_erasure: bool = False
+        self,
+        id: str,
+        version: int,
+        data_erasure: bool = False,
+        *,
+        force_delete: bool = True,
     ) -> types.ProductDiscount:
         params = ProductDiscountDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
@@ -74,4 +85,5 @@ class ProductDiscountService(abstract.AbstractService):
             endpoint=f"product-discounts/{id}",
             params=params,
             response_schema_cls=schemas.ProductDiscountSchema,
+            force_delete=force_delete,
         )

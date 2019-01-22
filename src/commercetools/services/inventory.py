@@ -51,7 +51,12 @@ class InventoryService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.InventoryUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.InventoryUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.InventoryEntry:
         update_action = types.InventoryUpdate(version=version, actions=actions)
         return self._client._post(
@@ -60,10 +65,16 @@ class InventoryService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.InventoryUpdateSchema,
             response_schema_cls=schemas.InventoryEntrySchema,
+            force_update=force_update,
         )
 
     def delete_by_id(
-        self, id: str, version: int, data_erasure: bool = False
+        self,
+        id: str,
+        version: int,
+        data_erasure: bool = False,
+        *,
+        force_delete: bool = True,
     ) -> types.InventoryEntry:
         params = InventoryDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
@@ -72,4 +83,5 @@ class InventoryService(abstract.AbstractService):
             endpoint=f"inventory/{id}",
             params=params,
             response_schema_cls=schemas.InventoryEntrySchema,
+            force_delete=force_delete,
         )

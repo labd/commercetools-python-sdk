@@ -51,7 +51,12 @@ class CartService(abstract.AbstractService):
         )
 
     def update(
-        self, id: str, version: int, actions: List[types.CartUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.CartUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Cart:
         update_action = types.CartUpdate(version=version, actions=actions)
         return self._client._post(
@@ -60,9 +65,17 @@ class CartService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.CartUpdateSchema,
             response_schema_cls=schemas.CartSchema,
+            force_update=force_update,
         )
 
-    def delete(self, id: str, version: int, data_erasure: bool = False) -> types.Cart:
+    def delete(
+        self,
+        id: str,
+        version: int,
+        data_erasure: bool = False,
+        *,
+        force_delete: bool = False,
+    ) -> types.Cart:
         params = CartDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
         )
@@ -70,6 +83,7 @@ class CartService(abstract.AbstractService):
             endpoint=f"carts/{id}",
             params=params,
             response_schema_cls=schemas.CartSchema,
+            force_delete=force_delete,
         )
 
     def replicate(self, draft: types.ReplicaCartDraft) -> types.Cart:

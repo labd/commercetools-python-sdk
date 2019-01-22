@@ -11,7 +11,11 @@ class ProjectService(abstract.AbstractService):
         return self._client._get("", {}, schemas.ProjectSchema)
 
     def update(
-        self, version: int, actions: List[types.OrderUpdateAction]
+        self,
+        version: int,
+        actions: List[types.OrderUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Order:
         update_action = types.ProjectUpdate(version=version, actions=actions)
         return self._client._post(
@@ -20,4 +24,5 @@ class ProjectService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ProjectUpdateSchema,
             response_schema_cls=schemas.ProjectSchema,
+            force_update=force_update,
         )

@@ -6,6 +6,8 @@ import marshmallow
 import requests_mock
 from requests_mock import create_response
 
+from commercetools import types, schemas
+from commercetools.client import CommercetoolsError
 from commercetools.schemas import ResourceSchema
 from commercetools.services import abstract
 from commercetools.testing import utils
@@ -154,23 +156,66 @@ class ServiceBackend(BaseBackend):
     def update_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
+            response = self._validate_resource_version(request, obj)
+            if response is not None:
+                return response
+
+            obj["version"] += 1
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
 
     def update_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
+            response = self._validate_resource_version(request, obj)
+            if response is not None:
+                return response
+
+            obj["version"] += 1
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
 
     def delete_by_id(self, request, id):
-        obj = self.model.delete_by_id(id)
+        obj = self.model.get_by_id(id)
         if obj:
+            response = self._validate_resource_version(request, obj)
+            if response is not None:
+                return response
+
+            obj = self.model.delete_by_id(id)
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
 
     def delete_by_key(self, request, key):
-        obj = self.model.delete_by_key(key)
+        obj = self.model.get_by_key(key)
         if obj:
+            response = self._validate_resource_version(request, obj)
+            if response is not None:
+                return response
+
+            obj = self.model.delete_by_key(key)
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
+
+    def _validate_resource_version(self, request, obj):
+        update_version = self._get_version_from_request(request)
+        if update_version != obj["version"]:
+            data = schemas.ErrorResponseSchema().dump(
+                types.ErrorResponse(
+                    status_code=409,
+                    message="Version mismatch. Concurrent modification.",
+                    errors=[
+                        types.ConcurrentModificationError(
+                            message="Version mismatch. Concurrent modification.",
+                            current_version=obj["version"],
+                        )
+                    ],
+                )
+            )
+            return create_response(request, json=data, status_code=409)
+
+    def _get_version_from_request(self, request):
+        version_data = request.qs.get('version')
+        if version_data:
+            return int(version_data[0])
+        return request.json().get("version")

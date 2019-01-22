@@ -50,7 +50,12 @@ class CategoryService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.CategoryUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.CategoryUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Category:
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
@@ -59,10 +64,16 @@ class CategoryService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.CategoryUpdateSchema,
             response_schema_cls=schemas.CategorySchema,
+            force_update=force_update,
         )
 
     def update_by_key(
-        self, key: str, version: int, actions: List[types.CategoryUpdateAction]
+        self,
+        key: str,
+        version: int,
+        actions: List[types.CategoryUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Category:
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
@@ -71,20 +82,27 @@ class CategoryService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.CategoryUpdateSchema,
             response_schema_cls=schemas.CategorySchema,
+            force_update=force_update,
         )
 
-    def delete_by_id(self, id: str, version: int) -> types.Category:
+    def delete_by_id(
+        self, id: str, version: int, *, force_delete: bool = True
+    ) -> types.Category:
         params = CategoryDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"categories/{id}",
             params=params,
             response_schema_cls=schemas.CategorySchema,
+            force_delete=force_delete,
         )
 
-    def delete_by_key(self, key: str, version: int) -> types.Category:
+    def delete_by_key(
+        self, key: str, version: int, *, force_delete: bool = True
+    ) -> types.Category:
         params = CategoryDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"categories/key={key}",
             params=params,
             response_schema_cls=schemas.CategorySchema,
+            force_delete=force_delete,
         )

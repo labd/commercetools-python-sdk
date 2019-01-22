@@ -47,7 +47,12 @@ class ChannelService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.ChannelUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.ChannelUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Channel:
         update_action = types.ChannelUpdate(version=version, actions=actions)
         return self._client._post(
@@ -56,12 +61,16 @@ class ChannelService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ChannelUpdateSchema,
             response_schema_cls=schemas.ChannelSchema,
+            force_update=force_update,
         )
 
-    def delete_by_id(self, id: str, version: int) -> types.Channel:
+    def delete_by_id(
+        self, id: str, version: int, *, force_delete: bool = True
+    ) -> types.Channel:
         params = ChannelDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"channels/{id}",
             params=params,
             response_schema_cls=schemas.ChannelSchema,
+            force_delete=force_delete,
         )

@@ -50,20 +50,24 @@ class CustomObjectService(abstract.AbstractService):
             response_schema_cls=schemas.CustomObjectSchema,
         )
 
-    def delete_by_id(self, id: str, version: int) -> types.CustomObject:
+    def delete_by_id(
+        self, id: str, version: int, *, force_delete: bool = True
+    ) -> types.CustomObject:
         params = CustomObjectDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"custom-objects/{id}",
             params=params,
             response_schema_cls=schemas.CustomObjectSchema,
+            force_delete=force_delete,
         )
 
     def delete_by_container_key(
-        self, container: str, key: str, version: int
+        self, container: str, key: str, version: int, *, force_delete: bool = True
     ) -> types.CustomObject:
         params = CustomObjectDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"custom-objects/{container}/{key}",
             params=params,
             response_schema_cls=schemas.CustomObjectSchema,
+            force_delete=force_delete,
         )

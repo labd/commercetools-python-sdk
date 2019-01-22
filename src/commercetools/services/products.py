@@ -71,11 +71,11 @@ class ProductService(abstract.AbstractService):
     ) -> types.Product:
         update_action = types.ProductUpdate(version=version, actions=actions)
         return self._client._post(
-            f"products/{id}",
-            {},
-            update_action,
-            schemas.ProductUpdateSchema,
-            schemas.ProductSchema,
+            endpoint=f"products/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ProductUpdateSchema,
+            response_schema_cls=schemas.ProductSchema,
         )
 
     def update_by_key(
@@ -83,11 +83,11 @@ class ProductService(abstract.AbstractService):
     ) -> types.Product:
         update_action = types.ProductUpdate(version=version, actions=actions)
         return self._client._post(
-            f"products/key={key}",
-            {},
-            update_action,
-            schemas.ProductUpdateSchema,
-            schemas.ProductSchema,
+            endpoint=f"products/key={key}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ProductUpdateSchema,
+            response_schema_cls=schemas.ProductSchema,
         )
 
     def delete_by_id(
@@ -108,7 +108,11 @@ class ProductService(abstract.AbstractService):
                 "price_channel": price_channel,
             }
         )
-        return self._client._delete(f"products/{id}", params, schemas.ProductSchema)
+        return self._client._delete(
+            endpoint=f"products/{id}",
+            params=params,
+            response_schema_cls=schemas.ProductSchema,
+        )
 
     def delete_by_key(
         self,
@@ -129,7 +133,9 @@ class ProductService(abstract.AbstractService):
             }
         )
         return self._client._delete(
-            f"products/key={key}", params, schemas.ProductSchema
+            endpoint=f"products/key={key}",
+            params=params,
+            response_schema_cls=schemas.ProductSchema,
         )
 
     def upload_image(
@@ -145,8 +151,8 @@ class ProductService(abstract.AbstractService):
             params["sku"] = sku
 
         return self._client._upload(
-            f"products/{product_id}/images",
-            params,
+            endpoint=f"products/{product_id}/images",
+            params=params,
             file=fh,
             response_schema_cls=schemas.ProductSchema,
         )

@@ -56,11 +56,11 @@ class PaymentService(abstract.AbstractService):
     ) -> types.Payment:
         update_action = types.PaymentUpdate(version=version, actions=actions)
         return self._client._post(
-            f"payments/{id}",
-            {},
-            update_action,
-            schemas.PaymentUpdateSchema,
-            schemas.PaymentSchema,
+            endpoint=f"payments/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.PaymentUpdateSchema,
+            response_schema_cls=schemas.PaymentSchema,
         )
 
     def update_by_key(
@@ -68,11 +68,11 @@ class PaymentService(abstract.AbstractService):
     ) -> types.Payment:
         update_action = types.PaymentUpdate(version=version, actions=actions)
         return self._client._post(
-            f"payments/key={key}",
-            {},
-            update_action,
-            schemas.PaymentUpdateSchema,
-            schemas.PaymentSchema,
+            endpoint=f"payments/key={key}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.PaymentUpdateSchema,
+            response_schema_cls=schemas.PaymentSchema,
         )
 
     def delete_by_id(
@@ -81,7 +81,11 @@ class PaymentService(abstract.AbstractService):
         params = PaymentDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
         )
-        return self._client._delete(f"payments/{id}", params, schemas.PaymentSchema)
+        return self._client._delete(
+            endpoint=f"payments/{id}",
+            params=params,
+            response_schema_cls=schemas.PaymentSchema,
+        )
 
     def delete_by_key(
         self, key: str, version: int, data_erasure: bool = False
@@ -90,5 +94,7 @@ class PaymentService(abstract.AbstractService):
             {"version": version, "data_erasure": data_erasure}
         )
         return self._client._delete(
-            f"payments/key={key}", params, schemas.PaymentSchema
+            endpoint=f"payments/key={key}",
+            params=params,
+            response_schema_cls=schemas.PaymentSchema,
         )

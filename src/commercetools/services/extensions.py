@@ -51,13 +51,17 @@ class ExtensionService(abstract.AbstractService):
     ) -> types.Extension:
         update_action = types.ExtensionUpdate(version=version, actions=actions)
         return self._client._post(
-            f"channels/{id}",
-            {},
-            update_action,
-            schemas.ExtensionUpdateSchema,
-            schemas.ExtensionSchema,
+            endpoint=f"channels/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ExtensionUpdateSchema,
+            response_schema_cls=schemas.ExtensionSchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.Extension:
         params = ExtensionDeleteSchema().dump({"version": version})
-        return self._client._delete(f"channels/{id}", params, schemas.ExtensionSchema)
+        return self._client._delete(
+            endpoint=f"channels/{id}",
+            params=params,
+            response_schema_cls=schemas.ExtensionSchema,
+        )

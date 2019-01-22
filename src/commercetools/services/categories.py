@@ -54,11 +54,11 @@ class CategoryService(abstract.AbstractService):
     ) -> types.Category:
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
-            f"categories/{id}",
-            {},
-            update_action,
-            schemas.CategoryUpdateSchema,
-            schemas.CategorySchema,
+            endpoint=f"categories/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.CategoryUpdateSchema,
+            response_schema_cls=schemas.CategorySchema,
         )
 
     def update_by_key(
@@ -66,19 +66,25 @@ class CategoryService(abstract.AbstractService):
     ) -> types.Category:
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
-            f"categories/key={key}",
-            {},
-            update_action,
-            schemas.CategoryUpdateSchema,
-            schemas.CategorySchema,
+            endpoint=f"categories/key={key}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.CategoryUpdateSchema,
+            response_schema_cls=schemas.CategorySchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.Category:
         params = CategoryDeleteSchema().dump({"version": version})
-        return self._client._delete(f"categories/{id}", params, schemas.CategorySchema)
+        return self._client._delete(
+            endpoint=f"categories/{id}",
+            params=params,
+            response_schema_cls=schemas.CategorySchema,
+        )
 
     def delete_by_key(self, key: str, version: int) -> types.Category:
         params = CategoryDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"categories/key={key}", params, schemas.CategorySchema
+            endpoint=f"categories/key={key}",
+            params=params,
+            response_schema_cls=schemas.CategorySchema,
         )

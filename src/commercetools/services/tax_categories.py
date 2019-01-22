@@ -60,15 +60,17 @@ class TaxCategoryService(abstract.AbstractService):
     ) -> types.TaxCategory:
         update_action = types.TaxCategoryUpdate(version=version, actions=actions)
         return self._client._post(
-            f"tax-categories/{id}",
-            {},
-            update_action,
-            schemas.TaxCategoryUpdateSchema,
-            schemas.TaxCategorySchema,
+            endpoint=f"tax-categories/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.TaxCategoryUpdateSchema,
+            response_schema_cls=schemas.TaxCategorySchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.TaxCategory:
         params = TaxCategoryDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"tax-categories/{id}", params, schemas.TaxCategorySchema
+            endpoint=f"tax-categories/{id}",
+            params=params,
+            response_schema_cls=schemas.TaxCategorySchema,
         )

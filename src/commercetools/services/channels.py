@@ -51,13 +51,17 @@ class ChannelService(abstract.AbstractService):
     ) -> types.Channel:
         update_action = types.ChannelUpdate(version=version, actions=actions)
         return self._client._post(
-            f"channels/{id}",
-            {},
-            update_action,
-            schemas.ChannelUpdateSchema,
-            schemas.ChannelSchema,
+            endpoint=f"channels/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ChannelUpdateSchema,
+            response_schema_cls=schemas.ChannelSchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.Channel:
         params = ChannelDeleteSchema().dump({"version": version})
-        return self._client._delete(f"channels/{id}", params, schemas.ChannelSchema)
+        return self._client._delete(
+            endpoint=f"channels/{id}",
+            params=params,
+            response_schema_cls=schemas.ChannelSchema,
+        )

@@ -51,11 +51,11 @@ class TypeService(abstract.AbstractService):
     ) -> types.Type:
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
-            f"types/{id}",
-            {},
-            update_action,
-            schemas.TypeUpdateSchema,
-            schemas.TypeSchema,
+            endpoint=f"types/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.TypeUpdateSchema,
+            response_schema_cls=schemas.TypeSchema,
         )
 
     def update_by_key(
@@ -63,17 +63,25 @@ class TypeService(abstract.AbstractService):
     ) -> types.Type:
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
-            f"types/key={key}",
-            {},
-            update_action,
-            schemas.TypeUpdateSchema,
-            schemas.TypeSchema,
+            endpoint=f"types/key={key}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.TypeUpdateSchema,
+            response_schema_cls=schemas.TypeSchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.Type:
         params = TypeDeleteSchema().dump({"version": version})
-        return self._client._delete(f"types/{id}", params, schemas.TypeSchema)
+        return self._client._delete(
+            endpoint=f"types/{id}",
+            params=params,
+            response_schema_cls=schemas.TypeSchema,
+        )
 
     def delete_by_key(self, key: str, version: int) -> types.Type:
         params = TypeDeleteSchema().dump({"version": version})
-        return self._client._delete(f"types/key={key}", params, schemas.TypeSchema)
+        return self._client._delete(
+            endpoint=f"types/key={key}",
+            params=params,
+            response_schema_cls=schemas.TypeSchema,
+        )

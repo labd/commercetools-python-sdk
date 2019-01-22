@@ -55,11 +55,11 @@ class InventoryService(abstract.AbstractService):
     ) -> types.InventoryEntry:
         update_action = types.InventoryUpdate(version=version, actions=actions)
         return self._client._post(
-            f"inventory/{id}",
-            {},
-            update_action,
-            schemas.InventoryUpdateSchema,
-            schemas.InventoryEntrySchema,
+            endpoint=f"inventory/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.InventoryUpdateSchema,
+            response_schema_cls=schemas.InventoryEntrySchema,
         )
 
     def delete_by_id(
@@ -69,5 +69,7 @@ class InventoryService(abstract.AbstractService):
             {"version": version, "data_erasure": data_erasure}
         )
         return self._client._delete(
-            f"inventory/{id}", params, schemas.InventoryEntrySchema
+            endpoint=f"inventory/{id}",
+            params=params,
+            response_schema_cls=schemas.InventoryEntrySchema,
         )

@@ -55,15 +55,17 @@ class SubscriptionService(abstract.AbstractService):
     ) -> types.Subscription:
         update_action = types.SubscriptionUpdate(version=version, actions=actions)
         return self._client._post(
-            f"subscriptions/{id}",
-            {},
-            update_action,
-            schemas.SubscriptionUpdateSchema,
-            schemas.SubscriptionSchema,
+            endpoint=f"subscriptions/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.SubscriptionUpdateSchema,
+            response_schema_cls=schemas.SubscriptionSchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.Subscription:
         params = SubscriptionDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"subscriptions/{id}", params, schemas.SubscriptionSchema
+            f"subscriptions/{id}",
+            params=params,
+            response_schema_cls=schemas.SubscriptionSchema,
         )

@@ -15,5 +15,9 @@ class ProjectService(abstract.AbstractService):
     ) -> types.Order:
         update_action = types.ProjectUpdate(version=version, actions=actions)
         return self._client._post(
-            "", {}, update_action, schemas.ProjectUpdateSchema, schemas.ProjectSchema
+            endpoint="",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ProjectUpdateSchema,
+            response_schema_cls=schemas.ProjectSchema,
         )

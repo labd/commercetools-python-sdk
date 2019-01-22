@@ -56,11 +56,11 @@ class OrderService(abstract.AbstractService):
     ) -> types.Order:
         update_action = types.OrderUpdate(version=version, actions=actions)
         return self._client._post(
-            f"orders/{id}",
-            {},
-            update_action,
-            schemas.OrderUpdateSchema,
-            schemas.OrderSchema,
+            endpoint=f"orders/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.OrderUpdateSchema,
+            response_schema_cls=schemas.OrderSchema,
         )
 
     def update_by_key(
@@ -68,11 +68,11 @@ class OrderService(abstract.AbstractService):
     ) -> types.Order:
         update_action = types.OrderUpdate(version=version, actions=actions)
         return self._client._post(
-            f"orders/key={key}",
-            {},
-            update_action,
-            schemas.OrderUpdateSchema,
-            schemas.OrderSchema,
+            endpoint=f"orders/key={key}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.OrderUpdateSchema,
+            response_schema_cls=schemas.OrderSchema,
         )
 
     def delete_by_id(
@@ -81,7 +81,11 @@ class OrderService(abstract.AbstractService):
         params = OrderDeleteSchema().dump(
             {"version": version, "data_erasure": data_erasure}
         )
-        return self._client._delete(f"orders/{id}", params, schemas.OrderSchema)
+        return self._client._delete(
+            endpoint=f"orders/{id}",
+            params=params,
+            response_schema_cls=schemas.OrderSchema,
+        )
 
     def delete_by_order_number(
         self, order_number: str, version: int, data_erasure: bool = False
@@ -90,5 +94,7 @@ class OrderService(abstract.AbstractService):
             {"version": version, "data_erasure": data_erasure}
         )
         return self._client._delete(
-            f"orders/order-number={order_number}", params, schemas.OrderSchema
+            endpoint=f"orders/order-number={order_number}",
+            params=params,
+            response_schema_cls=schemas.OrderSchema,
         )

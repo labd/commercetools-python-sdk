@@ -57,11 +57,11 @@ class ProductDiscountService(abstract.AbstractService):
     ) -> types.ProductDiscount:
         update_action = types.ProductDiscountUpdate(version=version, actions=actions)
         return self._client._post(
-            f"product-discounts/{id}",
-            {},
-            update_action,
-            schemas.ProductDiscountUpdateSchema,
-            schemas.ProductDiscountSchema,
+            endpoint=f"product-discounts/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ProductDiscountUpdateSchema,
+            response_schema_cls=schemas.ProductDiscountSchema,
         )
 
     def delete_by_id(
@@ -71,5 +71,7 @@ class ProductDiscountService(abstract.AbstractService):
             {"version": version, "data_erasure": data_erasure}
         )
         return self._client._delete(
-            f"product-discounts/{id}", params, schemas.ProductDiscountSchema
+            endpoint=f"product-discounts/{id}",
+            params=params,
+            response_schema_cls=schemas.ProductDiscountSchema,
         )

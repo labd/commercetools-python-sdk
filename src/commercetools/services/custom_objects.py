@@ -43,17 +43,19 @@ class CustomObjectService(abstract.AbstractService):
 
     def create_or_update(self, draft: types.CustomObjectDraft) -> types.CustomObject:
         return self._client._post(
-            "custom-objects",
-            {},
-            draft,
-            schemas.CustomObjectDraftSchema,
-            schemas.CustomObjectSchema,
+            endpoint="custom-objects",
+            params={},
+            data_object=draft,
+            request_schema_cls=schemas.CustomObjectDraftSchema,
+            response_schema_cls=schemas.CustomObjectSchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.CustomObject:
         params = CustomObjectDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"custom-objects/{id}", params, schemas.CustomObjectSchema
+            endpoint=f"custom-objects/{id}",
+            params=params,
+            response_schema_cls=schemas.CustomObjectSchema,
         )
 
     def delete_by_container_key(
@@ -61,5 +63,7 @@ class CustomObjectService(abstract.AbstractService):
     ) -> types.CustomObject:
         params = CustomObjectDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"custom-objects/{container}/{key}", params, schemas.CustomObjectSchema
+            endpoint=f"custom-objects/{container}/{key}",
+            params=params,
+            response_schema_cls=schemas.CustomObjectSchema,
         )

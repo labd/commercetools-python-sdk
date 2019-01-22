@@ -59,11 +59,11 @@ class ProductTypeService(abstract.AbstractService):
     ) -> types.ProductType:
         update_action = types.ProductTypeUpdate(version=version, actions=actions)
         return self._client._post(
-            f"product-types/{id}",
-            {},
-            update_action,
-            schemas.ProductTypeUpdateSchema,
-            schemas.ProductTypeSchema,
+            endpoint=f"product-types/{id}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ProductTypeUpdateSchema,
+            response_schema_cls=schemas.ProductTypeSchema,
         )
 
     def update_by_key(
@@ -74,21 +74,25 @@ class ProductTypeService(abstract.AbstractService):
     ) -> types.ProductType:
         update_action = types.ProductTypeUpdate(version=version, actions=actions)
         return self._client._post(
-            f"product-types/key={key}",
-            {},
-            update_action,
-            schemas.ProductTypeUpdateSchema,
-            schemas.ProductTypeSchema,
+            endpoint=f"product-types/key={key}",
+            params={},
+            data_object=update_action,
+            request_schema_cls=schemas.ProductTypeUpdateSchema,
+            response_schema_cls=schemas.ProductTypeSchema,
         )
 
     def delete_by_id(self, id: str, version: int) -> types.ProductType:
         params = ProductTypeDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"product-types/{id}", params, schemas.ProductTypeSchema
+            endpoint=f"product-types/{id}",
+            params=params,
+            response_schema_cls=schemas.ProductTypeSchema,
         )
 
     def delete_by_key(self, key: str, version: int) -> types.ProductType:
         params = ProductTypeDeleteSchema().dump({"version": version})
         return self._client._delete(
-            f"product-types/key={key}", params, schemas.ProductTypeSchema
+            endpoint=f"product-types/key={key}",
+            params=params,
+            response_schema_cls=schemas.ProductTypeSchema,
         )

@@ -1,4 +1,5 @@
 import json
+import typing
 from collections.abc import Collection
 from decimal import Decimal
 from functools import reduce
@@ -23,7 +24,7 @@ class QueryPredicate:
         self._connector = filters.pop("_connector", self.AND)
         self._filters = filters
 
-    def __str__(self):
+    def __str__(self) -> str:
         result = []
 
         for key, value in self._filters.items():
@@ -43,18 +44,18 @@ class QueryPredicate:
         return " AND ".join(result)
 
     def __or__(self, other):
-        data = {}
+        data: typing.Dict[str, typing.Any] = {}
         data.update(self._filters)
         data.update(other._filters)
         return self.__class__(**data, _connector=self.OR)
 
     def __and__(self, other):
-        data = {}
+        data: typing.Dict[str, typing.Any] = {}
         data.update(self._filters)
         data.update(other._filters)
         return self.__class__(**data, _connector=self.AND)
 
-    def _clause(self, lhs, operator, rhs):
+    def _clause(self, lhs, operator, rhs) -> str:
         assert operator in self._operators
 
         if isinstance(rhs, dict):
@@ -66,12 +67,12 @@ class QueryPredicate:
 
         op = self._operators[operator]
         if isinstance(op, tuple):
-            return " ".join((lhs, op[0 if rhs else 1]))
+            return "%s %s" % (lhs, op[0 if rhs else 1])
         else:
             rhs = self._escape_value(rhs)
-            return " ".join((lhs, op, rhs))
+            return "%s %s %s" % (lhs, op, rhs)
 
-    def _escape_value(self, value):
+    def _escape_value(self, value) -> str:
         if isinstance(value, self.__class__):
             return "(%s)" % value
         if isinstance(value, Decimal):

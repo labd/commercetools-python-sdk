@@ -32,6 +32,7 @@ class ChannelsBackend(ServiceBackend):
     service_path = "channels"
     model_class = ChannelsModel
     _schema_draft = schemas.ChannelDraftSchema
+    _schema_update = schemas.ChannelUpdateSchema
     _schema_query_response = schemas.ChannelPagedQueryResponseSchema
 
     def urls(self):

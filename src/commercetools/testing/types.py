@@ -31,6 +31,7 @@ class TypesBackend(ServiceBackend):
     service_path = "types"
     model_class = TypesModel
     _schema_draft = schemas.TypeDraftSchema
+    _schema_update = schemas.TypeUpdateSchema
     _schema_query_response = schemas.TypePagedQueryResponseSchema
 
     def urls(self):

@@ -33,6 +33,7 @@ class InventoryEntryBackend(ServiceBackend):
     service_path = "inventory"
     model_class = InventoryEntryModel
     _schema_draft = schemas.InventoryEntryDraftSchema
+    _schema_update = schemas.InventoryUpdateSchema
     _schema_query_response = schemas.InventoryPagedQueryResponseSchema
 
     def urls(self):

@@ -123,6 +123,7 @@ class ProductsBackend(ServiceBackend):
     service_path = "products"
     model_class = ProductsModel
     _schema_draft = schemas.ProductDraftSchema
+    _schema_update = schemas.ProductUpdateSchema
     _schema_query_response = schemas.ProductPagedQueryResponseSchema
 
     def urls(self):

@@ -24,7 +24,7 @@ class ProductDiscountsModel(BaseModel):
             references=[],
             is_active=obj.is_active,
             valid_from=obj.valid_from,
-            valid_until=obj.valid_until
+            valid_until=obj.valid_until,
         )
 
 
@@ -33,6 +33,7 @@ class ProductDiscountsBackend(ServiceBackend):
     model_class = ProductDiscountsModel
 
     _schema_draft = schemas.ProductDiscountDraftSchema
+    _schema_update = schemas.ProductDiscountUpdateSchema
     _schema_query_response = schemas.ProductDiscountPagedQueryResponseSchema
 
     def urls(self):

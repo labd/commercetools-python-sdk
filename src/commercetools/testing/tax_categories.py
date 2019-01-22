@@ -29,6 +29,7 @@ class TaxCategoryBackend(ServiceBackend):
     service_path = "tax-categories"
     model_class = TaxCategoryModel
     _schema_draft = schemas.TaxCategorySchema
+    _schema_update = schemas.TaxCategoryUpdateSchema
     _schema_query_response = schemas.TaxCategoryPagedQueryResponseSchema
 
     def urls(self):

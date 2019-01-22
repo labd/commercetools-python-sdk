@@ -3,8 +3,7 @@ import uuid
 
 import pytest
 
-from commercetools import types
-from commercetools import CommercetoolsError
+from commercetools import CommercetoolsError, types
 from commercetools.client import Client
 
 

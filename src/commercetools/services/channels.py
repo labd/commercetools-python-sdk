@@ -43,7 +43,11 @@ class ChannelService(abstract.AbstractService):
 
     def create(self, draft: types.ChannelDraft) -> types.Channel:
         return self._client._post(
-            "channels", {}, draft, schemas.ChannelDraftSchema, schemas.ChannelSchema
+            endpoint="channels",
+            params={},
+            data_object=draft,
+            request_schema_cls=schemas.ChannelDraftSchema,
+            response_schema_cls=schemas.ChannelSchema,
         )
 
     def update_by_id(

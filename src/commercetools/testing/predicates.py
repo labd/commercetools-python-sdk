@@ -390,7 +390,7 @@ class Context:
         self.stack: typing.List[str] = []
 
     def __repr__(self):
-        return 'Context(stack=%r)' % self.stack
+        return "Context(stack=%r)" % self.stack
 
 
 class PredicateFilter:

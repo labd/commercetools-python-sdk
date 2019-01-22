@@ -6,7 +6,7 @@ import marshmallow
 import requests_mock
 from requests_mock import create_response
 
-from commercetools import types, schemas
+from commercetools import schemas, types
 from commercetools.client import CommercetoolsError
 from commercetools.schemas import ResourceSchema
 from commercetools.services import abstract
@@ -222,7 +222,7 @@ class ServiceBackend(BaseBackend):
             return create_response(request, json=data, status_code=409)
 
     def _get_version_from_request(self, request):
-        version_data = request.qs.get('version')
+        version_data = request.qs.get("version")
         if version_data:
             return int(version_data[0])
         return request.json().get("version")

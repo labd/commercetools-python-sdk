@@ -1,11 +1,12 @@
 import typing
 
-from commercetools.exceptions import CommercetoolsError
 from marshmallow import class_registry, fields, missing
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
 from marshmallow.utils import missing as missing_
 from marshmallow.utils import RAISE, is_collection
+
+from commercetools.exceptions import CommercetoolsError
 
 
 class OptionalList(fields.List):

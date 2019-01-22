@@ -153,6 +153,6 @@ class ProductProjectionService(abstract.AbstractService):
             {},
             params,
             ProductProjectionsSearchSchema,
-            schemas.ProductProjectionPagedSearchResponseSchema,
+            response_schema_cls=schemas.ProductProjectionPagedSearchResponseSchema,
             form_encoded=True,
         )

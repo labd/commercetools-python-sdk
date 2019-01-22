@@ -20,7 +20,9 @@ class ProductDiscountQuerySchema(abstract.AbstractQuerySchema):
 
 class ProductDiscountService(abstract.AbstractService):
     def get_by_id(self, id: str) -> Optional[types.ProductDiscount]:
-        return self._client._get(f"product-discounts/{id}", {}, schemas.ProductDiscountSchema)
+        return self._client._get(
+            f"product-discounts/{id}", {}, schemas.ProductDiscountSchema
+        )
 
     def query(
         self,

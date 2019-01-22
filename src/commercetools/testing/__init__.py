@@ -32,7 +32,9 @@ class Storage:
     def init_store(self, name: str) -> typing.Dict[uuid.UUID, typing.Any]:
         return self._stores.setdefault(name, {})
 
-    def get_by_resource_identifier(self, obj: typing.Any) -> typing.Optional[typing.Any]:
+    def get_by_resource_identifier(
+        self, obj: typing.Any
+    ) -> typing.Optional[typing.Any]:
         store = self._stores[obj.type_id.value]
 
         try:

@@ -3,8 +3,7 @@ import uuid
 import pytest
 from requests.exceptions import HTTPError
 
-from commercetools import types
-from commercetools import CommercetoolsError
+from commercetools import CommercetoolsError, types
 
 
 def test_products_create(client):

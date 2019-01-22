@@ -187,7 +187,9 @@ class Client:
 
         @_concurrent_retry(3 if force_delete else 0)
         def remote_http_call(data):
-            response = self._http_client.delete(self._base_url + endpoint, params=params)
+            response = self._http_client.delete(
+                self._base_url + endpoint, params=params
+            )
             if response.status_code == 200:
                 return response_schema_cls().load(response.json())
             return self._process_error(response)

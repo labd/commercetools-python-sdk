@@ -38,7 +38,9 @@ class CustomObjectService(abstract.AbstractService):
             {"where": where, "sort": sort, "limit": limit, "offset": offset}
         )
         return self._client._get(
-            "custom-objects", params, schemas.CustomObjectPagedQueryResponseSchema
+            "custom-objects",
+            params,
+            schema_cls=schemas.CustomObjectPagedQueryResponseSchema,
         )
 
     def create_or_update(self, draft: types.CustomObjectDraft) -> types.CustomObject:

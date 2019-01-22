@@ -32,13 +32,14 @@ def test_tokenize(predicate):
     [
         (
             'slug(nl-be = "test-categorie") and parent is not defined',
-            [['slug', 'nl-be'], ['parent']]
+            [["slug", "nl-be"], ["parent"]],
         ),
         (
             'slug(nl-uk = "test-categorie" or nl-nl = "test-categorie")',
-            [['slug', 'nl-uk'], ['slug', 'nl-nl']]
+            [["slug", "nl-uk"], ["slug", "nl-nl"]],
         ),
-    ])
+    ],
+)
 def test_filter(predicate, paths):
     pf = predicates.PredicateFilter(predicate)
 
@@ -51,9 +52,5 @@ def test_filter(predicate, paths):
         return org_filter_field(obj, path, operator, value)
 
     pf.filter_field = mock_filter_field
-    pf.match({
-        'slug': {
-            'nl-BE': 'test-categorie'
-        }
-    })
+    pf.match({"slug": {"nl-BE": "test-categorie"}})
     assert paths == found_paths

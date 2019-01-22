@@ -1,3 +1,4 @@
+import typing
 from marshmallow import Schema
 from requests_mock.request import _RequestObjectProxy
 
@@ -40,3 +41,11 @@ def custom_fields_from_draft(
     return types.CustomFields(
         type=storage.get_by_resource_identifier(draft.type), fields=draft.fields
     )
+
+
+def _money_to_typed(money: typing.Optional[types.Money]) -> typing.Optional[types.TypedMoney]:
+    if money is not None:
+        return types.TypedMoney(
+            cent_amount=money.cent_amount,
+            currency_code=money.currency_code
+        )

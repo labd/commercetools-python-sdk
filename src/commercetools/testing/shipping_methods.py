@@ -4,6 +4,7 @@ import typing
 import uuid
 
 from commercetools import schemas, types
+from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
@@ -22,8 +23,8 @@ class ShippingMethodsModel(BaseModel):
             shipping_rates: typing.List[types.ShippingRate] = []
             for shipping_rate_draft in rate_draft.shipping_rates or []:
                 shipping_rate = types.ShippingRate(
-                    price=shipping_rate_draft.price,
-                    free_above=shipping_rate_draft.free_above,
+                    price=utils._money_to_typed(shipping_rate_draft.price),
+                    free_above=utils._money_to_typed(shipping_rate_draft.free_above),
                     tiers=copy.deepcopy(shipping_rate_draft.tiers),
                 )
                 shipping_rates.append(shipping_rate)

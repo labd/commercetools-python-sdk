@@ -160,7 +160,7 @@ class ApiClient:
     scope: typing.Optional[str]
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
     created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.date` `(Named` ``lastUsedAt`` `in Commercetools)`
+    #: Optional :class:`datetime.date` `(Named` ``lastUsedAt`` `in Commercetools)`
     last_used_at: typing.Optional[datetime.date]
     #: Optional :class:`str`
     secret: typing.Optional[str]
@@ -2304,8 +2304,8 @@ class FieldDefinition:
     label: typing.Optional["LocalizedString"]
     #: :class:`bool`
     required: typing.Optional[bool]
-    #: Optional :class:`str` `(Named` ``inputHint`` `in Commercetools)`
-    input_hint: typing.Optional[str]
+    #: Optional :class:`commercetools.types.TypeTextInputHint` `(Named` ``inputHint`` `in Commercetools)`
+    input_hint: typing.Optional["TypeTextInputHint"]
 
     def __init__(
         self,
@@ -2314,7 +2314,7 @@ class FieldDefinition:
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
         required: typing.Optional[bool] = None,
-        input_hint: typing.Optional[str] = None,
+        input_hint: typing.Optional["TypeTextInputHint"] = None,
     ) -> None:
         self.type = type
         self.name = name
@@ -9141,6 +9141,8 @@ class FilteredFacetResult(FacetResult):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class GeoJsonPoint(GeoJson):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonPointSchema`."
+    #: :class:`list`
+    coordinates: typing.Optional[list]
 
     def __init__(
         self,
@@ -9148,6 +9150,7 @@ class GeoJsonPoint(GeoJson):
         type: typing.Optional[str] = None,
         coordinates: typing.Optional[list] = None,
     ) -> None:
+        self.coordinates = coordinates
         super().__init__(type="Point", coordinates=coordinates)
 
     def __repr__(self) -> str:
@@ -15694,6 +15697,11 @@ class TypePagedQueryResponse(PagedQueryResponse):
             self.offset,
             self.results,
         )
+
+
+class TypeTextInputHint(enum.Enum):
+    SINGLE_LINE = "SingleLine"
+    MULTI_LINE = "MultiLine"
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)

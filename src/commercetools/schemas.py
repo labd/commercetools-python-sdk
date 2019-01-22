@@ -117,7 +117,9 @@ class ApiClientSchema(marshmallow.Schema):
     name = marshmallow.fields.String(allow_none=True)
     scope = marshmallow.fields.String(allow_none=True)
     created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_used_at = marshmallow.fields.Date(allow_none=True, data_key="lastUsedAt")
+    last_used_at = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="lastUsedAt"
+    )
     secret = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -1700,8 +1702,8 @@ class FieldDefinitionSchema(marshmallow.Schema):
     name = marshmallow.fields.String(allow_none=True)
     label = LocalizedStringField(allow_none=True)
     required = marshmallow.fields.Bool(allow_none=True)
-    input_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="inputHint"
+    input_hint = marshmallow_enum.EnumField(
+        types.TypeTextInputHint, by_value=True, missing=None, data_key="inputHint"
     )
 
     class Meta:
@@ -7280,6 +7282,14 @@ class FilteredFacetResultSchema(FacetResultSchema):
 
 class GeoJsonPointSchema(GeoJsonSchema):
     "Marshmallow schema for :class:`commercetools.types.GeoJsonPoint`."
+    coordinates = marshmallow.fields.List(
+        marshmallow.fields.Nested(
+            nested="commercetools.schemas.numberSchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

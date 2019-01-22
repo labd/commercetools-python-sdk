@@ -22,8 +22,30 @@ class ProductTypesModel(BaseModel):
             key=obj.key,
             created_at=datetime.datetime.now(),
             last_modified_at=datetime.datetime.now(),
-            attributes=obj.attributes,
+            attributes=self._create_attributes_from_draft(obj.attributes),
         )
+
+    def _create_attributes_from_draft(
+        self, obj: typing.Optional[typing.List[types.AttributeDefinitionDraft]]
+    ) -> typing.List[types.AttributeDefinition]:
+
+        result: typing.List[types.AttributeDefinition] = []
+        if not obj:
+            return result
+
+        for draft in obj:
+            ad = types.AttributeDefinition(
+                type=draft.type,
+                name=draft.name,
+                label=draft.label,
+                is_required=draft.is_required,
+                attribute_constraint=draft.attribute_constraint,
+                input_tip=draft.input_tip,
+                input_hint=draft.input_hint,
+                is_searchable=draft.is_searchable,
+            )
+            result.append(ad)
+        return result
 
 
 class ProductTypesBackend(ServiceBackend):

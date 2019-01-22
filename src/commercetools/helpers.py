@@ -1,5 +1,6 @@
 import typing
 
+from commercetools.exceptions import CommercetoolsError
 from marshmallow import class_registry, fields, missing
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
@@ -133,3 +134,43 @@ class Discriminator(Field):
     def _deserialize(self, value, attr, data):
         self._test_collection(value)
         return self._load(value, data)
+
+
+def _concurrent_retry(num):
+    """Decorator to add retry logic for concurrent modifications.
+
+    The num field is used to indicate how many times it should be retried. When
+    0 is given then it doesn't retry at all.ArithmeticError
+
+    """
+    # Shortcut the decorator when we don't want to retry. This is the usual
+    # flow.
+    if num == 0:
+        return lambda func: func
+
+    def _wrapper(func):
+        def _handler(data):
+            nonlocal num
+
+            # When there is no version set we can skip the retry logic
+            if "version" not in data:
+                return func(data)
+
+            # Loop while we explicity either return or raise an error when the
+            # num value is decreated to <= 0.
+            while True:
+                try:
+                    return func(data)
+                except CommercetoolsError as exc:
+                    if num <= 0:
+                        raise
+
+                    if exc.response.status_code == 409:
+                        data["version"] = exc.response.errors[0].current_version
+                    else:
+                        raise
+                    num -= 1
+
+        return _handler
+
+    return _wrapper

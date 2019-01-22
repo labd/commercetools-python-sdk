@@ -1,1 +1,4 @@
-from .client import Client, CommercetoolsError  # noqa
+from .client import Client
+from .exceptions import CommercetoolsError
+
+__all__ = ["Client", "CommercetoolsError"]

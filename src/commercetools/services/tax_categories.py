@@ -56,7 +56,12 @@ class TaxCategoryService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.TaxCategoryUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.TaxCategoryUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.TaxCategory:
         update_action = types.TaxCategoryUpdate(version=version, actions=actions)
         return self._client._post(
@@ -65,12 +70,16 @@ class TaxCategoryService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.TaxCategoryUpdateSchema,
             response_schema_cls=schemas.TaxCategorySchema,
+            force_update=force_update,
         )
 
-    def delete_by_id(self, id: str, version: int) -> types.TaxCategory:
+    def delete_by_id(
+        self, id: str, version: int, *, force_delete: bool = False
+    ) -> types.TaxCategory:
         params = TaxCategoryDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"tax-categories/{id}",
             params=params,
             response_schema_cls=schemas.TaxCategorySchema,
+            force_delete=force_delete,
         )

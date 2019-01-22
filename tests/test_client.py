@@ -1,8 +1,10 @@
 import time
+import uuid
 
 import pytest
-from freezegun import freeze_time
 
+from commercetools import types
+from commercetools import CommercetoolsError
 from commercetools.client import Client
 
 
@@ -65,3 +67,76 @@ def test_cache_token(commercetools_api):
         token_url="https://auth.sphere.io/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1
+
+
+def test_resource_update_conflict(client):
+    """Test the return value of the update methods.
+
+    It doesn't test the actual update itself.
+    TODO: See if this is worth testing since we're using a mocking backend
+    """
+    product = client.products.create(types.ProductDraft(key="test-product"))
+
+    assert product.version == 1
+    assert uuid.UUID(product.id)
+    assert product.key == "test-product"
+
+    product = client.products.update_by_id(
+        id=product.id,
+        version=product.version,
+        actions=[
+            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
+    )
+    assert product.key == "test-product"
+    assert product.version == 2
+
+    # This should raise a version conflict error
+    with pytest.raises(CommercetoolsError) as exc:
+        product = client.products.update_by_id(
+            id=product.id,
+            version=1,
+            actions=[
+                types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+            ],
+        )
+    assert exc.value.response.status_code == 409
+    assert exc.value.response.errors[0].current_version == 2
+
+    # Force it
+    product = client.products.update_by_id(
+        id=product.id,
+        version=1,
+        actions=[
+            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
+        force_update=True,
+    )
+
+
+def test_resource_delete_conflict(client):
+    """Test the return value of the update methods.
+
+    It doesn't test the actual update itself.
+    TODO: See if this is worth testing since we're using a mocking backend
+    """
+    product = client.products.create(types.ProductDraft(key="test-product"))
+
+    product = client.products.update_by_id(
+        id=product.id,
+        version=product.version,
+        actions=[
+            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+        ],
+    )
+    assert product.version == 2
+
+    # This should raise a version conflict error
+    with pytest.raises(CommercetoolsError) as exc:
+        product = client.products.delete_by_id(id=product.id, version=1)
+
+    assert exc.value.response.status_code == 409
+    assert exc.value.response.errors[0].current_version == 2
+
+    # Force it
+    client.products.delete_by_id(id=product.id, version=1, force_delete=True)

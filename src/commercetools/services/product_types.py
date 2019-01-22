@@ -55,7 +55,12 @@ class ProductTypeService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: typing.List[types.ProductTypeUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: typing.List[types.ProductTypeUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.ProductType:
         update_action = types.ProductTypeUpdate(version=version, actions=actions)
         return self._client._post(
@@ -64,6 +69,7 @@ class ProductTypeService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ProductTypeUpdateSchema,
             response_schema_cls=schemas.ProductTypeSchema,
+            force_update=force_update,
         )
 
     def update_by_key(
@@ -71,6 +77,8 @@ class ProductTypeService(abstract.AbstractService):
         key: str,
         version: int,
         actions: typing.List[types.ProductTypeUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.ProductType:
         update_action = types.ProductTypeUpdate(version=version, actions=actions)
         return self._client._post(
@@ -79,20 +87,27 @@ class ProductTypeService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ProductTypeUpdateSchema,
             response_schema_cls=schemas.ProductTypeSchema,
+            force_update=force_update,
         )
 
-    def delete_by_id(self, id: str, version: int) -> types.ProductType:
+    def delete_by_id(
+        self, id: str, version: int, *, force_delete: bool = True
+    ) -> types.ProductType:
         params = ProductTypeDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"product-types/{id}",
             params=params,
             response_schema_cls=schemas.ProductTypeSchema,
+            force_delete=force_delete,
         )
 
-    def delete_by_key(self, key: str, version: int) -> types.ProductType:
+    def delete_by_key(
+        self, key: str, version: int, *, force_delete: bool = True
+    ) -> types.ProductType:
         params = ProductTypeDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"product-types/key={key}",
             params=params,
             response_schema_cls=schemas.ProductTypeSchema,
+            force_delete=force_delete,
         )

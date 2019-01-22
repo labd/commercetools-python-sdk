@@ -53,7 +53,12 @@ class ShippingMethodService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.ShippingMethodUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.ShippingMethodUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.ShippingMethod:
         update_action = types.ShippingMethodUpdate(version=version, actions=actions)
         return self._client._post(
@@ -62,10 +67,16 @@ class ShippingMethodService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ShippingMethodUpdateSchema,
             response_schema_cls=schemas.ShippingMethodSchema,
+            force_update=force_update,
         )
 
     def update_by_key(
-        self, key: str, version: int, actions: List[types.ShippingMethodUpdateAction]
+        self,
+        key: str,
+        version: int,
+        actions: List[types.ShippingMethodUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.ShippingMethod:
         update_action = types.ShippingMethodUpdate(version=version, actions=actions)
         return self._client._post(
@@ -74,12 +85,16 @@ class ShippingMethodService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ShippingMethodUpdateSchema,
             response_schema_cls=schemas.ShippingMethodSchema,
+            force_update=force_update,
         )
 
-    def delete(self, id: str, version: int) -> types.ShippingMethod:
+    def delete(
+        self, id: str, version: int, *, force_delete: bool = False
+    ) -> types.ShippingMethod:
         params = ShippingMethodDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"shipping-methods/{id}",
             params=params,
             response_schema_cls=schemas.ShippingMethodSchema,
+            force_delete=force_delete,
         )

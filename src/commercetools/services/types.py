@@ -47,7 +47,12 @@ class TypeService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: typing.List[types.TypeUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: typing.List[types.TypeUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Type:
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
@@ -56,10 +61,16 @@ class TypeService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.TypeUpdateSchema,
             response_schema_cls=schemas.TypeSchema,
+            force_update=force_update,
         )
 
     def update_by_key(
-        self, key: str, version: int, actions: typing.List[types.TypeUpdateAction]
+        self,
+        key: str,
+        version: int,
+        actions: typing.List[types.TypeUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Type:
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
@@ -68,20 +79,27 @@ class TypeService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.TypeUpdateSchema,
             response_schema_cls=schemas.TypeSchema,
+            force_update=force_update,
         )
 
-    def delete_by_id(self, id: str, version: int) -> types.Type:
+    def delete_by_id(
+        self, id: str, version: int, *, force_delete: bool = False
+    ) -> types.Type:
         params = TypeDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"types/{id}",
             params=params,
             response_schema_cls=schemas.TypeSchema,
+            force_delete=force_delete,
         )
 
-    def delete_by_key(self, key: str, version: int) -> types.Type:
+    def delete_by_key(
+        self, key: str, version: int, *, force_delete: bool = False
+    ) -> types.Type:
         params = TypeDeleteSchema().dump({"version": version})
         return self._client._delete(
             endpoint=f"types/key={key}",
             params=params,
             response_schema_cls=schemas.TypeSchema,
+            force_delete=force_delete,
         )

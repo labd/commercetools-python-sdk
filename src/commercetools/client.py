@@ -10,6 +10,8 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util.retry import Retry
 
 from commercetools import schemas
+from commercetools.exceptions import CommercetoolsError
+from commercetools.helpers import _concurrent_retry
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
@@ -18,22 +20,16 @@ from commercetools.services.extensions import ExtensionService
 from commercetools.services.inventory import InventoryService
 from commercetools.services.orders import OrderService
 from commercetools.services.payments import PaymentService
+from commercetools.services.product_discounts import ProductDiscountService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
-from commercetools.services.product_discounts import ProductDiscountService
 from commercetools.services.project import ProjectService
 from commercetools.services.shipping_methods import ShippingMethodService
 from commercetools.services.subscriptions import SubscriptionService
 from commercetools.services.tax_categories import TaxCategoryService
 from commercetools.services.types import TypeService
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
-
-
-class CommercetoolsError(Exception):
-    def __init__(self, message, response) -> None:
-        super().__init__(message)
-        self.response = response
 
 
 class RefreshingOAuth2Session(OAuth2Session):
@@ -145,18 +141,24 @@ class Client:
         request_schema_cls: SchemaABC,
         response_schema_cls: SchemaABC,
         form_encoded: bool = False,
+        force_update: bool = False,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
-        data = request_schema_cls().dump(data_object)
-        if form_encoded:
-            kwargs = {"data": data}
-        else:
-            kwargs = {"json": data}
-        response = self._http_client.post(self._base_url + endpoint, **kwargs)
 
-        if response.status_code in (200, 201):
-            return response_schema_cls().load(response.json())
-        return self._process_error(response)
+        @_concurrent_retry(3 if force_update else 0)
+        def remote_http_call(data):
+            if form_encoded:
+                kwargs = {"data": data}
+            else:
+                kwargs = {"json": data}
+
+            response = self._http_client.post(self._base_url + endpoint, **kwargs)
+            if response.status_code in (200, 201):
+                return response_schema_cls().load(response.json())
+            return self._process_error(response)
+
+        data = request_schema_cls().dump(data_object)
+        return remote_http_call(data)
 
     def _upload(
         self,
@@ -179,13 +181,18 @@ class Client:
         endpoint: str,
         params: typing.Dict[str, str],
         response_schema_cls: SchemaABC,
+        force_delete: bool = False,
     ) -> typing.Any:
         """Delete an object from the commercetools platform"""
-        response = self._http_client.delete(self._base_url + endpoint, params=params)
 
-        if response.status_code == 200:
-            return response_schema_cls().load(response.json())
-        return self._process_error(response)
+        @_concurrent_retry(3 if force_delete else 0)
+        def remote_http_call(data):
+            response = self._http_client.delete(self._base_url + endpoint, params=params)
+            if response.status_code == 200:
+                return response_schema_cls().load(response.json())
+            return self._process_error(response)
+
+        return remote_http_call(params)
 
     def _process_error(self, response: requests.Response) -> None:
         if not response.content:

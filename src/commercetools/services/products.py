@@ -67,7 +67,12 @@ class ProductService(abstract.AbstractService):
         )
 
     def update_by_id(
-        self, id: str, version: int, actions: List[types.ProductUpdateAction]
+        self,
+        id: str,
+        version: int,
+        actions: List[types.ProductUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Product:
         update_action = types.ProductUpdate(version=version, actions=actions)
         return self._client._post(
@@ -76,10 +81,16 @@ class ProductService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ProductUpdateSchema,
             response_schema_cls=schemas.ProductSchema,
+            force_update=force_update,
         )
 
     def update_by_key(
-        self, key: str, version: int, actions: List[types.ProductUpdateAction]
+        self,
+        key: str,
+        version: int,
+        actions: List[types.ProductUpdateAction],
+        *,
+        force_update: bool = False,
     ) -> types.Product:
         update_action = types.ProductUpdate(version=version, actions=actions)
         return self._client._post(
@@ -88,6 +99,7 @@ class ProductService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.ProductUpdateSchema,
             response_schema_cls=schemas.ProductSchema,
+            force_update=force_update,
         )
 
     def delete_by_id(
@@ -98,6 +110,8 @@ class ProductService(abstract.AbstractService):
         price_country: typing.Optional[str] = None,
         price_customer_group: typing.Optional[UUID] = None,
         price_channel: typing.Optional[UUID] = None,
+        *,
+        force_delete: bool = False,
     ) -> types.Product:
         params = ProductDeleteSchema().dump(
             {
@@ -112,6 +126,7 @@ class ProductService(abstract.AbstractService):
             endpoint=f"products/{id}",
             params=params,
             response_schema_cls=schemas.ProductSchema,
+            force_delete=force_delete,
         )
 
     def delete_by_key(
@@ -122,6 +137,8 @@ class ProductService(abstract.AbstractService):
         price_country: typing.Optional[str] = None,
         price_customer_group: typing.Optional[UUID] = None,
         price_channel: typing.Optional[UUID] = None,
+        *,
+        force_delete: bool = False,
     ) -> types.Product:
         params = ProductDeleteSchema().dump(
             {
@@ -136,6 +153,7 @@ class ProductService(abstract.AbstractService):
             endpoint=f"products/key={key}",
             params=params,
             response_schema_cls=schemas.ProductSchema,
+            force_delete=force_delete,
         )
 
     def upload_image(

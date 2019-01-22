@@ -32,6 +32,7 @@ class SubscriptionsBackend(ServiceBackend):
     service_path = "subscriptions"
     model_class = SubscriptionsModel
     _schema_draft = schemas.SubscriptionDraftSchema
+    _schema_update = schemas.SubscriptionUpdateSchema
     _schema_query_response = schemas.SubscriptionPagedQueryResponseSchema
 
     def urls(self):

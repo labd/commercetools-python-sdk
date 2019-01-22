@@ -114,6 +114,7 @@ class ServiceBackend(BaseBackend):
     hostnames = ["api.sphere.io", "localhost"]
     model_class: typing.Any = None
     _schema_draft: typing.Optional[marshmallow.Schema] = None
+    _schema_update: typing.Optional[marshmallow.Schema] = None
     _schema_query_response: typing.Optional[marshmallow.Schema] = None
 
     @property
@@ -160,7 +161,10 @@ class ServiceBackend(BaseBackend):
             if response is not None:
                 return response
 
-            obj["version"] += 1
+            update = self._schema_update().load(request.json())
+            if update.actions:
+                obj["version"] += 1
+
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
 
@@ -171,7 +175,10 @@ class ServiceBackend(BaseBackend):
             if response is not None:
                 return response
 
-            obj["version"] += 1
+            update = self._schema_update().load(request.json())
+            if update.actions:
+                obj["version"] += 1
+
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
 

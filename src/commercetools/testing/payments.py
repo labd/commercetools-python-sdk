@@ -54,6 +54,7 @@ class PaymentsBackend(ServiceBackend):
     service_path = "payments"
     model_class = PaymentsModel
     _schema_draft = schemas.PaymentDraftSchema
+    _schema_update = schemas.PaymentUpdateSchema
     _schema_query_response = schemas.PaymentPagedQueryResponseSchema
 
     def urls(self):

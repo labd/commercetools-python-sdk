@@ -29,6 +29,7 @@ class ExtensionsBackend(ServiceBackend):
     service_path = "extensions"
     model_class = ExtensionsModel
     _schema_draft = schemas.ExtensionDraftSchema
+    _schema_update = schemas.ExtensionUpdateSchema
     _schema_query_response = schemas.ExtensionPagedQueryResponseSchema
 
     def urls(self):

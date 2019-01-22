@@ -32,6 +32,7 @@ class CategoriesBackend(ServiceBackend):
     service_path = "categories"
     model_class = CategoriesModel
     _schema_draft = schemas.CategoryDraftSchema
+    _schema_update = schemas.CategoryUpdateSchema
     _schema_query_response = schemas.CategoryPagedQueryResponseSchema
 
     def urls(self):

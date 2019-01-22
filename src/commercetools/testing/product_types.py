@@ -53,6 +53,7 @@ class ProductTypesBackend(ServiceBackend):
     model_class = ProductTypesModel
 
     _schema_draft = schemas.ProductTypeDraftSchema
+    _schema_update = schemas.ProductTypeUpdateSchema
     _schema_query_response = schemas.ProductTypePagedQueryResponseSchema
 
     def urls(self):

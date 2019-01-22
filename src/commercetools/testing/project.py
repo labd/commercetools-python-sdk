@@ -6,6 +6,7 @@ from commercetools.testing.abstract import ServiceBackend
 
 class ProjectBackend(ServiceBackend):
     _resource_schema = schemas.ProjectSchema
+    _schema_update = schemas.ProjectUpdateSchema
 
     def __init__(self):
         self.project = {

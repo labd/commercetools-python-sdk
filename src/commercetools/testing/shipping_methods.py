@@ -10,6 +10,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class ShippingMethodsModel(BaseModel):
     _primary_type_name = "shipping-method"
     _resource_schema = schemas.ShippingMethodSchema
+    _schema_update = schemas.ProjectUpdateSchema
 
     def _create_from_draft(
         self, obj: types.ShippingMethodDraft, id: typing.Optional[str] = None
@@ -51,6 +52,7 @@ class ShippingMethodsBackend(ServiceBackend):
     service_path = "shipping-methods"
     model_class = ShippingMethodsModel
     _schema_draft = schemas.ShippingMethodDraftSchema
+    _schema_update = schemas.ShippingMethodUpdateSchema
     _schema_query_response = schemas.ShippingMethodPagedQueryResponseSchema
 
     def urls(self):

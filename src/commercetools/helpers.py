@@ -140,7 +140,7 @@ def _concurrent_retry(num):
     """Decorator to add retry logic for concurrent modifications.
 
     The num field is used to indicate how many times it should be retried. When
-    0 is given then it doesn't retry at all.ArithmeticError
+    0 is given then it doesn't retry at all.
 
     """
     # Shortcut the decorator when we don't want to retry. This is the usual

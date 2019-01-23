@@ -40,8 +40,9 @@ class Server:
         self.is_running = threading.Event()
 
     def run(self):
-        srv = make_server("localhost", 8989, self)
+        srv = make_server("0.0.0.0", 8989, self)
         self.api_url = "http://localhost:8989"
+        logger.info("Starting commercetools mock server on %s", self.api_url)
         self.is_running.set()
         srv.serve_forever()
 
@@ -81,7 +82,5 @@ class Server:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    logger.info("Starting commercetools mock server on http://localhost:8080")
     server = Server()
-    srv = make_server("localhost", 8080, server)
-    srv.serve_forever()
+    server.run()

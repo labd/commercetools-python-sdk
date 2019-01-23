@@ -6,6 +6,7 @@ install_requires = [
     "requests>=2.7.0",
     "pytz",
     "requests-oauthlib>=1.0.0",
+    "requests_mock>=0.7.0",
     "attrs>=18.2.0",
     "marshmallow>=3.0.0b17",
     "marshmallow-enum>=1.4.1",
@@ -27,7 +28,6 @@ tests_require = [
     "pretend==1.0.8",
     "pytest-cov==2.5.1",
     "pytest==3.1.3",
-    "requests_mock>=0.7.0",
     # Linting
     "isort==4.2.15",
     "flake8==3.3.0",

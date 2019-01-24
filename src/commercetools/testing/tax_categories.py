@@ -22,7 +22,27 @@ class TaxCategoryModel(BaseModel):
             last_modified_at=datetime.datetime.now(),
             name=obj.name,
             description=obj.description,
+            rates=self._create_rates(obj.rates),
         )
+
+    def _create_rates(
+        self, drafts: typing.Optional[typing.List[types.TaxRateDraft]]
+    ) -> typing.List[types.TaxRate]:
+        result: typing.List[types.TaxRate] = []
+        if not drafts:
+            return result
+        for draft in drafts:
+            obj = types.TaxRate(
+                name=draft.name,
+                amount=draft.amount,
+                included_in_price=draft.included_in_price,
+                country=draft.country,
+                state=draft.state,
+                sub_rates=draft.sub_rates,
+            )
+            result.append(obj)
+        print(result)
+        return result
 
 
 class TaxCategoryBackend(ServiceBackend):
@@ -40,4 +60,6 @@ class TaxCategoryBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
+            ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
+            ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]

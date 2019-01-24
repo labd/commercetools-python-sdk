@@ -8483,6 +8483,8 @@ class DeliveryAddressSetMessagePayload(MessagePayload):
     delivery_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
 
     def __init__(
         self,
@@ -8490,15 +8492,17 @@ class DeliveryAddressSetMessagePayload(MessagePayload):
         type: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.address = address
+        self.old_address = old_address
         super().__init__(type="DeliveryAddressSet")
 
     def __repr__(self) -> str:
         return (
-            "DeliveryAddressSetMessagePayload(type=%r, delivery_id=%r, address=%r)"
-            % (self.type, self.delivery_id, self.address)
+            "DeliveryAddressSetMessagePayload(type=%r, delivery_id=%r, address=%r, old_address=%r)"
+            % (self.type, self.delivery_id, self.address, self.old_address)
         )
 
 
@@ -8531,6 +8535,8 @@ class DeliveryItemsUpdatedMessagePayload(MessagePayload):
     delivery_id: typing.Optional[str]
     #: List of :class:`commercetools.types.DeliveryItem`
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
+    old_items: typing.Optional[typing.List["DeliveryItem"]]
 
     def __init__(
         self,
@@ -8538,15 +8544,17 @@ class DeliveryItemsUpdatedMessagePayload(MessagePayload):
         type: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        old_items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
+        self.old_items = old_items
         super().__init__(type="DeliveryItemsUpdated")
 
     def __repr__(self) -> str:
         return (
-            "DeliveryItemsUpdatedMessagePayload(type=%r, delivery_id=%r, items=%r)"
-            % (self.type, self.delivery_id, self.items)
+            "DeliveryItemsUpdatedMessagePayload(type=%r, delivery_id=%r, items=%r, old_items=%r)"
+            % (self.type, self.delivery_id, self.items, self.old_items)
         )
 
 
@@ -10099,22 +10107,26 @@ class Order(Resource):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderBillingAddressSetMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessagePayloadSchema`."
-    #: :class:`commercetools.types.Address`
+    #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
 
     def __init__(
         self,
         *,
         type: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None,
     ) -> None:
         self.address = address
+        self.old_address = old_address
         super().__init__(type="OrderBillingAddressSet")
 
     def __repr__(self) -> str:
-        return "OrderBillingAddressSetMessagePayload(type=%r, address=%r)" % (
-            self.type,
-            self.address,
+        return (
+            "OrderBillingAddressSetMessagePayload(type=%r, address=%r, old_address=%r)"
+            % (self.type, self.address, self.old_address)
         )
 
 
@@ -10179,19 +10191,26 @@ class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderCustomerEmailSetMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessagePayloadSchema`."
-    #: :class:`str`
+    #: Optional :class:`str`
     email: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``oldEmail`` `in Commercetools)`
+    old_email: typing.Optional[str]
 
     def __init__(
-        self, *, type: typing.Optional[str] = None, email: typing.Optional[str] = None
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        old_email: typing.Optional[str] = None,
     ) -> None:
         self.email = email
+        self.old_email = old_email
         super().__init__(type="OrderCustomerEmailSet")
 
     def __repr__(self) -> str:
-        return "OrderCustomerEmailSetMessagePayload(type=%r, email=%r)" % (
-            self.type,
-            self.email,
+        return (
+            "OrderCustomerEmailSetMessagePayload(type=%r, email=%r, old_email=%r)"
+            % (self.type, self.email, self.old_email)
         )
 
 
@@ -10669,24 +10688,28 @@ class OrderPagedQueryResponse(PagedQueryResponse):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class OrderPaymentChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentChangedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional[str]
+class OrderPaymentStateChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
+    payment_state: typing.Optional["PaymentState"]
+    #: :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
+    old_payment_state: typing.Optional["PaymentState"]
 
     def __init__(
         self,
         *,
         type: typing.Optional[str] = None,
-        payment_state: typing.Optional[str] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        old_payment_state: typing.Optional["PaymentState"] = None,
     ) -> None:
         self.payment_state = payment_state
+        self.old_payment_state = old_payment_state
         super().__init__(type="OrderPaymentStateChanged")
 
     def __repr__(self) -> str:
-        return "OrderPaymentChangedMessagePayload(type=%r, payment_state=%r)" % (
-            self.type,
-            self.payment_state,
+        return (
+            "OrderPaymentStateChangedMessagePayload(type=%r, payment_state=%r, old_payment_state=%r)"
+            % (self.type, self.payment_state, self.old_payment_state)
         )
 
 
@@ -10743,42 +10766,50 @@ class OrderShipmentStateChangedMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessagePayloadSchema`."
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: typing.Optional["ShipmentState"]
+    #: :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
+    old_shipment_state: typing.Optional["ShipmentState"]
 
     def __init__(
         self,
         *,
         type: typing.Optional[str] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
+        old_shipment_state: typing.Optional["ShipmentState"] = None,
     ) -> None:
         self.shipment_state = shipment_state
+        self.old_shipment_state = old_shipment_state
         super().__init__(type="OrderShipmentStateChanged")
 
     def __repr__(self) -> str:
-        return "OrderShipmentStateChangedMessagePayload(type=%r, shipment_state=%r)" % (
-            self.type,
-            self.shipment_state,
+        return (
+            "OrderShipmentStateChangedMessagePayload(type=%r, shipment_state=%r, old_shipment_state=%r)"
+            % (self.type, self.shipment_state, self.old_shipment_state)
         )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderShippingAddressSetMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessagePayloadSchema`."
-    #: :class:`commercetools.types.Address`
+    #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
 
     def __init__(
         self,
         *,
         type: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None,
     ) -> None:
         self.address = address
+        self.old_address = old_address
         super().__init__(type="OrderShippingAddressSet")
 
     def __repr__(self) -> str:
-        return "OrderShippingAddressSetMessagePayload(type=%r, address=%r)" % (
-            self.type,
-            self.address,
+        return (
+            "OrderShippingAddressSetMessagePayload(type=%r, address=%r, old_address=%r)"
+            % (self.type, self.address, self.old_address)
         )
 
 
@@ -10844,22 +10875,26 @@ class OrderState(enum.Enum):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderStateChangedMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional[str]
+    #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
+    order_state: typing.Optional["OrderState"]
+    #: :class:`commercetools.types.OrderState` `(Named` ``oldOrderState`` `in Commercetools)`
+    old_order_state: typing.Optional["OrderState"]
 
     def __init__(
         self,
         *,
         type: typing.Optional[str] = None,
-        order_state: typing.Optional[str] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        old_order_state: typing.Optional["OrderState"] = None,
     ) -> None:
         self.order_state = order_state
+        self.old_order_state = old_order_state
         super().__init__(type="OrderStateChanged")
 
     def __repr__(self) -> str:
-        return "OrderStateChangedMessagePayload(type=%r, order_state=%r)" % (
-            self.type,
-            self.order_state,
+        return (
+            "OrderStateChangedMessagePayload(type=%r, order_state=%r, old_order_state=%r)"
+            % (self.type, self.order_state, self.old_order_state)
         )
 
 
@@ -10984,6 +11019,8 @@ class ParcelItemsUpdatedMessagePayload(MessagePayload):
     delivery_id: typing.Optional[str]
     #: List of :class:`commercetools.types.DeliveryItem`
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
+    old_items: typing.Optional[typing.List["DeliveryItem"]]
 
     def __init__(
         self,
@@ -10992,16 +11029,18 @@ class ParcelItemsUpdatedMessagePayload(MessagePayload):
         parcel_id: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        old_items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ) -> None:
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
         self.items = items
+        self.old_items = old_items
         super().__init__(type="ParcelItemsUpdated")
 
     def __repr__(self) -> str:
         return (
-            "ParcelItemsUpdatedMessagePayload(type=%r, parcel_id=%r, delivery_id=%r, items=%r)"
-            % (self.type, self.parcel_id, self.delivery_id, self.items)
+            "ParcelItemsUpdatedMessagePayload(type=%r, parcel_id=%r, delivery_id=%r, items=%r, old_items=%r)"
+            % (self.type, self.parcel_id, self.delivery_id, self.items, self.old_items)
         )
 
 
@@ -12701,13 +12740,13 @@ class ReviewPagedQueryResponse(PagedQueryResponse):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewRatingSetMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessagePayloadSchema`."
-    #: :class:`int` `(Named` ``oldRating`` `in Commercetools)`
+    #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
     old_rating: typing.Optional[int]
-    #: :class:`int` `(Named` ``newRating`` `in Commercetools)`
+    #: Optional :class:`int` `(Named` ``newRating`` `in Commercetools)`
     new_rating: typing.Optional[int]
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
     included_in_statistics: typing.Optional[bool]
-    #: :class:`commercetools.types.Reference`
+    #: Optional :class:`commercetools.types.Reference`
     target: typing.Optional["Reference"]
 
     def __init__(
@@ -19809,6 +19848,8 @@ class DeliveryAddressSetMessage(Message):
     delivery_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
 
     def __init__(
         self,
@@ -19823,9 +19864,11 @@ class DeliveryAddressSetMessage(Message):
         type: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.address = address
+        self.old_address = old_address
         super().__init__(
             id=id,
             version=version,
@@ -19839,7 +19882,7 @@ class DeliveryAddressSetMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "DeliveryAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, address=%r)"
+            "DeliveryAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, address=%r, old_address=%r)"
             % (
                 self.id,
                 self.version,
@@ -19851,6 +19894,7 @@ class DeliveryAddressSetMessage(Message):
                 self.type,
                 self.delivery_id,
                 self.address,
+                self.old_address,
             )
         )
 
@@ -19862,6 +19906,8 @@ class DeliveryItemsUpdatedMessage(Message):
     delivery_id: typing.Optional[str]
     #: List of :class:`commercetools.types.DeliveryItem`
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
+    old_items: typing.Optional[typing.List["DeliveryItem"]]
 
     def __init__(
         self,
@@ -19876,9 +19922,11 @@ class DeliveryItemsUpdatedMessage(Message):
         type: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        old_items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
+        self.old_items = old_items
         super().__init__(
             id=id,
             version=version,
@@ -19892,7 +19940,7 @@ class DeliveryItemsUpdatedMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "DeliveryItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, items=%r)"
+            "DeliveryItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, delivery_id=%r, items=%r, old_items=%r)"
             % (
                 self.id,
                 self.version,
@@ -19904,6 +19952,7 @@ class DeliveryItemsUpdatedMessage(Message):
                 self.type,
                 self.delivery_id,
                 self.items,
+                self.old_items,
             )
         )
 
@@ -20860,8 +20909,10 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderBillingAddressSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessageSchema`."
-    #: :class:`commercetools.types.Address`
+    #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
 
     def __init__(
         self,
@@ -20875,8 +20926,10 @@ class OrderBillingAddressSetMessage(Message):
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None,
     ) -> None:
         self.address = address
+        self.old_address = old_address
         super().__init__(
             id=id,
             version=version,
@@ -20890,7 +20943,7 @@ class OrderBillingAddressSetMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "OrderBillingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            "OrderBillingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r, old_address=%r)"
             % (
                 self.id,
                 self.version,
@@ -20901,6 +20954,7 @@ class OrderBillingAddressSetMessage(Message):
                 self.resource_version,
                 self.type,
                 self.address,
+                self.old_address,
             )
         )
 
@@ -21084,8 +21138,10 @@ class OrderCustomLineItemDiscountSetMessage(Message):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderCustomerEmailSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessageSchema`."
-    #: :class:`str`
+    #: Optional :class:`str`
     email: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``oldEmail`` `in Commercetools)`
+    old_email: typing.Optional[str]
 
     def __init__(
         self,
@@ -21099,8 +21155,10 @@ class OrderCustomerEmailSetMessage(Message):
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
         email: typing.Optional[str] = None,
+        old_email: typing.Optional[str] = None,
     ) -> None:
         self.email = email
+        self.old_email = old_email
         super().__init__(
             id=id,
             version=version,
@@ -21114,7 +21172,7 @@ class OrderCustomerEmailSetMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "OrderCustomerEmailSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, email=%r)"
+            "OrderCustomerEmailSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, email=%r, old_email=%r)"
             % (
                 self.id,
                 self.version,
@@ -21125,6 +21183,7 @@ class OrderCustomerEmailSetMessage(Message):
                 self.resource_version,
                 self.type,
                 self.email,
+                self.old_email,
             )
         )
 
@@ -21777,10 +21836,12 @@ class OrderLineItemDiscountSetMessage(Message):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class OrderPaymentChangedMessage(Message):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentChangedMessageSchema`."
-    #: :class:`str` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional[str]
+class OrderPaymentStateChangedMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessageSchema`."
+    #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
+    payment_state: typing.Optional["PaymentState"]
+    #: :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
+    old_payment_state: typing.Optional["PaymentState"]
 
     def __init__(
         self,
@@ -21793,9 +21854,11 @@ class OrderPaymentChangedMessage(Message):
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
-        payment_state: typing.Optional[str] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        old_payment_state: typing.Optional["PaymentState"] = None,
     ) -> None:
         self.payment_state = payment_state
+        self.old_payment_state = old_payment_state
         super().__init__(
             id=id,
             version=version,
@@ -21809,7 +21872,7 @@ class OrderPaymentChangedMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "OrderPaymentChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment_state=%r)"
+            "OrderPaymentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, payment_state=%r, old_payment_state=%r)"
             % (
                 self.id,
                 self.version,
@@ -21820,6 +21883,7 @@ class OrderPaymentChangedMessage(Message):
                 self.resource_version,
                 self.type,
                 self.payment_state,
+                self.old_payment_state,
             )
         )
 
@@ -22580,6 +22644,8 @@ class OrderShipmentStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessageSchema`."
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: typing.Optional["ShipmentState"]
+    #: :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
+    old_shipment_state: typing.Optional["ShipmentState"]
 
     def __init__(
         self,
@@ -22593,8 +22659,10 @@ class OrderShipmentStateChangedMessage(Message):
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
+        old_shipment_state: typing.Optional["ShipmentState"] = None,
     ) -> None:
         self.shipment_state = shipment_state
+        self.old_shipment_state = old_shipment_state
         super().__init__(
             id=id,
             version=version,
@@ -22608,7 +22676,7 @@ class OrderShipmentStateChangedMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "OrderShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, shipment_state=%r)"
+            "OrderShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, shipment_state=%r, old_shipment_state=%r)"
             % (
                 self.id,
                 self.version,
@@ -22619,6 +22687,7 @@ class OrderShipmentStateChangedMessage(Message):
                 self.resource_version,
                 self.type,
                 self.shipment_state,
+                self.old_shipment_state,
             )
         )
 
@@ -22626,8 +22695,10 @@ class OrderShipmentStateChangedMessage(Message):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderShippingAddressSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessageSchema`."
-    #: :class:`commercetools.types.Address`
+    #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
 
     def __init__(
         self,
@@ -22641,8 +22712,10 @@ class OrderShippingAddressSetMessage(Message):
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
         address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None,
     ) -> None:
         self.address = address
+        self.old_address = old_address
         super().__init__(
             id=id,
             version=version,
@@ -22656,7 +22729,7 @@ class OrderShippingAddressSetMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "OrderShippingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r)"
+            "OrderShippingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, address=%r, old_address=%r)"
             % (
                 self.id,
                 self.version,
@@ -22667,6 +22740,7 @@ class OrderShippingAddressSetMessage(Message):
                 self.resource_version,
                 self.type,
                 self.address,
+                self.old_address,
             )
         )
 
@@ -22780,8 +22854,10 @@ class OrderShippingRateInputSetMessage(Message):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class OrderStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessageSchema`."
-    #: :class:`str` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional[str]
+    #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
+    order_state: typing.Optional["OrderState"]
+    #: :class:`commercetools.types.OrderState` `(Named` ``oldOrderState`` `in Commercetools)`
+    old_order_state: typing.Optional["OrderState"]
 
     def __init__(
         self,
@@ -22794,9 +22870,11 @@ class OrderStateChangedMessage(Message):
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
         type: typing.Optional[str] = None,
-        order_state: typing.Optional[str] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        old_order_state: typing.Optional["OrderState"] = None,
     ) -> None:
         self.order_state = order_state
+        self.old_order_state = old_order_state
         super().__init__(
             id=id,
             version=version,
@@ -22810,7 +22888,7 @@ class OrderStateChangedMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "OrderStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order_state=%r)"
+            "OrderStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, order_state=%r, old_order_state=%r)"
             % (
                 self.id,
                 self.version,
@@ -22821,6 +22899,7 @@ class OrderStateChangedMessage(Message):
                 self.resource_version,
                 self.type,
                 self.order_state,
+                self.old_order_state,
             )
         )
 
@@ -23109,6 +23188,8 @@ class ParcelItemsUpdatedMessage(Message):
     delivery_id: typing.Optional[str]
     #: List of :class:`commercetools.types.DeliveryItem`
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
+    old_items: typing.Optional[typing.List["DeliveryItem"]]
 
     def __init__(
         self,
@@ -23124,10 +23205,12 @@ class ParcelItemsUpdatedMessage(Message):
         parcel_id: typing.Optional[str] = None,
         delivery_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        old_items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ) -> None:
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
         self.items = items
+        self.old_items = old_items
         super().__init__(
             id=id,
             version=version,
@@ -23141,7 +23224,7 @@ class ParcelItemsUpdatedMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "ParcelItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, parcel_id=%r, delivery_id=%r, items=%r)"
+            "ParcelItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, parcel_id=%r, delivery_id=%r, items=%r, old_items=%r)"
             % (
                 self.id,
                 self.version,
@@ -23154,6 +23237,7 @@ class ParcelItemsUpdatedMessage(Message):
                 self.parcel_id,
                 self.delivery_id,
                 self.items,
+                self.old_items,
             )
         )
 
@@ -27141,13 +27225,13 @@ class ReviewCreatedMessage(Message):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewRatingSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessageSchema`."
-    #: :class:`int` `(Named` ``oldRating`` `in Commercetools)`
+    #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
     old_rating: typing.Optional[int]
-    #: :class:`int` `(Named` ``newRating`` `in Commercetools)`
+    #: Optional :class:`int` `(Named` ``newRating`` `in Commercetools)`
     new_rating: typing.Optional[int]
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
     included_in_statistics: typing.Optional[bool]
-    #: :class:`commercetools.types.Reference`
+    #: Optional :class:`commercetools.types.Reference`
     target: typing.Optional["Reference"]
 
     def __init__(

@@ -91,6 +91,7 @@ class BaseBackend:
 
         match = re.match(self.path_prefix, request.path)
         if match:
+            request.kwargs = match.groupdict()
             try:
                 request_path = match.groupdict()["path"]
             except KeyError:

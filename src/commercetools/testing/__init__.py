@@ -63,7 +63,7 @@ class BackendRepository:
         self.extensions = ExtensionsBackend(self._storage)
         self.inventory = InventoryEntryBackend(self._storage)
         self.payments = PaymentsBackend(self._storage)
-        self.project = ProjectBackend()
+        self.project = ProjectBackend(self._storage)
         self.products = ProductsBackend(self._storage)
         self.product_discounts = ProductDiscountsBackend(self._storage)
         self.product_projections = ProductProjectionsBackend(

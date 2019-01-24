@@ -1,16 +1,26 @@
+import uuid
 from requests_mock import create_response
 
 from commercetools import schemas
-from commercetools.testing.abstract import ServiceBackend
+from commercetools.testing.abstract import BaseModel, ServiceBackend
+
+
+class ProjectsModel(BaseModel):
+    _resource_schema = schemas.ChannelSchema
+    _primary_type_name = "project"
 
 
 class ProjectBackend(ServiceBackend):
+    model_class = ProjectsModel
     _resource_schema = schemas.ProjectSchema
     _schema_update = schemas.ProjectUpdateSchema
 
-    def __init__(self):
-        self.project = {
-            "key": "labdigital-sandbox",
+    def __init__(self, storage):
+        super().__init__(storage)
+
+        project_id = uuid.uuid4()
+        self.model.objects[project_id] = {
+            "key": "unittest",
             "name": "labdigital-sandbox",
             "countries": ["DE", "US"],
             "currencies": ["EUR"],
@@ -29,12 +39,10 @@ class ProjectBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/$"
 
     def get(self, request):
-        content = schemas.ProjectSchema().dumps(self.project)
-        return create_response(request, text=content)
+        project_key = request.kwargs['project']
+        return self.get_by_key(request, project_key)
 
     def update(self, request):
-        schemas.ProjectUpdateSchema().loads(request.body)
+        project_key = request.kwargs['project']
+        return self.update_by_key(request, project_key)
 
-        # Return current
-        content = schemas.ChannelSchema().dumps(self.project)
-        return create_response(request, text=content)

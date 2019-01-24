@@ -1,3 +1,9 @@
+2.2.0 (2019-01-24)
+------------------
+ - Tax related fields now parse rate as float instead of always being 0
+ - Support generating code for Python 3.7 and higher
+ - Add limited testing service for orders
+
 2.1.0 (2019-01-23)
 ------------------
  - Add `commercetools.predicate.QueryPredicate()` which can be used to construct

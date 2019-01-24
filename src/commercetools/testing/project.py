@@ -2,6 +2,7 @@ import copy
 import uuid
 
 from commercetools import schemas
+from commercetools.testing.utils import update_attribute
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
@@ -47,30 +48,10 @@ class ProjectBackend(ServiceBackend):
         project_key = request.kwargs["project"]
         return self.update_by_key(request, project_key)
 
-    def _change_countries(self, obj, action):
-        if obj['countries'] != action.countries:
-            new = copy.deepcopy(obj)
-            new['countries'] = action.countries
-            return new
-        return obj
-
-    def _change_name(self, obj, action):
-        if obj['name'] != action.name:
-            new = copy.deepcopy(obj)
-            new['name'] = action.name
-            return new
-        return obj
-
-    def _change_languages(self, obj, action):
-        if obj['languages'] != action.languages:
-            new = copy.deepcopy(obj)
-            new['languages'] = action.languages
-            return new
-        return obj
-
     # Fixme: use decorator for this
     _actions = {
-        'changeCountries': _change_countries,
-        'changeName': _change_name,
-        'changeLanguages': _change_languages,
+        'changeCountries': update_attribute('countries', 'countries'),
+        'changeCurrencies': update_attribute('currencies', 'currencies'),
+        'changeName': update_attribute('name', 'name'),
+        'changeLanguages': update_attribute('languages', 'languages')
     }

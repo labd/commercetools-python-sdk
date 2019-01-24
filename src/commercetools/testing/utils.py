@@ -1,3 +1,4 @@
+import copy
 import typing
 from marshmallow import Schema
 from requests_mock.request import _RequestObjectProxy
@@ -49,3 +50,14 @@ def _money_to_typed(money: typing.Optional[types.Money]) -> typing.Optional[type
             cent_amount=money.cent_amount,
             currency_code=money.currency_code
         )
+
+
+def update_attribute(dst: str, src: str):
+    def updater(self, obj, action):
+        value = getattr(action, src)
+        if obj[dst] != value:
+            new = copy.deepcopy(obj)
+            new[dst] = value
+            return new
+        return obj
+    return updater

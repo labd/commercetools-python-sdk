@@ -36,15 +36,16 @@ class Server:
         self.adapter = HttpAdapter()
         self.repository = repository or BackendRepository()
         self.repository.register(self.adapter)
-        self.api_url = None
         self.is_running = threading.Event()
 
-    def run(self):
-        srv = make_server("0.0.0.0", 8989, self)
+        self.listen_url = "http://0.0.0.0:8989"
         self.api_url = "http://localhost:8989"
-        logger.info("Starting commercetools mock server on %s", self.api_url)
+        self.srv = make_server("0.0.0.0", 8989, self)
+
+    def run(self):
+        logger.info("Starting commercetools mock server on %s", self.listen_url)
         self.is_running.set()
-        srv.serve_forever()
+        self.srv.serve_forever()
 
     def __call__(self, environ, start_response):
         request = self._create_request(environ)

@@ -1,14 +1,29 @@
 import requests
 
+from commercetools import Client
 from commercetools.types import LocalizedString, ProductDraft
 
 
 def test_http_server(commercetools_client, commercetools_http_server):
-    product = commercetools_client.products.create(
+    import os
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+    client = Client(
+        project_key="unittest",
+        client_id="client-id",
+        client_secret="client-secret",
+        scope=[],
+        url=commercetools_http_server.api_url,
+        token_url=f"{commercetools_http_server.api_url}/oauth/token",
+    )
+
+    query_result = client.products.query()
+    assert query_result.count == 0
+    product = client.products.create(
         ProductDraft(name=LocalizedString(nl="Testje"))
     )
 
-    commercetools_client.products.get_by_id(product.id)
+    client.products.get_by_id(product.id)
     url = commercetools_http_server.api_url + f"/unittest/products/{product.id}"
     response = requests.get(url, headers={"Authorization": "Bearer token"})
 

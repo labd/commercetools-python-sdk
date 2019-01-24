@@ -3721,7 +3721,7 @@ class ReviewDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
     )
-    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
+    rating = marshmallow.fields.Float(allow_none=True, missing=None)
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
@@ -4360,7 +4360,7 @@ class StateDraftSchema(marshmallow.Schema):
 class SubRateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.SubRate`."
     name = marshmallow.fields.String(allow_none=True)
-    amount = marshmallow.fields.Integer(allow_none=True)
+    amount = marshmallow.fields.Float(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4571,7 +4571,7 @@ class TaxCategoryDraftSchema(marshmallow.Schema):
 class TaxPortionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxPortion`."
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    rate = marshmallow.fields.Integer(allow_none=True)
+    rate = marshmallow.fields.Float(allow_none=True)
     amount = marshmallow.fields.Nested(
         nested="commercetools.schemas.MoneySchema",
         unknown=marshmallow.EXCLUDE,
@@ -4589,7 +4589,7 @@ class TaxPortionSchema(marshmallow.Schema):
 class TaxRateDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxRateDraft`."
     name = marshmallow.fields.String(allow_none=True)
-    amount = marshmallow.fields.Integer(allow_none=True, missing=None)
+    amount = marshmallow.fields.Float(allow_none=True, missing=None)
     included_in_price = marshmallow.fields.Bool(
         allow_none=True, data_key="includedInPrice"
     )
@@ -4616,7 +4616,7 @@ class TaxRateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxRate`."
     id = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
-    amount = marshmallow.fields.Integer(allow_none=True)
+    amount = marshmallow.fields.Float(allow_none=True)
     included_in_price = marshmallow.fields.Bool(
         allow_none=True, data_key="includedInPrice"
     )
@@ -10257,7 +10257,7 @@ class ReviewSchema(ResourceSchema):
     included_in_statistics = marshmallow.fields.Bool(
         allow_none=True, data_key="includedInStatistics"
     )
-    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
+    rating = marshmallow.fields.Float(allow_none=True, missing=None)
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,

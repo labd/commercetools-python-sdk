@@ -8,6 +8,7 @@ from .utils import merge_imports, reorder_class_definitions
 FIELD_TYPES = {
     "string": "marshmallow.fields.String",
     "object": "marshmallow.fields.Dict",
+    "float": "marshmallow.fields.Float",
     "number": "marshmallow.fields.Integer",
     "integer": "marshmallow.fields.Integer",
     "boolean": "marshmallow.fields.Bool",

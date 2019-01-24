@@ -1,5 +1,5 @@
+import copy
 import uuid
-from requests_mock import create_response
 
 from commercetools import schemas
 from commercetools.testing.abstract import BaseModel, ServiceBackend
@@ -20,6 +20,7 @@ class ProjectBackend(ServiceBackend):
 
         project_id = uuid.uuid4()
         self.model.objects[project_id] = {
+            "id": str(project_id),
             "key": "unittest",
             "name": "labdigital-sandbox",
             "countries": ["DE", "US"],
@@ -39,10 +40,37 @@ class ProjectBackend(ServiceBackend):
         return r"/(?P<project>[^/]+)/$"
 
     def get(self, request):
-        project_key = request.kwargs['project']
+        project_key = request.kwargs["project"]
         return self.get_by_key(request, project_key)
 
     def update(self, request):
-        project_key = request.kwargs['project']
+        project_key = request.kwargs["project"]
         return self.update_by_key(request, project_key)
 
+    def _change_countries(self, obj, action):
+        if obj['countries'] != action.countries:
+            new = copy.deepcopy(obj)
+            new['countries'] = action.countries
+            return new
+        return obj
+
+    def _change_name(self, obj, action):
+        if obj['name'] != action.name:
+            new = copy.deepcopy(obj)
+            new['name'] = action.name
+            return new
+        return obj
+
+    def _change_languages(self, obj, action):
+        if obj['languages'] != action.languages:
+            new = copy.deepcopy(obj)
+            new['languages'] = action.languages
+            return new
+        return obj
+
+    # Fixme: use decorator for this
+    _actions = {
+        'changeCountries': _change_countries,
+        'changeName': _change_name,
+        'changeLanguages': _change_languages,
+    }

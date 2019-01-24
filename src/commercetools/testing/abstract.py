@@ -65,6 +65,11 @@ class BaseModel:
             if obj["key"] == key:
                 return self.objects.pop(obj_id)
 
+    def save(self, obj):
+        assert obj["id"]
+        obj["version"] += 1
+        self.objects[obj["id"]] = obj
+
 
 class BaseBackend:
     path = None
@@ -164,7 +169,7 @@ class ServiceBackend(BaseBackend):
 
             update = self._schema_update().load(request.json())
             if update.actions:
-                obj["version"] += 1
+                obj = self._apply_update_actions(obj, update.actions)
 
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
@@ -178,7 +183,7 @@ class ServiceBackend(BaseBackend):
 
             update = self._schema_update().load(request.json())
             if update.actions:
-                obj["version"] += 1
+                obj = self._apply_update_actions(obj, update.actions)
 
             return create_response(request, json=obj)
         return create_response(request, status_code=404)
@@ -227,3 +232,19 @@ class ServiceBackend(BaseBackend):
         if version_data:
             return int(version_data[0])
         return request.json().get("version")
+
+    def _apply_update_actions(self, obj, actions):
+        original_obj = obj
+
+        for action in actions:
+            func = self._actions.get(action.action)
+            if not func:
+                print("Missing action for", action.action)
+                continue
+            obj = func(self, obj, action)
+
+        # Save the updated object to the model
+        if obj != original_obj:
+            self.model.save(obj)
+
+        return obj

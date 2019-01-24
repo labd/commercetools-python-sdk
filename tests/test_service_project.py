@@ -7,3 +7,4 @@ def test_project_update(client):
         actions=[types.ProjectChangeCountriesAction(countries=["AT", "NL"])],
         version=project.version,
     )
+    assert project.countries == ["AT", "NL"]

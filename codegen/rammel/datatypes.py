@@ -22,6 +22,7 @@ class DataType:
         return self.type in [
             "string",
             "number",
+            "float",
             "integer",
             "boolean",
             "date",

@@ -3,6 +3,12 @@ from typing import Any, Dict
 from .datatypes import DataType, Property, UnresolvedType
 
 
+def determine_type(value: Dict[str, Any]) -> str:
+    if value["type"] == "number" and all(key in value for key in ["minimum", "maximum"]):
+        return "float"
+    return value["type"]
+
+
 def create_data_type(name: str, data: Dict[str, Any]):
     obj = DataType(name=name, type=data.get("type"))
 
@@ -20,7 +26,7 @@ def create_data_type(name: str, data: Dict[str, Any]):
     properties = data.get("properties") or {}
     for key, value in properties.items():
         if isinstance(value, dict):
-            property_type = value["type"]
+            property_type = determine_type(value)
             items = value.get("items")
             if items:
                 items = [v.strip() for v in value.get("items").split("|")]
@@ -57,6 +63,7 @@ class TypeProcessor:
         DataType(name="boolean", type="any"),
         DataType(name="datetime", type="any"),
         DataType(name="integer", type="number"),
+        DataType(name="float", type="number"),
         DataType(name="object", type="any"),
         DataType(name="date-only", type="any"),
     ]

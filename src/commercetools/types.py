@@ -4781,8 +4781,8 @@ class ReviewDraft:
     target: typing.Optional["ProductReference"]
     #: Optional :class:`commercetools.types.ResourceIdentifier`
     state: typing.Optional["ResourceIdentifier"]
-    #: Optional :class:`int`
-    rating: typing.Optional[int]
+    #: Optional :class:`float`
+    rating: typing.Optional[float]
     #: Optional :class:`commercetools.types.CustomerReference`
     customer: typing.Optional["CustomerReference"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -4799,7 +4799,7 @@ class ReviewDraft:
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
         state: typing.Optional["ResourceIdentifier"] = None,
-        rating: typing.Optional[int] = None,
+        rating: typing.Optional[float] = None,
         customer: typing.Optional["CustomerReference"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
     ) -> None:
@@ -5524,11 +5524,14 @@ class SubRate:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubRateSchema`."
     #: :class:`str`
     name: typing.Optional[str]
-    #: :class:`int`
-    amount: typing.Optional[int]
+    #: :class:`float`
+    amount: typing.Optional[float]
 
     def __init__(
-        self, *, name: typing.Optional[str] = None, amount: typing.Optional[int] = None
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        amount: typing.Optional[float] = None,
     ) -> None:
         self.name = name
         self.amount = amount
@@ -5695,8 +5698,8 @@ class TaxPortion:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxPortionSchema`."
     #: Optional :class:`str`
     name: typing.Optional[str]
-    #: :class:`int`
-    rate: typing.Optional[int]
+    #: :class:`float`
+    rate: typing.Optional[float]
     #: :class:`commercetools.types.Money`
     amount: typing.Optional["Money"]
 
@@ -5704,7 +5707,7 @@ class TaxPortion:
         self,
         *,
         name: typing.Optional[str] = None,
-        rate: typing.Optional[int] = None,
+        rate: typing.Optional[float] = None,
         amount: typing.Optional["Money"] = None,
     ) -> None:
         self.name = name
@@ -5726,8 +5729,8 @@ class TaxRate:
     id: typing.Optional[str]
     #: :class:`str`
     name: typing.Optional[str]
-    #: :class:`int`
-    amount: typing.Optional[int]
+    #: :class:`float`
+    amount: typing.Optional[float]
     #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
     included_in_price: typing.Optional[bool]
     #: :class:`str`
@@ -5742,7 +5745,7 @@ class TaxRate:
         *,
         id: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
-        amount: typing.Optional[int] = None,
+        amount: typing.Optional[float] = None,
         included_in_price: typing.Optional[bool] = None,
         country: typing.Optional["str"] = None,
         state: typing.Optional[str] = None,
@@ -5776,8 +5779,8 @@ class TaxRateDraft:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateDraftSchema`."
     #: :class:`str`
     name: typing.Optional[str]
-    #: Optional :class:`int`
-    amount: typing.Optional[int]
+    #: Optional :class:`float`
+    amount: typing.Optional[float]
     #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
     included_in_price: typing.Optional[bool]
     #: :class:`str`
@@ -5791,7 +5794,7 @@ class TaxRateDraft:
         self,
         *,
         name: typing.Optional[str] = None,
-        amount: typing.Optional[int] = None,
+        amount: typing.Optional[float] = None,
         included_in_price: typing.Optional[bool] = None,
         country: typing.Optional["str"] = None,
         state: typing.Optional[str] = None,
@@ -12617,8 +12620,8 @@ class Review(Resource):
     target: typing.Optional["ProductReference"]
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
     included_in_statistics: typing.Optional[bool]
-    #: Optional :class:`int`
-    rating: typing.Optional[int]
+    #: Optional :class:`float`
+    rating: typing.Optional[float]
     #: Optional :class:`commercetools.types.StateReference`
     state: typing.Optional["StateReference"]
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -12641,7 +12644,7 @@ class Review(Resource):
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
         included_in_statistics: typing.Optional[bool] = None,
-        rating: typing.Optional[int] = None,
+        rating: typing.Optional[float] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         custom: typing.Optional["CustomFields"] = None,

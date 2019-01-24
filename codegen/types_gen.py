@@ -11,6 +11,7 @@ BUILTIN_TYPES = {
     "string": ast.Name(id="str"),
     "number": ast.Name(id="int"),
     "integer": ast.Name(id="int"),
+    "float": ast.Name(id="float"),
     "boolean": ast.Name(id="bool"),
     "object": ast.Name(id="object"),
     "array": ast.Name(id="list"),

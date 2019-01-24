@@ -14,7 +14,7 @@ install_requires = [
     "wrapt>=1.10.0",
 ]
 
-codegen_requires = ["PyYAML==3.13", "astunparse==1.6.1", "black==18.9b0", "isort"]
+codegen_requires = ["PyYAML==3.13", "astunparse==1.6.2", "black==18.9b0", "isort"]
 
 docs_require = [
     "Sphinx>=1.8.1",

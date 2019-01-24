@@ -73,6 +73,7 @@ class BaseModel:
 
 class BaseBackend:
     path = None
+    _actions: typing.Dict[str, typing.Callable] = {}
 
     def __init__(self, storage=None, model=None):
         if model:
@@ -245,6 +246,10 @@ class ServiceBackend(BaseBackend):
 
         # Save the updated object to the model
         if obj != original_obj:
+            self.model.save(obj)
+
+        # Temporary
+        elif not self._actions:
             self.model.save(obj)
 
         return obj

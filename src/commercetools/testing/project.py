@@ -1,4 +1,3 @@
-import copy
 import uuid
 
 from commercetools import schemas

@@ -1,6 +1,8 @@
-2.2.1 (2019-01-24)
+2.3.0 (2019-01-28)
 ------------------
 - Money -> TypedMoney conversion not setting default to CENT_PRECISION
+- Improve testing interface to only raise conflict error when the data is
+  actually changed
 
 2.2.0 (2019-01-24)
 ------------------

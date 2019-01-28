@@ -48,7 +48,9 @@ def _money_to_typed(money: typing.Optional[types.Money]) -> typing.Optional[type
     if money is not None:
         return types.TypedMoney(
             cent_amount=money.cent_amount,
-            currency_code=money.currency_code
+            currency_code=money.currency_code,
+            type=types.MoneyType.CENT_PRECISION,
+            fraction_digits=2
         )
 
 

@@ -3,7 +3,7 @@ import uuid
 import pytest
 from requests.exceptions import HTTPError
 
-from commercetools import CommercetoolsError, types
+from commercetools import types
 
 
 def test_products_create(client):
@@ -162,48 +162,3 @@ def test_product_update(client):
         ],
     )
     assert product.key == "test-product"
-
-
-def test_product_update_conflict(client):
-    """Test the return value of the update methods.
-
-    It doesn't test the actual update itself.
-    TODO: See if this is worth testing since we're using a mocking backend
-    """
-    product = client.products.create(types.ProductDraft(key="test-product"))
-
-    assert product.version == 1
-    assert uuid.UUID(product.id)
-    assert product.key == "test-product"
-
-    product = client.products.update_by_id(
-        id=product.id,
-        version=product.version,
-        actions=[
-            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
-        ],
-    )
-    assert product.key == "test-product"
-    assert product.version == 2
-
-    # This should raise a version conflict error
-    with pytest.raises(CommercetoolsError) as exc:
-        product = client.products.update_by_id(
-            id=product.id,
-            version=1,
-            actions=[
-                types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
-            ],
-        )
-    assert exc.value.response.status_code == 409
-    assert exc.value.response.errors[0].current_version == 2
-
-    # Force it
-    product = client.products.update_by_id(
-        id=product.id,
-        version=1,
-        actions=[
-            types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
-        ],
-        force_update=True,
-    )

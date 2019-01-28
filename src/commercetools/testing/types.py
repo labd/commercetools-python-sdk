@@ -4,6 +4,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute_add_item
 
 
 class TypesModel(BaseModel):
@@ -45,3 +46,9 @@ class TypesBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
+
+    # Fixme: use decorator for this
+    _actions = {
+        'addFieldDefinition': update_attribute_add_item(
+            'fieldDefinitions', 'field_definition', schemas.FieldDefinitionSchema)
+    }

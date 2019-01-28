@@ -63,3 +63,15 @@ def update_attribute(dst: str, src: str):
             return new
         return obj
     return updater
+
+
+def update_attribute_add_item(dst: str, src: str, schema: Schema):
+    def updater(self, obj, action):
+        value = getattr(action, src)
+        value = schema().dump(value)
+        if value not in obj[dst]:
+            new = copy.deepcopy(obj)
+            new[dst].append(value)
+            return new
+        return obj
+    return updater

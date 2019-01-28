@@ -96,7 +96,7 @@ def test_resource_update_conflict(client):
             id=product.id,
             version=1,
             actions=[
-                types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug2"))
+                types.ProductChangeSlugAction(slug=types.LocalizedString(nl="nl-slug3"))
             ],
         )
     assert exc.value.response.status_code == 409

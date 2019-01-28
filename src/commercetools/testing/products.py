@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -5,6 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import custom_fields_from_draft
+from commercetools.testing.utils import update_attribute
 
 
 class ProductsModel(BaseModel):
@@ -137,3 +139,25 @@ class ProductsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
+
+    def _update_productdata_attr(dst: str, src: str):
+        def updater(self, obj: types.Product, action: types.ProductUpdateAction):
+            value = getattr(action, src)
+            # Action.staged default is True
+            if action.staged is True or action.staged is None:
+                target_obj = obj['masterData']['staged']
+            else:
+                target_obj = obj['masterData']['current']
+
+            if target_obj[dst] != value:
+                new = copy.deepcopy(obj)
+                new[dst] = value
+                return new
+            return obj
+        return updater
+
+
+    # Fixme: use decorator for this
+    _actions = {
+        'changeSlug': _update_productdata_attr('slug', 'slug'),
+    }

@@ -12,19 +12,19 @@ class CategoriesModel(BaseModel):
     _resource_schema = schemas.CategorySchema
 
     def _create_from_draft(
-        self, obj: types.CategoryDraft, id: typing.Optional[str] = None
+        self, draft: types.CategoryDraft, id: typing.Optional[str] = None
     ) -> types.Category:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Category(
             id=str(object_id),
             version=1,
-            name=obj.name,
-            description=obj.description,
-            slug=obj.slug,
-            key=obj.key,
+            name=draft.name,
+            description=draft.description,
+            slug=draft.slug,
+            key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            custom=utils.create_from_draft(obj.custom),
+            custom=utils.create_from_draft(draft.custom),
         )
 
 

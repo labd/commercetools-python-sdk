@@ -11,18 +11,18 @@ class TaxCategoryModel(BaseModel):
     _resource_schema = schemas.TaxCategorySchema
 
     def _create_from_draft(
-        self, obj: types.TaxCategoryDraft, id: typing.Optional[str] = None
+        self, draft: types.TaxCategoryDraft, id: typing.Optional[str] = None
     ) -> types.TaxCategory:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.TaxCategory(
             id=str(object_id),
-            key=obj.key,
+            key=draft.key,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            name=obj.name,
-            description=obj.description,
-            rates=self._create_rates(obj.rates),
+            name=draft.name,
+            description=draft.description,
+            rates=self._create_rates(draft.rates),
         )
 
     def _create_rates(
@@ -41,7 +41,6 @@ class TaxCategoryModel(BaseModel):
                 sub_rates=draft.sub_rates,
             )
             result.append(obj)
-        print(result)
         return result
 
 

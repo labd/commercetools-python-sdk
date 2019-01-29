@@ -11,29 +11,30 @@ class ProductTypesModel(BaseModel):
     _resource_schema = schemas.ProductTypeSchema
 
     def _create_from_draft(
-        self, obj: types.ProductTypeDraft, id: typing.Optional[str] = None
+        self, draft: types.ProductTypeDraft, id: typing.Optional[str] = None
     ) -> types.ProductType:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.ProductType(
             id=str(object_id),
             version=1,
-            name=obj.name,
-            description=obj.description,
-            key=obj.key,
+            name=draft.name,
+            description=draft.description,
+            key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            attributes=self._create_attributes_from_draft(obj.attributes),
+            attributes=self._create_attributes_from_draft(draft.attributes),
         )
 
     def _create_attributes_from_draft(
-        self, obj: typing.Optional[typing.List[types.AttributeDefinitionDraft]]
+        self,
+        draft_attributes: typing.Optional[typing.List[types.AttributeDefinitionDraft]],
     ) -> typing.List[types.AttributeDefinition]:
 
         result: typing.List[types.AttributeDefinition] = []
-        if not obj:
+        if not draft_attributes:
             return result
 
-        for draft in obj:
+        for draft in draft_attributes:
             ad = types.AttributeDefinition(
                 type=draft.type,
                 name=draft.name,

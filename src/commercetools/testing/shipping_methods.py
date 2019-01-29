@@ -14,12 +14,12 @@ class ShippingMethodsModel(BaseModel):
     _schema_update = schemas.ProjectUpdateSchema
 
     def _create_from_draft(
-        self, obj: types.ShippingMethodDraft, id: typing.Optional[str] = None
+        self, draft: types.ShippingMethodDraft, id: typing.Optional[str] = None
     ) -> types.ShippingMethod:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
 
         zone_rates: typing.List[types.ZoneRate] = []
-        for rate_draft in obj.zone_rates or []:
+        for rate_draft in draft.zone_rates or []:
             shipping_rates: typing.List[types.ShippingRate] = []
             for shipping_rate_draft in rate_draft.shipping_rates or []:
                 shipping_rate = types.ShippingRate(
@@ -36,16 +36,16 @@ class ShippingMethodsModel(BaseModel):
 
         return types.ShippingMethod(
             id=str(object_id),
-            key=obj.key,
+            key=draft.key,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            name=obj.name,
-            description=obj.description,
-            tax_category=obj.tax_category,
+            name=draft.name,
+            description=draft.description,
+            tax_category=draft.tax_category,
             zone_rates=zone_rates,
-            is_default=obj.is_default,
-            predicate=obj.predicate,
+            is_default=draft.is_default,
+            predicate=draft.predicate,
         )
 
 

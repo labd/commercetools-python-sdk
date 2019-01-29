@@ -11,7 +11,7 @@ class ExtensionsModel(BaseModel):
     _resource_schema = schemas.ExtensionSchema
 
     def _create_from_draft(
-        self, obj: types.ExtensionDraft, id: typing.Optional[str] = None
+        self, draft: types.ExtensionDraft, id: typing.Optional[str] = None
     ) -> types.Extension:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Extension(
@@ -19,9 +19,9 @@ class ExtensionsModel(BaseModel):
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            key=obj.key,
-            destination=obj.destination,
-            triggers=obj.triggers,
+            key=draft.key,
+            destination=draft.destination,
+            triggers=draft.triggers,
         )
 
 

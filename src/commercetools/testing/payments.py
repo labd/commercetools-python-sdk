@@ -12,41 +12,41 @@ class PaymentsModel(BaseModel):
     _resource_schema = schemas.PaymentSchema
 
     def _create_from_draft(
-        self, obj: types.PaymentDraft, id: typing.Optional[str] = None
+        self, draft: types.PaymentDraft, id: typing.Optional[str] = None
     ) -> types.Payment:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         payment = types.Payment(
             id=str(object_id),
-            key=obj.key,
+            key=draft.key,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            customer=obj.customer,
-            amount_authorized=obj.amount_authorized,
-            amount_paid=utils._money_to_typed(obj.amount_paid),
-            amount_planned=utils._money_to_typed(obj.amount_planned),
-            amount_refunded=utils._money_to_typed(obj.amount_refunded),
-            anonymous_id=obj.anonymous_id,
-            payment_method_info=obj.payment_method_info,
-            payment_status=obj.payment_status,
+            customer=draft.customer,
+            amount_authorized=draft.amount_authorized,
+            amount_paid=utils._money_to_typed(draft.amount_paid),
+            amount_planned=utils._money_to_typed(draft.amount_planned),
+            amount_refunded=utils._money_to_typed(draft.amount_refunded),
+            anonymous_id=draft.anonymous_id,
+            payment_method_info=draft.payment_method_info,
+            payment_status=draft.payment_status,
             transactions=[
                 self._create_transaction_draft(transaction)
-                for transaction in obj.transactions or []
+                for transaction in draft.transactions or []
             ],
-            custom=utils.create_from_draft(obj.custom),
+            custom=utils.create_from_draft(draft.custom),
         )
         return payment
 
     def _create_transaction_draft(
-        self, obj: types.TransactionDraft
+        self, draft: types.TransactionDraft
     ) -> types.Transaction:
         return types.Transaction(
             id=str(uuid.uuid4()),
-            timestamp=obj.timestamp,
-            type=obj.type,
-            amount=utils._money_to_typed(obj.amount),
-            interaction_id=obj.interaction_id,
-            state=obj.state,
+            timestamp=draft.timestamp,
+            type=draft.type,
+            amount=utils._money_to_typed(draft.amount),
+            interaction_id=draft.interaction_id,
+            state=draft.state,
         )
 
 

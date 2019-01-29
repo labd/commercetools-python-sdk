@@ -6,7 +6,6 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import custom_fields_from_draft
-from commercetools.testing.utils import update_attribute
 
 
 class ProductsModel(BaseModel):
@@ -14,33 +13,33 @@ class ProductsModel(BaseModel):
     _resource_schema = schemas.ProductSchema
 
     def _create_from_draft(
-        self, obj: types.ProductDraft, id: typing.Optional[str] = None
+        self, draft: types.ProductDraft, id: typing.Optional[str] = None
     ) -> types.Product:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
 
         product = types.Product(
             id=str(object_id),
-            key=obj.key,
-            product_type=obj.product_type,
+            key=draft.key,
+            product_type=draft.product_type,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
         )
 
         master_variant = None
-        if obj.master_variant:
-            master_variant = self._create_variant_from_draft(obj.master_variant)
+        if draft.master_variant:
+            master_variant = self._create_variant_from_draft(draft.master_variant)
 
         product_data = types.ProductData(
-            name=obj.name,
-            categories=obj.categories,
-            category_order_hints=obj.category_order_hints,
-            description=obj.description,
+            name=draft.name,
+            categories=draft.categories,
+            category_order_hints=draft.category_order_hints,
+            description=draft.description,
             master_variant=master_variant,
-            slug=obj.slug or types.LocalizedString(),
+            slug=draft.slug or types.LocalizedString(),
         )
 
-        if obj.publish:
+        if draft.publish:
             product.master_data = types.ProductCatalogData(
                 staged=None, current=product_data, published=True
             )
@@ -52,25 +51,25 @@ class ProductsModel(BaseModel):
         return product
 
     def _create_variant_from_draft(
-        self, obj: types.ProductVariantDraft
+        self, draft: types.ProductVariantDraft
     ) -> types.ProductVariant:
 
         assets: typing.Optional[typing.List[types.Asset]] = None
-        if obj.assets:
-            assets = self._create_assets_from_draft(obj.assets)
+        if draft.assets:
+            assets = self._create_assets_from_draft(draft.assets)
 
         prices: typing.Optional[typing.List[types.Price]] = None
-        if obj.prices:
-            prices = self._create_prices_from_draft(obj.prices)
+        if draft.prices:
+            prices = self._create_prices_from_draft(draft.prices)
 
         return types.ProductVariant(
             id=1,
-            sku=obj.sku,
-            key=obj.key,
+            sku=draft.sku,
+            key=draft.key,
             prices=prices,
-            attributes=obj.attributes,
+            attributes=draft.attributes,
             price=None,
-            images=obj.images,
+            images=draft.images,
             assets=assets,
             availability=None,
             is_matching_variant=None,
@@ -145,19 +144,17 @@ class ProductsBackend(ServiceBackend):
             value = getattr(action, src)
             # Action.staged default is True
             if action.staged is True or action.staged is None:
-                target_obj = obj['masterData']['staged']
+                target_obj = obj["masterData"]["staged"]
             else:
-                target_obj = obj['masterData']['current']
+                target_obj = obj["masterData"]["current"]
 
             if target_obj[dst] != value:
                 new = copy.deepcopy(obj)
                 new[dst] = value
                 return new
             return obj
+
         return updater
 
-
     # Fixme: use decorator for this
-    _actions = {
-        'changeSlug': _update_productdata_attr('slug', 'slug'),
-    }
+    _actions = {"changeSlug": _update_productdata_attr("slug", "slug")}

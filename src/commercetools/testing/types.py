@@ -12,19 +12,19 @@ class TypesModel(BaseModel):
     _resource_schema = schemas.TypeSchema
 
     def _create_from_draft(
-        self, obj: types.TypeDraft, id: typing.Optional[str] = None
+        self, draft: types.TypeDraft, id: typing.Optional[str] = None
     ) -> types.Type:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Type(
             id=str(object_id),
             version=1,
-            name=obj.name,
-            description=obj.description,
-            key=obj.key,
+            name=draft.name,
+            description=draft.description,
+            key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            resource_type_ids=obj.resource_type_ids,
-            field_definitions=obj.field_definitions,
+            resource_type_ids=draft.resource_type_ids,
+            field_definitions=draft.field_definitions,
         )
 
 
@@ -49,6 +49,7 @@ class TypesBackend(ServiceBackend):
 
     # Fixme: use decorator for this
     _actions = {
-        'addFieldDefinition': update_attribute_add_item(
-            'fieldDefinitions', 'field_definition', schemas.FieldDefinitionSchema)
+        "addFieldDefinition": update_attribute_add_item(
+            "fieldDefinitions", "field_definition", schemas.FieldDefinitionSchema
+        )
     }

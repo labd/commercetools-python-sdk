@@ -10,21 +10,21 @@ class ProductDiscountsModel(BaseModel):
     _resource_schema = schemas.ProductDiscountSchema
 
     def _create_from_draft(
-        self, obj: types.ProductDiscountDraft, id: typing.Optional[str] = None
+        self, draft: types.ProductDiscountDraft, id: typing.Optional[str] = None
     ) -> types.ProductDiscount:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.ProductDiscount(
             id=str(object_id),
             version=1,
-            name=obj.name,
-            description=obj.description,
-            value=obj.value,
-            predicate=obj.predicate,
-            sort_order=obj.sort_order,
+            name=draft.name,
+            description=draft.description,
+            value=draft.value,
+            predicate=draft.predicate,
+            sort_order=draft.sort_order,
             references=[],
-            is_active=obj.is_active,
-            valid_from=obj.valid_from,
-            valid_until=obj.valid_until,
+            is_active=draft.is_active,
+            valid_from=draft.valid_from,
+            valid_until=draft.valid_until,
         )
 
 

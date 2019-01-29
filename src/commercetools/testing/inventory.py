@@ -12,20 +12,20 @@ class InventoryEntryModel(BaseModel):
     _resource_schema = schemas.InventoryEntrySchema
 
     def _create_from_draft(
-        self, obj: types.InventoryEntryDraft, id: typing.Optional[str] = None
+        self, draft: types.InventoryEntryDraft, id: typing.Optional[str] = None
     ) -> types.InventoryEntry:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.InventoryEntry(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
-            expected_delivery=obj.expected_delivery,
+            expected_delivery=draft.expected_delivery,
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            quantity_on_stock=obj.quantity_on_stock,
-            restockable_in_days=obj.restockable_in_days,
-            sku=obj.sku,
-            supply_channel=obj.supply_channel,
-            custom=utils.create_from_draft(obj.custom),
+            quantity_on_stock=draft.quantity_on_stock,
+            restockable_in_days=draft.restockable_in_days,
+            sku=draft.sku,
+            supply_channel=draft.supply_channel,
+            custom=utils.create_from_draft(draft.custom),
         )
 
 

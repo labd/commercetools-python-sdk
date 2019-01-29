@@ -25,8 +25,8 @@ class CustomObjectsModel(BaseModel):
             key=obj.key,
             container=obj.container,
             value=obj.value,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
         )
 
 

@@ -23,8 +23,8 @@ class ProductsModel(BaseModel):
             key=obj.key,
             product_type=obj.product_type,
             version=1,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
         )
 
         master_variant = None

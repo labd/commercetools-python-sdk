@@ -24,8 +24,8 @@ class OrdersModel(BaseModel):
         order = types.Order(
             id=str(object_id),
             version=1,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             order_number=obj.order_number,
             payment_state=obj.payment_state,
             order_state=OrderState.OPEN,

@@ -19,8 +19,8 @@ class SubscriptionsModel(BaseModel):
         return types.Subscription(
             id=str(object_id),
             version=1,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             key=obj.key,
             changes=obj.changes,
             destination=obj.destination,

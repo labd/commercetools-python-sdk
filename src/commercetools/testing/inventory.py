@@ -18,9 +18,9 @@ class InventoryEntryModel(BaseModel):
         return types.InventoryEntry(
             id=str(object_id),
             version=1,
-            created_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
             expected_delivery=obj.expected_delivery,
-            last_modified_at=datetime.datetime.now(),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             quantity_on_stock=obj.quantity_on_stock,
             restockable_in_days=obj.restockable_in_days,
             sku=obj.sku,

@@ -20,8 +20,8 @@ class ProductTypesModel(BaseModel):
             name=obj.name,
             description=obj.description,
             key=obj.key,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             attributes=self._create_attributes_from_draft(obj.attributes),
         )
 

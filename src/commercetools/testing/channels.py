@@ -22,8 +22,8 @@ class ChannelsModel(BaseModel):
             description=obj.description,
             roles=obj.roles,
             key=obj.key,
-            created_at=datetime.datetime.now(),
-            last_modified_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(obj.custom),
         )
 

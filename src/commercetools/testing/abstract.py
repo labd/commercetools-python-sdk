@@ -7,7 +7,6 @@ import requests_mock
 from requests_mock import create_response
 
 from commercetools import schemas, types
-from commercetools.client import CommercetoolsError
 from commercetools.schemas import ResourceSchema
 from commercetools.services import abstract
 from commercetools.testing import utils
@@ -24,8 +23,14 @@ class BaseModel:
             self._resource_schema
         ), f"{self.__class__.__name__} has no resource schema defined"
 
-    def add(self, obj, id=None):
-        obj = self._create_from_draft(obj, id)
+    def add_existing(self, obj):
+        return self._store_obj(obj)
+
+    def add(self, draft, id=None):
+        obj = self._create_from_draft(draft, id)
+        return self._store_obj(obj)
+
+    def _store_obj(self, obj):
         key = self._generate_key(obj)
         document = self._resource_schema().dump(obj)
         self.objects[key] = document
@@ -34,7 +39,7 @@ class BaseModel:
     def _generate_key(self, obj):
         return uuid.UUID(obj.id)
 
-    def _create_from_draft(self, obj, id=None):
+    def _create_from_draft(self, draft, id=None):
         raise NotImplementedError()
 
     def query(self, where):
@@ -129,6 +134,9 @@ class ServiceBackend(BaseBackend):
     def path_prefix(self):
         return f"/(?P<project>[^/]+)/{self.service_path}/?(?P<path>.*)?"
 
+    def add_existing(self, obj):
+        return self.model.add_existing(obj)
+
     def create(self, request):
         obj = self._schema_draft().loads(request.body)
         data = self.model.add(obj)
@@ -200,9 +208,7 @@ class ServiceBackend(BaseBackend):
         if update.actions:
             obj, err = self._apply_update_actions(obj, update)
             if err:
-                return create_response(
-                    request, json=err, status_code=err["statusCode"]
-                )
+                return create_response(request, json=err, status_code=err["statusCode"])
         return create_response(request, json=obj)
 
     def _validate_resource_version(self, request, obj):

@@ -6,7 +6,8 @@ from commercetools.types import LocalizedString, ProductDraft
 
 def test_http_server(commercetools_client, commercetools_http_server):
     import os
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
     client = Client(
         project_key="unittest",
@@ -19,9 +20,7 @@ def test_http_server(commercetools_client, commercetools_http_server):
 
     query_result = client.products.query()
     assert query_result.count == 0
-    product = client.products.create(
-        ProductDraft(name=LocalizedString(nl="Testje"))
-    )
+    product = client.products.create(ProductDraft(name=LocalizedString(nl="Testje")))
 
     client.products.get_by_id(product.id)
     url = commercetools_http_server.api_url + f"/unittest/products/{product.id}"

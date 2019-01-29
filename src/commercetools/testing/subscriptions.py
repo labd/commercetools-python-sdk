@@ -13,7 +13,7 @@ class SubscriptionsModel(BaseModel):
     _resource_schema = schemas.SubscriptionSchema
 
     def _create_from_draft(
-        self, obj: types.SubscriptionDraft, id: typing.Optional[str] = None
+        self, draft: types.SubscriptionDraft, id: typing.Optional[str] = None
     ) -> types.Subscription:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Subscription(
@@ -21,10 +21,10 @@ class SubscriptionsModel(BaseModel):
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            key=obj.key,
-            changes=obj.changes,
-            destination=obj.destination,
-            messages=obj.messages,
+            key=draft.key,
+            changes=draft.changes,
+            destination=draft.destination,
+            messages=draft.messages,
         )
 
 

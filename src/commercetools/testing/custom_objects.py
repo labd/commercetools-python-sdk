@@ -13,7 +13,7 @@ class CustomObjectsModel(BaseModel):
     _resource_schema = schemas.CustomObjectSchema
 
     def _generate_key(self, obj):
-        return (obj.container, obj.key)
+        return obj.container, obj.key
 
     def _create_from_draft(
         self, obj: types.CustomObjectDraft, id: typing.Optional[str] = None

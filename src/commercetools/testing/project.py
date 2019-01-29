@@ -1,8 +1,8 @@
 import uuid
 
 from commercetools import schemas
-from commercetools.testing.utils import update_attribute
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute
 
 
 class ProjectsModel(BaseModel):
@@ -49,8 +49,8 @@ class ProjectBackend(ServiceBackend):
 
     # Fixme: use decorator for this
     _actions = {
-        'changeCountries': update_attribute('countries', 'countries'),
-        'changeCurrencies': update_attribute('currencies', 'currencies'),
-        'changeName': update_attribute('name', 'name'),
-        'changeLanguages': update_attribute('languages', 'languages')
+        "changeCountries": update_attribute("countries", "countries"),
+        "changeCurrencies": update_attribute("currencies", "currencies"),
+        "changeName": update_attribute("name", "name"),
+        "changeLanguages": update_attribute("languages", "languages"),
     }

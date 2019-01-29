@@ -4,7 +4,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.types import OrderState, CartOrigin
+from commercetools.types import CartOrigin, OrderState
 
 
 class OrdersModel(BaseModel):
@@ -12,7 +12,7 @@ class OrdersModel(BaseModel):
     _resource_schema = schemas.OrderSchema
 
     def _create_from_draft(
-        self, obj: types.OrderFromCartDraft, id: typing.Optional[str] = None
+        self, draft: types.OrderFromCartDraft, id: typing.Optional[str] = None
     ) -> types.Order:
         """
         Note this implementation needs further refinement. For example:
@@ -26,8 +26,8 @@ class OrdersModel(BaseModel):
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            order_number=obj.order_number,
-            payment_state=obj.payment_state,
+            order_number=draft.order_number,
+            payment_state=draft.payment_state,
             order_state=OrderState.OPEN,
             origin=CartOrigin.CUSTOMER,
         )

@@ -12,19 +12,19 @@ class ChannelsModel(BaseModel):
     _primary_type_name = "channel"
 
     def _create_from_draft(
-        self, obj: types.ChannelDraft, id: typing.Optional[str] = None
+        self, draft: types.ChannelDraft, id: typing.Optional[str] = None
     ) -> types.Channel:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         return types.Channel(
             id=str(object_id),
             version=1,
-            name=obj.name,
-            description=obj.description,
-            roles=obj.roles,
-            key=obj.key,
+            name=draft.name,
+            description=draft.description,
+            roles=draft.roles,
+            key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            custom=utils.create_from_draft(obj.custom),
+            custom=utils.create_from_draft(draft.custom),
         )
 
 

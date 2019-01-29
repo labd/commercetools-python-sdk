@@ -1,5 +1,6 @@
 import copy
 import typing
+
 from marshmallow import Schema
 from requests_mock.request import _RequestObjectProxy
 
@@ -21,19 +22,19 @@ def flatten_multivaluedict(data: dict) -> dict:
     return result
 
 
-def create_from_draft(draft_obj):
+def create_from_draft(draft):
     """Utility method to create normal objects out of draft objects.
 
     This is used for non-resource objects. For the resources themselves (which contain)
     an id, we have the specific implementations of the `BaseModel`.
     """
-    if not draft_obj:
+    if not draft:
         return None
 
-    if isinstance(draft_obj, types.CustomFieldsDraft):
-        return types.CustomFields(type=draft_obj.type, fields=draft_obj.fields)
+    if isinstance(draft, types.CustomFieldsDraft):
+        return types.CustomFields(type=draft.type, fields=draft.fields)
 
-    raise ValueError(f"Unsupported type {draft_obj.__class__}")
+    raise ValueError(f"Unsupported type {draft.__class__}")
 
 
 def custom_fields_from_draft(
@@ -44,13 +45,15 @@ def custom_fields_from_draft(
     )
 
 
-def _money_to_typed(money: typing.Optional[types.Money]) -> typing.Optional[types.TypedMoney]:
+def _money_to_typed(
+    money: typing.Optional[types.Money]
+) -> typing.Optional[types.TypedMoney]:
     if money is not None:
         return types.TypedMoney(
             cent_amount=money.cent_amount,
             currency_code=money.currency_code,
             type=types.MoneyType.CENT_PRECISION,
-            fraction_digits=2
+            fraction_digits=2,
         )
 
 
@@ -62,6 +65,7 @@ def update_attribute(dst: str, src: str):
             new[dst] = value
             return new
         return obj
+
     return updater
 
 
@@ -74,4 +78,5 @@ def update_attribute_add_item(dst: str, src: str, schema: Schema):
             new[dst].append(value)
             return new
         return obj
+
     return updater

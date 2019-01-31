@@ -7,10 +7,57 @@ def test_page_paginator(client):
             types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
         )
 
-    paginator = paginators.Paginator(page_size=20)
-    products = paginator.paginate(client.products.query, sort=["id asc", "name asc"])
+    paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
 
     items = []
-    for product in products:
+    for product in paginator:
         items.append(product)
     assert len(items) == 100
+
+
+def test_page_paginator_slice_start(client):
+    for i in range(100):
+        client.products.create(
+            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
+        )
+
+    paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
+
+    items = []
+    for product in paginator[20:]:
+        items.append(product)
+        if len(items) > 80:
+            assert False
+    assert len(items) == 80
+
+
+def test_page_paginator_slice_stop(client):
+    for i in range(100):
+        client.products.create(
+            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
+        )
+
+    paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
+
+    items = []
+    for product in paginator[:-20]:
+        items.append(product)
+        if len(items) > 80:
+            assert False
+    assert len(items) == 80
+
+
+def test_page_paginator_slice_start_stop(client):
+    for i in range(100):
+        client.products.create(
+            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
+        )
+
+    paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
+
+    items = []
+    for product in paginator[20:-20]:
+        items.append(product)
+        if len(items) > 60:
+            assert False
+    assert len(items) == 60

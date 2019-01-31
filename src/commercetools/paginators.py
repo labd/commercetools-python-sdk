@@ -51,7 +51,7 @@ class Paginator:
                 if limit is not None:
                     num += 1
                     if num >= limit:
-                        raise StopIteration()
+                        return
 
             offset += response.count
             if offset >= response.total:

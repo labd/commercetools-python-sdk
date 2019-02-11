@@ -25,6 +25,8 @@ from commercetools.testing.subscriptions import SubscriptionsBackend
 from commercetools.testing.tax_categories import TaxCategoryBackend
 from commercetools.testing.types import TypesBackend
 
+requests_mock.mock.case_sensitive = True
+
 
 class Storage:
     def __init__(self):
@@ -53,7 +55,6 @@ class Storage:
 
 class BackendRepository:
     def __init__(self):
-        requests_mock.mock.case_sensitive = True
 
         self._storage = Storage()
 

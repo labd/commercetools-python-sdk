@@ -4,6 +4,7 @@ import re
 import pytest
 
 from commercetools.testing import predicates
+from commercetools import schemas
 
 
 @pytest.mark.parametrize(
@@ -24,24 +25,24 @@ from commercetools.testing import predicates
     ],
 )
 def test_tokenize(predicate):
-    predicates.PredicateFilter(predicate)
+    predicates.PredicateFilter(predicate, schema=None)
 
 
 @pytest.mark.parametrize(
     "predicate,paths",
     [
         (
-            'slug(nl-be = "test-categorie") and parent is not defined',
-            [["slug", "nl-be"], ["parent"]],
-        ),
-        (
             'slug(nl-uk = "test-categorie" or nl-nl = "test-categorie")',
             [["slug", "nl-uk"], ["slug", "nl-nl"]],
+        ),
+        (
+            'slug(nl-be = "test-categorie") and masterVariant is not defined',
+            [["slug", "nl-be"], ["masterVariant"]],
         ),
     ],
 )
 def test_filter(predicate, paths):
-    pf = predicates.PredicateFilter(predicate)
+    pf = predicates.PredicateFilter(predicate, schema=schemas.ProductDataSchema)
 
     found_paths = []
 

@@ -1,3 +1,4 @@
+import copy
 import typing
 
 from commercetools import types
@@ -66,6 +67,53 @@ class Paginator:
         if isinstance(item, slice):
             clone = self._clone()
             clone._offset = item.start
+            clone._limit = item.stop
+            return clone
+        raise IndexError
+
+
+class CursorPaginator(Paginator):
+    """This paginator uses a cursor (where clause) for pagination.
+
+    See https://docs.commercetools.com/http-api.html#paging
+
+    """
+    def __iter__(self) -> typing.Generator[types.Resource, None, None]:
+        last_created_at = None
+        limit = self._limit
+        num = 0
+
+        kwargs = copy.deepcopy(self._kwargs)
+        where_clause = kwargs.setdefault("where", [])
+        if where_clause and not isinstance(where_clause, list):
+            where_clause = [where_clause]
+
+        kwargs["sort"] = "createdAt asc"
+
+        while True:
+            if last_created_at:
+                # copy list since we want to append the createdAt filter for
+                # every request with an other value.
+                kwargs["where"] = list(where_clause)
+                kwargs["where"].append(f'createdAt > "{last_created_at.isoformat()}"')
+
+            response = self._operation(**kwargs, limit=self.page_size)
+            for item in response.results:
+                last_created_at = item.created_at
+                yield item
+                if limit is not None:
+                    num += 1
+                    if num >= limit:
+                        return
+
+            if response.count < self.page_size:
+                break
+
+    def __getitem__(self, item):
+        if isinstance(item, slice):
+            if item.start:
+                raise ValueError("Start slice is not supported")
+            clone = self._clone()
             clone._limit = item.stop
             return clone
         raise IndexError

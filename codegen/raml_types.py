@@ -10,12 +10,18 @@ class DataType:
     name: str
     type: Optional[str]
     properties: List['Property'] = attr.Factory(lambda: [])
-    annotations: Dict[str, object] = attr.Factory(lambda: {})
-    enum: List[str] = attr.Factory(lambda: [])
+
     base: "DataType" = attr.ib(repr=False, default=None)
-    discriminator: Optional[str] = None
-    discriminator_value: Optional[str] = None
     children: List["DataType"] = attr.ib(repr=False, default=attr.Factory(lambda: []))
+    discriminator_value: Optional[str] = None
+    discriminator: Optional[str] = None
+    enum: List[str] = attr.Factory(lambda: [])
+
+    package_name: Optional[str] = None
+
+    #: Annotations are additional free fields, not specified in the
+    #: raml specs
+    annotations: Dict[str, object] = attr.Factory(lambda: {})
 
     @property
     def is_scalar_type(self):
@@ -98,13 +104,6 @@ class Property:
         if not name or not name.isidentifier():
             return None
         return name
-
-
-@attr.s(auto_attribs=True)
-class Package:
-    name: str
-    types: List[DataType] = attr.Factory(lambda: [])
-    references: List[object] = attr.Factory(lambda: [])
 
 
 @attr.s(auto_attribs=True)

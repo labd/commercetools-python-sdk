@@ -1,5 +1,7 @@
 import ast
+import operator
 import typing
+from collections import defaultdict
 
 from codegen import raml_types
 from codegen.generate_abstract import AbstractModuleGenerator
@@ -23,41 +25,67 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
     """This generator is responsible for generating the schemas.py file"""
 
     def __init__(self):
-        self._import_nodes: typing.List[ast.AST] = []
-        self._field_nodes: typing.List[ast.AST] = []
-        self._type_nodes: typing.List[ast.AST] = []
+        self._field_nodes: typing.Dict[str, typing.List[ast.AST]] = defaultdict(list)
+        self._type_nodes: typing.Dict[str, typing.List[ast.AST]] = defaultdict(list)
+        self._type_nodes_map: typing.Dict[str, str] = {}
         super().__init__()
 
-    def get_module_node(self):
-        self.add_import_statement("re")
-        self.add_import_statement("commercetools", "helpers", "types")
-        self.add_import_statement("marshmallow")
-        self.add_import_statement("marshmallow_enum")
+    def get_module_nodes(self):
+        modules = list(set(self._field_nodes.keys()) | set(self._type_nodes.keys()))
+        result = {}
 
-        type_nodes = reorder_class_definitions(self._type_nodes)
-        import_nodes = merge_imports(self._import_nodes)
+        for module in modules:
+            self.add_import_statement(module, "re")
+            self.add_import_statement(module, "commercetools", "helpers", "types")
+            self.add_import_statement(module, "marshmallow")
+            self.add_import_statement(module, "marshmallow_enum")
 
-        all_nodes = import_nodes + self._field_nodes + type_nodes
-        value = ast.Module(body=all_nodes)
-        return value
+            type_nodes = reorder_class_definitions(self._type_nodes[module])
+            global_nodes = [
+                ast.Assign(
+                    targets=[ast.Name(id="__all__")],
+                    value=ast.List(elts=[ast.Str(s=node.name) for node in sorted(type_nodes, key=operator.attrgetter('name'))]),
+                )
+            ]
+            all_nodes = (
+                self._import_nodes[module]
+                + global_nodes
+                + self._field_nodes[module]
+                + type_nodes
+            )
+            value = ast.Module(body=all_nodes)
+            result[module] = value
+
+        result["__init__"] = self.generate_init_module(result.keys())
+        return result
+
+    def generate_init_module(self, modules):
+        "Module(body=[ImportFrom(module='module', names=[alias(name='*', asname=None)], level=1)])"
+        nodes = [
+            ast.ImportFrom(
+                module=module, names=[ast.alias(name="*  # noqa", asname=None)], level=1
+            )
+            for module in sorted(modules)
+        ]
+        return ast.Module(body=nodes)
 
     def add_type_definition(self, resource):
         """Create a class definition"""
         if resource.name in FIELD_TYPES:
             return
+
         if "asMap" in resource.annotations:
-            return self.add_dict_field_definition(resource)
+            return self.add_dict_field_definition(resource, resource.package_name)
 
-        return self.add_schema_definition(resource)
+        return self.add_schema_definition(resource, resource.package_name)
 
-    def add_schema_definition(self, resource):
-
-        node = SchemaClassGenerator(resource).build()
+    def add_schema_definition(self, resource, module_name):
+        node = SchemaClassGenerator(resource, self).build()
         if node:
-            self._type_nodes.append(node)
+            self._type_nodes_map[node.name] = module_name
+            self._type_nodes[module_name].append(node)
 
-    def add_dict_field_definition(self, resource):
-
+    def add_dict_field_definition(self, resource, module_name):
         base_class = ast.Name(id="marshmallow.fields.Dict")
 
         # Define the base class
@@ -118,18 +146,24 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
             )
         )
 
-        self._field_nodes.append(class_node)
+        self._field_nodes[module_name].append(class_node)
+
+    def import_resource(self, source, module, cls):
+        self.add_import_statement(source, f"commercetools.schemas.{module}", cls)
 
 
 class SchemaClassGenerator:
     """Create a marshmallow schema"""
 
-    def __init__(self, resource: raml_types.DataType) -> None:
+    def __init__(
+        self, resource: raml_types.DataType, generator: SchemaModuleGenerator
+    ) -> None:
         self.resource = resource
         self.properties = resource.get_all_properties()
         self.contains_regex_field = any(
             p.name.startswith("/") for p in resource.properties
         )
+        self.generator = generator
 
     def build(self) -> typing.Optional[ast.ClassDef]:
         base_class: typing.Union[ast.Attribute, ast.Name]
@@ -142,6 +176,13 @@ class SchemaClassGenerator:
                 return None
             base_class = ast.Name(id=self.resource.base.name + "Schema")
 
+            if self.resource.package_name != self.resource.base.package_name:
+                self.generator.import_resource(
+                    self.resource.package_name,
+                    self.resource.base.package_name,
+                    self.resource.base.name + "Schema",
+                )
+
         # Define the base class
         class_node = ast.ClassDef(
             name=self.resource.name + "Schema",
@@ -151,7 +192,9 @@ class SchemaClassGenerator:
             body=[],
         )
 
-        doc_string = f"Marshmallow schema for :class:`commercetools.types.{self.resource.name}`."
+        doc_string = (
+            f"Marshmallow schema for :class:`commercetools.types.{self.resource.name}`."
+        )
         class_node.body.append(ast.Expr(value=ast.Str(s=doc_string)))
 
         # Add the field definitions
@@ -318,6 +361,12 @@ class SchemaClassGenerator:
 
         # Dict Field
         elif "asMap" in prop.type.annotations:
+            if self.resource.package_name != prop.type.package_name:
+                self.generator.import_resource(
+                    self.resource.package_name,
+                    prop.type.package_name,
+                    prop.type.name + "Field",
+                )
             return ast.Call(
                 func=ast.Name(id=prop.type.name + "Field"),
                 args=[],
@@ -337,7 +386,7 @@ class SchemaClassGenerator:
         for child in type_obj.get_all_children():
             items[
                 child.discriminator_value
-            ] = f"commercetools.schemas.{child.name}Schema"
+            ] = f"commercetools.schemas.{child.package_name}.{child.name}Schema"
 
         field = type_obj.get_discriminator_field()
 
@@ -345,9 +394,12 @@ class SchemaClassGenerator:
             func=ast.Name(id="helpers.Discriminator"),
             args=[],
             keywords=[
-                ast.keyword(arg="discriminator_field", value=ast.Tuple(
-                    elts=[ast.Str(s=field.name), ast.Str(s=field.attribute_name)]
-                )),
+                ast.keyword(
+                    arg="discriminator_field",
+                    value=ast.Tuple(
+                        elts=[ast.Str(s=field.name), ast.Str(s=field.attribute_name)]
+                    ),
+                ),
                 ast.keyword(
                     arg="discriminator_schemas",
                     value=ast.Dict(
@@ -367,7 +419,7 @@ class SchemaClassGenerator:
             keywords=[
                 ast.keyword(
                     arg="nested",
-                    value=ast.Str(s=f"commercetools.schemas.{type_obj.name}Schema"),
+                    value=ast.Str(s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema"),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
                 ast.keyword(arg="allow_none", value=ast.NameConstant(True)),

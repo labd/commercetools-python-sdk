@@ -5,7 +5,7 @@ from collections import defaultdict
 
 from codegen import raml_types
 from codegen.generate_abstract import AbstractModuleGenerator
-from codegen.utils import merge_imports, reorder_class_definitions
+from codegen.utils import reorder_class_definitions
 
 FIELD_TYPES = {
     "string": "marshmallow.fields.String",
@@ -35,16 +35,21 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         result = {}
 
         for module in modules:
-            self.add_import_statement(module, "re")
-            self.add_import_statement(module, "commercetools", "helpers", "types")
+            self.add_import_statement(module, "commercetools", "types")
             self.add_import_statement(module, "marshmallow")
-            self.add_import_statement(module, "marshmallow_enum")
 
             type_nodes = reorder_class_definitions(self._type_nodes[module])
             global_nodes = [
                 ast.Assign(
                     targets=[ast.Name(id="__all__")],
-                    value=ast.List(elts=[ast.Str(s=node.name) for node in sorted(type_nodes, key=operator.attrgetter('name'))]),
+                    value=ast.List(
+                        elts=[
+                            ast.Str(s=node.name)
+                            for node in sorted(
+                                type_nodes, key=operator.attrgetter("name")
+                            )
+                        ]
+                    ),
                 )
             ]
             all_nodes = (
@@ -297,6 +302,10 @@ class SchemaClassGenerator:
 
         if prop.name.startswith("/"):
             assert len(self.properties) == 1
+            self.generator.add_import_statement(self.resource.package_name, "re")
+            self.generator.add_import_statement(
+                self.resource.package_name, "commercetools", "helpers"
+            )
             node = ast.Call(
                 func=ast.Name(id="helpers.RegexField"),
                 args=[],
@@ -329,6 +338,9 @@ class SchemaClassGenerator:
                 keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
             )
         elif prop.type.enum:
+            self.generator.add_import_statement(
+                self.resource.package_name, "marshmallow_enum"
+            )
             return ast.Call(
                 func=ast.Name(id="marshmallow_enum.EnumField"),
                 args=[ast.Attribute(value=ast.Name(id="types"), attr=prop.type.name)],
@@ -393,6 +405,9 @@ class SchemaClassGenerator:
             ] = f"commercetools.schemas.{child.package_name}.{child.name}Schema"
 
         field = type_obj.get_discriminator_field()
+        self.generator.add_import_statement(
+            self.resource.package_name, "commercetools", "helpers"
+        )
 
         return ast.Call(
             func=ast.Name(id="helpers.Discriminator"),
@@ -423,7 +438,9 @@ class SchemaClassGenerator:
             keywords=[
                 ast.keyword(
                     arg="nested",
-                    value=ast.Str(s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema"),
+                    value=ast.Str(
+                        s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema"
+                    ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
                 ast.keyword(arg="allow_none", value=ast.NameConstant(True)),

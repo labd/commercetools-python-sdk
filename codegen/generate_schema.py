@@ -69,8 +69,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
             ast.ImportFrom(
                 module=module,
                 names=[
-                    ast.alias(name=node.name, asname=None)
-                    for node in self._type_nodes[module]
+                    ast.alias(name="*  # noqa", asname=None)
                 ],
                 level=1,
             )

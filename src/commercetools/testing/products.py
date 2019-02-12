@@ -140,10 +140,12 @@ class ProductsBackend(ServiceBackend):
         ]
 
     def _update_productdata_attr(dst: str, src: str):
-        def updater(self, obj: types.Product, action: types.ProductUpdateAction):
+        def updater(self, obj: dict, action: types.ProductUpdateAction):
             value = getattr(action, src)
+            staged = getattr(action, 'staged', False) or True
+
             # Action.staged default is True
-            if action.staged is True or action.staged is None:
+            if staged:
                 target_obj = obj["masterData"]["staged"]
             else:
                 target_obj = obj["masterData"]["current"]

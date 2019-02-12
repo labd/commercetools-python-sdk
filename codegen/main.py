@@ -1,13 +1,22 @@
 import os
+import typing
 from pathlib import Path
 
 import astunparse
 import black
 from isort import SortImports
 
-from codegen.rammel import parse_raml_file
-from codegen.schema_gen import SchemaModuleGenerator
-from codegen.types_gen import TypesModuleGenerator
+from codegen.generate_schema import SchemaModuleGenerator
+from codegen.generate_types import TypesModuleGenerator
+from codegen.type_processor import TypeProcessor
+from codegen.yaml import read_raml_file
+
+
+def parse_raml_file(filename) -> typing.Dict[str, typing.Any]:
+    data = read_raml_file(filename)
+    types = TypeProcessor()
+    types.load(data["types"])
+    return {"types": types, "resources": data}
 
 
 def generate_types_module(types):

@@ -27,8 +27,7 @@ def construct_include(loader, node):
 yaml.add_constructor("!include", construct_include, Loader)
 
 
-def read_raml_file(filename):
-    print(filename)
+def read_raml_file(filename) -> dict:
     with open(filename, "r") as fh:
         data = yaml.load(fh, Loader)
     return data

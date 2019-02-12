@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 
 import attr
 
-from .utils import snakeit
+from codegen.utils import snakeit
 
 
 @attr.s(auto_attribs=True)
@@ -78,7 +78,7 @@ class Property:
     optional: bool = False
     many: bool = False
     items: List[str] = attr.Factory(lambda: [])
-    items_types: List["DataType"] = None
+    items_types: Optional[List["DataType"]] = None
 
     @property
     def type(self):
@@ -93,9 +93,9 @@ class Property:
             self.types = [value]
 
     @property
-    def attribute_name(self):
+    def attribute_name(self) -> Optional[str]:
         name = snakeit(self.name)
-        if not name.isidentifier():
+        if not name or not name.isidentifier():
             return None
         return name
 

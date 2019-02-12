@@ -1,9 +1,10 @@
 import ast
+import typing
 
 
 class AbstractModuleGenerator:
     def __init__(self):
-        self._import_set = set()
+        self._import_set: typing.Set[typing.Tuple[str, str]] = set()
 
     def add_import_statement(self, module_name, *subpackages):
         key = (module_name, subpackages)

@@ -1,9 +1,9 @@
 import ast
 import typing
 
-from .abstract_gen import AbstractModuleGenerator
-from .rammel import datatypes
-from .utils import merge_imports, reorder_class_definitions
+from codegen import raml_types
+from codegen.abstract_gen import AbstractModuleGenerator
+from codegen.utils import merge_imports, reorder_class_definitions
 
 FIELD_TYPES = {
     "string": "marshmallow.fields.String",
@@ -124,7 +124,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
 class SchemaClassGenerator:
     """Create a marshmallow schema"""
 
-    def __init__(self, resource: datatypes.DataType) -> None:
+    def __init__(self, resource: raml_types.DataType) -> None:
         self.resource = resource
         self.properties = resource.get_all_properties()
         self.contains_regex_field = any(

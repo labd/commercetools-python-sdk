@@ -3,9 +3,9 @@ import typing
 
 import astunparse
 
-from .abstract_gen import AbstractModuleGenerator
-from .rammel import datatypes
-from .utils import enum_attr, merge_imports, reorder_class_definitions
+from codegen import raml_types
+from codegen.abstract_gen import AbstractModuleGenerator
+from codegen.utils import enum_attr, merge_imports, reorder_class_definitions
 
 BUILTIN_TYPES = {
     "string": ast.Name(id="str"),
@@ -149,10 +149,10 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         return class_node
 
     def create_dataclass(self, resource):
-        return ResourceClassGenerator(resource).build()
+        return _ResourceClassGenerator(resource).build()
 
 
-class ResourceClassGenerator:
+class _ResourceClassGenerator:
     """Create an attr.s class definition
 
         @attr.s(auto_attribs=True, init=False, repr=False)
@@ -165,9 +165,9 @@ class ResourceClassGenerator:
 
     """
 
-    resource: datatypes.DataType
+    resource: raml_types.DataType
 
-    def __init__(self, resource: datatypes.DataType):
+    def __init__(self, resource: raml_types.DataType):
         self.resource = resource
         self.properties = self.resource.get_all_properties()
         self.attribute_names = [
@@ -229,7 +229,7 @@ class ResourceClassGenerator:
         class_node.body.append(repr_func)
         return class_node
 
-    def _create_property(self, prop: datatypes.Property):
+    def _create_property(self, prop: raml_types.Property):
         attribute_name = prop.attribute_name
         if not attribute_name:
             print(
@@ -274,7 +274,7 @@ class ResourceClassGenerator:
 
         return " ".join(parts)
 
-    def _get_annotation_for_property(self, prop: datatypes.Property):
+    def _get_annotation_for_property(self, prop: raml_types.Property):
         """Create an node which represents an annotation for a property"""
         if prop.type is None:
             annotation_type = BUILTIN_TYPES["any"]

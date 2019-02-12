@@ -1,56 +1,6 @@
 from typing import Any, Dict
 
-from .datatypes import DataType, Property, UnresolvedType
-
-
-def determine_type(value: Dict[str, Any]) -> str:
-    if value["type"] == "number" and all(key in value for key in ["minimum", "maximum"]):
-        return "float"
-    return value["type"]
-
-
-def create_data_type(name: str, data: Dict[str, Any]):
-    obj = DataType(name=name, type=data.get("type"))
-
-    # Copy all annotations
-    for key, value in data.items():
-        if key.startswith("("):
-            obj.annotations[key[1:-1]] = value
-
-    # Copy enum properties
-    obj.enum = data.get("enum", [])
-    obj.discriminator = data.get("discriminator")
-    obj.discriminator_value = data.get("discriminatorValue")
-
-    # Iterate object properties
-    properties = data.get("properties") or {}
-    for key, value in properties.items():
-        if isinstance(value, dict):
-            property_type = determine_type(value)
-            items = value.get("items")
-            if items:
-                items = [v.strip() for v in value.get("items").split("|")]
-        else:
-            property_type = value
-            items = []
-
-        optional = key.endswith("?")
-        many = property_type.endswith("[]")
-        if many:
-            property_type = property_type[:-2]
-
-        property_types = [v.strip() for v in property_type.split("|")]
-        property_objects = [UnresolvedType(name=p) for p in property_types]
-        prop = Property(
-            name=key.rstrip("?"),
-            optional=optional,
-            types=property_objects,
-            many=many,
-            items=items,
-        )
-        obj.properties.append(prop)
-
-    return obj
+from codegen.raml_types import DataType, Property, UnresolvedType
 
 
 class TypeProcessor:
@@ -73,9 +23,9 @@ class TypeProcessor:
         for type_ in self.builtin_types:
             self.types[type_.name] = type_
 
-    def load(self, data):
+    def load(self, data) -> None:
         for key, value in data.items():
-            obj = create_data_type(key, value)
+            obj = _create_data_type(key, value)
             self.types[obj.name] = obj
         self.resolve()
 
@@ -123,3 +73,53 @@ class TypeProcessor:
             print(" - Properties")
             for prop in type_obj.properties:
                 print("   -", prop.name)
+
+
+def _determine_type(value: Dict[str, Any]) -> str:
+    if value["type"] == "number" and all(key in value for key in ["minimum", "maximum"]):
+        return "float"
+    return value["type"]
+
+
+def _create_data_type(name: str, data: Dict[str, Any]):
+    obj = DataType(name=name, type=data.get("type"))
+
+    # Copy all annotations
+    for key, value in data.items():
+        if key.startswith("("):
+            obj.annotations[key[1:-1]] = value
+
+    # Copy enum properties
+    obj.enum = data.get("enum", [])
+    obj.discriminator = data.get("discriminator")
+    obj.discriminator_value = data.get("discriminatorValue")
+
+    # Iterate object properties
+    properties = data.get("properties") or {}
+    for key, value in properties.items():
+        if isinstance(value, dict):
+            property_type = _determine_type(value)
+            items = value.get("items")
+            if items:
+                items = [v.strip() for v in value.get("items").split("|")]
+        else:
+            property_type = value
+            items = []
+
+        optional = key.endswith("?")
+        many = property_type.endswith("[]")
+        if many:
+            property_type = property_type[:-2]
+
+        property_types = [v.strip() for v in property_type.split("|")]
+        property_objects = [UnresolvedType(name=p) for p in property_types]
+        prop = Property(
+            name=key.rstrip("?"),
+            optional=optional,
+            types=property_objects,
+            many=many,
+            items=items,
+        )
+        obj.properties.append(prop)
+
+    return obj

@@ -39,7 +39,7 @@ def merge_imports(imports) -> typing.List[ast.AST]:
             for alias in node.names:
                 import_nodes.add(alias.name)
 
-    result = []
+    result: typing.List[ast.AST] = []
     for name in sorted(import_nodes):
         result.append(ast.Import(names=[ast.alias(name=name, asname=None)], level=0))
     for name, aliases in importfrom_nodes.items():

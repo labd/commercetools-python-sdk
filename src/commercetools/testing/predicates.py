@@ -455,7 +455,7 @@ class PredicateFilter:
             if isinstance(obj, dict):
                 obj = self.case_insensitive_get(obj, key, {})
                 if isinstance(schema_field, marshmallow.fields.Dict):
-                    path = path[i + 1 :]
+                    path = path[i + 1:]
                     break
 
             elif isinstance(obj, list):

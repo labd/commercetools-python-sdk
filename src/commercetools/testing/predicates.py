@@ -444,7 +444,7 @@ class PredicateFilter:
             fields = self._get_schema_fields(schema)
             schema_field = self.case_insensitive_get(fields, key, None)
 
-            # Query field doens't exist
+            # Query field doesn't exist
             if schema_field is None:
                 raise ValueError("No field %s on schema %s" % (key, schema))
 

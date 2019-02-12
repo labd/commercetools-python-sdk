@@ -5,7 +5,6 @@ import typing
 import requests_mock
 import wrapt
 
-from commercetools import types
 from commercetools.testing.abstract import BaseBackend
 from commercetools.testing.auth import AuthBackend
 from commercetools.testing.categories import CategoriesBackend

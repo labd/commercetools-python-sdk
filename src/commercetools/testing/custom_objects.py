@@ -65,7 +65,7 @@ class CustomObjectsBackend(ServiceBackend):
                     errors=[
                         types.InvalidSubjectError(
                             code="InvalidSubject",
-                            message=f"The CustomObject with ID '({container},{key}' was not found.",
+                            message=f"The CustomObject with ID '({container},{key}' was not found.",  # noqa E501
                         )
                     ],
                 )

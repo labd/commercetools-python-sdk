@@ -4,7 +4,7 @@ import typing
 import astunparse
 
 from codegen import raml_types
-from codegen.abstract_gen import AbstractModuleGenerator
+from codegen.generate_abstract import AbstractModuleGenerator
 from codegen.utils import enum_attr, merge_imports, reorder_class_definitions
 
 BUILTIN_TYPES = {

@@ -2,7 +2,7 @@ import ast
 import typing
 
 from codegen import raml_types
-from codegen.abstract_gen import AbstractModuleGenerator
+from codegen.generate_abstract import AbstractModuleGenerator
 from codegen.utils import merge_imports, reorder_class_definitions
 
 FIELD_TYPES = {

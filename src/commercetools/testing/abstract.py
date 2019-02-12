@@ -47,7 +47,7 @@ class BaseModel:
         if not where:
             return objects
         where_clause = " AND ".join(where)
-        predicate_filter = PredicateFilter(where_clause)
+        predicate_filter = PredicateFilter(where_clause, schema=self._resource_schema)
         return [obj for obj in objects if predicate_filter.match(obj)]
 
     def get_by_id(self, id):

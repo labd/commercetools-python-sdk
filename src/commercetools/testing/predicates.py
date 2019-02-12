@@ -1,7 +1,10 @@
 import ast
 import logging
+import operator
 import re
 import typing
+
+import marshmallow
 
 logger = logging.getLogger(__name__)
 
@@ -394,8 +397,19 @@ class Context:
 
 
 class PredicateFilter:
-    def __init__(self, predicate):
+    operators = {
+        "<": operator.lt,
+        "=<": operator.le,
+        ">": operator.gt,
+        ">=": operator.ge,
+        "=": operator.eq,
+        "!=": operator.ne,
+        "is not": operator.is_not,
+    }
+
+    def __init__(self, predicate, schema):
         self.predicate = predicate
+        self.schema = schema
         ast_node = self.parse(predicate)
         self._code = compile(ast_node, "internal.py", mode="eval")
         logger.info("Compiled python code:", ast.dump(ast_node))
@@ -406,22 +420,70 @@ class PredicateFilter:
         except TypeError as exc:
             return False
 
-    def filter_field(self, obj, path, operator, value):
+    def _get_schema_fields(self, schema):
+        result = {}
+        for name, field in schema._declared_fields.items():
+            key = field.data_key or name
+            result[key] = field
+        return result
+
+    def filter_field(
+        self,
+        obj: typing.Dict[typing.Any, typing.Any],
+        path: typing.List[str],
+        operator_value: str,
+        value: typing.Any,
+        schema=None,
+    ):
+        if schema is None:
+            schema = self.schema
+
+        schema_field = None
+
         for i, key in enumerate(path):
-            if isinstance(obj, list):
-                return any(
-                    self.filter_field(child_doc, path[i:], operator, value)
-                    for child_doc in obj
-                )
+            fields = self._get_schema_fields(schema)
+            schema_field = self.case_insensitive_get(fields, key, None)
+
+            # Query field doesn't exist
+            if schema_field is None:
+                raise ValueError("No field %s on schema %s" % (key, schema))
+
+            if isinstance(schema_field, marshmallow.fields.Nested):
+                schema = schema_field.schema
+
+            # Get value
             if isinstance(obj, dict):
                 obj = self.case_insensitive_get(obj, key, {})
+                if isinstance(schema_field, marshmallow.fields.Dict):
+                    path = path[i + 1 :]
+                    break
 
+            elif isinstance(obj, list):
+                return any(
+                    self.filter_field(
+                        child_doc, path[i:], operator_value, value, schema=schema
+                    )
+                    for child_doc in obj
+                )
+
+        if isinstance(schema_field, marshmallow.fields.Dict):
+            obj = schema_field._deserialize(obj, None, None)
+            assert len(path) == 1
+            obj = self.case_insensitive_get(obj, path[0], None)
+        else:
+            if obj is not None:
+                obj = schema_field._deserialize(obj, None, None)
+            if value is not None:
+                value = schema_field._deserialize(value, None, None)
+
+        # Case insensitve comparison for strings
         if isinstance(obj, str):
             obj = obj.lower()
         if isinstance(value, str):
             value = value.lower()
 
-        return obj == value
+        op = self.operators[operator_value]
+        return op(obj, value)
 
     def case_insensitive_get(sef, dict, key, default=None):
         for k, v in dict.items():

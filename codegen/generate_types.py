@@ -23,18 +23,17 @@ BUILTIN_TYPES = {
 
 class TypesModuleGenerator(AbstractModuleGenerator):
     def __init__(self):
-        self._import_nodes: typing.List[ast.AST] = []
         self._type_nodes: typing.List[ast.AST] = []
         super().__init__()
 
     def get_module_node(self):
-        self.add_import_statement("attr")
-        self.add_import_statement("enum")
-        self.add_import_statement("typing")
-        self.add_import_statement("datetime")
+        self.add_import_statement("types", "attr")
+        self.add_import_statement("types", "enum")
+        self.add_import_statement("types", "typing")
+        self.add_import_statement("types", "datetime")
 
         type_nodes = reorder_class_definitions(self._type_nodes)
-        import_nodes = merge_imports(self._import_nodes)
+        import_nodes = merge_imports(self._import_nodes["types"])
 
         all_nodes = import_nodes + type_nodes
         value = ast.Module(body=all_nodes)

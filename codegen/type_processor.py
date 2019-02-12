@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 from codegen.raml_types import DataType, Property, UnresolvedType
+from codegen.utils import snakeit
 
 
 class TypeProcessor:
@@ -88,6 +89,8 @@ def _create_data_type(name: str, data: Dict[str, Any]):
     for key, value in data.items():
         if key.startswith("("):
             obj.annotations[key[1:-1]] = value
+
+    obj.package_name = "_" + snakeit(obj.annotations.get('package', 'base'))
 
     # Copy enum properties
     obj.enum = data.get("enum", [])

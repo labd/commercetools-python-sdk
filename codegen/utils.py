@@ -79,5 +79,5 @@ def reorder_class_definitions(definitions):
             if name in nodes:
                 result.append(nodes[name])
             elif not name.startswith(("enum.", "typing.", "marshmallow.")):
-                print("[MISSING BASE CLASS]", name)
+                pass
     return result

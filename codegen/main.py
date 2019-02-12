@@ -26,11 +26,11 @@ def generate_types_module(types):
     return generator.get_module_node()
 
 
-def generate_schemas_module(types):
+def generate_schemas_modules(types):
     generator = SchemaModuleGenerator()
     for resource in types:
         generator.add_type_definition(resource)
-    return generator.get_module_node()
+    return generator.get_module_nodes()
 
 
 def generate():
@@ -49,9 +49,14 @@ def generate():
     write_module(filename, module_ast)
 
     # Generate schemas.py
-    module_ast = generate_schemas_module(types)
-    filename = os.path.join(path, "schemas.py")
-    write_module(filename, module_ast)
+    ast_nodes = generate_schemas_modules(types)
+    target_path = os.path.join(path, 'schemas')
+    if not os.path.exists(target_path):
+        os.mkdir(target_path)
+
+    for name, module_ast in ast_nodes.items():
+        filename = os.path.join(target_path, f"{name}.py")
+        write_module(filename, module_ast)
 
 
 def write_module(filename, ast):

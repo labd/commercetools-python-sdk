@@ -60,10 +60,14 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         return result
 
     def generate_init_module(self, modules):
-        "Module(body=[ImportFrom(module='module', names=[alias(name='*', asname=None)], level=1)])"
         nodes = [
             ast.ImportFrom(
-                module=module, names=[ast.alias(name="*  # noqa", asname=None)], level=1
+                module=module,
+                names=[
+                    ast.alias(name=node.name, asname=None)
+                    for node in self._type_nodes[module]
+                ],
+                level=1,
             )
             for module in sorted(modules)
         ]

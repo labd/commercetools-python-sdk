@@ -1,5 +1,7 @@
+import operator
 import ast
 import typing
+from collections import defaultdict
 
 import astunparse
 
@@ -23,26 +25,68 @@ BUILTIN_TYPES = {
 
 class TypesModuleGenerator(AbstractModuleGenerator):
     def __init__(self):
-        self._type_nodes: typing.List[ast.AST] = []
+        self._type_nodes: typing.Dict[str, typing.List[ast.AST]] = defaultdict(list)
+        self._typing_imports: typing.Dict[
+            str, typing.Dict[str, typing.List[str]]
+        ] = defaultdict(lambda: defaultdict(list))
         super().__init__()
 
-    def get_module_node(self):
-        self.add_import_statement("types", "attr")
-        self.add_import_statement("types", "enum")
-        self.add_import_statement("types", "typing")
-        self.add_import_statement("types", "datetime")
+    def get_module_nodes(self):
 
-        type_nodes = reorder_class_definitions(self._type_nodes)
-        import_nodes = merge_imports(self._import_nodes["types"])
+        modules = list(self._type_nodes.keys())
 
-        all_nodes = import_nodes + type_nodes
-        value = ast.Module(body=all_nodes)
-        return value
+        result = {}
+        for module in modules:
+            self.add_import_statement(module, "attr")
+            self.add_import_statement(module, "typing")
+            self.add_import_statement(module, "datetime")
+
+            type_nodes = reorder_class_definitions(self._type_nodes[module])
+            import_nodes = merge_imports(self._import_nodes[module])
+            global_nodes = [
+                ast.Assign(
+                    targets=[ast.Name(id="__all__")],
+                    value=ast.List(
+                        elts=[
+                            ast.Str(s=node.name)
+                            for node in sorted(
+                                type_nodes, key=operator.attrgetter("name")
+                            )
+                        ]
+                    ),
+                )
+            ]
+
+            all_nodes = (
+                import_nodes
+                + self.get_typing_imports(module)
+                + global_nodes
+                + type_nodes
+            )
+            value = ast.Module(body=all_nodes)
+            result[module] = value
+
+        result["__init__"] = self.generate_init_module(result.keys())
+        return result
+
+    def generate_init_module(self, modules):
+        nodes = [
+            ast.ImportFrom(
+                module=module,
+                names=[
+                    ast.alias(name=node.name, asname=None)
+                    for node in self._type_nodes[module]
+                ],
+                level=1,
+            )
+            for module in sorted(modules)
+        ]
+        return ast.Module(body=nodes)
 
     def add_type_definition(self, resource):
         node = self.create_object(resource)
         if node:
-            self._type_nodes.append(node)
+            self._type_nodes[resource.package_name].append(node)
 
     def create_object(self, resource):
         """Create a class definition"""
@@ -132,6 +176,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
                 PRIMARY = 'Primary'
 
         """
+        self.add_import_statement(resource.package_name, "enum")
         bases = [ast.Name(id="enum.Enum")]
         class_node = ast.ClassDef(
             name=resource.name,
@@ -148,7 +193,46 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         return class_node
 
     def create_dataclass(self, resource):
-        return _ResourceClassGenerator(resource).build()
+        return _ResourceClassGenerator(resource, self).build()
+
+    def import_resource_typing(self, source, module, cls):
+        if cls not in self._typing_imports[source][module]:
+            self._typing_imports[source][module].append(cls)
+
+    def import_resource(self, source, module, cls):
+        self.add_import_statement(source, f"commercetools.types.{module}", cls)
+
+    def get_typing_imports(self, source):
+        nodes = []
+
+        imported_nodes = defaultdict(list)
+        for key, value in self._import_set[source]:
+            imported_nodes[key].extend(list(value))
+
+        for module, objects in self._typing_imports[source].items():
+            objects = sorted(objects)
+            node = ast.ImportFrom(
+                module=module,
+                names=[
+                    ast.alias(name=obj, asname=None)
+                    for obj in objects
+                    if obj not in imported_nodes[f"commercetools.types.{module}"]
+                ],
+                level=1,
+            )
+            if node.names:
+                nodes.append(node)
+        if not nodes:
+            return []
+
+        nodes = sorted(nodes, key=operator.attrgetter("module"))
+        return [
+            ast.If(
+                test=ast.Attribute(value=ast.Name(id="typing"), attr="TYPE_CHECKING"),
+                body=nodes,
+                orelse=[],
+            )
+        ]
 
 
 class _ResourceClassGenerator:
@@ -166,8 +250,9 @@ class _ResourceClassGenerator:
 
     resource: raml_types.DataType
 
-    def __init__(self, resource: raml_types.DataType):
+    def __init__(self, resource: raml_types.DataType, generator: TypesModuleGenerator):
         self.resource = resource
+        self.generator = generator
         self.properties = self.resource.get_all_properties()
         self.attribute_names = [
             prop.attribute_name for prop in self.properties if prop.attribute_name
@@ -186,6 +271,13 @@ class _ResourceClassGenerator:
         assert not self.resource.is_scalar_type
         if self.resource.base and self.resource.base.name not in ("any", "object"):
             bases.append(ast.Name(id=self.resource.base.name))
+
+            if self.resource.package_name != self.resource.base.package_name:
+                self.generator.import_resource(
+                    self.resource.package_name,
+                    self.resource.base.package_name,
+                    self.resource.base.name,
+                )
 
         # Create the class node
         class_node = ast.ClassDef(
@@ -282,6 +374,10 @@ class _ResourceClassGenerator:
         elif prop.type.base and prop.type.base.name == "string" and not prop.type.enum:
             annotation_type = ast.Str(s="str")
         else:
+            if self.resource.package_name != prop.type.package_name:
+                self.generator.import_resource_typing(
+                    self.resource.package_name, prop.type.package_name, prop.type.name
+                )
             annotation_type = ast.Str(s=prop.type.name)
 
         # use typing.List[]. We make an hardcoded exception for
@@ -385,6 +481,17 @@ class _ResourceClassGenerator:
                             ),
                         )
                     )
+
+                    if (
+                        self.resource.package_name
+                        != self.discriminator_attr.type.package_name
+                    ):
+                        self.generator.add_import_statement(
+                            self.resource.package_name,
+                            f"commercetools.types.{self.discriminator_attr.type.package_name}",
+                            self.discriminator_attr.type.name,
+                        )
+
                 else:
                     init_values.append(
                         ast.keyword(

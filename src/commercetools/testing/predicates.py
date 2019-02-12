@@ -397,7 +397,15 @@ class Context:
 
 
 class PredicateFilter:
-    operators = {">": operator.gt, "=": operator.eq, "is not": operator.is_not}
+    operators = {
+        "<": operator.lt,
+        "=<": operator.le,
+        ">": operator.gt,
+        ">=": operator.ge,
+        "=": operator.eq,
+        "!=": operator.ne,
+        "is not": operator.is_not,
+    }
 
     def __init__(self, predicate, schema):
         self.predicate = predicate

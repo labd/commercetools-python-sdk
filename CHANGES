@@ -1,3 +1,16 @@
+2.4.0 (2019-02-13)
+------------------
+ - Refactor the code generation module to split the types.py and schemas.py file
+   into multile submodules. This should be fully backwards compatible and from
+   the API perspective nothing should be changed, but it makes the generated
+   code more maintanable since we no longer have files with 40k lines.
+ - Use timezone aware timestamps in the mocking interface
+ - Rewrite the Paginator class. This is a backwards incompatible change but it
+   makes the API much cleaner. It now also supports slicing etc.
+ - Add a CursorPaginator class, which uses filtering instead of offsets for
+   pagination.
+
+
 2.3.0 (2019-01-28)
 ------------------
 - Money -> TypedMoney conversion not setting default to CENT_PRECISION

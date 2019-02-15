@@ -19,7 +19,9 @@ class Paginator:
 
     """
 
-    def __init__(self, operation: typing.Callable, **kwargs: typing.Dict[str, typing.Any]):
+    def __init__(
+        self, operation: typing.Callable, **kwargs: typing.Dict[str, typing.Any]
+    ):
         if not callable(operation):
             raise ValueError("Expected a callable as first argument")
 
@@ -41,7 +43,9 @@ class Paginator:
         limit = self._limit
         num = 0
         while True:
-            response = self._operation(**self._kwargs, offset=offset, limit=self.page_size)
+            response = self._operation(
+                **self._kwargs, offset=offset, limit=self.page_size
+            )
 
             if limit is not None and limit < 0:
                 limit = (response.total + limit) - offset
@@ -78,6 +82,7 @@ class CursorPaginator(Paginator):
     See https://docs.commercetools.com/http-api.html#paging
 
     """
+
     def __iter__(self) -> typing.Generator[types.Resource, None, None]:
         last_created_at = None
         limit = self._limit

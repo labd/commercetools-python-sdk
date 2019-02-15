@@ -47,10 +47,10 @@ class CartService(abstract.AbstractService):
 
     def create(self, draft: types.CartDraft) -> types.Cart:
         return self._client._post(
-            "carts", {}, draft, schemas.CartUpdateSchema, schemas.CartSchema
+            "carts", {}, draft, schemas.CartDraftSchema, schemas.CartSchema
         )
 
-    def update(
+    def update_by_id(
         self,
         id: str,
         version: int,
@@ -68,7 +68,7 @@ class CartService(abstract.AbstractService):
             force_update=force_update,
         )
 
-    def delete(
+    def delete_by_id(
         self,
         id: str,
         version: int,

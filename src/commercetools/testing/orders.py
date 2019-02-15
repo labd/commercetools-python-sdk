@@ -4,6 +4,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_enum_attribute
 from commercetools.types import CartOrigin, OrderState
 
 
@@ -50,3 +51,9 @@ class OrdersBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
+
+    _actions = {
+        "changeOrderState": update_enum_attribute("orderState", "order_state"),
+        "changePaymentState": update_enum_attribute("paymentState", "payment_state"),
+        "changeShipmentState": update_enum_attribute("shipmentState", "shipment_state"),
+    }

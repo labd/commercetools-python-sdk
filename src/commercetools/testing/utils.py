@@ -69,6 +69,18 @@ def update_attribute(dst: str, src: str):
     return updater
 
 
+def update_enum_attribute(dst: str, src: str):
+    def updater(self, obj, action):
+        value = getattr(action, src).value
+        if obj[dst] != value:
+            new = copy.deepcopy(obj)
+            new[dst] = value
+            return new
+        return obj
+
+    return updater
+
+
 def update_attribute_add_item(dst: str, src: str, schema: Schema):
     def updater(self, obj, action):
         value = getattr(action, src)

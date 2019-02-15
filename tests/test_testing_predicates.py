@@ -3,8 +3,8 @@ import re
 
 import pytest
 
-from commercetools.testing import predicates
 from commercetools import schemas
+from commercetools.testing import predicates
 
 
 @pytest.mark.parametrize(

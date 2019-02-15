@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -5,6 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute_add_item
 
 
 class PaymentsModel(BaseModel):
@@ -50,6 +52,70 @@ class PaymentsModel(BaseModel):
         )
 
 
+def add_transaction():
+    def updater(self, obj, action):
+        draft: types.TransactionDraft = getattr(action, "transaction")
+        transaction = types.Transaction(
+            id=str(uuid.uuid4()),
+            timestamp=draft.timestamp,
+            type=draft.type,
+            amount=utils._money_to_typed(draft.amount),
+            interaction_id=draft.interaction_id,
+            state=draft.state,
+        )
+        transaction = schemas.TransactionSchema().dump(transaction)
+        if not obj["transactions"]:
+            obj["transactions"] = []
+        new = copy.deepcopy(obj)
+        new["transactions"].append(transaction)
+        return new
+
+    return updater
+
+
+def change_transaction_state():
+    def updater(self, obj, action):
+        transaction_id = getattr(action, "transaction_id")
+        transaction_state = getattr(action, "state")
+        for index, transaction in enumerate(obj["transactions"]):
+            if transaction["id"] == transaction_id:
+                new = copy.deepcopy(obj)
+                new["transactions"][index]["state"] = transaction_state.value
+                return new
+        raise ValueError("Could not find transaction with id %s" % transaction_id)
+
+    return updater
+
+
+def change_transaction_interaction_id():
+    def updater(self, obj, action):
+        transaction_id = getattr(action, "transaction_id")
+        interaction_id = getattr(action, "interaction_id")
+        for index, transaction in enumerate(obj["transactions"]):
+            if transaction["id"] == transaction_id:
+                new = copy.deepcopy(obj)
+                new["transactions"][index]["interactionId"] = interaction_id
+                return new
+        raise ValueError("Could not find transaction with id %s" % transaction_id)
+
+    return updater
+
+
+def add_interface_interaction():
+    def updater(self, obj, action):
+        value = types.CustomFields(fields=getattr(action, "fields"))
+        value = schemas.CustomFieldsSchema().dump(value)
+        if not obj["interfaceInteractions"]:
+            obj["interfaceInteractions"] = []
+        if value not in obj["interfaceInteractions"]:
+            new = copy.deepcopy(obj)
+            new["interfaceInteractions"].append(value)
+            return new
+        return obj
+
+    return updater
+
+
 class PaymentsBackend(ServiceBackend):
     service_path = "payments"
     model_class = PaymentsModel
@@ -66,3 +132,10 @@ class PaymentsBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
+
+    _actions = {
+        "addInterfaceInteraction": add_interface_interaction(),
+        "changeTransactionInteractionId": change_transaction_interaction_id(),
+        "addTransaction": add_transaction(),
+        "changeTransactionState": change_transaction_state(),
+    }

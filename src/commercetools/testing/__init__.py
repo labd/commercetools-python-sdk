@@ -7,6 +7,7 @@ import wrapt
 
 from commercetools.testing.abstract import BaseBackend
 from commercetools.testing.auth import AuthBackend
+from commercetools.testing.carts import CartsBackend
 from commercetools.testing.categories import CategoriesBackend
 from commercetools.testing.channels import ChannelsBackend
 from commercetools.testing.custom_objects import CustomObjectsBackend
@@ -58,6 +59,7 @@ class BackendRepository:
         self._storage = Storage()
 
         self.auth = AuthBackend()
+        self.carts = CartsBackend(self._storage)
         self.categories = CategoriesBackend(self._storage)
         self.channels = ChannelsBackend(self._storage)
         self.custom_objects = CustomObjectsBackend(self._storage)

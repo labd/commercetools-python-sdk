@@ -11,6 +11,30 @@ def test_orders_get_by_id(client):
 
 
 def test_add_existing_order(commercetools_api, client):
+    order = get_test_order()
+
+    commercetools_api.orders.add_existing(order)
+
+    assert client.orders.get_by_id(order.id).order_number == order.order_number
+
+
+def test_update_actions(commercetools_api, client):
+    order = get_test_order()
+
+    commercetools_api.orders.add_existing(order)
+
+    updated_order = client.orders.update_by_id(
+        order.id,
+        order.version,
+        actions=[
+            types.OrderChangeOrderStateAction(order_state=types.OrderState.CONFIRMED)
+        ],
+    )
+
+    assert updated_order.order_state == types.OrderState.CONFIRMED
+
+
+def get_test_order():
     order = types.Order(
         id="20ad6c92-fe04-4983-877e-5f5f80b5e37b",
         version=10,
@@ -182,7 +206,4 @@ def test_add_existing_order(commercetools_api, client):
             country="GB",
         ),
     )
-
-    commercetools_api.orders.add_existing(order)
-
-    assert client.orders.get_by_id(order.id).order_number == order.order_number
+    return order

@@ -1,3 +1,9 @@
+2.4.1 (tbd)
+-----------
+- Fix cart create function using incorrect schema
+- Add update actions to carts testing backend
+- Add update actions to orders testing backend
+
 2.4.0 (2019-02-13)
 ------------------
  - Refactor the code generation module to split the types.py and schemas.py file

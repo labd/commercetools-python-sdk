@@ -142,7 +142,7 @@ class ProductsBackend(ServiceBackend):
     def _update_productdata_attr(dst: str, src: str):
         def updater(self, obj: dict, action: types.ProductUpdateAction):
             value = getattr(action, src)
-            staged = getattr(action, 'staged', False) or True
+            staged = getattr(action, "staged", False) or True
 
             # Action.staged default is True
             if staged:

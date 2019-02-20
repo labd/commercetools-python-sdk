@@ -6,7 +6,9 @@ import typing
 import attr
 
 if typing.TYPE_CHECKING:
-    from ._common import Price, ReferenceTypeId
+    from ._channel import ChannelReference
+    from ._common import Price, Reference, ReferenceTypeId
+    from ._customer_group import CustomerGroupReference
     from ._product import Attribute
 __all__ = [
     "AccessDeniedError",
@@ -15,10 +17,15 @@ __all__ = [
     "DuplicateAttributeValueError",
     "DuplicateAttributeValuesError",
     "DuplicateFieldError",
+    "DuplicateFieldWithConflictingResourceError",
     "DuplicatePriceScopeError",
     "DuplicateVariantValuesError",
+    "EnumValueIsUsedError",
     "ErrorObject",
     "ErrorResponse",
+    "ExtensionBadResponseError",
+    "ExtensionNoResponseError",
+    "ExtensionUpdateActionsFailedError",
     "InsufficientScopeError",
     "InvalidCredentialsError",
     "InvalidCurrentPasswordError",
@@ -29,6 +36,7 @@ __all__ = [
     "InvalidOperationError",
     "InvalidSubjectError",
     "InvalidTokenError",
+    "MatchingPriceNotFoundError",
     "MissingTaxRateForCountryError",
     "NoMatchingProductDiscountFoundError",
     "OutOfStockError",
@@ -169,16 +177,52 @@ class ConcurrentModificationError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeNonApplicableError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeNonApplicableErrorSchema`."
+    #: :class:`str` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional[str]
+    #: :class:`str`
+    reason: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``dicountCodeId`` `in Commercetools)`
+    dicount_code_id: typing.Optional[str]
+    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
+    valid_from: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
+    valid_until: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``validityCheckTime`` `in Commercetools)`
+    validity_check_time: typing.Optional[datetime.datetime]
 
     def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        discount_code: typing.Optional[str] = None,
+        reason: typing.Optional[str] = None,
+        dicount_code_id: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        validity_check_time: typing.Optional[datetime.datetime] = None
     ) -> None:
+        self.discount_code = discount_code
+        self.reason = reason
+        self.dicount_code_id = dicount_code_id
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        self.validity_check_time = validity_check_time
         super().__init__(code="DiscountCodeNonApplicable", message=message)
 
     def __repr__(self) -> str:
-        return "DiscountCodeNonApplicableError(code=%r, message=%r)" % (
-            self.code,
-            self.message,
+        return (
+            "DiscountCodeNonApplicableError(code=%r, message=%r, discount_code=%r, reason=%r, dicount_code_id=%r, valid_from=%r, valid_until=%r, validity_check_time=%r)"
+            % (
+                self.code,
+                self.message,
+                self.discount_code,
+                self.reason,
+                self.dicount_code_id,
+                self.valid_from,
+                self.valid_until,
+                self.validity_check_time,
+            )
         )
 
 
@@ -233,9 +277,9 @@ class DuplicateAttributeValuesError(ErrorObject):
 @attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicateFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldErrorSchema`."
-    #: Optional :class:`str`
+    #: :class:`str`
     field: typing.Optional[str]
-    #: Optional :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
+    #: :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
     duplicate_value: typing.Optional[typing.Any]
 
     def __init__(
@@ -254,6 +298,43 @@ class DuplicateFieldError(ErrorObject):
         return (
             "DuplicateFieldError(code=%r, message=%r, field=%r, duplicate_value=%r)"
             % (self.code, self.message, self.field, self.duplicate_value)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class DuplicateFieldWithConflictingResourceError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldWithConflictingResourceErrorSchema`."
+    #: :class:`str`
+    field: typing.Optional[str]
+    #: :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
+    duplicate_value: typing.Optional[typing.Any]
+    #: :class:`commercetools.types.Reference` `(Named` ``conflictingResource`` `in Commercetools)`
+    conflicting_resource: typing.Optional["Reference"]
+
+    def __init__(
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        field: typing.Optional[str] = None,
+        duplicate_value: typing.Optional[typing.Any] = None,
+        conflicting_resource: typing.Optional["Reference"] = None
+    ) -> None:
+        self.field = field
+        self.duplicate_value = duplicate_value
+        self.conflicting_resource = conflicting_resource
+        super().__init__(code="DuplicateFieldWithConflictingResource", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "DuplicateFieldWithConflictingResourceError(code=%r, message=%r, field=%r, duplicate_value=%r, conflicting_resource=%r)"
+            % (
+                self.code,
+                self.message,
+                self.field,
+                self.duplicate_value,
+                self.conflicting_resource,
+            )
         )
 
 
@@ -301,6 +382,100 @@ class DuplicateVariantValuesError(ErrorObject):
             self.code,
             self.message,
             self.variant_values,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class EnumValueIsUsedError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.EnumValueIsUsedErrorSchema`."
+
+    def __init__(
+        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+    ) -> None:
+        super().__init__(code="EnumValueIsUsed", message=message)
+
+    def __repr__(self) -> str:
+        return "EnumValueIsUsedError(code=%r, message=%r)" % (self.code, self.message)
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ExtensionBadResponseError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionBadResponseErrorSchema`."
+    #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
+    extension_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``extensionKey`` `in Commercetools)`
+    extension_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        extension_id: typing.Optional[str] = None,
+        extension_key: typing.Optional[str] = None
+    ) -> None:
+        self.extension_id = extension_id
+        self.extension_key = extension_key
+        super().__init__(code="ExtensionBadResponse", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "ExtensionBadResponseError(code=%r, message=%r, extension_id=%r, extension_key=%r)"
+            % (self.code, self.message, self.extension_id, self.extension_key)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ExtensionNoResponseError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionNoResponseErrorSchema`."
+    #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
+    extension_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``extensionKey`` `in Commercetools)`
+    extension_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        extension_id: typing.Optional[str] = None,
+        extension_key: typing.Optional[str] = None
+    ) -> None:
+        self.extension_id = extension_id
+        self.extension_key = extension_key
+        super().__init__(code="ExtensionNoResponse", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "ExtensionNoResponseError(code=%r, message=%r, extension_id=%r, extension_key=%r)"
+            % (self.code, self.message, self.extension_id, self.extension_key)
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ExtensionUpdateActionsFailedError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionsFailedErrorSchema`."
+    #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
+    extension_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``extensionKey`` `in Commercetools)`
+    extension_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        extension_id: typing.Optional[str] = None,
+        extension_key: typing.Optional[str] = None
+    ) -> None:
+        self.extension_id = extension_id
+        self.extension_key = extension_key
+        super().__init__(code="ExtensionUpdateActionsFailed", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "ExtensionUpdateActionsFailedError(code=%r, message=%r, extension_id=%r, extension_key=%r)"
+            % (self.code, self.message, self.extension_id, self.extension_key)
         )
 
 
@@ -479,18 +654,85 @@ class InvalidTokenError(ErrorObject):
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class MissingTaxRateForCountryError(ErrorObject):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.MissingTaxRateForCountryErrorSchema`."
+class MatchingPriceNotFoundError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MatchingPriceNotFoundErrorSchema`."
+    #: :class:`str` `(Named` ``productId`` `in Commercetools)`
+    product_id: typing.Optional[str]
+    #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+    #: Optional :class:`str`
+    currency: typing.Optional[str]
+    #: Optional :class:`str`
+    country: typing.Optional[str]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.ChannelReference`
+    channel: typing.Optional["ChannelReference"]
 
     def __init__(
-        self, *, code: typing.Optional[str] = None, message: typing.Optional[str] = None
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        currency: typing.Optional[str] = None,
+        country: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        channel: typing.Optional["ChannelReference"] = None
     ) -> None:
+        self.product_id = product_id
+        self.variant_id = variant_id
+        self.currency = currency
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        super().__init__(code="MatchingPriceNotFound", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "MatchingPriceNotFoundError(code=%r, message=%r, product_id=%r, variant_id=%r, currency=%r, country=%r, customer_group=%r, channel=%r)"
+            % (
+                self.code,
+                self.message,
+                self.product_id,
+                self.variant_id,
+                self.currency,
+                self.country,
+                self.customer_group,
+                self.channel,
+            )
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class MissingTaxRateForCountryError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MissingTaxRateForCountryErrorSchema`."
+    #: :class:`str` `(Named` ``taxCategoryId`` `in Commercetools)`
+    tax_category_id: typing.Optional[str]
+    #: Optional :class:`str`
+    country: typing.Optional[str]
+    #: Optional :class:`str`
+    state: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        code: typing.Optional[str] = None,
+        message: typing.Optional[str] = None,
+        tax_category_id: typing.Optional[str] = None,
+        country: typing.Optional[str] = None,
+        state: typing.Optional[str] = None
+    ) -> None:
+        self.tax_category_id = tax_category_id
+        self.country = country
+        self.state = state
         super().__init__(code="MissingTaxRateForCountry", message=message)
 
     def __repr__(self) -> str:
-        return "MissingTaxRateForCountryError(code=%r, message=%r)" % (
-            self.code,
-            self.message,
+        return (
+            "MissingTaxRateForCountryError(code=%r, message=%r, tax_category_id=%r, country=%r, state=%r)"
+            % (self.code, self.message, self.tax_category_id, self.country, self.state)
         )
 
 

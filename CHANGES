@@ -3,6 +3,7 @@
 - Fix cart create function using incorrect schema
 - Add update actions to carts testing backend
 - Add update actions to orders testing backend
+- Regenerate code based on new commercetools-api-reference definition
 
 2.4.0 (2019-02-13)
 ------------------

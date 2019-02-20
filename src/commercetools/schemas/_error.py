@@ -12,10 +12,15 @@ __all__ = [
     "DuplicateAttributeValueErrorSchema",
     "DuplicateAttributeValuesErrorSchema",
     "DuplicateFieldErrorSchema",
+    "DuplicateFieldWithConflictingResourceErrorSchema",
     "DuplicatePriceScopeErrorSchema",
     "DuplicateVariantValuesErrorSchema",
+    "EnumValueIsUsedErrorSchema",
     "ErrorObjectSchema",
     "ErrorResponseSchema",
+    "ExtensionBadResponseErrorSchema",
+    "ExtensionNoResponseErrorSchema",
+    "ExtensionUpdateActionsFailedErrorSchema",
     "InsufficientScopeErrorSchema",
     "InvalidCredentialsErrorSchema",
     "InvalidCurrentPasswordErrorSchema",
@@ -26,6 +31,7 @@ __all__ = [
     "InvalidOperationErrorSchema",
     "InvalidSubjectErrorSchema",
     "InvalidTokenErrorSchema",
+    "MatchingPriceNotFoundErrorSchema",
     "MissingTaxRateForCountryErrorSchema",
     "NoMatchingProductDiscountFoundErrorSchema",
     "OutOfStockErrorSchema",
@@ -68,8 +74,13 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "DuplicateAttributeValue": "commercetools.schemas._error.DuplicateAttributeValueErrorSchema",
                 "DuplicateAttributeValues": "commercetools.schemas._error.DuplicateAttributeValuesErrorSchema",
                 "DuplicateField": "commercetools.schemas._error.DuplicateFieldErrorSchema",
+                "DuplicateFieldWithConflictingResource": "commercetools.schemas._error.DuplicateFieldWithConflictingResourceErrorSchema",
                 "DuplicatePriceScope": "commercetools.schemas._error.DuplicatePriceScopeErrorSchema",
                 "DuplicateVariantValues": "commercetools.schemas._error.DuplicateVariantValuesErrorSchema",
+                "EnumValueIsUsed": "commercetools.schemas._error.EnumValueIsUsedErrorSchema",
+                "ExtensionBadResponse": "commercetools.schemas._error.ExtensionBadResponseErrorSchema",
+                "ExtensionNoResponse": "commercetools.schemas._error.ExtensionNoResponseErrorSchema",
+                "ExtensionUpdateActionsFailed": "commercetools.schemas._error.ExtensionUpdateActionsFailedErrorSchema",
                 "insufficient_scope": "commercetools.schemas._error.InsufficientScopeErrorSchema",
                 "InvalidCredentials": "commercetools.schemas._error.InvalidCredentialsErrorSchema",
                 "InvalidCurrentPassword": "commercetools.schemas._error.InvalidCurrentPasswordErrorSchema",
@@ -80,6 +91,7 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "InvalidOperation": "commercetools.schemas._error.InvalidOperationErrorSchema",
                 "InvalidSubject": "commercetools.schemas._error.InvalidSubjectErrorSchema",
                 "invalid_token": "commercetools.schemas._error.InvalidTokenErrorSchema",
+                "MatchingPriceNotFound": "commercetools.schemas._error.MatchingPriceNotFoundErrorSchema",
                 "MissingTaxRateForCountry": "commercetools.schemas._error.MissingTaxRateForCountryErrorSchema",
                 "NoMatchingProductDiscountFound": "commercetools.schemas._error.NoMatchingProductDiscountFoundErrorSchema",
                 "OutOfStock": "commercetools.schemas._error.OutOfStockErrorSchema",
@@ -157,6 +169,20 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
 
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeNonApplicableError`."
+    discount_code = marshmallow.fields.String(allow_none=True, data_key="discountCode")
+    reason = marshmallow.fields.String(allow_none=True)
+    dicount_code_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="dicountCodeId"
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
+    validity_check_time = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validityCheckTime"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -204,10 +230,8 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DuplicateFieldError`."
-    field = marshmallow.fields.String(allow_none=True, missing=None)
-    duplicate_value = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="duplicateValue"
-    )
+    field = marshmallow.fields.String(allow_none=True)
+    duplicate_value = marshmallow.fields.Raw(allow_none=True, data_key="duplicateValue")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -216,6 +240,50 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
     def post_load(self, data):
         del data["code"]
         return types.DuplicateFieldError(**data)
+
+
+class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.DuplicateFieldWithConflictingResourceError`."
+    field = marshmallow.fields.String(allow_none=True)
+    duplicate_value = marshmallow.fields.Raw(allow_none=True, data_key="duplicateValue")
+    conflicting_resource = helpers.Discriminator(
+        discriminator_field=("typeId", "type_id"),
+        discriminator_schemas={
+            "cart-discount": "commercetools.schemas._cart_discount.CartDiscountReferenceSchema",
+            "cart": "commercetools.schemas._cart.CartReferenceSchema",
+            "category": "commercetools.schemas._category.CategoryReferenceSchema",
+            "channel": "commercetools.schemas._channel.ChannelReferenceSchema",
+            "key-value-document": "commercetools.schemas._custom_object.CustomObjectReferenceSchema",
+            "customer-group": "commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+            "customer": "commercetools.schemas._customer.CustomerReferenceSchema",
+            "discount-code": "commercetools.schemas._discount_code.DiscountCodeReferenceSchema",
+            "inventory-entry": "commercetools.schemas._inventory.InventoryEntryReferenceSchema",
+            "order-edit": "commercetools.schemas._order_edit.OrderEditReferenceSchema",
+            "order": "commercetools.schemas._order.OrderReferenceSchema",
+            "payment": "commercetools.schemas._payment.PaymentReferenceSchema",
+            "product-discount": "commercetools.schemas._product_discount.ProductDiscountReferenceSchema",
+            "product-type": "commercetools.schemas._product_type.ProductTypeReferenceSchema",
+            "product": "commercetools.schemas._product.ProductReferenceSchema",
+            "review": "commercetools.schemas._review.ReviewReferenceSchema",
+            "shipping-method": "commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
+            "shopping-list": "commercetools.schemas._shopping_list.ShoppingListReferenceSchema",
+            "state": "commercetools.schemas._state.StateReferenceSchema",
+            "tax-category": "commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+            "type": "commercetools.schemas._type.TypeReferenceSchema",
+            "zone": "commercetools.schemas._zone.ZoneReferenceSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="conflictingResource",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.DuplicateFieldWithConflictingResourceError(**data)
 
 
 class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
@@ -253,6 +321,66 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
     def post_load(self, data):
         del data["code"]
         return types.DuplicateVariantValuesError(**data)
+
+
+class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.EnumValueIsUsedError`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.EnumValueIsUsedError(**data)
+
+
+class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.ExtensionBadResponseError`."
+    extension_id = marshmallow.fields.String(allow_none=True, data_key="extensionId")
+    extension_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="extensionKey"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.ExtensionBadResponseError(**data)
+
+
+class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.ExtensionNoResponseError`."
+    extension_id = marshmallow.fields.String(allow_none=True, data_key="extensionId")
+    extension_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="extensionKey"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.ExtensionNoResponseError(**data)
+
+
+class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.ExtensionUpdateActionsFailedError`."
+    extension_id = marshmallow.fields.String(allow_none=True, data_key="extensionId")
+    extension_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="extensionKey"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.ExtensionUpdateActionsFailedError(**data)
 
 
 class InsufficientScopeErrorSchema(ErrorObjectSchema):
@@ -389,8 +517,42 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
         return types.InvalidTokenError(**data)
 
 
+class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.MatchingPriceNotFoundError`."
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    currency = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(allow_none=True, missing=None)
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="customerGroup",
+    )
+    channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["code"]
+        return types.MatchingPriceNotFoundError(**data)
+
+
 class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.MissingTaxRateForCountryError`."
+    tax_category_id = marshmallow.fields.String(
+        allow_none=True, data_key="taxCategoryId"
+    )
+    country = marshmallow.fields.String(allow_none=True, missing=None)
+    state = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE

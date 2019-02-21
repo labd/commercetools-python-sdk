@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -35,6 +36,41 @@ class OrdersModel(BaseModel):
         return order
 
 
+def add_delivery():
+    def updater(self, obj, action):
+        parcels: typing.List[types.ParcelDraft] = getattr(action, "parcels")
+        delivery = types.Delivery(
+            id=str(uuid.uuid4()),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            parcels=[
+                types.Parcel(
+                    id=str(uuid.uuid4()),
+                    created_at=datetime.datetime.now(datetime.timezone.utc),
+                    measurements=parcel_draft.measurements,
+                    tracking_data=parcel_draft.tracking_data,
+                    items=parcel_draft.items,
+                )
+                for parcel_draft in parcels
+            ],
+        )
+
+        if not obj["shippingInfo"]:
+            obj["shippingInfo"] = schemas.ShippingInfoSchema().dump(
+                types.ShippingInfo(deliveries=[])
+            )
+        elif not obj["shippingInfo"]["deliveries"]:
+            obj["shippingInfo"]["deliveries"] = []
+
+        value = schemas.DeliverySchema().dump(delivery)
+        if value not in obj["shippingInfo"]["deliveries"]:
+            new = copy.deepcopy(obj)
+            new["shippingInfo"]["deliveries"].append(value)
+            return new
+        return obj
+
+    return updater
+
+
 class OrdersBackend(ServiceBackend):
     service_path = "orders"
     model_class = OrdersModel
@@ -56,4 +92,5 @@ class OrdersBackend(ServiceBackend):
         "changeOrderState": update_enum_attribute("orderState", "order_state"),
         "changePaymentState": update_enum_attribute("paymentState", "payment_state"),
         "changeShipmentState": update_enum_attribute("shipmentState", "shipment_state"),
+        "addDelivery": add_delivery(),
     }

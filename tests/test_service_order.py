@@ -18,7 +18,7 @@ def test_add_existing_order(commercetools_api, client):
     assert client.orders.get_by_id(order.id).order_number == order.order_number
 
 
-def test_update_actions(commercetools_api, client):
+def test_update_order_state_action(commercetools_api, client):
     order = get_test_order()
 
     commercetools_api.orders.add_existing(order)
@@ -32,6 +32,33 @@ def test_update_actions(commercetools_api, client):
     )
 
     assert updated_order.order_state == types.OrderState.CONFIRMED
+
+
+def test_update_order_add_delivery(commercetools_api, client):
+    order = get_test_order()
+
+    commercetools_api.orders.add_existing(order)
+
+    updated_order = client.orders.update_by_id(
+        order.id,
+        order.version,
+        actions=[
+            types.OrderAddDeliveryAction(
+                parcels=[
+                    types.ParcelDraft(
+                        tracking_data=types.TrackingData(
+                            tracking_id="123", carrier="Test Carrier"
+                        )
+                    )
+                ]
+            )
+        ],
+    )
+
+    assert (
+        updated_order.shipping_info.deliveries[0].parcels[0].tracking_data.tracking_id
+        == "123"
+    )
 
 
 def get_test_order():

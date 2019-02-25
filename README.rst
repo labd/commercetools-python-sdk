@@ -1,6 +1,6 @@
 .. start-no-pypi
-.. image:: https://travis-ci.org/labd/commercetools-python-sdk.svg?branch=master
-    :target: https://travis-ci.org/labd/commercetools-python-sdk
+.. image:: https://dev.azure.com/lab-digital/commercetools-python-sdk/_apis/build/status/labd.commercetools-python-sdk?branchName=master
+    :target: https://dev.azure.com/lab-digital/commercetools-python-sdk/
 
 .. image:: http://codecov.io/github/labd/commercetools-python-sdk/coverage.svg?branch=master
     :target: http://codecov.io/github/labd/commercetools-python-sdk?branch=master

@@ -1,10 +1,15 @@
 import copy
+import json
 import typing
 
 from marshmallow import Schema
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import types
+
+
+class InternalUpdateError(ValueError):
+    pass
 
 
 def parse_request_params(schema: Schema, request: _RequestObjectProxy) -> dict:
@@ -89,6 +94,11 @@ def update_attribute_add_item(dst: str, src: str, schema: Schema):
             new = copy.deepcopy(obj)
             new[dst].append(value)
             return new
+        else:
+            raise InternalUpdateError(
+                "Duplicate value %r exists for field %s on %r"
+                % (json.dumps(value), dst, obj["id"])
+            )
         return obj
 
     return updater
@@ -113,7 +123,7 @@ def update_attribute_delete_item_by_id(dst: str, src: str):
 
         new = copy.deepcopy(obj)
         for i, item in enumerate(obj[dst]):
-            if item['id'] == value:
+            if item["id"] == value:
                 del new[dst][i]
                 return new
 

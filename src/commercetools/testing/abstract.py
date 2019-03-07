@@ -214,7 +214,7 @@ class ServiceBackend(BaseBackend):
     def _validate_resource_version(self, request, obj):
         update_version = self._get_version_from_request(request)
         if update_version != obj["version"]:
-            data = self._create_error_response(obj["version"])
+            data = self._create_version_error_response(obj["version"])
             return create_response(request, json=data, status_code=409)
 
     def _get_version_from_request(self, request):
@@ -231,12 +231,15 @@ class ServiceBackend(BaseBackend):
             if not func:
                 print("Missing action for", action.action)
                 continue
-            obj = func(self, obj, action)
+            try:
+                obj = func(self, obj, action)
+            except utils.InternalUpdateError as exc:
+                return None, self._create_data_error_response(str(exc), obj)
 
         # Save the updated object to the model
         if obj != original_obj:
             if obj["version"] != update.version:
-                return None, self._create_error_response(obj["version"])
+                return None, self._create_version_error_response(obj["version"])
             self.model.save(obj)
 
         # Temporary
@@ -245,7 +248,22 @@ class ServiceBackend(BaseBackend):
 
         return obj, None
 
-    def _create_error_response(self, version):
+    def _create_data_error_response(self, message, obj):
+        return schemas.ErrorResponseSchema().dump(
+            types.ErrorResponse(
+                status_code=400,
+                message=message,
+                errors=[
+                    types.ConcurrentModificationError(
+                        message=message,
+                        current_version=obj['version']
+                    )
+                ],
+            )
+        )
+
+
+    def _create_version_error_response(self, version):
         return schemas.ErrorResponseSchema().dump(
             types.ErrorResponse(
                 status_code=409,

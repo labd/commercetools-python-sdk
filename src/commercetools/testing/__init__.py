@@ -24,6 +24,7 @@ from commercetools.testing.shipping_methods import ShippingMethodsBackend
 from commercetools.testing.subscriptions import SubscriptionsBackend
 from commercetools.testing.tax_categories import TaxCategoryBackend
 from commercetools.testing.types import TypesBackend
+from commercetools.testing.zones import ZonesBackend
 
 requests_mock.mock.case_sensitive = True
 
@@ -78,6 +79,7 @@ class BackendRepository:
         self.tax_categories = TaxCategoryBackend(self._storage)
         self.types = TypesBackend(self._storage)
         self.subscriptions = SubscriptionsBackend(self._storage)
+        self.zones = ZonesBackend(self._storage)
 
     def register(self, adapter):
         # Bit of a hack, but it works and makes life easier so hey :-)

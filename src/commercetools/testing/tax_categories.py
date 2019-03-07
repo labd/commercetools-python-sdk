@@ -4,6 +4,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute
 
 
 class TaxCategoryModel(BaseModel):
@@ -62,3 +63,9 @@ class TaxCategoryBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
+
+    _actions = {
+        "changeName": update_attribute("name", "name"),
+        "setKey": update_attribute("key", "key"),
+        "setDescription": update_attribute("description", "description"),
+    }

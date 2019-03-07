@@ -4,7 +4,11 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute
+from commercetools.testing.utils import (
+    update_attribute,
+    update_attribute_add_item,
+    update_attribute_delete_item_by_id,
+)
 
 
 class TaxCategoryModel(BaseModel):
@@ -68,4 +72,10 @@ class TaxCategoryBackend(ServiceBackend):
         "changeName": update_attribute("name", "name"),
         "setKey": update_attribute("key", "key"),
         "setDescription": update_attribute("description", "description"),
+        "addTaxRate": update_attribute_add_item(
+            "rates", "tax_rate", schemas.TaxRateSchema
+        ),
+        "removeTaxRate": update_attribute_delete_item_by_id(
+            "rates", "tax_rate_id",
+        ),
     }

@@ -53,9 +53,9 @@ class ZonesBackend(ServiceBackend):
         "setKey": update_attribute("key", "key"),
         "setDescription": update_attribute("description", "description"),
         "addLocation": update_attribute_add_item(
-            "locations", "locations", types.Location
+            "locations", "location", schemas.LocationSchema
         ),
         "removeLocation": update_attribute_delete_item(
-            "locations", "locations", types.Location
+            "locations", "location", schemas.LocationSchema
         ),
     }

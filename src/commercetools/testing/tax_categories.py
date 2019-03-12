@@ -1,4 +1,6 @@
 import datetime
+import random
+import string
 import typing
 import uuid
 
@@ -38,6 +40,7 @@ class TaxCategoryModel(BaseModel):
             return result
         for draft in drafts:
             obj = types.TaxRate(
+                id="".join(random.choices(string.ascii_uppercase + string.digits, k=6)),
                 name=draft.name,
                 amount=draft.amount,
                 included_in_price=draft.included_in_price,

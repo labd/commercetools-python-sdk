@@ -112,6 +112,10 @@ def update_attribute_delete_item(dst: str, src: str, schema: Schema):
             new = copy.deepcopy(obj)
             new[dst].remove(value)
             return new
+        else:
+            raise InternalUpdateError(
+                "No item found with id %r" % (obj["id"])
+            )
         return obj
 
     return updater
@@ -127,6 +131,6 @@ def update_attribute_delete_item_by_id(dst: str, src: str):
                 del new[dst][i]
                 return new
 
-        return obj
+        raise InternalUpdateError("No item found with id %r" % value)
 
     return updater

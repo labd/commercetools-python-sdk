@@ -37,12 +37,15 @@ jobs:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: "3.7"
-    - script: "pip install twine"
+    - script: |
+        python -m pip install --upgrade pip
+        pip3 install --upgrade twine
+        pip3 install --upgrade wheel
       displayName: "Install twine"
     - task: TwineAuthenticate@0
       inputs:
         artifactFeeds: "PythonArtifacts"
-    - script: "python setup.py bdist_wheel"
+    - script: "python setup.py sdist bdist_wheel"
       displayName: "Build wheel package"
     - script: "twine upload -r PythonArtifacts --config-file $(PYPIRC_PATH) dist/*"
       displayName: "Upload to AzureArtifacts"

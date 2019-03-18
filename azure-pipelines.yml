@@ -13,7 +13,7 @@ jobs:
     steps:
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: '$(python.version)'
+          versionSpec: "$(python.version)"
       - script: |
           python -m pip install --upgrade pip
           pip3 install --upgrade setuptools
@@ -31,16 +31,18 @@ jobs:
     pool:
       vmImage: "ubuntu-16.04"
     dependsOn: Test
-    condition: in(variables['Build.SourceBranch'], 'refs/heads/master')
+    condition: in(variables['Build.SourceBranch'], "refs/heads/master")
     displayName: "Determine whether to publish artifact"
     steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '$(python.version)'
-    - script: 'pip install twine'
+        versionSpec: "$(python.version)"
+    - script: "pip install twine"
       displayName: "Install twine"
     - task: TwineAuthenticate@0
       inputs:
-        artifactFeeds: 'PythonArtifacts'
-    - script: 'twine upload -r PythonArtifacts/commercetools --config-file $(PYPIRC_PATH) commercetools'
+        artifactFeeds: "PythonArtifacts"
+    - script: "python setup.py bdist_wheel"
+      displayName: "Build wheel package"
+    - script: "twine upload -r PythonArtifacts --config-file $(PYPIRC_PATH) dist/*"
       displayName: "Upload to AzureArtifacts"

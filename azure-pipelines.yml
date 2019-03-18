@@ -32,7 +32,7 @@ jobs:
       vmImage: "ubuntu-16.04"
     dependsOn: Test
     condition: in(variables['Build.SourceBranch'], 'refs/heads/master')
-    displayName: "Determine whether to publish artifact"
+    displayName: "Publish artifacts"
     steps:
     - task: UsePythonVersion@0
       inputs:

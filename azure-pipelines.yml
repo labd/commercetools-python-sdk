@@ -36,7 +36,7 @@ jobs:
     steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: "$(python.version)"
+        versionSpec: "3.7"
     - script: "pip install twine"
       displayName: "Install twine"
     - task: TwineAuthenticate@0

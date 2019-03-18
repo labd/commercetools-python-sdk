@@ -86,9 +86,11 @@ def update_enum_attribute(dst: str, src: str):
     return updater
 
 
-def update_attribute_add_item(dst: str, src: str, schema: Schema):
+def update_attribute_add_item(dst: str, src: str, schema: Schema, id_generator: typing.Optional[typing.Callable]=None):
     def updater(self, obj, action):
         value = getattr(action, src)
+        if id_generator:
+            value.id = id_generator()
         value = schema().dump(value)
         if value not in obj[dst]:
             new = copy.deepcopy(obj)

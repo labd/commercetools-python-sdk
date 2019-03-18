@@ -13,6 +13,10 @@ from commercetools.testing.utils import (
 )
 
 
+def generate_tax_rate_id():
+    return "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+
 class TaxCategoryModel(BaseModel):
     _primary_type_name = "tax-category"
     _resource_schema = schemas.TaxCategorySchema
@@ -40,7 +44,7 @@ class TaxCategoryModel(BaseModel):
             return result
         for draft in drafts:
             obj = types.TaxRate(
-                id="".join(random.choices(string.ascii_uppercase + string.digits, k=6)),
+                id=generate_tax_rate_id(),
                 name=draft.name,
                 amount=draft.amount,
                 included_in_price=draft.included_in_price,
@@ -50,6 +54,24 @@ class TaxCategoryModel(BaseModel):
             )
             result.append(obj)
         return result
+
+
+def add_tax_rate_action():
+    return update_attribute_add_item(
+        "rates", "tax_rate", schemas.TaxRateSchema, generate_tax_rate_id)
+
+
+def replace_tax_rate_action():
+    delete_action = update_attribute_delete_item_by_id(
+        "rates", "tax_rate_id",
+    )
+    add_action = add_tax_rate_action()
+
+    def updater(self, obj, action):
+        obj = delete_action(self, obj, action)
+        return add_action(self, obj, action)
+
+    return updater
 
 
 class TaxCategoryBackend(ServiceBackend):
@@ -75,10 +97,9 @@ class TaxCategoryBackend(ServiceBackend):
         "changeName": update_attribute("name", "name"),
         "setKey": update_attribute("key", "key"),
         "setDescription": update_attribute("description", "description"),
-        "addTaxRate": update_attribute_add_item(
-            "rates", "tax_rate", schemas.TaxRateSchema
-        ),
+        "addTaxRate": add_tax_rate_action(),
         "removeTaxRate": update_attribute_delete_item_by_id(
             "rates", "tax_rate_id",
         ),
+        "replaceTaxRate": replace_tax_rate_action(),
     }

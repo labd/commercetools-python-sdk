@@ -1,3 +1,7 @@
+2.4.2 (2019-03-18)
+------------------
+- Tax rates ids are now correctly generated
+
 2.4.1 (2019-02-21)
 ------------------
 - Fix cart create function using incorrect schema

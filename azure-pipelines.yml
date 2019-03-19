@@ -34,18 +34,13 @@ jobs:
     condition: in(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: "Publish artifacts"
     steps:
-    - task: UsePythonVersion@0
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
       inputs:
-        versionSpec: "3.7"
-    - script: |
-        python -m pip install --upgrade pip
-        pip3 install --upgrade twine
-        pip3 install --upgrade wheel
-      displayName: "Install twine"
-    - task: TwineAuthenticate@0
-      inputs:
-        artifactFeeds: "PythonArtifacts"
-    - script: "python setup.py sdist bdist_wheel"
-      displayName: "Build wheel package"
-    - script: "twine upload -r PythonArtifacts --config-file $(PYPIRC_PATH) dist/*"
-      displayName: "Upload to AzureArtifacts"
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: |
+         **/*
+         !.git/**/*
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      displayName: drop

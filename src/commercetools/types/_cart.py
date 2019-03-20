@@ -556,6 +556,8 @@ class ExternalTaxRateDraft:
     state: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
     sub_rates: typing.Optional[typing.List["SubRate"]]
+    #: Optional :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
+    included_in_price: typing.Optional[bool]
 
     def __init__(
         self,
@@ -564,18 +566,27 @@ class ExternalTaxRateDraft:
         amount: typing.Optional[int] = None,
         country: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None,
+        included_in_price: typing.Optional[bool] = None
     ) -> None:
         self.name = name
         self.amount = amount
         self.country = country
         self.state = state
         self.sub_rates = sub_rates
+        self.included_in_price = included_in_price
 
     def __repr__(self) -> str:
         return (
-            "ExternalTaxRateDraft(name=%r, amount=%r, country=%r, state=%r, sub_rates=%r)"
-            % (self.name, self.amount, self.country, self.state, self.sub_rates)
+            "ExternalTaxRateDraft(name=%r, amount=%r, country=%r, state=%r, sub_rates=%r, included_in_price=%r)"
+            % (
+                self.name,
+                self.amount,
+                self.country,
+                self.state,
+                self.sub_rates,
+                self.included_in_price,
+            )
         )
 
 

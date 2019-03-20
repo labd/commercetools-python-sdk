@@ -1335,6 +1335,8 @@ class ProductAddVariantAction(ProductUpdateAction):
     attributes: typing.Optional[typing.List["Attribute"]]
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
+    #: Optional list of :class:`commercetools.types.Asset`
+    assets: typing.Optional[typing.List["Asset"]]
 
     def __init__(
         self,
@@ -1346,6 +1348,7 @@ class ProductAddVariantAction(ProductUpdateAction):
         images: typing.Optional[typing.List["Image"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         staged: typing.Optional[bool] = None,
+        assets: typing.Optional[typing.List["Asset"]] = None,
     ) -> None:
         self.sku = sku
         self.key = key
@@ -1353,11 +1356,12 @@ class ProductAddVariantAction(ProductUpdateAction):
         self.images = images
         self.attributes = attributes
         self.staged = staged
+        self.assets = assets
         super().__init__(action="addVariant")
 
     def __repr__(self) -> str:
         return (
-            "ProductAddVariantAction(action=%r, sku=%r, key=%r, prices=%r, images=%r, attributes=%r, staged=%r)"
+            "ProductAddVariantAction(action=%r, sku=%r, key=%r, prices=%r, images=%r, attributes=%r, staged=%r, assets=%r)"
             % (
                 self.action,
                 self.sku,
@@ -1366,6 +1370,7 @@ class ProductAddVariantAction(ProductUpdateAction):
                 self.images,
                 self.attributes,
                 self.staged,
+                self.assets,
             )
         )
 

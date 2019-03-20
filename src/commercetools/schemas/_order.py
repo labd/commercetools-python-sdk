@@ -79,7 +79,7 @@ __all__ = [
     "ReturnInfoSchema",
     "ReturnItemDraftSchema",
     "ReturnItemSchema",
-    "ShippingInfoDraftSchema",
+    "ShippingInfoImportDraftSchema",
     "StagedOrderUpdateActionSchema",
     "SyncInfoSchema",
     "TaxedItemPriceDraftSchema",
@@ -202,6 +202,13 @@ class LineItemImportDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="supplyChannel",
     )
+    distribution_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="distributionChannel",
+    )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxRateSchema",
         unknown=marshmallow.EXCLUDE,
@@ -322,7 +329,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         types.PaymentState, by_value=True, missing=None, data_key="paymentState"
     )
     shipping_info = marshmallow.fields.Nested(
-        nested="commercetools.schemas._order.ShippingInfoDraftSchema",
+        nested="commercetools.schemas._order.ShippingInfoImportDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -786,11 +793,16 @@ class ProductVariantImportDraftSchema(marshmallow.Schema):
 
 class ReturnInfoSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReturnInfo`."
-    items = marshmallow.fields.Nested(
-        nested="commercetools.schemas._order.ReturnItemSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    items = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "CustomLineItemReturnItem": "commercetools.schemas._order.CustomLineItemReturnItemSchema",
+                "LineItemReturnItem": "commercetools.schemas._order.LineItemReturnItemSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
     return_tracking_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="returnTrackingId"
@@ -851,11 +863,12 @@ class ReturnItemSchema(marshmallow.Schema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ReturnItem(**data)
 
 
-class ShippingInfoDraftSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.ShippingInfoDraft`."
+class ShippingInfoImportDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ShippingInfoImportDraft`."
     shipping_method_name = marshmallow.fields.String(
         allow_none=True, data_key="shippingMethodName"
     )
@@ -869,13 +882,6 @@ class ShippingInfoDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
-    )
-    taxed_price = marshmallow.fields.Nested(
-        nested="commercetools.schemas._order.TaxedItemPriceDraftSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="taxedPrice",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxRateSchema",
@@ -924,7 +930,7 @@ class ShippingInfoDraftSchema(marshmallow.Schema):
 
     @marshmallow.post_load
     def post_load(self, data):
-        return types.ShippingInfoDraft(**data)
+        return types.ShippingInfoImportDraft(**data)
 
 
 class StagedOrderUpdateActionSchema(marshmallow.Schema):
@@ -1016,6 +1022,7 @@ class CustomLineItemReturnItemSchema(ReturnItemSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomLineItemReturnItem(**data)
 
 
@@ -1028,6 +1035,7 @@ class LineItemReturnItemSchema(ReturnItemSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.LineItemReturnItem(**data)
 
 

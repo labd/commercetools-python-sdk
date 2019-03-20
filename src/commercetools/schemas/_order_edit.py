@@ -2182,6 +2182,8 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "ProductCreated": "commercetools.schemas._message.ProductCreatedMessagePayloadSchema",
                 "ProductDeleted": "commercetools.schemas._message.ProductDeletedMessagePayloadSchema",
                 "ProductImageAdded": "commercetools.schemas._message.ProductImageAddedMessagePayloadSchema",
+                "ProductPriceDiscountsSet": "commercetools.schemas._message.ProductPriceDiscountsSetMessagePayloadSchema",
+                "ProductPriceExternalDiscountSet": "commercetools.schemas._message.ProductPriceExternalDiscountSetMessagePayloadSchema",
                 "ProductPublished": "commercetools.schemas._message.ProductPublishedMessagePayloadSchema",
                 "ProductRevertedStagedChanges": "commercetools.schemas._message.ProductRevertedStagedChangesMessagePayloadSchema",
                 "ProductSlugChanged": "commercetools.schemas._message.ProductSlugChangedMessagePayloadSchema",

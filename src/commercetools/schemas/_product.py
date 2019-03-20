@@ -1098,6 +1098,13 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
         missing=None,
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
+    assets = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AssetSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

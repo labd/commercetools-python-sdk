@@ -755,6 +755,9 @@ class ExternalTaxRateDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="subRates",
     )
+    included_in_price = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="includedInPrice"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

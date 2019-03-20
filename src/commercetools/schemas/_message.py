@@ -119,6 +119,11 @@ __all__ = [
     "ProductDeletedMessageSchema",
     "ProductImageAddedMessagePayloadSchema",
     "ProductImageAddedMessageSchema",
+    "ProductPriceDiscountsSetMessagePayloadSchema",
+    "ProductPriceDiscountsSetMessageSchema",
+    "ProductPriceDiscountsSetUpdatedPriceSchema",
+    "ProductPriceExternalDiscountSetMessagePayloadSchema",
+    "ProductPriceExternalDiscountSetMessageSchema",
     "ProductPublishedMessagePayloadSchema",
     "ProductPublishedMessageSchema",
     "ProductRevertedStagedChangesMessagePayloadSchema",
@@ -137,6 +142,7 @@ __all__ = [
     "ReviewRatingSetMessageSchema",
     "ReviewStateTransitionMessagePayloadSchema",
     "ReviewStateTransitionMessageSchema",
+    "UserProvidedIdentifiersSchema",
 ]
 
 
@@ -238,6 +244,13 @@ class MessageSchema(ResourceSchema):
         allow_none=True, data_key="resourceVersion"
     )
     type = marshmallow.fields.String(allow_none=True)
+    resource_user_provided_identifiers = marshmallow.fields.Nested(
+        nested="commercetools.schemas._message.UserProvidedIdentifiersSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="resourceUserProvidedIdentifiers",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -245,6 +258,53 @@ class MessageSchema(ResourceSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.Message(**data)
+
+
+class ProductPriceDiscountsSetUpdatedPriceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ProductPriceDiscountsSetUpdatedPrice`."
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="variantKey"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    discounted = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.DiscountedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    staged = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ProductPriceDiscountsSetUpdatedPrice(**data)
+
+
+class UserProvidedIdentifiersSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.UserProvidedIdentifiers`."
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    order_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderNumber"
+    )
+    customer_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerNumber"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    slug = LocalizedStringField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.UserProvidedIdentifiers(**data)
 
 
 class CategoryCreatedMessagePayloadSchema(MessagePayloadSchema):
@@ -2334,6 +2394,92 @@ class ProductImageAddedMessageSchema(MessageSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.ProductImageAddedMessage(**data)
+
+
+class ProductPriceDiscountsSetMessagePayloadSchema(MessagePayloadSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductPriceDiscountsSetMessagePayload`."
+    updated_prices = marshmallow.fields.Nested(
+        nested="commercetools.schemas._message.ProductPriceDiscountsSetUpdatedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="updatedPrices",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductPriceDiscountsSetMessagePayload(**data)
+
+
+class ProductPriceDiscountsSetMessageSchema(MessageSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductPriceDiscountsSetMessage`."
+    updated_prices = marshmallow.fields.Nested(
+        nested="commercetools.schemas._message.ProductPriceDiscountsSetUpdatedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="updatedPrices",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ProductPriceDiscountsSetMessage(**data)
+
+
+class ProductPriceExternalDiscountSetMessagePayloadSchema(MessagePayloadSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductPriceExternalDiscountSetMessagePayload`."
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="variantKey"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    discounted = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.DiscountedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    staged = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductPriceExternalDiscountSetMessagePayload(**data)
+
+
+class ProductPriceExternalDiscountSetMessageSchema(MessageSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductPriceExternalDiscountSetMessage`."
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="variantKey"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    discounted = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.DiscountedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    staged = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ProductPriceExternalDiscountSetMessage(**data)
 
 
 class ProductPublishedMessagePayloadSchema(MessagePayloadSchema):

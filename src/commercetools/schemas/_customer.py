@@ -89,6 +89,9 @@ class CustomerCreateEmailTokenSchema(marshmallow.Schema):
 class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerCreatePasswordResetToken`."
     email = marshmallow.fields.String(allow_none=True)
+    ttl_minutes = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="ttlMinutes"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

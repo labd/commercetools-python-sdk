@@ -123,12 +123,23 @@ class CustomerCreatePasswordResetToken:
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatePasswordResetTokenSchema`."
     #: :class:`str`
     email: typing.Optional[str]
+    #: Optional :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
+    ttl_minutes: typing.Optional[int]
 
-    def __init__(self, *, email: typing.Optional[str] = None) -> None:
+    def __init__(
+        self,
+        *,
+        email: typing.Optional[str] = None,
+        ttl_minutes: typing.Optional[int] = None
+    ) -> None:
         self.email = email
+        self.ttl_minutes = ttl_minutes
 
     def __repr__(self) -> str:
-        return "CustomerCreatePasswordResetToken(email=%r)" % (self.email,)
+        return "CustomerCreatePasswordResetToken(email=%r, ttl_minutes=%r)" % (
+            self.email,
+            self.ttl_minutes,
+        )
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)

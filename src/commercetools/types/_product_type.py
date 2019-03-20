@@ -39,6 +39,7 @@ __all__ = [
     "ProductTypeChangeAttributeConstraintAction",
     "ProductTypeChangeAttributeNameAction",
     "ProductTypeChangeAttributeOrderAction",
+    "ProductTypeChangeAttributeOrderByNameAction",
     "ProductTypeChangeDescriptionAction",
     "ProductTypeChangeEnumKeyAction",
     "ProductTypeChangeInputHintAction",
@@ -752,6 +753,28 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
         return "ProductTypeChangeAttributeOrderAction(action=%r, attributes=%r)" % (
             self.action,
             self.attributes,
+        )
+
+
+@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderByNameActionSchema`."
+    #: List of :class:`str` `(Named` ``attributeNames`` `in Commercetools)`
+    attribute_names: typing.Optional[typing.List[str]]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        attribute_names: typing.Optional[typing.List[str]] = None
+    ) -> None:
+        self.attribute_names = attribute_names
+        super().__init__(action="changeAttributeOrderByName")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductTypeChangeAttributeOrderByNameAction(action=%r, attribute_names=%r)"
+            % (self.action, self.attribute_names)
         )
 
 

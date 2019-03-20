@@ -11,6 +11,7 @@ from commercetools.types._common import Resource
 
 if typing.TYPE_CHECKING:
     from ._common import Reference
+    from ._message import UserProvidedIdentifiers
 __all__ = [
     "AzureEventGridDestination",
     "AzureServiceBusDestination",
@@ -139,22 +140,33 @@ class SubscriptionDelivery:
     notification_type: typing.Optional[str]
     #: :class:`commercetools.types.Reference`
     resource: typing.Optional["Reference"]
+    #: Optional :class:`commercetools.types.UserProvidedIdentifiers` `(Named` ``resourceUserProvidedIdentifiers`` `in Commercetools)`
+    resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
     def __init__(
         self,
         *,
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None
+        resource: typing.Optional["Reference"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
     ) -> None:
         self.project_key = project_key
         self.notification_type = notification_type
         self.resource = resource
+        self.resource_user_provided_identifiers = resource_user_provided_identifiers
 
     def __repr__(self) -> str:
         return (
-            "SubscriptionDelivery(project_key=%r, notification_type=%r, resource=%r)"
-            % (self.project_key, self.notification_type, self.resource)
+            "SubscriptionDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r)"
+            % (
+                self.project_key,
+                self.notification_type,
+                self.resource,
+                self.resource_user_provided_identifiers,
+            )
         )
 
 
@@ -343,6 +355,9 @@ class MessageDelivery(SubscriptionDelivery):
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
@@ -359,16 +374,20 @@ class MessageDelivery(SubscriptionDelivery):
         self.resource_version = resource_version
         self.payload_not_included = payload_not_included
         super().__init__(
-            project_key=project_key, notification_type="Message", resource=resource
+            project_key=project_key,
+            notification_type="Message",
+            resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "MessageDelivery(project_key=%r, notification_type=%r, resource=%r, id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource_version=%r, payload_not_included=%r)"
+            "MessageDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r, id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource_version=%r, payload_not_included=%r)"
             % (
                 self.project_key,
                 self.notification_type,
                 self.resource,
+                self.resource_user_provided_identifiers,
                 self.id,
                 self.version,
                 self.created_at,
@@ -394,6 +413,9 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
         version: typing.Optional[int] = None,
         modified_at: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -403,15 +425,17 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
             project_key=project_key,
             notification_type="ResourceCreated",
             resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ResourceCreatedDelivery(project_key=%r, notification_type=%r, resource=%r, version=%r, modified_at=%r)"
+            "ResourceCreatedDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r, version=%r, modified_at=%r)"
             % (
                 self.project_key,
                 self.notification_type,
                 self.resource,
+                self.resource_user_provided_identifiers,
                 self.version,
                 self.modified_at,
             )
@@ -432,6 +456,9 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
         version: typing.Optional[int] = None,
         modified_at: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -441,15 +468,17 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
             project_key=project_key,
             notification_type="ResourceDeleted",
             resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ResourceDeletedDelivery(project_key=%r, notification_type=%r, resource=%r, version=%r, modified_at=%r)"
+            "ResourceDeletedDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r, version=%r, modified_at=%r)"
             % (
                 self.project_key,
                 self.notification_type,
                 self.resource,
+                self.resource_user_provided_identifiers,
                 self.version,
                 self.modified_at,
             )
@@ -472,6 +501,9 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
         project_key: typing.Optional[str] = None,
         notification_type: typing.Optional[str] = None,
         resource: typing.Optional["Reference"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
         version: typing.Optional[int] = None,
         old_version: typing.Optional[int] = None,
         modified_at: typing.Optional[datetime.datetime] = None
@@ -483,15 +515,17 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
             project_key=project_key,
             notification_type="ResourceUpdated",
             resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ResourceUpdatedDelivery(project_key=%r, notification_type=%r, resource=%r, version=%r, old_version=%r, modified_at=%r)"
+            "ResourceUpdatedDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r, version=%r, old_version=%r, modified_at=%r)"
             % (
                 self.project_key,
                 self.notification_type,
                 self.resource,
+                self.resource_user_provided_identifiers,
                 self.version,
                 self.old_version,
                 self.modified_at,

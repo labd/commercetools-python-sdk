@@ -147,6 +147,13 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
+    resource_user_provided_identifiers = marshmallow.fields.Nested(
+        nested="commercetools.schemas._message.UserProvidedIdentifiersSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="resourceUserProvidedIdentifiers",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

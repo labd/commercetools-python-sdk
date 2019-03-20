@@ -105,7 +105,7 @@ __all__ = [
     "ReturnPaymentState",
     "ReturnShipmentState",
     "ShipmentState",
-    "ShippingInfoDraft",
+    "ShippingInfoImportDraft",
     "StagedOrderUpdateAction",
     "SyncInfo",
     "TaxedItemPriceDraft",
@@ -234,6 +234,8 @@ class LineItemImportDraft:
     state: typing.Optional[typing.List["ItemState"]]
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelReference"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: typing.Optional["TaxRate"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -251,6 +253,7 @@ class LineItemImportDraft:
         quantity: typing.Optional[int] = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
+        distribution_channel: typing.Optional["ChannelReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
@@ -262,13 +265,14 @@ class LineItemImportDraft:
         self.quantity = quantity
         self.state = state
         self.supply_channel = supply_channel
+        self.distribution_channel = distribution_channel
         self.tax_rate = tax_rate
         self.custom = custom
         self.shipping_details = shipping_details
 
     def __repr__(self) -> str:
         return (
-            "LineItemImportDraft(product_id=%r, name=%r, variant=%r, price=%r, quantity=%r, state=%r, supply_channel=%r, tax_rate=%r, custom=%r, shipping_details=%r)"
+            "LineItemImportDraft(product_id=%r, name=%r, variant=%r, price=%r, quantity=%r, state=%r, supply_channel=%r, distribution_channel=%r, tax_rate=%r, custom=%r, shipping_details=%r)"
             % (
                 self.product_id,
                 self.name,
@@ -277,6 +281,7 @@ class LineItemImportDraft:
                 self.quantity,
                 self.state,
                 self.supply_channel,
+                self.distribution_channel,
                 self.tax_rate,
                 self.custom,
                 self.shipping_details,
@@ -347,8 +352,8 @@ class OrderImportDraft:
     shipment_state: typing.Optional["ShipmentState"]
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: typing.Optional["PaymentState"]
-    #: Optional :class:`commercetools.types.ShippingInfoDraft` `(Named` ``shippingInfo`` `in Commercetools)`
-    shipping_info: typing.Optional["ShippingInfoDraft"]
+    #: Optional :class:`commercetools.types.ShippingInfoImportDraft` `(Named` ``shippingInfo`` `in Commercetools)`
+    shipping_info: typing.Optional["ShippingInfoImportDraft"]
     #: Optional :class:`datetime.datetime` `(Named` ``completedAt`` `in Commercetools)`
     completed_at: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -377,7 +382,7 @@ class OrderImportDraft:
         order_state: typing.Optional["OrderState"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         payment_state: typing.Optional["PaymentState"] = None,
-        shipping_info: typing.Optional["ShippingInfoDraft"] = None,
+        shipping_info: typing.Optional["ShippingInfoImportDraft"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
@@ -721,16 +726,14 @@ class ReturnItemDraft:
 
 
 @attr.s(auto_attribs=True, init=False, repr=False)
-class ShippingInfoDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingInfoDraftSchema`."
+class ShippingInfoImportDraft:
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingInfoImportDraftSchema`."
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
     shipping_method_name: typing.Optional[str]
     #: :class:`commercetools.types.Money`
     price: typing.Optional["Money"]
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
     shipping_rate: typing.Optional["ShippingRateDraft"]
-    #: Optional :class:`commercetools.types.TaxedItemPriceDraft` `(Named` ``taxedPrice`` `in Commercetools)`
-    taxed_price: typing.Optional["TaxedItemPriceDraft"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: typing.Optional["TaxRate"]
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
@@ -750,7 +753,6 @@ class ShippingInfoDraft:
         shipping_method_name: typing.Optional[str] = None,
         price: typing.Optional["Money"] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None,
-        taxed_price: typing.Optional["TaxedItemPriceDraft"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         shipping_method: typing.Optional["ShippingMethodReference"] = None,
@@ -761,7 +763,6 @@ class ShippingInfoDraft:
         self.shipping_method_name = shipping_method_name
         self.price = price
         self.shipping_rate = shipping_rate
-        self.taxed_price = taxed_price
         self.tax_rate = tax_rate
         self.tax_category = tax_category
         self.shipping_method = shipping_method
@@ -771,12 +772,11 @@ class ShippingInfoDraft:
 
     def __repr__(self) -> str:
         return (
-            "ShippingInfoDraft(shipping_method_name=%r, price=%r, shipping_rate=%r, taxed_price=%r, tax_rate=%r, tax_category=%r, shipping_method=%r, deliveries=%r, discounted_price=%r, shipping_method_state=%r)"
+            "ShippingInfoImportDraft(shipping_method_name=%r, price=%r, shipping_rate=%r, tax_rate=%r, tax_category=%r, shipping_method=%r, deliveries=%r, discounted_price=%r, shipping_method_state=%r)"
             % (
                 self.shipping_method_name,
                 self.price,
                 self.shipping_rate,
-                self.taxed_price,
                 self.tax_rate,
                 self.tax_category,
                 self.shipping_method,
@@ -918,7 +918,7 @@ class CustomLineItemReturnItem(ReturnItem):
         super().__init__(
             id=id,
             quantity=quantity,
-            type=type,
+            type="CustomLineItemReturnItem",
             comment=comment,
             shipment_state=shipment_state,
             payment_state=payment_state,
@@ -966,7 +966,7 @@ class LineItemReturnItem(ReturnItem):
         super().__init__(
             id=id,
             quantity=quantity,
-            type=type,
+            type="LineItemReturnItem",
             comment=comment,
             shipment_state=shipment_state,
             payment_state=payment_state,

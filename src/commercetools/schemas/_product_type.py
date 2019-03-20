@@ -40,6 +40,7 @@ __all__ = [
     "ProductTypeChangeAttributeConstraintActionSchema",
     "ProductTypeChangeAttributeNameActionSchema",
     "ProductTypeChangeAttributeOrderActionSchema",
+    "ProductTypeChangeAttributeOrderByNameActionSchema",
     "ProductTypeChangeDescriptionActionSchema",
     "ProductTypeChangeEnumKeyActionSchema",
     "ProductTypeChangeInputHintActionSchema",
@@ -292,6 +293,7 @@ class ProductTypeUpdateSchema(UpdateSchema):
                 "changeAttributeConstraint": "commercetools.schemas._product_type.ProductTypeChangeAttributeConstraintActionSchema",
                 "changeAttributeName": "commercetools.schemas._product_type.ProductTypeChangeAttributeNameActionSchema",
                 "changeAttributeOrder": "commercetools.schemas._product_type.ProductTypeChangeAttributeOrderActionSchema",
+                "changeAttributeOrderByName": "commercetools.schemas._product_type.ProductTypeChangeAttributeOrderByNameActionSchema",
                 "changeDescription": "commercetools.schemas._product_type.ProductTypeChangeDescriptionActionSchema",
                 "changeEnumKey": "commercetools.schemas._product_type.ProductTypeChangeEnumKeyActionSchema",
                 "changeInputHint": "commercetools.schemas._product_type.ProductTypeChangeInputHintActionSchema",
@@ -628,6 +630,21 @@ class ProductTypeChangeAttributeOrderActionSchema(ProductTypeUpdateActionSchema)
     def post_load(self, data):
         del data["action"]
         return types.ProductTypeChangeAttributeOrderAction(**data)
+
+
+class ProductTypeChangeAttributeOrderByNameActionSchema(ProductTypeUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductTypeChangeAttributeOrderByNameAction`."
+    attribute_names = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="attributeNames"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.ProductTypeChangeAttributeOrderByNameAction(**data)
 
 
 class ProductTypeChangeDescriptionActionSchema(ProductTypeUpdateActionSchema):

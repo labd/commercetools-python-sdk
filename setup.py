@@ -50,7 +50,7 @@ setup(
     long_description=long_description,
     author="Lab Digital B.V.",
     author_email="opensource@labdigital.nl",
-    url="https://github.co/labd/commercetools-python-sdk",
+    url="https://github.com/labd/commercetools-python-sdk",
     install_requires=install_requires,
     tests_require=tests_require,
     extras_require={

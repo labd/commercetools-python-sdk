@@ -11,7 +11,7 @@ __all__ = ["OrderService"]
 
 
 class OrderDeleteSchema(abstract.AbstractDeleteSchema):
-    data_erasure = fields.Bool(data_key="dataErause", required=False)
+    data_erasure = fields.Bool(data_key="dataErasure", required=False)
 
 
 class OrderQuerySchema(abstract.AbstractQuerySchema):

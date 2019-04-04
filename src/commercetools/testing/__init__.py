@@ -1,6 +1,6 @@
-from contextlib import contextmanager
-import uuid
 import typing
+import uuid
+from contextlib import contextmanager
 
 import requests_mock
 import wrapt
@@ -21,6 +21,7 @@ from commercetools.testing.product_types import ProductTypesBackend
 from commercetools.testing.products import ProductsBackend
 from commercetools.testing.project import ProjectBackend
 from commercetools.testing.shipping_methods import ShippingMethodsBackend
+from commercetools.testing.shopping_lists import ShoppingListBackend
 from commercetools.testing.subscriptions import SubscriptionsBackend
 from commercetools.testing.tax_categories import TaxCategoryBackend
 from commercetools.testing.types import TypesBackend
@@ -76,6 +77,7 @@ class BackendRepository:
         )
         self.product_types = ProductTypesBackend(self._storage)
         self.shipping_methods = ShippingMethodsBackend(self._storage)
+        self.shopping_lists = ShoppingListBackend(self._storage)
         self.tax_categories = TaxCategoryBackend(self._storage)
         self.types = TypesBackend(self._storage)
         self.subscriptions = SubscriptionsBackend(self._storage)

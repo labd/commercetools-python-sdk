@@ -1,3 +1,8 @@
+2.5.0 (unreleased)
+------------------
+ - Generate the code normally created by the attrs package to improve the
+   import time with 30%. Attrs is now also no longer a dependency
+
 2.4.2 (2019-03-18)
 ------------------
 - Tax rates ids are now correctly generated

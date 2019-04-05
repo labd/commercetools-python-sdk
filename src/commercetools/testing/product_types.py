@@ -4,6 +4,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute
 
 
 class ProductTypesModel(BaseModel):
@@ -68,3 +69,7 @@ class ProductTypesBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
+
+    _actions = {
+        "changeDescription": update_attribute("description", "description"),
+    }

@@ -28,7 +28,7 @@ class ReviewModel(abstract.BaseModel):
             target=draft.target,
             included_in_statistics=False,
             rating=draft.rating,
-            state=types.StateReference(),
+            state=None,
             customer=draft.customer,
             custom=utils.create_from_draft(draft.custom),
         )

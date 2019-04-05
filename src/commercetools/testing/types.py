@@ -4,7 +4,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute_add_item
+from commercetools.testing.utils import update_attribute_add_item, update_attribute
 
 
 class TypesModel(BaseModel):
@@ -51,5 +51,6 @@ class TypesBackend(ServiceBackend):
     _actions = {
         "addFieldDefinition": update_attribute_add_item(
             "fieldDefinitions", "field_definition", schemas.FieldDefinitionSchema
-        )
+        ),
+        "setDescription": update_attribute("description", "description")
     }

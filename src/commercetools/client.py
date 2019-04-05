@@ -25,6 +25,7 @@ from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
 from commercetools.services.project import ProjectService
+from commercetools.services.reviews import ReviewService
 from commercetools.services.shipping_methods import ShippingMethodService
 from commercetools.services.shopping_lists import ShoppingListService
 from commercetools.services.subscriptions import SubscriptionService
@@ -303,6 +304,10 @@ class Client:
         return ProductTypeService(self)
 
     @property
+    def reviews(self) -> ReviewService:
+        return ReviewService(self)
+
+    @property
     def shipping_methods(self) -> ShippingMethodService:
         return ShippingMethodService(self)
 
@@ -313,10 +318,6 @@ class Client:
     @property
     def subscriptions(self) -> SubscriptionService:
         return SubscriptionService(self)
-
-    @property
-    def reviews(self):
-        raise NotImplementedError()
 
     @property
     def tax_categories(self) -> TaxCategoryService:

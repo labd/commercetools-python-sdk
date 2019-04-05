@@ -1,11 +1,12 @@
 import copy
 import json
 import typing
+import uuid
 
 from marshmallow import Schema
 from requests_mock.request import _RequestObjectProxy
 
-from commercetools import types
+from commercetools import schemas, types
 
 
 class InternalUpdateError(ValueError):
@@ -86,7 +87,12 @@ def update_enum_attribute(dst: str, src: str):
     return updater
 
 
-def update_attribute_add_item(dst: str, src: str, schema: Schema, id_generator: typing.Optional[typing.Callable]=None):
+def update_attribute_add_item(
+    dst: str,
+    src: str,
+    schema: Schema,
+    id_generator: typing.Optional[typing.Callable] = None,
+):
     def updater(self, obj, action):
         value = getattr(action, src)
         if id_generator:
@@ -115,9 +121,7 @@ def update_attribute_delete_item(dst: str, src: str, schema: Schema):
             new[dst].remove(value)
             return new
         else:
-            raise InternalUpdateError(
-                "No item found with id %r" % (obj["id"])
-            )
+            raise InternalUpdateError("No item found with id %r" % (obj["id"]))
         return obj
 
     return updater
@@ -136,3 +140,28 @@ def update_attribute_delete_item_by_id(dst: str, src: str):
         raise InternalUpdateError("No item found with id %r" % value)
 
     return updater
+
+
+def get_product_from_storage(
+    storage: "commercetools.testing.Storage",
+    product_id: uuid.UUID = None,
+    sku: str = None,
+) -> types.Product:
+    product = None
+    product_store = storage._stores["product"]
+
+    if product_id:
+        product = schemas.ProductSchema().load(product_store[product_id])
+    elif sku:
+        for product_data in product_store.values():
+            try:
+                master_data = product_data["masterData"]["current"]
+            except KeyError:
+                continue
+
+            if master_data and master_data["masterVariant"]["sku"] == sku:
+                product = schemas.ProductSchema().load(product_data)
+    else:
+        raise ValueError("SKU or productId is required")
+
+    return product

@@ -14,33 +14,30 @@ class ShoppingListModel(BaseModel):
     def _create_line_item_from_draft(
         self, line_item_draft: types.ShoppingListLineItemDraft
     ) -> types.ShoppingListLineItem:
-        product_store = self._storage._stores["product"]
+        product_id = (
+            uuid.UUID(line_item_draft.product_id)
+            if line_item_draft.product_id
+            else None
+        )
+        product = utils.get_product_from_storage(
+            self._storage, product_id=product_id, sku=line_item_draft.sku
+        )
 
-        product = None
-        if line_item_draft.product_id:
-            product = product_store[uuid.UUID(line_item_draft.product_id)]
-        elif line_item_draft.sku:
-            for product_data in product_store.values():
-                master = product_data["masterData"]["current"]["masterVariant"]
-                if master["sku"] == line_item_draft.sku:
-                    product = product_data
-                    break
-
-        if not product:
+        if not product or not product.master_data or not product.master_data.current:
             raise NotImplementedError
 
-        variant = product["masterData"]["current"]["masterVariant"]
+        variant = product.master_data.current.master_variant
         return types.ShoppingListLineItem(
             id=str(uuid.uuid4()),
             added_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(line_item_draft.custom),
             deactivated_at=None,
-            name=product["masterData"]["current"]["name"],
+            name=product.master_data.current.name,
             product_id=line_item_draft.product_id,
-            product_type=product["productType"],
-            product_slug=product["masterData"]["current"]["slug"],
+            product_type=product.product_type,
+            product_slug=product.master_data.current.slug,
             quantity=line_item_draft.quantity,
-            variant=types.ProductVariant(id=variant["id"], sku=variant["sku"]),
+            variant=types.ProductVariant(id=variant.id, sku=variant.sku),
             variant_id=line_item_draft.variant_id,
         )
 

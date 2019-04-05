@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -34,59 +33,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ChannelDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelDraftSchema`."
-    #: :class:`str`
-    key: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: Optional :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`commercetools.types.GeoJsonPoint` `(Named` ``geoLocation`` `in Commercetools)`
-    geo_location: typing.Optional["GeoJsonPoint"]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        address: typing.Optional["Address"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        geo_location: typing.Optional["GeoJsonPoint"] = None
-    ) -> None:
-        self.key = key
-        self.roles = roles
-        self.name = name
-        self.description = description
-        self.address = address
-        self.custom = custom
-        self.geo_location = geo_location
-
-    def __repr__(self) -> str:
-        return (
-            "ChannelDraft(key=%r, roles=%r, name=%r, description=%r, address=%r, custom=%r, geo_location=%r)"
-            % (
-                self.key,
-                self.roles,
-                self.name,
-                self.description,
-                self.address,
-                self.custom,
-                self.geo_location,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Channel(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSchema`."
     #: :class:`str`
@@ -157,7 +103,58 @@ class Channel(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ChannelDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelDraftSchema`."
+    #: :class:`str`
+    key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.ChannelRoleEnum`
+    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`commercetools.types.GeoJsonPoint` `(Named` ``geoLocation`` `in Commercetools)`
+    geo_location: typing.Optional["GeoJsonPoint"]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        address: typing.Optional["Address"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        geo_location: typing.Optional["GeoJsonPoint"] = None
+    ) -> None:
+        self.key = key
+        self.roles = roles
+        self.name = name
+        self.description = description
+        self.address = address
+        self.custom = custom
+        self.geo_location = geo_location
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ChannelDraft(key=%r, roles=%r, name=%r, description=%r, address=%r, custom=%r, geo_location=%r)"
+            % (
+                self.key,
+                self.roles,
+                self.name,
+                self.description,
+                self.address,
+                self.custom,
+                self.geo_location,
+            )
+        )
+
+
 class ChannelPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Channel`
@@ -181,7 +178,6 @@ class ChannelPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelReferenceSchema`."
     #: Optional :class:`commercetools.types.Channel`
@@ -215,7 +211,6 @@ class ChannelRoleEnum(enum.Enum):
     PRIMARY = "Primary"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateSchema`."
     #: :class:`list`
@@ -234,7 +229,6 @@ class ChannelUpdate(Update):
         return "ChannelUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateActionSchema`."
 
@@ -245,7 +239,6 @@ class ChannelUpdateAction(UpdateAction):
         return "ChannelUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelAddRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelAddRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
@@ -264,7 +257,6 @@ class ChannelAddRolesAction(ChannelUpdateAction):
         return "ChannelAddRolesAction(action=%r, roles=%r)" % (self.action, self.roles)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelChangeDescriptionAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeDescriptionActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -286,7 +278,6 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelChangeKeyAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeKeyActionSchema`."
     #: :class:`str`
@@ -302,7 +293,6 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
         return "ChannelChangeKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelChangeNameAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -321,7 +311,6 @@ class ChannelChangeNameAction(ChannelUpdateAction):
         return "ChannelChangeNameAction(action=%r, name=%r)" % (self.action, self.name)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelRemoveRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelRemoveRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
@@ -343,7 +332,6 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelSetAddressAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetAddressActionSchema`."
     #: Optional :class:`commercetools.types.Address`
@@ -365,7 +353,6 @@ class ChannelSetAddressAction(ChannelUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelSetCustomFieldAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -392,7 +379,6 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelSetCustomTypeAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -419,7 +405,6 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelSetGeoLocationAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetGeoLocationActionSchema`."
     #: Optional :class:`commercetools.types.GeoJsonPoint` `(Named` ``geoLocation`` `in Commercetools)`
@@ -441,7 +426,6 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ChannelSetRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`

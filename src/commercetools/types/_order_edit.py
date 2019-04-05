@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 from commercetools.types._order import Order, StagedOrderUpdateAction
@@ -152,120 +151,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditApply:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditApplySchema`."
-    #: :class:`int` `(Named` ``editVersion`` `in Commercetools)`
-    edit_version: typing.Optional[int]
-    #: :class:`int` `(Named` ``resourceVersion`` `in Commercetools)`
-    resource_version: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        edit_version: typing.Optional[int] = None,
-        resource_version: typing.Optional[int] = None
-    ) -> None:
-        self.edit_version = edit_version
-        self.resource_version = resource_version
-
-    def __repr__(self) -> str:
-        return "OrderEditApply(edit_version=%r, resource_version=%r)" % (
-            self.edit_version,
-            self.resource_version,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditDraftSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: :class:`commercetools.types.OrderReference`
-    resource: typing.Optional["OrderReference"]
-    #: Optional list of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
-    staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`str`
-    comment: typing.Optional[str]
-    #: Optional :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
-    dry_run: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        resource: typing.Optional["OrderReference"] = None,
-        staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        comment: typing.Optional[str] = None,
-        dry_run: typing.Optional[bool] = None
-    ) -> None:
-        self.key = key
-        self.resource = resource
-        self.staged_actions = staged_actions
-        self.custom = custom
-        self.comment = comment
-        self.dry_run = dry_run
-
-    def __repr__(self) -> str:
-        return (
-            "OrderEditDraft(key=%r, resource=%r, staged_actions=%r, custom=%r, comment=%r, dry_run=%r)"
-            % (
-                self.key,
-                self.resource,
-                self.staged_actions,
-                self.custom,
-                self.comment,
-                self.dry_run,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditResult:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditResultSchema`."
-    #: :class:`str`
-    type: typing.Optional[str]
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "OrderEditResult(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderExcerpt:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderExcerptSchema`."
-    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
-    #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
-    taxed_price: typing.Optional["TaxedPrice"]
-    #: :class:`int`
-    version: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        total_price: typing.Optional["Money"] = None,
-        taxed_price: typing.Optional["TaxedPrice"] = None,
-        version: typing.Optional[int] = None
-    ) -> None:
-        self.total_price = total_price
-        self.taxed_price = taxed_price
-        self.version = version
-
-    def __repr__(self) -> str:
-        return "OrderExcerpt(total_price=%r, taxed_price=%r, version=%r)" % (
-            self.total_price,
-            self.taxed_price,
-            self.version,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEdit(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSchema`."
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
@@ -332,53 +217,77 @@ class OrderEdit(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditApplied(OrderEditResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedSchema`."
-    #: :class:`datetime.datetime` `(Named` ``appliedAt`` `in Commercetools)`
-    applied_at: typing.Optional[datetime.datetime]
-    #: :class:`commercetools.types.OrderExcerpt` `(Named` ``excerptBeforeEdit`` `in Commercetools)`
-    excerpt_before_edit: typing.Optional["OrderExcerpt"]
-    #: :class:`commercetools.types.OrderExcerpt` `(Named` ``excerptAfterEdit`` `in Commercetools)`
-    excerpt_after_edit: typing.Optional["OrderExcerpt"]
+class OrderEditApply(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditApplySchema`."
+    #: :class:`int` `(Named` ``editVersion`` `in Commercetools)`
+    edit_version: typing.Optional[int]
+    #: :class:`int` `(Named` ``resourceVersion`` `in Commercetools)`
+    resource_version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        applied_at: typing.Optional[datetime.datetime] = None,
-        excerpt_before_edit: typing.Optional["OrderExcerpt"] = None,
-        excerpt_after_edit: typing.Optional["OrderExcerpt"] = None
+        edit_version: typing.Optional[int] = None,
+        resource_version: typing.Optional[int] = None
     ) -> None:
-        self.applied_at = applied_at
-        self.excerpt_before_edit = excerpt_before_edit
-        self.excerpt_after_edit = excerpt_after_edit
-        super().__init__(type="Applied")
+        self.edit_version = edit_version
+        self.resource_version = resource_version
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "OrderEditApply(edit_version=%r, resource_version=%r)" % (
+            self.edit_version,
+            self.resource_version,
+        )
+
+
+class OrderEditDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: :class:`commercetools.types.OrderReference`
+    resource: typing.Optional["OrderReference"]
+    #: Optional list of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`
+    staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`str`
+    comment: typing.Optional[str]
+    #: Optional :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
+    dry_run: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        resource: typing.Optional["OrderReference"] = None,
+        staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        comment: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None
+    ) -> None:
+        self.key = key
+        self.resource = resource
+        self.staged_actions = staged_actions
+        self.custom = custom
+        self.comment = comment
+        self.dry_run = dry_run
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "OrderEditApplied(type=%r, applied_at=%r, excerpt_before_edit=%r, excerpt_after_edit=%r)"
+            "OrderEditDraft(key=%r, resource=%r, staged_actions=%r, custom=%r, comment=%r, dry_run=%r)"
             % (
-                self.type,
-                self.applied_at,
-                self.excerpt_before_edit,
-                self.excerpt_after_edit,
+                self.key,
+                self.resource,
+                self.staged_actions,
+                self.custom,
+                self.comment,
+                self.dry_run,
             )
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditNotProcessed(OrderEditResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditNotProcessedSchema`."
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        super().__init__(type="NotProcessed")
-
-    def __repr__(self) -> str:
-        return "OrderEditNotProcessed(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.OrderEdit`
@@ -402,53 +311,6 @@ class OrderEditPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditPreviewFailure(OrderEditResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPreviewFailureSchema`."
-    #: List of :class:`commercetools.types.ErrorObject`
-    errors: typing.Optional[typing.List["ErrorObject"]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        errors: typing.Optional[typing.List["ErrorObject"]] = None
-    ) -> None:
-        self.errors = errors
-        super().__init__(type="PreviewFailure")
-
-    def __repr__(self) -> str:
-        return "OrderEditPreviewFailure(type=%r, errors=%r)" % (self.type, self.errors)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditPreviewSuccess(OrderEditResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPreviewSuccessSchema`."
-    #: :class:`commercetools.types.StagedOrder`
-    preview: typing.Optional["StagedOrder"]
-    #: List of :class:`commercetools.types.MessagePayload` `(Named` ``messagePayloads`` `in Commercetools)`
-    message_payloads: typing.Optional[typing.List["MessagePayload"]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        preview: typing.Optional["StagedOrder"] = None,
-        message_payloads: typing.Optional[typing.List["MessagePayload"]] = None
-    ) -> None:
-        self.preview = preview
-        self.message_payloads = message_payloads
-        super().__init__(type="PreviewSuccess")
-
-    def __repr__(self) -> str:
-        return "OrderEditPreviewSuccess(type=%r, preview=%r, message_payloads=%r)" % (
-            self.type,
-            self.preview,
-            self.message_payloads,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditReferenceSchema`."
     #: Optional :class:`commercetools.types.OrderEdit`
@@ -474,7 +336,19 @@ class OrderEditReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderEditResult(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditResultSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "OrderEditResult(type=%r)" % (self.type,)
+
+
 class OrderEditUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditUpdateSchema`."
     #: List of :class:`commercetools.types.OrderEditUpdateAction`
@@ -501,7 +375,6 @@ class OrderEditUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditUpdateActionSchema`."
 
@@ -512,7 +385,35 @@ class OrderEditUpdateAction(UpdateAction):
         return "OrderEditUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderExcerpt(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderExcerptSchema`."
+    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedPrice"]
+    #: :class:`int`
+    version: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        total_price: typing.Optional["Money"] = None,
+        taxed_price: typing.Optional["TaxedPrice"] = None,
+        version: typing.Optional[int] = None
+    ) -> None:
+        self.total_price = total_price
+        self.taxed_price = taxed_price
+        self.version = version
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "OrderExcerpt(total_price=%r, taxed_price=%r, version=%r)" % (
+            self.total_price,
+            self.taxed_price,
+            self.version,
+        )
+
+
 class StagedOrder(Order):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSchema`."
 
@@ -642,7 +543,6 @@ class StagedOrder(Order):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddCustomLineItemActionSchema`."
     #: :class:`commercetools.types.Money`
@@ -697,7 +597,6 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddDeliveryActionSchema`."
     #: Optional list of :class:`commercetools.types.DeliveryItem`
@@ -727,7 +626,6 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddDiscountCodeActionSchema`."
     #: :class:`str`
@@ -746,7 +644,6 @@ class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
@@ -768,7 +665,6 @@ class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddLineItemActionSchema`."
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -843,7 +739,6 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddParcelToDeliveryActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -883,7 +778,6 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddPaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
@@ -905,7 +799,6 @@ class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddReturnInfoActionSchema`."
     #: Optional :class:`str` `(Named` ``returnTrackingId`` `in Commercetools)`
@@ -935,7 +828,6 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderAddShoppingListActionSchema`."
     #: :class:`commercetools.types.ShoppingListReference` `(Named` ``shoppingList`` `in Commercetools)`
@@ -970,7 +862,6 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeCustomLineItemMoneyActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -996,7 +887,6 @@ class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeCustomLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1022,7 +912,6 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1062,7 +951,6 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeOrderStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeOrderStateActionSchema`."
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
@@ -1084,7 +972,6 @@ class StagedOrderChangeOrderStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangePaymentStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangePaymentStateActionSchema`."
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
@@ -1106,7 +993,6 @@ class StagedOrderChangePaymentStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeShipmentStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeShipmentStateActionSchema`."
     #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
@@ -1128,7 +1014,6 @@ class StagedOrderChangeShipmentStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeTaxCalculationModeActionSchema`."
     #: :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
@@ -1150,7 +1035,6 @@ class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeTaxModeActionSchema`."
     #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
@@ -1172,7 +1056,6 @@ class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderChangeTaxRoundingModeActionSchema`."
     #: :class:`commercetools.types.RoundingMode` `(Named` ``taxRoundingMode`` `in Commercetools)`
@@ -1194,7 +1077,6 @@ class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderImportCustomLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1220,7 +1102,6 @@ class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderImportLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1246,7 +1127,6 @@ class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveCustomLineItemActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1268,7 +1148,6 @@ class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveDeliveryActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -1290,7 +1169,6 @@ class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveDiscountCodeActionSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
@@ -1312,7 +1190,6 @@ class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveItemShippingAddressActionSchema`."
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -1334,7 +1211,6 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveLineItemActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1379,7 +1255,6 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemoveParcelFromDeliveryActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -1401,7 +1276,6 @@ class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderRemovePaymentActionSchema`."
     #: :class:`commercetools.types.PaymentReference`
@@ -1423,7 +1297,6 @@ class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetBillingAddressActionSchema`."
     #: Optional :class:`commercetools.types.Address`
@@ -1445,7 +1318,6 @@ class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCountryAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCountryActionSchema`."
     #: Optional :class:`str`
@@ -1467,7 +1339,6 @@ class StagedOrderSetCountryAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -1494,7 +1365,6 @@ class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1524,7 +1394,6 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1554,7 +1423,6 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1580,7 +1448,6 @@ class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction)
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemTaxAmountActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1606,7 +1473,6 @@ class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomLineItemTaxRateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -1632,7 +1498,6 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomShippingMethodActionSchema`."
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
@@ -1672,7 +1537,6 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -1699,7 +1563,6 @@ class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomerEmailActionSchema`."
     #: Optional :class:`str`
@@ -1718,7 +1581,6 @@ class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomerGroupActionSchema`."
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -1740,7 +1602,6 @@ class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetCustomerIdActionSchema`."
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
@@ -1762,7 +1623,6 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetDeliveryAddressActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -1788,7 +1648,6 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetDeliveryItemsActionSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -1814,7 +1673,6 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1844,7 +1702,6 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1874,7 +1731,6 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemPriceActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1900,7 +1756,6 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemShippingDetailsActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1926,7 +1781,6 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemTaxAmountActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1952,7 +1806,6 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemTaxRateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1978,7 +1831,6 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLineItemTotalPriceActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -2004,7 +1856,6 @@ class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetLocaleAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetLocaleActionSchema`."
     #: Optional :class:`str`
@@ -2026,7 +1877,6 @@ class StagedOrderSetLocaleAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetOrderNumberActionSchema`."
     #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
@@ -2048,7 +1898,6 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``externalTotalGross`` `in Commercetools)`
@@ -2074,7 +1923,6 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetParcelItemsActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -2101,7 +1949,6 @@ class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetParcelMeasurementsActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -2127,7 +1974,6 @@ class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetParcelTrackingDataActionSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -2153,7 +1999,6 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetReturnPaymentStateActionSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
@@ -2179,7 +2024,6 @@ class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetReturnShipmentStateActionSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
@@ -2205,7 +2049,6 @@ class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingAddressActionSchema`."
     #: Optional :class:`commercetools.types.Address`
@@ -2227,7 +2070,6 @@ class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     StagedOrderUpdateAction
 ):
@@ -2274,7 +2116,6 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingAddressAndShippingMethodActionSchema`."
     #: :class:`commercetools.types.Address`
@@ -2304,7 +2145,6 @@ class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateActi
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingMethodActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference` `(Named` ``shippingMethod`` `in Commercetools)`
@@ -2330,7 +2170,6 @@ class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingMethodTaxAmountActionSchema`."
     #: Optional :class:`commercetools.types.ExternalTaxAmountDraft` `(Named` ``externalTaxAmount`` `in Commercetools)`
@@ -2352,7 +2191,6 @@ class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingMethodTaxRateActionSchema`."
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -2374,7 +2212,6 @@ class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetShippingRateInputActionSchema`."
     #: Optional :class:`commercetools.types.ShippingRateInputDraft` `(Named` ``shippingRateInput`` `in Commercetools)`
@@ -2396,7 +2233,6 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderTransitionCustomLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -2441,7 +2277,6 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderTransitionLineItemStateActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -2486,7 +2321,6 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateReference`
@@ -2513,7 +2347,6 @@ class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderUpdateItemShippingAddressActionSchema`."
     #: :class:`commercetools.types.Address`
@@ -2535,7 +2368,6 @@ class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderUpdateSyncInfoActionSchema`."
     #: :class:`commercetools.types.ChannelReference`
@@ -2565,7 +2397,6 @@ class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditAddStagedActionAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAddStagedActionActionSchema`."
     #: :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedAction`` `in Commercetools)`
@@ -2587,7 +2418,94 @@ class OrderEditAddStagedActionAction(OrderEditUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderEditApplied(OrderEditResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedSchema`."
+    #: :class:`datetime.datetime` `(Named` ``appliedAt`` `in Commercetools)`
+    applied_at: typing.Optional[datetime.datetime]
+    #: :class:`commercetools.types.OrderExcerpt` `(Named` ``excerptBeforeEdit`` `in Commercetools)`
+    excerpt_before_edit: typing.Optional["OrderExcerpt"]
+    #: :class:`commercetools.types.OrderExcerpt` `(Named` ``excerptAfterEdit`` `in Commercetools)`
+    excerpt_after_edit: typing.Optional["OrderExcerpt"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        applied_at: typing.Optional[datetime.datetime] = None,
+        excerpt_before_edit: typing.Optional["OrderExcerpt"] = None,
+        excerpt_after_edit: typing.Optional["OrderExcerpt"] = None
+    ) -> None:
+        self.applied_at = applied_at
+        self.excerpt_before_edit = excerpt_before_edit
+        self.excerpt_after_edit = excerpt_after_edit
+        super().__init__(type="Applied")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderEditApplied(type=%r, applied_at=%r, excerpt_before_edit=%r, excerpt_after_edit=%r)"
+            % (
+                self.type,
+                self.applied_at,
+                self.excerpt_before_edit,
+                self.excerpt_after_edit,
+            )
+        )
+
+
+class OrderEditNotProcessed(OrderEditResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditNotProcessedSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="NotProcessed")
+
+    def __repr__(self) -> str:
+        return "OrderEditNotProcessed(type=%r)" % (self.type,)
+
+
+class OrderEditPreviewFailure(OrderEditResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPreviewFailureSchema`."
+    #: List of :class:`commercetools.types.ErrorObject`
+    errors: typing.Optional[typing.List["ErrorObject"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        errors: typing.Optional[typing.List["ErrorObject"]] = None
+    ) -> None:
+        self.errors = errors
+        super().__init__(type="PreviewFailure")
+
+    def __repr__(self) -> str:
+        return "OrderEditPreviewFailure(type=%r, errors=%r)" % (self.type, self.errors)
+
+
+class OrderEditPreviewSuccess(OrderEditResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPreviewSuccessSchema`."
+    #: :class:`commercetools.types.StagedOrder`
+    preview: typing.Optional["StagedOrder"]
+    #: List of :class:`commercetools.types.MessagePayload` `(Named` ``messagePayloads`` `in Commercetools)`
+    message_payloads: typing.Optional[typing.List["MessagePayload"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        preview: typing.Optional["StagedOrder"] = None,
+        message_payloads: typing.Optional[typing.List["MessagePayload"]] = None
+    ) -> None:
+        self.preview = preview
+        self.message_payloads = message_payloads
+        super().__init__(type="PreviewSuccess")
+
+    def __repr__(self) -> str:
+        return "OrderEditPreviewSuccess(type=%r, preview=%r, message_payloads=%r)" % (
+            self.type,
+            self.preview,
+            self.message_payloads,
+        )
+
+
 class OrderEditSetCommentAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetCommentActionSchema`."
     #: Optional :class:`str`
@@ -2609,7 +2527,6 @@ class OrderEditSetCommentAction(OrderEditUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -2636,7 +2553,6 @@ class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -2663,7 +2579,6 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditSetKeyAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetKeyActionSchema`."
     #: Optional :class:`str`
@@ -2679,7 +2594,6 @@ class OrderEditSetKeyAction(OrderEditUpdateAction):
         return "OrderEditSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSetStagedActionsActionSchema`."
     #: List of :class:`commercetools.types.StagedOrderUpdateAction` `(Named` ``stagedActions`` `in Commercetools)`

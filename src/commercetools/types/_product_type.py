@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -63,8 +62,18 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeDefinition:
+class AttributeConstraintEnum(enum.Enum):
+    NONE = "None"
+    UNIQUE = "Unique"
+    COMBINATION_UNIQUE = "CombinationUnique"
+    SAME_FOR_ALL = "SameForAll"
+
+
+class AttributeConstraintEnumDraft(enum.Enum):
+    NONE = "None"
+
+
+class AttributeDefinition(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionSchema`."
     #: :class:`commercetools.types.AttributeType`
     type: typing.Optional["AttributeType"]
@@ -103,6 +112,7 @@ class AttributeDefinition:
         self.input_tip = input_tip
         self.input_hint = input_hint
         self.is_searchable = is_searchable
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -120,8 +130,7 @@ class AttributeDefinition:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeDefinitionDraft:
+class AttributeDefinitionDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionDraftSchema`."
     #: :class:`commercetools.types.AttributeType`
     type: typing.Optional["AttributeType"]
@@ -160,6 +169,7 @@ class AttributeDefinitionDraft:
         self.input_tip = input_tip
         self.input_hint = input_hint
         self.is_searchable = is_searchable
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -177,8 +187,7 @@ class AttributeDefinitionDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeLocalizedEnumValue:
+class AttributeLocalizedEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumValueSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -193,13 +202,13 @@ class AttributeLocalizedEnumValue:
     ) -> None:
         self.key = key
         self.label = label
+        super().__init__()
 
     def __repr__(self) -> str:
         return "AttributeLocalizedEnumValue(key=%r, label=%r)" % (self.key, self.label)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributePlainEnumValue:
+class AttributePlainEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributePlainEnumValueSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -211,265 +220,25 @@ class AttributePlainEnumValue:
     ) -> None:
         self.key = key
         self.label = label
+        super().__init__()
 
     def __repr__(self) -> str:
         return "AttributePlainEnumValue(key=%r, label=%r)" % (self.key, self.label)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeType:
+class AttributeType(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTypeSchema`."
     #: :class:`str`
     name: typing.Optional[str]
 
     def __init__(self, *, name: typing.Optional[str] = None) -> None:
         self.name = name
+        super().__init__()
 
     def __repr__(self) -> str:
         return "AttributeType(name=%r)" % (self.name,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductTypeDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeDraftSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: :class:`str`
-    description: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.AttributeDefinitionDraft`
-    attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
-        attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None
-    ) -> None:
-        self.key = key
-        self.name = name
-        self.description = description
-        self.attributes = attributes
-
-    def __repr__(self) -> str:
-        return "ProductTypeDraft(key=%r, name=%r, description=%r, attributes=%r)" % (
-            self.key,
-            self.name,
-            self.description,
-            self.attributes,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeBooleanType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeBooleanTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="boolean")
-
-    def __repr__(self) -> str:
-        return "AttributeBooleanType(name=%r)" % (self.name,)
-
-
-class AttributeConstraintEnum(enum.Enum):
-    NONE = "None"
-    UNIQUE = "Unique"
-    COMBINATION_UNIQUE = "CombinationUnique"
-    SAME_FOR_ALL = "SameForAll"
-
-
-class AttributeConstraintEnumDraft(enum.Enum):
-    NONE = "None"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeDateTimeType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTimeTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="datetime")
-
-    def __repr__(self) -> str:
-        return "AttributeDateTimeType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeDateType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="date")
-
-    def __repr__(self) -> str:
-        return "AttributeDateType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeEnumType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeEnumTypeSchema`."
-    #: List of :class:`commercetools.types.AttributePlainEnumValue`
-    values: typing.Optional[typing.List["AttributePlainEnumValue"]]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None
-    ) -> None:
-        self.values = values
-        super().__init__(name="enum")
-
-    def __repr__(self) -> str:
-        return "AttributeEnumType(name=%r, values=%r)" % (self.name, self.values)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeLocalizableTextType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizableTextTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="ltext")
-
-    def __repr__(self) -> str:
-        return "AttributeLocalizableTextType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeLocalizedEnumType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumTypeSchema`."
-    #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
-    values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None
-    ) -> None:
-        self.values = values
-        super().__init__(name="lenum")
-
-    def __repr__(self) -> str:
-        return "AttributeLocalizedEnumType(name=%r, values=%r)" % (
-            self.name,
-            self.values,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeMoneyType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeMoneyTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="money")
-
-    def __repr__(self) -> str:
-        return "AttributeMoneyType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeNestedType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNestedTypeSchema`."
-    #: :class:`commercetools.types.ProductTypeReference` `(Named` ``typeReference`` `in Commercetools)`
-    type_reference: typing.Optional["ProductTypeReference"]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        type_reference: typing.Optional["ProductTypeReference"] = None
-    ) -> None:
-        self.type_reference = type_reference
-        super().__init__(name="nested")
-
-    def __repr__(self) -> str:
-        return "AttributeNestedType(name=%r, type_reference=%r)" % (
-            self.name,
-            self.type_reference,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeNumberType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNumberTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="number")
-
-    def __repr__(self) -> str:
-        return "AttributeNumberType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeReferenceType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeReferenceTypeSchema`."
-    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
-    reference_type_id: typing.Optional["ReferenceTypeId"]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        reference_type_id: typing.Optional["ReferenceTypeId"] = None
-    ) -> None:
-        self.reference_type_id = reference_type_id
-        super().__init__(name="reference")
-
-    def __repr__(self) -> str:
-        return "AttributeReferenceType(name=%r, reference_type_id=%r)" % (
-            self.name,
-            self.reference_type_id,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeSetType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSetTypeSchema`."
-    #: :class:`commercetools.types.AttributeType` `(Named` ``elementType`` `in Commercetools)`
-    element_type: typing.Optional["AttributeType"]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        element_type: typing.Optional["AttributeType"] = None
-    ) -> None:
-        self.element_type = element_type
-        super().__init__(name="set")
-
-    def __repr__(self) -> str:
-        return "AttributeSetType(name=%r, element_type=%r)" % (
-            self.name,
-            self.element_type,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeTextType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTextTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="text")
-
-    def __repr__(self) -> str:
-        return "AttributeTextType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeTimeType(AttributeType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTimeTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="time")
-
-    def __repr__(self) -> str:
-        return "AttributeTimeType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductType(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSchema`."
     #: Optional :class:`str`
@@ -520,7 +289,40 @@ class ProductType(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductTypeDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: :class:`str`
+    description: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.AttributeDefinitionDraft`
+    attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None
+    ) -> None:
+        self.key = key
+        self.name = name
+        self.description = description
+        self.attributes = attributes
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ProductTypeDraft(key=%r, name=%r, description=%r, attributes=%r)" % (
+            self.key,
+            self.name,
+            self.description,
+            self.attributes,
+        )
+
+
 class ProductTypePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ProductType`
@@ -544,7 +346,6 @@ class ProductTypePagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeReferenceSchema`."
     #: Optional :class:`commercetools.types.ProductType`
@@ -570,7 +371,6 @@ class ProductTypeReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateSchema`."
     #: :class:`list`
@@ -592,7 +392,6 @@ class ProductTypeUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateActionSchema`."
 
@@ -608,7 +407,188 @@ class TextInputHint(enum.Enum):
     MULTI_LINE = "MultiLine"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class AttributeBooleanType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeBooleanTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="boolean")
+
+    def __repr__(self) -> str:
+        return "AttributeBooleanType(name=%r)" % (self.name,)
+
+
+class AttributeDateTimeType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTimeTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="datetime")
+
+    def __repr__(self) -> str:
+        return "AttributeDateTimeType(name=%r)" % (self.name,)
+
+
+class AttributeDateType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="date")
+
+    def __repr__(self) -> str:
+        return "AttributeDateType(name=%r)" % (self.name,)
+
+
+class AttributeEnumType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeEnumTypeSchema`."
+    #: List of :class:`commercetools.types.AttributePlainEnumValue`
+    values: typing.Optional[typing.List["AttributePlainEnumValue"]]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None
+    ) -> None:
+        self.values = values
+        super().__init__(name="enum")
+
+    def __repr__(self) -> str:
+        return "AttributeEnumType(name=%r, values=%r)" % (self.name, self.values)
+
+
+class AttributeLocalizableTextType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizableTextTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="ltext")
+
+    def __repr__(self) -> str:
+        return "AttributeLocalizableTextType(name=%r)" % (self.name,)
+
+
+class AttributeLocalizedEnumType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumTypeSchema`."
+    #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
+    values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None
+    ) -> None:
+        self.values = values
+        super().__init__(name="lenum")
+
+    def __repr__(self) -> str:
+        return "AttributeLocalizedEnumType(name=%r, values=%r)" % (
+            self.name,
+            self.values,
+        )
+
+
+class AttributeMoneyType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeMoneyTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="money")
+
+    def __repr__(self) -> str:
+        return "AttributeMoneyType(name=%r)" % (self.name,)
+
+
+class AttributeNestedType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNestedTypeSchema`."
+    #: :class:`commercetools.types.ProductTypeReference` `(Named` ``typeReference`` `in Commercetools)`
+    type_reference: typing.Optional["ProductTypeReference"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        type_reference: typing.Optional["ProductTypeReference"] = None
+    ) -> None:
+        self.type_reference = type_reference
+        super().__init__(name="nested")
+
+    def __repr__(self) -> str:
+        return "AttributeNestedType(name=%r, type_reference=%r)" % (
+            self.name,
+            self.type_reference,
+        )
+
+
+class AttributeNumberType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNumberTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="number")
+
+    def __repr__(self) -> str:
+        return "AttributeNumberType(name=%r)" % (self.name,)
+
+
+class AttributeReferenceType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeReferenceTypeSchema`."
+    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
+    reference_type_id: typing.Optional["ReferenceTypeId"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        reference_type_id: typing.Optional["ReferenceTypeId"] = None
+    ) -> None:
+        self.reference_type_id = reference_type_id
+        super().__init__(name="reference")
+
+    def __repr__(self) -> str:
+        return "AttributeReferenceType(name=%r, reference_type_id=%r)" % (
+            self.name,
+            self.reference_type_id,
+        )
+
+
+class AttributeSetType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSetTypeSchema`."
+    #: :class:`commercetools.types.AttributeType` `(Named` ``elementType`` `in Commercetools)`
+    element_type: typing.Optional["AttributeType"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        element_type: typing.Optional["AttributeType"] = None
+    ) -> None:
+        self.element_type = element_type
+        super().__init__(name="set")
+
+    def __repr__(self) -> str:
+        return "AttributeSetType(name=%r, element_type=%r)" % (
+            self.name,
+            self.element_type,
+        )
+
+
+class AttributeTextType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTextTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="text")
+
+    def __repr__(self) -> str:
+        return "AttributeTextType(name=%r)" % (self.name,)
+
+
+class AttributeTimeType(AttributeType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTimeTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="time")
+
+    def __repr__(self) -> str:
+        return "AttributeTimeType(name=%r)" % (self.name,)
+
+
 class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddAttributeDefinitionActionSchema`."
     #: :class:`commercetools.types.AttributeDefinitionDraft`
@@ -630,7 +610,6 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddLocalizedEnumValueActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -656,7 +635,6 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddPlainEnumValueActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -682,7 +660,6 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeConstraintActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -708,7 +685,6 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeNameActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -734,7 +710,6 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderActionSchema`."
     #: List of :class:`commercetools.types.AttributeDefinition`
@@ -756,7 +731,6 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderByNameActionSchema`."
     #: List of :class:`str` `(Named` ``attributeNames`` `in Commercetools)`
@@ -778,7 +752,6 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeDescriptionActionSchema`."
     #: :class:`str`
@@ -800,7 +773,6 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeEnumKeyActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -830,7 +802,6 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeInputHintActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -856,7 +827,6 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeIsSearchableActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -882,7 +852,6 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -908,7 +877,6 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -934,7 +902,6 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -960,7 +927,6 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangeNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeNameActionSchema`."
     #: :class:`str`
@@ -979,7 +945,6 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -1005,7 +970,6 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -1031,7 +995,6 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveAttributeDefinitionActionSchema`."
     #: :class:`str`
@@ -1050,7 +1013,6 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveEnumValuesActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -1076,7 +1038,6 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSetInputTipActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
@@ -1102,7 +1063,6 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTypeSetKeyAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSetKeyActionSchema`."
     #: Optional :class:`str`

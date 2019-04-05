@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -50,110 +49,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountDraftSchema`."
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
-    #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
-    cart_predicate: typing.Optional[str]
-    #: Optional :class:`commercetools.types.CartDiscountTarget`
-    target: typing.Optional["CartDiscountTarget"]
-    #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
-    #: Optional :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
-    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
-    valid_from: typing.Optional[datetime.datetime]
-    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
-    valid_until: typing.Optional[datetime.datetime]
-    #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
-    requires_discount_code: typing.Optional[bool]
-    #: Optional :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
-    stacking_mode: typing.Optional["StackingMode"]
-    #: Optional :class:`commercetools.types.CustomFields`
-    custom: typing.Optional["CustomFields"]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional["LocalizedString"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["CartDiscountValue"] = None,
-        cart_predicate: typing.Optional[str] = None,
-        target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-        valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None,
-        requires_discount_code: typing.Optional[bool] = None,
-        stacking_mode: typing.Optional["StackingMode"] = None,
-        custom: typing.Optional["CustomFields"] = None
-    ) -> None:
-        self.name = name
-        self.description = description
-        self.value = value
-        self.cart_predicate = cart_predicate
-        self.target = target
-        self.sort_order = sort_order
-        self.is_active = is_active
-        self.valid_from = valid_from
-        self.valid_until = valid_until
-        self.requires_discount_code = requires_discount_code
-        self.stacking_mode = stacking_mode
-        self.custom = custom
-
-    def __repr__(self) -> str:
-        return (
-            "CartDiscountDraft(name=%r, description=%r, value=%r, cart_predicate=%r, target=%r, sort_order=%r, is_active=%r, valid_from=%r, valid_until=%r, requires_discount_code=%r, stacking_mode=%r, custom=%r)"
-            % (
-                self.name,
-                self.description,
-                self.value,
-                self.cart_predicate,
-                self.target,
-                self.sort_order,
-                self.is_active,
-                self.valid_from,
-                self.valid_until,
-                self.requires_discount_code,
-                self.stacking_mode,
-                self.custom,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountTarget:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountTargetSchema`."
-    #: :class:`str`
-    type: typing.Optional[str]
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "CartDiscountTarget(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountValue:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueSchema`."
-    #: :class:`str`
-    type: typing.Optional[str]
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "CartDiscountValue(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscount(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -249,51 +144,83 @@ class CartDiscount(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountCustomLineItemsTargetSchema`."
-    #: :class:`str`
-    predicate: typing.Optional[str]
+class CartDiscountDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountDraftSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: :class:`commercetools.types.CartDiscountValue`
+    value: typing.Optional["CartDiscountValue"]
+    #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
+    cart_predicate: typing.Optional[str]
+    #: Optional :class:`commercetools.types.CartDiscountTarget`
+    target: typing.Optional["CartDiscountTarget"]
+    #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
+    sort_order: typing.Optional[str]
+    #: Optional :class:`bool` `(Named` ``isActive`` `in Commercetools)`
+    is_active: typing.Optional[bool]
+    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
+    valid_from: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
+    valid_until: typing.Optional[datetime.datetime]
+    #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
+    requires_discount_code: typing.Optional[bool]
+    #: Optional :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
+    stacking_mode: typing.Optional["StackingMode"]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None
+        name: typing.Optional["LocalizedString"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        value: typing.Optional["CartDiscountValue"] = None,
+        cart_predicate: typing.Optional[str] = None,
+        target: typing.Optional["CartDiscountTarget"] = None,
+        sort_order: typing.Optional[str] = None,
+        is_active: typing.Optional[bool] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        requires_discount_code: typing.Optional[bool] = None,
+        stacking_mode: typing.Optional["StackingMode"] = None,
+        custom: typing.Optional["CustomFields"] = None
     ) -> None:
-        self.predicate = predicate
-        super().__init__(type="customLineItems")
+        self.name = name
+        self.description = description
+        self.value = value
+        self.cart_predicate = cart_predicate
+        self.target = target
+        self.sort_order = sort_order
+        self.is_active = is_active
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        self.requires_discount_code = requires_discount_code
+        self.stacking_mode = stacking_mode
+        self.custom = custom
+        super().__init__()
 
     def __repr__(self) -> str:
-        return "CartDiscountCustomLineItemsTarget(type=%r, predicate=%r)" % (
-            self.type,
-            self.predicate,
+        return (
+            "CartDiscountDraft(name=%r, description=%r, value=%r, cart_predicate=%r, target=%r, sort_order=%r, is_active=%r, valid_from=%r, valid_until=%r, requires_discount_code=%r, stacking_mode=%r, custom=%r)"
+            % (
+                self.name,
+                self.description,
+                self.value,
+                self.cart_predicate,
+                self.target,
+                self.sort_order,
+                self.is_active,
+                self.valid_from,
+                self.valid_until,
+                self.requires_discount_code,
+                self.stacking_mode,
+                self.custom,
+            )
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountLineItemsTarget(CartDiscountTarget):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountLineItemsTargetSchema`."
-    #: :class:`str`
-    predicate: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None
-    ) -> None:
-        self.predicate = predicate
-        super().__init__(type="lineItems")
-
-    def __repr__(self) -> str:
-        return "CartDiscountLineItemsTarget(type=%r, predicate=%r)" % (
-            self.type,
-            self.predicate,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.CartDiscount`
@@ -317,7 +244,6 @@ class CartDiscountPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountReferenceSchema`."
     #: Optional :class:`commercetools.types.CartDiscount`
@@ -343,18 +269,19 @@ class CartDiscountReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountShippingCostTarget(CartDiscountTarget):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountShippingCostTargetSchema`."
+class CartDiscountTarget(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountTargetSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
 
     def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        super().__init__(type="shipping")
+        self.type = type
+        super().__init__()
 
     def __repr__(self) -> str:
-        return "CartDiscountShippingCostTarget(type=%r)" % (self.type,)
+        return "CartDiscountTarget(type=%r)" % (self.type,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountUpdateSchema`."
     #: :class:`list`
@@ -376,7 +303,6 @@ class CartDiscountUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountUpdateActionSchema`."
 
@@ -387,7 +313,389 @@ class CartDiscountUpdateAction(UpdateAction):
         return "CartDiscountUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CartDiscountValue(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CartDiscountValue(type=%r)" % (self.type,)
+
+
+class SelectionMode(enum.Enum):
+    CHEAPEST = "Cheapest"
+    MOST_EXPENSIVE = "MostExpensive"
+
+
+class StackingMode(enum.Enum):
+    STACKING = "Stacking"
+    STOP_AFTER_THIS_DISCOUNT = "StopAfterThisDiscount"
+
+
+class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeCartPredicateActionSchema`."
+    #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
+    cart_predicate: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        cart_predicate: typing.Optional[str] = None
+    ) -> None:
+        self.cart_predicate = cart_predicate
+        super().__init__(action="changeCartPredicate")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeCartPredicateAction(action=%r, cart_predicate=%r)" % (
+            self.action,
+            self.cart_predicate,
+        )
+
+
+class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeIsActiveActionSchema`."
+    #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
+    is_active: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        is_active: typing.Optional[bool] = None
+    ) -> None:
+        self.is_active = is_active
+        super().__init__(action="changeIsActive")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeIsActiveAction(action=%r, is_active=%r)" % (
+            self.action,
+            self.is_active,
+        )
+
+
+class CartDiscountChangeNameAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeNameActionSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.name = name
+        super().__init__(action="changeName")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeNameAction(action=%r, name=%r)" % (
+            self.action,
+            self.name,
+        )
+
+
+class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeRequiresDiscountCodeActionSchema`."
+    #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
+    requires_discount_code: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        requires_discount_code: typing.Optional[bool] = None
+    ) -> None:
+        self.requires_discount_code = requires_discount_code
+        super().__init__(action="changeRequiresDiscountCode")
+
+    def __repr__(self) -> str:
+        return (
+            "CartDiscountChangeRequiresDiscountCodeAction(action=%r, requires_discount_code=%r)"
+            % (self.action, self.requires_discount_code)
+        )
+
+
+class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeSortOrderActionSchema`."
+    #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
+    sort_order: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        sort_order: typing.Optional[str] = None
+    ) -> None:
+        self.sort_order = sort_order
+        super().__init__(action="changeSortOrder")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeSortOrderAction(action=%r, sort_order=%r)" % (
+            self.action,
+            self.sort_order,
+        )
+
+
+class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeStackingModeActionSchema`."
+    #: :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
+    stacking_mode: typing.Optional["StackingMode"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        stacking_mode: typing.Optional["StackingMode"] = None
+    ) -> None:
+        self.stacking_mode = stacking_mode
+        super().__init__(action="changeStackingMode")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeStackingModeAction(action=%r, stacking_mode=%r)" % (
+            self.action,
+            self.stacking_mode,
+        )
+
+
+class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeTargetActionSchema`."
+    #: :class:`commercetools.types.CartDiscountTarget`
+    target: typing.Optional["CartDiscountTarget"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        target: typing.Optional["CartDiscountTarget"] = None
+    ) -> None:
+        self.target = target
+        super().__init__(action="changeTarget")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeTargetAction(action=%r, target=%r)" % (
+            self.action,
+            self.target,
+        )
+
+
+class CartDiscountChangeValueAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeValueActionSchema`."
+    #: :class:`commercetools.types.CartDiscountValue`
+    value: typing.Optional["CartDiscountValue"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        value: typing.Optional["CartDiscountValue"] = None
+    ) -> None:
+        self.value = value
+        super().__init__(action="changeValue")
+
+    def __repr__(self) -> str:
+        return "CartDiscountChangeValueAction(action=%r, value=%r)" % (
+            self.action,
+            self.value,
+        )
+
+
+class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountCustomLineItemsTargetSchema`."
+    #: :class:`str`
+    predicate: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        predicate: typing.Optional[str] = None
+    ) -> None:
+        self.predicate = predicate
+        super().__init__(type="customLineItems")
+
+    def __repr__(self) -> str:
+        return "CartDiscountCustomLineItemsTarget(type=%r, predicate=%r)" % (
+            self.type,
+            self.predicate,
+        )
+
+
+class CartDiscountLineItemsTarget(CartDiscountTarget):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountLineItemsTargetSchema`."
+    #: :class:`str`
+    predicate: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        predicate: typing.Optional[str] = None
+    ) -> None:
+        self.predicate = predicate
+        super().__init__(type="lineItems")
+
+    def __repr__(self) -> str:
+        return "CartDiscountLineItemsTarget(type=%r, predicate=%r)" % (
+            self.type,
+            self.predicate,
+        )
+
+
+class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomFieldActionSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.name = name
+        self.value = value
+        super().__init__(action="setCustomField")
+
+    def __repr__(self) -> str:
+        return "CartDiscountSetCustomFieldAction(action=%r, name=%r, value=%r)" % (
+            self.action,
+            self.name,
+            self.value,
+        )
+
+
+class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomTypeActionSchema`."
+    #: Optional :class:`commercetools.types.TypeReference`
+    type: typing.Optional["TypeReference"]
+    #: Optional :class:`object`
+    fields: typing.Optional[object]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        type: typing.Optional["TypeReference"] = None,
+        fields: typing.Optional[object] = None
+    ) -> None:
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setCustomType")
+
+    def __repr__(self) -> str:
+        return "CartDiscountSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
+            self.action,
+            self.type,
+            self.fields,
+        )
+
+
+class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetDescriptionActionSchema`."
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        description: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.description = description
+        super().__init__(action="setDescription")
+
+    def __repr__(self) -> str:
+        return "CartDiscountSetDescriptionAction(action=%r, description=%r)" % (
+            self.action,
+            self.description,
+        )
+
+
+class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidFromActionSchema`."
+    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
+    valid_from: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None
+    ) -> None:
+        self.valid_from = valid_from
+        super().__init__(action="setValidFrom")
+
+    def __repr__(self) -> str:
+        return "CartDiscountSetValidFromAction(action=%r, valid_from=%r)" % (
+            self.action,
+            self.valid_from,
+        )
+
+
+class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidFromAndUntilActionSchema`."
+    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
+    valid_from: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
+    ) -> None:
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        super().__init__(action="setValidFromAndUntil")
+
+    def __repr__(self) -> str:
+        return (
+            "CartDiscountSetValidFromAndUntilAction(action=%r, valid_from=%r, valid_until=%r)"
+            % (self.action, self.valid_from, self.valid_until)
+        )
+
+
+class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidUntilActionSchema`."
+    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
+    ) -> None:
+        self.valid_until = valid_until
+        super().__init__(action="setValidUntil")
+
+    def __repr__(self) -> str:
+        return "CartDiscountSetValidUntilAction(action=%r, valid_until=%r)" % (
+            self.action,
+            self.valid_until,
+        )
+
+
+class CartDiscountShippingCostTarget(CartDiscountTarget):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountShippingCostTargetSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="shipping")
+
+    def __repr__(self) -> str:
+        return "CartDiscountShippingCostTarget(type=%r)" % (self.type,)
+
+
 class CartDiscountValueAbsolute(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueAbsoluteSchema`."
     #: List of :class:`commercetools.types.Money`
@@ -406,7 +714,6 @@ class CartDiscountValueAbsolute(CartDiscountValue):
         return "CartDiscountValueAbsolute(type=%r, money=%r)" % (self.type, self.money)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountValueGiftLineItem(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueGiftLineItemSchema`."
     #: :class:`commercetools.types.ProductReference`
@@ -446,7 +753,6 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CartDiscountValueRelative(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueRelativeSchema`."
     #: :class:`int`
@@ -468,7 +774,6 @@ class CartDiscountValueRelative(CartDiscountValue):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MultiBuyCustomLineItemsTargetSchema`."
     #: :class:`str`
@@ -513,7 +818,6 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class MultiBuyLineItemsTarget(CartDiscountTarget):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MultiBuyLineItemsTargetSchema`."
     #: :class:`str`
@@ -555,336 +859,4 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
                 self.max_occurrence,
                 self.selection_mode,
             )
-        )
-
-
-class SelectionMode(enum.Enum):
-    CHEAPEST = "Cheapest"
-    MOST_EXPENSIVE = "MostExpensive"
-
-
-class StackingMode(enum.Enum):
-    STACKING = "Stacking"
-    STOP_AFTER_THIS_DISCOUNT = "StopAfterThisDiscount"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeCartPredicateActionSchema`."
-    #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
-    cart_predicate: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        cart_predicate: typing.Optional[str] = None
-    ) -> None:
-        self.cart_predicate = cart_predicate
-        super().__init__(action="changeCartPredicate")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeCartPredicateAction(action=%r, cart_predicate=%r)" % (
-            self.action,
-            self.cart_predicate,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeIsActiveActionSchema`."
-    #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None
-    ) -> None:
-        self.is_active = is_active
-        super().__init__(action="changeIsActive")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeIsActiveAction(action=%r, is_active=%r)" % (
-            self.action,
-            self.is_active,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeNameAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeNameActionSchema`."
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
-    ) -> None:
-        self.name = name
-        super().__init__(action="changeName")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeNameAction(action=%r, name=%r)" % (
-            self.action,
-            self.name,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeRequiresDiscountCodeActionSchema`."
-    #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
-    requires_discount_code: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        requires_discount_code: typing.Optional[bool] = None
-    ) -> None:
-        self.requires_discount_code = requires_discount_code
-        super().__init__(action="changeRequiresDiscountCode")
-
-    def __repr__(self) -> str:
-        return (
-            "CartDiscountChangeRequiresDiscountCodeAction(action=%r, requires_discount_code=%r)"
-            % (self.action, self.requires_discount_code)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeSortOrderActionSchema`."
-    #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None
-    ) -> None:
-        self.sort_order = sort_order
-        super().__init__(action="changeSortOrder")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeSortOrderAction(action=%r, sort_order=%r)" % (
-            self.action,
-            self.sort_order,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeStackingModeActionSchema`."
-    #: :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
-    stacking_mode: typing.Optional["StackingMode"]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        stacking_mode: typing.Optional["StackingMode"] = None
-    ) -> None:
-        self.stacking_mode = stacking_mode
-        super().__init__(action="changeStackingMode")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeStackingModeAction(action=%r, stacking_mode=%r)" % (
-            self.action,
-            self.stacking_mode,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeTargetActionSchema`."
-    #: :class:`commercetools.types.CartDiscountTarget`
-    target: typing.Optional["CartDiscountTarget"]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        target: typing.Optional["CartDiscountTarget"] = None
-    ) -> None:
-        self.target = target
-        super().__init__(action="changeTarget")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeTargetAction(action=%r, target=%r)" % (
-            self.action,
-            self.target,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountChangeValueAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeValueActionSchema`."
-    #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        value: typing.Optional["CartDiscountValue"] = None
-    ) -> None:
-        self.value = value
-        super().__init__(action="changeValue")
-
-    def __repr__(self) -> str:
-        return "CartDiscountChangeValueAction(action=%r, value=%r)" % (
-            self.action,
-            self.value,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomFieldActionSchema`."
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: Optional :class:`typing.Any`
-    value: typing.Optional[typing.Any]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
-        self.name = name
-        self.value = value
-        super().__init__(action="setCustomField")
-
-    def __repr__(self) -> str:
-        return "CartDiscountSetCustomFieldAction(action=%r, name=%r, value=%r)" % (
-            self.action,
-            self.name,
-            self.value,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
-    #: Optional :class:`object`
-    fields: typing.Optional[object]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
-        fields: typing.Optional[object] = None
-    ) -> None:
-        self.type = type
-        self.fields = fields
-        super().__init__(action="setCustomType")
-
-    def __repr__(self) -> str:
-        return "CartDiscountSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
-            self.action,
-            self.type,
-            self.fields,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetDescriptionActionSchema`."
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
-    ) -> None:
-        self.description = description
-        super().__init__(action="setDescription")
-
-    def __repr__(self) -> str:
-        return "CartDiscountSetDescriptionAction(action=%r, description=%r)" % (
-            self.action,
-            self.description,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidFromActionSchema`."
-    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
-    valid_from: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        valid_from: typing.Optional[datetime.datetime] = None
-    ) -> None:
-        self.valid_from = valid_from
-        super().__init__(action="setValidFrom")
-
-    def __repr__(self) -> str:
-        return "CartDiscountSetValidFromAction(action=%r, valid_from=%r)" % (
-            self.action,
-            self.valid_from,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidFromAndUntilActionSchema`."
-    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
-    valid_from: typing.Optional[datetime.datetime]
-    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
-    valid_until: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
-    ) -> None:
-        self.valid_from = valid_from
-        self.valid_until = valid_until
-        super().__init__(action="setValidFromAndUntil")
-
-    def __repr__(self) -> str:
-        return (
-            "CartDiscountSetValidFromAndUntilAction(action=%r, valid_from=%r, valid_until=%r)"
-            % (self.action, self.valid_from, self.valid_until)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidUntilActionSchema`."
-    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
-    valid_until: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
-    ) -> None:
-        self.valid_until = valid_until
-        super().__init__(action="setValidUntil")
-
-    def __repr__(self) -> str:
-        return "CartDiscountSetValidUntilAction(action=%r, valid_until=%r)" % (
-            self.action,
-            self.valid_until,
         )

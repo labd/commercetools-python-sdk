@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -57,397 +56,11 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerChangePassword:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangePasswordSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`str` `(Named` ``currentPassword`` `in Commercetools)`
-    current_password: typing.Optional[str]
-    #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
-    new_password: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        current_password: typing.Optional[str] = None,
-        new_password: typing.Optional[str] = None
-    ) -> None:
-        self.id = id
-        self.version = version
-        self.current_password = current_password
-        self.new_password = new_password
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerChangePassword(id=%r, version=%r, current_password=%r, new_password=%r)"
-            % (self.id, self.version, self.current_password, self.new_password)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerCreateEmailToken:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreateEmailTokenSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: Optional :class:`int`
-    version: typing.Optional[int]
-    #: :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
-    ttl_minutes: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        ttl_minutes: typing.Optional[int] = None
-    ) -> None:
-        self.id = id
-        self.version = version
-        self.ttl_minutes = ttl_minutes
-
-    def __repr__(self) -> str:
-        return "CustomerCreateEmailToken(id=%r, version=%r, ttl_minutes=%r)" % (
-            self.id,
-            self.version,
-            self.ttl_minutes,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerCreatePasswordResetToken:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatePasswordResetTokenSchema`."
-    #: :class:`str`
-    email: typing.Optional[str]
-    #: Optional :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
-    ttl_minutes: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        email: typing.Optional[str] = None,
-        ttl_minutes: typing.Optional[int] = None
-    ) -> None:
-        self.email = email
-        self.ttl_minutes = ttl_minutes
-
-    def __repr__(self) -> str:
-        return "CustomerCreatePasswordResetToken(email=%r, ttl_minutes=%r)" % (
-            self.email,
-            self.ttl_minutes,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDraftSchema`."
-    #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
-    customer_number: typing.Optional[str]
-    #: :class:`str`
-    email: typing.Optional[str]
-    #: :class:`str`
-    password: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
-    first_name: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
-    last_name: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
-    middle_name: typing.Optional[str]
-    #: Optional :class:`str`
-    title: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``anonymousCartId`` `in Commercetools)`
-    anonymous_cart_id: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
-    anonymous_id: typing.Optional[str]
-    #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
-    date_of_birth: typing.Optional[datetime.date]
-    #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
-    company_name: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
-    vat_id: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.Address`
-    addresses: typing.Optional[typing.List["Address"]]
-    #: Optional :class:`int` `(Named` ``defaultShippingAddress`` `in Commercetools)`
-    default_shipping_address: typing.Optional[int]
-    #: Optional list of :class:`int` `(Named` ``shippingAddresses`` `in Commercetools)`
-    shipping_addresses: typing.Optional[typing.List[int]]
-    #: Optional :class:`int` `(Named` ``defaultBillingAddress`` `in Commercetools)`
-    default_billing_address: typing.Optional[int]
-    #: Optional list of :class:`int` `(Named` ``billingAddresses`` `in Commercetools)`
-    billing_addresses: typing.Optional[typing.List[int]]
-    #: Optional :class:`bool` `(Named` ``isEmailVerified`` `in Commercetools)`
-    is_email_verified: typing.Optional[bool]
-    #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
-    external_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`str`
-    locale: typing.Optional[str]
-    #: Optional :class:`str`
-    salutation: typing.Optional[str]
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        customer_number: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
-        first_name: typing.Optional[str] = None,
-        last_name: typing.Optional[str] = None,
-        middle_name: typing.Optional[str] = None,
-        title: typing.Optional[str] = None,
-        anonymous_cart_id: typing.Optional[str] = None,
-        anonymous_id: typing.Optional[str] = None,
-        date_of_birth: typing.Optional[datetime.date] = None,
-        company_name: typing.Optional[str] = None,
-        vat_id: typing.Optional[str] = None,
-        addresses: typing.Optional[typing.List["Address"]] = None,
-        default_shipping_address: typing.Optional[int] = None,
-        shipping_addresses: typing.Optional[typing.List[int]] = None,
-        default_billing_address: typing.Optional[int] = None,
-        billing_addresses: typing.Optional[typing.List[int]] = None,
-        is_email_verified: typing.Optional[bool] = None,
-        external_id: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        locale: typing.Optional[str] = None,
-        salutation: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
-    ) -> None:
-        self.customer_number = customer_number
-        self.email = email
-        self.password = password
-        self.first_name = first_name
-        self.last_name = last_name
-        self.middle_name = middle_name
-        self.title = title
-        self.anonymous_cart_id = anonymous_cart_id
-        self.anonymous_id = anonymous_id
-        self.date_of_birth = date_of_birth
-        self.company_name = company_name
-        self.vat_id = vat_id
-        self.addresses = addresses
-        self.default_shipping_address = default_shipping_address
-        self.shipping_addresses = shipping_addresses
-        self.default_billing_address = default_billing_address
-        self.billing_addresses = billing_addresses
-        self.is_email_verified = is_email_verified
-        self.external_id = external_id
-        self.customer_group = customer_group
-        self.custom = custom
-        self.locale = locale
-        self.salutation = salutation
-        self.key = key
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerDraft(customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, anonymous_cart_id=%r, anonymous_id=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address=%r, shipping_addresses=%r, default_billing_address=%r, billing_addresses=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r)"
-            % (
-                self.customer_number,
-                self.email,
-                self.password,
-                self.first_name,
-                self.last_name,
-                self.middle_name,
-                self.title,
-                self.anonymous_cart_id,
-                self.anonymous_id,
-                self.date_of_birth,
-                self.company_name,
-                self.vat_id,
-                self.addresses,
-                self.default_shipping_address,
-                self.shipping_addresses,
-                self.default_billing_address,
-                self.billing_addresses,
-                self.is_email_verified,
-                self.external_id,
-                self.customer_group,
-                self.custom,
-                self.locale,
-                self.salutation,
-                self.key,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerEmailVerify:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifySchema`."
-    #: Optional :class:`int`
-    version: typing.Optional[int]
-    #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
-    token_value: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        token_value: typing.Optional[str] = None
-    ) -> None:
-        self.version = version
-        self.token_value = token_value
-
-    def __repr__(self) -> str:
-        return "CustomerEmailVerify(version=%r, token_value=%r)" % (
-            self.version,
-            self.token_value,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerResetPassword:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerResetPasswordSchema`."
-    #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
-    token_value: typing.Optional[str]
-    #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
-    new_password: typing.Optional[str]
-    #: Optional :class:`int`
-    version: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        token_value: typing.Optional[str] = None,
-        new_password: typing.Optional[str] = None,
-        version: typing.Optional[int] = None
-    ) -> None:
-        self.token_value = token_value
-        self.new_password = new_password
-        self.version = version
-
-    def __repr__(self) -> str:
-        return "CustomerResetPassword(token_value=%r, new_password=%r, version=%r)" % (
-            self.token_value,
-            self.new_password,
-            self.version,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerSignInResult:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSignInResultSchema`."
-    #: :class:`commercetools.types.Customer`
-    customer: typing.Optional["Customer"]
-    #: Optional :class:`object`
-    cart: typing.Optional[object]
-
-    def __init__(
-        self,
-        *,
-        customer: typing.Optional["Customer"] = None,
-        cart: typing.Optional[object] = None
-    ) -> None:
-        self.customer = customer
-        self.cart = cart
-
-    def __repr__(self) -> str:
-        return "CustomerSignInResult(customer=%r, cart=%r)" % (self.customer, self.cart)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerSignin:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSigninSchema`."
-    #: :class:`str`
-    email: typing.Optional[str]
-    #: :class:`str`
-    password: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``anonymousCartId`` `in Commercetools)`
-    anonymous_cart_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.AnonymousCartSignInMode` `(Named` ``anonymousCartSignInMode`` `in Commercetools)`
-    anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
-    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
-    anonymous_id: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
-        anonymous_cart_id: typing.Optional[str] = None,
-        anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
-        anonymous_id: typing.Optional[str] = None
-    ) -> None:
-        self.email = email
-        self.password = password
-        self.anonymous_cart_id = anonymous_cart_id
-        self.anonymous_cart_sign_in_mode = anonymous_cart_sign_in_mode
-        self.anonymous_id = anonymous_id
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerSignin(email=%r, password=%r, anonymous_cart_id=%r, anonymous_cart_sign_in_mode=%r, anonymous_id=%r)"
-            % (
-                self.email,
-                self.password,
-                self.anonymous_cart_id,
-                self.anonymous_cart_sign_in_mode,
-                self.anonymous_id,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerToken:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerTokenSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: :class:`str` `(Named` ``customerId`` `in Commercetools)`
-    customer_id: typing.Optional[str]
-    #: :class:`datetime.datetime` `(Named` ``expiresAt`` `in Commercetools)`
-    expires_at: typing.Optional[datetime.datetime]
-    #: :class:`str`
-    value: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        customer_id: typing.Optional[str] = None,
-        expires_at: typing.Optional[datetime.datetime] = None,
-        value: typing.Optional[str] = None
-    ) -> None:
-        self.id = id
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.customer_id = customer_id
-        self.expires_at = expires_at
-        self.value = value
-
-    def __repr__(self) -> str:
-        return (
-            "CustomerToken(id=%r, created_at=%r, last_modified_at=%r, customer_id=%r, expires_at=%r, value=%r)"
-            % (
-                self.id,
-                self.created_at,
-                self.last_modified_at,
-                self.customer_id,
-                self.expires_at,
-                self.value,
-            )
-        )
-
-
 class AnonymousCartSignInMode(enum.Enum):
     MERGE_WITH_EXISTING_CUSTOMER_CART = "MergeWithExistingCustomerCart"
     USE_AS_NEW_ACTIVE_CUSTOMER_CART = "UseAsNewActiveCustomerCart"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Customer(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSchema`."
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
@@ -588,7 +201,252 @@ class Customer(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerChangePassword(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangePasswordSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`str` `(Named` ``currentPassword`` `in Commercetools)`
+    current_password: typing.Optional[str]
+    #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
+    new_password: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        current_password: typing.Optional[str] = None,
+        new_password: typing.Optional[str] = None
+    ) -> None:
+        self.id = id
+        self.version = version
+        self.current_password = current_password
+        self.new_password = new_password
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerChangePassword(id=%r, version=%r, current_password=%r, new_password=%r)"
+            % (self.id, self.version, self.current_password, self.new_password)
+        )
+
+
+class CustomerCreateEmailToken(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreateEmailTokenSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: Optional :class:`int`
+    version: typing.Optional[int]
+    #: :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
+    ttl_minutes: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        ttl_minutes: typing.Optional[int] = None
+    ) -> None:
+        self.id = id
+        self.version = version
+        self.ttl_minutes = ttl_minutes
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomerCreateEmailToken(id=%r, version=%r, ttl_minutes=%r)" % (
+            self.id,
+            self.version,
+            self.ttl_minutes,
+        )
+
+
+class CustomerCreatePasswordResetToken(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatePasswordResetTokenSchema`."
+    #: :class:`str`
+    email: typing.Optional[str]
+    #: Optional :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
+    ttl_minutes: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        email: typing.Optional[str] = None,
+        ttl_minutes: typing.Optional[int] = None
+    ) -> None:
+        self.email = email
+        self.ttl_minutes = ttl_minutes
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomerCreatePasswordResetToken(email=%r, ttl_minutes=%r)" % (
+            self.email,
+            self.ttl_minutes,
+        )
+
+
+class CustomerDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDraftSchema`."
+    #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
+    customer_number: typing.Optional[str]
+    #: :class:`str`
+    email: typing.Optional[str]
+    #: :class:`str`
+    password: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
+    first_name: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
+    last_name: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
+    middle_name: typing.Optional[str]
+    #: Optional :class:`str`
+    title: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``anonymousCartId`` `in Commercetools)`
+    anonymous_cart_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+    #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
+    date_of_birth: typing.Optional[datetime.date]
+    #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
+    company_name: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
+    vat_id: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.Address`
+    addresses: typing.Optional[typing.List["Address"]]
+    #: Optional :class:`int` `(Named` ``defaultShippingAddress`` `in Commercetools)`
+    default_shipping_address: typing.Optional[int]
+    #: Optional list of :class:`int` `(Named` ``shippingAddresses`` `in Commercetools)`
+    shipping_addresses: typing.Optional[typing.List[int]]
+    #: Optional :class:`int` `(Named` ``defaultBillingAddress`` `in Commercetools)`
+    default_billing_address: typing.Optional[int]
+    #: Optional list of :class:`int` `(Named` ``billingAddresses`` `in Commercetools)`
+    billing_addresses: typing.Optional[typing.List[int]]
+    #: Optional :class:`bool` `(Named` ``isEmailVerified`` `in Commercetools)`
+    is_email_verified: typing.Optional[bool]
+    #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
+    external_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+    #: Optional :class:`str`
+    salutation: typing.Optional[str]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        customer_number: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        password: typing.Optional[str] = None,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        middle_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        anonymous_cart_id: typing.Optional[str] = None,
+        anonymous_id: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None,
+        company_name: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None,
+        addresses: typing.Optional[typing.List["Address"]] = None,
+        default_shipping_address: typing.Optional[int] = None,
+        shipping_addresses: typing.Optional[typing.List[int]] = None,
+        default_billing_address: typing.Optional[int] = None,
+        billing_addresses: typing.Optional[typing.List[int]] = None,
+        is_email_verified: typing.Optional[bool] = None,
+        external_id: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        locale: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
+        self.customer_number = customer_number
+        self.email = email
+        self.password = password
+        self.first_name = first_name
+        self.last_name = last_name
+        self.middle_name = middle_name
+        self.title = title
+        self.anonymous_cart_id = anonymous_cart_id
+        self.anonymous_id = anonymous_id
+        self.date_of_birth = date_of_birth
+        self.company_name = company_name
+        self.vat_id = vat_id
+        self.addresses = addresses
+        self.default_shipping_address = default_shipping_address
+        self.shipping_addresses = shipping_addresses
+        self.default_billing_address = default_billing_address
+        self.billing_addresses = billing_addresses
+        self.is_email_verified = is_email_verified
+        self.external_id = external_id
+        self.customer_group = customer_group
+        self.custom = custom
+        self.locale = locale
+        self.salutation = salutation
+        self.key = key
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerDraft(customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, anonymous_cart_id=%r, anonymous_id=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address=%r, shipping_addresses=%r, default_billing_address=%r, billing_addresses=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r)"
+            % (
+                self.customer_number,
+                self.email,
+                self.password,
+                self.first_name,
+                self.last_name,
+                self.middle_name,
+                self.title,
+                self.anonymous_cart_id,
+                self.anonymous_id,
+                self.date_of_birth,
+                self.company_name,
+                self.vat_id,
+                self.addresses,
+                self.default_shipping_address,
+                self.shipping_addresses,
+                self.default_billing_address,
+                self.billing_addresses,
+                self.is_email_verified,
+                self.external_id,
+                self.customer_group,
+                self.custom,
+                self.locale,
+                self.salutation,
+                self.key,
+            )
+        )
+
+
+class CustomerEmailVerify(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifySchema`."
+    #: Optional :class:`int`
+    version: typing.Optional[int]
+    #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
+    token_value: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        version: typing.Optional[int] = None,
+        token_value: typing.Optional[str] = None
+    ) -> None:
+        self.version = version
+        self.token_value = token_value
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomerEmailVerify(version=%r, token_value=%r)" % (
+            self.version,
+            self.token_value,
+        )
+
+
 class CustomerPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Customer`
@@ -612,7 +470,6 @@ class CustomerPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerReferenceSchema`."
     #: Optional :class:`commercetools.types.Customer`
@@ -638,7 +495,145 @@ class CustomerReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerResetPassword(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerResetPasswordSchema`."
+    #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
+    token_value: typing.Optional[str]
+    #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
+    new_password: typing.Optional[str]
+    #: Optional :class:`int`
+    version: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        token_value: typing.Optional[str] = None,
+        new_password: typing.Optional[str] = None,
+        version: typing.Optional[int] = None
+    ) -> None:
+        self.token_value = token_value
+        self.new_password = new_password
+        self.version = version
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomerResetPassword(token_value=%r, new_password=%r, version=%r)" % (
+            self.token_value,
+            self.new_password,
+            self.version,
+        )
+
+
+class CustomerSignInResult(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSignInResultSchema`."
+    #: :class:`commercetools.types.Customer`
+    customer: typing.Optional["Customer"]
+    #: Optional :class:`object`
+    cart: typing.Optional[object]
+
+    def __init__(
+        self,
+        *,
+        customer: typing.Optional["Customer"] = None,
+        cart: typing.Optional[object] = None
+    ) -> None:
+        self.customer = customer
+        self.cart = cart
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomerSignInResult(customer=%r, cart=%r)" % (self.customer, self.cart)
+
+
+class CustomerSignin(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSigninSchema`."
+    #: :class:`str`
+    email: typing.Optional[str]
+    #: :class:`str`
+    password: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``anonymousCartId`` `in Commercetools)`
+    anonymous_cart_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.AnonymousCartSignInMode` `(Named` ``anonymousCartSignInMode`` `in Commercetools)`
+    anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        email: typing.Optional[str] = None,
+        password: typing.Optional[str] = None,
+        anonymous_cart_id: typing.Optional[str] = None,
+        anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
+        anonymous_id: typing.Optional[str] = None
+    ) -> None:
+        self.email = email
+        self.password = password
+        self.anonymous_cart_id = anonymous_cart_id
+        self.anonymous_cart_sign_in_mode = anonymous_cart_sign_in_mode
+        self.anonymous_id = anonymous_id
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerSignin(email=%r, password=%r, anonymous_cart_id=%r, anonymous_cart_sign_in_mode=%r, anonymous_id=%r)"
+            % (
+                self.email,
+                self.password,
+                self.anonymous_cart_id,
+                self.anonymous_cart_sign_in_mode,
+                self.anonymous_id,
+            )
+        )
+
+
+class CustomerToken(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerTokenSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: typing.Optional[datetime.datetime]
+    #: :class:`str` `(Named` ``customerId`` `in Commercetools)`
+    customer_id: typing.Optional[str]
+    #: :class:`datetime.datetime` `(Named` ``expiresAt`` `in Commercetools)`
+    expires_at: typing.Optional[datetime.datetime]
+    #: :class:`str`
+    value: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        customer_id: typing.Optional[str] = None,
+        expires_at: typing.Optional[datetime.datetime] = None,
+        value: typing.Optional[str] = None
+    ) -> None:
+        self.id = id
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.customer_id = customer_id
+        self.expires_at = expires_at
+        self.value = value
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "CustomerToken(id=%r, created_at=%r, last_modified_at=%r, customer_id=%r, expires_at=%r, value=%r)"
+            % (
+                self.id,
+                self.created_at,
+                self.last_modified_at,
+                self.customer_id,
+                self.expires_at,
+                self.value,
+            )
+        )
+
+
 class CustomerUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateSchema`."
     #: :class:`list`
@@ -657,7 +652,6 @@ class CustomerUpdate(Update):
         return "CustomerUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateActionSchema`."
 
@@ -668,7 +662,6 @@ class CustomerUpdateAction(UpdateAction):
         return "CustomerUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerAddAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddAddressActionSchema`."
     #: :class:`commercetools.types.Address`
@@ -690,7 +683,6 @@ class CustomerAddAddressAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddBillingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -712,7 +704,6 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddShippingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -734,7 +725,6 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerChangeAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeAddressActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -761,7 +751,6 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerChangeEmailAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeEmailActionSchema`."
     #: :class:`str`
@@ -780,7 +769,6 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerRemoveAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveAddressActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -802,7 +790,6 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveBillingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -824,7 +811,6 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveShippingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -846,7 +832,6 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetCompanyNameAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCompanyNameActionSchema`."
     #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
@@ -868,7 +853,6 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -895,7 +879,6 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetCustomTypeAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -922,7 +905,6 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetCustomerGroupAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomerGroupActionSchema`."
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -944,7 +926,6 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetCustomerNumberAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomerNumberActionSchema`."
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
@@ -966,7 +947,6 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetDateOfBirthAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDateOfBirthActionSchema`."
     #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
@@ -988,7 +968,6 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDefaultBillingAddressActionSchema`."
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -1010,7 +989,6 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDefaultShippingAddressActionSchema`."
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
@@ -1032,7 +1010,6 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetExternalIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetExternalIdActionSchema`."
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
@@ -1054,7 +1031,6 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetFirstNameAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetFirstNameActionSchema`."
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
@@ -1076,7 +1052,6 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetKeyAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetKeyActionSchema`."
     #: Optional :class:`str`
@@ -1092,7 +1067,6 @@ class CustomerSetKeyAction(CustomerUpdateAction):
         return "CustomerSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetLastNameAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetLastNameActionSchema`."
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
@@ -1114,7 +1088,6 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetLocaleAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetLocaleActionSchema`."
     #: Optional :class:`str`
@@ -1136,7 +1109,6 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetMiddleNameAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetMiddleNameActionSchema`."
     #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
@@ -1158,7 +1130,6 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetSalutationAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetSalutationActionSchema`."
     #: Optional :class:`str`
@@ -1180,7 +1151,6 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetTitleAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetTitleActionSchema`."
     #: Optional :class:`str`
@@ -1196,7 +1166,6 @@ class CustomerSetTitleAction(CustomerUpdateAction):
         return "CustomerSetTitleAction(action=%r, title=%r)" % (self.action, self.title)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerSetVatIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetVatIdActionSchema`."
     #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`

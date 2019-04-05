@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -35,84 +34,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DiscountCodeDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeDraftSchema`."
-    #: Optional :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: :class:`str`
-    code: typing.Optional[str]
-    #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``cartDiscounts`` `in Commercetools)`
-    cart_discounts: typing.Optional[typing.List["CartDiscountReference"]]
-    #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
-    cart_predicate: typing.Optional[str]
-    #: Optional :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
-    #: Optional :class:`int` `(Named` ``maxApplications`` `in Commercetools)`
-    max_applications: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``maxApplicationsPerCustomer`` `in Commercetools)`
-    max_applications_per_customer: typing.Optional[int]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`list`
-    groups: typing.Optional[list]
-    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
-    valid_from: typing.Optional[datetime.datetime]
-    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
-    valid_until: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional["LocalizedString"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        code: typing.Optional[str] = None,
-        cart_discounts: typing.Optional[typing.List["CartDiscountReference"]] = None,
-        cart_predicate: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-        max_applications: typing.Optional[int] = None,
-        max_applications_per_customer: typing.Optional[int] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        groups: typing.Optional[list] = None,
-        valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
-    ) -> None:
-        self.name = name
-        self.description = description
-        self.code = code
-        self.cart_discounts = cart_discounts
-        self.cart_predicate = cart_predicate
-        self.is_active = is_active
-        self.max_applications = max_applications
-        self.max_applications_per_customer = max_applications_per_customer
-        self.custom = custom
-        self.groups = groups
-        self.valid_from = valid_from
-        self.valid_until = valid_until
-
-    def __repr__(self) -> str:
-        return (
-            "DiscountCodeDraft(name=%r, description=%r, code=%r, cart_discounts=%r, cart_predicate=%r, is_active=%r, max_applications=%r, max_applications_per_customer=%r, custom=%r, groups=%r, valid_from=%r, valid_until=%r)"
-            % (
-                self.name,
-                self.description,
-                self.code,
-                self.cart_discounts,
-                self.cart_predicate,
-                self.is_active,
-                self.max_applications,
-                self.max_applications_per_customer,
-                self.custom,
-                self.groups,
-                self.valid_from,
-                self.valid_until,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCode(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -208,7 +129,83 @@ class DiscountCode(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class DiscountCodeDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeDraftSchema`."
+    #: Optional :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: :class:`str`
+    code: typing.Optional[str]
+    #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``cartDiscounts`` `in Commercetools)`
+    cart_discounts: typing.Optional[typing.List["CartDiscountReference"]]
+    #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
+    cart_predicate: typing.Optional[str]
+    #: Optional :class:`bool` `(Named` ``isActive`` `in Commercetools)`
+    is_active: typing.Optional[bool]
+    #: Optional :class:`int` `(Named` ``maxApplications`` `in Commercetools)`
+    max_applications: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``maxApplicationsPerCustomer`` `in Commercetools)`
+    max_applications_per_customer: typing.Optional[int]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`list`
+    groups: typing.Optional[list]
+    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
+    valid_from: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional["LocalizedString"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        code: typing.Optional[str] = None,
+        cart_discounts: typing.Optional[typing.List["CartDiscountReference"]] = None,
+        cart_predicate: typing.Optional[str] = None,
+        is_active: typing.Optional[bool] = None,
+        max_applications: typing.Optional[int] = None,
+        max_applications_per_customer: typing.Optional[int] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        groups: typing.Optional[list] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
+    ) -> None:
+        self.name = name
+        self.description = description
+        self.code = code
+        self.cart_discounts = cart_discounts
+        self.cart_predicate = cart_predicate
+        self.is_active = is_active
+        self.max_applications = max_applications
+        self.max_applications_per_customer = max_applications_per_customer
+        self.custom = custom
+        self.groups = groups
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "DiscountCodeDraft(name=%r, description=%r, code=%r, cart_discounts=%r, cart_predicate=%r, is_active=%r, max_applications=%r, max_applications_per_customer=%r, custom=%r, groups=%r, valid_from=%r, valid_until=%r)"
+            % (
+                self.name,
+                self.description,
+                self.code,
+                self.cart_discounts,
+                self.cart_predicate,
+                self.is_active,
+                self.max_applications,
+                self.max_applications_per_customer,
+                self.custom,
+                self.groups,
+                self.valid_from,
+                self.valid_until,
+            )
+        )
+
+
 class DiscountCodePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.DiscountCode`
@@ -232,7 +229,6 @@ class DiscountCodePagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeReferenceSchema`."
     #: Optional :class:`commercetools.types.DiscountCode`
@@ -258,7 +254,6 @@ class DiscountCodeReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeUpdateSchema`."
     #: :class:`list`
@@ -280,7 +275,6 @@ class DiscountCodeUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeUpdateActionSchema`."
 
@@ -291,7 +285,6 @@ class DiscountCodeUpdateAction(UpdateAction):
         return "DiscountCodeUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeCartDiscountsActionSchema`."
     #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``cartDiscounts`` `in Commercetools)`
@@ -313,7 +306,6 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeGroupsActionSchema`."
     #: List of :class:`str`
@@ -335,7 +327,6 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeIsActiveActionSchema`."
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
@@ -357,7 +348,6 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCartPredicateActionSchema`."
     #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
@@ -379,7 +369,6 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -406,7 +395,6 @@ class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -433,7 +421,6 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetDescriptionActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -455,7 +442,6 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetMaxApplicationsActionSchema`."
     #: Optional :class:`int` `(Named` ``maxApplications`` `in Commercetools)`
@@ -477,7 +463,6 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetMaxApplicationsPerCustomerActionSchema`."
     #: Optional :class:`int` `(Named` ``maxApplicationsPerCustomer`` `in Commercetools)`
@@ -499,7 +484,6 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetNameActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -521,7 +505,6 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetValidFromActionSchema`."
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
@@ -543,7 +526,6 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetValidFromAndUntilActionSchema`."
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
@@ -569,7 +551,6 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetValidUntilActionSchema`."
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`

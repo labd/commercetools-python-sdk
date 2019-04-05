@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -29,54 +28,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class InventoryEntryDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDraftSchema`."
-    #: :class:`str`
-    sku: typing.Optional[str]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
-    #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
-    quantity_on_stock: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
-    restockable_in_days: typing.Optional[int]
-    #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
-    expected_delivery: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-
-    def __init__(
-        self,
-        *,
-        sku: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
-        quantity_on_stock: typing.Optional[int] = None,
-        restockable_in_days: typing.Optional[int] = None,
-        expected_delivery: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
-    ) -> None:
-        self.sku = sku
-        self.supply_channel = supply_channel
-        self.quantity_on_stock = quantity_on_stock
-        self.restockable_in_days = restockable_in_days
-        self.expected_delivery = expected_delivery
-        self.custom = custom
-
-    def __repr__(self) -> str:
-        return (
-            "InventoryEntryDraft(sku=%r, supply_channel=%r, quantity_on_stock=%r, restockable_in_days=%r, expected_delivery=%r, custom=%r)"
-            % (
-                self.sku,
-                self.supply_channel,
-                self.quantity_on_stock,
-                self.restockable_in_days,
-                self.expected_delivery,
-                self.custom,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryEntry(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySchema`."
     #: :class:`str`
@@ -142,7 +93,53 @@ class InventoryEntry(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class InventoryEntryDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDraftSchema`."
+    #: :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelReference"]
+    #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
+    quantity_on_stock: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
+    restockable_in_days: typing.Optional[int]
+    #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
+    expected_delivery: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        sku: typing.Optional[str] = None,
+        supply_channel: typing.Optional["ChannelReference"] = None,
+        quantity_on_stock: typing.Optional[int] = None,
+        restockable_in_days: typing.Optional[int] = None,
+        expected_delivery: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ) -> None:
+        self.sku = sku
+        self.supply_channel = supply_channel
+        self.quantity_on_stock = quantity_on_stock
+        self.restockable_in_days = restockable_in_days
+        self.expected_delivery = expected_delivery
+        self.custom = custom
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "InventoryEntryDraft(sku=%r, supply_channel=%r, quantity_on_stock=%r, restockable_in_days=%r, expected_delivery=%r, custom=%r)"
+            % (
+                self.sku,
+                self.supply_channel,
+                self.quantity_on_stock,
+                self.restockable_in_days,
+                self.expected_delivery,
+                self.custom,
+            )
+        )
+
+
 class InventoryEntryReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryReferenceSchema`."
     #: Optional :class:`commercetools.types.InventoryEntry`
@@ -168,7 +165,6 @@ class InventoryEntryReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.InventoryEntry`
@@ -192,7 +188,6 @@ class InventoryPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryUpdateSchema`."
     #: :class:`list`
@@ -211,7 +206,6 @@ class InventoryUpdate(Update):
         return "InventoryUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryUpdateActionSchema`."
 
@@ -222,7 +216,6 @@ class InventoryUpdateAction(UpdateAction):
         return "InventoryUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryAddQuantityAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryAddQuantityActionSchema`."
     #: :class:`int`
@@ -244,7 +237,6 @@ class InventoryAddQuantityAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryChangeQuantityAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryChangeQuantityActionSchema`."
     #: :class:`int`
@@ -266,7 +258,6 @@ class InventoryChangeQuantityAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventoryRemoveQuantityAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryRemoveQuantityActionSchema`."
     #: :class:`int`
@@ -288,7 +279,6 @@ class InventoryRemoveQuantityAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventorySetCustomFieldAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetCustomFieldActionSchema`."
     #: :class:`str`
@@ -315,7 +305,6 @@ class InventorySetCustomFieldAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventorySetCustomTypeAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -342,7 +331,6 @@ class InventorySetCustomTypeAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventorySetExpectedDeliveryAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetExpectedDeliveryActionSchema`."
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
@@ -364,7 +352,6 @@ class InventorySetExpectedDeliveryAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventorySetRestockableInDaysAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetRestockableInDaysActionSchema`."
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
@@ -386,7 +373,6 @@ class InventorySetRestockableInDaysAction(InventoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InventorySetSupplyChannelAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetSupplyChannelActionSchema`."
     #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`

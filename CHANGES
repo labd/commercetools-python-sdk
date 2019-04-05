@@ -2,6 +2,7 @@
 ------------------
  - Generate the code normally created by the attrs package to improve the
    import time with 30%. Attrs is now also no longer a dependency
+ - Add py.typed placeholder file (PEP561)
 
 2.4.2 (2019-03-18)
 ------------------

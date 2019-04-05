@@ -14,28 +14,33 @@ class ShoppingListModel(BaseModel):
     def _create_line_item_from_draft(
         self, line_item_draft: types.ShoppingListLineItemDraft
     ) -> types.ShoppingListLineItem:
+        product_store = self._storage._stores["product"]
+
+        product = None
+        if line_item_draft.product_id:
+            product = product_store[uuid.UUID(line_item_draft.product_id)]
+        elif line_item_draft.sku:
+            for product_data in product_store.values():
+                master = product_data["masterData"]["current"]["masterVariant"]
+                if master["sku"] == line_item_draft.sku:
+                    product = product_data
+                    break
+
+        if not product:
+            raise NotImplementedError
+
+        variant = product["masterData"]["current"]["masterVariant"]
         return types.ShoppingListLineItem(
             id=str(uuid.uuid4()),
             added_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(line_item_draft.custom),
             deactivated_at=None,
-            name=types.LocalizedString({"en": "FRUIT MIX STAGE 1"}),
+            name=product["masterData"]["current"]["name"],
             product_id=line_item_draft.product_id,
-            product_type=types.ProductTypeReference(
-                id="9faf6335-7618-4f8b-a11d-c0f832b733c1"
-            ),
-            product_slug=types.LocalizedString({"en": "fruit-mix-stage-1"}),
+            product_type=product["productType"],
+            product_slug=product["masterData"]["current"]["slug"],
             quantity=line_item_draft.quantity,
-            variant=types.ProductVariant(
-                id=1,
-                sku="982218931672529",
-                prices=[
-                    types.Price(
-                        id="fb424988-79b3-4418-8730-9f324025a13c",
-                        value=types.Money(cent_amount=1000, currency_code="GBP"),
-                    )
-                ],
-            ),
+            variant=types.ProductVariant(id=variant["id"], sku=variant["sku"]),
             variant_id=line_item_draft.variant_id,
         )
 
@@ -86,7 +91,7 @@ class ShoppingListModel(BaseModel):
         )
 
 
-class ShoppingListBackend(ServiceBackend):
+class ShoppingListsBackend(ServiceBackend):
     service_path = "shopping-lists"
     model_class = ShoppingListModel
     _schema_draft = schemas.ShoppingListDraftSchema

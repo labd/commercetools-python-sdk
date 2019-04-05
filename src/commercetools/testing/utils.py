@@ -146,7 +146,7 @@ def get_product_from_storage(
     storage: "commercetools.testing.Storage",
     product_id: uuid.UUID = None,
     sku: str = None,
-) -> types.Product:
+) -> typing.Optional[types.Product]:
     product = None
     product_store = storage._stores["product"]
 

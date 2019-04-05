@@ -57,6 +57,26 @@ class Client:
 
     """
 
+    categories: CategoryService
+    custom_objects: CustomObjectService
+    carts: CartService
+    channels: ChannelService
+    customer_groups: CustomerGroupService
+    extensions: ExtensionService
+    orders: OrderService
+    products: ProductService
+    product_discounts: ProductDiscountService
+    project: ProjectService
+    payments: PaymentService
+    product_projections: ProductProjectionService
+    product_types: ProductTypeService
+    reviews: ReviewService
+    shipping_methods: ShippingMethodService
+    shopping_lists: ShoppingListService
+    subscriptions: SubscriptionService
+    tax_categories: TaxCategoryService
+    types: TypeService
+
     def __init__(
         self,
         project_key: str = None,
@@ -120,6 +140,27 @@ class Client:
                 client_secret=self._config["client_secret"],
             )
             self._save_token(token)
+
+        self.categories = CategoryService(self)
+        self.custom_objects = CustomObjectService(self)
+        self.carts = CartService(self)
+        self.channels = ChannelService(self)
+        self.customer_groups = CustomerGroupService(self)
+        self.extensions = ExtensionService(self)
+        self.inventory = InventoryService(self)
+        self.orders = OrderService(self)
+        self.products = ProductService(self)
+        self.product_discounts = ProductDiscountService(self)
+        self.project = ProjectService(self)
+        self.payments = PaymentService(self)
+        self.product_projections = ProductProjectionService(self)
+        self.product_types = ProductTypeService(self)
+        self.reviews = ReviewService(self)
+        self.shipping_methods = ShippingMethodService(self)
+        self.shopping_lists = ShoppingListService(self)
+        self.subscriptions = SubscriptionService(self)
+        self.tax_categories = TaxCategoryService(self)
+        self.types = TypeService(self)
 
     def _save_token(self, token):
         self._token_saver.add_token(
@@ -243,91 +284,3 @@ class Client:
                 raise ValueError(f"No value set for {key}")
 
         return config
-
-    @property
-    def categories(self) -> CategoryService:
-        return CategoryService(self)
-
-    @property
-    def custom_objects(self) -> CustomObjectService:
-        return CustomObjectService(self)
-
-    @property
-    def customer_groups(self) -> CustomerGroupService:
-        return CustomerGroupService(self)
-
-    @property
-    def carts(self) -> CartService:
-        return CartService(self)
-
-    @property
-    def cart_discounts(self):
-        raise NotImplementedError()
-
-    @property
-    def channels(self) -> ChannelService:
-        return ChannelService(self)
-
-    @property
-    def discount_codes(self):
-        raise NotImplementedError()
-
-    @property
-    def extensions(self) -> ExtensionService:
-        return ExtensionService(self)
-
-    @property
-    def inventory(self):
-        return InventoryService(self)
-
-    @property
-    def orders(self) -> OrderService:
-        return OrderService(self)
-
-    @property
-    def products(self) -> ProductService:
-        return ProductService(self)
-
-    @property
-    def product_discounts(self) -> ProductDiscountService:
-        return ProductDiscountService(self)
-
-    @property
-    def project(self) -> ProjectService:
-        return ProjectService(self)
-
-    @property
-    def payments(self) -> PaymentService:
-        return PaymentService(self)
-
-    @property
-    def product_projections(self) -> ProductProjectionService:
-        return ProductProjectionService(self)
-
-    @property
-    def product_types(self) -> ProductTypeService:
-        return ProductTypeService(self)
-
-    @property
-    def reviews(self) -> ReviewService:
-        return ReviewService(self)
-
-    @property
-    def shipping_methods(self) -> ShippingMethodService:
-        return ShippingMethodService(self)
-
-    @property
-    def shopping_lists(self) -> ShoppingListService:
-        return ShoppingListService(self)
-
-    @property
-    def subscriptions(self) -> SubscriptionService:
-        return SubscriptionService(self)
-
-    @property
-    def tax_categories(self) -> TaxCategoryService:
-        return TaxCategoryService(self)
-
-    @property
-    def types(self) -> TypeService:
-        return TypeService(self)

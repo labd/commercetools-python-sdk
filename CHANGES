@@ -4,6 +4,7 @@
    import time with 30%. Attrs is now also no longer a dependency
  - Add py.typed placeholder file (PEP561)
  - Add support for the ShoppingList service endpoint (including mock interface)
+ - Add support for the Reviews endpoint (including mock interface)
 
 2.4.2 (2019-03-18)
 ------------------

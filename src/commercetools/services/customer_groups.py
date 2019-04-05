@@ -62,9 +62,7 @@ class CustomerGroupService(abstract.AbstractService):
         *,
         force_update: bool = False,
     ) -> types.CustomerGroup:
-        update_action = schemas.CustomerGroupUpdateSchema(
-            version=version, actions=actions
-        )
+        update_action = types.CustomerGroupUpdate(version=version, actions=actions)
         return self._client._post(
             f"customer-groups/{id}",
             {},
@@ -81,9 +79,7 @@ class CustomerGroupService(abstract.AbstractService):
         *,
         force_update: bool = False,
     ) -> types.CustomerGroup:
-        update_action = schemas.CustomerGroupUpdateSchema(
-            version=version, actions=actions
-        )
+        update_action = types.CustomerGroupUpdate(version=version, actions=actions)
         return self._client._post(
             f"customer-groups/key={key}",
             {},

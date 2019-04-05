@@ -11,6 +11,7 @@ from commercetools.testing.carts import CartsBackend
 from commercetools.testing.categories import CategoriesBackend
 from commercetools.testing.channels import ChannelsBackend
 from commercetools.testing.custom_objects import CustomObjectsBackend
+from commercetools.testing.customer_groups import CustomerGroupBackend
 from commercetools.testing.extensions import ExtensionsBackend
 from commercetools.testing.inventory import InventoryEntryBackend
 from commercetools.testing.orders import OrdersBackend
@@ -66,6 +67,7 @@ class BackendRepository:
         self.categories = CategoriesBackend(self._storage)
         self.channels = ChannelsBackend(self._storage)
         self.custom_objects = CustomObjectsBackend(self._storage)
+        self.customer_groups = CustomerGroupBackend(self._storage)
         self.extensions = ExtensionsBackend(self._storage)
         self.inventory = InventoryEntryBackend(self._storage)
         self.orders = OrdersBackend(self._storage)

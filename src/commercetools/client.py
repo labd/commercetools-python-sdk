@@ -16,6 +16,7 @@ from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
 from commercetools.services.custom_objects import CustomObjectService
+from commercetools.services.customer_groups import CustomerGroupService
 from commercetools.services.extensions import ExtensionService
 from commercetools.services.inventory import InventoryService
 from commercetools.services.orders import OrderService
@@ -250,6 +251,10 @@ class Client:
     @property
     def custom_objects(self) -> CustomObjectService:
         return CustomObjectService(self)
+
+    @property
+    def customer_groups(self) -> CustomerGroupService:
+        return CustomerGroupService(self)
 
     @property
     def carts(self) -> CartService:

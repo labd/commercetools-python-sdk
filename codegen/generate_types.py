@@ -1,3 +1,4 @@
+import textwrap
 import operator
 import ast
 import typing
@@ -37,7 +38,6 @@ class TypesModuleGenerator(AbstractModuleGenerator):
 
         result = {}
         for module in modules:
-            self.add_import_statement(module, "attr")
             self.add_import_statement(module, "typing")
             self.add_import_statement(module, "datetime")
 
@@ -67,6 +67,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
             result[module] = value
 
         result["__init__"] = self.generate_init_module(result.keys())
+        result["_abstract"] = self.generate_abstract_module(result.keys())
         return result
 
     def generate_init_module(self, modules):
@@ -81,6 +82,55 @@ class TypesModuleGenerator(AbstractModuleGenerator):
             for module in sorted(modules)
         ]
         return ast.Module(body=nodes)
+
+    def generate_abstract_module(self, modules):
+        content = """
+        class _BaseType():
+
+            def __eq__(self, other):
+                if (other.__class__ is self.__class__):
+                    return (self.__values__() == other.__values__())
+                else:
+                    return NotImplemented
+
+            def __ne__(self, other):
+                result = self.__eq__(other)
+                if (result is NotImplemented):
+                    return NotImplemented
+                else:
+                    return (not result)
+
+            def __lt__(self, other):
+                if (other.__class__ is self.__class__):
+                    return (self.__values__() < other.__values__())
+                else:
+                    return NotImplemented
+
+            def __le__(self, other):
+                if (other.__class__ is self.__class__):
+                    return (self.__values__() <= other.__values__())
+                else:
+                    return NotImplemented
+
+            def __gt__(self, other):
+                if (other.__class__ is self.__class__):
+                    return (self.__values__() > other.__values__())
+                else:
+                    return NotImplemented
+
+            def __ge__(self, other):
+                if (other.__class__ is self.__class__):
+                    return (self.__values__() >= other.__values__())
+                else:
+                    return NotImplemented
+
+            def __values__(self):
+                return tuple(self.__dict__.values())
+
+            def __hash__(self):
+                return hash((self.__class__,) + self.__values__())
+        """
+        return ast.parse(textwrap.dedent(content))
 
     def add_type_definition(self, resource):
         node = self.create_object(resource)
@@ -278,24 +328,19 @@ class _ResourceClassGenerator:
                     self.resource.base.name,
                 )
 
+        if not bases:
+            bases.append(ast.Name(id="_BaseType"))
+            self.generator.import_resource(
+                self.resource.package_name,
+                "_abstract",
+                "_BaseType")
+
         # Create the class node
         class_node = ast.ClassDef(
             name=self.resource.name,
             bases=bases,
             keywords=[],
-            decorator_list=[
-                ast.Call(
-                    func=ast.Attribute(value=ast.Name(id="attr"), attr="s"),
-                    args=[],
-                    keywords=[
-                        ast.keyword(
-                            arg="auto_attribs", value=ast.NameConstant(value=True)
-                        ),
-                        ast.keyword(arg="init", value=ast.NameConstant(value=False)),
-                        ast.keyword(arg="repr", value=ast.NameConstant(value=False)),
-                    ],
-                )
-            ],
+            decorator_list=[],
             body=[],
         )
         # Docstring
@@ -421,8 +466,7 @@ class _ResourceClassGenerator:
                 )
             )
 
-        # Generate an __init__ function. This isn't really needed for
-        # attrs but it results in some nicer code completion for editors
+        # Generate an __init__ function.
         init_func = ast.FunctionDef(
             name="__init__",
             args=ast.arguments(

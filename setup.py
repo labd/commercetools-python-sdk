@@ -7,14 +7,19 @@ install_requires = [
     "pytz",
     "requests-oauthlib>=1.0.0",
     "requests_mock>=0.7.0",
-    "attrs>=18.2.0",
     "marshmallow>=3.0.0b17",
     "marshmallow-enum>=1.4.1",
     "WebOb>=1.8.0",
     "wrapt>=1.10.0",
 ]
 
-codegen_requires = ["PyYAML==3.13", "astunparse==1.6.2", "black==18.9b0", "isort"]
+codegen_requires = [
+    "astunparse==1.6.2",
+    "attrs>=18.2.0",
+    "black==18.9b0",
+    "isort",
+    "PyYAML==3.13",
+]
 
 docs_require = [
     "Sphinx>=1.8.1",

@@ -431,6 +431,17 @@ class SchemaClassGenerator:
         )
 
     def _create_nested_field(self, type_obj):
+        """Create a `marshmallow.fields.Nested()` field.
+
+        Generated code::
+
+            marshmallow.fields.Nested(
+                nested="commercetools.schemas.{package}.{object}Schema",
+                unknown=marshmallow.EXCLUDE,
+                allow_none=True
+            )
+
+        """
         return ast.Call(
             func=ast.Name(id="marshmallow.fields.Nested"),
             args=[],
@@ -447,6 +458,7 @@ class SchemaClassGenerator:
         )
 
     def _create_regex_call(self, field_name, method_name):
+        """Generate `data = self.fields[{ field_name }].{ method_name }(data)`"""
         return ast.Assign(
             targets=[ast.Name(id="data")],
             value=ast.Call(
@@ -463,6 +475,16 @@ class SchemaClassGenerator:
         )
 
     def _create_marshmallow_hook(self, name):
+        """Create a method on the Marshmallow schema which acts as a hook.
+
+        Generated code:
+
+            @marshmallow.post_load
+            def { name }(self, data):
+                <empty>
+
+        """
+
         return ast.FunctionDef(
             name=name,
             args=ast.arguments(

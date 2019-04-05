@@ -40,14 +40,15 @@ def test_get_by_key(client):
     variant = product.master_data.current.master_variant
     shopping_list = client.shopping_lists.create(
         draft=types.ShoppingListDraft(
+            key="test-shopping-list",
             name=types.LocalizedString({"nl": "Verlanglijstje"}),
             description=types.LocalizedString({"nl": "Verlanglijstje van LabD"}),
             line_items=[types.ShoppingListLineItemDraft(sku=variant.sku, quantity=1)],
         )
     )
-    assert shopping_list.id
+    assert shopping_list.key
 
-    shopping_list = client.shopping_lists.get_by_id(shopping_list.id)
+    shopping_list = client.shopping_lists.get_by_key("test-shopping-list")
     assert shopping_list.name["nl"] == "Verlanglijstje"
     assert shopping_list.description["nl"] == "Verlanglijstje van LabD"
     assert shopping_list.line_items[0].variant.sku == "123"

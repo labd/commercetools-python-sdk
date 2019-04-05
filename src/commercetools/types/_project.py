@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import Update, UpdateAction
 from commercetools.types._shipping_method import ShippingRateTierType
 
@@ -28,8 +27,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Project:
+class Project(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSchema`."
     #: :class:`int`
     version: typing.Optional[int]
@@ -76,6 +74,7 @@ class Project:
         self.trial_until = trial_until
         self.messages = messages
         self.shipping_rate_input_type = shipping_rate_input_type
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -95,61 +94,6 @@ class Project:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShippingRateInputType:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputTypeSchema`."
-    #: :class:`commercetools.types.ShippingRateTierType`
-    type: typing.Optional["ShippingRateTierType"]
-
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "ShippingRateInputType(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartClassificationType(ShippingRateInputType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTypeSchema`."
-    #: :class:`list`
-    values: typing.Optional[list]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        values: typing.Optional[list] = None
-    ) -> None:
-        self.values = values
-        super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
-
-    def __repr__(self) -> str:
-        return "CartClassificationType(type=%r, values=%r)" % (self.type, self.values)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartScoreType(ShippingRateInputType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTypeSchema`."
-
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
-        super().__init__(type=ShippingRateTierType.CART_SCORE)
-
-    def __repr__(self) -> str:
-        return "CartScoreType(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartValueType(ShippingRateInputType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTypeSchema`."
-
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
-        super().__init__(type=ShippingRateTierType.CART_VALUE)
-
-    def __repr__(self) -> str:
-        return "CartValueType(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateSchema`."
     #: :class:`list`
@@ -168,7 +112,6 @@ class ProjectUpdate(Update):
         return "ProjectUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateActionSchema`."
 
@@ -179,7 +122,57 @@ class ProjectUpdateAction(UpdateAction):
         return "ProjectUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ShippingRateInputType(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputTypeSchema`."
+    #: :class:`commercetools.types.ShippingRateTierType`
+    type: typing.Optional["ShippingRateTierType"]
+
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ShippingRateInputType(type=%r)" % (self.type,)
+
+
+class CartClassificationType(ShippingRateInputType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTypeSchema`."
+    #: :class:`list`
+    values: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["ShippingRateTierType"] = None,
+        values: typing.Optional[list] = None
+    ) -> None:
+        self.values = values
+        super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
+
+    def __repr__(self) -> str:
+        return "CartClassificationType(type=%r, values=%r)" % (self.type, self.values)
+
+
+class CartScoreType(ShippingRateInputType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTypeSchema`."
+
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+        super().__init__(type=ShippingRateTierType.CART_SCORE)
+
+    def __repr__(self) -> str:
+        return "CartScoreType(type=%r)" % (self.type,)
+
+
+class CartValueType(ShippingRateInputType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTypeSchema`."
+
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+        super().__init__(type=ShippingRateTierType.CART_VALUE)
+
+    def __repr__(self) -> str:
+        return "CartValueType(type=%r)" % (self.type,)
+
+
 class ProjectChangeCountriesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCountriesActionSchema`."
     #: List of :class:`str`
@@ -201,7 +194,6 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeCurrenciesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCurrenciesActionSchema`."
     #: List of :class:`str`
@@ -223,7 +215,6 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeLanguagesActionSchema`."
     #: List of :class:`str`
@@ -245,7 +236,6 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesConfigurationActionSchema`."
     #: :class:`commercetools.types.MessageConfigurationDraft` `(Named` ``messagesConfiguration`` `in Commercetools)`
@@ -267,7 +257,6 @@ class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesEnabledActionSchema`."
     #: :class:`bool` `(Named` ``messagesEnabled`` `in Commercetools)`
@@ -289,7 +278,6 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectChangeNameAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeNameActionSchema`."
     #: :class:`str`
@@ -305,7 +293,6 @@ class ProjectChangeNameAction(ProjectUpdateAction):
         return "ProjectChangeNameAction(action=%r, name=%r)" % (self.action, self.name)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSetShippingRateInputTypeActionSchema`."
     #: Optional :class:`commercetools.types.ShippingRateInputType` `(Named` ``shippingRateInputType`` `in Commercetools)`

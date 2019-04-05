@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -36,121 +35,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewDraftSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``uniquenessValue`` `in Commercetools)`
-    uniqueness_value: typing.Optional[str]
-    #: Optional :class:`str`
-    locale: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``authorName`` `in Commercetools)`
-    author_name: typing.Optional[str]
-    #: Optional :class:`str`
-    title: typing.Optional[str]
-    #: Optional :class:`str`
-    text: typing.Optional[str]
-    #: Optional :class:`commercetools.types.ProductReference`
-    target: typing.Optional["ProductReference"]
-    #: Optional :class:`commercetools.types.ResourceIdentifier`
-    state: typing.Optional["ResourceIdentifier"]
-    #: Optional :class:`float`
-    rating: typing.Optional[float]
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        uniqueness_value: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None,
-        author_name: typing.Optional[str] = None,
-        title: typing.Optional[str] = None,
-        text: typing.Optional[str] = None,
-        target: typing.Optional["ProductReference"] = None,
-        state: typing.Optional["ResourceIdentifier"] = None,
-        rating: typing.Optional[float] = None,
-        customer: typing.Optional["CustomerReference"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
-    ) -> None:
-        self.key = key
-        self.uniqueness_value = uniqueness_value
-        self.locale = locale
-        self.author_name = author_name
-        self.title = title
-        self.text = text
-        self.target = target
-        self.state = state
-        self.rating = rating
-        self.customer = customer
-        self.custom = custom
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewDraft(key=%r, uniqueness_value=%r, locale=%r, author_name=%r, title=%r, text=%r, target=%r, state=%r, rating=%r, customer=%r, custom=%r)"
-            % (
-                self.key,
-                self.uniqueness_value,
-                self.locale,
-                self.author_name,
-                self.title,
-                self.text,
-                self.target,
-                self.state,
-                self.rating,
-                self.customer,
-                self.custom,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewRatingStatistics:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingStatisticsSchema`."
-    #: :class:`int` `(Named` ``averageRating`` `in Commercetools)`
-    average_rating: typing.Optional[int]
-    #: :class:`int` `(Named` ``highestRating`` `in Commercetools)`
-    highest_rating: typing.Optional[int]
-    #: :class:`int` `(Named` ``lowestRating`` `in Commercetools)`
-    lowest_rating: typing.Optional[int]
-    #: :class:`int`
-    count: typing.Optional[int]
-    #: :class:`object` `(Named` ``ratingsDistribution`` `in Commercetools)`
-    ratings_distribution: typing.Optional[object]
-
-    def __init__(
-        self,
-        *,
-        average_rating: typing.Optional[int] = None,
-        highest_rating: typing.Optional[int] = None,
-        lowest_rating: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
-        ratings_distribution: typing.Optional[object] = None
-    ) -> None:
-        self.average_rating = average_rating
-        self.highest_rating = highest_rating
-        self.lowest_rating = lowest_rating
-        self.count = count
-        self.ratings_distribution = ratings_distribution
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewRatingStatistics(average_rating=%r, highest_rating=%r, lowest_rating=%r, count=%r, ratings_distribution=%r)"
-            % (
-                self.average_rating,
-                self.highest_rating,
-                self.lowest_rating,
-                self.count,
-                self.ratings_distribution,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Review(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSchema`."
     #: Optional :class:`str`
@@ -241,7 +125,78 @@ class Review(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``uniquenessValue`` `in Commercetools)`
+    uniqueness_value: typing.Optional[str]
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``authorName`` `in Commercetools)`
+    author_name: typing.Optional[str]
+    #: Optional :class:`str`
+    title: typing.Optional[str]
+    #: Optional :class:`str`
+    text: typing.Optional[str]
+    #: Optional :class:`commercetools.types.ProductReference`
+    target: typing.Optional["ProductReference"]
+    #: Optional :class:`commercetools.types.ResourceIdentifier`
+    state: typing.Optional["ResourceIdentifier"]
+    #: Optional :class:`float`
+    rating: typing.Optional[float]
+    #: Optional :class:`commercetools.types.CustomerReference`
+    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        uniqueness_value: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
+        author_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        text: typing.Optional[str] = None,
+        target: typing.Optional["ProductReference"] = None,
+        state: typing.Optional["ResourceIdentifier"] = None,
+        rating: typing.Optional[float] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ) -> None:
+        self.key = key
+        self.uniqueness_value = uniqueness_value
+        self.locale = locale
+        self.author_name = author_name
+        self.title = title
+        self.text = text
+        self.target = target
+        self.state = state
+        self.rating = rating
+        self.customer = customer
+        self.custom = custom
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewDraft(key=%r, uniqueness_value=%r, locale=%r, author_name=%r, title=%r, text=%r, target=%r, state=%r, rating=%r, customer=%r, custom=%r)"
+            % (
+                self.key,
+                self.uniqueness_value,
+                self.locale,
+                self.author_name,
+                self.title,
+                self.text,
+                self.target,
+                self.state,
+                self.rating,
+                self.customer,
+                self.custom,
+            )
+        )
+
+
 class ReviewPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Review`
@@ -267,7 +222,48 @@ class ReviewPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewRatingStatistics(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingStatisticsSchema`."
+    #: :class:`int` `(Named` ``averageRating`` `in Commercetools)`
+    average_rating: typing.Optional[int]
+    #: :class:`int` `(Named` ``highestRating`` `in Commercetools)`
+    highest_rating: typing.Optional[int]
+    #: :class:`int` `(Named` ``lowestRating`` `in Commercetools)`
+    lowest_rating: typing.Optional[int]
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: :class:`object` `(Named` ``ratingsDistribution`` `in Commercetools)`
+    ratings_distribution: typing.Optional[object]
+
+    def __init__(
+        self,
+        *,
+        average_rating: typing.Optional[int] = None,
+        highest_rating: typing.Optional[int] = None,
+        lowest_rating: typing.Optional[int] = None,
+        count: typing.Optional[int] = None,
+        ratings_distribution: typing.Optional[object] = None
+    ) -> None:
+        self.average_rating = average_rating
+        self.highest_rating = highest_rating
+        self.lowest_rating = lowest_rating
+        self.count = count
+        self.ratings_distribution = ratings_distribution
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewRatingStatistics(average_rating=%r, highest_rating=%r, lowest_rating=%r, count=%r, ratings_distribution=%r)"
+            % (
+                self.average_rating,
+                self.highest_rating,
+                self.lowest_rating,
+                self.count,
+                self.ratings_distribution,
+            )
+        )
+
+
 class ReviewReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewReferenceSchema`."
     #: Optional :class:`commercetools.types.Review`
@@ -293,7 +289,6 @@ class ReviewReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateSchema`."
     #: :class:`list`
@@ -312,7 +307,6 @@ class ReviewUpdate(Update):
         return "ReviewUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateActionSchema`."
 
@@ -323,7 +317,6 @@ class ReviewUpdateAction(UpdateAction):
         return "ReviewUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetAuthorNameAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetAuthorNameActionSchema`."
     #: Optional :class:`str` `(Named` ``authorName`` `in Commercetools)`
@@ -345,7 +338,6 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetCustomFieldAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -372,7 +364,6 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetCustomTypeAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -399,7 +390,6 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetCustomerAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomerActionSchema`."
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -421,7 +411,6 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetKeyAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetKeyActionSchema`."
     #: Optional :class:`str`
@@ -437,7 +426,6 @@ class ReviewSetKeyAction(ReviewUpdateAction):
         return "ReviewSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetLocaleAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetLocaleActionSchema`."
     #: Optional :class:`str`
@@ -459,7 +447,6 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetRatingAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetRatingActionSchema`."
     #: Optional :class:`int`
@@ -481,7 +468,6 @@ class ReviewSetRatingAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetTargetAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTargetActionSchema`."
     #: Optional :class:`commercetools.types.ProductReference`
@@ -503,7 +489,6 @@ class ReviewSetTargetAction(ReviewUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetTextAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTextActionSchema`."
     #: Optional :class:`str`
@@ -519,7 +504,6 @@ class ReviewSetTextAction(ReviewUpdateAction):
         return "ReviewSetTextAction(action=%r, text=%r)" % (self.action, self.text)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewSetTitleAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTitleActionSchema`."
     #: Optional :class:`str`
@@ -535,7 +519,6 @@ class ReviewSetTitleAction(ReviewUpdateAction):
         return "ReviewSetTitleAction(action=%r, title=%r)" % (self.action, self.title)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReviewTransitionStateAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateReference`

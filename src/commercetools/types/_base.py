@@ -3,15 +3,14 @@
 import datetime
 import typing
 
-import attr
+from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._common import Resource
 __all__ = ["PagedQueryResponse", "Update", "UpdateAction"]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PagedQueryResponse:
+class PagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PagedQueryResponseSchema`."
     #: :class:`int`
     count: typing.Optional[int]
@@ -34,6 +33,7 @@ class PagedQueryResponse:
         self.total = total
         self.offset = offset
         self.results = results
+        super().__init__()
 
     def __repr__(self) -> str:
         return "PagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
@@ -44,8 +44,7 @@ class PagedQueryResponse:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Update:
+class Update(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateSchema`."
     #: :class:`int`
     version: typing.Optional[int]
@@ -60,19 +59,20 @@ class Update:
     ) -> None:
         self.version = version
         self.actions = actions
+        super().__init__()
 
     def __repr__(self) -> str:
         return "Update(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class UpdateAction:
+class UpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateActionSchema`."
     #: :class:`str`
     action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
         self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "UpdateAction(action=%r)" % (self.action,)

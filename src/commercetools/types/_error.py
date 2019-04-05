@@ -3,7 +3,7 @@
 import datetime
 import typing
 
-import attr
+from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
@@ -49,8 +49,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ErrorObject:
+class ErrorObject(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorObjectSchema`."
     #: :class:`str`
     code: typing.Optional[str]
@@ -62,13 +61,13 @@ class ErrorObject:
     ) -> None:
         self.code = code
         self.message = message
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ErrorObject(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ErrorResponse:
+class ErrorResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorResponseSchema`."
     #: :class:`int` `(Named` ``statusCode`` `in Commercetools)`
     status_code: typing.Optional[int]
@@ -95,6 +94,7 @@ class ErrorResponse:
         self.error = error
         self.error_description = error_description
         self.errors = errors
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -109,8 +109,7 @@ class ErrorResponse:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class VariantValues:
+class VariantValues(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.VariantValuesSchema`."
     #: Optional :class:`str`
     sku: typing.Optional[str]
@@ -129,6 +128,7 @@ class VariantValues:
         self.sku = sku
         self.prices = prices
         self.attributes = attributes
+        super().__init__()
 
     def __repr__(self) -> str:
         return "VariantValues(sku=%r, prices=%r, attributes=%r)" % (
@@ -138,7 +138,6 @@ class VariantValues:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class AccessDeniedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AccessDeniedErrorSchema`."
 
@@ -151,7 +150,6 @@ class AccessDeniedError(ErrorObject):
         return "AccessDeniedError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ConcurrentModificationError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ConcurrentModificationErrorSchema`."
     #: Optional :class:`int` `(Named` ``currentVersion`` `in Commercetools)`
@@ -174,7 +172,6 @@ class ConcurrentModificationError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DiscountCodeNonApplicableError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeNonApplicableErrorSchema`."
     #: :class:`str` `(Named` ``discountCode`` `in Commercetools)`
@@ -226,7 +223,6 @@ class DiscountCodeNonApplicableError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicateAttributeValueError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateAttributeValueErrorSchema`."
     #: :class:`commercetools.types.Attribute`
@@ -250,7 +246,6 @@ class DuplicateAttributeValueError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicateAttributeValuesError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateAttributeValuesErrorSchema`."
     #: List of :class:`commercetools.types.Attribute`
@@ -274,7 +269,6 @@ class DuplicateAttributeValuesError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicateFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldErrorSchema`."
     #: :class:`str`
@@ -301,7 +295,6 @@ class DuplicateFieldError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicateFieldWithConflictingResourceError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldWithConflictingResourceErrorSchema`."
     #: :class:`str`
@@ -338,7 +331,6 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicatePriceScopeError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicatePriceScopeErrorSchema`."
     #: List of :class:`commercetools.types.Price` `(Named` ``conflictingPrices`` `in Commercetools)`
@@ -361,7 +353,6 @@ class DuplicatePriceScopeError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class DuplicateVariantValuesError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateVariantValuesErrorSchema`."
     #: :class:`commercetools.types.VariantValues` `(Named` ``variantValues`` `in Commercetools)`
@@ -385,7 +376,6 @@ class DuplicateVariantValuesError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class EnumValueIsUsedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.EnumValueIsUsedErrorSchema`."
 
@@ -398,7 +388,6 @@ class EnumValueIsUsedError(ErrorObject):
         return "EnumValueIsUsedError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ExtensionBadResponseError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionBadResponseErrorSchema`."
     #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
@@ -425,7 +414,6 @@ class ExtensionBadResponseError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ExtensionNoResponseError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionNoResponseErrorSchema`."
     #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
@@ -452,7 +440,6 @@ class ExtensionNoResponseError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ExtensionUpdateActionsFailedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionsFailedErrorSchema`."
     #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
@@ -479,7 +466,6 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InsufficientScopeError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InsufficientScopeErrorSchema`."
 
@@ -492,7 +478,6 @@ class InsufficientScopeError(ErrorObject):
         return "InsufficientScopeError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidCredentialsError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidCredentialsErrorSchema`."
 
@@ -508,7 +493,6 @@ class InvalidCredentialsError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidCurrentPasswordError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidCurrentPasswordErrorSchema`."
 
@@ -524,7 +508,6 @@ class InvalidCurrentPasswordError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidFieldErrorSchema`."
     #: :class:`str`
@@ -561,7 +544,6 @@ class InvalidFieldError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidInputError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidInputErrorSchema`."
 
@@ -574,7 +556,6 @@ class InvalidInputError(ErrorObject):
         return "InvalidInputError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidItemShippingDetailsError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidItemShippingDetailsErrorSchema`."
     #: :class:`str`
@@ -601,7 +582,6 @@ class InvalidItemShippingDetailsError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidJsonInputError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidJsonInputErrorSchema`."
 
@@ -614,7 +594,6 @@ class InvalidJsonInputError(ErrorObject):
         return "InvalidJsonInputError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidOperationError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidOperationErrorSchema`."
 
@@ -627,7 +606,6 @@ class InvalidOperationError(ErrorObject):
         return "InvalidOperationError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidSubjectError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidSubjectErrorSchema`."
 
@@ -640,7 +618,6 @@ class InvalidSubjectError(ErrorObject):
         return "InvalidSubjectError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class InvalidTokenError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidTokenErrorSchema`."
 
@@ -653,7 +630,6 @@ class InvalidTokenError(ErrorObject):
         return "InvalidTokenError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class MatchingPriceNotFoundError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MatchingPriceNotFoundErrorSchema`."
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
@@ -705,7 +681,6 @@ class MatchingPriceNotFoundError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class MissingTaxRateForCountryError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MissingTaxRateForCountryErrorSchema`."
     #: :class:`str` `(Named` ``taxCategoryId`` `in Commercetools)`
@@ -736,7 +711,6 @@ class MissingTaxRateForCountryError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class NoMatchingProductDiscountFoundError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.NoMatchingProductDiscountFoundErrorSchema`."
 
@@ -752,7 +726,6 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class OutOfStockError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OutOfStockErrorSchema`."
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
@@ -781,7 +754,6 @@ class OutOfStockError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class PriceChangedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceChangedErrorSchema`."
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
@@ -810,7 +782,6 @@ class PriceChangedError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ReferenceExistsError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceExistsErrorSchema`."
     #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``referencedBy`` `in Commercetools)`
@@ -834,7 +805,6 @@ class ReferenceExistsError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class RequiredFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.RequiredFieldErrorSchema`."
     #: :class:`str`
@@ -858,7 +828,6 @@ class RequiredFieldError(ErrorObject):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ResourceNotFoundError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceNotFoundErrorSchema`."
 
@@ -871,7 +840,6 @@ class ResourceNotFoundError(ErrorObject):
         return "ResourceNotFoundError(code=%r, message=%r)" % (self.code, self.message)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodDoesNotMatchCartErrorSchema`."
 

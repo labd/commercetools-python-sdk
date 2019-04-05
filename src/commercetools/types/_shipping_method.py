@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -43,8 +42,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PriceFunction:
+class PriceFunction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceFunctionSchema`."
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
     currency_code: typing.Optional["str"]
@@ -59,6 +57,7 @@ class PriceFunction:
     ) -> None:
         self.currency_code = currency_code
         self.function = function
+        super().__init__()
 
     def __repr__(self) -> str:
         return "PriceFunction(currency_code=%r, function=%r)" % (
@@ -67,276 +66,6 @@ class PriceFunction:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShippingMethodDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodDraftSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: Optional :class:`str`
-    description: typing.Optional[str]
-    #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
-    #: List of :class:`commercetools.types.ZoneRateDraft` `(Named` ``zoneRates`` `in Commercetools)`
-    zone_rates: typing.Optional[typing.List["ZoneRateDraft"]]
-    #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
-    is_default: typing.Optional[bool]
-    #: Optional :class:`str`
-    predicate: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
-        zone_rates: typing.Optional[typing.List["ZoneRateDraft"]] = None,
-        is_default: typing.Optional[bool] = None,
-        predicate: typing.Optional[str] = None
-    ) -> None:
-        self.key = key
-        self.name = name
-        self.description = description
-        self.tax_category = tax_category
-        self.zone_rates = zone_rates
-        self.is_default = is_default
-        self.predicate = predicate
-
-    def __repr__(self) -> str:
-        return (
-            "ShippingMethodDraft(key=%r, name=%r, description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
-            % (
-                self.key,
-                self.name,
-                self.description,
-                self.tax_category,
-                self.zone_rates,
-                self.is_default,
-                self.predicate,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShippingRate:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateSchema`."
-    #: :class:`commercetools.types.TypedMoney`
-    price: typing.Optional["TypedMoney"]
-    #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``freeAbove`` `in Commercetools)`
-    free_above: typing.Optional["TypedMoney"]
-    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
-    is_matching: typing.Optional[bool]
-    #: List of :class:`commercetools.types.ShippingRatePriceTier`
-    tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
-
-    def __init__(
-        self,
-        *,
-        price: typing.Optional["TypedMoney"] = None,
-        free_above: typing.Optional["TypedMoney"] = None,
-        is_matching: typing.Optional[bool] = None,
-        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
-    ) -> None:
-        self.price = price
-        self.free_above = free_above
-        self.is_matching = is_matching
-        self.tiers = tiers
-
-    def __repr__(self) -> str:
-        return "ShippingRate(price=%r, free_above=%r, is_matching=%r, tiers=%r)" % (
-            self.price,
-            self.free_above,
-            self.is_matching,
-            self.tiers,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShippingRateDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateDraftSchema`."
-    #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
-    #: Optional :class:`commercetools.types.Money` `(Named` ``freeAbove`` `in Commercetools)`
-    free_above: typing.Optional["Money"]
-    #: Optional list of :class:`commercetools.types.ShippingRatePriceTier`
-    tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
-
-    def __init__(
-        self,
-        *,
-        price: typing.Optional["Money"] = None,
-        free_above: typing.Optional["Money"] = None,
-        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
-    ) -> None:
-        self.price = price
-        self.free_above = free_above
-        self.tiers = tiers
-
-    def __repr__(self) -> str:
-        return "ShippingRateDraft(price=%r, free_above=%r, tiers=%r)" % (
-            self.price,
-            self.free_above,
-            self.tiers,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShippingRatePriceTier:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRatePriceTierSchema`."
-    #: :class:`commercetools.types.ShippingRateTierType`
-    type: typing.Optional["ShippingRateTierType"]
-
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "ShippingRatePriceTier(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ZoneRate:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
-    #: List of :class:`commercetools.types.ShippingRate` `(Named` ``shippingRates`` `in Commercetools)`
-    shipping_rates: typing.Optional[typing.List["ShippingRate"]]
-
-    def __init__(
-        self,
-        *,
-        zone: typing.Optional["ZoneReference"] = None,
-        shipping_rates: typing.Optional[typing.List["ShippingRate"]] = None
-    ) -> None:
-        self.zone = zone
-        self.shipping_rates = shipping_rates
-
-    def __repr__(self) -> str:
-        return "ZoneRate(zone=%r, shipping_rates=%r)" % (self.zone, self.shipping_rates)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ZoneRateDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateDraftSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
-    #: List of :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRates`` `in Commercetools)`
-    shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]]
-
-    def __init__(
-        self,
-        *,
-        zone: typing.Optional["ZoneReference"] = None,
-        shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]] = None
-    ) -> None:
-        self.zone = zone
-        self.shipping_rates = shipping_rates
-
-    def __repr__(self) -> str:
-        return "ZoneRateDraft(zone=%r, shipping_rates=%r)" % (
-            self.zone,
-            self.shipping_rates,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartClassificationTier(ShippingRatePriceTier):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTierSchema`."
-    #: :class:`str`
-    value: typing.Optional[str]
-    #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
-    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
-    is_matching: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        value: typing.Optional[str] = None,
-        price: typing.Optional["Money"] = None,
-        is_matching: typing.Optional[bool] = None
-    ) -> None:
-        self.value = value
-        self.price = price
-        self.is_matching = is_matching
-        super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
-
-    def __repr__(self) -> str:
-        return "CartClassificationTier(type=%r, value=%r, price=%r, is_matching=%r)" % (
-            self.type,
-            self.value,
-            self.price,
-            self.is_matching,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartScoreTier(ShippingRatePriceTier):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTierSchema`."
-    #: :class:`int`
-    score: typing.Optional[int]
-    #: Optional :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
-    #: Optional :class:`commercetools.types.PriceFunction` `(Named` ``priceFunction`` `in Commercetools)`
-    price_function: typing.Optional["PriceFunction"]
-    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
-    is_matching: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        score: typing.Optional[int] = None,
-        price: typing.Optional["Money"] = None,
-        price_function: typing.Optional["PriceFunction"] = None,
-        is_matching: typing.Optional[bool] = None
-    ) -> None:
-        self.score = score
-        self.price = price
-        self.price_function = price_function
-        self.is_matching = is_matching
-        super().__init__(type=ShippingRateTierType.CART_SCORE)
-
-    def __repr__(self) -> str:
-        return (
-            "CartScoreTier(type=%r, score=%r, price=%r, price_function=%r, is_matching=%r)"
-            % (self.type, self.score, self.price, self.price_function, self.is_matching)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CartValueTier(ShippingRatePriceTier):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTierSchema`."
-    #: :class:`int` `(Named` ``minimumCentAmount`` `in Commercetools)`
-    minimum_cent_amount: typing.Optional[int]
-    #: :class:`commercetools.types.Money`
-    price: typing.Optional["Money"]
-    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
-    is_matching: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        minimum_cent_amount: typing.Optional[int] = None,
-        price: typing.Optional["Money"] = None,
-        is_matching: typing.Optional[bool] = None
-    ) -> None:
-        self.minimum_cent_amount = minimum_cent_amount
-        self.price = price
-        self.is_matching = is_matching
-        super().__init__(type=ShippingRateTierType.CART_VALUE)
-
-    def __repr__(self) -> str:
-        return (
-            "CartValueTier(type=%r, minimum_cent_amount=%r, price=%r, is_matching=%r)"
-            % (self.type, self.minimum_cent_amount, self.price, self.is_matching)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethod(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSchema`."
     #: Optional :class:`str`
@@ -402,7 +131,58 @@ class ShippingMethod(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ShippingMethodDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`str`
+    description: typing.Optional[str]
+    #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryReference"]
+    #: List of :class:`commercetools.types.ZoneRateDraft` `(Named` ``zoneRates`` `in Commercetools)`
+    zone_rates: typing.Optional[typing.List["ZoneRateDraft"]]
+    #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
+    is_default: typing.Optional[bool]
+    #: Optional :class:`str`
+    predicate: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        zone_rates: typing.Optional[typing.List["ZoneRateDraft"]] = None,
+        is_default: typing.Optional[bool] = None,
+        predicate: typing.Optional[str] = None
+    ) -> None:
+        self.key = key
+        self.name = name
+        self.description = description
+        self.tax_category = tax_category
+        self.zone_rates = zone_rates
+        self.is_default = is_default
+        self.predicate = predicate
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ShippingMethodDraft(key=%r, name=%r, description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
+            % (
+                self.key,
+                self.name,
+                self.description,
+                self.tax_category,
+                self.zone_rates,
+                self.is_default,
+                self.predicate,
+            )
+        )
+
+
 class ShippingMethodPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ShippingMethod`
@@ -426,7 +206,6 @@ class ShippingMethodPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodReferenceSchema`."
     #: Optional :class:`commercetools.types.ShippingMethod`
@@ -452,7 +231,6 @@ class ShippingMethodReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodUpdateSchema`."
     #: :class:`list`
@@ -474,7 +252,6 @@ class ShippingMethodUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodUpdateActionSchema`."
 
@@ -485,13 +262,226 @@ class ShippingMethodUpdateAction(UpdateAction):
         return "ShippingMethodUpdateAction(action=%r)" % (self.action,)
 
 
+class ShippingRate(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateSchema`."
+    #: :class:`commercetools.types.TypedMoney`
+    price: typing.Optional["TypedMoney"]
+    #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``freeAbove`` `in Commercetools)`
+    free_above: typing.Optional["TypedMoney"]
+    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
+    is_matching: typing.Optional[bool]
+    #: List of :class:`commercetools.types.ShippingRatePriceTier`
+    tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
+
+    def __init__(
+        self,
+        *,
+        price: typing.Optional["TypedMoney"] = None,
+        free_above: typing.Optional["TypedMoney"] = None,
+        is_matching: typing.Optional[bool] = None,
+        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
+    ) -> None:
+        self.price = price
+        self.free_above = free_above
+        self.is_matching = is_matching
+        self.tiers = tiers
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ShippingRate(price=%r, free_above=%r, is_matching=%r, tiers=%r)" % (
+            self.price,
+            self.free_above,
+            self.is_matching,
+            self.tiers,
+        )
+
+
+class ShippingRateDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateDraftSchema`."
+    #: :class:`commercetools.types.Money`
+    price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.Money` `(Named` ``freeAbove`` `in Commercetools)`
+    free_above: typing.Optional["Money"]
+    #: Optional list of :class:`commercetools.types.ShippingRatePriceTier`
+    tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
+
+    def __init__(
+        self,
+        *,
+        price: typing.Optional["Money"] = None,
+        free_above: typing.Optional["Money"] = None,
+        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
+    ) -> None:
+        self.price = price
+        self.free_above = free_above
+        self.tiers = tiers
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ShippingRateDraft(price=%r, free_above=%r, tiers=%r)" % (
+            self.price,
+            self.free_above,
+            self.tiers,
+        )
+
+
+class ShippingRatePriceTier(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRatePriceTierSchema`."
+    #: :class:`commercetools.types.ShippingRateTierType`
+    type: typing.Optional["ShippingRateTierType"]
+
+    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ShippingRatePriceTier(type=%r)" % (self.type,)
+
+
 class ShippingRateTierType(enum.Enum):
     CART_VALUE = "CartValue"
     CART_CLASSIFICATION = "CartClassification"
     CART_SCORE = "CartScore"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ZoneRate(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateSchema`."
+    #: :class:`commercetools.types.ZoneReference`
+    zone: typing.Optional["ZoneReference"]
+    #: List of :class:`commercetools.types.ShippingRate` `(Named` ``shippingRates`` `in Commercetools)`
+    shipping_rates: typing.Optional[typing.List["ShippingRate"]]
+
+    def __init__(
+        self,
+        *,
+        zone: typing.Optional["ZoneReference"] = None,
+        shipping_rates: typing.Optional[typing.List["ShippingRate"]] = None
+    ) -> None:
+        self.zone = zone
+        self.shipping_rates = shipping_rates
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ZoneRate(zone=%r, shipping_rates=%r)" % (self.zone, self.shipping_rates)
+
+
+class ZoneRateDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateDraftSchema`."
+    #: :class:`commercetools.types.ZoneReference`
+    zone: typing.Optional["ZoneReference"]
+    #: List of :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRates`` `in Commercetools)`
+    shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]]
+
+    def __init__(
+        self,
+        *,
+        zone: typing.Optional["ZoneReference"] = None,
+        shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]] = None
+    ) -> None:
+        self.zone = zone
+        self.shipping_rates = shipping_rates
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ZoneRateDraft(zone=%r, shipping_rates=%r)" % (
+            self.zone,
+            self.shipping_rates,
+        )
+
+
+class CartClassificationTier(ShippingRatePriceTier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTierSchema`."
+    #: :class:`str`
+    value: typing.Optional[str]
+    #: :class:`commercetools.types.Money`
+    price: typing.Optional["Money"]
+    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
+    is_matching: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["ShippingRateTierType"] = None,
+        value: typing.Optional[str] = None,
+        price: typing.Optional["Money"] = None,
+        is_matching: typing.Optional[bool] = None
+    ) -> None:
+        self.value = value
+        self.price = price
+        self.is_matching = is_matching
+        super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
+
+    def __repr__(self) -> str:
+        return "CartClassificationTier(type=%r, value=%r, price=%r, is_matching=%r)" % (
+            self.type,
+            self.value,
+            self.price,
+            self.is_matching,
+        )
+
+
+class CartScoreTier(ShippingRatePriceTier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTierSchema`."
+    #: :class:`int`
+    score: typing.Optional[int]
+    #: Optional :class:`commercetools.types.Money`
+    price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.PriceFunction` `(Named` ``priceFunction`` `in Commercetools)`
+    price_function: typing.Optional["PriceFunction"]
+    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
+    is_matching: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["ShippingRateTierType"] = None,
+        score: typing.Optional[int] = None,
+        price: typing.Optional["Money"] = None,
+        price_function: typing.Optional["PriceFunction"] = None,
+        is_matching: typing.Optional[bool] = None
+    ) -> None:
+        self.score = score
+        self.price = price
+        self.price_function = price_function
+        self.is_matching = is_matching
+        super().__init__(type=ShippingRateTierType.CART_SCORE)
+
+    def __repr__(self) -> str:
+        return (
+            "CartScoreTier(type=%r, score=%r, price=%r, price_function=%r, is_matching=%r)"
+            % (self.type, self.score, self.price, self.price_function, self.is_matching)
+        )
+
+
+class CartValueTier(ShippingRatePriceTier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTierSchema`."
+    #: :class:`int` `(Named` ``minimumCentAmount`` `in Commercetools)`
+    minimum_cent_amount: typing.Optional[int]
+    #: :class:`commercetools.types.Money`
+    price: typing.Optional["Money"]
+    #: Optional :class:`bool` `(Named` ``isMatching`` `in Commercetools)`
+    is_matching: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["ShippingRateTierType"] = None,
+        minimum_cent_amount: typing.Optional[int] = None,
+        price: typing.Optional["Money"] = None,
+        is_matching: typing.Optional[bool] = None
+    ) -> None:
+        self.minimum_cent_amount = minimum_cent_amount
+        self.price = price
+        self.is_matching = is_matching
+        super().__init__(type=ShippingRateTierType.CART_VALUE)
+
+    def __repr__(self) -> str:
+        return (
+            "CartValueTier(type=%r, minimum_cent_amount=%r, price=%r, is_matching=%r)"
+            % (self.type, self.minimum_cent_amount, self.price, self.is_matching)
+        )
+
+
 class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddShippingRateActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
@@ -517,7 +507,6 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddZoneActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
@@ -539,7 +528,6 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeIsDefaultActionSchema`."
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
@@ -561,7 +549,6 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeNameActionSchema`."
     #: :class:`str`
@@ -580,7 +567,6 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeTaxCategoryActionSchema`."
     #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
@@ -602,7 +588,6 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveShippingRateActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
@@ -628,7 +613,6 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveZoneActionSchema`."
     #: :class:`commercetools.types.ZoneReference`
@@ -650,7 +634,6 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetDescriptionActionSchema`."
     #: Optional :class:`str`
@@ -672,7 +655,6 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetKeyActionSchema`."
     #: Optional :class:`str`
@@ -688,7 +670,6 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
         return "ShippingMethodSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetPredicateActionSchema`."
     #: Optional :class:`str`

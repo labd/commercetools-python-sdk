@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -16,41 +15,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomObjectDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectDraftSchema`."
-    #: :class:`str`
-    container: typing.Optional[str]
-    #: :class:`str`
-    key: typing.Optional[str]
-    #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
-    #: Optional :class:`int`
-    version: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        container: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None,
-        version: typing.Optional[int] = None
-    ) -> None:
-        self.container = container
-        self.key = key
-        self.value = value
-        self.version = version
-
-    def __repr__(self) -> str:
-        return "CustomObjectDraft(container=%r, key=%r, value=%r, version=%r)" % (
-            self.container,
-            self.key,
-            self.value,
-            self.version,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomObject(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."
     #: :class:`str`
@@ -96,7 +60,40 @@ class CustomObject(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomObjectDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectDraftSchema`."
+    #: :class:`str`
+    container: typing.Optional[str]
+    #: :class:`str`
+    key: typing.Optional[str]
+    #: :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+    #: Optional :class:`int`
+    version: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        container: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None,
+        version: typing.Optional[int] = None
+    ) -> None:
+        self.container = container
+        self.key = key
+        self.value = value
+        self.version = version
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomObjectDraft(container=%r, key=%r, value=%r, version=%r)" % (
+            self.container,
+            self.key,
+            self.value,
+            self.version,
+        )
+
+
 class CustomObjectPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.CustomObject`
@@ -120,7 +117,6 @@ class CustomObjectPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomObjectReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectReferenceSchema`."
     #: Optional :class:`commercetools.types.CustomObject`

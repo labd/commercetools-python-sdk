@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -24,8 +23,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Location:
+class Location(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LocationSchema`."
     #: :class:`str`
     country: typing.Optional["str"]
@@ -40,46 +38,12 @@ class Location:
     ) -> None:
         self.country = country
         self.state = state
+        super().__init__()
 
     def __repr__(self) -> str:
         return "Location(country=%r, state=%r)" % (self.country, self.state)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ZoneDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneDraftSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: Optional :class:`str`
-    description: typing.Optional[str]
-    #: List of :class:`commercetools.types.Location`
-    locations: typing.Optional[typing.List["Location"]]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
-        locations: typing.Optional[typing.List["Location"]] = None
-    ) -> None:
-        self.key = key
-        self.name = name
-        self.description = description
-        self.locations = locations
-
-    def __repr__(self) -> str:
-        return "ZoneDraft(key=%r, name=%r, description=%r, locations=%r)" % (
-            self.key,
-            self.name,
-            self.description,
-            self.locations,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Zone(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSchema`."
     #: Optional :class:`str`
@@ -130,7 +94,40 @@ class Zone(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ZoneDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`str`
+    description: typing.Optional[str]
+    #: List of :class:`commercetools.types.Location`
+    locations: typing.Optional[typing.List["Location"]]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        locations: typing.Optional[typing.List["Location"]] = None
+    ) -> None:
+        self.key = key
+        self.name = name
+        self.description = description
+        self.locations = locations
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ZoneDraft(key=%r, name=%r, description=%r, locations=%r)" % (
+            self.key,
+            self.name,
+            self.description,
+            self.locations,
+        )
+
+
 class ZonePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZonePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Zone`
@@ -156,7 +153,6 @@ class ZonePagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneReferenceSchema`."
     #: Optional :class:`commercetools.types.Zone`
@@ -182,7 +178,6 @@ class ZoneReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateSchema`."
     #: :class:`list`
@@ -201,7 +196,6 @@ class ZoneUpdate(Update):
         return "ZoneUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateActionSchema`."
 
@@ -212,7 +206,6 @@ class ZoneUpdateAction(UpdateAction):
         return "ZoneUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneAddLocationAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneAddLocationActionSchema`."
     #: :class:`commercetools.types.Location`
@@ -234,7 +227,6 @@ class ZoneAddLocationAction(ZoneUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneChangeNameAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneChangeNameActionSchema`."
     #: :class:`str`
@@ -250,7 +242,6 @@ class ZoneChangeNameAction(ZoneUpdateAction):
         return "ZoneChangeNameAction(action=%r, name=%r)" % (self.action, self.name)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneRemoveLocationAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRemoveLocationActionSchema`."
     #: :class:`commercetools.types.Location`
@@ -272,7 +263,6 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneSetDescriptionAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSetDescriptionActionSchema`."
     #: Optional :class:`str`
@@ -294,7 +284,6 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ZoneSetKeyAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSetKeyActionSchema`."
     #: Optional :class:`str`

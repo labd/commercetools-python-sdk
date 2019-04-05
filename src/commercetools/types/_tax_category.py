@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -27,8 +26,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class SubRate:
+class SubRate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubRateSchema`."
     #: :class:`str`
     name: typing.Optional[str]
@@ -43,145 +41,12 @@ class SubRate:
     ) -> None:
         self.name = name
         self.amount = amount
+        super().__init__()
 
     def __repr__(self) -> str:
         return "SubRate(name=%r, amount=%r)" % (self.name, self.amount)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TaxCategoryDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryDraftSchema`."
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: Optional :class:`str`
-    description: typing.Optional[str]
-    #: List of :class:`commercetools.types.TaxRateDraft`
-    rates: typing.Optional[typing.List["TaxRateDraft"]]
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
-        rates: typing.Optional[typing.List["TaxRateDraft"]] = None,
-        key: typing.Optional[str] = None
-    ) -> None:
-        self.name = name
-        self.description = description
-        self.rates = rates
-        self.key = key
-
-    def __repr__(self) -> str:
-        return "TaxCategoryDraft(name=%r, description=%r, rates=%r, key=%r)" % (
-            self.name,
-            self.description,
-            self.rates,
-            self.key,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TaxRate:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateSchema`."
-    #: Optional :class:`str`
-    id: typing.Optional[str]
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: :class:`float`
-    amount: typing.Optional[float]
-    #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
-    included_in_price: typing.Optional[bool]
-    #: :class:`str`
-    country: typing.Optional["str"]
-    #: Optional :class:`str`
-    state: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
-    sub_rates: typing.Optional[typing.List["SubRate"]]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        amount: typing.Optional[float] = None,
-        included_in_price: typing.Optional[bool] = None,
-        country: typing.Optional["str"] = None,
-        state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
-    ) -> None:
-        self.id = id
-        self.name = name
-        self.amount = amount
-        self.included_in_price = included_in_price
-        self.country = country
-        self.state = state
-        self.sub_rates = sub_rates
-
-    def __repr__(self) -> str:
-        return (
-            "TaxRate(id=%r, name=%r, amount=%r, included_in_price=%r, country=%r, state=%r, sub_rates=%r)"
-            % (
-                self.id,
-                self.name,
-                self.amount,
-                self.included_in_price,
-                self.country,
-                self.state,
-                self.sub_rates,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TaxRateDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateDraftSchema`."
-    #: :class:`str`
-    name: typing.Optional[str]
-    #: Optional :class:`float`
-    amount: typing.Optional[float]
-    #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
-    included_in_price: typing.Optional[bool]
-    #: :class:`str`
-    country: typing.Optional["str"]
-    #: Optional :class:`str`
-    state: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
-    sub_rates: typing.Optional[typing.List["SubRate"]]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        amount: typing.Optional[float] = None,
-        included_in_price: typing.Optional[bool] = None,
-        country: typing.Optional["str"] = None,
-        state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
-    ) -> None:
-        self.name = name
-        self.amount = amount
-        self.included_in_price = included_in_price
-        self.country = country
-        self.state = state
-        self.sub_rates = sub_rates
-
-    def __repr__(self) -> str:
-        return (
-            "TaxRateDraft(name=%r, amount=%r, included_in_price=%r, country=%r, state=%r, sub_rates=%r)"
-            % (
-                self.name,
-                self.amount,
-                self.included_in_price,
-                self.country,
-                self.state,
-                self.sub_rates,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategory(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySchema`."
     #: :class:`str`
@@ -232,7 +97,40 @@ class TaxCategory(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class TaxCategoryDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryDraftSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`str`
+    description: typing.Optional[str]
+    #: List of :class:`commercetools.types.TaxRateDraft`
+    rates: typing.Optional[typing.List["TaxRateDraft"]]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        rates: typing.Optional[typing.List["TaxRateDraft"]] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
+        self.name = name
+        self.description = description
+        self.rates = rates
+        self.key = key
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "TaxCategoryDraft(name=%r, description=%r, rates=%r, key=%r)" % (
+            self.name,
+            self.description,
+            self.rates,
+            self.key,
+        )
+
+
 class TaxCategoryPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.TaxCategory`
@@ -256,7 +154,6 @@ class TaxCategoryPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryReferenceSchema`."
     #: Optional :class:`commercetools.types.TaxCategory`
@@ -282,7 +179,6 @@ class TaxCategoryReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateSchema`."
     #: :class:`list`
@@ -304,7 +200,6 @@ class TaxCategoryUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateActionSchema`."
 
@@ -315,7 +210,105 @@ class TaxCategoryUpdateAction(UpdateAction):
         return "TaxCategoryUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class TaxRate(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateSchema`."
+    #: Optional :class:`str`
+    id: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: :class:`float`
+    amount: typing.Optional[float]
+    #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
+    included_in_price: typing.Optional[bool]
+    #: :class:`str`
+    country: typing.Optional["str"]
+    #: Optional :class:`str`
+    state: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
+    sub_rates: typing.Optional[typing.List["SubRate"]]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        amount: typing.Optional[float] = None,
+        included_in_price: typing.Optional[bool] = None,
+        country: typing.Optional["str"] = None,
+        state: typing.Optional[str] = None,
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.amount = amount
+        self.included_in_price = included_in_price
+        self.country = country
+        self.state = state
+        self.sub_rates = sub_rates
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "TaxRate(id=%r, name=%r, amount=%r, included_in_price=%r, country=%r, state=%r, sub_rates=%r)"
+            % (
+                self.id,
+                self.name,
+                self.amount,
+                self.included_in_price,
+                self.country,
+                self.state,
+                self.sub_rates,
+            )
+        )
+
+
+class TaxRateDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateDraftSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`float`
+    amount: typing.Optional[float]
+    #: :class:`bool` `(Named` ``includedInPrice`` `in Commercetools)`
+    included_in_price: typing.Optional[bool]
+    #: :class:`str`
+    country: typing.Optional["str"]
+    #: Optional :class:`str`
+    state: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.SubRate` `(Named` ``subRates`` `in Commercetools)`
+    sub_rates: typing.Optional[typing.List["SubRate"]]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        amount: typing.Optional[float] = None,
+        included_in_price: typing.Optional[bool] = None,
+        country: typing.Optional["str"] = None,
+        state: typing.Optional[str] = None,
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+    ) -> None:
+        self.name = name
+        self.amount = amount
+        self.included_in_price = included_in_price
+        self.country = country
+        self.state = state
+        self.sub_rates = sub_rates
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "TaxRateDraft(name=%r, amount=%r, included_in_price=%r, country=%r, state=%r, sub_rates=%r)"
+            % (
+                self.name,
+                self.amount,
+                self.included_in_price,
+                self.country,
+                self.state,
+                self.sub_rates,
+            )
+        )
+
+
 class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryAddTaxRateActionSchema`."
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
@@ -337,7 +330,6 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryChangeNameActionSchema`."
     #: :class:`str`
@@ -356,7 +348,6 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryRemoveTaxRateActionSchema`."
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
@@ -378,7 +369,6 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryReplaceTaxRateActionSchema`."
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
@@ -404,7 +394,6 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySetDescriptionActionSchema`."
     #: Optional :class:`str`
@@ -426,7 +415,6 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySetKeyActionSchema`."
     #: Optional :class:`str`

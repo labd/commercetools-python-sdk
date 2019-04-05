@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse
 from commercetools.types._common import Resource
 
@@ -188,610 +187,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MessageConfiguration:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationSchema`."
-    #: :class:`bool`
-    enabled: typing.Optional[bool]
-    #: Optional :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
-    delete_days_after_creation: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        enabled: typing.Optional[bool] = None,
-        delete_days_after_creation: typing.Optional[int] = None
-    ) -> None:
-        self.enabled = enabled
-        self.delete_days_after_creation = delete_days_after_creation
-
-    def __repr__(self) -> str:
-        return "MessageConfiguration(enabled=%r, delete_days_after_creation=%r)" % (
-            self.enabled,
-            self.delete_days_after_creation,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MessageConfigurationDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationDraftSchema`."
-    #: :class:`bool`
-    enabled: typing.Optional[bool]
-    #: :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
-    delete_days_after_creation: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        enabled: typing.Optional[bool] = None,
-        delete_days_after_creation: typing.Optional[int] = None
-    ) -> None:
-        self.enabled = enabled
-        self.delete_days_after_creation = delete_days_after_creation
-
-    def __repr__(self) -> str:
-        return (
-            "MessageConfigurationDraft(enabled=%r, delete_days_after_creation=%r)"
-            % (self.enabled, self.delete_days_after_creation)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MessagePayload:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePayloadSchema`."
-    #: :class:`str`
-    type: typing.Optional[str]
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "MessagePayload(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductPriceDiscountsSetUpdatedPrice:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetUpdatedPriceSchema`."
-    #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
-    #: Optional :class:`str` `(Named` ``variantKey`` `in Commercetools)`
-    variant_key: typing.Optional[str]
-    #: Optional :class:`str`
-    sku: typing.Optional[str]
-    #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.DiscountedPrice`
-    discounted: typing.Optional["DiscountedPrice"]
-    #: :class:`bool`
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        variant_id: typing.Optional[int] = None,
-        variant_key: typing.Optional[str] = None,
-        sku: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
-        discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: typing.Optional[bool] = None
-    ) -> None:
-        self.variant_id = variant_id
-        self.variant_key = variant_key
-        self.sku = sku
-        self.price_id = price_id
-        self.discounted = discounted
-        self.staged = staged
-
-    def __repr__(self) -> str:
-        return (
-            "ProductPriceDiscountsSetUpdatedPrice(variant_id=%r, variant_key=%r, sku=%r, price_id=%r, discounted=%r, staged=%r)"
-            % (
-                self.variant_id,
-                self.variant_key,
-                self.sku,
-                self.price_id,
-                self.discounted,
-                self.staged,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class UserProvidedIdentifiers:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.UserProvidedIdentifiersSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
-    external_id: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
-    order_number: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
-    customer_number: typing.Optional[str]
-    #: Optional :class:`str`
-    sku: typing.Optional[str]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None,
-        order_number: typing.Optional[str] = None,
-        customer_number: typing.Optional[str] = None,
-        sku: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None
-    ) -> None:
-        self.key = key
-        self.external_id = external_id
-        self.order_number = order_number
-        self.customer_number = customer_number
-        self.sku = sku
-        self.slug = slug
-
-    def __repr__(self) -> str:
-        return (
-            "UserProvidedIdentifiers(key=%r, external_id=%r, order_number=%r, customer_number=%r, sku=%r, slug=%r)"
-            % (
-                self.key,
-                self.external_id,
-                self.order_number,
-                self.customer_number,
-                self.sku,
-                self.slug,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CategoryCreatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryCreatedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Category`
-    category: typing.Optional["Category"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        category: typing.Optional["Category"] = None
-    ) -> None:
-        self.category = category
-        super().__init__(type="CategoryCreated")
-
-    def __repr__(self) -> str:
-        return "CategoryCreatedMessagePayload(type=%r, category=%r)" % (
-            self.type,
-            self.category,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CategorySlugChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySlugChangedMessagePayloadSchema`."
-    #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None
-    ) -> None:
-        self.slug = slug
-        super().__init__(type="CategorySlugChanged")
-
-    def __repr__(self) -> str:
-        return "CategorySlugChangedMessagePayload(type=%r, slug=%r)" % (
-            self.type,
-            self.slug,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomLineItemStateTransitionMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemStateTransitionMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
-    #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
-    transition_date: typing.Optional[datetime.datetime]
-    #: :class:`int`
-    quantity: typing.Optional[int]
-    #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
-    #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        transition_date: typing.Optional[datetime.datetime] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None
-    ) -> None:
-        self.custom_line_item_id = custom_line_item_id
-        self.transition_date = transition_date
-        self.quantity = quantity
-        self.from_state = from_state
-        self.to_state = to_state
-        super().__init__(type="CustomLineItemStateTransition")
-
-    def __repr__(self) -> str:
-        return (
-            "CustomLineItemStateTransitionMessagePayload(type=%r, custom_line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
-            % (
-                self.type,
-                self.custom_line_item_id,
-                self.transition_date,
-                self.quantity,
-                self.from_state,
-                self.to_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerAddressAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressAddedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None
-    ) -> None:
-        self.address = address
-        super().__init__(type="CustomerAddressAdded")
-
-    def __repr__(self) -> str:
-        return "CustomerAddressAddedMessagePayload(type=%r, address=%r)" % (
-            self.type,
-            self.address,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerAddressChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressChangedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None
-    ) -> None:
-        self.address = address
-        super().__init__(type="CustomerAddressChanged")
-
-    def __repr__(self) -> str:
-        return "CustomerAddressChangedMessagePayload(type=%r, address=%r)" % (
-            self.type,
-            self.address,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerAddressRemovedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressRemovedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None
-    ) -> None:
-        self.address = address
-        super().__init__(type="CustomerAddressRemoved")
-
-    def __repr__(self) -> str:
-        return "CustomerAddressRemovedMessagePayload(type=%r, address=%r)" % (
-            self.type,
-            self.address,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerCompanyNameSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCompanyNameSetMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
-    company_name: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        company_name: typing.Optional[str] = None
-    ) -> None:
-        self.company_name = company_name
-        super().__init__(type="CustomerCompanyNameSet")
-
-    def __repr__(self) -> str:
-        return "CustomerCompanyNameSetMessagePayload(type=%r, company_name=%r)" % (
-            self.type,
-            self.company_name,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerCreatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Customer`
-    customer: typing.Optional["Customer"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        customer: typing.Optional["Customer"] = None
-    ) -> None:
-        self.customer = customer
-        super().__init__(type="CustomerCreated")
-
-    def __repr__(self) -> str:
-        return "CustomerCreatedMessagePayload(type=%r, customer=%r)" % (
-            self.type,
-            self.customer,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerDateOfBirthSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDateOfBirthSetMessagePayloadSchema`."
-    #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
-    date_of_birth: typing.Optional[datetime.date]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        date_of_birth: typing.Optional[datetime.date] = None
-    ) -> None:
-        self.date_of_birth = date_of_birth
-        super().__init__(type="CustomerDateOfBirthSet")
-
-    def __repr__(self) -> str:
-        return "CustomerDateOfBirthSetMessagePayload(type=%r, date_of_birth=%r)" % (
-            self.type,
-            self.date_of_birth,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerEmailChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailChangedMessagePayloadSchema`."
-    #: :class:`str`
-    email: typing.Optional[str]
-
-    def __init__(
-        self, *, type: typing.Optional[str] = None, email: typing.Optional[str] = None
-    ) -> None:
-        self.email = email
-        super().__init__(type="CustomerEmailChanged")
-
-    def __repr__(self) -> str:
-        return "CustomerEmailChangedMessagePayload(type=%r, email=%r)" % (
-            self.type,
-            self.email,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerEmailVerifiedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifiedMessagePayloadSchema`."
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        super().__init__(type="CustomerEmailVerified")
-
-    def __repr__(self) -> str:
-        return "CustomerEmailVerifiedMessagePayload(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerGroupSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetMessagePayloadSchema`."
-    #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None
-    ) -> None:
-        self.customer_group = customer_group
-        super().__init__(type="CustomerGroupSet")
-
-    def __repr__(self) -> str:
-        return "CustomerGroupSetMessagePayload(type=%r, customer_group=%r)" % (
-            self.type,
-            self.customer_group,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Delivery`
-    delivery: typing.Optional["Delivery"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None
-    ) -> None:
-        self.delivery = delivery
-        super().__init__(type="DeliveryAdded")
-
-    def __repr__(self) -> str:
-        return "DeliveryAddedMessagePayload(type=%r, delivery=%r)" % (
-            self.type,
-            self.delivery,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryAddressSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddressSetMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
-    old_address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.address = address
-        self.old_address = old_address
-        super().__init__(type="DeliveryAddressSet")
-
-    def __repr__(self) -> str:
-        return (
-            "DeliveryAddressSetMessagePayload(type=%r, delivery_id=%r, address=%r, old_address=%r)"
-            % (self.type, self.delivery_id, self.address, self.old_address)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryItemsUpdatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
-    #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
-    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
-    old_items: typing.Optional[typing.List["DeliveryItem"]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        old_items: typing.Optional[typing.List["DeliveryItem"]] = None
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.items = items
-        self.old_items = old_items
-        super().__init__(type="DeliveryItemsUpdated")
-
-    def __repr__(self) -> str:
-        return (
-            "DeliveryItemsUpdatedMessagePayload(type=%r, delivery_id=%r, items=%r, old_items=%r)"
-            % (self.type, self.delivery_id, self.items, self.old_items)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DeliveryRemovedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryRemovedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Delivery`
-    delivery: typing.Optional["Delivery"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None
-    ) -> None:
-        self.delivery = delivery
-        super().__init__(type="DeliveryRemoved")
-
-    def __repr__(self) -> str:
-        return "DeliveryRemovedMessagePayload(type=%r, delivery=%r)" % (
-            self.type,
-            self.delivery,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class InventoryEntryDeletedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDeletedMessagePayloadSchema`."
-    #: :class:`str`
-    sku: typing.Optional[str]
-    #: :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        sku: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None
-    ) -> None:
-        self.sku = sku
-        self.supply_channel = supply_channel
-        super().__init__(type="InventoryEntryDeleted")
-
-    def __repr__(self) -> str:
-        return (
-            "InventoryEntryDeletedMessagePayload(type=%r, sku=%r, supply_channel=%r)"
-            % (self.type, self.sku, self.supply_channel)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class LineItemStateTransitionMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
-    #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
-    transition_date: typing.Optional[datetime.datetime]
-    #: :class:`int`
-    quantity: typing.Optional[int]
-    #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
-    from_state: typing.Optional["StateReference"]
-    #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
-    to_state: typing.Optional["StateReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        transition_date: typing.Optional[datetime.datetime] = None,
-        quantity: typing.Optional[int] = None,
-        from_state: typing.Optional["StateReference"] = None,
-        to_state: typing.Optional["StateReference"] = None
-    ) -> None:
-        self.line_item_id = line_item_id
-        self.transition_date = transition_date
-        self.quantity = quantity
-        self.from_state = from_state
-        self.to_state = to_state
-        super().__init__(type="LineItemStateTransition")
-
-    def __repr__(self) -> str:
-        return (
-            "LineItemStateTransitionMessagePayload(type=%r, line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
-            % (
-                self.type,
-                self.line_item_id,
-                self.transition_date,
-                self.quantity,
-                self.from_state,
-                self.to_state,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Message(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSchema`."
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
@@ -849,7 +244,54 @@ class Message(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class MessageConfiguration(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationSchema`."
+    #: :class:`bool`
+    enabled: typing.Optional[bool]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
+    delete_days_after_creation: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        enabled: typing.Optional[bool] = None,
+        delete_days_after_creation: typing.Optional[int] = None
+    ) -> None:
+        self.enabled = enabled
+        self.delete_days_after_creation = delete_days_after_creation
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MessageConfiguration(enabled=%r, delete_days_after_creation=%r)" % (
+            self.enabled,
+            self.delete_days_after_creation,
+        )
+
+
+class MessageConfigurationDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationDraftSchema`."
+    #: :class:`bool`
+    enabled: typing.Optional[bool]
+    #: :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
+    delete_days_after_creation: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        enabled: typing.Optional[bool] = None,
+        delete_days_after_creation: typing.Optional[int] = None
+    ) -> None:
+        self.enabled = enabled
+        self.delete_days_after_creation = delete_days_after_creation
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "MessageConfigurationDraft(enabled=%r, delete_days_after_creation=%r)"
+            % (self.enabled, self.delete_days_after_creation)
+        )
+
+
 class MessagePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Message`
@@ -873,968 +315,21 @@ class MessagePagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderBillingAddressSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessagePayloadSchema`."
-    #: Optional :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
-    old_address: typing.Optional["Address"]
+class MessagePayload(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePayloadSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
-    ) -> None:
-        self.address = address
-        self.old_address = old_address
-        super().__init__(type="OrderBillingAddressSet")
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+        super().__init__()
 
     def __repr__(self) -> str:
-        return (
-            "OrderBillingAddressSetMessagePayload(type=%r, address=%r, old_address=%r)"
-            % (self.type, self.address, self.old_address)
-        )
+        return "MessagePayload(type=%r)" % (self.type,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCreatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCreatedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Order`
-    order: typing.Optional["Order"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None
-    ) -> None:
-        self.order = order
-        super().__init__(type="OrderCreated")
-
-    def __repr__(self) -> str:
-        return "OrderCreatedMessagePayload(type=%r, order=%r)" % (self.type, self.order)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
-    custom_line_item_id: typing.Optional[str]
-    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
-    discounted_price_per_quantity: typing.Optional[
-        typing.List["DiscountedLineItemPriceForQuantity"]
-    ]
-    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
-    taxed_price: typing.Optional["TaxedItemPrice"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        custom_line_item_id: typing.Optional[str] = None,
-        discounted_price_per_quantity: typing.Optional[
-            typing.List["DiscountedLineItemPriceForQuantity"]
-        ] = None,
-        taxed_price: typing.Optional["TaxedItemPrice"] = None
-    ) -> None:
-        self.custom_line_item_id = custom_line_item_id
-        self.discounted_price_per_quantity = discounted_price_per_quantity
-        self.taxed_price = taxed_price
-        super().__init__(type="OrderCustomLineItemDiscountSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomLineItemDiscountSetMessagePayload(type=%r, custom_line_item_id=%r, discounted_price_per_quantity=%r, taxed_price=%r)"
-            % (
-                self.type,
-                self.custom_line_item_id,
-                self.discounted_price_per_quantity,
-                self.taxed_price,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCustomerEmailSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessagePayloadSchema`."
-    #: Optional :class:`str`
-    email: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``oldEmail`` `in Commercetools)`
-    old_email: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-        old_email: typing.Optional[str] = None
-    ) -> None:
-        self.email = email
-        self.old_email = old_email
-        super().__init__(type="OrderCustomerEmailSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomerEmailSetMessagePayload(type=%r, email=%r, old_email=%r)"
-            % (self.type, self.email, self.old_email)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderCustomerSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerSetMessagePayloadSchema`."
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
-    #: Optional :class:`commercetools.types.CustomerReference` `(Named` ``oldCustomer`` `in Commercetools)`
-    old_customer: typing.Optional["CustomerReference"]
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``oldCustomerGroup`` `in Commercetools)`
-    old_customer_group: typing.Optional["CustomerGroupReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        customer: typing.Optional["CustomerReference"] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-        old_customer: typing.Optional["CustomerReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
-    ) -> None:
-        self.customer = customer
-        self.customer_group = customer_group
-        self.old_customer = old_customer
-        self.old_customer_group = old_customer_group
-        super().__init__(type="OrderCustomerSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomerSetMessagePayload(type=%r, customer=%r, customer_group=%r, old_customer=%r, old_customer_group=%r)"
-            % (
-                self.type,
-                self.customer,
-                self.customer_group,
-                self.old_customer,
-                self.old_customer_group,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderDeletedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDeletedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Order`
-    order: typing.Optional["Order"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None
-    ) -> None:
-        self.order = order
-        super().__init__(type="OrderDeleted")
-
-    def __repr__(self) -> str:
-        return "OrderDeletedMessagePayload(type=%r, order=%r)" % (self.type, self.order)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderDiscountCodeAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessagePayloadSchema`."
-    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
-    discount_code: typing.Optional["DiscountCodeReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        discount_code: typing.Optional["DiscountCodeReference"] = None
-    ) -> None:
-        self.discount_code = discount_code
-        super().__init__(type="OrderDiscountCodeAdded")
-
-    def __repr__(self) -> str:
-        return "OrderDiscountCodeAddedMessagePayload(type=%r, discount_code=%r)" % (
-            self.type,
-            self.discount_code,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessagePayloadSchema`."
-    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
-    discount_code: typing.Optional["DiscountCodeReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        discount_code: typing.Optional["DiscountCodeReference"] = None
-    ) -> None:
-        self.discount_code = discount_code
-        super().__init__(type="OrderDiscountCodeRemoved")
-
-    def __repr__(self) -> str:
-        return "OrderDiscountCodeRemovedMessagePayload(type=%r, discount_code=%r)" % (
-            self.type,
-            self.discount_code,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessagePayloadSchema`."
-    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
-    discount_code: typing.Optional["DiscountCodeReference"]
-    #: :class:`commercetools.types.DiscountCodeState`
-    state: typing.Optional["DiscountCodeState"]
-    #: Optional :class:`commercetools.types.DiscountCodeState` `(Named` ``oldState`` `in Commercetools)`
-    old_state: typing.Optional["DiscountCodeState"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        discount_code: typing.Optional["DiscountCodeReference"] = None,
-        state: typing.Optional["DiscountCodeState"] = None,
-        old_state: typing.Optional["DiscountCodeState"] = None
-    ) -> None:
-        self.discount_code = discount_code
-        self.state = state
-        self.old_state = old_state
-        super().__init__(type="OrderDiscountCodeStateSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderDiscountCodeStateSetMessagePayload(type=%r, discount_code=%r, state=%r, old_state=%r)"
-            % (self.type, self.discount_code, self.state, self.old_state)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderEditAppliedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedMessagePayloadSchema`."
-    #: :class:`commercetools.types.OrderEditReference`
-    edit: typing.Optional["OrderEditReference"]
-    #: :class:`commercetools.types.OrderEditApplied`
-    result: typing.Optional["OrderEditApplied"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        edit: typing.Optional["OrderEditReference"] = None,
-        result: typing.Optional["OrderEditApplied"] = None
-    ) -> None:
-        self.edit = edit
-        self.result = result
-        super().__init__(type="OrderEditApplied")
-
-    def __repr__(self) -> str:
-        return "OrderEditAppliedMessagePayload(type=%r, edit=%r, result=%r)" % (
-            self.type,
-            self.edit,
-            self.result,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderImportedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Order`
-    order: typing.Optional["Order"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order: typing.Optional["Order"] = None
-    ) -> None:
-        self.order = order
-        super().__init__(type="OrderImported")
-
-    def __repr__(self) -> str:
-        return "OrderImportedMessagePayload(type=%r, order=%r)" % (
-            self.type,
-            self.order,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderLineItemDiscountSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
-    line_item_id: typing.Optional[str]
-    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
-    discounted_price_per_quantity: typing.Optional[
-        typing.List["DiscountedLineItemPriceForQuantity"]
-    ]
-    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
-    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
-    taxed_price: typing.Optional["TaxedItemPrice"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        line_item_id: typing.Optional[str] = None,
-        discounted_price_per_quantity: typing.Optional[
-            typing.List["DiscountedLineItemPriceForQuantity"]
-        ] = None,
-        total_price: typing.Optional["Money"] = None,
-        taxed_price: typing.Optional["TaxedItemPrice"] = None
-    ) -> None:
-        self.line_item_id = line_item_id
-        self.discounted_price_per_quantity = discounted_price_per_quantity
-        self.total_price = total_price
-        self.taxed_price = taxed_price
-        super().__init__(type="OrderLineItemDiscountSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderLineItemDiscountSetMessagePayload(type=%r, line_item_id=%r, discounted_price_per_quantity=%r, total_price=%r, taxed_price=%r)"
-            % (
-                self.type,
-                self.line_item_id,
-                self.discounted_price_per_quantity,
-                self.total_price,
-                self.taxed_price,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderPaymentStateChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessagePayloadSchema`."
-    #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
-    payment_state: typing.Optional["PaymentState"]
-    #: :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
-    old_payment_state: typing.Optional["PaymentState"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        payment_state: typing.Optional["PaymentState"] = None,
-        old_payment_state: typing.Optional["PaymentState"] = None
-    ) -> None:
-        self.payment_state = payment_state
-        self.old_payment_state = old_payment_state
-        super().__init__(type="OrderPaymentStateChanged")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderPaymentStateChangedMessagePayload(type=%r, payment_state=%r, old_payment_state=%r)"
-            % (self.type, self.payment_state, self.old_payment_state)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderReturnInfoAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnInfoAddedMessagePayloadSchema`."
-    #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
-    return_info: typing.Optional["ReturnInfo"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        return_info: typing.Optional["ReturnInfo"] = None
-    ) -> None:
-        self.return_info = return_info
-        super().__init__(type="ReturnInfoAdded")
-
-    def __repr__(self) -> str:
-        return "OrderReturnInfoAddedMessagePayload(type=%r, return_info=%r)" % (
-            self.type,
-            self.return_info,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnShipmentStateChangedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
-    return_item_id: typing.Optional[str]
-    #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``returnShipmentState`` `in Commercetools)`
-    return_shipment_state: typing.Optional["ReturnShipmentState"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        return_item_id: typing.Optional[str] = None,
-        return_shipment_state: typing.Optional["ReturnShipmentState"] = None
-    ) -> None:
-        self.return_item_id = return_item_id
-        self.return_shipment_state = return_shipment_state
-        super().__init__(type="OrderReturnShipmentStateChanged")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderReturnShipmentStateChangedMessagePayload(type=%r, return_item_id=%r, return_shipment_state=%r)"
-            % (self.type, self.return_item_id, self.return_shipment_state)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderShipmentStateChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessagePayloadSchema`."
-    #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
-    shipment_state: typing.Optional["ShipmentState"]
-    #: :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
-    old_shipment_state: typing.Optional["ShipmentState"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        shipment_state: typing.Optional["ShipmentState"] = None,
-        old_shipment_state: typing.Optional["ShipmentState"] = None
-    ) -> None:
-        self.shipment_state = shipment_state
-        self.old_shipment_state = old_shipment_state
-        super().__init__(type="OrderShipmentStateChanged")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderShipmentStateChangedMessagePayload(type=%r, shipment_state=%r, old_shipment_state=%r)"
-            % (self.type, self.shipment_state, self.old_shipment_state)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderShippingAddressSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessagePayloadSchema`."
-    #: Optional :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
-    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
-    old_address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
-    ) -> None:
-        self.address = address
-        self.old_address = old_address
-        super().__init__(type="OrderShippingAddressSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderShippingAddressSetMessagePayload(type=%r, address=%r, old_address=%r)"
-            % (self.type, self.address, self.old_address)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderShippingInfoSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessagePayloadSchema`."
-    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
-    shipping_info: typing.Optional["ShippingInfo"]
-    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``oldShippingInfo`` `in Commercetools)`
-    old_shipping_info: typing.Optional["ShippingInfo"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        shipping_info: typing.Optional["ShippingInfo"] = None,
-        old_shipping_info: typing.Optional["ShippingInfo"] = None
-    ) -> None:
-        self.shipping_info = shipping_info
-        self.old_shipping_info = old_shipping_info
-        super().__init__(type="OrderShippingInfoSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderShippingInfoSetMessagePayload(type=%r, shipping_info=%r, old_shipping_info=%r)"
-            % (self.type, self.shipping_info, self.old_shipping_info)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderShippingRateInputSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessagePayloadSchema`."
-    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
-    shipping_rate_input: typing.Optional["ShippingRateInput"]
-    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``oldShippingRateInput`` `in Commercetools)`
-    old_shipping_rate_input: typing.Optional["ShippingRateInput"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None
-    ) -> None:
-        self.shipping_rate_input = shipping_rate_input
-        self.old_shipping_rate_input = old_shipping_rate_input
-        super().__init__(type="OrderShippingRateInputSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderShippingRateInputSetMessagePayload(type=%r, shipping_rate_input=%r, old_shipping_rate_input=%r)"
-            % (self.type, self.shipping_rate_input, self.old_shipping_rate_input)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderStateChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessagePayloadSchema`."
-    #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
-    order_state: typing.Optional["OrderState"]
-    #: :class:`commercetools.types.OrderState` `(Named` ``oldOrderState`` `in Commercetools)`
-    old_order_state: typing.Optional["OrderState"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        order_state: typing.Optional["OrderState"] = None,
-        old_order_state: typing.Optional["OrderState"] = None
-    ) -> None:
-        self.order_state = order_state
-        self.old_order_state = old_order_state
-        super().__init__(type="OrderStateChanged")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderStateChangedMessagePayload(type=%r, order_state=%r, old_order_state=%r)"
-            % (self.type, self.order_state, self.old_order_state)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class OrderStateTransitionMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateTransitionMessagePayloadSchema`."
-    #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
-    #: :class:`bool`
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None
-    ) -> None:
-        self.state = state
-        self.force = force
-        super().__init__(type="OrderStateTransition")
-
-    def __repr__(self) -> str:
-        return "OrderStateTransitionMessagePayload(type=%r, state=%r, force=%r)" % (
-            self.type,
-            self.state,
-            self.force,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelAddedToDeliveryMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessagePayloadSchema`."
-    #: :class:`commercetools.types.Delivery`
-    delivery: typing.Optional["Delivery"]
-    #: :class:`commercetools.types.Parcel`
-    parcel: typing.Optional["Parcel"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery: typing.Optional["Delivery"] = None,
-        parcel: typing.Optional["Parcel"] = None
-    ) -> None:
-        self.delivery = delivery
-        self.parcel = parcel
-        super().__init__(type="ParcelAddedToDelivery")
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelAddedToDeliveryMessagePayload(type=%r, delivery=%r, parcel=%r)"
-            % (self.type, self.delivery, self.parcel)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelItemsUpdatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelItemsUpdatedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
-    #: List of :class:`commercetools.types.DeliveryItem`
-    items: typing.Optional[typing.List["DeliveryItem"]]
-    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
-    old_items: typing.Optional[typing.List["DeliveryItem"]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        old_items: typing.Optional[typing.List["DeliveryItem"]] = None
-    ) -> None:
-        self.parcel_id = parcel_id
-        self.delivery_id = delivery_id
-        self.items = items
-        self.old_items = old_items
-        super().__init__(type="ParcelItemsUpdated")
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelItemsUpdatedMessagePayload(type=%r, parcel_id=%r, delivery_id=%r, items=%r, old_items=%r)"
-            % (self.type, self.parcel_id, self.delivery_id, self.items, self.old_items)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsUpdatedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
-    #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.ParcelMeasurements`
-    measurements: typing.Optional["ParcelMeasurements"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        measurements: typing.Optional["ParcelMeasurements"] = None
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.parcel_id = parcel_id
-        self.measurements = measurements
-        super().__init__(type="ParcelMeasurementsUpdated")
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelMeasurementsUpdatedMessagePayload(type=%r, delivery_id=%r, parcel_id=%r, measurements=%r)"
-            % (self.type, self.delivery_id, self.parcel_id, self.measurements)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelRemovedFromDeliveryMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
-    #: :class:`commercetools.types.Parcel`
-    parcel: typing.Optional["Parcel"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel: typing.Optional["Parcel"] = None
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.parcel = parcel
-        super().__init__(type="ParcelRemovedFromDelivery")
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelRemovedFromDeliveryMessagePayload(type=%r, delivery_id=%r, parcel=%r)"
-            % (self.type, self.delivery_id, self.parcel)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ParcelTrackingDataUpdatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelTrackingDataUpdatedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
-    delivery_id: typing.Optional[str]
-    #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
-    parcel_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
-    tracking_data: typing.Optional["TrackingData"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        delivery_id: typing.Optional[str] = None,
-        parcel_id: typing.Optional[str] = None,
-        tracking_data: typing.Optional["TrackingData"] = None
-    ) -> None:
-        self.delivery_id = delivery_id
-        self.parcel_id = parcel_id
-        self.tracking_data = tracking_data
-        super().__init__(type="ParcelTrackingDataUpdated")
-
-    def __repr__(self) -> str:
-        return (
-            "ParcelTrackingDataUpdatedMessagePayload(type=%r, delivery_id=%r, parcel_id=%r, tracking_data=%r)"
-            % (self.type, self.delivery_id, self.parcel_id, self.tracking_data)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentCreatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentCreatedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Payment`
-    payment: typing.Optional["Payment"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        payment: typing.Optional["Payment"] = None
-    ) -> None:
-        self.payment = payment
-        super().__init__(type="PaymentCreated")
-
-    def __repr__(self) -> str:
-        return "PaymentCreatedMessagePayload(type=%r, payment=%r)" % (
-            self.type,
-            self.payment,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentInteractionAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInteractionAddedMessagePayloadSchema`."
-    #: :class:`commercetools.types.CustomFields`
-    interaction: typing.Optional["CustomFields"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        interaction: typing.Optional["CustomFields"] = None
-    ) -> None:
-        self.interaction = interaction
-        super().__init__(type="PaymentInteractionAdded")
-
-    def __repr__(self) -> str:
-        return "PaymentInteractionAddedMessagePayload(type=%r, interaction=%r)" % (
-            self.type,
-            self.interaction,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusInterfaceCodeSetMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``paymentId`` `in Commercetools)`
-    payment_id: typing.Optional[str]
-    #: :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
-    interface_code: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        payment_id: typing.Optional[str] = None,
-        interface_code: typing.Optional[str] = None
-    ) -> None:
-        self.payment_id = payment_id
-        self.interface_code = interface_code
-        super().__init__(type="PaymentStatusInterfaceCodeSet")
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentStatusInterfaceCodeSetMessagePayload(type=%r, payment_id=%r, interface_code=%r)"
-            % (self.type, self.payment_id, self.interface_code)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentStatusStateTransitionMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusStateTransitionMessagePayloadSchema`."
-    #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
-    #: :class:`bool`
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None
-    ) -> None:
-        self.state = state
-        self.force = force
-        super().__init__(type="PaymentStatusStateTransition")
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentStatusStateTransitionMessagePayload(type=%r, state=%r, force=%r)"
-            % (self.type, self.state, self.force)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentTransactionAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionAddedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Transaction`
-    transaction: typing.Optional["Transaction"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        transaction: typing.Optional["Transaction"] = None
-    ) -> None:
-        self.transaction = transaction
-        super().__init__(type="PaymentTransactionAdded")
-
-    def __repr__(self) -> str:
-        return "PaymentTransactionAddedMessagePayload(type=%r, transaction=%r)" % (
-            self.type,
-            self.transaction,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PaymentTransactionStateChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionStateChangedMessagePayloadSchema`."
-    #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
-    #: :class:`commercetools.types.TransactionState`
-    state: typing.Optional["TransactionState"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None
-    ) -> None:
-        self.transaction_id = transaction_id
-        self.state = state
-        super().__init__(type="PaymentTransactionStateChanged")
-
-    def __repr__(self) -> str:
-        return (
-            "PaymentTransactionStateChangedMessagePayload(type=%r, transaction_id=%r, state=%r)"
-            % (self.type, self.transaction_id, self.state)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductCreatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessagePayloadSchema`."
-    #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
-    product_projection: typing.Optional["ProductProjection"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        product_projection: typing.Optional["ProductProjection"] = None
-    ) -> None:
-        self.product_projection = product_projection
-        super().__init__(type="ProductCreated")
-
-    def __repr__(self) -> str:
-        return "ProductCreatedMessagePayload(type=%r, product_projection=%r)" % (
-            self.type,
-            self.product_projection,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductDeletedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDeletedMessagePayloadSchema`."
-    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
-    #: :class:`commercetools.types.ProductProjection` `(Named` ``currentProjection`` `in Commercetools)`
-    current_projection: typing.Optional["ProductProjection"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        current_projection: typing.Optional["ProductProjection"] = None
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        self.current_projection = current_projection
-        super().__init__(type="ProductDeleted")
-
-    def __repr__(self) -> str:
-        return (
-            "ProductDeletedMessagePayload(type=%r, removed_image_urls=%r, current_projection=%r)"
-            % (self.type, self.removed_image_urls, self.current_projection)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductImageAddedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductImageAddedMessagePayloadSchema`."
-    #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
-    #: :class:`commercetools.types.Image`
-    image: typing.Optional["Image"]
-    #: :class:`bool`
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-        image: typing.Optional["Image"] = None,
-        staged: typing.Optional[bool] = None
-    ) -> None:
-        self.variant_id = variant_id
-        self.image = image
-        self.staged = staged
-        super().__init__(type="ProductImageAdded")
-
-    def __repr__(self) -> str:
-        return (
-            "ProductImageAddedMessagePayload(type=%r, variant_id=%r, image=%r, staged=%r)"
-            % (self.type, self.variant_id, self.image, self.staged)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductPriceDiscountsSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetMessagePayloadSchema`."
-    #: List of :class:`commercetools.types.ProductPriceDiscountsSetUpdatedPrice` `(Named` ``updatedPrices`` `in Commercetools)`
-    updated_prices: typing.Optional[typing.List["ProductPriceDiscountsSetUpdatedPrice"]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        updated_prices: typing.Optional[
-            typing.List["ProductPriceDiscountsSetUpdatedPrice"]
-        ] = None
-    ) -> None:
-        self.updated_prices = updated_prices
-        super().__init__(type="ProductPriceDiscountsSet")
-
-    def __repr__(self) -> str:
-        return "ProductPriceDiscountsSetMessagePayload(type=%r, updated_prices=%r)" % (
-            self.type,
-            self.updated_prices,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceExternalDiscountSetMessagePayloadSchema`."
+class ProductPriceDiscountsSetUpdatedPrice(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetUpdatedPriceSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str` `(Named` ``variantKey`` `in Commercetools)`
@@ -1851,7 +346,6 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         variant_key: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
@@ -1865,13 +359,12 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
         self.price_id = price_id
         self.discounted = discounted
         self.staged = staged
-        super().__init__(type="ProductPriceExternalDiscountSet")
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "ProductPriceExternalDiscountSetMessagePayload(type=%r, variant_id=%r, variant_key=%r, sku=%r, price_id=%r, discounted=%r, staged=%r)"
+            "ProductPriceDiscountsSetUpdatedPrice(variant_id=%r, variant_key=%r, sku=%r, price_id=%r, discounted=%r, staged=%r)"
             % (
-                self.type,
                 self.variant_id,
                 self.variant_key,
                 self.sku,
@@ -1882,257 +375,53 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductPublishedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishedMessagePayloadSchema`."
-    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
-    #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
-    product_projection: typing.Optional["ProductProjection"]
-    #: :class:`commercetools.types.ProductPublishScope`
-    scope: typing.Optional["ProductPublishScope"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        product_projection: typing.Optional["ProductProjection"] = None,
-        scope: typing.Optional["ProductPublishScope"] = None
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        self.product_projection = product_projection
-        self.scope = scope
-        super().__init__(type="ProductPublished")
-
-    def __repr__(self) -> str:
-        return (
-            "ProductPublishedMessagePayload(type=%r, removed_image_urls=%r, product_projection=%r, scope=%r)"
-            % (self.type, self.removed_image_urls, self.product_projection, self.scope)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductRevertedStagedChangesMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessagePayloadSchema`."
-    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        super().__init__(type="ProductRevertedStagedChanges")
-
-    def __repr__(self) -> str:
-        return (
-            "ProductRevertedStagedChangesMessagePayload(type=%r, removed_image_urls=%r)"
-            % (self.type, self.removed_image_urls)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductSlugChangedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSlugChangedMessagePayloadSchema`."
-    #: :class:`commercetools.types.LocalizedString`
+class UserProvidedIdentifiers(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.UserProvidedIdentifiersSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
+    external_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
+    order_number: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
+    customer_number: typing.Optional[str]
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString`
     slug: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
+        order_number: typing.Optional[str] = None,
+        customer_number: typing.Optional[str] = None,
+        sku: typing.Optional[str] = None,
         slug: typing.Optional["LocalizedString"] = None
     ) -> None:
+        self.key = key
+        self.external_id = external_id
+        self.order_number = order_number
+        self.customer_number = customer_number
+        self.sku = sku
         self.slug = slug
-        super().__init__(type="ProductSlugChanged")
-
-    def __repr__(self) -> str:
-        return "ProductSlugChangedMessagePayload(type=%r, slug=%r)" % (
-            self.type,
-            self.slug,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductStateTransitionMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductStateTransitionMessagePayloadSchema`."
-    #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
-    #: :class:`bool`
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
-        force: typing.Optional[bool] = None
-    ) -> None:
-        self.state = state
-        self.force = force
-        super().__init__(type="ProductStateTransition")
-
-    def __repr__(self) -> str:
-        return "ProductStateTransitionMessagePayload(type=%r, state=%r, force=%r)" % (
-            self.type,
-            self.state,
-            self.force,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductUnpublishedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishedMessagePayloadSchema`."
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        super().__init__(type="ProductUnpublished")
-
-    def __repr__(self) -> str:
-        return "ProductUnpublishedMessagePayload(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductVariantDeletedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessagePayloadSchema`."
-    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
-    removed_image_urls: typing.Optional[list]
-    #: :class:`commercetools.types.ProductVariant`
-    variant: typing.Optional["ProductVariant"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        removed_image_urls: typing.Optional[list] = None,
-        variant: typing.Optional["ProductVariant"] = None
-    ) -> None:
-        self.removed_image_urls = removed_image_urls
-        self.variant = variant
-        super().__init__(type="ProductVariantDeleted")
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "ProductVariantDeletedMessagePayload(type=%r, removed_image_urls=%r, variant=%r)"
-            % (self.type, self.removed_image_urls, self.variant)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewCreatedMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewCreatedMessagePayloadSchema`."
-    #: :class:`commercetools.types.Review`
-    review: typing.Optional["Review"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        review: typing.Optional["Review"] = None
-    ) -> None:
-        self.review = review
-        super().__init__(type="ReviewCreated")
-
-    def __repr__(self) -> str:
-        return "ReviewCreatedMessagePayload(type=%r, review=%r)" % (
-            self.type,
-            self.review,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewRatingSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessagePayloadSchema`."
-    #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
-    old_rating: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``newRating`` `in Commercetools)`
-    new_rating: typing.Optional[int]
-    #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
-    included_in_statistics: typing.Optional[bool]
-    #: Optional :class:`commercetools.types.Reference`
-    target: typing.Optional["Reference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        old_rating: typing.Optional[int] = None,
-        new_rating: typing.Optional[int] = None,
-        included_in_statistics: typing.Optional[bool] = None,
-        target: typing.Optional["Reference"] = None
-    ) -> None:
-        self.old_rating = old_rating
-        self.new_rating = new_rating
-        self.included_in_statistics = included_in_statistics
-        self.target = target
-        super().__init__(type="ReviewRatingSet")
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewRatingSetMessagePayload(type=%r, old_rating=%r, new_rating=%r, included_in_statistics=%r, target=%r)"
+            "UserProvidedIdentifiers(key=%r, external_id=%r, order_number=%r, customer_number=%r, sku=%r, slug=%r)"
             % (
-                self.type,
-                self.old_rating,
-                self.new_rating,
-                self.included_in_statistics,
-                self.target,
+                self.key,
+                self.external_id,
+                self.order_number,
+                self.customer_number,
+                self.sku,
+                self.slug,
             )
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ReviewStateTransitionMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewStateTransitionMessagePayloadSchema`."
-    #: :class:`commercetools.types.StateReference` `(Named` ``oldState`` `in Commercetools)`
-    old_state: typing.Optional["StateReference"]
-    #: :class:`commercetools.types.StateReference` `(Named` ``newState`` `in Commercetools)`
-    new_state: typing.Optional["StateReference"]
-    #: :class:`bool` `(Named` ``oldIncludedInStatistics`` `in Commercetools)`
-    old_included_in_statistics: typing.Optional[bool]
-    #: :class:`bool` `(Named` ``newIncludedInStatistics`` `in Commercetools)`
-    new_included_in_statistics: typing.Optional[bool]
-    #: :class:`commercetools.types.Reference`
-    target: typing.Optional["Reference"]
-    #: :class:`bool`
-    force: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        old_state: typing.Optional["StateReference"] = None,
-        new_state: typing.Optional["StateReference"] = None,
-        old_included_in_statistics: typing.Optional[bool] = None,
-        new_included_in_statistics: typing.Optional[bool] = None,
-        target: typing.Optional["Reference"] = None,
-        force: typing.Optional[bool] = None
-    ) -> None:
-        self.old_state = old_state
-        self.new_state = new_state
-        self.old_included_in_statistics = old_included_in_statistics
-        self.new_included_in_statistics = new_included_in_statistics
-        self.target = target
-        self.force = force
-        super().__init__(type="ReviewStateTransition")
-
-    def __repr__(self) -> str:
-        return (
-            "ReviewStateTransitionMessagePayload(type=%r, old_state=%r, new_state=%r, old_included_in_statistics=%r, new_included_in_statistics=%r, target=%r, force=%r)"
-            % (
-                self.type,
-                self.old_state,
-                self.new_state,
-                self.old_included_in_statistics,
-                self.new_included_in_statistics,
-                self.target,
-                self.force,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CategoryCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryCreatedMessageSchema`."
     #: :class:`commercetools.types.Category`
@@ -2185,7 +474,27 @@ class CategoryCreatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CategoryCreatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryCreatedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Category`
+    category: typing.Optional["Category"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        category: typing.Optional["Category"] = None
+    ) -> None:
+        self.category = category
+        super().__init__(type="CategoryCreated")
+
+    def __repr__(self) -> str:
+        return "CategoryCreatedMessagePayload(type=%r, category=%r)" % (
+            self.type,
+            self.category,
+        )
+
+
 class CategorySlugChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySlugChangedMessageSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -2238,7 +547,27 @@ class CategorySlugChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CategorySlugChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySlugChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    slug: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        slug: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.slug = slug
+        super().__init__(type="CategorySlugChanged")
+
+    def __repr__(self) -> str:
+        return "CategorySlugChangedMessagePayload(type=%r, slug=%r)" % (
+            self.type,
+            self.slug,
+        )
+
+
 class CustomLineItemStateTransitionMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemStateTransitionMessageSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -2311,7 +640,50 @@ class CustomLineItemStateTransitionMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomLineItemStateTransitionMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemStateTransitionMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
+    custom_line_item_id: typing.Optional[str]
+    #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
+    transition_date: typing.Optional[datetime.datetime]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+    #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
+    from_state: typing.Optional["StateReference"]
+    #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
+    to_state: typing.Optional["StateReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        custom_line_item_id: typing.Optional[str] = None,
+        transition_date: typing.Optional[datetime.datetime] = None,
+        quantity: typing.Optional[int] = None,
+        from_state: typing.Optional["StateReference"] = None,
+        to_state: typing.Optional["StateReference"] = None
+    ) -> None:
+        self.custom_line_item_id = custom_line_item_id
+        self.transition_date = transition_date
+        self.quantity = quantity
+        self.from_state = from_state
+        self.to_state = to_state
+        super().__init__(type="CustomLineItemStateTransition")
+
+    def __repr__(self) -> str:
+        return (
+            "CustomLineItemStateTransitionMessagePayload(type=%r, custom_line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            % (
+                self.type,
+                self.custom_line_item_id,
+                self.transition_date,
+                self.quantity,
+                self.from_state,
+                self.to_state,
+            )
+        )
+
+
 class CustomerAddressAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressAddedMessageSchema`."
     #: :class:`commercetools.types.Address`
@@ -2364,7 +736,27 @@ class CustomerAddressAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerAddressAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(type="CustomerAddressAdded")
+
+    def __repr__(self) -> str:
+        return "CustomerAddressAddedMessagePayload(type=%r, address=%r)" % (
+            self.type,
+            self.address,
+        )
+
+
 class CustomerAddressChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressChangedMessageSchema`."
     #: :class:`commercetools.types.Address`
@@ -2417,7 +809,27 @@ class CustomerAddressChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerAddressChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(type="CustomerAddressChanged")
+
+    def __repr__(self) -> str:
+        return "CustomerAddressChangedMessagePayload(type=%r, address=%r)" % (
+            self.type,
+            self.address,
+        )
+
+
 class CustomerAddressRemovedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressRemovedMessageSchema`."
     #: :class:`commercetools.types.Address`
@@ -2470,7 +882,27 @@ class CustomerAddressRemovedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerAddressRemovedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressRemovedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(type="CustomerAddressRemoved")
+
+    def __repr__(self) -> str:
+        return "CustomerAddressRemovedMessagePayload(type=%r, address=%r)" % (
+            self.type,
+            self.address,
+        )
+
+
 class CustomerCompanyNameSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCompanyNameSetMessageSchema`."
     #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
@@ -2523,7 +955,27 @@ class CustomerCompanyNameSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerCompanyNameSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCompanyNameSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
+    company_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        company_name: typing.Optional[str] = None
+    ) -> None:
+        self.company_name = company_name
+        super().__init__(type="CustomerCompanyNameSet")
+
+    def __repr__(self) -> str:
+        return "CustomerCompanyNameSetMessagePayload(type=%r, company_name=%r)" % (
+            self.type,
+            self.company_name,
+        )
+
+
 class CustomerCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatedMessageSchema`."
     #: :class:`commercetools.types.Customer`
@@ -2576,7 +1028,27 @@ class CustomerCreatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerCreatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Customer`
+    customer: typing.Optional["Customer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        customer: typing.Optional["Customer"] = None
+    ) -> None:
+        self.customer = customer
+        super().__init__(type="CustomerCreated")
+
+    def __repr__(self) -> str:
+        return "CustomerCreatedMessagePayload(type=%r, customer=%r)" % (
+            self.type,
+            self.customer,
+        )
+
+
 class CustomerDateOfBirthSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDateOfBirthSetMessageSchema`."
     #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
@@ -2629,7 +1101,27 @@ class CustomerDateOfBirthSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerDateOfBirthSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDateOfBirthSetMessagePayloadSchema`."
+    #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
+    date_of_birth: typing.Optional[datetime.date]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None
+    ) -> None:
+        self.date_of_birth = date_of_birth
+        super().__init__(type="CustomerDateOfBirthSet")
+
+    def __repr__(self) -> str:
+        return "CustomerDateOfBirthSetMessagePayload(type=%r, date_of_birth=%r)" % (
+            self.type,
+            self.date_of_birth,
+        )
+
+
 class CustomerEmailChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailChangedMessageSchema`."
     #: :class:`str`
@@ -2682,7 +1174,24 @@ class CustomerEmailChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerEmailChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailChangedMessagePayloadSchema`."
+    #: :class:`str`
+    email: typing.Optional[str]
+
+    def __init__(
+        self, *, type: typing.Optional[str] = None, email: typing.Optional[str] = None
+    ) -> None:
+        self.email = email
+        super().__init__(type="CustomerEmailChanged")
+
+    def __repr__(self) -> str:
+        return "CustomerEmailChangedMessagePayload(type=%r, email=%r)" % (
+            self.type,
+            self.email,
+        )
+
+
 class CustomerEmailVerifiedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifiedMessageSchema`."
 
@@ -2730,7 +1239,16 @@ class CustomerEmailVerifiedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerEmailVerifiedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifiedMessagePayloadSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="CustomerEmailVerified")
+
+    def __repr__(self) -> str:
+        return "CustomerEmailVerifiedMessagePayload(type=%r)" % (self.type,)
+
+
 class CustomerGroupSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetMessageSchema`."
     #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -2783,7 +1301,27 @@ class CustomerGroupSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerGroupSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetMessagePayloadSchema`."
+    #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None
+    ) -> None:
+        self.customer_group = customer_group
+        super().__init__(type="CustomerGroupSet")
+
+    def __repr__(self) -> str:
+        return "CustomerGroupSetMessagePayload(type=%r, customer_group=%r)" % (
+            self.type,
+            self.customer_group,
+        )
+
+
 class DeliveryAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddedMessageSchema`."
     #: :class:`commercetools.types.Delivery`
@@ -2836,7 +1374,27 @@ class DeliveryAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Delivery`
+    delivery: typing.Optional["Delivery"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery: typing.Optional["Delivery"] = None
+    ) -> None:
+        self.delivery = delivery
+        super().__init__(type="DeliveryAdded")
+
+    def __repr__(self) -> str:
+        return "DeliveryAddedMessagePayload(type=%r, delivery=%r)" % (
+            self.type,
+            self.delivery,
+        )
+
+
 class DeliveryAddressSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddressSetMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -2899,7 +1457,35 @@ class DeliveryAddressSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryAddressSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddressSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
+    delivery_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.address = address
+        self.old_address = old_address
+        super().__init__(type="DeliveryAddressSet")
+
+    def __repr__(self) -> str:
+        return (
+            "DeliveryAddressSetMessagePayload(type=%r, delivery_id=%r, address=%r, old_address=%r)"
+            % (self.type, self.delivery_id, self.address, self.old_address)
+        )
+
+
 class DeliveryItemsUpdatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -2962,7 +1548,35 @@ class DeliveryItemsUpdatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryItemsUpdatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
+    delivery_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DeliveryItem`
+    items: typing.Optional[typing.List["DeliveryItem"]]
+    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
+    old_items: typing.Optional[typing.List["DeliveryItem"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        old_items: typing.Optional[typing.List["DeliveryItem"]] = None
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.items = items
+        self.old_items = old_items
+        super().__init__(type="DeliveryItemsUpdated")
+
+    def __repr__(self) -> str:
+        return (
+            "DeliveryItemsUpdatedMessagePayload(type=%r, delivery_id=%r, items=%r, old_items=%r)"
+            % (self.type, self.delivery_id, self.items, self.old_items)
+        )
+
+
 class DeliveryRemovedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryRemovedMessageSchema`."
     #: :class:`commercetools.types.Delivery`
@@ -3015,7 +1629,27 @@ class DeliveryRemovedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class DeliveryRemovedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryRemovedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Delivery`
+    delivery: typing.Optional["Delivery"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery: typing.Optional["Delivery"] = None
+    ) -> None:
+        self.delivery = delivery
+        super().__init__(type="DeliveryRemoved")
+
+    def __repr__(self) -> str:
+        return "DeliveryRemovedMessagePayload(type=%r, delivery=%r)" % (
+            self.type,
+            self.delivery,
+        )
+
+
 class InventoryEntryDeletedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDeletedMessageSchema`."
     #: :class:`str`
@@ -3073,7 +1707,31 @@ class InventoryEntryDeletedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class InventoryEntryDeletedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDeletedMessagePayloadSchema`."
+    #: :class:`str`
+    sku: typing.Optional[str]
+    #: :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        sku: typing.Optional[str] = None,
+        supply_channel: typing.Optional["ChannelReference"] = None
+    ) -> None:
+        self.sku = sku
+        self.supply_channel = supply_channel
+        super().__init__(type="InventoryEntryDeleted")
+
+    def __repr__(self) -> str:
+        return (
+            "InventoryEntryDeletedMessagePayload(type=%r, sku=%r, supply_channel=%r)"
+            % (self.type, self.sku, self.supply_channel)
+        )
+
+
 class LineItemStateTransitionMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessageSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -3146,7 +1804,50 @@ class LineItemStateTransitionMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class LineItemStateTransitionMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
+    transition_date: typing.Optional[datetime.datetime]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+    #: :class:`commercetools.types.StateReference` `(Named` ``fromState`` `in Commercetools)`
+    from_state: typing.Optional["StateReference"]
+    #: :class:`commercetools.types.StateReference` `(Named` ``toState`` `in Commercetools)`
+    to_state: typing.Optional["StateReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        transition_date: typing.Optional[datetime.datetime] = None,
+        quantity: typing.Optional[int] = None,
+        from_state: typing.Optional["StateReference"] = None,
+        to_state: typing.Optional["StateReference"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.transition_date = transition_date
+        self.quantity = quantity
+        self.from_state = from_state
+        self.to_state = to_state
+        super().__init__(type="LineItemStateTransition")
+
+    def __repr__(self) -> str:
+        return (
+            "LineItemStateTransitionMessagePayload(type=%r, line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            % (
+                self.type,
+                self.line_item_id,
+                self.transition_date,
+                self.quantity,
+                self.from_state,
+                self.to_state,
+            )
+        )
+
+
 class OrderBillingAddressSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessageSchema`."
     #: Optional :class:`commercetools.types.Address`
@@ -3204,7 +1905,31 @@ class OrderBillingAddressSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderBillingAddressSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        self.old_address = old_address
+        super().__init__(type="OrderBillingAddressSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderBillingAddressSetMessagePayload(type=%r, address=%r, old_address=%r)"
+            % (self.type, self.address, self.old_address)
+        )
+
+
 class OrderCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCreatedMessageSchema`."
     #: :class:`commercetools.types.Order`
@@ -3257,7 +1982,24 @@ class OrderCreatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCreatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCreatedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Order`
+    order: typing.Optional["Order"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        order: typing.Optional["Order"] = None
+    ) -> None:
+        self.order = order
+        super().__init__(type="OrderCreated")
+
+    def __repr__(self) -> str:
+        return "OrderCreatedMessagePayload(type=%r, order=%r)" % (self.type, self.order)
+
+
 class OrderCustomLineItemDiscountSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessageSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
@@ -3324,7 +2066,44 @@ class OrderCustomLineItemDiscountSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
+    custom_line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
+    discounted_price_per_quantity: typing.Optional[
+        typing.List["DiscountedLineItemPriceForQuantity"]
+    ]
+    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        custom_line_item_id: typing.Optional[str] = None,
+        discounted_price_per_quantity: typing.Optional[
+            typing.List["DiscountedLineItemPriceForQuantity"]
+        ] = None,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None
+    ) -> None:
+        self.custom_line_item_id = custom_line_item_id
+        self.discounted_price_per_quantity = discounted_price_per_quantity
+        self.taxed_price = taxed_price
+        super().__init__(type="OrderCustomLineItemDiscountSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomLineItemDiscountSetMessagePayload(type=%r, custom_line_item_id=%r, discounted_price_per_quantity=%r, taxed_price=%r)"
+            % (
+                self.type,
+                self.custom_line_item_id,
+                self.discounted_price_per_quantity,
+                self.taxed_price,
+            )
+        )
+
+
 class OrderCustomerEmailSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessageSchema`."
     #: Optional :class:`str`
@@ -3382,7 +2161,31 @@ class OrderCustomerEmailSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomerEmailSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessagePayloadSchema`."
+    #: Optional :class:`str`
+    email: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``oldEmail`` `in Commercetools)`
+    old_email: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        old_email: typing.Optional[str] = None
+    ) -> None:
+        self.email = email
+        self.old_email = old_email
+        super().__init__(type="OrderCustomerEmailSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomerEmailSetMessagePayload(type=%r, email=%r, old_email=%r)"
+            % (self.type, self.email, self.old_email)
+        )
+
+
 class OrderCustomerSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerSetMessageSchema`."
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -3450,7 +2253,45 @@ class OrderCustomerSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderCustomerSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.CustomerReference`
+    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.CustomerReference` `(Named` ``oldCustomer`` `in Commercetools)`
+    old_customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``oldCustomerGroup`` `in Commercetools)`
+    old_customer_group: typing.Optional["CustomerGroupReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        old_customer: typing.Optional["CustomerReference"] = None,
+        old_customer_group: typing.Optional["CustomerGroupReference"] = None
+    ) -> None:
+        self.customer = customer
+        self.customer_group = customer_group
+        self.old_customer = old_customer
+        self.old_customer_group = old_customer_group
+        super().__init__(type="OrderCustomerSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderCustomerSetMessagePayload(type=%r, customer=%r, customer_group=%r, old_customer=%r, old_customer_group=%r)"
+            % (
+                self.type,
+                self.customer,
+                self.customer_group,
+                self.old_customer,
+                self.old_customer_group,
+            )
+        )
+
+
 class OrderDeletedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDeletedMessageSchema`."
     #: :class:`commercetools.types.Order`
@@ -3503,7 +2344,24 @@ class OrderDeletedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDeletedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDeletedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Order`
+    order: typing.Optional["Order"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        order: typing.Optional["Order"] = None
+    ) -> None:
+        self.order = order
+        super().__init__(type="OrderDeleted")
+
+    def __repr__(self) -> str:
+        return "OrderDeletedMessagePayload(type=%r, order=%r)" % (self.type, self.order)
+
+
 class OrderDiscountCodeAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessageSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
@@ -3556,7 +2414,27 @@ class OrderDiscountCodeAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(type="OrderDiscountCodeAdded")
+
+    def __repr__(self) -> str:
+        return "OrderDiscountCodeAddedMessagePayload(type=%r, discount_code=%r)" % (
+            self.type,
+            self.discount_code,
+        )
+
+
 class OrderDiscountCodeRemovedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessageSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
@@ -3609,7 +2487,27 @@ class OrderDiscountCodeRemovedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessagePayloadSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(type="OrderDiscountCodeRemoved")
+
+    def __repr__(self) -> str:
+        return "OrderDiscountCodeRemovedMessagePayload(type=%r, discount_code=%r)" % (
+            self.type,
+            self.discount_code,
+        )
+
+
 class OrderDiscountCodeStateSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessageSchema`."
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
@@ -3672,7 +2570,35 @@ class OrderDiscountCodeStateSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessagePayloadSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+    #: :class:`commercetools.types.DiscountCodeState`
+    state: typing.Optional["DiscountCodeState"]
+    #: Optional :class:`commercetools.types.DiscountCodeState` `(Named` ``oldState`` `in Commercetools)`
+    old_state: typing.Optional["DiscountCodeState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None,
+        state: typing.Optional["DiscountCodeState"] = None,
+        old_state: typing.Optional["DiscountCodeState"] = None
+    ) -> None:
+        self.discount_code = discount_code
+        self.state = state
+        self.old_state = old_state
+        super().__init__(type="OrderDiscountCodeStateSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderDiscountCodeStateSetMessagePayload(type=%r, discount_code=%r, state=%r, old_state=%r)"
+            % (self.type, self.discount_code, self.state, self.old_state)
+        )
+
+
 class OrderEditAppliedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedMessageSchema`."
     #: :class:`commercetools.types.OrderEditReference`
@@ -3730,7 +2656,32 @@ class OrderEditAppliedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderEditAppliedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedMessagePayloadSchema`."
+    #: :class:`commercetools.types.OrderEditReference`
+    edit: typing.Optional["OrderEditReference"]
+    #: :class:`commercetools.types.OrderEditApplied`
+    result: typing.Optional["OrderEditApplied"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        edit: typing.Optional["OrderEditReference"] = None,
+        result: typing.Optional["OrderEditApplied"] = None
+    ) -> None:
+        self.edit = edit
+        self.result = result
+        super().__init__(type="OrderEditApplied")
+
+    def __repr__(self) -> str:
+        return "OrderEditAppliedMessagePayload(type=%r, edit=%r, result=%r)" % (
+            self.type,
+            self.edit,
+            self.result,
+        )
+
+
 class OrderImportedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportedMessageSchema`."
     #: :class:`commercetools.types.Order`
@@ -3783,7 +2734,27 @@ class OrderImportedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderImportedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Order`
+    order: typing.Optional["Order"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        order: typing.Optional["Order"] = None
+    ) -> None:
+        self.order = order
+        super().__init__(type="OrderImported")
+
+    def __repr__(self) -> str:
+        return "OrderImportedMessagePayload(type=%r, order=%r)" % (
+            self.type,
+            self.order,
+        )
+
+
 class OrderLineItemDiscountSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessageSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -3855,7 +2826,49 @@ class OrderLineItemDiscountSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderLineItemDiscountSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
+    discounted_price_per_quantity: typing.Optional[
+        typing.List["DiscountedLineItemPriceForQuantity"]
+    ]
+    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        discounted_price_per_quantity: typing.Optional[
+            typing.List["DiscountedLineItemPriceForQuantity"]
+        ] = None,
+        total_price: typing.Optional["Money"] = None,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.discounted_price_per_quantity = discounted_price_per_quantity
+        self.total_price = total_price
+        self.taxed_price = taxed_price
+        super().__init__(type="OrderLineItemDiscountSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderLineItemDiscountSetMessagePayload(type=%r, line_item_id=%r, discounted_price_per_quantity=%r, total_price=%r, taxed_price=%r)"
+            % (
+                self.type,
+                self.line_item_id,
+                self.discounted_price_per_quantity,
+                self.total_price,
+                self.taxed_price,
+            )
+        )
+
+
 class OrderPaymentStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessageSchema`."
     #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
@@ -3913,7 +2926,31 @@ class OrderPaymentStateChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderPaymentStateChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
+    payment_state: typing.Optional["PaymentState"]
+    #: :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
+    old_payment_state: typing.Optional["PaymentState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        old_payment_state: typing.Optional["PaymentState"] = None
+    ) -> None:
+        self.payment_state = payment_state
+        self.old_payment_state = old_payment_state
+        super().__init__(type="OrderPaymentStateChanged")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderPaymentStateChangedMessagePayload(type=%r, payment_state=%r, old_payment_state=%r)"
+            % (self.type, self.payment_state, self.old_payment_state)
+        )
+
+
 class OrderReturnInfoAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnInfoAddedMessageSchema`."
     #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
@@ -3966,7 +3003,27 @@ class OrderReturnInfoAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderReturnInfoAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnInfoAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
+    return_info: typing.Optional["ReturnInfo"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        return_info: typing.Optional["ReturnInfo"] = None
+    ) -> None:
+        self.return_info = return_info
+        super().__init__(type="ReturnInfoAdded")
+
+    def __repr__(self) -> str:
+        return "OrderReturnInfoAddedMessagePayload(type=%r, return_info=%r)" % (
+            self.type,
+            self.return_info,
+        )
+
+
 class OrderReturnShipmentStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnShipmentStateChangedMessageSchema`."
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
@@ -4024,7 +3081,31 @@ class OrderReturnShipmentStateChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnShipmentStateChangedMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
+    return_item_id: typing.Optional[str]
+    #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``returnShipmentState`` `in Commercetools)`
+    return_shipment_state: typing.Optional["ReturnShipmentState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        return_item_id: typing.Optional[str] = None,
+        return_shipment_state: typing.Optional["ReturnShipmentState"] = None
+    ) -> None:
+        self.return_item_id = return_item_id
+        self.return_shipment_state = return_shipment_state
+        super().__init__(type="OrderReturnShipmentStateChanged")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderReturnShipmentStateChangedMessagePayload(type=%r, return_item_id=%r, return_shipment_state=%r)"
+            % (self.type, self.return_item_id, self.return_shipment_state)
+        )
+
+
 class OrderShipmentStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessageSchema`."
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
@@ -4082,7 +3163,31 @@ class OrderShipmentStateChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShipmentStateChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
+    shipment_state: typing.Optional["ShipmentState"]
+    #: :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
+    old_shipment_state: typing.Optional["ShipmentState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        shipment_state: typing.Optional["ShipmentState"] = None,
+        old_shipment_state: typing.Optional["ShipmentState"] = None
+    ) -> None:
+        self.shipment_state = shipment_state
+        self.old_shipment_state = old_shipment_state
+        super().__init__(type="OrderShipmentStateChanged")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShipmentStateChangedMessagePayload(type=%r, shipment_state=%r, old_shipment_state=%r)"
+            % (self.type, self.shipment_state, self.old_shipment_state)
+        )
+
+
 class OrderShippingAddressSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessageSchema`."
     #: Optional :class:`commercetools.types.Address`
@@ -4140,7 +3245,31 @@ class OrderShippingAddressSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingAddressSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
+    old_address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        self.old_address = old_address
+        super().__init__(type="OrderShippingAddressSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingAddressSetMessagePayload(type=%r, address=%r, old_address=%r)"
+            % (self.type, self.address, self.old_address)
+        )
+
+
 class OrderShippingInfoSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessageSchema`."
     #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
@@ -4198,7 +3327,31 @@ class OrderShippingInfoSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingInfoSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
+    shipping_info: typing.Optional["ShippingInfo"]
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``oldShippingInfo`` `in Commercetools)`
+    old_shipping_info: typing.Optional["ShippingInfo"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        shipping_info: typing.Optional["ShippingInfo"] = None,
+        old_shipping_info: typing.Optional["ShippingInfo"] = None
+    ) -> None:
+        self.shipping_info = shipping_info
+        self.old_shipping_info = old_shipping_info
+        super().__init__(type="OrderShippingInfoSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingInfoSetMessagePayload(type=%r, shipping_info=%r, old_shipping_info=%r)"
+            % (self.type, self.shipping_info, self.old_shipping_info)
+        )
+
+
 class OrderShippingRateInputSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessageSchema`."
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
@@ -4256,7 +3409,31 @@ class OrderShippingRateInputSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderShippingRateInputSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessagePayloadSchema`."
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
+    shipping_rate_input: typing.Optional["ShippingRateInput"]
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``oldShippingRateInput`` `in Commercetools)`
+    old_shipping_rate_input: typing.Optional["ShippingRateInput"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None
+    ) -> None:
+        self.shipping_rate_input = shipping_rate_input
+        self.old_shipping_rate_input = old_shipping_rate_input
+        super().__init__(type="OrderShippingRateInputSet")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderShippingRateInputSetMessagePayload(type=%r, shipping_rate_input=%r, old_shipping_rate_input=%r)"
+            % (self.type, self.shipping_rate_input, self.old_shipping_rate_input)
+        )
+
+
 class OrderStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessageSchema`."
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
@@ -4314,7 +3491,31 @@ class OrderStateChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderStateChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
+    order_state: typing.Optional["OrderState"]
+    #: :class:`commercetools.types.OrderState` `(Named` ``oldOrderState`` `in Commercetools)`
+    old_order_state: typing.Optional["OrderState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        old_order_state: typing.Optional["OrderState"] = None
+    ) -> None:
+        self.order_state = order_state
+        self.old_order_state = old_order_state
+        super().__init__(type="OrderStateChanged")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderStateChangedMessagePayload(type=%r, order_state=%r, old_order_state=%r)"
+            % (self.type, self.order_state, self.old_order_state)
+        )
+
+
 class OrderStateTransitionMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference`
@@ -4372,7 +3573,32 @@ class OrderStateTransitionMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class OrderStateTransitionMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateTransitionMessagePayloadSchema`."
+    #: :class:`commercetools.types.StateReference`
+    state: typing.Optional["StateReference"]
+    #: :class:`bool`
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        state: typing.Optional["StateReference"] = None,
+        force: typing.Optional[bool] = None
+    ) -> None:
+        self.state = state
+        self.force = force
+        super().__init__(type="OrderStateTransition")
+
+    def __repr__(self) -> str:
+        return "OrderStateTransitionMessagePayload(type=%r, state=%r, force=%r)" % (
+            self.type,
+            self.state,
+            self.force,
+        )
+
+
 class ParcelAddedToDeliveryMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessageSchema`."
     #: :class:`commercetools.types.Delivery`
@@ -4430,7 +3656,31 @@ class ParcelAddedToDeliveryMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelAddedToDeliveryMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessagePayloadSchema`."
+    #: :class:`commercetools.types.Delivery`
+    delivery: typing.Optional["Delivery"]
+    #: :class:`commercetools.types.Parcel`
+    parcel: typing.Optional["Parcel"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery: typing.Optional["Delivery"] = None,
+        parcel: typing.Optional["Parcel"] = None
+    ) -> None:
+        self.delivery = delivery
+        self.parcel = parcel
+        super().__init__(type="ParcelAddedToDelivery")
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelAddedToDeliveryMessagePayload(type=%r, delivery=%r, parcel=%r)"
+            % (self.type, self.delivery, self.parcel)
+        )
+
+
 class ParcelItemsUpdatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelItemsUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -4498,7 +3748,39 @@ class ParcelItemsUpdatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelItemsUpdatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelItemsUpdatedMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
+    parcel_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
+    delivery_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.DeliveryItem`
+    items: typing.Optional[typing.List["DeliveryItem"]]
+    #: List of :class:`commercetools.types.DeliveryItem` `(Named` ``oldItems`` `in Commercetools)`
+    old_items: typing.Optional[typing.List["DeliveryItem"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        parcel_id: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        old_items: typing.Optional[typing.List["DeliveryItem"]] = None
+    ) -> None:
+        self.parcel_id = parcel_id
+        self.delivery_id = delivery_id
+        self.items = items
+        self.old_items = old_items
+        super().__init__(type="ParcelItemsUpdated")
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelItemsUpdatedMessagePayload(type=%r, parcel_id=%r, delivery_id=%r, items=%r, old_items=%r)"
+            % (self.type, self.parcel_id, self.delivery_id, self.items, self.old_items)
+        )
+
+
 class ParcelMeasurementsUpdatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -4561,7 +3843,35 @@ class ParcelMeasurementsUpdatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsUpdatedMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
+    delivery_id: typing.Optional[str]
+    #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
+    parcel_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.ParcelMeasurements`
+    measurements: typing.Optional["ParcelMeasurements"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        parcel_id: typing.Optional[str] = None,
+        measurements: typing.Optional["ParcelMeasurements"] = None
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.parcel_id = parcel_id
+        self.measurements = measurements
+        super().__init__(type="ParcelMeasurementsUpdated")
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelMeasurementsUpdatedMessagePayload(type=%r, delivery_id=%r, parcel_id=%r, measurements=%r)"
+            % (self.type, self.delivery_id, self.parcel_id, self.measurements)
+        )
+
+
 class ParcelRemovedFromDeliveryMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelRemovedFromDeliveryMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -4619,7 +3929,31 @@ class ParcelRemovedFromDeliveryMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelRemovedFromDeliveryMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
+    delivery_id: typing.Optional[str]
+    #: :class:`commercetools.types.Parcel`
+    parcel: typing.Optional["Parcel"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        parcel: typing.Optional["Parcel"] = None
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.parcel = parcel
+        super().__init__(type="ParcelRemovedFromDelivery")
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelRemovedFromDeliveryMessagePayload(type=%r, delivery_id=%r, parcel=%r)"
+            % (self.type, self.delivery_id, self.parcel)
+        )
+
+
 class ParcelTrackingDataUpdatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelTrackingDataUpdatedMessageSchema`."
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -4682,7 +4016,35 @@ class ParcelTrackingDataUpdatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ParcelTrackingDataUpdatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelTrackingDataUpdatedMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
+    delivery_id: typing.Optional[str]
+    #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
+    parcel_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
+    tracking_data: typing.Optional["TrackingData"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        delivery_id: typing.Optional[str] = None,
+        parcel_id: typing.Optional[str] = None,
+        tracking_data: typing.Optional["TrackingData"] = None
+    ) -> None:
+        self.delivery_id = delivery_id
+        self.parcel_id = parcel_id
+        self.tracking_data = tracking_data
+        super().__init__(type="ParcelTrackingDataUpdated")
+
+    def __repr__(self) -> str:
+        return (
+            "ParcelTrackingDataUpdatedMessagePayload(type=%r, delivery_id=%r, parcel_id=%r, tracking_data=%r)"
+            % (self.type, self.delivery_id, self.parcel_id, self.tracking_data)
+        )
+
+
 class PaymentCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentCreatedMessageSchema`."
     #: :class:`commercetools.types.Payment`
@@ -4735,7 +4097,27 @@ class PaymentCreatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentCreatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentCreatedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Payment`
+    payment: typing.Optional["Payment"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        payment: typing.Optional["Payment"] = None
+    ) -> None:
+        self.payment = payment
+        super().__init__(type="PaymentCreated")
+
+    def __repr__(self) -> str:
+        return "PaymentCreatedMessagePayload(type=%r, payment=%r)" % (
+            self.type,
+            self.payment,
+        )
+
+
 class PaymentInteractionAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInteractionAddedMessageSchema`."
     #: :class:`commercetools.types.CustomFields`
@@ -4788,7 +4170,27 @@ class PaymentInteractionAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentInteractionAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInteractionAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.CustomFields`
+    interaction: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        interaction: typing.Optional["CustomFields"] = None
+    ) -> None:
+        self.interaction = interaction
+        super().__init__(type="PaymentInteractionAdded")
+
+    def __repr__(self) -> str:
+        return "PaymentInteractionAddedMessagePayload(type=%r, interaction=%r)" % (
+            self.type,
+            self.interaction,
+        )
+
+
 class PaymentStatusInterfaceCodeSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusInterfaceCodeSetMessageSchema`."
     #: :class:`str` `(Named` ``paymentId`` `in Commercetools)`
@@ -4846,7 +4248,31 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusInterfaceCodeSetMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``paymentId`` `in Commercetools)`
+    payment_id: typing.Optional[str]
+    #: :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
+    interface_code: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        payment_id: typing.Optional[str] = None,
+        interface_code: typing.Optional[str] = None
+    ) -> None:
+        self.payment_id = payment_id
+        self.interface_code = interface_code
+        super().__init__(type="PaymentStatusInterfaceCodeSet")
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentStatusInterfaceCodeSetMessagePayload(type=%r, payment_id=%r, interface_code=%r)"
+            % (self.type, self.payment_id, self.interface_code)
+        )
+
+
 class PaymentStatusStateTransitionMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference`
@@ -4904,7 +4330,31 @@ class PaymentStatusStateTransitionMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentStatusStateTransitionMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusStateTransitionMessagePayloadSchema`."
+    #: :class:`commercetools.types.StateReference`
+    state: typing.Optional["StateReference"]
+    #: :class:`bool`
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        state: typing.Optional["StateReference"] = None,
+        force: typing.Optional[bool] = None
+    ) -> None:
+        self.state = state
+        self.force = force
+        super().__init__(type="PaymentStatusStateTransition")
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentStatusStateTransitionMessagePayload(type=%r, state=%r, force=%r)"
+            % (self.type, self.state, self.force)
+        )
+
+
 class PaymentTransactionAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionAddedMessageSchema`."
     #: :class:`commercetools.types.Transaction`
@@ -4957,7 +4407,27 @@ class PaymentTransactionAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentTransactionAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Transaction`
+    transaction: typing.Optional["Transaction"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        transaction: typing.Optional["Transaction"] = None
+    ) -> None:
+        self.transaction = transaction
+        super().__init__(type="PaymentTransactionAdded")
+
+    def __repr__(self) -> str:
+        return "PaymentTransactionAddedMessagePayload(type=%r, transaction=%r)" % (
+            self.type,
+            self.transaction,
+        )
+
+
 class PaymentTransactionStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionStateChangedMessageSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
@@ -5015,7 +4485,31 @@ class PaymentTransactionStateChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class PaymentTransactionStateChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionStateChangedMessagePayloadSchema`."
+    #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
+    transaction_id: typing.Optional[str]
+    #: :class:`commercetools.types.TransactionState`
+    state: typing.Optional["TransactionState"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        transaction_id: typing.Optional[str] = None,
+        state: typing.Optional["TransactionState"] = None
+    ) -> None:
+        self.transaction_id = transaction_id
+        self.state = state
+        super().__init__(type="PaymentTransactionStateChanged")
+
+    def __repr__(self) -> str:
+        return (
+            "PaymentTransactionStateChangedMessagePayload(type=%r, transaction_id=%r, state=%r)"
+            % (self.type, self.transaction_id, self.state)
+        )
+
+
 class ProductCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessageSchema`."
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
@@ -5068,7 +4562,27 @@ class ProductCreatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductCreatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessagePayloadSchema`."
+    #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
+    product_projection: typing.Optional["ProductProjection"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        product_projection: typing.Optional["ProductProjection"] = None
+    ) -> None:
+        self.product_projection = product_projection
+        super().__init__(type="ProductCreated")
+
+    def __repr__(self) -> str:
+        return "ProductCreatedMessagePayload(type=%r, product_projection=%r)" % (
+            self.type,
+            self.product_projection,
+        )
+
+
 class ProductDeletedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDeletedMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -5126,7 +4640,31 @@ class ProductDeletedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductDeletedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDeletedMessagePayloadSchema`."
+    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
+    removed_image_urls: typing.Optional[list]
+    #: :class:`commercetools.types.ProductProjection` `(Named` ``currentProjection`` `in Commercetools)`
+    current_projection: typing.Optional["ProductProjection"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+        current_projection: typing.Optional["ProductProjection"] = None
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        self.current_projection = current_projection
+        super().__init__(type="ProductDeleted")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductDeletedMessagePayload(type=%r, removed_image_urls=%r, current_projection=%r)"
+            % (self.type, self.removed_image_urls, self.current_projection)
+        )
+
+
 class ProductImageAddedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductImageAddedMessageSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -5189,7 +4727,35 @@ class ProductImageAddedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductImageAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductImageAddedMessagePayloadSchema`."
+    #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+    #: :class:`commercetools.types.Image`
+    image: typing.Optional["Image"]
+    #: :class:`bool`
+    staged: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        image: typing.Optional["Image"] = None,
+        staged: typing.Optional[bool] = None
+    ) -> None:
+        self.variant_id = variant_id
+        self.image = image
+        self.staged = staged
+        super().__init__(type="ProductImageAdded")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductImageAddedMessagePayload(type=%r, variant_id=%r, image=%r, staged=%r)"
+            % (self.type, self.variant_id, self.image, self.staged)
+        )
+
+
 class ProductPriceDiscountsSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetMessageSchema`."
     #: List of :class:`commercetools.types.ProductPriceDiscountsSetUpdatedPrice` `(Named` ``updatedPrices`` `in Commercetools)`
@@ -5244,7 +4810,29 @@ class ProductPriceDiscountsSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductPriceDiscountsSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetMessagePayloadSchema`."
+    #: List of :class:`commercetools.types.ProductPriceDiscountsSetUpdatedPrice` `(Named` ``updatedPrices`` `in Commercetools)`
+    updated_prices: typing.Optional[typing.List["ProductPriceDiscountsSetUpdatedPrice"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        updated_prices: typing.Optional[
+            typing.List["ProductPriceDiscountsSetUpdatedPrice"]
+        ] = None
+    ) -> None:
+        self.updated_prices = updated_prices
+        super().__init__(type="ProductPriceDiscountsSet")
+
+    def __repr__(self) -> str:
+        return "ProductPriceDiscountsSetMessagePayload(type=%r, updated_prices=%r)" % (
+            self.type,
+            self.updated_prices,
+        )
+
+
 class ProductPriceExternalDiscountSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceExternalDiscountSetMessageSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -5322,7 +4910,55 @@ class ProductPriceExternalDiscountSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceExternalDiscountSetMessagePayloadSchema`."
+    #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+    #: Optional :class:`str` `(Named` ``variantKey`` `in Commercetools)`
+    variant_key: typing.Optional[str]
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
+    price_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.DiscountedPrice`
+    discounted: typing.Optional["DiscountedPrice"]
+    #: :class:`bool`
+    staged: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        variant_key: typing.Optional[str] = None,
+        sku: typing.Optional[str] = None,
+        price_id: typing.Optional[str] = None,
+        discounted: typing.Optional["DiscountedPrice"] = None,
+        staged: typing.Optional[bool] = None
+    ) -> None:
+        self.variant_id = variant_id
+        self.variant_key = variant_key
+        self.sku = sku
+        self.price_id = price_id
+        self.discounted = discounted
+        self.staged = staged
+        super().__init__(type="ProductPriceExternalDiscountSet")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductPriceExternalDiscountSetMessagePayload(type=%r, variant_id=%r, variant_key=%r, sku=%r, price_id=%r, discounted=%r, staged=%r)"
+            % (
+                self.type,
+                self.variant_id,
+                self.variant_key,
+                self.sku,
+                self.price_id,
+                self.discounted,
+                self.staged,
+            )
+        )
+
+
 class ProductPublishedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishedMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -5385,7 +5021,35 @@ class ProductPublishedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductPublishedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishedMessagePayloadSchema`."
+    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
+    removed_image_urls: typing.Optional[list]
+    #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
+    product_projection: typing.Optional["ProductProjection"]
+    #: :class:`commercetools.types.ProductPublishScope`
+    scope: typing.Optional["ProductPublishScope"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+        product_projection: typing.Optional["ProductProjection"] = None,
+        scope: typing.Optional["ProductPublishScope"] = None
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        self.product_projection = product_projection
+        self.scope = scope
+        super().__init__(type="ProductPublished")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductPublishedMessagePayload(type=%r, removed_image_urls=%r, product_projection=%r, scope=%r)"
+            % (self.type, self.removed_image_urls, self.product_projection, self.scope)
+        )
+
+
 class ProductRevertedStagedChangesMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -5438,7 +5102,27 @@ class ProductRevertedStagedChangesMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductRevertedStagedChangesMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessagePayloadSchema`."
+    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
+    removed_image_urls: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        super().__init__(type="ProductRevertedStagedChanges")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductRevertedStagedChangesMessagePayload(type=%r, removed_image_urls=%r)"
+            % (self.type, self.removed_image_urls)
+        )
+
+
 class ProductSlugChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSlugChangedMessageSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -5491,7 +5175,27 @@ class ProductSlugChangedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductSlugChangedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSlugChangedMessagePayloadSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    slug: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        slug: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.slug = slug
+        super().__init__(type="ProductSlugChanged")
+
+    def __repr__(self) -> str:
+        return "ProductSlugChangedMessagePayload(type=%r, slug=%r)" % (
+            self.type,
+            self.slug,
+        )
+
+
 class ProductStateTransitionMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference`
@@ -5549,7 +5253,32 @@ class ProductStateTransitionMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductStateTransitionMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductStateTransitionMessagePayloadSchema`."
+    #: :class:`commercetools.types.StateReference`
+    state: typing.Optional["StateReference"]
+    #: :class:`bool`
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        state: typing.Optional["StateReference"] = None,
+        force: typing.Optional[bool] = None
+    ) -> None:
+        self.state = state
+        self.force = force
+        super().__init__(type="ProductStateTransition")
+
+    def __repr__(self) -> str:
+        return "ProductStateTransitionMessagePayload(type=%r, state=%r, force=%r)" % (
+            self.type,
+            self.state,
+            self.force,
+        )
+
+
 class ProductUnpublishedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishedMessageSchema`."
 
@@ -5597,7 +5326,16 @@ class ProductUnpublishedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductUnpublishedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishedMessagePayloadSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="ProductUnpublished")
+
+    def __repr__(self) -> str:
+        return "ProductUnpublishedMessagePayload(type=%r)" % (self.type,)
+
+
 class ProductVariantDeletedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -5655,7 +5393,31 @@ class ProductVariantDeletedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ProductVariantDeletedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessagePayloadSchema`."
+    #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
+    removed_image_urls: typing.Optional[list]
+    #: :class:`commercetools.types.ProductVariant`
+    variant: typing.Optional["ProductVariant"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        removed_image_urls: typing.Optional[list] = None,
+        variant: typing.Optional["ProductVariant"] = None
+    ) -> None:
+        self.removed_image_urls = removed_image_urls
+        self.variant = variant
+        super().__init__(type="ProductVariantDeleted")
+
+    def __repr__(self) -> str:
+        return (
+            "ProductVariantDeletedMessagePayload(type=%r, removed_image_urls=%r, variant=%r)"
+            % (self.type, self.removed_image_urls, self.variant)
+        )
+
+
 class ReviewCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewCreatedMessageSchema`."
     #: :class:`commercetools.types.Review`
@@ -5708,7 +5470,27 @@ class ReviewCreatedMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewCreatedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewCreatedMessagePayloadSchema`."
+    #: :class:`commercetools.types.Review`
+    review: typing.Optional["Review"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        review: typing.Optional["Review"] = None
+    ) -> None:
+        self.review = review
+        super().__init__(type="ReviewCreated")
+
+    def __repr__(self) -> str:
+        return "ReviewCreatedMessagePayload(type=%r, review=%r)" % (
+            self.type,
+            self.review,
+        )
+
+
 class ReviewRatingSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessageSchema`."
     #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
@@ -5776,7 +5558,45 @@ class ReviewRatingSetMessage(Message):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ReviewRatingSetMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessagePayloadSchema`."
+    #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
+    old_rating: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``newRating`` `in Commercetools)`
+    new_rating: typing.Optional[int]
+    #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
+    included_in_statistics: typing.Optional[bool]
+    #: Optional :class:`commercetools.types.Reference`
+    target: typing.Optional["Reference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        old_rating: typing.Optional[int] = None,
+        new_rating: typing.Optional[int] = None,
+        included_in_statistics: typing.Optional[bool] = None,
+        target: typing.Optional["Reference"] = None
+    ) -> None:
+        self.old_rating = old_rating
+        self.new_rating = new_rating
+        self.included_in_statistics = included_in_statistics
+        self.target = target
+        super().__init__(type="ReviewRatingSet")
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewRatingSetMessagePayload(type=%r, old_rating=%r, new_rating=%r, included_in_statistics=%r, target=%r)"
+            % (
+                self.type,
+                self.old_rating,
+                self.new_rating,
+                self.included_in_statistics,
+                self.target,
+            )
+        )
+
+
 class ReviewStateTransitionMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewStateTransitionMessageSchema`."
     #: :class:`commercetools.types.StateReference` `(Named` ``oldState`` `in Commercetools)`
@@ -5844,6 +5664,55 @@ class ReviewStateTransitionMessage(Message):
                 self.resource_version,
                 self.type,
                 self.resource_user_provided_identifiers,
+                self.old_state,
+                self.new_state,
+                self.old_included_in_statistics,
+                self.new_included_in_statistics,
+                self.target,
+                self.force,
+            )
+        )
+
+
+class ReviewStateTransitionMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewStateTransitionMessagePayloadSchema`."
+    #: :class:`commercetools.types.StateReference` `(Named` ``oldState`` `in Commercetools)`
+    old_state: typing.Optional["StateReference"]
+    #: :class:`commercetools.types.StateReference` `(Named` ``newState`` `in Commercetools)`
+    new_state: typing.Optional["StateReference"]
+    #: :class:`bool` `(Named` ``oldIncludedInStatistics`` `in Commercetools)`
+    old_included_in_statistics: typing.Optional[bool]
+    #: :class:`bool` `(Named` ``newIncludedInStatistics`` `in Commercetools)`
+    new_included_in_statistics: typing.Optional[bool]
+    #: :class:`commercetools.types.Reference`
+    target: typing.Optional["Reference"]
+    #: :class:`bool`
+    force: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        old_state: typing.Optional["StateReference"] = None,
+        new_state: typing.Optional["StateReference"] = None,
+        old_included_in_statistics: typing.Optional[bool] = None,
+        new_included_in_statistics: typing.Optional[bool] = None,
+        target: typing.Optional["Reference"] = None,
+        force: typing.Optional[bool] = None
+    ) -> None:
+        self.old_state = old_state
+        self.new_state = new_state
+        self.old_included_in_statistics = old_included_in_statistics
+        self.new_included_in_statistics = new_included_in_statistics
+        self.target = target
+        self.force = force
+        super().__init__(type="ReviewStateTransition")
+
+    def __repr__(self) -> str:
+        return (
+            "ReviewStateTransitionMessagePayload(type=%r, old_state=%r, new_state=%r, old_included_in_statistics=%r, new_included_in_statistics=%r, target=%r, force=%r)"
+            % (
+                self.type,
                 self.old_state,
                 self.new_state,
                 self.old_included_in_statistics,

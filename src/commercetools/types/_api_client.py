@@ -3,13 +3,12 @@
 import datetime
 import typing
 
-import attr
+from commercetools.types._abstract import _BaseType
 
 __all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ApiClient:
+class ApiClient(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientSchema`."
     #: :class:`str`
     id: typing.Optional[str]
@@ -40,6 +39,7 @@ class ApiClient:
         self.created_at = created_at
         self.last_used_at = last_used_at
         self.secret = secret
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -55,8 +55,7 @@ class ApiClient:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ApiClientDraft:
+class ApiClientDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientDraftSchema`."
     #: :class:`str`
     name: typing.Optional[str]
@@ -68,13 +67,13 @@ class ApiClientDraft:
     ) -> None:
         self.name = name
         self.scope = scope
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ApiClientDraft(name=%r, scope=%r)" % (self.name, self.scope)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ApiClientPagedQueryResponse:
+class ApiClientPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientPagedQueryResponseSchema`."
     #: :class:`int`
     count: typing.Optional[int]
@@ -97,6 +96,7 @@ class ApiClientPagedQueryResponse:
         self.total = total
         self.offset = offset
         self.results = results
+        super().__init__()
 
     def __repr__(self) -> str:
         return (

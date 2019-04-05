@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -113,8 +112,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Attribute:
+class Attribute(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSchema`."
     #: :class:`str`
     name: typing.Optional[str]
@@ -129,37 +127,43 @@ class Attribute:
     ) -> None:
         self.name = name
         self.value = value
+        super().__init__()
 
     def __repr__(self) -> str:
         return "Attribute(name=%r, value=%r)" % (self.name, self.value)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AttributeValue:
+class AttributeValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeValueSchema`."
 
     def __init__(self) -> None:
-        pass
+        super().__init__()
 
     def __repr__(self) -> str:
         return "AttributeValue()" % ()
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class FacetResult:
+class CategoryOrderHints(typing.Dict[(str, str)]):
+    def __repr__(self) -> str:
+        return "CategoryOrderHints(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
+
+
+class FacetResult(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultSchema`."
     #: :class:`commercetools.types.FacetTypes`
     type: typing.Optional["FacetTypes"]
 
     def __init__(self, *, type: typing.Optional["FacetTypes"] = None) -> None:
         self.type = type
+        super().__init__()
 
     def __repr__(self) -> str:
         return "FacetResult(type=%r)" % (self.type,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class FacetResultRange:
+class FacetResultRange(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultRangeSchema`."
     #: :class:`int` `(Named` ``from`` `in Commercetools)`
     from_: typing.Optional[int]
@@ -206,6 +210,7 @@ class FacetResultRange:
         self.min = min
         self.max = max
         self.mean = mean
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -225,8 +230,7 @@ class FacetResultRange:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class FacetResultTerm:
+class FacetResultTerm(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultTermSchema`."
     #: :class:`typing.Any`
     term: typing.Optional[typing.Any]
@@ -245,6 +249,7 @@ class FacetResultTerm:
         self.term = term
         self.count = count
         self.product_count = product_count
+        super().__init__()
 
     def __repr__(self) -> str:
         return "FacetResultTerm(term=%r, count=%r, product_count=%r)" % (
@@ -254,8 +259,78 @@ class FacetResultTerm:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductCatalogData:
+class FacetResults(typing.Dict[(str, "FacetResult")]):
+    def __repr__(self) -> str:
+        return "FacetResults(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
+
+
+class FacetTypes(enum.Enum):
+    TERMS = "terms"
+    RANGE = "range"
+    FILTER = "filter"
+
+
+class Product(Resource):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
+    product_type: typing.Optional["ProductTypeReference"]
+    #: :class:`commercetools.types.ProductCatalogData` `(Named` ``masterData`` `in Commercetools)`
+    master_data: typing.Optional["ProductCatalogData"]
+    #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryReference"]
+    #: Optional :class:`commercetools.types.StateReference`
+    state: typing.Optional["StateReference"]
+    #: Optional :class:`commercetools.types.ReviewRatingStatistics` `(Named` ``reviewRatingStatistics`` `in Commercetools)`
+    review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        key: typing.Optional[str] = None,
+        product_type: typing.Optional["ProductTypeReference"] = None,
+        master_data: typing.Optional["ProductCatalogData"] = None,
+        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        state: typing.Optional["StateReference"] = None,
+        review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
+    ) -> None:
+        self.key = key
+        self.product_type = product_type
+        self.master_data = master_data
+        self.tax_category = tax_category
+        self.state = state
+        self.review_rating_statistics = review_rating_statistics
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "Product(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, product_type=%r, master_data=%r, tax_category=%r, state=%r, review_rating_statistics=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.key,
+                self.product_type,
+                self.master_data,
+                self.tax_category,
+                self.state,
+                self.review_rating_statistics,
+            )
+        )
+
+
+class ProductCatalogData(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCatalogDataSchema`."
     #: :class:`bool`
     published: typing.Optional[bool]
@@ -278,6 +353,7 @@ class ProductCatalogData:
         self.current = current
         self.staged = staged
         self.has_staged_changes = has_staged_changes
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -286,8 +362,7 @@ class ProductCatalogData:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductData:
+class ProductData(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDataSchema`."
     #: :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
@@ -338,6 +413,7 @@ class ProductData:
         self.master_variant = master_variant
         self.variants = variants
         self.search_keywords = search_keywords
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -358,8 +434,7 @@ class ProductData:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductDraft:
+class ProductDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDraftSchema`."
     #: Optional :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
     product_type: typing.Optional["ProductTypeReference"]
@@ -430,6 +505,7 @@ class ProductDraft:
         self.search_keywords = search_keywords
         self.state = state
         self.publish = publish
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -455,371 +531,6 @@ class ProductDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductVariant:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantSchema`."
-    #: :class:`int`
-    id: typing.Optional[int]
-    #: Optional :class:`str`
-    sku: typing.Optional[str]
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.Price`
-    prices: typing.Optional[typing.List["Price"]]
-    #: Optional list of :class:`commercetools.types.Attribute`
-    attributes: typing.Optional[typing.List["Attribute"]]
-    #: Optional :class:`commercetools.types.Price`
-    price: typing.Optional["Price"]
-    #: Optional list of :class:`commercetools.types.Image`
-    images: typing.Optional[typing.List["Image"]]
-    #: Optional list of :class:`commercetools.types.Asset`
-    assets: typing.Optional[typing.List["Asset"]]
-    #: Optional :class:`commercetools.types.ProductVariantAvailability`
-    availability: typing.Optional["ProductVariantAvailability"]
-    #: Optional :class:`bool` `(Named` ``isMatchingVariant`` `in Commercetools)`
-    is_matching_variant: typing.Optional[bool]
-    #: Optional :class:`commercetools.types.ScopedPrice` `(Named` ``scopedPrice`` `in Commercetools)`
-    scoped_price: typing.Optional["ScopedPrice"]
-    #: Optional :class:`bool` `(Named` ``scopedPriceDiscounted`` `in Commercetools)`
-    scoped_price_discounted: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[int] = None,
-        sku: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["Price"]] = None,
-        attributes: typing.Optional[typing.List["Attribute"]] = None,
-        price: typing.Optional["Price"] = None,
-        images: typing.Optional[typing.List["Image"]] = None,
-        assets: typing.Optional[typing.List["Asset"]] = None,
-        availability: typing.Optional["ProductVariantAvailability"] = None,
-        is_matching_variant: typing.Optional[bool] = None,
-        scoped_price: typing.Optional["ScopedPrice"] = None,
-        scoped_price_discounted: typing.Optional[bool] = None,
-    ) -> None:
-        self.id = id
-        self.sku = sku
-        self.key = key
-        self.prices = prices
-        self.attributes = attributes
-        self.price = price
-        self.images = images
-        self.assets = assets
-        self.availability = availability
-        self.is_matching_variant = is_matching_variant
-        self.scoped_price = scoped_price
-        self.scoped_price_discounted = scoped_price_discounted
-
-    def __repr__(self) -> str:
-        return (
-            "ProductVariant(id=%r, sku=%r, key=%r, prices=%r, attributes=%r, price=%r, images=%r, assets=%r, availability=%r, is_matching_variant=%r, scoped_price=%r, scoped_price_discounted=%r)"
-            % (
-                self.id,
-                self.sku,
-                self.key,
-                self.prices,
-                self.attributes,
-                self.price,
-                self.images,
-                self.assets,
-                self.availability,
-                self.is_matching_variant,
-                self.scoped_price,
-                self.scoped_price_discounted,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductVariantAvailability:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantAvailabilitySchema`."
-    #: Optional :class:`bool` `(Named` ``isOnStock`` `in Commercetools)`
-    is_on_stock: typing.Optional[bool]
-    #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
-    restockable_in_days: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
-    available_quantity: typing.Optional[int]
-    #: Optional :class:`commercetools.types.ProductVariantChannelAvailabilityMap`
-    channels: typing.Optional["ProductVariantChannelAvailabilityMap"]
-
-    def __init__(
-        self,
-        *,
-        is_on_stock: typing.Optional[bool] = None,
-        restockable_in_days: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None,
-        channels: typing.Optional["ProductVariantChannelAvailabilityMap"] = None,
-    ) -> None:
-        self.is_on_stock = is_on_stock
-        self.restockable_in_days = restockable_in_days
-        self.available_quantity = available_quantity
-        self.channels = channels
-
-    def __repr__(self) -> str:
-        return (
-            "ProductVariantAvailability(is_on_stock=%r, restockable_in_days=%r, available_quantity=%r, channels=%r)"
-            % (
-                self.is_on_stock,
-                self.restockable_in_days,
-                self.available_quantity,
-                self.channels,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductVariantChannelAvailability:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantChannelAvailabilitySchema`."
-    #: Optional :class:`bool` `(Named` ``isOnStock`` `in Commercetools)`
-    is_on_stock: typing.Optional[bool]
-    #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
-    restockable_in_days: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
-    available_quantity: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        is_on_stock: typing.Optional[bool] = None,
-        restockable_in_days: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None,
-    ) -> None:
-        self.is_on_stock = is_on_stock
-        self.restockable_in_days = restockable_in_days
-        self.available_quantity = available_quantity
-
-    def __repr__(self) -> str:
-        return (
-            "ProductVariantChannelAvailability(is_on_stock=%r, restockable_in_days=%r, available_quantity=%r)"
-            % (self.is_on_stock, self.restockable_in_days, self.available_quantity)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ProductVariantDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDraftSchema`."
-    #: Optional :class:`str`
-    sku: typing.Optional[str]
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.PriceDraft`
-    prices: typing.Optional[typing.List["PriceDraft"]]
-    #: Optional list of :class:`commercetools.types.Attribute`
-    attributes: typing.Optional[typing.List["Attribute"]]
-    #: Optional list of :class:`commercetools.types.Image`
-    images: typing.Optional[typing.List["Image"]]
-    #: Optional list of :class:`commercetools.types.AssetDraft`
-    assets: typing.Optional[typing.List["AssetDraft"]]
-
-    def __init__(
-        self,
-        *,
-        sku: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["PriceDraft"]] = None,
-        attributes: typing.Optional[typing.List["Attribute"]] = None,
-        images: typing.Optional[typing.List["Image"]] = None,
-        assets: typing.Optional[typing.List["AssetDraft"]] = None,
-    ) -> None:
-        self.sku = sku
-        self.key = key
-        self.prices = prices
-        self.attributes = attributes
-        self.images = images
-        self.assets = assets
-
-    def __repr__(self) -> str:
-        return (
-            "ProductVariantDraft(sku=%r, key=%r, prices=%r, attributes=%r, images=%r, assets=%r)"
-            % (
-                self.sku,
-                self.key,
-                self.prices,
-                self.attributes,
-                self.images,
-                self.assets,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class SearchKeyword:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.SearchKeywordSchema`."
-    #: :class:`str`
-    text: typing.Optional[str]
-    #: Optional :class:`commercetools.types.SuggestTokenizer` `(Named` ``suggestTokenizer`` `in Commercetools)`
-    suggest_tokenizer: typing.Optional["SuggestTokenizer"]
-
-    def __init__(
-        self,
-        *,
-        text: typing.Optional[str] = None,
-        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
-    ) -> None:
-        self.text = text
-        self.suggest_tokenizer = suggest_tokenizer
-
-    def __repr__(self) -> str:
-        return "SearchKeyword(text=%r, suggest_tokenizer=%r)" % (
-            self.text,
-            self.suggest_tokenizer,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class SuggestTokenizer:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestTokenizerSchema`."
-    #: :class:`str`
-    type: typing.Optional[str]
-
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        self.type = type
-
-    def __repr__(self) -> str:
-        return "SuggestTokenizer(type=%r)" % (self.type,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Suggestion:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestionSchema`."
-    #: :class:`str`
-    text: typing.Optional[str]
-
-    def __init__(self, *, text: typing.Optional[str] = None) -> None:
-        self.text = text
-
-    def __repr__(self) -> str:
-        return "Suggestion(text=%r)" % (self.text,)
-
-
-class CategoryOrderHints(typing.Dict[(str, str)]):
-    def __repr__(self) -> str:
-        return "CategoryOrderHints(%s)" % (
-            ", ".join(f"{k}={v!r}" for k, v in self.items())
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomTokenizer(SuggestTokenizer):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomTokenizerSchema`."
-    #: List of :class:`str`
-    inputs: typing.Optional[typing.List[str]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        inputs: typing.Optional[typing.List[str]] = None,
-    ) -> None:
-        self.inputs = inputs
-        super().__init__(type="custom")
-
-    def __repr__(self) -> str:
-        return "CustomTokenizer(type=%r, inputs=%r)" % (self.type, self.inputs)
-
-
-class FacetResults(typing.Dict[(str, "FacetResult")]):
-    def __repr__(self) -> str:
-        return "FacetResults(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
-
-
-class FacetTypes(enum.Enum):
-    TERMS = "terms"
-    RANGE = "range"
-    FILTER = "filter"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class FilteredFacetResult(FacetResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.FilteredFacetResultSchema`."
-    #: :class:`int`
-    count: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
-    product_count: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["FacetTypes"] = None,
-        count: typing.Optional[int] = None,
-        product_count: typing.Optional[int] = None,
-    ) -> None:
-        self.count = count
-        self.product_count = product_count
-        super().__init__(type=FacetTypes.FILTER)
-
-    def __repr__(self) -> str:
-        return "FilteredFacetResult(type=%r, count=%r, product_count=%r)" % (
-            self.type,
-            self.count,
-            self.product_count,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Product(Resource):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
-    #: :class:`commercetools.types.ProductCatalogData` `(Named` ``masterData`` `in Commercetools)`
-    master_data: typing.Optional["ProductCatalogData"]
-    #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
-    #: Optional :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
-    #: Optional :class:`commercetools.types.ReviewRatingStatistics` `(Named` ``reviewRatingStatistics`` `in Commercetools)`
-    review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        key: typing.Optional[str] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        master_data: typing.Optional["ProductCatalogData"] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
-        state: typing.Optional["StateReference"] = None,
-        review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
-    ) -> None:
-        self.key = key
-        self.product_type = product_type
-        self.master_data = master_data
-        self.tax_category = tax_category
-        self.state = state
-        self.review_rating_statistics = review_rating_statistics
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "Product(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, product_type=%r, master_data=%r, tax_category=%r, state=%r, review_rating_statistics=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.key,
-                self.product_type,
-                self.master_data,
-                self.tax_category,
-                self.state,
-                self.review_rating_statistics,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Product`
@@ -843,7 +554,6 @@ class ProductPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductProjection(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionSchema`."
     #: Optional :class:`str`
@@ -964,7 +674,6 @@ class ProductProjection(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductProjectionPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ProductProjection`
@@ -988,7 +697,6 @@ class ProductProjectionPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductProjectionPagedSearchResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedSearchResponseSchema`."
     #: List of :class:`commercetools.types.ProductProjection`
@@ -1016,7 +724,6 @@ class ProductProjectionPagedSearchResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductReferenceSchema`."
     #: Optional :class:`commercetools.types.Product`
@@ -1042,7 +749,6 @@ class ProductReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateSchema`."
     #: :class:`list`
@@ -1061,7 +767,6 @@ class ProductUpdate(Update):
         return "ProductUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateActionSchema`."
 
@@ -1070,6 +775,148 @@ class ProductUpdateAction(UpdateAction):
 
     def __repr__(self) -> str:
         return "ProductUpdateAction(action=%r)" % (self.action,)
+
+
+class ProductVariant(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantSchema`."
+    #: :class:`int`
+    id: typing.Optional[int]
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.Price`
+    prices: typing.Optional[typing.List["Price"]]
+    #: Optional list of :class:`commercetools.types.Attribute`
+    attributes: typing.Optional[typing.List["Attribute"]]
+    #: Optional :class:`commercetools.types.Price`
+    price: typing.Optional["Price"]
+    #: Optional list of :class:`commercetools.types.Image`
+    images: typing.Optional[typing.List["Image"]]
+    #: Optional list of :class:`commercetools.types.Asset`
+    assets: typing.Optional[typing.List["Asset"]]
+    #: Optional :class:`commercetools.types.ProductVariantAvailability`
+    availability: typing.Optional["ProductVariantAvailability"]
+    #: Optional :class:`bool` `(Named` ``isMatchingVariant`` `in Commercetools)`
+    is_matching_variant: typing.Optional[bool]
+    #: Optional :class:`commercetools.types.ScopedPrice` `(Named` ``scopedPrice`` `in Commercetools)`
+    scoped_price: typing.Optional["ScopedPrice"]
+    #: Optional :class:`bool` `(Named` ``scopedPriceDiscounted`` `in Commercetools)`
+    scoped_price_discounted: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        prices: typing.Optional[typing.List["Price"]] = None,
+        attributes: typing.Optional[typing.List["Attribute"]] = None,
+        price: typing.Optional["Price"] = None,
+        images: typing.Optional[typing.List["Image"]] = None,
+        assets: typing.Optional[typing.List["Asset"]] = None,
+        availability: typing.Optional["ProductVariantAvailability"] = None,
+        is_matching_variant: typing.Optional[bool] = None,
+        scoped_price: typing.Optional["ScopedPrice"] = None,
+        scoped_price_discounted: typing.Optional[bool] = None,
+    ) -> None:
+        self.id = id
+        self.sku = sku
+        self.key = key
+        self.prices = prices
+        self.attributes = attributes
+        self.price = price
+        self.images = images
+        self.assets = assets
+        self.availability = availability
+        self.is_matching_variant = is_matching_variant
+        self.scoped_price = scoped_price
+        self.scoped_price_discounted = scoped_price_discounted
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ProductVariant(id=%r, sku=%r, key=%r, prices=%r, attributes=%r, price=%r, images=%r, assets=%r, availability=%r, is_matching_variant=%r, scoped_price=%r, scoped_price_discounted=%r)"
+            % (
+                self.id,
+                self.sku,
+                self.key,
+                self.prices,
+                self.attributes,
+                self.price,
+                self.images,
+                self.assets,
+                self.availability,
+                self.is_matching_variant,
+                self.scoped_price,
+                self.scoped_price_discounted,
+            )
+        )
+
+
+class ProductVariantAvailability(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantAvailabilitySchema`."
+    #: Optional :class:`bool` `(Named` ``isOnStock`` `in Commercetools)`
+    is_on_stock: typing.Optional[bool]
+    #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
+    restockable_in_days: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
+    available_quantity: typing.Optional[int]
+    #: Optional :class:`commercetools.types.ProductVariantChannelAvailabilityMap`
+    channels: typing.Optional["ProductVariantChannelAvailabilityMap"]
+
+    def __init__(
+        self,
+        *,
+        is_on_stock: typing.Optional[bool] = None,
+        restockable_in_days: typing.Optional[int] = None,
+        available_quantity: typing.Optional[int] = None,
+        channels: typing.Optional["ProductVariantChannelAvailabilityMap"] = None,
+    ) -> None:
+        self.is_on_stock = is_on_stock
+        self.restockable_in_days = restockable_in_days
+        self.available_quantity = available_quantity
+        self.channels = channels
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ProductVariantAvailability(is_on_stock=%r, restockable_in_days=%r, available_quantity=%r, channels=%r)"
+            % (
+                self.is_on_stock,
+                self.restockable_in_days,
+                self.available_quantity,
+                self.channels,
+            )
+        )
+
+
+class ProductVariantChannelAvailability(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantChannelAvailabilitySchema`."
+    #: Optional :class:`bool` `(Named` ``isOnStock`` `in Commercetools)`
+    is_on_stock: typing.Optional[bool]
+    #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
+    restockable_in_days: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
+    available_quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        is_on_stock: typing.Optional[bool] = None,
+        restockable_in_days: typing.Optional[int] = None,
+        available_quantity: typing.Optional[int] = None,
+    ) -> None:
+        self.is_on_stock = is_on_stock
+        self.restockable_in_days = restockable_in_days
+        self.available_quantity = available_quantity
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ProductVariantChannelAvailability(is_on_stock=%r, restockable_in_days=%r, available_quantity=%r)"
+            % (self.is_on_stock, self.restockable_in_days, self.available_quantity)
+        )
 
 
 class ProductVariantChannelAvailabilityMap(
@@ -1081,23 +928,75 @@ class ProductVariantChannelAvailabilityMap(
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class RangeFacetResult(FacetResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.RangeFacetResultSchema`."
-    #: List of :class:`commercetools.types.FacetResultRange`
-    ranges: typing.Optional[typing.List["FacetResultRange"]]
+class ProductVariantDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDraftSchema`."
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.PriceDraft`
+    prices: typing.Optional[typing.List["PriceDraft"]]
+    #: Optional list of :class:`commercetools.types.Attribute`
+    attributes: typing.Optional[typing.List["Attribute"]]
+    #: Optional list of :class:`commercetools.types.Image`
+    images: typing.Optional[typing.List["Image"]]
+    #: Optional list of :class:`commercetools.types.AssetDraft`
+    assets: typing.Optional[typing.List["AssetDraft"]]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        ranges: typing.Optional[typing.List["FacetResultRange"]] = None,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        prices: typing.Optional[typing.List["PriceDraft"]] = None,
+        attributes: typing.Optional[typing.List["Attribute"]] = None,
+        images: typing.Optional[typing.List["Image"]] = None,
+        assets: typing.Optional[typing.List["AssetDraft"]] = None,
     ) -> None:
-        self.ranges = ranges
-        super().__init__(type=FacetTypes.RANGE)
+        self.sku = sku
+        self.key = key
+        self.prices = prices
+        self.attributes = attributes
+        self.images = images
+        self.assets = assets
+        super().__init__()
 
     def __repr__(self) -> str:
-        return "RangeFacetResult(type=%r, ranges=%r)" % (self.type, self.ranges)
+        return (
+            "ProductVariantDraft(sku=%r, key=%r, prices=%r, attributes=%r, images=%r, assets=%r)"
+            % (
+                self.sku,
+                self.key,
+                self.prices,
+                self.attributes,
+                self.images,
+                self.assets,
+            )
+        )
+
+
+class SearchKeyword(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.SearchKeywordSchema`."
+    #: :class:`str`
+    text: typing.Optional[str]
+    #: Optional :class:`commercetools.types.SuggestTokenizer` `(Named` ``suggestTokenizer`` `in Commercetools)`
+    suggest_tokenizer: typing.Optional["SuggestTokenizer"]
+
+    def __init__(
+        self,
+        *,
+        text: typing.Optional[str] = None,
+        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
+    ) -> None:
+        self.text = text
+        self.suggest_tokenizer = suggest_tokenizer
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "SearchKeyword(text=%r, suggest_tokenizer=%r)" % (
+            self.text,
+            self.suggest_tokenizer,
+        )
 
 
 class SearchKeywords(typing.Dict[(str, "SearchKeyword")]):
@@ -1105,55 +1004,36 @@ class SearchKeywords(typing.Dict[(str, "SearchKeyword")]):
         return "SearchKeywords(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
 
 
+class SuggestTokenizer(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestTokenizerSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "SuggestTokenizer(type=%r)" % (self.type,)
+
+
+class Suggestion(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestionSchema`."
+    #: :class:`str`
+    text: typing.Optional[str]
+
+    def __init__(self, *, text: typing.Optional[str] = None) -> None:
+        self.text = text
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "Suggestion(text=%r)" % (self.text,)
+
+
 class SuggestionResult(typing.Dict[(str, list)]):
     def __repr__(self) -> str:
         return "SuggestionResult(%s)" % (
             ", ".join(f"{k}={v!r}" for k, v in self.items())
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TermFacetResult(FacetResult):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TermFacetResultSchema`."
-    #: :class:`commercetools.types.TermFacetResultType` `(Named` ``dataType`` `in Commercetools)`
-    data_type: typing.Optional["TermFacetResultType"]
-    #: :class:`int`
-    missing: typing.Optional[int]
-    #: :class:`int`
-    total: typing.Optional[int]
-    #: :class:`int`
-    other: typing.Optional[int]
-    #: List of :class:`commercetools.types.FacetResultTerm`
-    terms: typing.Optional[typing.List["FacetResultTerm"]]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["FacetTypes"] = None,
-        data_type: typing.Optional["TermFacetResultType"] = None,
-        missing: typing.Optional[int] = None,
-        total: typing.Optional[int] = None,
-        other: typing.Optional[int] = None,
-        terms: typing.Optional[typing.List["FacetResultTerm"]] = None,
-    ) -> None:
-        self.data_type = data_type
-        self.missing = missing
-        self.total = total
-        self.other = other
-        self.terms = terms
-        super().__init__(type=FacetTypes.TERMS)
-
-    def __repr__(self) -> str:
-        return (
-            "TermFacetResult(type=%r, data_type=%r, missing=%r, total=%r, other=%r, terms=%r)"
-            % (
-                self.type,
-                self.data_type,
-                self.missing,
-                self.total,
-                self.other,
-                self.terms,
-            )
         )
 
 
@@ -1166,18 +1046,50 @@ class TermFacetResultType(enum.Enum):
     NUMBER = "number"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class WhitespaceTokenizer(SuggestTokenizer):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.WhitespaceTokenizerSchema`."
+class CustomTokenizer(SuggestTokenizer):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomTokenizerSchema`."
+    #: List of :class:`str`
+    inputs: typing.Optional[typing.List[str]]
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
-        super().__init__(type="whitespace")
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        inputs: typing.Optional[typing.List[str]] = None,
+    ) -> None:
+        self.inputs = inputs
+        super().__init__(type="custom")
 
     def __repr__(self) -> str:
-        return "WhitespaceTokenizer(type=%r)" % (self.type,)
+        return "CustomTokenizer(type=%r, inputs=%r)" % (self.type, self.inputs)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class FilteredFacetResult(FacetResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.FilteredFacetResultSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
+    product_count: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["FacetTypes"] = None,
+        count: typing.Optional[int] = None,
+        product_count: typing.Optional[int] = None,
+    ) -> None:
+        self.count = count
+        self.product_count = product_count
+        super().__init__(type=FacetTypes.FILTER)
+
+    def __repr__(self) -> str:
+        return "FilteredFacetResult(type=%r, count=%r, product_count=%r)" % (
+            self.type,
+            self.count,
+            self.product_count,
+        )
+
+
 class ProductAddAssetAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddAssetActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1222,7 +1134,6 @@ class ProductAddAssetAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductAddExternalImageAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddExternalImageActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1256,7 +1167,6 @@ class ProductAddExternalImageAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductAddPriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddPriceActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1290,7 +1200,6 @@ class ProductAddPriceAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductAddToCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddToCategoryActionSchema`."
     #: :class:`commercetools.types.CategoryReference`
@@ -1320,7 +1229,6 @@ class ProductAddToCategoryAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductAddVariantAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddVariantActionSchema`."
     #: Optional :class:`str`
@@ -1375,7 +1283,6 @@ class ProductAddVariantAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductChangeAssetNameAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeAssetNameActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1425,7 +1332,6 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductChangeAssetOrderAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeAssetOrderActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1459,7 +1365,6 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductChangeMasterVariantAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeMasterVariantActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1489,7 +1394,6 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductChangeNameAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -1516,7 +1420,6 @@ class ProductChangeNameAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductChangePriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangePriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
@@ -1546,7 +1449,6 @@ class ProductChangePriceAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductChangeSlugAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeSlugActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -1573,7 +1475,6 @@ class ProductChangeSlugAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductLegacySetSkuAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductLegacySetSkuActionSchema`."
     #: Optional :class:`str`
@@ -1600,7 +1501,6 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductMoveImageToPositionAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductMoveImageToPositionActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1645,7 +1545,6 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductPublishAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishActionSchema`."
     #: Optional :class:`commercetools.types.ProductPublishScope`
@@ -1664,7 +1563,6 @@ class ProductPublishAction(ProductUpdateAction):
         return "ProductPublishAction(action=%r, scope=%r)" % (self.action, self.scope)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRemoveAssetAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveAssetActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1709,7 +1607,6 @@ class ProductRemoveAssetAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRemoveFromCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveFromCategoryActionSchema`."
     #: :class:`commercetools.types.CategoryReference`
@@ -1736,7 +1633,6 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRemoveImageAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveImageActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1770,7 +1666,6 @@ class ProductRemoveImageAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRemovePriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovePriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
@@ -1797,7 +1692,6 @@ class ProductRemovePriceAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRemoveVariantAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveVariantActionSchema`."
     #: Optional :class:`int`
@@ -1829,7 +1723,6 @@ class ProductRemoveVariantAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRevertStagedChangesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedChangesActionSchema`."
 
@@ -1840,7 +1733,6 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
         return "ProductRevertStagedChangesAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedVariantChangesActionSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1862,7 +1754,6 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAssetCustomFieldAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetCustomFieldActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1917,7 +1808,6 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAssetCustomTypeAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetCustomTypeActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1972,7 +1862,6 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAssetDescriptionAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetDescriptionActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2022,7 +1911,6 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAssetKeyAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetKeyActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2067,7 +1955,6 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAssetSourcesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetSourcesActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2117,7 +2004,6 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAssetTagsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetTagsActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2167,7 +2053,6 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAttributeAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAttributeActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2212,7 +2097,6 @@ class ProductSetAttributeAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAttributeInAllVariantsActionSchema`."
     #: :class:`str`
@@ -2242,7 +2126,6 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetCategoryOrderHintAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetCategoryOrderHintActionSchema`."
     #: :class:`str` `(Named` ``categoryId`` `in Commercetools)`
@@ -2272,7 +2155,6 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetDescriptionAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetDescriptionActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -2299,7 +2181,6 @@ class ProductSetDescriptionAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetDiscountedPriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
@@ -2329,7 +2210,6 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetImageLabelAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetImageLabelActionSchema`."
     #: Optional :class:`str`
@@ -2374,7 +2254,6 @@ class ProductSetImageLabelAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetKeyAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetKeyActionSchema`."
     #: Optional :class:`str`
@@ -2390,7 +2269,6 @@ class ProductSetKeyAction(ProductUpdateAction):
         return "ProductSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetMetaDescriptionAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetMetaDescriptionActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaDescription`` `in Commercetools)`
@@ -2416,7 +2294,6 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetMetaKeywordsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetMetaKeywordsActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaKeywords`` `in Commercetools)`
@@ -2442,7 +2319,6 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetMetaTitleAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetMetaTitleActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
@@ -2469,7 +2345,6 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetPricesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetPricesActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2503,7 +2378,6 @@ class ProductSetPricesAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
@@ -2537,7 +2411,6 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
@@ -2571,7 +2444,6 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetProductVariantKeyAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductVariantKeyActionSchema`."
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2605,7 +2477,6 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetSearchKeywordsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSearchKeywordsActionSchema`."
     #: :class:`commercetools.types.SearchKeywords` `(Named` ``searchKeywords`` `in Commercetools)`
@@ -2631,7 +2502,6 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetSkuAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSkuActionSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2663,7 +2533,6 @@ class ProductSetSkuAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductSetTaxCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetTaxCategoryActionSchema`."
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
@@ -2685,7 +2554,6 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductTransitionStateAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTransitionStateActionSchema`."
     #: Optional :class:`commercetools.types.StateReference`
@@ -2712,7 +2580,6 @@ class ProductTransitionStateAction(ProductUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ProductUnpublishAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishActionSchema`."
 
@@ -2721,3 +2588,75 @@ class ProductUnpublishAction(ProductUpdateAction):
 
     def __repr__(self) -> str:
         return "ProductUnpublishAction(action=%r)" % (self.action,)
+
+
+class RangeFacetResult(FacetResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.RangeFacetResultSchema`."
+    #: List of :class:`commercetools.types.FacetResultRange`
+    ranges: typing.Optional[typing.List["FacetResultRange"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["FacetTypes"] = None,
+        ranges: typing.Optional[typing.List["FacetResultRange"]] = None,
+    ) -> None:
+        self.ranges = ranges
+        super().__init__(type=FacetTypes.RANGE)
+
+    def __repr__(self) -> str:
+        return "RangeFacetResult(type=%r, ranges=%r)" % (self.type, self.ranges)
+
+
+class TermFacetResult(FacetResult):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TermFacetResultSchema`."
+    #: :class:`commercetools.types.TermFacetResultType` `(Named` ``dataType`` `in Commercetools)`
+    data_type: typing.Optional["TermFacetResultType"]
+    #: :class:`int`
+    missing: typing.Optional[int]
+    #: :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    other: typing.Optional[int]
+    #: List of :class:`commercetools.types.FacetResultTerm`
+    terms: typing.Optional[typing.List["FacetResultTerm"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["FacetTypes"] = None,
+        data_type: typing.Optional["TermFacetResultType"] = None,
+        missing: typing.Optional[int] = None,
+        total: typing.Optional[int] = None,
+        other: typing.Optional[int] = None,
+        terms: typing.Optional[typing.List["FacetResultTerm"]] = None,
+    ) -> None:
+        self.data_type = data_type
+        self.missing = missing
+        self.total = total
+        self.other = other
+        self.terms = terms
+        super().__init__(type=FacetTypes.TERMS)
+
+    def __repr__(self) -> str:
+        return (
+            "TermFacetResult(type=%r, data_type=%r, missing=%r, total=%r, other=%r, terms=%r)"
+            % (
+                self.type,
+                self.data_type,
+                self.missing,
+                self.total,
+                self.other,
+                self.terms,
+            )
+        )
+
+
+class WhitespaceTokenizer(SuggestTokenizer):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.WhitespaceTokenizerSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="whitespace")
+
+    def __repr__(self) -> str:
+        return "WhitespaceTokenizer(type=%r)" % (self.type,)

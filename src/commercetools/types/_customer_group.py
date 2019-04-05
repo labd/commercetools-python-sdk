@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -24,36 +23,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomerGroupDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupDraftSchema`."
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: :class:`str` `(Named` ``groupName`` `in Commercetools)`
-    group_name: typing.Optional[str]
-    #: Optional :class:`commercetools.types.CustomFields`
-    custom: typing.Optional["CustomFields"]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        group_name: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFields"] = None
-    ) -> None:
-        self.key = key
-        self.group_name = group_name
-        self.custom = custom
-
-    def __repr__(self) -> str:
-        return "CustomerGroupDraft(key=%r, group_name=%r, custom=%r)" % (
-            self.key,
-            self.group_name,
-            self.custom,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroup(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSchema`."
     #: Optional :class:`str`
@@ -99,7 +68,35 @@ class CustomerGroup(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomerGroupDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupDraftSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: :class:`str` `(Named` ``groupName`` `in Commercetools)`
+    group_name: typing.Optional[str]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        group_name: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFields"] = None
+    ) -> None:
+        self.key = key
+        self.group_name = group_name
+        self.custom = custom
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CustomerGroupDraft(key=%r, group_name=%r, custom=%r)" % (
+            self.key,
+            self.group_name,
+            self.custom,
+        )
+
+
 class CustomerGroupPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.CustomerGroup`
@@ -123,7 +120,6 @@ class CustomerGroupPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupReferenceSchema`."
     #: Optional :class:`commercetools.types.CustomerGroup`
@@ -149,7 +145,6 @@ class CustomerGroupReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateSchema`."
     #: :class:`list`
@@ -171,7 +166,6 @@ class CustomerGroupUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateActionSchema`."
 
@@ -182,7 +176,6 @@ class CustomerGroupUpdateAction(UpdateAction):
         return "CustomerGroupUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupChangeNameActionSchema`."
     #: :class:`str`
@@ -201,7 +194,6 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -228,7 +220,6 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -255,7 +246,6 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetKeyActionSchema`."
     #: Optional :class:`str`

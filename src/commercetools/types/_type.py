@@ -4,8 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -54,8 +53,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldEnumValue:
+class CustomFieldEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumValueSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -67,13 +65,13 @@ class CustomFieldEnumValue:
     ) -> None:
         self.key = key
         self.label = label
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CustomFieldEnumValue(key=%r, label=%r)" % (self.key, self.label)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldLocalizedEnumValue:
+class CustomFieldLocalizedEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumValueSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -88,6 +86,7 @@ class CustomFieldLocalizedEnumValue:
     ) -> None:
         self.key = key
         self.label = label
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CustomFieldLocalizedEnumValue(key=%r, label=%r)" % (
@@ -96,8 +95,7 @@ class CustomFieldLocalizedEnumValue:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFields:
+class CustomFields(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsSchema`."
     #: :class:`commercetools.types.TypeReference`
     type: typing.Optional["TypeReference"]
@@ -112,13 +110,13 @@ class CustomFields:
     ) -> None:
         self.type = type
         self.fields = fields
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CustomFields(type=%r, fields=%r)" % (self.type, self.fields)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldsDraft:
+class CustomFieldsDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsDraftSchema`."
     #: :class:`commercetools.types.ResourceIdentifier`
     type: typing.Optional["ResourceIdentifier"]
@@ -133,13 +131,18 @@ class CustomFieldsDraft:
     ) -> None:
         self.type = type
         self.fields = fields
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CustomFieldsDraft(type=%r, fields=%r)" % (self.type, self.fields)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class FieldDefinition:
+class FieldContainer(typing.Dict[(str, typing.Any)]):
+    def __repr__(self) -> str:
+        return "FieldContainer(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
+
+
+class FieldDefinition(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldDefinitionSchema`."
     #: :class:`object`
     type: typing.Optional[object]
@@ -166,6 +169,7 @@ class FieldDefinition:
         self.label = label
         self.required = required
         self.input_hint = input_hint
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -174,237 +178,17 @@ class FieldDefinition:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class FieldType:
+class FieldType(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldTypeSchema`."
     #: :class:`str`
     name: typing.Optional[str]
 
     def __init__(self, *, name: typing.Optional[str] = None) -> None:
         self.name = name
+        super().__init__()
 
     def __repr__(self) -> str:
         return "FieldType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TypeDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeDraftSchema`."
-    #: :class:`str`
-    key: typing.Optional[str]
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: List of :class:`commercetools.types.ResourceTypeId` `(Named` ``resourceTypeIds`` `in Commercetools)`
-    resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]]
-    #: Optional list of :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinitions`` `in Commercetools)`
-    field_definitions: typing.Optional[typing.List["FieldDefinition"]]
-
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
-        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
-    ) -> None:
-        self.key = key
-        self.name = name
-        self.description = description
-        self.resource_type_ids = resource_type_ids
-        self.field_definitions = field_definitions
-
-    def __repr__(self) -> str:
-        return (
-            "TypeDraft(key=%r, name=%r, description=%r, resource_type_ids=%r, field_definitions=%r)"
-            % (
-                self.key,
-                self.name,
-                self.description,
-                self.resource_type_ids,
-                self.field_definitions,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldBooleanType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldBooleanTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="Boolean")
-
-    def __repr__(self) -> str:
-        return "CustomFieldBooleanType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldDateTimeType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTimeTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="DateTime")
-
-    def __repr__(self) -> str:
-        return "CustomFieldDateTimeType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldDateType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="Date")
-
-    def __repr__(self) -> str:
-        return "CustomFieldDateType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldEnumType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumTypeSchema`."
-    #: List of :class:`commercetools.types.CustomFieldEnumValue`
-    values: typing.Optional[typing.List["CustomFieldEnumValue"]]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["CustomFieldEnumValue"]] = None,
-    ) -> None:
-        self.values = values
-        super().__init__(name="Enum")
-
-    def __repr__(self) -> str:
-        return "CustomFieldEnumType(name=%r, values=%r)" % (self.name, self.values)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldLocalizedEnumType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumTypeSchema`."
-    #: List of :class:`commercetools.types.CustomFieldLocalizedEnumValue`
-    values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]] = None,
-    ) -> None:
-        self.values = values
-        super().__init__(name="LocalizedEnum")
-
-    def __repr__(self) -> str:
-        return "CustomFieldLocalizedEnumType(name=%r, values=%r)" % (
-            self.name,
-            self.values,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldLocalizedStringType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedStringTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="LocalizedString")
-
-    def __repr__(self) -> str:
-        return "CustomFieldLocalizedStringType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldMoneyType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldMoneyTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="Money")
-
-    def __repr__(self) -> str:
-        return "CustomFieldMoneyType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldNumberType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldNumberTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="Number")
-
-    def __repr__(self) -> str:
-        return "CustomFieldNumberType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldReferenceType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldReferenceTypeSchema`."
-    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
-    reference_type_id: typing.Optional["ReferenceTypeId"]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        reference_type_id: typing.Optional["ReferenceTypeId"] = None,
-    ) -> None:
-        self.reference_type_id = reference_type_id
-        super().__init__(name="Reference")
-
-    def __repr__(self) -> str:
-        return "CustomFieldReferenceType(name=%r, reference_type_id=%r)" % (
-            self.name,
-            self.reference_type_id,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldSetType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldSetTypeSchema`."
-    #: :class:`commercetools.types.FieldType` `(Named` ``elementType`` `in Commercetools)`
-    element_type: typing.Optional["FieldType"]
-
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        element_type: typing.Optional["FieldType"] = None,
-    ) -> None:
-        self.element_type = element_type
-        super().__init__(name="Set")
-
-    def __repr__(self) -> str:
-        return "CustomFieldSetType(name=%r, element_type=%r)" % (
-            self.name,
-            self.element_type,
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldStringType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldStringTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="String")
-
-    def __repr__(self) -> str:
-        return "CustomFieldStringType(name=%r)" % (self.name,)
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class CustomFieldTimeType(FieldType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldTimeTypeSchema`."
-
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
-        super().__init__(name="Time")
-
-    def __repr__(self) -> str:
-        return "CustomFieldTimeType(name=%r)" % (self.name,)
-
-
-class FieldContainer(typing.Dict[(str, typing.Any)]):
-    def __repr__(self) -> str:
-        return "FieldContainer(%s)" % (", ".join(f"{k}={v!r}" for k, v in self.items()))
 
 
 class ResourceTypeId(enum.Enum):
@@ -428,7 +212,6 @@ class ResourceTypeId(enum.Enum):
     CUSTOMER_GROUP = "customer-group"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Type(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSchema`."
     #: :class:`str`
@@ -484,7 +267,48 @@ class Type(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class TypeDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeDraftSchema`."
+    #: :class:`str`
+    key: typing.Optional[str]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: List of :class:`commercetools.types.ResourceTypeId` `(Named` ``resourceTypeIds`` `in Commercetools)`
+    resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]]
+    #: Optional list of :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinitions`` `in Commercetools)`
+    field_definitions: typing.Optional[typing.List["FieldDefinition"]]
+
+    def __init__(
+        self,
+        *,
+        key: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
+        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
+    ) -> None:
+        self.key = key
+        self.name = name
+        self.description = description
+        self.resource_type_ids = resource_type_ids
+        self.field_definitions = field_definitions
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "TypeDraft(key=%r, name=%r, description=%r, resource_type_ids=%r, field_definitions=%r)"
+            % (
+                self.key,
+                self.name,
+                self.description,
+                self.resource_type_ids,
+                self.field_definitions,
+            )
+        )
+
+
 class TypePagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypePagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.Type`
@@ -510,7 +334,6 @@ class TypePagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeReferenceSchema`."
     #: Optional :class:`commercetools.types.Type`
@@ -541,7 +364,6 @@ class TypeTextInputHint(enum.Enum):
     MULTI_LINE = "MultiLine"
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateSchema`."
     #: :class:`list`
@@ -560,7 +382,6 @@ class TypeUpdate(Update):
         return "TypeUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateActionSchema`."
 
@@ -571,7 +392,167 @@ class TypeUpdateAction(UpdateAction):
         return "TypeUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class CustomFieldBooleanType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldBooleanTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="Boolean")
+
+    def __repr__(self) -> str:
+        return "CustomFieldBooleanType(name=%r)" % (self.name,)
+
+
+class CustomFieldDateTimeType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTimeTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="DateTime")
+
+    def __repr__(self) -> str:
+        return "CustomFieldDateTimeType(name=%r)" % (self.name,)
+
+
+class CustomFieldDateType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="Date")
+
+    def __repr__(self) -> str:
+        return "CustomFieldDateType(name=%r)" % (self.name,)
+
+
+class CustomFieldEnumType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumTypeSchema`."
+    #: List of :class:`commercetools.types.CustomFieldEnumValue`
+    values: typing.Optional[typing.List["CustomFieldEnumValue"]]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        values: typing.Optional[typing.List["CustomFieldEnumValue"]] = None,
+    ) -> None:
+        self.values = values
+        super().__init__(name="Enum")
+
+    def __repr__(self) -> str:
+        return "CustomFieldEnumType(name=%r, values=%r)" % (self.name, self.values)
+
+
+class CustomFieldLocalizedEnumType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumTypeSchema`."
+    #: List of :class:`commercetools.types.CustomFieldLocalizedEnumValue`
+    values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]] = None,
+    ) -> None:
+        self.values = values
+        super().__init__(name="LocalizedEnum")
+
+    def __repr__(self) -> str:
+        return "CustomFieldLocalizedEnumType(name=%r, values=%r)" % (
+            self.name,
+            self.values,
+        )
+
+
+class CustomFieldLocalizedStringType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedStringTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="LocalizedString")
+
+    def __repr__(self) -> str:
+        return "CustomFieldLocalizedStringType(name=%r)" % (self.name,)
+
+
+class CustomFieldMoneyType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldMoneyTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="Money")
+
+    def __repr__(self) -> str:
+        return "CustomFieldMoneyType(name=%r)" % (self.name,)
+
+
+class CustomFieldNumberType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldNumberTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="Number")
+
+    def __repr__(self) -> str:
+        return "CustomFieldNumberType(name=%r)" % (self.name,)
+
+
+class CustomFieldReferenceType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldReferenceTypeSchema`."
+    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
+    reference_type_id: typing.Optional["ReferenceTypeId"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        reference_type_id: typing.Optional["ReferenceTypeId"] = None,
+    ) -> None:
+        self.reference_type_id = reference_type_id
+        super().__init__(name="Reference")
+
+    def __repr__(self) -> str:
+        return "CustomFieldReferenceType(name=%r, reference_type_id=%r)" % (
+            self.name,
+            self.reference_type_id,
+        )
+
+
+class CustomFieldSetType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldSetTypeSchema`."
+    #: :class:`commercetools.types.FieldType` `(Named` ``elementType`` `in Commercetools)`
+    element_type: typing.Optional["FieldType"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        element_type: typing.Optional["FieldType"] = None,
+    ) -> None:
+        self.element_type = element_type
+        super().__init__(name="Set")
+
+    def __repr__(self) -> str:
+        return "CustomFieldSetType(name=%r, element_type=%r)" % (
+            self.name,
+            self.element_type,
+        )
+
+
+class CustomFieldStringType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldStringTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="String")
+
+    def __repr__(self) -> str:
+        return "CustomFieldStringType(name=%r)" % (self.name,)
+
+
+class CustomFieldTimeType(FieldType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldTimeTypeSchema`."
+
+    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+        super().__init__(name="Time")
+
+    def __repr__(self) -> str:
+        return "CustomFieldTimeType(name=%r)" % (self.name,)
+
+
 class TypeAddEnumValueAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddEnumValueActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -598,7 +579,6 @@ class TypeAddEnumValueAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeAddFieldDefinitionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddFieldDefinitionActionSchema`."
     #: :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinition`` `in Commercetools)`
@@ -620,7 +600,6 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddLocalizedEnumValueActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -647,7 +626,6 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -674,7 +652,6 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -700,7 +677,6 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionOrderActionSchema`."
     #: List of :class:`str` `(Named` ``fieldNames`` `in Commercetools)`
@@ -722,7 +698,6 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeKeyAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeKeyActionSchema`."
     #: :class:`str`
@@ -738,7 +713,6 @@ class TypeChangeKeyAction(TypeUpdateAction):
         return "TypeChangeKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -765,7 +739,6 @@ class TypeChangeLabelAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -791,7 +764,6 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeChangeNameAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -810,7 +782,6 @@ class TypeChangeNameAction(TypeUpdateAction):
         return "TypeChangeNameAction(action=%r, name=%r)" % (self.action, self.name)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeRemoveFieldDefinitionActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -832,7 +803,6 @@ class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypeSetDescriptionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSetDescriptionActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`

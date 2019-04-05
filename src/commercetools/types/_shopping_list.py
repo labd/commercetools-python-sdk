@@ -3,8 +3,7 @@
 import datetime
 import typing
 
-import attr
-
+from commercetools.types._abstract import _BaseType
 from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
 from commercetools.types._common import Reference, ReferenceTypeId, Resource
 
@@ -51,276 +50,6 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShoppingListDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListDraftSchema`."
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
-    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
-    delete_days_after_last_modification: typing.Optional[int]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: Optional :class:`str`
-    key: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.ShoppingListLineItemDraft` `(Named` ``lineItems`` `in Commercetools)`
-    line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
-    #: Optional list of :class:`commercetools.types.TextLineItemDraft` `(Named` ``textLineItems`` `in Commercetools)`
-    text_line_items: typing.Optional[typing.List["TextLineItemDraft"]]
-    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
-    anonymous_id: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        customer: typing.Optional["CustomerReference"] = None,
-        delete_days_after_last_modification: typing.Optional[int] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        key: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-        text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
-        anonymous_id: typing.Optional[str] = None
-    ) -> None:
-        self.custom = custom
-        self.customer = customer
-        self.delete_days_after_last_modification = delete_days_after_last_modification
-        self.description = description
-        self.key = key
-        self.line_items = line_items
-        self.name = name
-        self.slug = slug
-        self.text_line_items = text_line_items
-        self.anonymous_id = anonymous_id
-
-    def __repr__(self) -> str:
-        return (
-            "ShoppingListDraft(custom=%r, customer=%r, delete_days_after_last_modification=%r, description=%r, key=%r, line_items=%r, name=%r, slug=%r, text_line_items=%r, anonymous_id=%r)"
-            % (
-                self.custom,
-                self.customer,
-                self.delete_days_after_last_modification,
-                self.description,
-                self.key,
-                self.line_items,
-                self.name,
-                self.slug,
-                self.text_line_items,
-                self.anonymous_id,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShoppingListLineItem:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemSchema`."
-    #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
-    added_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.CustomFields`
-    custom: typing.Optional["CustomFields"]
-    #: Optional :class:`datetime.datetime` `(Named` ``deactivatedAt`` `in Commercetools)`
-    deactivated_at: typing.Optional[datetime.datetime]
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``productSlug`` `in Commercetools)`
-    product_slug: typing.Optional["LocalizedString"]
-    #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
-    #: :class:`int`
-    quantity: typing.Optional[int]
-    #: Optional :class:`commercetools.types.ProductVariant`
-    variant: typing.Optional["ProductVariant"]
-    #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFields"] = None,
-        deactivated_at: typing.Optional[datetime.datetime] = None,
-        id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        product_id: typing.Optional[str] = None,
-        product_slug: typing.Optional["LocalizedString"] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        quantity: typing.Optional[int] = None,
-        variant: typing.Optional["ProductVariant"] = None,
-        variant_id: typing.Optional[int] = None
-    ) -> None:
-        self.added_at = added_at
-        self.custom = custom
-        self.deactivated_at = deactivated_at
-        self.id = id
-        self.name = name
-        self.product_id = product_id
-        self.product_slug = product_slug
-        self.product_type = product_type
-        self.quantity = quantity
-        self.variant = variant
-        self.variant_id = variant_id
-
-    def __repr__(self) -> str:
-        return (
-            "ShoppingListLineItem(added_at=%r, custom=%r, deactivated_at=%r, id=%r, name=%r, product_id=%r, product_slug=%r, product_type=%r, quantity=%r, variant=%r, variant_id=%r)"
-            % (
-                self.added_at,
-                self.custom,
-                self.deactivated_at,
-                self.id,
-                self.name,
-                self.product_id,
-                self.product_slug,
-                self.product_type,
-                self.quantity,
-                self.variant,
-                self.variant_id,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ShoppingListLineItemDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemDraftSchema`."
-    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
-    added_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`str`
-    sku: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
-    #: Optional :class:`int`
-    quantity: typing.Optional[int]
-    #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        sku: typing.Optional[str] = None,
-        product_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        variant_id: typing.Optional[int] = None
-    ) -> None:
-        self.added_at = added_at
-        self.custom = custom
-        self.sku = sku
-        self.product_id = product_id
-        self.quantity = quantity
-        self.variant_id = variant_id
-
-    def __repr__(self) -> str:
-        return (
-            "ShoppingListLineItemDraft(added_at=%r, custom=%r, sku=%r, product_id=%r, quantity=%r, variant_id=%r)"
-            % (
-                self.added_at,
-                self.custom,
-                self.sku,
-                self.product_id,
-                self.quantity,
-                self.variant_id,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TextLineItem:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemSchema`."
-    #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
-    added_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.CustomFields`
-    custom: typing.Optional["CustomFields"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: :class:`int`
-    quantity: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFields"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        id: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        quantity: typing.Optional[int] = None
-    ) -> None:
-        self.added_at = added_at
-        self.custom = custom
-        self.description = description
-        self.id = id
-        self.name = name
-        self.quantity = quantity
-
-    def __repr__(self) -> str:
-        return (
-            "TextLineItem(added_at=%r, custom=%r, description=%r, id=%r, name=%r, quantity=%r)"
-            % (
-                self.added_at,
-                self.custom,
-                self.description,
-                self.id,
-                self.name,
-                self.quantity,
-            )
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
-class TextLineItemDraft:
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemDraftSchema`."
-    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
-    added_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.CustomFieldsDraft`
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
-    #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
-    #: Optional :class:`int`
-    quantity: typing.Optional[int]
-
-    def __init__(
-        self,
-        *,
-        added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        quantity: typing.Optional[int] = None
-    ) -> None:
-        self.added_at = added_at
-        self.custom = custom
-        self.description = description
-        self.name = name
-        self.quantity = quantity
-
-    def __repr__(self) -> str:
-        return (
-            "TextLineItemDraft(added_at=%r, custom=%r, description=%r, name=%r, quantity=%r)"
-            % (self.added_at, self.custom, self.description, self.name, self.quantity)
-        )
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingList(Resource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSchema`."
     #: Optional :class:`commercetools.types.CustomFields`
@@ -401,7 +130,192 @@ class ShoppingList(Resource):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class ShoppingListDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListDraftSchema`."
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`commercetools.types.CustomerReference`
+    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
+    delete_days_after_last_modification: typing.Optional[int]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.ShoppingListLineItemDraft` `(Named` ``lineItems`` `in Commercetools)`
+    line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    slug: typing.Optional["LocalizedString"]
+    #: Optional list of :class:`commercetools.types.TextLineItemDraft` `(Named` ``textLineItems`` `in Commercetools)`
+    text_line_items: typing.Optional[typing.List["TextLineItemDraft"]]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        key: typing.Optional[str] = None,
+        line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        slug: typing.Optional["LocalizedString"] = None,
+        text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
+        anonymous_id: typing.Optional[str] = None
+    ) -> None:
+        self.custom = custom
+        self.customer = customer
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        self.description = description
+        self.key = key
+        self.line_items = line_items
+        self.name = name
+        self.slug = slug
+        self.text_line_items = text_line_items
+        self.anonymous_id = anonymous_id
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ShoppingListDraft(custom=%r, customer=%r, delete_days_after_last_modification=%r, description=%r, key=%r, line_items=%r, name=%r, slug=%r, text_line_items=%r, anonymous_id=%r)"
+            % (
+                self.custom,
+                self.customer,
+                self.delete_days_after_last_modification,
+                self.description,
+                self.key,
+                self.line_items,
+                self.name,
+                self.slug,
+                self.text_line_items,
+                self.anonymous_id,
+            )
+        )
+
+
+class ShoppingListLineItem(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemSchema`."
+    #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`datetime.datetime` `(Named` ``deactivatedAt`` `in Commercetools)`
+    deactivated_at: typing.Optional[datetime.datetime]
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: :class:`str` `(Named` ``productId`` `in Commercetools)`
+    product_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``productSlug`` `in Commercetools)`
+    product_slug: typing.Optional["LocalizedString"]
+    #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
+    product_type: typing.Optional["ProductTypeReference"]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`commercetools.types.ProductVariant`
+    variant: typing.Optional["ProductVariant"]
+    #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        added_at: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        deactivated_at: typing.Optional[datetime.datetime] = None,
+        id: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        product_id: typing.Optional[str] = None,
+        product_slug: typing.Optional["LocalizedString"] = None,
+        product_type: typing.Optional["ProductTypeReference"] = None,
+        quantity: typing.Optional[int] = None,
+        variant: typing.Optional["ProductVariant"] = None,
+        variant_id: typing.Optional[int] = None
+    ) -> None:
+        self.added_at = added_at
+        self.custom = custom
+        self.deactivated_at = deactivated_at
+        self.id = id
+        self.name = name
+        self.product_id = product_id
+        self.product_slug = product_slug
+        self.product_type = product_type
+        self.quantity = quantity
+        self.variant = variant
+        self.variant_id = variant_id
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ShoppingListLineItem(added_at=%r, custom=%r, deactivated_at=%r, id=%r, name=%r, product_id=%r, product_slug=%r, product_type=%r, quantity=%r, variant=%r, variant_id=%r)"
+            % (
+                self.added_at,
+                self.custom,
+                self.deactivated_at,
+                self.id,
+                self.name,
+                self.product_id,
+                self.product_slug,
+                self.product_type,
+                self.quantity,
+                self.variant,
+                self.variant_id,
+            )
+        )
+
+
+class ShoppingListLineItemDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemDraftSchema`."
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
+    product_id: typing.Optional[str]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        added_at: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        sku: typing.Optional[str] = None,
+        product_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        variant_id: typing.Optional[int] = None
+    ) -> None:
+        self.added_at = added_at
+        self.custom = custom
+        self.sku = sku
+        self.product_id = product_id
+        self.quantity = quantity
+        self.variant_id = variant_id
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ShoppingListLineItemDraft(added_at=%r, custom=%r, sku=%r, product_id=%r, quantity=%r, variant_id=%r)"
+            % (
+                self.added_at,
+                self.custom,
+                self.sku,
+                self.product_id,
+                self.quantity,
+                self.variant_id,
+            )
+        )
+
+
 class ShoppingListPagedQueryResponse(PagedQueryResponse):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListPagedQueryResponseSchema`."
     #: List of :class:`commercetools.types.ShoppingList`
@@ -425,7 +339,6 @@ class ShoppingListPagedQueryResponse(PagedQueryResponse):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListReference(Reference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListReferenceSchema`."
     #: Optional :class:`commercetools.types.ShoppingList`
@@ -451,7 +364,6 @@ class ShoppingListReference(Reference):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListUpdate(Update):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListUpdateSchema`."
     #: :class:`list`
@@ -473,7 +385,6 @@ class ShoppingListUpdate(Update):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListUpdateAction(UpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListUpdateActionSchema`."
 
@@ -484,7 +395,89 @@ class ShoppingListUpdateAction(UpdateAction):
         return "ShoppingListUpdateAction(action=%r)" % (self.action,)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
+class TextLineItem(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemSchema`."
+    #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        added_at: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        id: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        quantity: typing.Optional[int] = None
+    ) -> None:
+        self.added_at = added_at
+        self.custom = custom
+        self.description = description
+        self.id = id
+        self.name = name
+        self.quantity = quantity
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "TextLineItem(added_at=%r, custom=%r, description=%r, id=%r, name=%r, quantity=%r)"
+            % (
+                self.added_at,
+                self.custom,
+                self.description,
+                self.id,
+                self.name,
+                self.quantity,
+            )
+        )
+
+
+class TextLineItemDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemDraftSchema`."
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        added_at: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        quantity: typing.Optional[int] = None
+    ) -> None:
+        self.added_at = added_at
+        self.custom = custom
+        self.description = description
+        self.name = name
+        self.quantity = quantity
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "TextLineItemDraft(added_at=%r, custom=%r, description=%r, name=%r, quantity=%r)"
+            % (self.added_at, self.custom, self.description, self.name, self.quantity)
+        )
+
+
 class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListAddLineItemActionSchema`."
     #: Optional :class:`str`
@@ -534,7 +527,6 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListAddTextLineItemActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -579,7 +571,6 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -605,7 +596,6 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeLineItemsOrderActionSchema`."
     #: List of :class:`str` `(Named` ``lineItemOrder`` `in Commercetools)`
@@ -627,7 +617,6 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListChangeNameAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
@@ -649,7 +638,6 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemNameActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
@@ -675,7 +663,6 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemQuantityActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
@@ -701,7 +688,6 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemsOrderActionSchema`."
     #: List of :class:`str` `(Named` ``textLineItemOrder`` `in Commercetools)`
@@ -723,7 +709,6 @@ class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListRemoveLineItemActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -749,7 +734,6 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListRemoveTextLineItemActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
@@ -775,7 +759,6 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetAnonymousIdActionSchema`."
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
@@ -797,7 +780,6 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomFieldActionSchema`."
     #: :class:`str`
@@ -824,7 +806,6 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeReference`
@@ -851,7 +832,6 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomerActionSchema`."
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -873,7 +853,6 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetDeleteDaysAfterLastModificationActionSchema`."
     #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
@@ -895,7 +874,6 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetDescriptionActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -917,7 +895,6 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetKeyAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetKeyActionSchema`."
     #: Optional :class:`str`
@@ -933,7 +910,6 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
         return "ShoppingListSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -963,7 +939,6 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -993,7 +968,6 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetSlugAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetSlugActionSchema`."
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -1015,7 +989,6 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
@@ -1045,7 +1018,6 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
@@ -1075,7 +1047,6 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemDescriptionActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`

@@ -3,7 +3,7 @@
 import datetime
 import typing
 
-import attr
+from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._cart import InventoryMode, ItemShippingDetailsDraft, TaxMode
@@ -14,8 +14,7 @@ if typing.TYPE_CHECKING:
 __all__ = ["MyCartDraft", "MyCustomerDraft", "MyLineItemDraft", "MyOrderFromCartDraft"]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MyCartDraft:
+class MyCartDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartDraftSchema`."
     #: :class:`str`
     currency: typing.Optional["str"]
@@ -74,6 +73,7 @@ class MyCartDraft:
         self.tax_mode = tax_mode
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.item_shipping_addresses = item_shipping_addresses
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -96,8 +96,7 @@ class MyCartDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MyCustomerDraft:
+class MyCustomerDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerDraftSchema`."
     #: :class:`str`
     email: typing.Optional[str]
@@ -160,6 +159,7 @@ class MyCustomerDraft:
         self.default_billing_address = default_billing_address
         self.custom = custom
         self.locale = locale
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -183,8 +183,7 @@ class MyCustomerDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MyLineItemDraft:
+class MyLineItemDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyLineItemDraftSchema`."
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
     product_id: typing.Optional[str]
@@ -219,6 +218,7 @@ class MyLineItemDraft:
         self.distribution_channel = distribution_channel
         self.custom = custom
         self.shipping_details = shipping_details
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -235,8 +235,7 @@ class MyLineItemDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class MyOrderFromCartDraft:
+class MyOrderFromCartDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyOrderFromCartDraftSchema`."
     #: :class:`str`
     id: typing.Optional[str]
@@ -248,6 +247,7 @@ class MyOrderFromCartDraft:
     ) -> None:
         self.id = id
         self.version = version
+        super().__init__()
 
     def __repr__(self) -> str:
         return "MyOrderFromCartDraft(id=%r, version=%r)" % (self.id, self.version)

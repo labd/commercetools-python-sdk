@@ -4,7 +4,7 @@ import datetime
 import enum
 import typing
 
-import attr
+from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
@@ -39,8 +39,7 @@ __all__ = [
 ]
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Address:
+class Address(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AddressSchema`."
     #: Optional :class:`str`
     id: typing.Optional[str]
@@ -147,6 +146,7 @@ class Address:
         self.fax = fax
         self.additional_address_info = additional_address_info
         self.external_id = external_id
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -181,8 +181,7 @@ class Address:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Asset:
+class Asset(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSchema`."
     #: :class:`str`
     id: typing.Optional[str]
@@ -217,6 +216,7 @@ class Asset:
         self.tags = tags
         self.custom = custom
         self.key = key
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -233,8 +233,7 @@ class Asset:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AssetDimensions:
+class AssetDimensions(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDimensionsSchema`."
     #: :class:`int`
     w: typing.Optional[int]
@@ -246,13 +245,13 @@ class AssetDimensions:
     ) -> None:
         self.w = w
         self.h = h
+        super().__init__()
 
     def __repr__(self) -> str:
         return "AssetDimensions(w=%r, h=%r)" % (self.w, self.h)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AssetDraft:
+class AssetDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDraftSchema`."
     #: List of :class:`commercetools.types.AssetSource`
     sources: typing.Optional[typing.List["AssetSource"]]
@@ -283,6 +282,7 @@ class AssetDraft:
         self.tags = tags
         self.custom = custom
         self.key = key
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -298,8 +298,7 @@ class AssetDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class AssetSource:
+class AssetSource(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSourceSchema`."
     #: :class:`str`
     uri: typing.Optional[str]
@@ -322,6 +321,7 @@ class AssetSource:
         self.key = key
         self.dimensions = dimensions
         self.content_type = content_type
+        super().__init__()
 
     def __repr__(self) -> str:
         return "AssetSource(uri=%r, key=%r, dimensions=%r, content_type=%r)" % (
@@ -332,8 +332,7 @@ class AssetSource:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class DiscountedPrice:
+class DiscountedPrice(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedPriceSchema`."
     #: :class:`commercetools.types.Money`
     value: typing.Optional["Money"]
@@ -348,13 +347,13 @@ class DiscountedPrice:
     ) -> None:
         self.value = value
         self.discount = discount
+        super().__init__()
 
     def __repr__(self) -> str:
         return "DiscountedPrice(value=%r, discount=%r)" % (self.value, self.discount)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class GeoJson:
+class GeoJson(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonSchema`."
     #: :class:`str`
     type: typing.Optional[str]
@@ -369,13 +368,13 @@ class GeoJson:
     ) -> None:
         self.type = type
         self.coordinates = coordinates
+        super().__init__()
 
     def __repr__(self) -> str:
         return "GeoJson(type=%r, coordinates=%r)" % (self.type, self.coordinates)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Image:
+class Image(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ImageSchema`."
     #: :class:`str`
     url: typing.Optional[str]
@@ -394,6 +393,7 @@ class Image:
         self.url = url
         self.dimensions = dimensions
         self.label = label
+        super().__init__()
 
     def __repr__(self) -> str:
         return "Image(url=%r, dimensions=%r, label=%r)" % (
@@ -403,8 +403,7 @@ class Image:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ImageDimensions:
+class ImageDimensions(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ImageDimensionsSchema`."
     #: :class:`int`
     w: typing.Optional[int]
@@ -416,13 +415,20 @@ class ImageDimensions:
     ) -> None:
         self.w = w
         self.h = h
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ImageDimensions(w=%r, h=%r)" % (self.w, self.h)
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Money:
+class LocalizedString(typing.Dict[(str, str)]):
+    def __repr__(self) -> str:
+        return "LocalizedString(%s)" % (
+            ", ".join(f"{k}={v!r}" for k, v in self.items())
+        )
+
+
+class Money(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MoneySchema`."
     #: :class:`int` `(Named` ``centAmount`` `in Commercetools)`
     cent_amount: typing.Optional[int]
@@ -437,6 +443,7 @@ class Money:
     ) -> None:
         self.cent_amount = cent_amount
         self.currency_code = currency_code
+        super().__init__()
 
     def __repr__(self) -> str:
         return "Money(cent_amount=%r, currency_code=%r)" % (
@@ -445,8 +452,12 @@ class Money:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Price:
+class MoneyType(enum.Enum):
+    CENT_PRECISION = "centPrecision"
+    HIGH_PRECISION = "highPrecision"
+
+
+class Price(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceSchema`."
     #: Optional :class:`str`
     id: typing.Optional[str]
@@ -493,6 +504,7 @@ class Price:
         self.discounted = discounted
         self.custom = custom
         self.tiers = tiers
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -512,8 +524,7 @@ class Price:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PriceDraft:
+class PriceDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceDraftSchema`."
     #: :class:`commercetools.types.Money`
     value: typing.Optional["Money"]
@@ -552,6 +563,7 @@ class PriceDraft:
         self.valid_until = valid_until
         self.custom = custom
         self.tiers = tiers
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -569,8 +581,7 @@ class PriceDraft:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class PriceTier:
+class PriceTier(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierSchema`."
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
     minimum_quantity: typing.Optional[int]
@@ -585,6 +596,7 @@ class PriceTier:
     ) -> None:
         self.minimum_quantity = minimum_quantity
         self.value = value
+        super().__init__()
 
     def __repr__(self) -> str:
         return "PriceTier(minimum_quantity=%r, value=%r)" % (
@@ -593,8 +605,32 @@ class PriceTier:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class Resource:
+class ReferenceTypeId(enum.Enum):
+    CART = "cart"
+    CART_DISCOUNT = "cart-discount"
+    CATEGORY = "category"
+    CHANNEL = "channel"
+    CUSTOMER = "customer"
+    CUSTOMER_GROUP = "customer-group"
+    DISCOUNT_CODE = "discount-code"
+    KEY_VALUE_DOCUMENT = "key-value-document"
+    PAYMENT = "payment"
+    PRODUCT = "product"
+    PRODUCT_TYPE = "product-type"
+    PRODUCT_DISCOUNT = "product-discount"
+    ORDER = "order"
+    REVIEW = "review"
+    SHOPPING_LIST = "shopping-list"
+    SHIPPING_METHOD = "shipping-method"
+    STATE = "state"
+    TAX_CATEGORY = "tax-category"
+    TYPE = "type"
+    ZONE = "zone"
+    INVENTORY_ENTRY = "inventory-entry"
+    ORDER_EDIT = "order-edit"
+
+
+class Resource(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceSchema`."
     #: :class:`str`
     id: typing.Optional[str]
@@ -617,6 +653,7 @@ class Resource:
         self.version = version
         self.created_at = created_at
         self.last_modified_at = last_modified_at
+        super().__init__()
 
     def __repr__(self) -> str:
         return "Resource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
@@ -627,8 +664,7 @@ class Resource:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ResourceIdentifier:
+class ResourceIdentifier(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceIdentifierSchema`."
     #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
     type_id: typing.Optional["ReferenceTypeId"]
@@ -647,6 +683,7 @@ class ResourceIdentifier:
         self.type_id = type_id
         self.id = id
         self.key = key
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
@@ -656,8 +693,7 @@ class ResourceIdentifier:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
-class ScopedPrice:
+class ScopedPrice(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ScopedPriceSchema`."
     #: :class:`str`
     id: typing.Optional[str]
@@ -704,6 +740,7 @@ class ScopedPrice:
         self.valid_until = valid_until
         self.discounted = discounted
         self.custom = custom
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -723,7 +760,6 @@ class ScopedPrice:
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class GeoJsonPoint(GeoJson):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonPointSchema`."
     #: :class:`list`
@@ -742,19 +778,6 @@ class GeoJsonPoint(GeoJson):
         return "GeoJsonPoint(type=%r, coordinates=%r)" % (self.type, self.coordinates)
 
 
-class LocalizedString(typing.Dict[(str, str)]):
-    def __repr__(self) -> str:
-        return "LocalizedString(%s)" % (
-            ", ".join(f"{k}={v!r}" for k, v in self.items())
-        )
-
-
-class MoneyType(enum.Enum):
-    CENT_PRECISION = "centPrecision"
-    HIGH_PRECISION = "highPrecision"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class Reference(ResourceIdentifier):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceSchema`."
     #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
@@ -778,32 +801,6 @@ class Reference(ResourceIdentifier):
         )
 
 
-class ReferenceTypeId(enum.Enum):
-    CART = "cart"
-    CART_DISCOUNT = "cart-discount"
-    CATEGORY = "category"
-    CHANNEL = "channel"
-    CUSTOMER = "customer"
-    CUSTOMER_GROUP = "customer-group"
-    DISCOUNT_CODE = "discount-code"
-    KEY_VALUE_DOCUMENT = "key-value-document"
-    PAYMENT = "payment"
-    PRODUCT = "product"
-    PRODUCT_TYPE = "product-type"
-    PRODUCT_DISCOUNT = "product-discount"
-    ORDER = "order"
-    REVIEW = "review"
-    SHOPPING_LIST = "shopping-list"
-    SHIPPING_METHOD = "shipping-method"
-    STATE = "state"
-    TAX_CATEGORY = "tax-category"
-    TYPE = "type"
-    ZONE = "zone"
-    INVENTORY_ENTRY = "inventory-entry"
-    ORDER_EDIT = "order-edit"
-
-
-@attr.s(auto_attribs=True, init=False, repr=False)
 class TypedMoney(Money):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneySchema`."
     #: :class:`commercetools.types.MoneyType`
@@ -830,7 +827,6 @@ class TypedMoney(Money):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class CentPrecisionMoney(TypedMoney):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CentPrecisionMoneySchema`."
 
@@ -856,7 +852,6 @@ class CentPrecisionMoney(TypedMoney):
         )
 
 
-@attr.s(auto_attribs=True, init=False, repr=False)
 class HighPrecisionMoney(TypedMoney):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneySchema`."
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`

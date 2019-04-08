@@ -1,4 +1,4 @@
-2.5.0 (unreleased)
+2.5.0 (2019-04-08)
 ------------------
  - Generate the code normally created by the attrs package to improve the
    import time with 30%. Attrs is now also no longer a dependency
@@ -6,9 +6,11 @@
  - Add support for the ShoppingList service endpoint (including mock interface)
  - Add support for the Reviews endpoint (including mock interface)
 
+
 2.4.2 (2019-03-18)
 ------------------
 - Tax rates ids are now correctly generated
+
 
 2.4.1 (2019-02-21)
 ------------------
@@ -16,6 +18,7 @@
 - Add update actions to carts testing backend
 - Add update actions to orders testing backend
 - Regenerate code based on new commercetools-api-reference definition
+
 
 2.4.0 (2019-02-13)
 ------------------
@@ -36,11 +39,13 @@
 - Improve testing interface to only raise conflict error when the data is
   actually changed
 
+
 2.2.0 (2019-01-24)
 ------------------
  - Tax related fields now parse rate as float instead of always being 0
  - Support generating code for Python 3.7 and higher
  - Add limited testing service for orders
+
 
 2.1.0 (2019-01-23)
 ------------------

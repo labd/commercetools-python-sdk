@@ -28,19 +28,19 @@ class CartsModel(BaseModel):
                 total_net=types.TypedMoney(
                     type=types.MoneyType.CENT_PRECISION,
                     currency_code=draft.currency,
-                    cent_amount=price * line_item_draft.quantity,
+                    cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
                 total_gross=types.TypedMoney(
                     type=types.MoneyType.CENT_PRECISION,
                     currency_code=draft.currency,
-                    cent_amount=price * line_item_draft.quantity,
+                    cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
             ),
             total_price=types.Money(
                 currency_code=draft.currency,
-                cent_amount=price * line_item_draft.quantity,
+                cent_amount=price * (line_item_draft.quantity or 0),
             ),
             quantity=line_item_draft.quantity,
             price_mode=types.LineItemPriceMode.PLATFORM,
@@ -59,12 +59,14 @@ class CartsModel(BaseModel):
         total_price = None
         taxed_price = None
         if line_items:
+
             total_price = types.TypedMoney(
                 type=types.MoneyType.CENT_PRECISION,
                 currency_code=draft.currency,
                 cent_amount=sum(
                     line_item.taxed_price.total_gross.cent_amount
                     for line_item in line_items
+                    if line_item.taxed_price and line_item.taxed_price.total_gross
                 ),
                 fraction_digits=2,
             )
@@ -74,6 +76,7 @@ class CartsModel(BaseModel):
                     cent_amount=sum(
                         line_item.taxed_price.total_net.cent_amount
                         for line_item in line_items
+                        if line_item.taxed_price and line_item.taxed_price.total_net
                     ),
                 ),
                 total_gross=types.Money(
@@ -81,6 +84,7 @@ class CartsModel(BaseModel):
                     cent_amount=sum(
                         line_item.taxed_price.total_gross.cent_amount
                         for line_item in line_items
+                        if line_item.taxed_price and line_item.taxed_price.total_gross
                     ),
                 ),
                 tax_portions=[

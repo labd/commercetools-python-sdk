@@ -1,3 +1,9 @@
+"""This module implements a parser for the commercetools predicate query
+language.
+
+It uses the pratt algorithm.
+
+"""
 import ast
 import logging
 import operator
@@ -164,9 +170,10 @@ class Parser:
 
     def define(self, sid, bp=0, symbol_class=Symbol):
         symbol_table = self.symbol_table
-        sym = symbol_table[sid] = type(
+        sym: Symbol = type(
             symbol_class.__name__, (symbol_class,), {"identifier": sid, "lbp": bp}
         )
+        symbol_table[sid] = sym
 
         def wrapper(val):
             val.id = sid

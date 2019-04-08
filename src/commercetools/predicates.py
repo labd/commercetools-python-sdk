@@ -20,7 +20,7 @@ class QueryPredicate:
         "contains_any": "contains any",
     }
 
-    def __init__(self, **filters: str):
+    def __init__(self, **filters: str) -> None:
         self._connector = filters.pop("_connector", self.AND)
         self._filters = filters
 

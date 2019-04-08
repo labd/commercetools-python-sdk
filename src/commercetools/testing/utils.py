@@ -61,6 +61,7 @@ def _money_to_typed(
             type=types.MoneyType.CENT_PRECISION,
             fraction_digits=2,
         )
+    return None
 
 
 def update_attribute(dst: str, src: str):

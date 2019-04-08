@@ -27,6 +27,10 @@ class ShoppingListModel(BaseModel):
             raise NotImplementedError
 
         variant = product.master_data.current.master_variant
+        variant_object: Optional[types.ProductVariant] = None
+        if variant:
+            variant_object = types.ProductVariant(id=variant.id, sku=variant.sku)
+
         return types.ShoppingListLineItem(
             id=str(uuid.uuid4()),
             added_at=datetime.datetime.now(datetime.timezone.utc),
@@ -37,7 +41,7 @@ class ShoppingListModel(BaseModel):
             product_type=product.product_type,
             product_slug=product.master_data.current.slug,
             quantity=line_item_draft.quantity,
-            variant=types.ProductVariant(id=variant.id, sku=variant.sku),
+            variant=variant_object,
             variant_id=line_item_draft.variant_id,
         )
 

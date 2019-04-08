@@ -57,7 +57,7 @@ class CustomerGroupService(abstract.AbstractService):
     def update_by_id(
         self,
         id: str,
-        version: str,
+        version: int,
         actions: List[types.CustomerGroupUpdateAction],
         *,
         force_update: bool = False,
@@ -74,7 +74,7 @@ class CustomerGroupService(abstract.AbstractService):
     def update_by_key(
         self,
         key: str,
-        version: str,
+        version: int,
         actions: List[types.CustomerGroupUpdateAction],
         *,
         force_update: bool = False,

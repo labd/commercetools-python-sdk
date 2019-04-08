@@ -242,9 +242,8 @@ class BinOp(Symbol):
         self.rhs = None
 
     def __repr__(self):
-        out = [self.lhs, self.identifier, self.rhs]
-        out = map(str, filter(None, out))
-        return "BinOp(" + " ".join(out) + ")"
+        parts = [self.lhs, self.identifier, self.rhs]
+        return "BinOp(%s)" % " ".join(map(str, filter(None, parts)))
 
 
 class Prefix(Symbol):
@@ -302,9 +301,8 @@ class LParen(Symbol):
         return node
 
     def __repr__(self):
-        out = [self.first, self.second]
-        out = map(repr, filter(None, out))
-        return "LParen(" + " ".join(out) + ")"
+        parts = [self.first, self.second]
+        return "LParen(%s)" % " ".join(map(repr, filter(None, parts)))
 
 
 class LiteralToken(Symbol):

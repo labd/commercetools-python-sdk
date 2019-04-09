@@ -17,6 +17,7 @@ from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
 from commercetools.services.custom_objects import CustomObjectService
 from commercetools.services.customer_groups import CustomerGroupService
+from commercetools.services.customers import CustomerService
 from commercetools.services.extensions import ExtensionService
 from commercetools.services.inventory import InventoryService
 from commercetools.services.orders import OrderService
@@ -146,6 +147,7 @@ class Client:
         self.carts = CartService(self)
         self.channels = ChannelService(self)
         self.customer_groups = CustomerGroupService(self)
+        self.customers = CustomerService(self)
         self.extensions = ExtensionService(self)
         self.inventory = InventoryService(self)
         self.orders = OrderService(self)

@@ -1,10 +1,11 @@
+import copy
 import datetime
 import typing
 import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute
+from commercetools.testing.utils import update_attribute, InternalUpdateError
 
 
 class ProductTypesModel(BaseModel):
@@ -50,6 +51,37 @@ class ProductTypesModel(BaseModel):
         return result
 
 
+def change_label_action():
+    def updater(self, obj: dict, action: types.ProductTypeChangeLabelAction):
+        new = copy.deepcopy(obj)
+
+        for attribute in new["attributes"]:
+            if attribute["name"] == action.attribute_name:
+                attribute["label"] = action.label
+                return new
+
+        raise InternalUpdateError("No attribute found with name %r" % action.attribute_name)
+
+    return updater
+
+
+def change_localized_enum_value_label():
+    def updater(self, obj: dict, action: types.ProductTypeChangeLocalizedEnumValueLabelAction):
+        new = copy.deepcopy(obj)
+
+        for attribute in new["attributes"]:
+            if attribute["name"] == action.attribute_name:
+                for lenum_value in attribute["type"]["values"]:
+                    if lenum_value["key"] == action.new_value.key:
+                        lenum_value["label"] = action.new_value.label
+                        return new
+
+        raise InternalUpdateError("No attribute found with name %r"
+                                  " and local enum value key %r" % (action.attribute_name, action.new_value.key))
+
+    return updater
+
+
 class ProductTypesBackend(ServiceBackend):
     service_path = "product-types"
     model_class = ProductTypesModel
@@ -72,4 +104,6 @@ class ProductTypesBackend(ServiceBackend):
 
     _actions = {
         "changeDescription": update_attribute("description", "description"),
+        "changeLabel": change_label_action(),
+        "changeLocalizedEnumValueLabel": change_localized_enum_value_label(),
     }

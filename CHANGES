@@ -1,3 +1,7 @@
+2.5.1 (2019-04-15)
+------------------
+ - Implement testing actions 'changeLabel' and 'changeLocalizedEnumValueLabel' for product type
+
 2.5.0 (2019-04-08)
 ------------------
  - Generate the code normally created by the attrs package to improve the

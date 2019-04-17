@@ -24,6 +24,7 @@ class InventoryEntryModel(BaseModel):
             expected_delivery=draft.expected_delivery,
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             quantity_on_stock=draft.quantity_on_stock,
+            available_quantity=draft.quantity_on_stock,
             restockable_in_days=draft.restockable_in_days,
             sku=draft.sku,
             supply_channel=draft.supply_channel,

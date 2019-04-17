@@ -31,7 +31,7 @@ tests_require = [
     "freezegun==0.3.8",
     "mock==2.0.0",
     "pretend==1.0.8",
-    "pytest-cov==2.5.2",
+    "pytest-cov==2.5.1",
     "pytest==3.1.3",
     # Linting
     "isort==4.2.15",

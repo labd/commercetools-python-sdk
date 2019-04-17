@@ -189,7 +189,6 @@ class Parser:
 
 class Infix(Symbol):
     rightAssoc = False
-    _operator_map = {"in": ast.In(), ">": ast.Gt(), "<": ast.Lt(), "=": ast.Eq()}
     _logical_map = {"and": ast.And(), "or": ast.Or()}
 
     def led(self, left):
@@ -387,6 +386,8 @@ parser.define("or", 30, Infix)
 parser.define("(", 90, LParen)
 parser.define("circle", 60, FunctionCall)
 parser.define(")")
+parser.define(">=", 60, Infix)
+parser.define("<=", 60, Infix)
 parser.define(">", 60, Infix)
 parser.define("<", 60, Infix)
 parser.define(",")

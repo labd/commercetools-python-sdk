@@ -1,3 +1,7 @@
+2.5.2 (2019-04-17)
+------------------
+ - Implement testing predicates gte and lte
+
 2.5.1 (2019-04-15)
 ------------------
  - Implement testing actions 'changeLabel' and 'changeLocalizedEnumValueLabel' for product type

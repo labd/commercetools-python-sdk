@@ -11,6 +11,8 @@ from commercetools.testing import predicates
     "predicate",
     [
         "age <> 42",
+        "age >= 42",
+        "age <= 42",
         r'not (name = "P\"eter" and age < 42)',
         "age not in (42, 43, 44)",
         'tags contains all ("a", "b", "c")',

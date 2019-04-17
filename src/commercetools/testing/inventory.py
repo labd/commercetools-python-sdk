@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -5,6 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute, InternalUpdateError
 
 
 class InventoryEntryModel(BaseModel):
@@ -22,11 +24,34 @@ class InventoryEntryModel(BaseModel):
             expected_delivery=draft.expected_delivery,
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             quantity_on_stock=draft.quantity_on_stock,
+            available_quantity=draft.quantity_on_stock,
             restockable_in_days=draft.restockable_in_days,
             sku=draft.sku,
             supply_channel=draft.supply_channel,
             custom=utils.create_from_draft(draft.custom),
         )
+
+
+def change_stock():
+    def updater(self, obj, action: types.InventoryUpdateAction):
+        quantity = getattr(action, "quantity")
+
+        new = copy.deepcopy(obj)
+
+        if isinstance(action, types.InventoryAddQuantityAction):
+            new["availableQuantity"] += quantity
+        elif isinstance(action, types.InventoryRemoveQuantityAction):
+            new["availableQuantity"] -= quantity
+        elif isinstance(action, types.InventoryChangeQuantityAction):
+            new["availableQuantity"] = quantity
+        else:
+            raise InternalUpdateError("Unknown action to change stock: %r", action)
+
+        # For now we don't reserve stock
+        new["quantityOnStock"] = new["availableQuantity"]
+        return new
+
+    return updater
 
 
 class InventoryEntryBackend(ServiceBackend):
@@ -45,3 +70,11 @@ class InventoryEntryBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
+
+    _actions = {
+        "addQuantity": change_stock(),
+        "removeQuantity": change_stock(),
+        "changeQuantity": change_stock(),
+        "setRestockableInDays": update_attribute("restockableInDays", "restockableInDays"),
+        "setExpectedDelivery": update_attribute("expectedDelivery", "expectedDelivery"),
+    }

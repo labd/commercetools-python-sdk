@@ -31,4 +31,4 @@ def test_inventory_update_by_id(client):
         actions=[types.InventoryRemoveQuantityAction(quantity=10)],
     )
     assert inventory.id
-    assert inventory.quantity_on_stock == 10  # should be 0
+    assert inventory.quantity_on_stock == 0

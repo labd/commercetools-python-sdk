@@ -6,6 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute, InternalUpdateError
 
 
 class ShippingMethodsModel(BaseModel):
@@ -61,5 +62,44 @@ class ShippingMethodsBackend(ServiceBackend):
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
+            ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
+            ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
+            ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
+            ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
+
+    def change_is_default():
+        def updater(self, obj, action: types.ShippingMethodChangeIsDefaultAction):
+            if action.is_default:
+                for shipping_method in self.model._storage._stores["shipping-method"].values():
+                    shipping_method["isDefault"] = False
+                    self.model.save(shipping_method)
+            new = copy.deepcopy(obj)
+            new["isDefault"] = action.is_default
+            return new
+
+        return updater
+
+    def change_tax_category():
+        def updater(self, obj, action: types.ShippingMethodChangeTaxCategoryAction):
+            for tax_category in self.model._storage._stores["tax-category"].values():
+                if action.tax_category.id and tax_category["id"] == action.tax_category.id:
+                    break
+                if action.tax_category.key and tax_category["key"] == action.tax_category.key:
+                    break
+            else:
+                raise InternalUpdateError("Tax Category does not exist")
+            new = copy.deepcopy(obj)
+            new["taxCategory"] = schemas.TaxCategoryReferenceSchema().dump(action.tax_category)
+            return new
+
+        return updater
+
+    _actions = {
+        "changeIsDefault": change_is_default(),
+        "changeName": update_attribute("name", "name"),
+        "changeTaxCategory": change_tax_category(),
+        "setKey": update_attribute("key", "key"),
+        "setDescription": update_attribute("description", "description"),
+    }

@@ -28,11 +28,19 @@ def commercetools_client(commercetools_api) -> typing.Generator[Client, None, No
 
 @pytest.fixture()
 def commercetools_http_server(commercetools_api):
+    is_running = threading.Event()
     server = Server(commercetools_api)
-    thread = threading.Thread(target=server.run, daemon=True)
+
+    def serve():
+        from werkzeug.serving import run_simple
+        is_running.set()
+        server.api_url = "http://localhost:8989"
+        run_simple("localhost", port=8989, application=server)
+
+    thread = threading.Thread(target=serve, daemon=True)
     thread.start()
 
-    if server.is_running.wait():
+    if is_running.wait():
         yield server
 
     thread.join(timeout=0)

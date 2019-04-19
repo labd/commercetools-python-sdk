@@ -1,7 +1,5 @@
 import logging
-import threading
 import typing
-from wsgiref.simple_server import make_server
 
 import requests
 import webob
@@ -36,16 +34,7 @@ class Server:
         self.adapter = HttpAdapter()
         self.repository = repository or BackendRepository()
         self.repository.register(self.adapter)
-        self.is_running = threading.Event()
-
-        self.listen_url = "http://0.0.0.0:8989"
         self.api_url = "http://localhost:8989"
-        self.srv = make_server("0.0.0.0", 8989, self)
-
-    def run(self):
-        logger.info("Starting commercetools mock server on %s", self.listen_url)
-        self.is_running.set()
-        self.srv.serve_forever()
 
     def __call__(self, environ, start_response):
         request = self._create_request(environ)
@@ -84,4 +73,5 @@ class Server:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     server = Server()
-    server.run()
+    from werkzeug.serving import run_simple
+    run_simple("localhost", port=8989, application=server, use_reloader=True)

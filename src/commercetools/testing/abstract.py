@@ -129,6 +129,7 @@ class ServiceBackend(BaseBackend):
     _schema_draft: typing.Optional[marshmallow.Schema] = None
     _schema_update: typing.Optional[marshmallow.Schema] = None
     _schema_query_response: typing.Optional[marshmallow.Schema] = None
+    _verify_version: bool = True
 
     @property
     def path_prefix(self):
@@ -181,9 +182,10 @@ class ServiceBackend(BaseBackend):
     def delete_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            response = self._validate_resource_version(request, obj)
-            if response is not None:
-                return response
+            if self._verify_version:
+                response = self._validate_resource_version(request, obj)
+                if response is not None:
+                    return response
 
             obj = self.model.delete_by_id(id)
             return create_response(request, json=obj)
@@ -192,9 +194,10 @@ class ServiceBackend(BaseBackend):
     def delete_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            response = self._validate_resource_version(request, obj)
-            if response is not None:
-                return response
+            if self._verify_version:
+                response = self._validate_resource_version(request, obj)
+                if response is not None:
+                    return response
 
             obj = self.model.delete_by_key(key)
             return create_response(request, json=obj)
@@ -238,7 +241,7 @@ class ServiceBackend(BaseBackend):
 
         # Save the updated object to the model
         if obj != original_obj:
-            if obj["version"] != update.version:
+            if self._verify_version and obj["version"] != update.version:
                 return None, self._create_version_error_response(obj["version"])
             self.model.save(obj)
 
@@ -261,7 +264,6 @@ class ServiceBackend(BaseBackend):
                 ],
             )
         )
-
 
     def _create_version_error_response(self, version):
         return schemas.ErrorResponseSchema().dump(

@@ -4,6 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
+from commercetools.schemas._common import LocalizedStringField
 
 __all__ = [
     "AccessDeniedErrorSchema",
@@ -16,6 +17,7 @@ __all__ = [
     "DuplicatePriceScopeErrorSchema",
     "DuplicateVariantValuesErrorSchema",
     "EnumValueIsUsedErrorSchema",
+    "ErrorByExtensionSchema",
     "ErrorObjectSchema",
     "ErrorResponseSchema",
     "ExtensionBadResponseErrorSchema",
@@ -42,6 +44,19 @@ __all__ = [
     "ShippingMethodDoesNotMatchCartErrorSchema",
     "VariantValuesSchema",
 ]
+
+
+class ErrorByExtensionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ErrorByExtension`."
+    id = marshmallow.fields.String(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ErrorByExtension(**data)
 
 
 class ErrorObjectSchema(marshmallow.Schema):
@@ -169,8 +184,10 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
 
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeNonApplicableError`."
-    discount_code = marshmallow.fields.String(allow_none=True, data_key="discountCode")
-    reason = marshmallow.fields.String(allow_none=True)
+    discount_code = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="discountCode"
+    )
+    reason = marshmallow.fields.String(allow_none=True, missing=None)
     dicount_code_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="dicountCodeId"
     )
@@ -230,8 +247,10 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DuplicateFieldError`."
-    field = marshmallow.fields.String(allow_none=True)
-    duplicate_value = marshmallow.fields.Raw(allow_none=True, data_key="duplicateValue")
+    field = marshmallow.fields.String(allow_none=True, missing=None)
+    duplicate_value = marshmallow.fields.Raw(
+        allow_none=True, missing=None, data_key="duplicateValue"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -337,9 +356,17 @@ class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
 
 class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionBadResponseError`."
-    extension_id = marshmallow.fields.String(allow_none=True, data_key="extensionId")
-    extension_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="extensionKey"
+    localized_message = LocalizedStringField(
+        allow_none=True, missing=None, data_key="localizedMessage"
+    )
+    extension_extra_info = marshmallow.fields.Dict(
+        allow_none=True, missing=None, data_key="extensionExtraInfo"
+    )
+    error_by_extension = marshmallow.fields.Nested(
+        nested="commercetools.schemas._error.ErrorByExtensionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="errorByExtension",
     )
 
     class Meta:
@@ -353,9 +380,17 @@ class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
 
 class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionNoResponseError`."
-    extension_id = marshmallow.fields.String(allow_none=True, data_key="extensionId")
-    extension_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="extensionKey"
+    localized_message = LocalizedStringField(
+        allow_none=True, missing=None, data_key="localizedMessage"
+    )
+    extension_extra_info = marshmallow.fields.Dict(
+        allow_none=True, missing=None, data_key="extensionExtraInfo"
+    )
+    error_by_extension = marshmallow.fields.Nested(
+        nested="commercetools.schemas._error.ErrorByExtensionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="errorByExtension",
     )
 
     class Meta:
@@ -369,9 +404,17 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
 
 class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionUpdateActionsFailedError`."
-    extension_id = marshmallow.fields.String(allow_none=True, data_key="extensionId")
-    extension_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="extensionKey"
+    localized_message = LocalizedStringField(
+        allow_none=True, missing=None, data_key="localizedMessage"
+    )
+    extension_extra_info = marshmallow.fields.Dict(
+        allow_none=True, missing=None, data_key="extensionExtraInfo"
+    )
+    error_by_extension = marshmallow.fields.Nested(
+        nested="commercetools.schemas._error.ErrorByExtensionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="errorByExtension",
     )
 
     class Meta:

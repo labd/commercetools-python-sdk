@@ -1013,8 +1013,8 @@ class TrackingDataSchema(marshmallow.Schema):
 
 class CustomLineItemReturnItemSchema(ReturnItemSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomLineItemReturnItem`."
-    customline_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customlineItemId"
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="customLineItemId"
     )
 
     class Meta:

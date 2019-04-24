@@ -6,6 +6,7 @@ import requests_mock
 import wrapt
 
 from commercetools.testing.abstract import BaseBackend
+from commercetools.testing.api_clients import ApiClientsBackend
 from commercetools.testing.auth import AuthBackend
 from commercetools.testing.carts import CartsBackend
 from commercetools.testing.categories import CategoriesBackend
@@ -63,6 +64,7 @@ class BackendRepository:
 
         self._storage = Storage()
 
+        self.api_clients = ApiClientsBackend(self._storage)
         self.auth = AuthBackend()
         self.carts = CartsBackend(self._storage)
         self.categories = CategoriesBackend(self._storage)

@@ -13,6 +13,7 @@ from commercetools import schemas
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
+from commercetools.services.api_clients import ApiClientService
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
@@ -59,6 +60,7 @@ class Client:
 
     """
 
+    api_clients: ApiClientService
     categories: CategoryService
     custom_objects: CustomObjectService
     carts: CartService
@@ -143,6 +145,7 @@ class Client:
             )
             self._save_token(token)
 
+        self.api_clients = ApiClientService(self)
         self.categories = CategoryService(self)
         self.custom_objects = CustomObjectService(self)
         self.carts = CartService(self)

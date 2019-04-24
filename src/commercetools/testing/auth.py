@@ -3,9 +3,8 @@ import typing
 import uuid
 from urllib.parse import parse_qs
 
-from requests_mock import create_response
-
 from commercetools.testing.abstract import BaseBackend
+from commercetools.testing.utils import create_commercetools_response
 
 
 class AuthModel:
@@ -47,7 +46,7 @@ class AuthBackend(BaseBackend):
         if request.headers.get("Authorization"):
             auth_type, auth_info = request.headers["Authorization"].split()
             if auth_type != "Basic":
-                response = create_response(request, status_code=401)
+                response = create_commercetools_response(request, status_code=401)
                 return response
 
             client_id, client_secret = str(base64.b64decode(auth_info)).split(":")
@@ -55,7 +54,7 @@ class AuthBackend(BaseBackend):
             client_id = params.get("client_id")
             client_secret = params.get("client_secret")
         else:
-            response = create_response(request, status_code=401)
+            response = create_commercetools_response(request, status_code=401)
             return response
 
         scope = params.get("scope", "manage_project:todo")
@@ -68,5 +67,5 @@ class AuthBackend(BaseBackend):
                 "token_type": "Bearer",
             }
             self.model.add_token(token)
-            response = create_response(request, json=token)
+            response = create_commercetools_response(request, json=token)
             return response

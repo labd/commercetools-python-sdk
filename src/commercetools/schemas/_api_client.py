@@ -15,6 +15,9 @@ class ApiClientDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ApiClientDraft`."
     name = marshmallow.fields.String(allow_none=True)
     scope = marshmallow.fields.String(allow_none=True)
+    delete_days_after_creation = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -49,9 +52,14 @@ class ApiClientSchema(marshmallow.Schema):
     id = marshmallow.fields.String(allow_none=True)
     name = marshmallow.fields.String(allow_none=True)
     scope = marshmallow.fields.String(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="createdAt"
+    )
     last_used_at = marshmallow.fields.Date(
         allow_none=True, missing=None, data_key="lastUsedAt"
+    )
+    delete_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="deleteAt"
     )
     secret = marshmallow.fields.String(allow_none=True, missing=None)
 

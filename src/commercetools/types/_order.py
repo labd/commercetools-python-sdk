@@ -1207,8 +1207,8 @@ class TrackingData(_BaseType):
 
 class CustomLineItemReturnItem(ReturnItem):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemReturnItemSchema`."
-    #: :class:`str` `(Named` ``customlineItemId`` `in Commercetools)`
-    customline_item_id: typing.Optional[str]
+    #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
+    custom_line_item_id: typing.Optional[str]
 
     def __init__(
         self,
@@ -1221,9 +1221,9 @@ class CustomLineItemReturnItem(ReturnItem):
         payment_state: typing.Optional["ReturnPaymentState"] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
         created_at: typing.Optional[datetime.datetime] = None,
-        customline_item_id: typing.Optional[str] = None
+        custom_line_item_id: typing.Optional[str] = None
     ) -> None:
-        self.customline_item_id = customline_item_id
+        self.custom_line_item_id = custom_line_item_id
         super().__init__(
             id=id,
             quantity=quantity,
@@ -1237,7 +1237,7 @@ class CustomLineItemReturnItem(ReturnItem):
 
     def __repr__(self) -> str:
         return (
-            "CustomLineItemReturnItem(id=%r, quantity=%r, type=%r, comment=%r, shipment_state=%r, payment_state=%r, last_modified_at=%r, created_at=%r, customline_item_id=%r)"
+            "CustomLineItemReturnItem(id=%r, quantity=%r, type=%r, comment=%r, shipment_state=%r, payment_state=%r, last_modified_at=%r, created_at=%r, custom_line_item_id=%r)"
             % (
                 self.id,
                 self.quantity,
@@ -1247,7 +1247,7 @@ class CustomLineItemReturnItem(ReturnItem):
                 self.payment_state,
                 self.last_modified_at,
                 self.created_at,
-                self.customline_item_id,
+                self.custom_line_item_id,
             )
         )
 

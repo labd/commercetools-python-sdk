@@ -7,7 +7,7 @@ from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
-    from ._common import Price, Reference, ReferenceTypeId
+    from ._common import LocalizedString, Price, Reference, ReferenceTypeId
     from ._customer_group import CustomerGroupReference
     from ._product import Attribute
 __all__ = [
@@ -21,6 +21,7 @@ __all__ = [
     "DuplicatePriceScopeError",
     "DuplicateVariantValuesError",
     "EnumValueIsUsedError",
+    "ErrorByExtension",
     "ErrorObject",
     "ErrorResponse",
     "ExtensionBadResponseError",
@@ -47,6 +48,24 @@ __all__ = [
     "ShippingMethodDoesNotMatchCartError",
     "VariantValues",
 ]
+
+
+class ErrorByExtension(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorByExtensionSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
+    ) -> None:
+        self.id = id
+        self.key = key
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ErrorByExtension(id=%r, key=%r)" % (self.id, self.key)
 
 
 class ErrorObject(_BaseType):
@@ -174,9 +193,9 @@ class ConcurrentModificationError(ErrorObject):
 
 class DiscountCodeNonApplicableError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeNonApplicableErrorSchema`."
-    #: :class:`str` `(Named` ``discountCode`` `in Commercetools)`
+    #: Optional :class:`str` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: typing.Optional[str]
-    #: :class:`str`
+    #: Optional :class:`str`
     reason: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``dicountCodeId`` `in Commercetools)`
     dicount_code_id: typing.Optional[str]
@@ -271,9 +290,9 @@ class DuplicateAttributeValuesError(ErrorObject):
 
 class DuplicateFieldError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldErrorSchema`."
-    #: :class:`str`
+    #: Optional :class:`str`
     field: typing.Optional[str]
-    #: :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
+    #: Optional :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
     duplicate_value: typing.Optional[typing.Any]
 
     def __init__(
@@ -390,79 +409,109 @@ class EnumValueIsUsedError(ErrorObject):
 
 class ExtensionBadResponseError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionBadResponseErrorSchema`."
-    #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
-    extension_id: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``extensionKey`` `in Commercetools)`
-    extension_key: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
+    localized_message: typing.Optional["LocalizedString"]
+    #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
+    extension_extra_info: typing.Optional[object]
+    #: :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
+    error_by_extension: typing.Optional["ErrorByExtension"]
 
     def __init__(
         self,
         *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
-        extension_id: typing.Optional[str] = None,
-        extension_key: typing.Optional[str] = None
+        localized_message: typing.Optional["LocalizedString"] = None,
+        extension_extra_info: typing.Optional[object] = None,
+        error_by_extension: typing.Optional["ErrorByExtension"] = None
     ) -> None:
-        self.extension_id = extension_id
-        self.extension_key = extension_key
+        self.localized_message = localized_message
+        self.extension_extra_info = extension_extra_info
+        self.error_by_extension = error_by_extension
         super().__init__(code="ExtensionBadResponse", message=message)
 
     def __repr__(self) -> str:
         return (
-            "ExtensionBadResponseError(code=%r, message=%r, extension_id=%r, extension_key=%r)"
-            % (self.code, self.message, self.extension_id, self.extension_key)
+            "ExtensionBadResponseError(code=%r, message=%r, localized_message=%r, extension_extra_info=%r, error_by_extension=%r)"
+            % (
+                self.code,
+                self.message,
+                self.localized_message,
+                self.extension_extra_info,
+                self.error_by_extension,
+            )
         )
 
 
 class ExtensionNoResponseError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionNoResponseErrorSchema`."
-    #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
-    extension_id: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``extensionKey`` `in Commercetools)`
-    extension_key: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
+    localized_message: typing.Optional["LocalizedString"]
+    #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
+    extension_extra_info: typing.Optional[object]
+    #: :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
+    error_by_extension: typing.Optional["ErrorByExtension"]
 
     def __init__(
         self,
         *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
-        extension_id: typing.Optional[str] = None,
-        extension_key: typing.Optional[str] = None
+        localized_message: typing.Optional["LocalizedString"] = None,
+        extension_extra_info: typing.Optional[object] = None,
+        error_by_extension: typing.Optional["ErrorByExtension"] = None
     ) -> None:
-        self.extension_id = extension_id
-        self.extension_key = extension_key
+        self.localized_message = localized_message
+        self.extension_extra_info = extension_extra_info
+        self.error_by_extension = error_by_extension
         super().__init__(code="ExtensionNoResponse", message=message)
 
     def __repr__(self) -> str:
         return (
-            "ExtensionNoResponseError(code=%r, message=%r, extension_id=%r, extension_key=%r)"
-            % (self.code, self.message, self.extension_id, self.extension_key)
+            "ExtensionNoResponseError(code=%r, message=%r, localized_message=%r, extension_extra_info=%r, error_by_extension=%r)"
+            % (
+                self.code,
+                self.message,
+                self.localized_message,
+                self.extension_extra_info,
+                self.error_by_extension,
+            )
         )
 
 
 class ExtensionUpdateActionsFailedError(ErrorObject):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionsFailedErrorSchema`."
-    #: :class:`str` `(Named` ``extensionId`` `in Commercetools)`
-    extension_id: typing.Optional[str]
-    #: Optional :class:`str` `(Named` ``extensionKey`` `in Commercetools)`
-    extension_key: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
+    localized_message: typing.Optional["LocalizedString"]
+    #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
+    extension_extra_info: typing.Optional[object]
+    #: :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
+    error_by_extension: typing.Optional["ErrorByExtension"]
 
     def __init__(
         self,
         *,
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
-        extension_id: typing.Optional[str] = None,
-        extension_key: typing.Optional[str] = None
+        localized_message: typing.Optional["LocalizedString"] = None,
+        extension_extra_info: typing.Optional[object] = None,
+        error_by_extension: typing.Optional["ErrorByExtension"] = None
     ) -> None:
-        self.extension_id = extension_id
-        self.extension_key = extension_key
+        self.localized_message = localized_message
+        self.extension_extra_info = extension_extra_info
+        self.error_by_extension = error_by_extension
         super().__init__(code="ExtensionUpdateActionsFailed", message=message)
 
     def __repr__(self) -> str:
         return (
-            "ExtensionUpdateActionsFailedError(code=%r, message=%r, extension_id=%r, extension_key=%r)"
-            % (self.code, self.message, self.extension_id, self.extension_key)
+            "ExtensionUpdateActionsFailedError(code=%r, message=%r, localized_message=%r, extension_extra_info=%r, error_by_extension=%r)"
+            % (
+                self.code,
+                self.message,
+                self.localized_message,
+                self.extension_extra_info,
+                self.error_by_extension,
+            )
         )
 
 

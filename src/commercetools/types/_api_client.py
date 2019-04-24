@@ -16,10 +16,12 @@ class ApiClient(_BaseType):
     name: typing.Optional[str]
     #: :class:`str`
     scope: typing.Optional[str]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    #: Optional :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
     created_at: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.date` `(Named` ``lastUsedAt`` `in Commercetools)`
     last_used_at: typing.Optional[datetime.date]
+    #: Optional :class:`datetime.datetime` `(Named` ``deleteAt`` `in Commercetools)`
+    delete_at: typing.Optional[datetime.datetime]
     #: Optional :class:`str`
     secret: typing.Optional[str]
 
@@ -31,6 +33,7 @@ class ApiClient(_BaseType):
         scope: typing.Optional[str] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_used_at: typing.Optional[datetime.date] = None,
+        delete_at: typing.Optional[datetime.datetime] = None,
         secret: typing.Optional[str] = None
     ) -> None:
         self.id = id
@@ -38,18 +41,20 @@ class ApiClient(_BaseType):
         self.scope = scope
         self.created_at = created_at
         self.last_used_at = last_used_at
+        self.delete_at = delete_at
         self.secret = secret
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "ApiClient(id=%r, name=%r, scope=%r, created_at=%r, last_used_at=%r, secret=%r)"
+            "ApiClient(id=%r, name=%r, scope=%r, created_at=%r, last_used_at=%r, delete_at=%r, secret=%r)"
             % (
                 self.id,
                 self.name,
                 self.scope,
                 self.created_at,
                 self.last_used_at,
+                self.delete_at,
                 self.secret,
             )
         )
@@ -61,16 +66,27 @@ class ApiClientDraft(_BaseType):
     name: typing.Optional[str]
     #: :class:`str`
     scope: typing.Optional[str]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
+    delete_days_after_creation: typing.Optional[int]
 
     def __init__(
-        self, *, name: typing.Optional[str] = None, scope: typing.Optional[str] = None
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        scope: typing.Optional[str] = None,
+        delete_days_after_creation: typing.Optional[int] = None
     ) -> None:
         self.name = name
         self.scope = scope
+        self.delete_days_after_creation = delete_days_after_creation
         super().__init__()
 
     def __repr__(self) -> str:
-        return "ApiClientDraft(name=%r, scope=%r)" % (self.name, self.scope)
+        return "ApiClientDraft(name=%r, scope=%r, delete_days_after_creation=%r)" % (
+            self.name,
+            self.scope,
+            self.delete_days_after_creation,
+        )
 
 
 class ApiClientPagedQueryResponse(_BaseType):

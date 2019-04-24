@@ -1,3 +1,8 @@
+2.5.3 (2019-04-24)
+------------------
+ - Add X-Correlation-ID to exception class
+ - Mock X-Correlation-ID header in testing framework
+
 2.5.2 (2019-04-17)
 ------------------
  - Implement testing predicates gte and lte

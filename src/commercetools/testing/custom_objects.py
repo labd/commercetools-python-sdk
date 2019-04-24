@@ -2,10 +2,9 @@ import datetime
 import typing
 import uuid
 
-from requests_mock import create_response
-
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import create_commercetools_response
 
 
 class CustomObjectsModel(BaseModel):
@@ -49,14 +48,14 @@ class CustomObjectsBackend(ServiceBackend):
             (obj for obj in self.model.objects.values() if obj["id"] == id), None
         )
         if item:
-            return create_response(request, json=item)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, json=item)
+        return create_commercetools_response(request, status_code=404)
 
     def get_by_container_key(self, request, container: str, key: str):
         id = (container, key)
         item = self.model.objects.get(id)
         if item:
-            return create_response(request, json=item)
+            return create_commercetools_response(request, json=item)
         else:
             content = schemas.ErrorResponseSchema().dumps(
                 types.ErrorResponse(
@@ -70,4 +69,4 @@ class CustomObjectsBackend(ServiceBackend):
                     ],
                 )
             )
-            return create_response(request, text=content, status_code=404)
+            return create_commercetools_response(request, text=content, status_code=404)

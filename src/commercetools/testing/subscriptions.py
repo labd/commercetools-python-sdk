@@ -2,10 +2,9 @@ import datetime
 import typing
 import uuid
 
-from requests_mock import create_response
-
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import create_commercetools_response
 
 
 class SubscriptionsModel(BaseModel):
@@ -61,7 +60,7 @@ class SubscriptionsBackend(ServiceBackend):
                 errors=[types.InvalidInputError(message=message)],
             )
             error_data = schemas.ErrorResponseSchema().dumps(error).encode("utf-8")
-            return create_response(request, content=error_data, status_code=400)
+            return create_commercetools_response(request, content=error_data, status_code=400)
 
         data = self.model.add(obj)
-        return create_response(request, json=data)
+        return create_commercetools_response(request, json=data)

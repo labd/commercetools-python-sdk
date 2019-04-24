@@ -10,6 +10,7 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util.retry import Retry
 
 from commercetools import schemas
+from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
 from commercetools.services.carts import CartService
@@ -243,10 +244,11 @@ class Client:
         return remote_http_call(params)
 
     def _process_error(self, response: requests.Response) -> None:
+        correlation_id = response.headers.get(HEADER_CORRELATION_ID)
         if not response.content:
             response.raise_for_status()
         obj = schemas.ErrorResponseSchema().loads(response.content)
-        raise CommercetoolsError(obj.message, obj)
+        raise CommercetoolsError(obj.message, obj, correlation_id)
 
     def _read_env_vars(self, config: dict) -> dict:
         if not config.get("project_key"):

@@ -1,11 +1,10 @@
 import typing
 
-from requests_mock import create_response
-
 from commercetools import schemas, types
 from commercetools.services.product_projections import ProductProjectionsQuerySchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import ServiceBackend
+from commercetools.testing.utils import create_commercetools_response
 
 
 class ProductProjectionsBackend(ServiceBackend):
@@ -36,7 +35,7 @@ class ProductProjectionsBackend(ServiceBackend):
             "results": results,
         }
         content = schemas.ProductProjectionPagedQueryResponseSchema().dumps(data)
-        return create_response(request, text=content)
+        return create_commercetools_response(request, text=content)
 
     def search(self, request):
         params = utils.parse_request_params(ProductProjectionsQuerySchema, request)
@@ -55,21 +54,21 @@ class ProductProjectionsBackend(ServiceBackend):
             "results": results,
         }
         content = schemas.ProductProjectionPagedQueryResponseSchema().dumps(data)
-        return create_response(request, text=content)
+        return create_commercetools_response(request, text=content)
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
             content = schemas.ProductProjectionSchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, text=content)
+        return create_commercetools_response(request, status_code=404)
 
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
             content = schemas.ProductProjectionSchema().dumps(obj)
-            return create_response(request, text=content)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, text=content)
+        return create_commercetools_response(request, status_code=404)
 
     def _convert_product_projection(
         self, product: typing.Dict, staged: bool = False

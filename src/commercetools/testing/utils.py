@@ -4,9 +4,11 @@ import typing
 import uuid
 
 from marshmallow import Schema
+from requests_mock import create_response
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import schemas, types
+from commercetools.constants import HEADER_CORRELATION_ID
 
 
 class InternalUpdateError(ValueError):
@@ -166,3 +168,10 @@ def get_product_from_storage(
         raise ValueError("SKU or productId is required")
 
     return product
+
+
+def create_commercetools_response(request, **kwargs):
+    correlation_id = request.headers.get(HEADER_CORRELATION_ID, f"projects-{str(uuid.uuid4())}")
+    headers = kwargs.pop("headers", {})
+    headers.update({HEADER_CORRELATION_ID: correlation_id})
+    return create_response(request, headers=headers, **kwargs)

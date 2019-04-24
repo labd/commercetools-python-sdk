@@ -3,14 +3,13 @@ import typing
 import uuid
 
 import marshmallow
-import requests_mock
-from requests_mock import create_response
 
 from commercetools import schemas, types
 from commercetools.schemas import ResourceSchema
 from commercetools.services import abstract
 from commercetools.testing import utils
 from commercetools.testing.predicates import PredicateFilter
+from commercetools.testing.utils import create_commercetools_response
 
 
 class BaseModel:
@@ -120,7 +119,7 @@ class BaseBackend:
                             "No response returned by %r" % callback
                         )
                     return response
-            return requests_mock.create_response(request, status_code=404)
+            return create_commercetools_response(request, status_code=404)
 
 
 class ServiceBackend(BaseBackend):
@@ -140,19 +139,19 @@ class ServiceBackend(BaseBackend):
     def create(self, request):
         obj = self._schema_draft().loads(request.body)
         data = self.model.add(obj)
-        return create_response(request, json=data)
+        return create_commercetools_response(request, json=data)
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            return create_response(request, json=obj)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, json=obj)
+        return create_commercetools_response(request, status_code=404)
 
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            return create_response(request, json=obj)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, json=obj)
+        return create_commercetools_response(request, status_code=404)
 
     def query(self, request):
         params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
@@ -168,7 +167,7 @@ class ServiceBackend(BaseBackend):
             "results": self.model._resource_schema().load(results, many=True),
         }
         content = self._schema_query_response().dumps(data)
-        return create_response(request, text=content)
+        return create_commercetools_response(request, text=content)
 
     def update_by_id(self, request, id):
         obj = self.model.get_by_id(id)
@@ -186,8 +185,8 @@ class ServiceBackend(BaseBackend):
                 return response
 
             obj = self.model.delete_by_id(id)
-            return create_response(request, json=obj)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, json=obj)
+        return create_commercetools_response(request, status_code=404)
 
     def delete_by_key(self, request, key):
         obj = self.model.get_by_key(key)
@@ -197,25 +196,25 @@ class ServiceBackend(BaseBackend):
                 return response
 
             obj = self.model.delete_by_key(key)
-            return create_response(request, json=obj)
-        return create_response(request, status_code=404)
+            return create_commercetools_response(request, json=obj)
+        return create_commercetools_response(request, status_code=404)
 
     def _update(self, request, obj):
         if not obj:
-            return create_response(request, status_code=404)
+            return create_commercetools_response(request, status_code=404)
 
         update = self._schema_update().load(request.json())
         if update.actions:
             obj, err = self._apply_update_actions(obj, update)
             if err:
-                return create_response(request, json=err, status_code=err["statusCode"])
-        return create_response(request, json=obj)
+                return create_commercetools_response(request, json=err, status_code=err["statusCode"])
+        return create_commercetools_response(request, json=obj)
 
     def _validate_resource_version(self, request, obj):
         update_version = self._get_version_from_request(request)
         if update_version != obj["version"]:
             data = self._create_version_error_response(obj["version"])
-            return create_response(request, json=data, status_code=409)
+            return create_commercetools_response(request, json=data, status_code=409)
 
     def _get_version_from_request(self, request):
         version_data = request.qs.get("version")
@@ -261,7 +260,6 @@ class ServiceBackend(BaseBackend):
                 ],
             )
         )
-
 
     def _create_version_error_response(self, version):
         return schemas.ErrorResponseSchema().dump(

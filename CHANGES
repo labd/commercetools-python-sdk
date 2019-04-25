@@ -1,5 +1,8 @@
-2.5.3 (2019-04-24)
+3.0.0 (2019-04-25)
 ------------------
+ - Add Api clients service
+ - Testing server now autoreloads on python changes (using Werkzeug)
+ - Regenerate types from commercetools-api-reference (fixes typos, some new fields, adds extension response errors)
  - Add X-Correlation-ID to exception class
  - Mock X-Correlation-ID header in testing framework
 

@@ -1,3 +1,7 @@
+3.1.0 (2019-04-26)
+------------------
+- Implement testing shipping method actions
+
 3.0.0 (2019-04-25)
 ------------------
  - Add Api clients service

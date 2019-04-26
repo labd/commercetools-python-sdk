@@ -74,4 +74,5 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     server = Server()
     from werkzeug.serving import run_simple
-    run_simple("localhost", port=8989, application=server, use_reloader=True)
+
+    run_simple("0.0.0.0", port=8989, application=server, use_reloader=True)

@@ -164,6 +164,7 @@ class ProductDiscountSchema(ResourceSchema):
                 "shipping-method": "commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
                 "shopping-list": "commercetools.schemas._shopping_list.ShoppingListReferenceSchema",
                 "state": "commercetools.schemas._state.StateReferenceSchema",
+                "store": "commercetools.schemas._store.StoreReferenceSchema",
                 "tax-category": "commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
                 "type": "commercetools.schemas._type.TypeReferenceSchema",
                 "zone": "commercetools.schemas._zone.ZoneReferenceSchema",

@@ -24,6 +24,7 @@ if typing.TYPE_CHECKING:
         ShippingRateDraft,
     )
     from ._shopping_list import ShoppingListReference
+    from ._store import StoreKeyReference, StoreReference
     from ._tax_category import SubRate, TaxCategoryReference, TaxRate
     from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
 __all__ = [
@@ -130,6 +131,8 @@ class Cart(Resource):
     customer_email: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.StoreKeyReference`
+    store: typing.Optional["StoreKeyReference"]
     #: List of :class:`commercetools.types.LineItem` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.Optional[typing.List["LineItem"]]
     #: List of :class:`commercetools.types.CustomLineItem` `(Named` ``customLineItems`` `in Commercetools)`
@@ -187,6 +190,7 @@ class Cart(Resource):
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.Optional[typing.List["LineItem"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
         total_price: typing.Optional["TypedMoney"] = None,
@@ -214,6 +218,7 @@ class Cart(Resource):
         self.customer_id = customer_id
         self.customer_email = customer_email
         self.anonymous_id = anonymous_id
+        self.store = store
         self.line_items = line_items
         self.custom_line_items = custom_line_items
         self.total_price = total_price
@@ -246,7 +251,7 @@ class Cart(Resource):
 
     def __repr__(self) -> str:
         return (
-            "Cart(id=%r, version=%r, created_at=%r, last_modified_at=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, cart_state=%r, shipping_address=%r, billing_address=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, customer_group=%r, country=%r, shipping_info=%r, discount_codes=%r, custom=%r, payment_info=%r, locale=%r, delete_days_after_last_modification=%r, refused_gifts=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "Cart(id=%r, version=%r, created_at=%r, last_modified_at=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, cart_state=%r, shipping_address=%r, billing_address=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, customer_group=%r, country=%r, shipping_info=%r, discount_codes=%r, custom=%r, payment_info=%r, locale=%r, delete_days_after_last_modification=%r, refused_gifts=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
             % (
                 self.id,
                 self.version,
@@ -255,6 +260,7 @@ class Cart(Resource):
                 self.customer_id,
                 self.customer_email,
                 self.anonymous_id,
+                self.store,
                 self.line_items,
                 self.custom_line_items,
                 self.total_price,
@@ -294,6 +300,8 @@ class CartDraft(_BaseType):
     customer_group: typing.Optional["CustomerGroupReference"]
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.StoreReference`
+    store: typing.Optional["StoreReference"]
     #: Optional :class:`str`
     country: typing.Optional[str]
     #: Optional :class:`commercetools.types.InventoryMode` `(Named` ``inventoryMode`` `in Commercetools)`
@@ -337,6 +345,7 @@ class CartDraft(_BaseType):
         customer_email: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreReference"] = None,
         country: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
@@ -362,6 +371,7 @@ class CartDraft(_BaseType):
         self.customer_email = customer_email
         self.customer_group = customer_group
         self.anonymous_id = anonymous_id
+        self.store = store
         self.country = country
         self.inventory_mode = inventory_mode
         self.tax_mode = tax_mode
@@ -385,13 +395,14 @@ class CartDraft(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "CartDraft(currency=%r, customer_id=%r, customer_email=%r, customer_group=%r, anonymous_id=%r, country=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, line_items=%r, custom_line_items=%r, shipping_address=%r, billing_address=%r, shipping_method=%r, external_tax_rate_for_shipping_method=%r, custom=%r, locale=%r, delete_days_after_last_modification=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "CartDraft(currency=%r, customer_id=%r, customer_email=%r, customer_group=%r, anonymous_id=%r, store=%r, country=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, line_items=%r, custom_line_items=%r, shipping_address=%r, billing_address=%r, shipping_method=%r, external_tax_rate_for_shipping_method=%r, custom=%r, locale=%r, delete_days_after_last_modification=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
             % (
                 self.currency,
                 self.customer_id,
                 self.customer_email,
                 self.customer_group,
                 self.anonymous_id,
+                self.store,
                 self.country,
                 self.inventory_mode,
                 self.tax_mode,

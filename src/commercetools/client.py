@@ -32,6 +32,7 @@ from commercetools.services.project import ProjectService
 from commercetools.services.reviews import ReviewService
 from commercetools.services.shipping_methods import ShippingMethodService
 from commercetools.services.shopping_lists import ShoppingListService
+from commercetools.services.stores import StoreService
 from commercetools.services.subscriptions import SubscriptionService
 from commercetools.services.tax_categories import TaxCategoryService
 from commercetools.services.types import TypeService
@@ -77,6 +78,7 @@ class Client:
     reviews: ReviewService
     shipping_methods: ShippingMethodService
     shopping_lists: ShoppingListService
+    stores: StoreService
     subscriptions: SubscriptionService
     tax_categories: TaxCategoryService
     types: TypeService
@@ -164,6 +166,7 @@ class Client:
         self.reviews = ReviewService(self)
         self.shipping_methods = ShippingMethodService(self)
         self.shopping_lists = ShoppingListService(self)
+        self.stores = StoreService(self)
         self.subscriptions = SubscriptionService(self)
         self.tax_categories = TaxCategoryService(self)
         self.types = TypeService(self)

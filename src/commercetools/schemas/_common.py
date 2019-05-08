@@ -18,6 +18,7 @@ __all__ = [
     "HighPrecisionMoneySchema",
     "ImageDimensionsSchema",
     "ImageSchema",
+    "KeyReferenceSchema",
     "MoneySchema",
     "PriceDraftSchema",
     "PriceSchema",
@@ -253,6 +254,22 @@ class ImageSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.Image(**data)
+
+
+class KeyReferenceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.KeyReference`."
+    type_id = marshmallow_enum.EnumField(
+        types.ReferenceTypeId, by_value=True, data_key="typeId"
+    )
+    key = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.KeyReference(**data)
 
 
 class MoneySchema(marshmallow.Schema):

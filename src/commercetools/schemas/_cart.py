@@ -120,6 +120,12 @@ class CartDraftSchema(marshmallow.Schema):
     anonymous_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="anonymousId"
     )
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
     country = marshmallow.fields.String(allow_none=True, missing=None)
     inventory_mode = marshmallow_enum.EnumField(
         types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
@@ -264,6 +270,12 @@ class CartSchema(ResourceSchema):
     )
     anonymous_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="anonymousId"
+    )
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
     )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.LineItemSchema",
@@ -1006,6 +1018,7 @@ class ReplicaCartDraftSchema(marshmallow.Schema):
             "shipping-method": "commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
             "shopping-list": "commercetools.schemas._shopping_list.ShoppingListReferenceSchema",
             "state": "commercetools.schemas._state.StateReferenceSchema",
+            "store": "commercetools.schemas._store.StoreReferenceSchema",
             "tax-category": "commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
             "type": "commercetools.schemas._type.TypeReferenceSchema",
             "zone": "commercetools.schemas._zone.ZoneReferenceSchema",

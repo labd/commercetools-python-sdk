@@ -27,6 +27,7 @@ from ._review import *  # noqa
 from ._shipping_method import *  # noqa
 from ._shopping_list import *  # noqa
 from ._state import *  # noqa
+from ._store import *  # noqa
 from ._subscription import *  # noqa
 from ._tax_category import *  # noqa
 from ._type import *  # noqa

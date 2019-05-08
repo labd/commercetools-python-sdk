@@ -24,6 +24,7 @@ __all__ = [
     "HighPrecisionMoney",
     "Image",
     "ImageDimensions",
+    "KeyReference",
     "LocalizedString",
     "Money",
     "MoneyType",
@@ -421,6 +422,27 @@ class ImageDimensions(_BaseType):
         return "ImageDimensions(w=%r, h=%r)" % (self.w, self.h)
 
 
+class KeyReference(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.KeyReferenceSchema`."
+    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
+    type_id: typing.Optional["ReferenceTypeId"]
+    #: :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        key: typing.Optional[str] = None,
+    ) -> None:
+        self.type_id = type_id
+        self.key = key
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "KeyReference(type_id=%r, key=%r)" % (self.type_id, self.key)
+
+
 class LocalizedString(typing.Dict[(str, str)]):
     def __repr__(self) -> str:
         return "LocalizedString(%s)" % (
@@ -623,6 +645,7 @@ class ReferenceTypeId(enum.Enum):
     SHOPPING_LIST = "shopping-list"
     SHIPPING_METHOD = "shipping-method"
     STATE = "state"
+    STORE = "store"
     TAX_CATEGORY = "tax-category"
     TYPE = "type"
     ZONE = "zone"

@@ -26,6 +26,7 @@ from commercetools.testing.project import ProjectBackend
 from commercetools.testing.reviews import ReviewsBackend
 from commercetools.testing.shipping_methods import ShippingMethodsBackend
 from commercetools.testing.shopping_lists import ShoppingListsBackend
+from commercetools.testing.stores import StoresBackend
 from commercetools.testing.subscriptions import SubscriptionsBackend
 from commercetools.testing.tax_categories import TaxCategoryBackend
 from commercetools.testing.types import TypesBackend
@@ -86,6 +87,7 @@ class BackendRepository:
         self.reviews = ReviewsBackend(self._storage)
         self.shipping_methods = ShippingMethodsBackend(self._storage)
         self.shopping_lists = ShoppingListsBackend(self._storage)
+        self.stores = StoresBackend(self._storage)
         self.tax_categories = TaxCategoryBackend(self._storage)
         self.types = TypesBackend(self._storage)
         self.subscriptions = SubscriptionsBackend(self._storage)

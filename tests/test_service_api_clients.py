@@ -17,5 +17,5 @@ def test_api_client_flow(client, api_client_draft):
 def api_client_draft():
     return types.ApiClientDraft(
         name="Test API Client",
-        scope="manage_projeect:some_project_key"
+        scope="manage_project:some_project_key"
     )

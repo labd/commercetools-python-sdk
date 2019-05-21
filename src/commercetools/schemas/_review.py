@@ -57,7 +57,7 @@ class ReviewDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
     )
-    rating = marshmallow.fields.Float(allow_none=True, missing=None)
+    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer.CustomerReferenceSchema",
         unknown=marshmallow.EXCLUDE,
@@ -157,7 +157,7 @@ class ReviewSchema(ResourceSchema):
     included_in_statistics = marshmallow.fields.Bool(
         allow_none=True, data_key="includedInStatistics"
     )
-    rating = marshmallow.fields.Float(allow_none=True, missing=None)
+    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateReferenceSchema",
         unknown=marshmallow.EXCLUDE,

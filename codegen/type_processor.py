@@ -78,6 +78,8 @@ class TypeProcessor:
 
 def _determine_type(value: Dict[str, Any]) -> str:
     if value["type"] == "number" and all(key in value for key in ["minimum", "maximum"]):
+        if "format" in value and value["format"].startswith("int"):
+            return "integer"
         return "float"
     return value["type"]
 

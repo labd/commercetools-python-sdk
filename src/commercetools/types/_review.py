@@ -53,8 +53,8 @@ class Review(Resource):
     target: typing.Optional["ProductReference"]
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
     included_in_statistics: typing.Optional[bool]
-    #: Optional :class:`float`
-    rating: typing.Optional[float]
+    #: Optional :class:`int`
+    rating: typing.Optional[int]
     #: Optional :class:`commercetools.types.StateReference`
     state: typing.Optional["StateReference"]
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -77,7 +77,7 @@ class Review(Resource):
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
         included_in_statistics: typing.Optional[bool] = None,
-        rating: typing.Optional[float] = None,
+        rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         custom: typing.Optional["CustomFields"] = None
@@ -143,8 +143,8 @@ class ReviewDraft(_BaseType):
     target: typing.Optional["ProductReference"]
     #: Optional :class:`commercetools.types.ResourceIdentifier`
     state: typing.Optional["ResourceIdentifier"]
-    #: Optional :class:`float`
-    rating: typing.Optional[float]
+    #: Optional :class:`int`
+    rating: typing.Optional[int]
     #: Optional :class:`commercetools.types.CustomerReference`
     customer: typing.Optional["CustomerReference"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -161,7 +161,7 @@ class ReviewDraft(_BaseType):
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
         state: typing.Optional["ResourceIdentifier"] = None,
-        rating: typing.Optional[float] = None,
+        rating: typing.Optional[int] = None,
         customer: typing.Optional["CustomerReference"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ) -> None:

@@ -1,6 +1,13 @@
 from commercetools import schemas, types
 
 
+def test_create_review(client):
+    review = client.reviews.create(draft=types.ReviewDraft(rating=3))
+
+    assert review.id
+    assert review.rating == 3
+
+
 def test_get_by_id(client):
     review = client.reviews.create(draft=schemas.ReviewDraftSchema().dump({}))
     assert review.id

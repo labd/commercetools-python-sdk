@@ -4,15 +4,13 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -195,7 +193,7 @@ class PaymentReferenceSchema(ReferenceSchema):
         return types.PaymentReference(**data)
 
 
-class PaymentSchema(ResourceSchema):
+class PaymentSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Payment`."
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer.CustomerReferenceSchema",

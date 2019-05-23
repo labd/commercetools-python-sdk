@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import Update, UpdateAction
+from commercetools.types._common import Update, UpdateAction
 from commercetools.types._shipping_method import ShippingRateTierType
 
 if typing.TYPE_CHECKING:

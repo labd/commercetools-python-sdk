@@ -4,8 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse
-from commercetools.types._common import Resource
+from commercetools.types._common import PagedQueryResponse, Resource
 
 if typing.TYPE_CHECKING:
     from ._cart import (

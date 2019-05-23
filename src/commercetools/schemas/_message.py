@@ -4,8 +4,11 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import PagedQueryResponseSchema
-from commercetools.schemas._common import LocalizedStringField, ResourceSchema
+from commercetools.schemas._common import (
+    LocalizedStringField,
+    PagedQueryResponseSchema,
+    ResourceSchema,
+)
 
 __all__ = [
     "CategoryCreatedMessagePayloadSchema",

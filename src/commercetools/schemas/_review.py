@@ -3,12 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
+    ReferenceSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
@@ -136,7 +137,7 @@ class ReviewReferenceSchema(ReferenceSchema):
         return types.ReviewReference(**data)
 
 
-class ReviewSchema(ResourceSchema):
+class ReviewSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Review`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     uniqueness_value = marshmallow.fields.String(

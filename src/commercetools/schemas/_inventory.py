@@ -3,12 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
+    ReferenceSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
@@ -81,7 +82,7 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
         return types.InventoryEntryReference(**data)
 
 
-class InventoryEntrySchema(ResourceSchema):
+class InventoryEntrySchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.InventoryEntry`."
     sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(

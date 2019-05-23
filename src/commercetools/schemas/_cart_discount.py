@@ -4,15 +4,13 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 
 __all__ = [
@@ -145,7 +143,7 @@ class CartDiscountReferenceSchema(ReferenceSchema):
         return types.CartDiscountReference(**data)
 
 
-class CartDiscountSchema(ResourceSchema):
+class CartDiscountSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscount`."
     name = LocalizedStringField(allow_none=True)
     description = LocalizedStringField(allow_none=True, missing=None)

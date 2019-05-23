@@ -5,8 +5,15 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Resource,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
     from ._cart import ProductPublishScope
@@ -15,8 +22,10 @@ if typing.TYPE_CHECKING:
         Asset,
         AssetDraft,
         AssetSource,
+        CreatedBy,
         DiscountedPrice,
         Image,
+        LastModifiedBy,
         LocalizedString,
         Price,
         PriceDraft,
@@ -270,7 +279,7 @@ class FacetTypes(enum.Enum):
     FILTER = "filter"
 
 
-class Product(Resource):
+class Product(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSchema`."
     #: Optional :class:`str`
     key: typing.Optional[str]
@@ -292,6 +301,8 @@ class Product(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         product_type: typing.Optional["ProductTypeReference"] = None,
         master_data: typing.Optional["ProductCatalogData"] = None,
@@ -310,16 +321,20 @@ class Product(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Product(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, product_type=%r, master_data=%r, tax_category=%r, state=%r, review_rating_statistics=%r)"
+            "Product(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, product_type=%r, master_data=%r, tax_category=%r, state=%r, review_rating_statistics=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.product_type,
                 self.master_data,

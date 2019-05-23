@@ -5,11 +5,17 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import LocalizedString
+    from ._common import CreatedBy, LastModifiedBy, LocalizedString
 __all__ = [
     "State",
     "StateAddRolesAction",
@@ -31,7 +37,7 @@ __all__ = [
 ]
 
 
-class State(Resource):
+class State(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -57,6 +63,8 @@ class State(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         type: typing.Optional["StateTypeEnum"] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -79,16 +87,20 @@ class State(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "State(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, type=%r, name=%r, description=%r, initial=%r, built_in=%r, roles=%r, transitions=%r)"
+            "State(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, type=%r, name=%r, description=%r, initial=%r, built_in=%r, roles=%r, transitions=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.type,
                 self.name,

@@ -3,15 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     KeyReferenceSchema,
     LocalizedStringField,
+    PagedQueryResponseSchema,
     ReferenceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 
 __all__ = [

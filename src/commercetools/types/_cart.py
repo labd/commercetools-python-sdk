@@ -5,13 +5,27 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
     from ._cart_discount import CartDiscountReference
     from ._channel import ChannelReference
-    from ._common import Address, LocalizedString, Money, Price, TypedMoney
+    from ._common import (
+        Address,
+        CreatedBy,
+        LastModifiedBy,
+        LocalizedString,
+        Money,
+        Price,
+        TypedMoney,
+    )
     from ._customer_group import CustomerGroupReference
     from ._discount_code import DiscountCodeReference
     from ._order import Delivery, ItemState, PaymentInfo
@@ -123,7 +137,7 @@ __all__ = [
 ]
 
 
-class Cart(Resource):
+class Cart(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSchema`."
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
     customer_id: typing.Optional[str]
@@ -187,6 +201,8 @@ class Cart(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
@@ -247,16 +263,20 @@ class Cart(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Cart(id=%r, version=%r, created_at=%r, last_modified_at=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, cart_state=%r, shipping_address=%r, billing_address=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, customer_group=%r, country=%r, shipping_info=%r, discount_codes=%r, custom=%r, payment_info=%r, locale=%r, delete_days_after_last_modification=%r, refused_gifts=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "Cart(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, cart_state=%r, shipping_address=%r, billing_address=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, customer_group=%r, country=%r, shipping_info=%r, discount_codes=%r, custom=%r, payment_info=%r, locale=%r, delete_days_after_last_modification=%r, refused_gifts=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.customer_id,
                 self.customer_email,
                 self.anonymous_id,

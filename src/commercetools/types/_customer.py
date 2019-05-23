@@ -5,11 +5,17 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import Address
+    from ._common import Address, CreatedBy, LastModifiedBy
     from ._customer_group import CustomerGroupReference
     from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
 __all__ = [
@@ -61,7 +67,7 @@ class AnonymousCartSignInMode(enum.Enum):
     USE_AS_NEW_ACTIVE_CUSTOMER_CART = "UseAsNewActiveCustomerCart"
 
 
-class Customer(Resource):
+class Customer(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSchema`."
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
@@ -115,6 +121,8 @@ class Customer(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         customer_number: typing.Optional[str] = None,
         email: typing.Optional[str] = None,
         password: typing.Optional[str] = None,
@@ -165,16 +173,20 @@ class Customer(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Customer(id=%r, version=%r, created_at=%r, last_modified_at=%r, customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address_id=%r, shipping_address_ids=%r, default_billing_address_id=%r, billing_address_ids=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r)"
+            "Customer(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address_id=%r, shipping_address_ids=%r, default_billing_address_id=%r, billing_address_ids=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.customer_number,
                 self.email,
                 self.password,

@@ -3,15 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -207,7 +205,7 @@ class ShoppingListReferenceSchema(ReferenceSchema):
         return types.ShoppingListReference(**data)
 
 
-class ShoppingListSchema(ResourceSchema):
+class ShoppingListSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingList`."
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",

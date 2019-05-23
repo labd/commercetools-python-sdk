@@ -3,12 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
     PagedQueryResponseSchema,
+    ReferenceSchema,
+    ResourceSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
 
 __all__ = [
     "LocationSchema",

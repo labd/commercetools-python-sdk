@@ -3,12 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
+    ReferenceSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
 
 __all__ = [
     "SubRateSchema",
@@ -97,7 +98,7 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
         return types.TaxCategoryReference(**data)
 
 
-class TaxCategorySchema(ResourceSchema):
+class TaxCategorySchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.TaxCategory`."
     name = marshmallow.fields.String(allow_none=True)
     description = marshmallow.fields.String(allow_none=True, missing=None)

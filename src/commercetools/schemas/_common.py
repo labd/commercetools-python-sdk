@@ -12,6 +12,8 @@ __all__ = [
     "AssetSchema",
     "AssetSourceSchema",
     "CentPrecisionMoneySchema",
+    "ClientLoggingSchema",
+    "CreatedBySchema",
     "DiscountedPriceSchema",
     "GeoJsonPointSchema",
     "GeoJsonSchema",
@@ -19,7 +21,10 @@ __all__ = [
     "ImageDimensionsSchema",
     "ImageSchema",
     "KeyReferenceSchema",
+    "LastModifiedBySchema",
+    "LoggedResourceSchema",
     "MoneySchema",
+    "PagedQueryResponseSchema",
     "PriceDraftSchema",
     "PriceSchema",
     "PriceTierSchema",
@@ -28,6 +33,8 @@ __all__ = [
     "ResourceSchema",
     "ScopedPriceSchema",
     "TypedMoneySchema",
+    "UpdateActionSchema",
+    "UpdateSchema",
 ]
 
 
@@ -183,6 +190,32 @@ class AssetSourceSchema(marshmallow.Schema):
         return types.AssetSource(**data)
 
 
+class ClientLoggingSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ClientLogging`."
+    client_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="clientId"
+    )
+    external_user_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalUserId"
+    )
+    customer = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ClientLogging(**data)
+
+
 class DiscountedPriceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.DiscountedPrice`."
     value = marshmallow.fields.Nested(
@@ -283,6 +316,26 @@ class MoneySchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.Money(**data)
+
+
+class PagedQueryResponseSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.PagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
+    results = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.ResourceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.PagedQueryResponse(**data)
 
 
 class PriceDraftSchema(marshmallow.Schema):
@@ -505,6 +558,49 @@ class ScopedPriceSchema(marshmallow.Schema):
         return types.ScopedPrice(**data)
 
 
+class UpdateActionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.UpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.UpdateAction(**data)
+
+
+class UpdateSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.Update`."
+    version = marshmallow.fields.Integer(allow_none=True)
+    actions = marshmallow.fields.List(
+        marshmallow.fields.Nested(
+            nested="commercetools.schemas._common.UpdateActionSchema",
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.Update(**data)
+
+
+class CreatedBySchema(ClientLoggingSchema):
+    "Marshmallow schema for :class:`commercetools.types.CreatedBy`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.CreatedBy(**data)
+
+
 class GeoJsonPointSchema(GeoJsonSchema):
     "Marshmallow schema for :class:`commercetools.types.GeoJsonPoint`."
     coordinates = marshmallow.fields.List(
@@ -523,6 +619,42 @@ class GeoJsonPointSchema(GeoJsonSchema):
     def post_load(self, data):
         del data["type"]
         return types.GeoJsonPoint(**data)
+
+
+class LastModifiedBySchema(ClientLoggingSchema):
+    "Marshmallow schema for :class:`commercetools.types.LastModifiedBy`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.LastModifiedBy(**data)
+
+
+class LoggedResourceSchema(ResourceSchema):
+    "Marshmallow schema for :class:`commercetools.types.LoggedResource`."
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.LoggedResource(**data)
 
 
 class ReferenceSchema(ResourceIdentifierSchema):

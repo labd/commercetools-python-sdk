@@ -3,12 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
+    ReferenceSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
@@ -79,7 +80,7 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
         return types.CustomerGroupReference(**data)
 
 
-class CustomerGroupSchema(ResourceSchema):
+class CustomerGroupSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerGroup`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)

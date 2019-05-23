@@ -3,8 +3,11 @@
 import marshmallow
 
 from commercetools import types
-from commercetools.schemas._base import PagedQueryResponseSchema
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
+from commercetools.schemas._common import (
+    PagedQueryResponseSchema,
+    ReferenceSchema,
+    ResourceSchema,
+)
 
 __all__ = [
     "CustomObjectDraftSchema",

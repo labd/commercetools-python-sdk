@@ -5,11 +5,15 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import Reference
+    from ._common import CreatedBy, LastModifiedBy, Reference
 __all__ = [
     "Extension",
     "ExtensionAWSLambdaDestination",
@@ -26,13 +30,14 @@ __all__ = [
     "ExtensionPagedQueryResponse",
     "ExtensionResourceTypeId",
     "ExtensionSetKeyAction",
+    "ExtensionSetTimeoutInMsAction",
     "ExtensionTrigger",
     "ExtensionUpdate",
     "ExtensionUpdateAction",
 ]
 
 
-class Extension(Resource):
+class Extension(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionSchema`."
     #: Optional :class:`str`
     key: typing.Optional[str]
@@ -40,6 +45,8 @@ class Extension(Resource):
     destination: typing.Optional["ExtensionDestination"]
     #: List of :class:`commercetools.types.ExtensionTrigger`
     triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
+    timeout_in_ms: typing.Optional[int]
 
     def __init__(
         self,
@@ -48,31 +55,40 @@ class Extension(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         destination: typing.Optional["ExtensionDestination"] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None
+        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.key = key
         self.destination = destination
         self.triggers = triggers
+        self.timeout_in_ms = timeout_in_ms
         super().__init__(
             id=id,
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Extension(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, destination=%r, triggers=%r)"
+            "Extension(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, destination=%r, triggers=%r, timeout_in_ms=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.destination,
                 self.triggers,
+                self.timeout_in_ms,
             )
         )
 
@@ -103,24 +119,27 @@ class ExtensionDraft(_BaseType):
     destination: typing.Optional["ExtensionDestination"]
     #: List of :class:`commercetools.types.ExtensionTrigger`
     triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
+    timeout_in_ms: typing.Optional[int]
 
     def __init__(
         self,
         *,
         key: typing.Optional[str] = None,
         destination: typing.Optional["ExtensionDestination"] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None
+        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.key = key
         self.destination = destination
         self.triggers = triggers
+        self.timeout_in_ms = timeout_in_ms
         super().__init__()
 
     def __repr__(self) -> str:
-        return "ExtensionDraft(key=%r, destination=%r, triggers=%r)" % (
-            self.key,
-            self.destination,
-            self.triggers,
+        return (
+            "ExtensionDraft(key=%r, destination=%r, triggers=%r, timeout_in_ms=%r)"
+            % (self.key, self.destination, self.triggers, self.timeout_in_ms)
         )
 
 
@@ -391,3 +410,24 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
 
     def __repr__(self) -> str:
         return "ExtensionSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
+
+
+class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionSetTimeoutInMsActionSchema`."
+    #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
+    timeout_in_ms: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        timeout_in_ms: typing.Optional[int] = None
+    ) -> None:
+        self.timeout_in_ms = timeout_in_ms
+        super().__init__(action="setTimeoutInMs")
+
+    def __repr__(self) -> str:
+        return "ExtensionSetTimeoutInMsAction(action=%r, timeout_in_ms=%r)" % (
+            self.action,
+            self.timeout_in_ms,
+        )

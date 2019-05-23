@@ -3,15 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -127,7 +125,7 @@ class DiscountCodeReferenceSchema(ReferenceSchema):
         return types.DiscountCodeReference(**data)
 
 
-class DiscountCodeSchema(ResourceSchema):
+class DiscountCodeSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCode`."
     name = LocalizedStringField(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)

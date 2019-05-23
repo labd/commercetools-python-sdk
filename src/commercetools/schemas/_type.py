@@ -4,15 +4,13 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 
 __all__ = [
@@ -213,7 +211,7 @@ class TypeReferenceSchema(ReferenceSchema):
         return types.TypeReference(**data)
 
 
-class TypeSchema(ResourceSchema):
+class TypeSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Type`."
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True)

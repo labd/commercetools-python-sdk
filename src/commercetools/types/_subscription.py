@@ -5,11 +5,15 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import Reference
+    from ._common import CreatedBy, LastModifiedBy, Reference
     from ._message import UserProvidedIdentifiers
 __all__ = [
     "AzureEventGridDestination",
@@ -130,7 +134,7 @@ class PayloadNotIncluded(_BaseType):
         )
 
 
-class Subscription(Resource):
+class Subscription(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSchema`."
     #: List of :class:`commercetools.types.ChangeSubscription`
     changes: typing.Optional[typing.List["ChangeSubscription"]]
@@ -152,6 +156,8 @@ class Subscription(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
         destination: typing.Optional["Destination"] = None,
         key: typing.Optional[str] = None,
@@ -170,16 +176,20 @@ class Subscription(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Subscription(id=%r, version=%r, created_at=%r, last_modified_at=%r, changes=%r, destination=%r, key=%r, messages=%r, format=%r, status=%r)"
+            "Subscription(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, changes=%r, destination=%r, key=%r, messages=%r, format=%r, status=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.changes,
                 self.destination,
                 self.key,

@@ -3,15 +3,13 @@
 import marshmallow
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -131,7 +129,7 @@ class CategoryReferenceSchema(ReferenceSchema):
         return types.CategoryReference(**data)
 
 
-class CategorySchema(ResourceSchema):
+class CategorySchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Category`."
     name = LocalizedStringField(allow_none=True)
     slug = LocalizedStringField(allow_none=True)

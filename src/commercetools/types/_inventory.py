@@ -4,11 +4,18 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
+    from ._common import CreatedBy, LastModifiedBy
     from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
 __all__ = [
     "InventoryAddQuantityAction",
@@ -28,7 +35,7 @@ __all__ = [
 ]
 
 
-class InventoryEntry(Resource):
+class InventoryEntry(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySchema`."
     #: :class:`str`
     sku: typing.Optional[str]
@@ -52,6 +59,8 @@ class InventoryEntry(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sku: typing.Optional[str] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         quantity_on_stock: typing.Optional[int] = None,
@@ -72,16 +81,20 @@ class InventoryEntry(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "InventoryEntry(id=%r, version=%r, created_at=%r, last_modified_at=%r, sku=%r, supply_channel=%r, quantity_on_stock=%r, available_quantity=%r, restockable_in_days=%r, expected_delivery=%r, custom=%r)"
+            "InventoryEntry(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sku=%r, supply_channel=%r, quantity_on_stock=%r, available_quantity=%r, restockable_in_days=%r, expected_delivery=%r, custom=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sku,
                 self.supply_channel,
                 self.quantity_on_stock,

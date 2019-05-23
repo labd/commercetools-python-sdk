@@ -4,11 +4,17 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import ResourceIdentifier
+    from ._common import CreatedBy, LastModifiedBy, ResourceIdentifier
     from ._customer import CustomerReference
     from ._product import ProductReference
     from ._state import StateReference
@@ -35,7 +41,7 @@ __all__ = [
 ]
 
 
-class Review(Resource):
+class Review(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSchema`."
     #: Optional :class:`str`
     key: typing.Optional[str]
@@ -69,6 +75,8 @@ class Review(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         uniqueness_value: typing.Optional[str] = None,
         locale: typing.Optional[str] = None,
@@ -99,16 +107,20 @@ class Review(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Review(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, uniqueness_value=%r, locale=%r, author_name=%r, title=%r, text=%r, target=%r, included_in_statistics=%r, rating=%r, state=%r, customer=%r, custom=%r)"
+            "Review(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, uniqueness_value=%r, locale=%r, author_name=%r, title=%r, text=%r, target=%r, included_in_statistics=%r, rating=%r, state=%r, customer=%r, custom=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.uniqueness_value,
                 self.locale,

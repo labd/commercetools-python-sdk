@@ -5,11 +5,23 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import Address, GeoJsonPoint, LocalizedString
+    from ._common import (
+        Address,
+        CreatedBy,
+        GeoJsonPoint,
+        LastModifiedBy,
+        LocalizedString,
+    )
     from ._review import ReviewRatingStatistics
     from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
 __all__ = [
@@ -33,7 +45,7 @@ __all__ = [
 ]
 
 
-class Channel(Resource):
+class Channel(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -59,6 +71,8 @@ class Channel(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -81,16 +95,20 @@ class Channel(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Channel(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, roles=%r, name=%r, description=%r, address=%r, review_rating_statistics=%r, custom=%r, geo_location=%r)"
+            "Channel(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, roles=%r, name=%r, description=%r, address=%r, review_rating_statistics=%r, custom=%r, geo_location=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.roles,
                 self.name,

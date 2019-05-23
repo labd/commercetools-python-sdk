@@ -4,7 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import UpdateActionSchema, UpdateSchema
+from commercetools.schemas._common import UpdateActionSchema, UpdateSchema
 
 __all__ = [
     "CartClassificationTypeSchema",

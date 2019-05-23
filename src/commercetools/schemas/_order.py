@@ -4,15 +4,13 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -402,7 +400,7 @@ class OrderReferenceSchema(ReferenceSchema):
         return types.OrderReference(**data)
 
 
-class OrderSchema(ResourceSchema):
+class OrderSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Order`."
     completed_at = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="completedAt"
@@ -418,6 +416,12 @@ class OrderSchema(ResourceSchema):
     )
     anonymous_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="anonymousId"
+    )
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
     )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.LineItemSchema",

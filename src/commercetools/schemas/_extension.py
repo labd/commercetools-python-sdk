@@ -4,12 +4,12 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ResourceSchema
 
 __all__ = [
     "ExtensionAWSLambdaDestinationSchema",
@@ -25,6 +25,7 @@ __all__ = [
     "ExtensionPagedQueryResponseSchema",
     "ExtensionSchema",
     "ExtensionSetKeyActionSchema",
+    "ExtensionSetTimeoutInMsActionSchema",
     "ExtensionTriggerSchema",
     "ExtensionUpdateActionSchema",
     "ExtensionUpdateSchema",
@@ -61,6 +62,9 @@ class ExtensionDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
+    )
+    timeout_in_ms = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="timeoutInMs"
     )
 
     class Meta:
@@ -143,7 +147,7 @@ class ExtensionPagedQueryResponseSchema(PagedQueryResponseSchema):
         return types.ExtensionPagedQueryResponse(**data)
 
 
-class ExtensionSchema(ResourceSchema):
+class ExtensionSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Extension`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     destination = helpers.Discriminator(
@@ -160,6 +164,9 @@ class ExtensionSchema(ResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
+    )
+    timeout_in_ms = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="timeoutInMs"
     )
 
     class Meta:
@@ -208,6 +215,7 @@ class ExtensionUpdateSchema(UpdateSchema):
                 "changeDestination": "commercetools.schemas._extension.ExtensionChangeDestinationActionSchema",
                 "changeTriggers": "commercetools.schemas._extension.ExtensionChangeTriggersActionSchema",
                 "setKey": "commercetools.schemas._extension.ExtensionSetKeyActionSchema",
+                "setTimeoutInMs": "commercetools.schemas._extension.ExtensionSetTimeoutInMsActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
@@ -341,3 +349,18 @@ class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.ExtensionSetKeyAction(**data)
+
+
+class ExtensionSetTimeoutInMsActionSchema(ExtensionUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.ExtensionSetTimeoutInMsAction`."
+    timeout_in_ms = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="timeoutInMs"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.ExtensionSetTimeoutInMsAction(**data)

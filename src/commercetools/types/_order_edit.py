@@ -4,8 +4,14 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 from commercetools.types._order import Order, StagedOrderUpdateAction
 
 if typing.TYPE_CHECKING:
@@ -30,7 +36,7 @@ if typing.TYPE_CHECKING:
         TaxedPrice,
     )
     from ._channel import ChannelReference
-    from ._common import Address, LocalizedString, Money
+    from ._common import Address, CreatedBy, LastModifiedBy, LocalizedString, Money
     from ._customer_group import CustomerGroupReference
     from ._discount_code import DiscountCodeReference
     from ._error import ErrorObject
@@ -56,6 +62,7 @@ if typing.TYPE_CHECKING:
     from ._shipping_method import ShippingMethodReference, ShippingRateDraft
     from ._shopping_list import ShoppingListReference
     from ._state import StateReference
+    from ._store import StoreKeyReference
     from ._tax_category import TaxCategoryReference
     from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
 __all__ = [
@@ -151,7 +158,7 @@ __all__ = [
 ]
 
 
-class OrderEdit(Resource):
+class OrderEdit(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditSchema`."
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
     created_at: typing.Optional[datetime.datetime]
@@ -177,6 +184,8 @@ class OrderEdit(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         resource: typing.Optional["OrderReference"] = None,
         staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
@@ -197,16 +206,20 @@ class OrderEdit(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderEdit(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, resource=%r, staged_actions=%r, custom=%r, result=%r, comment=%r)"
+            "OrderEdit(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, resource=%r, staged_actions=%r, custom=%r, result=%r, comment=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.resource,
                 self.staged_actions,
@@ -424,11 +437,14 @@ class StagedOrder(Order):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         order_number: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.Optional[typing.List["LineItem"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
         total_price: typing.Optional["Money"] = None,
@@ -463,11 +479,14 @@ class StagedOrder(Order):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             completed_at=completed_at,
             order_number=order_number,
             customer_id=customer_id,
             customer_email=customer_email,
             anonymous_id=anonymous_id,
+            store=store,
             line_items=line_items,
             custom_line_items=custom_line_items,
             total_price=total_price,
@@ -500,17 +519,20 @@ class StagedOrder(Order):
 
     def __repr__(self) -> str:
         return (
-            "StagedOrder(id=%r, version=%r, created_at=%r, last_modified_at=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "StagedOrder(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.completed_at,
                 self.order_number,
                 self.customer_id,
                 self.customer_email,
                 self.anonymous_id,
+                self.store,
                 self.line_items,
                 self.custom_line_items,
                 self.total_price,

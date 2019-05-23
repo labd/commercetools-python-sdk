@@ -4,8 +4,14 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import KeyReference, Reference, ReferenceTypeId
+from commercetools.types._common import (
+    KeyReference,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
     from ._common import LocalizedString

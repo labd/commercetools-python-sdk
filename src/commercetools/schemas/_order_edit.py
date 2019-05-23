@@ -4,15 +4,13 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
 from commercetools.schemas._common import (
     LocalizedStringField,
+    LoggedResourceSchema,
+    PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
+    UpdateActionSchema,
+    UpdateSchema,
 )
 from commercetools.schemas._order import OrderSchema, StagedOrderUpdateActionSchema
 from commercetools.schemas._type import FieldContainerField
@@ -278,7 +276,7 @@ class OrderEditResultSchema(marshmallow.Schema):
         return types.OrderEditResult(**data)
 
 
-class OrderEditSchema(ResourceSchema):
+class OrderEditSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEdit`."
     created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
     last_modified_at = marshmallow.fields.DateTime(

@@ -8,6 +8,7 @@ from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
+    from ._customer import CustomerReference
     from ._customer_group import CustomerGroupReference
     from ._product_discount import ProductDiscountReference
     from ._type import CustomFields, CustomFieldsDraft
@@ -18,6 +19,8 @@ __all__ = [
     "AssetDraft",
     "AssetSource",
     "CentPrecisionMoney",
+    "ClientLogging",
+    "CreatedBy",
     "DiscountedPrice",
     "GeoJson",
     "GeoJsonPoint",
@@ -25,9 +28,12 @@ __all__ = [
     "Image",
     "ImageDimensions",
     "KeyReference",
+    "LastModifiedBy",
     "LocalizedString",
+    "LoggedResource",
     "Money",
     "MoneyType",
+    "PagedQueryResponse",
     "Price",
     "PriceDraft",
     "PriceTier",
@@ -37,6 +43,8 @@ __all__ = [
     "ResourceIdentifier",
     "ScopedPrice",
     "TypedMoney",
+    "Update",
+    "UpdateAction",
 ]
 
 
@@ -333,6 +341,38 @@ class AssetSource(_BaseType):
         )
 
 
+class ClientLogging(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ClientLoggingSchema`."
+    #: Optional :class:`str` `(Named` ``clientId`` `in Commercetools)`
+    client_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``externalUserId`` `in Commercetools)`
+    external_user_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.CustomerReference`
+    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        client_id: typing.Optional[str] = None,
+        external_user_id: typing.Optional[str] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        anonymous_id: typing.Optional[str] = None,
+    ) -> None:
+        self.client_id = client_id
+        self.external_user_id = external_user_id
+        self.customer = customer
+        self.anonymous_id = anonymous_id
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "ClientLogging(client_id=%r, external_user_id=%r, customer=%r, anonymous_id=%r)"
+            % (self.client_id, self.external_user_id, self.customer, self.anonymous_id)
+        )
+
+
 class DiscountedPrice(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedPriceSchema`."
     #: :class:`commercetools.types.Money`
@@ -477,6 +517,40 @@ class Money(_BaseType):
 class MoneyType(enum.Enum):
     CENT_PRECISION = "centPrecision"
     HIGH_PRECISION = "highPrecision"
+
+
+class PagedQueryResponse(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
+    #: List of :class:`commercetools.types.Resource`
+    results: typing.Optional[typing.Sequence["Resource"]]
+
+    def __init__(
+        self,
+        *,
+        count: typing.Optional[int] = None,
+        total: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        results: typing.Optional[typing.Sequence["Resource"]] = None,
+    ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
+        self.results = results
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "PagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
+            self.count,
+            self.total,
+            self.offset,
+            self.results,
+        )
 
 
 class Price(_BaseType):
@@ -783,6 +857,65 @@ class ScopedPrice(_BaseType):
         )
 
 
+class Update(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`list`
+    actions: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        version: typing.Optional[int] = None,
+        actions: typing.Optional[list] = None,
+    ) -> None:
+        self.version = version
+        self.actions = actions
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "Update(version=%r, actions=%r)" % (self.version, self.actions)
+
+
+class UpdateAction(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
+
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+        self.action = action
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "UpdateAction(action=%r)" % (self.action,)
+
+
+class CreatedBy(ClientLogging):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CreatedBySchema`."
+
+    def __init__(
+        self,
+        *,
+        client_id: typing.Optional[str] = None,
+        external_user_id: typing.Optional[str] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        anonymous_id: typing.Optional[str] = None,
+    ) -> None:
+        super().__init__(
+            client_id=client_id,
+            external_user_id=external_user_id,
+            customer=customer,
+            anonymous_id=anonymous_id,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CreatedBy(client_id=%r, external_user_id=%r, customer=%r, anonymous_id=%r)"
+            % (self.client_id, self.external_user_id, self.customer, self.anonymous_id)
+        )
+
+
 class GeoJsonPoint(GeoJson):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonPointSchema`."
     #: :class:`list`
@@ -799,6 +932,71 @@ class GeoJsonPoint(GeoJson):
 
     def __repr__(self) -> str:
         return "GeoJsonPoint(type=%r, coordinates=%r)" % (self.type, self.coordinates)
+
+
+class LastModifiedBy(ClientLogging):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.LastModifiedBySchema`."
+
+    def __init__(
+        self,
+        *,
+        client_id: typing.Optional[str] = None,
+        external_user_id: typing.Optional[str] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        anonymous_id: typing.Optional[str] = None,
+    ) -> None:
+        super().__init__(
+            client_id=client_id,
+            external_user_id=external_user_id,
+            customer=customer,
+            anonymous_id=anonymous_id,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "LastModifiedBy(client_id=%r, external_user_id=%r, customer=%r, anonymous_id=%r)"
+            % (self.client_id, self.external_user_id, self.customer, self.anonymous_id)
+        )
+
+
+class LoggedResource(Resource):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.LoggedResourceSchema`."
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+    ) -> None:
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "LoggedResource(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
+            )
+        )
 
 
 class Reference(ResourceIdentifier):

@@ -4,8 +4,14 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Resource,
+    Update,
+    UpdateAction,
+)
 
 __all__ = [
     "Location",

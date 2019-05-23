@@ -4,11 +4,17 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._base import PagedQueryResponse, Update, UpdateAction
-from commercetools.types._common import Reference, ReferenceTypeId, Resource
+from commercetools.types._common import (
+    LoggedResource,
+    PagedQueryResponse,
+    Reference,
+    ReferenceTypeId,
+    Update,
+    UpdateAction,
+)
 
 if typing.TYPE_CHECKING:
-    from ._common import LocalizedString, Money, Price
+    from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money, Price
 __all__ = [
     "ProductDiscount",
     "ProductDiscountChangeIsActiveAction",
@@ -33,7 +39,7 @@ __all__ = [
 ]
 
 
-class ProductDiscount(Resource):
+class ProductDiscount(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSchema`."
     #: :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
@@ -61,6 +67,8 @@ class ProductDiscount(Resource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: typing.Optional["ProductDiscountValue"] = None,
@@ -85,16 +93,20 @@ class ProductDiscount(Resource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductDiscount(id=%r, version=%r, created_at=%r, last_modified_at=%r, name=%r, description=%r, value=%r, predicate=%r, sort_order=%r, is_active=%r, references=%r, valid_from=%r, valid_until=%r)"
+            "ProductDiscount(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, name=%r, description=%r, value=%r, predicate=%r, sort_order=%r, is_active=%r, references=%r, valid_from=%r, valid_until=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.name,
                 self.description,
                 self.value,

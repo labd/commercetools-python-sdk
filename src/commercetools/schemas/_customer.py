@@ -4,12 +4,13 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
+    ReferenceSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ReferenceSchema, ResourceSchema
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
@@ -247,7 +248,7 @@ class CustomerResetPasswordSchema(marshmallow.Schema):
         return types.CustomerResetPassword(**data)
 
 
-class CustomerSchema(ResourceSchema):
+class CustomerSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Customer`."
     customer_number = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customerNumber"

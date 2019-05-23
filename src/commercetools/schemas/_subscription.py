@@ -4,12 +4,12 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._base import (
+from commercetools.schemas._common import (
+    LoggedResourceSchema,
     PagedQueryResponseSchema,
     UpdateActionSchema,
     UpdateSchema,
 )
-from commercetools.schemas._common import ResourceSchema
 
 __all__ = [
     "AzureEventGridDestinationSchema",
@@ -231,7 +231,7 @@ class SubscriptionPagedQueryResponseSchema(PagedQueryResponseSchema):
         return types.SubscriptionPagedQueryResponse(**data)
 
 
-class SubscriptionSchema(ResourceSchema):
+class SubscriptionSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Subscription`."
     changes = marshmallow.fields.Nested(
         nested="commercetools.schemas._subscription.ChangeSubscriptionSchema",

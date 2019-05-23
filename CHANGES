@@ -1,3 +1,8 @@
+3.5.0 (2019-05-23)
+------------------
+- Generate with new API definitions
+- Add missing 'store' field to Order
+
 3.4.0 (2019-05-21)
 ------------------
 - Fix rating number type not being an integer for Review related types

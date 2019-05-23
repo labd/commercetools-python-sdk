@@ -10,9 +10,26 @@ def test_orders_get_by_id(client):
     assert order.order_number == "test-order"
 
 
+def test_orders_query(client):
+    results = client.orders.query()
+    assert results.total == 0
+
+    client.orders.create(types.OrderFromCartDraft(order_number="test-order"))
+
+    results = client.orders.query()
+    assert results.total == 1
+
+
+def test_orders_delete(commercetools_api, client):
+    order = get_test_order()
+    commercetools_api.orders.add_existing(order)
+
+    deleted_order = client.orders.delete_by_id(order.id, order.version)
+    assert order.id == deleted_order.id
+
+
 def test_add_existing_order(commercetools_api, client):
     order = get_test_order()
-
     commercetools_api.orders.add_existing(order)
 
     assert client.orders.get_by_id(order.id).order_number == order.order_number

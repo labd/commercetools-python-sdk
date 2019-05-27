@@ -1,3 +1,7 @@
+3.5.1 (2019-05-27)
+------------------
+- Remove WIP code on carts get_by_id call
+
 3.5.0 (2019-05-23)
 ------------------
 - Generate with new API definitions

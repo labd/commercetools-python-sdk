@@ -19,11 +19,8 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: typing.Optional[str]) -> Optional[types.Cart]:
-        params = {}
-        if expand:
-            params["expand"] = expand
-        return self._client._get(f"carts/{id}", params, schemas.CartSchema)
+    def get_by_id(self, id: str) -> Optional[types.Cart]:
+        return self._client._get(f"carts/{id}", {}, schemas.CartSchema)
 
     def get_by_customer_id(self, customer_id: str) -> types.Cart:
         params = {"customerId": customer_id}

@@ -16,19 +16,25 @@ class CustomerQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CustomerService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Customer]:
-        return self._client._get(f"customers/{id}", {}, schemas.CustomerSchema)
+    def get_by_id(self, id: str, expand: str = None) -> Optional[types.Customer]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"customers/{id}", query_params, schemas.CustomerSchema)
 
-    def get_by_key(self, key: str) -> Optional[types.Customer]:
-        return self._client._get(f"customers/key={key}", {}, schemas.CustomerSchema)
+    def get_by_key(self, key: str, expand: str = None) -> Optional[types.Customer]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"customers/key={key}", query_params, schemas.CustomerSchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: Optional[str] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None,
+        expand: str = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.CustomerPagedQueryResponse:
         params = CustomerQuerySchema().dump(
             {
@@ -43,9 +49,12 @@ class CustomerService(abstract.AbstractService):
             "customers", params, schemas.CustomerPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CustomerDraft) -> types.Customer:
+    def create(self, draft: types.CustomerDraft, expand: str = None) -> types.Customer:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "customers", {}, draft, schemas.CustomerDraftSchema, schemas.CustomerSchema
+            "customers", query_params, draft, schemas.CustomerDraftSchema, schemas.CustomerSchema
         )
 
     def update_by_id(
@@ -53,13 +62,17 @@ class CustomerService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.CustomerUpdateAction],
+        expand: str = None,
         *,
         force_update: bool = False,
     ) -> types.Customer:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CustomerUpdate(version=version, actions=actions)
         return self._client._post(
             f"customers/{id}",
-            {},
+            query_params,
             data_object=update_action,
             request_schema_cls=schemas.CustomerUpdateSchema,
             response_schema_cls=schemas.CustomerSchema,
@@ -71,13 +84,17 @@ class CustomerService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.CustomerUpdateAction],
+        expand: str = None,
         *,
         force_update: bool = False,
     ) -> types.Customer:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CustomerUpdate(version=version, actions=actions)
         return self._client._post(
             f"customers/key={key}",
-            {},
+            query_params,
             data_object=update_action,
             request_schema_cls=schemas.CustomerUpdateSchema,
             response_schema_cls=schemas.CustomerSchema,
@@ -89,15 +106,17 @@ class CustomerService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
+        expand: str = None,
         *,
         force_delete: bool = False,
     ) -> types.Customer:
-        params = CustomerDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = CustomerDeleteSchema().dump(params)
         return self._client._delete(
             f"customers/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CustomerSchema,
             force_delete=force_delete,
         )
@@ -107,15 +126,17 @@ class CustomerService(abstract.AbstractService):
         key: str,
         version: int,
         data_erasure: bool = False,
+        expand: str = None,
         *,
         force_delete: bool = False,
     ) -> types.Customer:
-        params = CustomerDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = CustomerDeleteSchema().dump(params)
         return self._client._delete(
             f"customers/key={key}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CustomerSchema,
             force_delete=force_delete,
         )

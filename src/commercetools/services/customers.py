@@ -16,13 +16,13 @@ class CustomerQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CustomerService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: str = None) -> Optional[types.Customer]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Customer]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._get(f"customers/{id}", query_params, schemas.CustomerSchema)
 
-    def get_by_key(self, key: str, expand: str = None) -> Optional[types.Customer]:
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.Customer]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -32,7 +32,7 @@ class CustomerService(abstract.AbstractService):
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: str = None,
+        expand: OptionalListStr = None,
         limit: int = None,
         offset: int = None,
     ) -> types.CustomerPagedQueryResponse:
@@ -49,7 +49,7 @@ class CustomerService(abstract.AbstractService):
             "customers", params, schemas.CustomerPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CustomerDraft, expand: str = None) -> types.Customer:
+    def create(self, draft: types.CustomerDraft, expand: OptionalListStr = None) -> types.Customer:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -62,7 +62,7 @@ class CustomerService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.CustomerUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Customer:
@@ -84,7 +84,7 @@ class CustomerService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.CustomerUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Customer:
@@ -106,7 +106,7 @@ class CustomerService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = False,
     ) -> types.Customer:
@@ -126,7 +126,7 @@ class CustomerService(abstract.AbstractService):
         key: str,
         version: int,
         data_erasure: bool = False,
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = False,
     ) -> types.Customer:

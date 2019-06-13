@@ -18,13 +18,13 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: str = None) -> Optional[types.Cart]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Cart]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._get(f"carts/{id}", query_params, schemas.CartSchema)
 
-    def get_by_customer_id(self, customer_id: str, expand: str = None) -> types.Cart:
+    def get_by_customer_id(self, customer_id: str, expand: OptionalListStr = None) -> types.Cart:
         query_params = {"customerId": customer_id}
         if expand:
             query_params["expand"] = expand
@@ -34,7 +34,7 @@ class CartService(abstract.AbstractService):
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: str = None,
+        expand: OptionalListStr = None,
         limit: int = None,
         offset: int = None,
     ) -> types.CartPagedQueryResponse:
@@ -49,7 +49,7 @@ class CartService(abstract.AbstractService):
         )
         return self._client._get("carts", params, schemas.CartPagedQueryResponseSchema)
 
-    def create(self, draft: types.CartDraft, expand: str = None) -> types.Cart:
+    def create(self, draft: types.CartDraft, expand: OptionalListStr = None) -> types.Cart:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -62,7 +62,7 @@ class CartService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.CartUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Cart:
@@ -84,7 +84,7 @@ class CartService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = False,
     ) -> types.Cart:

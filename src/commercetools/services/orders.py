@@ -18,13 +18,13 @@ class OrderQuerySchema(abstract.AbstractQuerySchema):
 
 
 class OrderService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: str = None) -> Optional[types.Order]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Order]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._get(f"orders/{id}", query_params, schemas.OrderSchema)
 
-    def get_by_key(self, key: str, expand: str = None) -> types.Order:
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.Order:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -34,7 +34,7 @@ class OrderService(abstract.AbstractService):
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: str = None,
+        expand: OptionalListStr = None,
         limit: int = None,
         offset: int = None,
     ) -> types.OrderPagedQueryResponse:
@@ -51,7 +51,7 @@ class OrderService(abstract.AbstractService):
             "orders", params, schemas.OrderPagedQueryResponseSchema
         )
 
-    def create(self, cart: types.OrderFromCartDraft, expand: str = None) -> types.Order:
+    def create(self, cart: types.OrderFromCartDraft, expand: OptionalListStr = None) -> types.Order:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -64,7 +64,7 @@ class OrderService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.OrderUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Order:
@@ -86,7 +86,7 @@ class OrderService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.OrderUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Order:
@@ -108,7 +108,7 @@ class OrderService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = True,
     ) -> types.Order:
@@ -129,7 +129,7 @@ class OrderService(abstract.AbstractService):
         order_number: str,
         version: int,
         data_erasure: bool = False,
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = True,
     ) -> types.Order:

@@ -16,7 +16,7 @@ class InventoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class InventoryService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: str = None) -> Optional[types.InventoryEntry]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.InventoryEntry]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -26,7 +26,7 @@ class InventoryService(abstract.AbstractService):
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: str = None,
+        expand: OptionalListStr = None,
         limit: int = None,
         offset: int = None,
     ) -> types.InventoryPagedQueryResponse:
@@ -43,7 +43,7 @@ class InventoryService(abstract.AbstractService):
             "inventory", params, schemas.InventoryPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.InventoryEntryDraft, expand: str = None) -> types.InventoryEntry:
+    def create(self, draft: types.InventoryEntryDraft, expand: OptionalListStr = None) -> types.InventoryEntry:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -60,7 +60,7 @@ class InventoryService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.InventoryUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.InventoryEntry:
@@ -82,7 +82,7 @@ class InventoryService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = True,
     ) -> types.InventoryEntry:

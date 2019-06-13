@@ -17,7 +17,7 @@ class StateQuerySchema(abstract.AbstractQuerySchema):
 
 
 class StateService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: str = None) -> Optional[types.State]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.State]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -27,7 +27,7 @@ class StateService(abstract.AbstractService):
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: str = None,
+        expand: OptionalListStr = None,
         limit: int = None,
         offset: int = None,
     ) -> types.StatePagedQueryResponse:
@@ -44,7 +44,7 @@ class StateService(abstract.AbstractService):
             "states", params, schemas.StatePagedQueryResponseSchema
         )
 
-    def create(self, draft: types.StateDraft, expand: str = None) -> types.State:
+    def create(self, draft: types.StateDraft, expand: OptionalListStr = None) -> types.State:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -61,7 +61,7 @@ class StateService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.StateUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.State:
@@ -79,7 +79,7 @@ class StateService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: str = None, *, force_delete: bool = True
+        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
     ) -> types.State:
         params = {"version": version}
         if expand:

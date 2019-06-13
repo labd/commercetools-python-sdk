@@ -16,7 +16,7 @@ class ChannelQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ChannelService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: str = None) -> Optional[types.Channel]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Channel]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -26,7 +26,7 @@ class ChannelService(abstract.AbstractService):
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: str = None,
+        expand: OptionalListStr = None,
         limit: int = None,
         offset: int = None,
     ) -> types.ChannelPagedQueryResponse:
@@ -43,7 +43,7 @@ class ChannelService(abstract.AbstractService):
             "channels", params, schemas.ChannelPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ChannelDraft, expand: str = None) -> types.Channel:
+    def create(self, draft: types.ChannelDraft, expand: OptionalListStr = None) -> types.Channel:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -60,7 +60,7 @@ class ChannelService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.ChannelUpdateAction],
-        expand: str = None,
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Channel:
@@ -78,7 +78,7 @@ class ChannelService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: str = None, *, force_delete: bool = True
+        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
     ) -> types.Channel:
         params = {"version": version}
         if expand:

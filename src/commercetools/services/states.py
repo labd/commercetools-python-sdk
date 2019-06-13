@@ -17,16 +17,19 @@ class StateQuerySchema(abstract.AbstractQuerySchema):
 
 
 class StateService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.State]:
-        return self._client._get(f"states/{id}", {}, schemas.StateSchema)
+    def get_by_id(self, id: str, expand: str = None) -> Optional[types.State]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"states/{id}", query_params, schemas.StateSchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: str = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.StatePagedQueryResponse:
         params = StateQuerySchema().dump(
             {
@@ -41,10 +44,13 @@ class StateService(abstract.AbstractService):
             "states", params, schemas.StatePagedQueryResponseSchema
         )
 
-    def create(self, draft: types.StateDraft) -> types.State:
+    def create(self, draft: types.StateDraft, expand: str = None) -> types.State:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
             endpoint="states",
-            params={},
+            params=query_params,
             data_object=draft,
             request_schema_cls=schemas.StateDraftSchema,
             response_schema_cls=schemas.StateSchema,
@@ -55,13 +61,17 @@ class StateService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.StateUpdateAction],
+        expand: str = None,
         *,
         force_update: bool = False,
     ) -> types.State:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.StateUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"states/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.StateUpdateSchema,
             response_schema_cls=schemas.StateSchema,
@@ -69,12 +79,15 @@ class StateService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, *, force_delete: bool = True
+        self, id: str, version: int, expand: str = None, *, force_delete: bool = True
     ) -> types.State:
-        params = StateDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = StateDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"states/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.StateSchema,
             force_delete=force_delete,
         )

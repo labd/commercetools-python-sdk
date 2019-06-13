@@ -1,4 +1,3 @@
-import typing
 from typing import List, Optional
 
 from commercetools import schemas, types
@@ -17,18 +16,21 @@ class ShippingMethodQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ShippingMethodService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.ShippingMethod]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.ShippingMethod]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._get(
-            f"shipping-methods/{id}", {}, schemas.ShippingMethodSchema
+            f"shipping-methods/{id}", query_params, schemas.ShippingMethodSchema
         )
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.ShippingMethodPagedQueryResponse:
         params = ShippingMethodQuerySchema().dump(
             {
@@ -43,10 +45,13 @@ class ShippingMethodService(abstract.AbstractService):
             "shipping-methods", params, schemas.ShippingMethodPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ShippingMethodDraft) -> types.ShippingMethod:
+    def create(self, draft: types.ShippingMethodDraft, expand: OptionalListStr) -> types.ShippingMethod:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
             "shipping-methods",
-            {},
+            query_params,
             draft,
             schemas.ShippingMethodDraftSchema,
             schemas.ShippingMethodSchema,
@@ -57,13 +62,17 @@ class ShippingMethodService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.ShippingMethodUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.ShippingMethod:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.ShippingMethodUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"shipping-methods/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.ShippingMethodUpdateSchema,
             response_schema_cls=schemas.ShippingMethodSchema,
@@ -75,13 +84,17 @@ class ShippingMethodService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.ShippingMethodUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.ShippingMethod:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.ShippingMethodUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"shipping-methods/key={key}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.ShippingMethodUpdateSchema,
             response_schema_cls=schemas.ShippingMethodSchema,
@@ -89,12 +102,16 @@ class ShippingMethodService(abstract.AbstractService):
         )
 
     def delete(
-        self, id: str, version: int, *, force_delete: bool = False
+        self, id: str, version: int, expand: OptionalListStr = None,
+        *, force_delete: bool = False
     ) -> types.ShippingMethod:
-        params = ShippingMethodDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = ShippingMethodDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"shipping-methods/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.ShippingMethodSchema,
             force_delete=force_delete,
         )

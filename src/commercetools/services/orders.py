@@ -1,4 +1,3 @@
-import typing
 from typing import List, Optional
 
 from marshmallow import fields
@@ -19,19 +18,25 @@ class OrderQuerySchema(abstract.AbstractQuerySchema):
 
 
 class OrderService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Order]:
-        return self._client._get(f"orders/{id}", {}, schemas.OrderSchema)
+    def get_by_id(self, id: str, expand: str = None) -> Optional[types.Order]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"orders/{id}", query_params, schemas.OrderSchema)
 
-    def get_by_key(self, key: str) -> types.Order:
-        return self._client._get(f"orders/key={key}", {}, schemas.OrderSchema)
+    def get_by_key(self, key: str, expand: str = None) -> types.Order:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"orders/key={key}", query_params, schemas.OrderSchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: str = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.OrderPagedQueryResponse:
         params = OrderQuerySchema().dump(
             {
@@ -46,9 +51,12 @@ class OrderService(abstract.AbstractService):
             "orders", params, schemas.OrderPagedQueryResponseSchema
         )
 
-    def create(self, cart: types.OrderFromCartDraft) -> types.Order:
+    def create(self, cart: types.OrderFromCartDraft, expand: str = None) -> types.Order:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "orders", {}, cart, schemas.OrderFromCartDraftSchema, schemas.OrderSchema
+            "orders", query_params, cart, schemas.OrderFromCartDraftSchema, schemas.OrderSchema
         )
 
     def update_by_id(
@@ -56,13 +64,17 @@ class OrderService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.OrderUpdateAction],
+        expand: str = None,
         *,
         force_update: bool = False,
     ) -> types.Order:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.OrderUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"orders/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.OrderUpdateSchema,
             response_schema_cls=schemas.OrderSchema,
@@ -74,9 +86,13 @@ class OrderService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.OrderUpdateAction],
+        expand: str = None,
         *,
         force_update: bool = False,
     ) -> types.Order:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.OrderUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"orders/key={key}",
@@ -92,15 +108,18 @@ class OrderService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
+        expand: str = None,
         *,
         force_delete: bool = True,
     ) -> types.Order:
-        params = OrderDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+
+        query_params = OrderDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"orders/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.OrderSchema,
             force_delete=force_delete,
         )
@@ -110,15 +129,17 @@ class OrderService(abstract.AbstractService):
         order_number: str,
         version: int,
         data_erasure: bool = False,
+        expand: str = None,
         *,
         force_delete: bool = True,
     ) -> types.Order:
-        params = OrderDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = OrderDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"orders/order-number={order_number}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.OrderSchema,
             force_delete=force_delete,
         )

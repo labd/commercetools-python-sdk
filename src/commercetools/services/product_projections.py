@@ -11,24 +11,26 @@ from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListU
 __all__ = ["ProductProjectionService"]
 
 
-class _ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
-    sort = helpers.OptionalList(fields.String())
-    limit = fields.Int()
-    offset = fields.Int()
-
+class ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
     staged = fields.Bool(data_key="staged", required=False, missing=False)
     price_currency = fields.String(data_key="priceCurrency")
     price_country = fields.String(data_key="priceCountry")
     price_customer_group = fields.UUID(data_key="priceCustomerGroup")
     price_channel = fields.UUID(data_key="priceChannel")
-
-
-class ProductProjectionsQuerySchema(_ProductProjectionsBaseSchema):
-    where = helpers.OptionalList(fields.String())
     expand = helpers.OptionalList(fields.String())
 
 
-class ProductProjectionsSearchSchema(_ProductProjectionsBaseSchema):
+class ProductProjectionsBaseQuerySchema(ProductProjectionsBaseSchema):
+    sort = helpers.OptionalList(fields.String())
+    limit = fields.Int()
+    offset = fields.Int()
+
+
+class ProductProjectionsQuerySchema(ProductProjectionsBaseQuerySchema):
+    where = helpers.OptionalList(fields.String())
+
+
+class ProductProjectionsSearchSchema(ProductProjectionsBaseQuerySchema):
     text = fields.Method("text_serialize")
     fuzzy = fields.Bool()
     fuzzy_level = fields.Integer(data_key="fuzzy.level")
@@ -57,13 +59,23 @@ class ProductProjectionService(abstract.AbstractService):
         self,
         id: str,
         staged: bool = False,
-        price_currency: OptionalListStr = None,
-        price_country: OptionalListStr = None,
-        price_customer_group: typing.Optional[UUID] = None,
-        price_channel: typing.Optional[UUID] = None,
+        price_currency: str = None,
+        price_country: str = None,
+        price_customer_group: UUID = None,
+        price_channel: UUID = None,
+        expand: OptionalListStr = None,
     ) -> Optional[types.ProductProjection]:
+        params = {
+            "staged": staged,
+            "price_currency": price_currency,
+            "price_country": price_country,
+            "price_customer_group": price_customer_group,
+            "price_channel": price_channel,
+            "expand": expand,
+        }
+        query_params = ProductProjectionsBaseSchema().dump(params)
         return self._client._get(
-            f"product-projections/{id}", {}, schemas.ProductProjectionSchema
+            f"product-projections/{id}", query_params, schemas.ProductProjectionSchema
         )
 
     def get_by_key(
@@ -74,9 +86,19 @@ class ProductProjectionService(abstract.AbstractService):
         price_country: OptionalListStr = None,
         price_customer_group: typing.Optional[UUID] = None,
         price_channel: typing.Optional[UUID] = None,
+        expand: OptionalListStr = None,
     ) -> types.ProductProjection:
+        params = {
+            "staged": staged,
+            "price_currency": price_currency,
+            "price_country": price_country,
+            "price_customer_group": price_customer_group,
+            "price_channel": price_channel,
+            "expand": expand,
+        }
+        query_params = ProductProjectionsBaseSchema().dump(params)
         return self._client._get(
-            f"product-projections/key={key}", {}, schemas.ProductProjectionSchema
+            f"product-projections/key={key}", query_params, schemas.ProductProjectionSchema
         )
 
     def query(
@@ -99,6 +121,7 @@ class ProductProjectionService(abstract.AbstractService):
                 "expand": expand,
                 "limit": limit,
                 "offset": offset,
+                "staged": staged,
                 "price_currency": price_currency,
                 "price_country": price_country,
                 "price_customer_group": price_customer_group,
@@ -129,6 +152,7 @@ class ProductProjectionService(abstract.AbstractService):
         price_country: OptionalListStr = None,
         price_customer_group: OptionalListUUID = None,
         price_channel: OptionalListUUID = None,
+        expand: OptionalListStr = None,
     ) -> types.ProductProjectionPagedSearchResponse:
         params = {
             "text": text,
@@ -147,6 +171,7 @@ class ProductProjectionService(abstract.AbstractService):
             "price_country": price_country,
             "price_customer_group": price_customer_group,
             "price_channel": price_channel,
+            "expand": expand,
         }
         return self._client._post(
             "product-projections/search",

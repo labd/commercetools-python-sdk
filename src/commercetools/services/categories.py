@@ -50,9 +50,11 @@ class CategoryService(abstract.AbstractService):
         )
 
     def create(self, draft: types.CategoryDraft, expand: str = None) -> types.Category:
-
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "categories", {}, draft, schemas.CategoryDraftSchema, schemas.CategorySchema
+            "categories", query_params, draft, schemas.CategoryDraftSchema, schemas.CategorySchema
         )
 
     def update_by_id(
@@ -92,7 +94,7 @@ class CategoryService(abstract.AbstractService):
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"categories/key={key}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.CategoryUpdateSchema,
             response_schema_cls=schemas.CategorySchema,

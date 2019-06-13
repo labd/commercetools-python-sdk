@@ -49,9 +49,12 @@ class CartService(abstract.AbstractService):
         )
         return self._client._get("carts", params, schemas.CartPagedQueryResponseSchema)
 
-    def create(self, draft: types.CartDraft) -> types.Cart:
+    def create(self, draft: types.CartDraft, expand: str = None) -> types.Cart:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "carts", {}, draft, schemas.CartDraftSchema, schemas.CartSchema
+            "carts", query_params, draft, schemas.CartDraftSchema, schemas.CartSchema
         )
 
     def update_by_id(
@@ -63,10 +66,10 @@ class CartService(abstract.AbstractService):
         *,
         force_update: bool = False,
     ) -> types.Cart:
-        update_action = types.CartUpdate(version=version, actions=actions)
         query_params = {}
         if expand:
             query_params["expand"] = expand
+        update_action = types.CartUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"carts/{id}",
             params=query_params,
@@ -88,7 +91,6 @@ class CartService(abstract.AbstractService):
         params = {"version": version, "data_erasure": data_erasure}
         if expand:
             params["expand"] = expand
-
         query_params = CartDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"carts/{id}",

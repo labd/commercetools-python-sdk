@@ -17,20 +17,15 @@ class ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
     price_country = fields.String(data_key="priceCountry")
     price_customer_group = fields.UUID(data_key="priceCustomerGroup")
     price_channel = fields.UUID(data_key="priceChannel")
+
     expand = helpers.OptionalList(fields.String())
 
 
-class ProductProjectionsBaseQuerySchema(ProductProjectionsBaseSchema):
-    sort = helpers.OptionalList(fields.String())
-    limit = fields.Int()
-    offset = fields.Int()
+class ProductProjectionsQuerySchema(abstract.AbstractQuerySchema):
+    pass
 
 
-class ProductProjectionsQuerySchema(ProductProjectionsBaseQuerySchema):
-    where = helpers.OptionalList(fields.String())
-
-
-class ProductProjectionsSearchSchema(ProductProjectionsBaseQuerySchema):
+class ProductProjectionsSearchSchema(abstract.AbstractQuerySchema):
     text = fields.Method("text_serialize")
     fuzzy = fields.Bool()
     fuzzy_level = fields.Integer(data_key="fuzzy.level")

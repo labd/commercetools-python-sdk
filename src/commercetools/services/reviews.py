@@ -18,19 +18,25 @@ class ReviewQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ReviewService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Review]:
-        return self._client._get(f"reviews/{id}", {}, schemas.ReviewSchema)
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Review]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"reviews/{id}", query_params, schemas.ReviewSchema)
 
-    def get_by_key(self, key: str) -> Optional[types.Review]:
-        return self._client._get(f"reviews/key={key}", {}, schemas.ReviewSchema)
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.Review]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"reviews/key={key}", query_params, schemas.ReviewSchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: Optional[str] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None,
+        expand: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.ReviewPagedQueryResponse:
         params = ReviewQuerySchema().dump(
             {
@@ -45,9 +51,12 @@ class ReviewService(abstract.AbstractService):
             "reviews", params, schemas.ReviewPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ReviewDraft) -> types.Review:
+    def create(self, draft: types.ReviewDraft, expand: OptionalListStr = None) -> types.Review:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "reviews", {}, draft, schemas.ReviewDraftSchema, schemas.ReviewSchema
+            "reviews", query_params, draft, schemas.ReviewDraftSchema, schemas.ReviewSchema
         )
 
     def update_by_id(
@@ -55,13 +64,17 @@ class ReviewService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.ReviewUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Review:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.ReviewUpdate(version=version, actions=actions)
         return self._client._post(
             f"reviews/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.ReviewUpdateSchema,
             response_schema_cls=schemas.ReviewSchema,
@@ -73,13 +86,17 @@ class ReviewService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.ReviewUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Review:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.ReviewUpdate(version=version, actions=actions)
         return self._client._post(
             f"reviews/key={key}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.ReviewUpdateSchema,
             response_schema_cls=schemas.ReviewSchema,
@@ -91,15 +108,17 @@ class ReviewService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = False,
     ) -> types.Review:
-        params = ReviewDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = ReviewDeleteSchema().dump(params)
         return self._client._delete(
             f"reviews/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.ReviewSchema,
             force_delete=force_delete,
         )
@@ -109,15 +128,17 @@ class ReviewService(abstract.AbstractService):
         key: str,
         version: int,
         data_erasure: bool = False,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = False,
     ) -> types.Review:
-        params = ReviewDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = ReviewDeleteSchema().dump(params)
         return self._client._delete(
             f"reviews/key={key}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.ReviewSchema,
             force_delete=force_delete,
         )

@@ -1,4 +1,3 @@
-import typing
 from typing import List, Optional
 
 from marshmallow import fields
@@ -19,18 +18,21 @@ class ProductDiscountQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ProductDiscountService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.ProductDiscount]:
+    def get_by_id(self, id: str, expand: str = None) -> Optional[types.ProductDiscount]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._get(
-            f"product-discounts/{id}", {}, schemas.ProductDiscountSchema
+            f"product-discounts/{id}", query_params, schemas.ProductDiscountSchema
         )
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: str = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.ProductDiscountPagedQueryResponse:
         params = ProductDiscountQuerySchema().dump(
             {
@@ -45,10 +47,13 @@ class ProductDiscountService(abstract.AbstractService):
             "product-discounts", params, schemas.ProductDiscountPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ProductDiscountDraft) -> types.ProductDiscount:
+    def create(self, draft: types.ProductDiscountDraft, expand: str = None) -> types.ProductDiscount:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
             "product-discounts",
-            {},
+            query_params,
             draft,
             schemas.ProductDiscountDraftSchema,
             schemas.ProductDiscountSchema,
@@ -59,13 +64,17 @@ class ProductDiscountService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.ProductDiscountUpdateAction],
+        expand: str = None,
         *,
         force_update: bool = False,
     ) -> types.ProductDiscount:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.ProductDiscountUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"product-discounts/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.ProductDiscountUpdateSchema,
             response_schema_cls=schemas.ProductDiscountSchema,
@@ -77,15 +86,17 @@ class ProductDiscountService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
+        expand: str = None,
         *,
         force_delete: bool = True,
     ) -> types.ProductDiscount:
-        params = ProductDiscountDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = ProductDiscountDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"product-discounts/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.ProductDiscountSchema,
             force_delete=force_delete,
         )

@@ -45,7 +45,7 @@ class ShippingMethodService(abstract.AbstractService):
             "shipping-methods", params, schemas.ShippingMethodPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ShippingMethodDraft, expand: OptionalListStr) -> types.ShippingMethod:
+    def create(self, draft: types.ShippingMethodDraft, expand: OptionalListStr = None) -> types.ShippingMethod:
         query_params = {}
         if expand:
             query_params["expand"] = expand

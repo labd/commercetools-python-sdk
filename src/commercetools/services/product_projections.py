@@ -11,21 +11,19 @@ from commercetools.typing import OptionalListInt, OptionalListStr, OptionalListU
 __all__ = ["ProductProjectionService"]
 
 
-class ProductProjectionsBaseSchema(Schema, abstract.RemoveEmptyValuesMixin):
+class ProductProjectionsBaseSchema(abstract.AbstractQuerySchema):
     staged = fields.Bool(data_key="staged", required=False, missing=False)
     price_currency = fields.String(data_key="priceCurrency")
     price_country = fields.String(data_key="priceCountry")
     price_customer_group = fields.UUID(data_key="priceCustomerGroup")
     price_channel = fields.UUID(data_key="priceChannel")
 
-    expand = helpers.OptionalList(fields.String())
 
-
-class ProductProjectionsQuerySchema(abstract.AbstractQuerySchema):
+class ProductProjectionsQuerySchema(ProductProjectionsBaseSchema):
     pass
 
 
-class ProductProjectionsSearchSchema(abstract.AbstractQuerySchema):
+class ProductProjectionsSearchSchema(ProductProjectionsBaseSchema):
     text = fields.Method("text_serialize")
     fuzzy = fields.Bool()
     fuzzy_level = fields.Integer(data_key="fuzzy.level")

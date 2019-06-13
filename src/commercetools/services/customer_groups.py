@@ -69,6 +69,8 @@ class CustomerGroupService(abstract.AbstractService):
         version: int,
         actions: List[types.CustomerGroupUpdateAction],
         expand: str = None,
+        *,
+        force_update: bool = False,
     ) -> types.CustomerGroup:
         query_params = {}
         if expand:
@@ -80,6 +82,7 @@ class CustomerGroupService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.CustomerGroupUpdateSchema,
             response_schema_cls=schemas.CustomerGroupSchema,
+            force_update=force_update,
         )
 
     def update_by_key(
@@ -88,6 +91,8 @@ class CustomerGroupService(abstract.AbstractService):
         version: int,
         actions: List[types.CustomerGroupUpdateAction],
         expand: str = None,
+        *,
+        force_update: bool = False,
     ) -> types.CustomerGroup:
         query_params = {}
         if expand:
@@ -99,6 +104,7 @@ class CustomerGroupService(abstract.AbstractService):
             data_object=update_action,
             request_schema_cls=schemas.CustomerGroupUpdateSchema,
             response_schema_cls=schemas.CustomerGroupSchema,
+            force_update=force_update,
         )
 
     def delete_by_id(

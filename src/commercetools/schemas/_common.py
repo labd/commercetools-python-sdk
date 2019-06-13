@@ -11,6 +11,7 @@ __all__ = [
     "AssetDraftSchema",
     "AssetSchema",
     "AssetSourceSchema",
+    "BaseResourceSchema",
     "CentPrecisionMoneySchema",
     "ClientLoggingSchema",
     "CreatedBySchema",
@@ -30,7 +31,6 @@ __all__ = [
     "PriceTierSchema",
     "ReferenceSchema",
     "ResourceIdentifierSchema",
-    "ResourceSchema",
     "ScopedPriceSchema",
     "TypedMoneySchema",
     "UpdateActionSchema",
@@ -190,6 +190,23 @@ class AssetSourceSchema(marshmallow.Schema):
         return types.AssetSource(**data)
 
 
+class BaseResourceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.BaseResource`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.BaseResource(**data)
+
+
 class ClientLoggingSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ClientLogging`."
     client_id = marshmallow.fields.String(
@@ -289,22 +306,6 @@ class ImageSchema(marshmallow.Schema):
         return types.Image(**data)
 
 
-class KeyReferenceSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.KeyReference`."
-    type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, data_key="typeId"
-    )
-    key = marshmallow.fields.String(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type_id"]
-        return types.KeyReference(**data)
-
-
 class MoneySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Money`."
     cent_amount = marshmallow.fields.Integer(allow_none=True, data_key="centAmount")
@@ -324,7 +325,7 @@ class PagedQueryResponseSchema(marshmallow.Schema):
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.ResourceSchema",
+        nested="commercetools.schemas._common.BaseResourceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
@@ -478,23 +479,6 @@ class ResourceIdentifierSchema(marshmallow.Schema):
         return types.ResourceIdentifier(**data)
 
 
-class ResourceSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.Resource`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        return types.Resource(**data)
-
-
 class ScopedPriceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ScopedPrice`."
     id = marshmallow.fields.String(allow_none=True)
@@ -621,6 +605,21 @@ class GeoJsonPointSchema(GeoJsonSchema):
         return types.GeoJsonPoint(**data)
 
 
+class KeyReferenceSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.KeyReference`."
+    type_id = marshmallow_enum.EnumField(
+        types.ReferenceTypeId, by_value=True, missing=None, data_key="typeId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.KeyReference(**data)
+
+
 class LastModifiedBySchema(ClientLoggingSchema):
     "Marshmallow schema for :class:`commercetools.types.LastModifiedBy`."
 
@@ -632,7 +631,7 @@ class LastModifiedBySchema(ClientLoggingSchema):
         return types.LastModifiedBy(**data)
 
 
-class LoggedResourceSchema(ResourceSchema):
+class LoggedResourceSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.LoggedResource`."
     last_modified_by = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.LastModifiedBySchema",

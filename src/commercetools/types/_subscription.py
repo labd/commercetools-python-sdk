@@ -5,12 +5,7 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import (
-    LoggedResource,
-    PagedQueryResponse,
-    Update,
-    UpdateAction,
-)
+from commercetools.types._common import LoggedResource, PagedQueryResponse
 
 if typing.TYPE_CHECKING:
     from ._common import CreatedBy, LastModifiedBy, Reference
@@ -305,8 +300,10 @@ class SubscriptionPagedQueryResponse(PagedQueryResponse):
         )
 
 
-class SubscriptionUpdate(Update):
+class SubscriptionUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -316,8 +313,9 @@ class SubscriptionUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "SubscriptionUpdate(version=%r, actions=%r)" % (
@@ -326,11 +324,14 @@ class SubscriptionUpdate(Update):
         )
 
 
-class SubscriptionUpdateAction(UpdateAction):
+class SubscriptionUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "SubscriptionUpdateAction(action=%r)" % (self.action,)

@@ -9,8 +9,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -120,8 +118,9 @@ class StateSchema(LoggedResourceSchema):
         return types.State(**data)
 
 
-class StateUpdateActionSchema(UpdateActionSchema):
+class StateUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.StateUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -132,8 +131,9 @@ class StateUpdateActionSchema(UpdateActionSchema):
         return types.StateUpdateAction(**data)
 
 
-class StateUpdateSchema(UpdateSchema):
+class StateUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.StateUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

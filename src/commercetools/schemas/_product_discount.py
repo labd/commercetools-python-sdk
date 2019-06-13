@@ -8,8 +8,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -24,6 +22,7 @@ __all__ = [
     "ProductDiscountReferenceSchema",
     "ProductDiscountSchema",
     "ProductDiscountSetDescriptionActionSchema",
+    "ProductDiscountSetKeyActionSchema",
     "ProductDiscountSetValidFromActionSchema",
     "ProductDiscountSetValidFromAndUntilActionSchema",
     "ProductDiscountSetValidUntilActionSchema",
@@ -39,6 +38,7 @@ __all__ = [
 class ProductDiscountDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountDraft`."
     name = LocalizedStringField(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -125,6 +125,7 @@ class ProductDiscountReferenceSchema(ReferenceSchema):
 class ProductDiscountSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscount`."
     name = LocalizedStringField(allow_none=True)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -186,8 +187,9 @@ class ProductDiscountSchema(LoggedResourceSchema):
         return types.ProductDiscount(**data)
 
 
-class ProductDiscountUpdateActionSchema(UpdateActionSchema):
+class ProductDiscountUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -198,8 +200,9 @@ class ProductDiscountUpdateActionSchema(UpdateActionSchema):
         return types.ProductDiscountUpdateAction(**data)
 
 
-class ProductDiscountUpdateSchema(UpdateSchema):
+class ProductDiscountUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),
@@ -210,6 +213,7 @@ class ProductDiscountUpdateSchema(UpdateSchema):
                 "changeSortOrder": "commercetools.schemas._product_discount.ProductDiscountChangeSortOrderActionSchema",
                 "changeValue": "commercetools.schemas._product_discount.ProductDiscountChangeValueActionSchema",
                 "setDescription": "commercetools.schemas._product_discount.ProductDiscountSetDescriptionActionSchema",
+                "setKey": "commercetools.schemas._product_discount.ProductDiscountSetKeyActionSchema",
                 "setValidFrom": "commercetools.schemas._product_discount.ProductDiscountSetValidFromActionSchema",
                 "setValidFromAndUntil": "commercetools.schemas._product_discount.ProductDiscountSetValidFromAndUntilActionSchema",
                 "setValidUntil": "commercetools.schemas._product_discount.ProductDiscountSetValidUntilActionSchema",
@@ -326,6 +330,19 @@ class ProductDiscountSetDescriptionActionSchema(ProductDiscountUpdateActionSchem
     def post_load(self, data):
         del data["action"]
         return types.ProductDiscountSetDescriptionAction(**data)
+
+
+class ProductDiscountSetKeyActionSchema(ProductDiscountUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountSetKeyAction`."
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.ProductDiscountSetKeyAction(**data)
 
 
 class ProductDiscountSetValidFromActionSchema(ProductDiscountUpdateActionSchema):

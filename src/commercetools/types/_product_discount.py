@@ -9,8 +9,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -27,6 +25,7 @@ __all__ = [
     "ProductDiscountPagedQueryResponse",
     "ProductDiscountReference",
     "ProductDiscountSetDescriptionAction",
+    "ProductDiscountSetKeyAction",
     "ProductDiscountSetValidFromAction",
     "ProductDiscountSetValidFromAndUntilAction",
     "ProductDiscountSetValidUntilAction",
@@ -43,6 +42,8 @@ class ProductDiscount(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSchema`."
     #: :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductDiscountValue`
@@ -70,6 +71,7 @@ class ProductDiscount(LoggedResource):
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: typing.Optional["LocalizedString"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: typing.Optional["ProductDiscountValue"] = None,
         predicate: typing.Optional[str] = None,
@@ -80,6 +82,7 @@ class ProductDiscount(LoggedResource):
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.name = name
+        self.key = key
         self.description = description
         self.value = value
         self.predicate = predicate
@@ -99,7 +102,7 @@ class ProductDiscount(LoggedResource):
 
     def __repr__(self) -> str:
         return (
-            "ProductDiscount(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, name=%r, description=%r, value=%r, predicate=%r, sort_order=%r, is_active=%r, references=%r, valid_from=%r, valid_until=%r)"
+            "ProductDiscount(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, name=%r, key=%r, description=%r, value=%r, predicate=%r, sort_order=%r, is_active=%r, references=%r, valid_from=%r, valid_until=%r)"
             % (
                 self.id,
                 self.version,
@@ -108,6 +111,7 @@ class ProductDiscount(LoggedResource):
                 self.last_modified_by,
                 self.created_by,
                 self.name,
+                self.key,
                 self.description,
                 self.value,
                 self.predicate,
@@ -124,6 +128,8 @@ class ProductDiscountDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductDiscountValue`
@@ -143,6 +149,7 @@ class ProductDiscountDraft(_BaseType):
         self,
         *,
         name: typing.Optional["LocalizedString"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: typing.Optional["ProductDiscountValue"] = None,
         predicate: typing.Optional[str] = None,
@@ -152,6 +159,7 @@ class ProductDiscountDraft(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.name = name
+        self.key = key
         self.description = description
         self.value = value
         self.predicate = predicate
@@ -163,9 +171,10 @@ class ProductDiscountDraft(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "ProductDiscountDraft(name=%r, description=%r, value=%r, predicate=%r, sort_order=%r, is_active=%r, valid_from=%r, valid_until=%r)"
+            "ProductDiscountDraft(name=%r, key=%r, description=%r, value=%r, predicate=%r, sort_order=%r, is_active=%r, valid_from=%r, valid_until=%r)"
             % (
                 self.name,
+                self.key,
                 self.description,
                 self.value,
                 self.predicate,
@@ -257,8 +266,10 @@ class ProductDiscountReference(Reference):
         )
 
 
-class ProductDiscountUpdate(Update):
+class ProductDiscountUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -268,8 +279,9 @@ class ProductDiscountUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProductDiscountUpdate(version=%r, actions=%r)" % (
@@ -278,11 +290,14 @@ class ProductDiscountUpdate(Update):
         )
 
 
-class ProductDiscountUpdateAction(UpdateAction):
+class ProductDiscountUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProductDiscountUpdateAction(action=%r)" % (self.action,)
@@ -424,6 +439,24 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
         return "ProductDiscountSetDescriptionAction(action=%r, description=%r)" % (
             self.action,
             self.description,
+        )
+
+
+class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSetKeyActionSchema`."
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
+    ) -> None:
+        self.key = key
+        super().__init__(action="setKey")
+
+    def __repr__(self) -> str:
+        return "ProductDiscountSetKeyAction(action=%r, key=%r)" % (
+            self.action,
+            self.key,
         )
 
 

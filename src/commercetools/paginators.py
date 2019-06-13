@@ -37,7 +37,7 @@ class Paginator:
         self._offset = 0
         self._limit = None
 
-    def __iter__(self) -> typing.Generator[types.Resource, None, None]:
+    def __iter__(self) -> typing.Generator[types.BaseResource, None, None]:
 
         offset = self._offset or 0
         limit = self._limit
@@ -83,7 +83,7 @@ class CursorPaginator(Paginator):
 
     """
 
-    def __iter__(self) -> typing.Generator[types.Resource, None, None]:
+    def __iter__(self) -> typing.Generator[types.BaseResource, None, None]:
         last_created_at = None
         limit = self._limit
         num = 0

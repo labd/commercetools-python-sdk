@@ -5,9 +5,9 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     LocalizedStringField,
     PagedQueryResponseSchema,
-    ResourceSchema,
 )
 
 __all__ = [
@@ -209,7 +209,7 @@ class MessagePayloadSchema(marshmallow.Schema):
         return types.MessagePayload(**data)
 
 
-class MessageSchema(ResourceSchema):
+class MessageSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Message`."
     sequence_number = marshmallow.fields.Integer(
         allow_none=True, data_key="sequenceNumber"

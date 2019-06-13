@@ -10,8 +10,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -41,11 +39,14 @@ __all__ = [
     "TypeAddEnumValueAction",
     "TypeAddFieldDefinitionAction",
     "TypeAddLocalizedEnumValueAction",
+    "TypeChangeEnumValueLabelAction",
     "TypeChangeEnumValueOrderAction",
     "TypeChangeFieldDefinitionLabelAction",
     "TypeChangeFieldDefinitionOrderAction",
+    "TypeChangeInputHintAction",
     "TypeChangeKeyAction",
     "TypeChangeLabelAction",
+    "TypeChangeLocalizedEnumValueLabelAction",
     "TypeChangeLocalizedEnumValueOrderAction",
     "TypeChangeNameAction",
     "TypeDraft",
@@ -376,8 +377,10 @@ class TypeTextInputHint(enum.Enum):
     MULTI_LINE = "MultiLine"
 
 
-class TypeUpdate(Update):
+class TypeUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -387,18 +390,22 @@ class TypeUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "TypeUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-class TypeUpdateAction(UpdateAction):
+class TypeUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "TypeUpdateAction(action=%r)" % (self.action,)
@@ -638,6 +645,32 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
         )
 
 
+class TypeChangeEnumValueLabelAction(TypeUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueLabelActionSchema`."
+    #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
+    field_name: typing.Optional[str]
+    #: :class:`commercetools.types.CustomFieldEnumValue`
+    value: typing.Optional["CustomFieldEnumValue"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        field_name: typing.Optional[str] = None,
+        value: typing.Optional["CustomFieldEnumValue"] = None,
+    ) -> None:
+        self.field_name = field_name
+        self.value = value
+        super().__init__(action="changeEnumValueLabel")
+
+    def __repr__(self) -> str:
+        return "TypeChangeEnumValueLabelAction(action=%r, field_name=%r, value=%r)" % (
+            self.action,
+            self.field_name,
+            self.value,
+        )
+
+
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
@@ -710,6 +743,32 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
         )
 
 
+class TypeChangeInputHintAction(TypeUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeInputHintActionSchema`."
+    #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
+    field_name: typing.Optional[str]
+    #: :class:`commercetools.types.TypeTextInputHint` `(Named` ``inputHint`` `in Commercetools)`
+    input_hint: typing.Optional["TypeTextInputHint"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        field_name: typing.Optional[str] = None,
+        input_hint: typing.Optional["TypeTextInputHint"] = None,
+    ) -> None:
+        self.field_name = field_name
+        self.input_hint = input_hint
+        super().__init__(action="changeInputHint")
+
+    def __repr__(self) -> str:
+        return "TypeChangeInputHintAction(action=%r, field_name=%r, input_hint=%r)" % (
+            self.action,
+            self.field_name,
+            self.input_hint,
+        )
+
+
 class TypeChangeKeyAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeKeyActionSchema`."
     #: :class:`str`
@@ -748,6 +807,31 @@ class TypeChangeLabelAction(TypeUpdateAction):
             self.action,
             self.field_name,
             self.label,
+        )
+
+
+class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueLabelActionSchema`."
+    #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
+    field_name: typing.Optional[str]
+    #: :class:`commercetools.types.CustomFieldLocalizedEnumValue`
+    value: typing.Optional["CustomFieldLocalizedEnumValue"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        field_name: typing.Optional[str] = None,
+        value: typing.Optional["CustomFieldLocalizedEnumValue"] = None,
+    ) -> None:
+        self.field_name = field_name
+        self.value = value
+        super().__init__(action="changeLocalizedEnumValueLabel")
+
+    def __repr__(self) -> str:
+        return (
+            "TypeChangeLocalizedEnumValueLabelAction(action=%r, field_name=%r, value=%r)"
+            % (self.action, self.field_name, self.value)
         )
 
 

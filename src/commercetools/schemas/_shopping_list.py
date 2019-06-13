@@ -8,8 +8,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -254,8 +252,9 @@ class ShoppingListSchema(LoggedResourceSchema):
         return types.ShoppingList(**data)
 
 
-class ShoppingListUpdateActionSchema(UpdateActionSchema):
+class ShoppingListUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -266,8 +265,9 @@ class ShoppingListUpdateActionSchema(UpdateActionSchema):
         return types.ShoppingListUpdateAction(**data)
 
 
-class ShoppingListUpdateSchema(UpdateSchema):
+class ShoppingListUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

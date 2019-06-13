@@ -5,10 +5,10 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
+    BaseResource,
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Resource,
 )
 
 __all__ = [
@@ -19,7 +19,7 @@ __all__ = [
 ]
 
 
-class CustomObject(Resource):
+class CustomObject(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."
     #: :class:`str`
     container: typing.Optional[str]

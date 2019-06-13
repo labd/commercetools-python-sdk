@@ -9,8 +9,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -320,8 +318,9 @@ class PaymentStatusSchema(marshmallow.Schema):
         return types.PaymentStatus(**data)
 
 
-class PaymentUpdateActionSchema(UpdateActionSchema):
+class PaymentUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PaymentUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -332,8 +331,9 @@ class PaymentUpdateActionSchema(UpdateActionSchema):
         return types.PaymentUpdateAction(**data)
 
 
-class PaymentUpdateSchema(UpdateSchema):
+class PaymentUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PaymentUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

@@ -18,6 +18,7 @@ __all__ = [
     "AssetDimensions",
     "AssetDraft",
     "AssetSource",
+    "BaseResource",
     "CentPrecisionMoney",
     "ClientLogging",
     "CreatedBy",
@@ -39,7 +40,6 @@ __all__ = [
     "PriceTier",
     "Reference",
     "ReferenceTypeId",
-    "Resource",
     "ResourceIdentifier",
     "ScopedPrice",
     "TypedMoney",
@@ -341,6 +341,40 @@ class AssetSource(_BaseType):
         )
 
 
+class BaseResource(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.BaseResourceSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+    ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "BaseResource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
+            self.id,
+            self.version,
+            self.created_at,
+            self.last_modified_at,
+        )
+
+
 class ClientLogging(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ClientLoggingSchema`."
     #: Optional :class:`str` `(Named` ``clientId`` `in Commercetools)`
@@ -462,27 +496,6 @@ class ImageDimensions(_BaseType):
         return "ImageDimensions(w=%r, h=%r)" % (self.w, self.h)
 
 
-class KeyReference(_BaseType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.KeyReferenceSchema`."
-    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
-    type_id: typing.Optional["ReferenceTypeId"]
-    #: :class:`str`
-    key: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        key: typing.Optional[str] = None,
-    ) -> None:
-        self.type_id = type_id
-        self.key = key
-        super().__init__()
-
-    def __repr__(self) -> str:
-        return "KeyReference(type_id=%r, key=%r)" % (self.type_id, self.key)
-
-
 class LocalizedString(typing.Dict[(str, str)]):
     def __repr__(self) -> str:
         return "LocalizedString(%s)" % (
@@ -527,8 +540,8 @@ class PagedQueryResponse(_BaseType):
     total: typing.Optional[int]
     #: :class:`int`
     offset: typing.Optional[int]
-    #: List of :class:`commercetools.types.Resource`
-    results: typing.Optional[typing.Sequence["Resource"]]
+    #: List of :class:`commercetools.types.BaseResource`
+    results: typing.Optional[typing.Sequence["BaseResource"]]
 
     def __init__(
         self,
@@ -536,7 +549,7 @@ class PagedQueryResponse(_BaseType):
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Resource"]] = None,
+        results: typing.Optional[typing.Sequence["BaseResource"]] = None,
     ) -> None:
         self.count = count
         self.total = total
@@ -727,40 +740,6 @@ class ReferenceTypeId(enum.Enum):
     ORDER_EDIT = "order-edit"
 
 
-class Resource(_BaseType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-    ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        super().__init__()
-
-    def __repr__(self) -> str:
-        return "Resource(id=%r, version=%r, created_at=%r, last_modified_at=%r)" % (
-            self.id,
-            self.version,
-            self.created_at,
-            self.last_modified_at,
-        )
-
-
 class ResourceIdentifier(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceIdentifierSchema`."
     #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
@@ -934,6 +913,29 @@ class GeoJsonPoint(GeoJson):
         return "GeoJsonPoint(type=%r, coordinates=%r)" % (self.type, self.coordinates)
 
 
+class KeyReference(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.KeyReferenceSchema`."
+    #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
+    type_id: typing.Optional["ReferenceTypeId"]
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+    ) -> None:
+        self.type_id = type_id
+        super().__init__(type_id=type_id, id=id, key=key)
+
+    def __repr__(self) -> str:
+        return "KeyReference(type_id=%r, id=%r, key=%r)" % (
+            self.type_id,
+            self.id,
+            self.key,
+        )
+
+
 class LastModifiedBy(ClientLogging):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LastModifiedBySchema`."
 
@@ -959,7 +961,7 @@ class LastModifiedBy(ClientLogging):
         )
 
 
-class LoggedResource(Resource):
+class LoggedResource(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LoggedResourceSchema`."
     #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
     last_modified_by: typing.Optional["LastModifiedBy"]

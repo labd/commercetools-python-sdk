@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import PagedQueryResponse, Resource
+from commercetools.types._common import BaseResource, PagedQueryResponse
 
 if typing.TYPE_CHECKING:
     from ._cart import (
@@ -186,7 +186,7 @@ __all__ = [
 ]
 
 
-class Message(Resource):
+class Message(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSchema`."
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
     sequence_number: typing.Optional[int]

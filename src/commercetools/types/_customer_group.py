@@ -9,8 +9,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -158,8 +156,10 @@ class CustomerGroupReference(Reference):
         )
 
 
-class CustomerGroupUpdate(Update):
+class CustomerGroupUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -169,8 +169,9 @@ class CustomerGroupUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CustomerGroupUpdate(version=%r, actions=%r)" % (
@@ -179,11 +180,14 @@ class CustomerGroupUpdate(Update):
         )
 
 
-class CustomerGroupUpdateAction(UpdateAction):
+class CustomerGroupUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CustomerGroupUpdateAction(action=%r)" % (self.action,)

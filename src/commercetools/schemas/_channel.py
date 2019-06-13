@@ -9,8 +9,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -148,8 +146,9 @@ class ChannelSchema(LoggedResourceSchema):
         return types.Channel(**data)
 
 
-class ChannelUpdateActionSchema(UpdateActionSchema):
+class ChannelUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ChannelUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -160,8 +159,9 @@ class ChannelUpdateActionSchema(UpdateActionSchema):
         return types.ChannelUpdateAction(**data)
 
 
-class ChannelUpdateSchema(UpdateSchema):
+class ChannelUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ChannelUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

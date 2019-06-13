@@ -8,8 +8,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -201,8 +199,9 @@ class DiscountCodeSchema(LoggedResourceSchema):
         return types.DiscountCode(**data)
 
 
-class DiscountCodeUpdateActionSchema(UpdateActionSchema):
+class DiscountCodeUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -213,8 +212,9 @@ class DiscountCodeUpdateActionSchema(UpdateActionSchema):
         return types.DiscountCodeUpdateAction(**data)
 
 
-class DiscountCodeUpdateSchema(UpdateSchema):
+class DiscountCodeUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

@@ -5,7 +5,7 @@ import uuid
 import marshmallow
 
 from commercetools import schemas, types
-from commercetools.schemas import ResourceSchema
+from commercetools.schemas import BaseResourceSchema
 from commercetools.services import abstract
 from commercetools.testing import utils
 from commercetools.testing.predicates import PredicateFilter
@@ -13,7 +13,7 @@ from commercetools.testing.utils import create_commercetools_response
 
 
 class BaseModel:
-    _resource_schema: typing.Type[ResourceSchema]
+    _resource_schema: typing.Type[BaseResourceSchema]
 
     def __init__(self, storage):
         self._storage = storage

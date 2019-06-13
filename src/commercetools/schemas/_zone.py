@@ -4,11 +4,9 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -95,7 +93,7 @@ class ZoneReferenceSchema(ReferenceSchema):
         return types.ZoneReference(**data)
 
 
-class ZoneSchema(ResourceSchema):
+class ZoneSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Zone`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
@@ -115,8 +113,9 @@ class ZoneSchema(ResourceSchema):
         return types.Zone(**data)
 
 
-class ZoneUpdateActionSchema(UpdateActionSchema):
+class ZoneUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ZoneUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -127,8 +126,9 @@ class ZoneUpdateActionSchema(UpdateActionSchema):
         return types.ZoneUpdateAction(**data)
 
 
-class ZoneUpdateSchema(UpdateSchema):
+class ZoneUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ZoneUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

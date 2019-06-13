@@ -4,9 +4,9 @@ import marshmallow
 
 from commercetools import types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
 )
 
 __all__ = [
@@ -67,7 +67,7 @@ class CustomObjectReferenceSchema(ReferenceSchema):
         return types.CustomObjectReference(**data)
 
 
-class CustomObjectSchema(ResourceSchema):
+class CustomObjectSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomObject`."
     container = marshmallow.fields.String(allow_none=True)
     key = marshmallow.fields.String(allow_none=True)

@@ -5,12 +5,11 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
+    BaseResource,
     KeyReference,
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -27,49 +26,42 @@ __all__ = [
 ]
 
 
-class Store(_BaseType):
+class Store(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
     #: :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
         created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        key: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None
     ) -> None:
-        self.id = id
-        self.version = version
         self.key = key
         self.name = name
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        super().__init__()
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+        )
 
     def __repr__(self) -> str:
         return (
-            "Store(id=%r, version=%r, key=%r, name=%r, created_at=%r, last_modified_at=%r)"
+            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, name=%r)"
             % (
                 self.id,
                 self.version,
-                self.key,
-                self.name,
                 self.created_at,
                 self.last_modified_at,
+                self.key,
+                self.name,
             )
         )
 
@@ -102,12 +94,17 @@ class StoreKeyReference(KeyReference):
         self,
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
         key: typing.Optional[str] = None
     ) -> None:
-        super().__init__(type_id=ReferenceTypeId.STORE, key=key)
+        super().__init__(type_id=ReferenceTypeId.STORE, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "StoreKeyReference(type_id=%r, key=%r)" % (self.type_id, self.key)
+        return "StoreKeyReference(type_id=%r, id=%r, key=%r)" % (
+            self.type_id,
+            self.id,
+            self.key,
+        )
 
 
 class StorePagedQueryResponse(PagedQueryResponse):
@@ -160,8 +157,10 @@ class StoreReference(Reference):
         )
 
 
-class StoreUpdate(Update):
+class StoreUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -171,18 +170,22 @@ class StoreUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "StoreUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-class StoreUpdateAction(UpdateAction):
+class StoreUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "StoreUpdateAction(action=%r)" % (self.action,)

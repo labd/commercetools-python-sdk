@@ -9,8 +9,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 from commercetools.types._order import Order, StagedOrderUpdateAction
 
@@ -362,8 +360,10 @@ class OrderEditResult(_BaseType):
         return "OrderEditResult(type=%r)" % (self.type,)
 
 
-class OrderEditUpdate(Update):
+class OrderEditUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: List of :class:`commercetools.types.OrderEditUpdateAction`
     actions: typing.Optional[typing.List["OrderEditUpdateAction"]]
     #: :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
@@ -376,9 +376,10 @@ class OrderEditUpdate(Update):
         actions: typing.Optional[typing.List["OrderEditUpdateAction"]] = None,
         dry_run: typing.Optional[bool] = None
     ) -> None:
+        self.version = version
         self.actions = actions
         self.dry_run = dry_run
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "OrderEditUpdate(version=%r, actions=%r, dry_run=%r)" % (
@@ -388,11 +389,14 @@ class OrderEditUpdate(Update):
         )
 
 
-class OrderEditUpdateAction(UpdateAction):
+class OrderEditUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "OrderEditUpdateAction(action=%r)" % (self.action,)

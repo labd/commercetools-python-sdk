@@ -10,8 +10,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -229,8 +227,10 @@ class ChannelRoleEnum(enum.Enum):
     PRIMARY = "Primary"
 
 
-class ChannelUpdate(Update):
+class ChannelUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -240,18 +240,22 @@ class ChannelUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ChannelUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-class ChannelUpdateAction(UpdateAction):
+class ChannelUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ChannelUpdateAction(action=%r)" % (self.action,)

@@ -7,8 +7,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -118,8 +116,9 @@ class TaxCategorySchema(LoggedResourceSchema):
         return types.TaxCategory(**data)
 
 
-class TaxCategoryUpdateActionSchema(UpdateActionSchema):
+class TaxCategoryUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxCategoryUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -130,8 +129,9 @@ class TaxCategoryUpdateActionSchema(UpdateActionSchema):
         return types.TaxCategoryUpdateAction(**data)
 
 
-class TaxCategoryUpdateSchema(UpdateSchema):
+class TaxCategoryUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxCategoryUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

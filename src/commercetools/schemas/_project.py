@@ -4,12 +4,12 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import UpdateActionSchema, UpdateSchema
 
 __all__ = [
     "CartClassificationTypeSchema",
     "CartScoreTypeSchema",
     "CartValueTypeSchema",
+    "ExternalOAuthSchema",
     "ProjectChangeCountriesActionSchema",
     "ProjectChangeCurrenciesActionSchema",
     "ProjectChangeLanguagesActionSchema",
@@ -17,11 +17,27 @@ __all__ = [
     "ProjectChangeMessagesEnabledActionSchema",
     "ProjectChangeNameActionSchema",
     "ProjectSchema",
+    "ProjectSetExternalOAuthActionSchema",
     "ProjectSetShippingRateInputTypeActionSchema",
     "ProjectUpdateActionSchema",
     "ProjectUpdateSchema",
     "ShippingRateInputTypeSchema",
 ]
+
+
+class ExternalOAuthSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ExternalOAuth`."
+    url = marshmallow.fields.String(allow_none=True)
+    authorization_header = marshmallow.fields.String(
+        allow_none=True, data_key="authorizationHeader"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.ExternalOAuth(**data)
 
 
 class ProjectSchema(marshmallow.Schema):
@@ -53,6 +69,13 @@ class ProjectSchema(marshmallow.Schema):
         missing=None,
         data_key="shippingRateInputType",
     )
+    external_o_auth = marshmallow.fields.Nested(
+        nested="commercetools.schemas._project.ExternalOAuthSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalOAuth",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -62,8 +85,9 @@ class ProjectSchema(marshmallow.Schema):
         return types.Project(**data)
 
 
-class ProjectUpdateActionSchema(UpdateActionSchema):
+class ProjectUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProjectUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -74,8 +98,9 @@ class ProjectUpdateActionSchema(UpdateActionSchema):
         return types.ProjectUpdateAction(**data)
 
 
-class ProjectUpdateSchema(UpdateSchema):
+class ProjectUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProjectUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),
@@ -86,6 +111,7 @@ class ProjectUpdateSchema(UpdateSchema):
                 "changeMessagesConfiguration": "commercetools.schemas._project.ProjectChangeMessagesConfigurationActionSchema",
                 "changeMessagesEnabled": "commercetools.schemas._project.ProjectChangeMessagesEnabledActionSchema",
                 "changeName": "commercetools.schemas._project.ProjectChangeNameActionSchema",
+                "setExternalOAuth": "commercetools.schemas._project.ProjectSetExternalOAuthActionSchema",
                 "setShippingRateInputType": "commercetools.schemas._project.ProjectSetShippingRateInputTypeActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
@@ -242,6 +268,25 @@ class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.ProjectChangeNameAction(**data)
+
+
+class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProjectSetExternalOAuthAction`."
+    external_o_auth = marshmallow.fields.Nested(
+        nested="commercetools.schemas._project.ExternalOAuthSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalOAuth",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.ProjectSetExternalOAuthAction(**data)
 
 
 class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):

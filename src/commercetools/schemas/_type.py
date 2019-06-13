@@ -9,8 +9,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -35,11 +33,14 @@ __all__ = [
     "TypeAddEnumValueActionSchema",
     "TypeAddFieldDefinitionActionSchema",
     "TypeAddLocalizedEnumValueActionSchema",
+    "TypeChangeEnumValueLabelActionSchema",
     "TypeChangeEnumValueOrderActionSchema",
     "TypeChangeFieldDefinitionLabelActionSchema",
     "TypeChangeFieldDefinitionOrderActionSchema",
+    "TypeChangeInputHintActionSchema",
     "TypeChangeKeyActionSchema",
     "TypeChangeLabelActionSchema",
+    "TypeChangeLocalizedEnumValueLabelActionSchema",
     "TypeChangeLocalizedEnumValueOrderActionSchema",
     "TypeChangeNameActionSchema",
     "TypeDraftSchema",
@@ -236,8 +237,9 @@ class TypeSchema(LoggedResourceSchema):
         return types.Type(**data)
 
 
-class TypeUpdateActionSchema(UpdateActionSchema):
+class TypeUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TypeUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -248,8 +250,9 @@ class TypeUpdateActionSchema(UpdateActionSchema):
         return types.TypeUpdateAction(**data)
 
 
-class TypeUpdateSchema(UpdateSchema):
+class TypeUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TypeUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),
@@ -257,11 +260,14 @@ class TypeUpdateSchema(UpdateSchema):
                 "addEnumValue": "commercetools.schemas._type.TypeAddEnumValueActionSchema",
                 "addFieldDefinition": "commercetools.schemas._type.TypeAddFieldDefinitionActionSchema",
                 "addLocalizedEnumValue": "commercetools.schemas._type.TypeAddLocalizedEnumValueActionSchema",
+                "changeEnumValueLabel": "commercetools.schemas._type.TypeChangeEnumValueLabelActionSchema",
                 "changeEnumValueOrder": "commercetools.schemas._type.TypeChangeEnumValueOrderActionSchema",
                 "changeFieldDefinitionLabel": "commercetools.schemas._type.TypeChangeFieldDefinitionLabelActionSchema",
                 "changeFieldDefinitionOrder": "commercetools.schemas._type.TypeChangeFieldDefinitionOrderActionSchema",
+                "changeInputHint": "commercetools.schemas._type.TypeChangeInputHintActionSchema",
                 "changeKey": "commercetools.schemas._type.TypeChangeKeyActionSchema",
                 "changeLabel": "commercetools.schemas._type.TypeChangeLabelActionSchema",
+                "changeLocalizedEnumValueLabel": "commercetools.schemas._type.TypeChangeLocalizedEnumValueLabelActionSchema",
                 "changeLocalizedEnumValueOrder": "commercetools.schemas._type.TypeChangeLocalizedEnumValueOrderActionSchema",
                 "changeName": "commercetools.schemas._type.TypeChangeNameActionSchema",
                 "removeFieldDefinition": "commercetools.schemas._type.TypeRemoveFieldDefinitionActionSchema",
@@ -514,6 +520,24 @@ class TypeAddLocalizedEnumValueActionSchema(TypeUpdateActionSchema):
         return types.TypeAddLocalizedEnumValueAction(**data)
 
 
+class TypeChangeEnumValueLabelActionSchema(TypeUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.TypeChangeEnumValueLabelAction`."
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    value = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldEnumValueSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.TypeChangeEnumValueLabelAction(**data)
+
+
 class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeEnumValueOrderAction`."
     field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
@@ -557,6 +581,22 @@ class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):
         return types.TypeChangeFieldDefinitionOrderAction(**data)
 
 
+class TypeChangeInputHintActionSchema(TypeUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.TypeChangeInputHintAction`."
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    input_hint = marshmallow_enum.EnumField(
+        types.TypeTextInputHint, by_value=True, data_key="inputHint"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.TypeChangeInputHintAction(**data)
+
+
 class TypeChangeKeyActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeKeyAction`."
     key = marshmallow.fields.String(allow_none=True)
@@ -582,6 +622,24 @@ class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
     def post_load(self, data):
         del data["action"]
         return types.TypeChangeLabelAction(**data)
+
+
+class TypeChangeLocalizedEnumValueLabelActionSchema(TypeUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.TypeChangeLocalizedEnumValueLabelAction`."
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    value = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldLocalizedEnumValueSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.TypeChangeLocalizedEnumValueLabelAction(**data)
 
 
 class TypeChangeLocalizedEnumValueOrderActionSchema(TypeUpdateActionSchema):

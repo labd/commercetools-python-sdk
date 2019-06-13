@@ -4,7 +4,6 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import Update, UpdateAction
 from commercetools.types._shipping_method import ShippingRateTierType
 
 if typing.TYPE_CHECKING:
@@ -13,6 +12,7 @@ __all__ = [
     "CartClassificationType",
     "CartScoreType",
     "CartValueType",
+    "ExternalOAuth",
     "Project",
     "ProjectChangeCountriesAction",
     "ProjectChangeCurrenciesAction",
@@ -20,11 +20,36 @@ __all__ = [
     "ProjectChangeMessagesConfigurationAction",
     "ProjectChangeMessagesEnabledAction",
     "ProjectChangeNameAction",
+    "ProjectSetExternalOAuthAction",
     "ProjectSetShippingRateInputTypeAction",
     "ProjectUpdate",
     "ProjectUpdateAction",
     "ShippingRateInputType",
 ]
+
+
+class ExternalOAuth(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ExternalOAuthSchema`."
+    #: :class:`str`
+    url: typing.Optional[str]
+    #: :class:`str` `(Named` ``authorizationHeader`` `in Commercetools)`
+    authorization_header: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        url: typing.Optional[str] = None,
+        authorization_header: typing.Optional[str] = None
+    ) -> None:
+        self.url = url
+        self.authorization_header = authorization_header
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ExternalOAuth(url=%r, authorization_header=%r)" % (
+            self.url,
+            self.authorization_header,
+        )
 
 
 class Project(_BaseType):
@@ -49,6 +74,8 @@ class Project(_BaseType):
     messages: typing.Optional["MessageConfiguration"]
     #: Optional :class:`commercetools.types.ShippingRateInputType` `(Named` ``shippingRateInputType`` `in Commercetools)`
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
+    #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
+    external_o_auth: typing.Optional["ExternalOAuth"]
 
     def __init__(
         self,
@@ -62,7 +89,8 @@ class Project(_BaseType):
         created_at: typing.Optional[datetime.datetime] = None,
         trial_until: typing.Optional[str] = None,
         messages: typing.Optional["MessageConfiguration"] = None,
-        shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None
+        shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
+        external_o_auth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
         self.version = version
         self.key = key
@@ -74,11 +102,12 @@ class Project(_BaseType):
         self.trial_until = trial_until
         self.messages = messages
         self.shipping_rate_input_type = shipping_rate_input_type
+        self.external_o_auth = external_o_auth
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "Project(version=%r, key=%r, name=%r, countries=%r, currencies=%r, languages=%r, created_at=%r, trial_until=%r, messages=%r, shipping_rate_input_type=%r)"
+            "Project(version=%r, key=%r, name=%r, countries=%r, currencies=%r, languages=%r, created_at=%r, trial_until=%r, messages=%r, shipping_rate_input_type=%r, external_o_auth=%r)"
             % (
                 self.version,
                 self.key,
@@ -90,12 +119,15 @@ class Project(_BaseType):
                 self.trial_until,
                 self.messages,
                 self.shipping_rate_input_type,
+                self.external_o_auth,
             )
         )
 
 
-class ProjectUpdate(Update):
+class ProjectUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -105,18 +137,22 @@ class ProjectUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProjectUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-class ProjectUpdateAction(UpdateAction):
+class ProjectUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProjectUpdateAction(action=%r)" % (self.action,)
@@ -291,6 +327,27 @@ class ProjectChangeNameAction(ProjectUpdateAction):
 
     def __repr__(self) -> str:
         return "ProjectChangeNameAction(action=%r, name=%r)" % (self.action, self.name)
+
+
+class ProjectSetExternalOAuthAction(ProjectUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSetExternalOAuthActionSchema`."
+    #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
+    external_o_auth: typing.Optional["ExternalOAuth"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        external_o_auth: typing.Optional["ExternalOAuth"] = None
+    ) -> None:
+        self.external_o_auth = external_o_auth
+        super().__init__(action="setExternalOAuth")
+
+    def __repr__(self) -> str:
+        return "ProjectSetExternalOAuthAction(action=%r, external_o_auth=%r)" % (
+            self.action,
+            self.external_o_auth,
+        )
 
 
 class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):

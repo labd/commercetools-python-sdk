@@ -6,13 +6,11 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
+    BaseResource,
     LoggedResource,
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Resource,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -569,7 +567,7 @@ class ProductPagedQueryResponse(PagedQueryResponse):
         )
 
 
-class ProductProjection(Resource):
+class ProductProjection(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionSchema`."
     #: Optional :class:`str`
     key: typing.Optional[str]
@@ -764,8 +762,10 @@ class ProductReference(Reference):
         )
 
 
-class ProductUpdate(Update):
+class ProductUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -775,18 +775,22 @@ class ProductUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None,
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProductUpdate(version=%r, actions=%r)" % (self.version, self.actions)
 
 
-class ProductUpdateAction(UpdateAction):
+class ProductUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProductUpdateAction(action=%r)" % (self.action,)

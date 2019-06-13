@@ -10,8 +10,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -383,8 +381,10 @@ class ProductTypeReference(Reference):
         )
 
 
-class ProductTypeUpdate(Update):
+class ProductTypeUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -394,8 +394,9 @@ class ProductTypeUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProductTypeUpdate(version=%r, actions=%r)" % (
@@ -404,11 +405,14 @@ class ProductTypeUpdate(Update):
         )
 
 
-class ProductTypeUpdateAction(UpdateAction):
+class ProductTypeUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "ProductTypeUpdateAction(action=%r)" % (self.action,)

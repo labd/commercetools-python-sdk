@@ -4,12 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import (
-    LoggedResourceSchema,
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
+from commercetools.schemas._common import LoggedResourceSchema, PagedQueryResponseSchema
 
 __all__ = [
     "AzureEventGridDestinationSchema",
@@ -278,8 +273,9 @@ class SubscriptionSchema(LoggedResourceSchema):
         return types.Subscription(**data)
 
 
-class SubscriptionUpdateActionSchema(UpdateActionSchema):
+class SubscriptionUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.SubscriptionUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -290,8 +286,9 @@ class SubscriptionUpdateActionSchema(UpdateActionSchema):
         return types.SubscriptionUpdateAction(**data)
 
 
-class SubscriptionUpdateSchema(UpdateSchema):
+class SubscriptionUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.SubscriptionUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

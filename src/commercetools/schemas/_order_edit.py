@@ -9,8 +9,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._order import OrderSchema, StagedOrderUpdateActionSchema
 from commercetools.schemas._type import FieldContainerField
@@ -394,8 +392,9 @@ class OrderEditSchema(LoggedResourceSchema):
         return types.OrderEdit(**data)
 
 
-class OrderEditUpdateActionSchema(UpdateActionSchema):
+class OrderEditUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -406,8 +405,9 @@ class OrderEditUpdateActionSchema(UpdateActionSchema):
         return types.OrderEditUpdateAction(**data)
 
 
-class OrderEditUpdateSchema(UpdateSchema):
+class OrderEditUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

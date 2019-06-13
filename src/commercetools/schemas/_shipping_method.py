@@ -5,11 +5,9 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -118,7 +116,7 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
         return types.ShippingMethodReference(**data)
 
 
-class ShippingMethodSchema(ResourceSchema):
+class ShippingMethodSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethod`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
@@ -147,8 +145,9 @@ class ShippingMethodSchema(ResourceSchema):
         return types.ShippingMethod(**data)
 
 
-class ShippingMethodUpdateActionSchema(UpdateActionSchema):
+class ShippingMethodUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethodUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -159,8 +158,9 @@ class ShippingMethodUpdateActionSchema(UpdateActionSchema):
         return types.ShippingMethodUpdateAction(**data)
 
 
-class ShippingMethodUpdateSchema(UpdateSchema):
+class ShippingMethodUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethodUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

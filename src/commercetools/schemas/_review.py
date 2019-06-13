@@ -7,8 +7,6 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -186,8 +184,9 @@ class ReviewSchema(LoggedResourceSchema):
         return types.Review(**data)
 
 
-class ReviewUpdateActionSchema(UpdateActionSchema):
+class ReviewUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReviewUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -198,8 +197,9 @@ class ReviewUpdateActionSchema(UpdateActionSchema):
         return types.ReviewUpdateAction(**data)
 
 
-class ReviewUpdateSchema(UpdateSchema):
+class ReviewUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReviewUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

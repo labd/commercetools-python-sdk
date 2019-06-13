@@ -4,12 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import (
-    LoggedResourceSchema,
-    PagedQueryResponseSchema,
-    UpdateActionSchema,
-    UpdateSchema,
-)
+from commercetools.schemas._common import LoggedResourceSchema, PagedQueryResponseSchema
 
 __all__ = [
     "ExtensionAWSLambdaDestinationSchema",
@@ -194,8 +189,9 @@ class ExtensionTriggerSchema(marshmallow.Schema):
         return types.ExtensionTrigger(**data)
 
 
-class ExtensionUpdateActionSchema(UpdateActionSchema):
+class ExtensionUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -206,8 +202,9 @@ class ExtensionUpdateActionSchema(UpdateActionSchema):
         return types.ExtensionUpdateAction(**data)
 
 
-class ExtensionUpdateSchema(UpdateSchema):
+class ExtensionUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

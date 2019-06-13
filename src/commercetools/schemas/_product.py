@@ -7,13 +7,11 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     LocalizedStringField,
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    ResourceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -417,7 +415,7 @@ class ProductProjectionPagedSearchResponseSchema(PagedQueryResponseSchema):
         return types.ProductProjectionPagedSearchResponse(**data)
 
 
-class ProductProjectionSchema(ResourceSchema):
+class ProductProjectionSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductProjection`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     product_type = marshmallow.fields.Nested(
@@ -561,8 +559,9 @@ class ProductSchema(LoggedResourceSchema):
         return types.Product(**data)
 
 
-class ProductUpdateActionSchema(UpdateActionSchema):
+class ProductUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -573,8 +572,9 @@ class ProductUpdateActionSchema(UpdateActionSchema):
         return types.ProductUpdateAction(**data)
 
 
-class ProductUpdateSchema(UpdateSchema):
+class ProductUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

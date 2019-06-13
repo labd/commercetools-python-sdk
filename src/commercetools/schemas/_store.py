@@ -4,12 +4,11 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     KeyReferenceSchema,
     LocalizedStringField,
     PagedQueryResponseSchema,
     ReferenceSchema,
-    UpdateActionSchema,
-    UpdateSchema,
 )
 
 __all__ = [
@@ -84,16 +83,10 @@ class StoreReferenceSchema(ReferenceSchema):
         return types.StoreReference(**data)
 
 
-class StoreSchema(marshmallow.Schema):
+class StoreSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Store`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True, missing=None)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -103,8 +96,9 @@ class StoreSchema(marshmallow.Schema):
         return types.Store(**data)
 
 
-class StoreUpdateActionSchema(UpdateActionSchema):
+class StoreUpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.StoreUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -115,8 +109,9 @@ class StoreUpdateActionSchema(UpdateActionSchema):
         return types.StoreUpdateAction(**data)
 
 
-class StoreUpdateSchema(UpdateSchema):
+class StoreUpdateSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.StoreUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("action", "action"),

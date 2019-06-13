@@ -9,8 +9,6 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
-    Update,
-    UpdateAction,
 )
 
 if typing.TYPE_CHECKING:
@@ -193,8 +191,10 @@ class TaxCategoryReference(Reference):
         )
 
 
-class TaxCategoryUpdate(Update):
+class TaxCategoryUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
     #: :class:`list`
     actions: typing.Optional[list]
 
@@ -204,8 +204,9 @@ class TaxCategoryUpdate(Update):
         version: typing.Optional[int] = None,
         actions: typing.Optional[list] = None
     ) -> None:
+        self.version = version
         self.actions = actions
-        super().__init__(version=version, actions=actions)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "TaxCategoryUpdate(version=%r, actions=%r)" % (
@@ -214,11 +215,14 @@ class TaxCategoryUpdate(Update):
         )
 
 
-class TaxCategoryUpdateAction(UpdateAction):
+class TaxCategoryUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
 
     def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        super().__init__(action=action)
+        self.action = action
+        super().__init__()
 
     def __repr__(self) -> str:
         return "TaxCategoryUpdateAction(action=%r)" % (self.action,)

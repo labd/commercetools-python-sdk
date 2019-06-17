@@ -14,23 +14,29 @@ class CustomerGroupDeleteSchema(abstract.AbstractDeleteSchema):
 
 
 class CustomerGroupService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.CustomerGroup]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.CustomerGroup]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._get(
-            f"customer-groups/{id}", {}, schemas.CustomerGroupSchema
+            f"customer-groups/{id}", query_params, schemas.CustomerGroupSchema
         )
 
-    def get_by_key(self, key: str) -> Optional[types.CustomerGroup]:
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.CustomerGroup]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._get(
-            f"customer-groups/key={key}", {}, schemas.CustomerGroupSchema
+            f"customer-groups/key={key}", query_params, schemas.CustomerGroupSchema
         )
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: Optional[str] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None,
+        expand: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.CustomerGroupPagedQueryResponse:
         params = CustomerGroupQuerySchema().dump(
             {
@@ -45,10 +51,13 @@ class CustomerGroupService(abstract.AbstractService):
             "customer-groups", params, schemas.CustomerGroupPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CustomerGroupDraft) -> types.CustomerGroup:
+    def create(self, draft: types.CustomerGroupDraft, expand: OptionalListStr = None) -> types.CustomerGroup:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
             "customer-groups",
-            {},
+            query_params,
             draft,
             schemas.CustomerGroupDraftSchema,
             schemas.CustomerGroupSchema,
@@ -59,16 +68,21 @@ class CustomerGroupService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.CustomerGroupUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.CustomerGroup:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CustomerGroupUpdate(version=version, actions=actions)
         return self._client._post(
             f"customer-groups/{id}",
-            {},
+            query_params,
             data_object=update_action,
             request_schema_cls=schemas.CustomerGroupUpdateSchema,
             response_schema_cls=schemas.CustomerGroupSchema,
+            force_update=force_update,
         )
 
     def update_by_key(
@@ -76,36 +90,47 @@ class CustomerGroupService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.CustomerGroupUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.CustomerGroup:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CustomerGroupUpdate(version=version, actions=actions)
         return self._client._post(
             f"customer-groups/key={key}",
-            {},
+            query_params,
             data_object=update_action,
             request_schema_cls=schemas.CustomerGroupUpdateSchema,
             response_schema_cls=schemas.CustomerGroupSchema,
+            force_update=force_update,
         )
 
     def delete_by_id(
-        self, id: str, version: int, *, force_delete: bool = False
+        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
     ) -> types.CustomerGroup:
-        params = CustomerGroupDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = CustomerGroupDeleteSchema().dump(params)
         return self._client._delete(
             f"customer-groups/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CustomerGroupSchema,
             force_delete=force_delete,
         )
 
     def delete_by_key(
-        self, key: str, version: int, *, force_delete: bool = False
+        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
     ) -> types.CustomerGroup:
-        params = CustomerGroupDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = CustomerGroupDeleteSchema().dump(params)
         return self._client._delete(
             f"customer-groups/key={key}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CustomerGroupSchema,
             force_delete=force_delete,
         )

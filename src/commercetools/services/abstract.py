@@ -27,6 +27,7 @@ class RemoveEmptyValuesMixin:
 
 class AbstractDeleteSchema(Schema, RemoveEmptyValuesMixin):
     version = fields.Integer()
+    expand = OptionalList(fields.String())
 
 
 class AbstractQuerySchema(Schema, RemoveEmptyValuesMixin):

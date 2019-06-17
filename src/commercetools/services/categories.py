@@ -1,4 +1,3 @@
-import typing
 from typing import List, Optional
 
 from commercetools import schemas, types
@@ -17,19 +16,25 @@ class CategoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CategoryService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Category]:
-        return self._client._get(f"categories/{id}", {}, schemas.CategorySchema)
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Category]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"categories/{id}", query_params, schemas.CategorySchema)
 
-    def get_by_key(self, key: str) -> types.Category:
-        return self._client._get(f"categories/key={key}", {}, schemas.CategorySchema)
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.Category:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"categories/key={key}", query_params, schemas.CategorySchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.CategoryPagedQueryResponse:
         params = CategoryQuerySchema().dump(
             {
@@ -44,9 +49,12 @@ class CategoryService(abstract.AbstractService):
             "categories", params, schemas.CategoryPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CategoryDraft) -> types.Category:
+    def create(self, draft: types.CategoryDraft, expand: OptionalListStr = None) -> types.Category:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "categories", {}, draft, schemas.CategoryDraftSchema, schemas.CategorySchema
+            "categories", query_params, draft, schemas.CategoryDraftSchema, schemas.CategorySchema
         )
 
     def update_by_id(
@@ -54,13 +62,17 @@ class CategoryService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.CategoryUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Category:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"categories/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.CategoryUpdateSchema,
             response_schema_cls=schemas.CategorySchema,
@@ -72,13 +84,17 @@ class CategoryService(abstract.AbstractService):
         key: str,
         version: int,
         actions: List[types.CategoryUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Category:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CategoryUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"categories/key={key}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.CategoryUpdateSchema,
             response_schema_cls=schemas.CategorySchema,
@@ -86,23 +102,29 @@ class CategoryService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, *, force_delete: bool = True
+        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
     ) -> types.Category:
-        params = CategoryDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = CategoryDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"categories/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CategorySchema,
             force_delete=force_delete,
         )
 
     def delete_by_key(
-        self, key: str, version: int, *, force_delete: bool = True
+        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
     ) -> types.Category:
-        params = CategoryDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = CategoryDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"categories/key={key}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CategorySchema,
             force_delete=force_delete,
         )

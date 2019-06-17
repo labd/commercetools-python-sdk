@@ -1,4 +1,3 @@
-import typing
 from typing import List, Optional
 
 from marshmallow import fields
@@ -19,20 +18,25 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Cart]:
-        return self._client._get(f"carts/{id}", {}, schemas.CartSchema)
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Cart]:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"carts/{id}", query_params, schemas.CartSchema)
 
-    def get_by_customer_id(self, customer_id: str) -> types.Cart:
-        params = {"customerId": customer_id}
-        return self._client._get(f"carts/", params, schemas.CartSchema)
+    def get_by_customer_id(self, customer_id: str, expand: OptionalListStr = None) -> types.Cart:
+        query_params = {"customerId": customer_id}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"carts/", query_params, schemas.CartSchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.CartPagedQueryResponse:
         params = CartQuerySchema().dump(
             {
@@ -45,9 +49,12 @@ class CartService(abstract.AbstractService):
         )
         return self._client._get("carts", params, schemas.CartPagedQueryResponseSchema)
 
-    def create(self, draft: types.CartDraft) -> types.Cart:
+    def create(self, draft: types.CartDraft, expand: OptionalListStr = None) -> types.Cart:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "carts", {}, draft, schemas.CartDraftSchema, schemas.CartSchema
+            "carts", query_params, draft, schemas.CartDraftSchema, schemas.CartSchema
         )
 
     def update_by_id(
@@ -55,13 +62,17 @@ class CartService(abstract.AbstractService):
         id: str,
         version: int,
         actions: List[types.CartUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Cart:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.CartUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"carts/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.CartUpdateSchema,
             response_schema_cls=schemas.CartSchema,
@@ -73,15 +84,17 @@ class CartService(abstract.AbstractService):
         id: str,
         version: int,
         data_erasure: bool = False,
+        expand: OptionalListStr = None,
         *,
         force_delete: bool = False,
     ) -> types.Cart:
-        params = CartDeleteSchema().dump(
-            {"version": version, "data_erasure": data_erasure}
-        )
+        params = {"version": version, "data_erasure": data_erasure}
+        if expand:
+            params["expand"] = expand
+        query_params = CartDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"carts/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.CartSchema,
             force_delete=force_delete,
         )

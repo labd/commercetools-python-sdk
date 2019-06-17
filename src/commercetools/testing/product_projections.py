@@ -9,6 +9,7 @@ from commercetools.testing.utils import create_commercetools_response
 
 class ProductProjectionsBackend(ServiceBackend):
     service_path = "product-projections"
+    _schema_query_params = ProductProjectionsQuerySchema
 
     def urls(self):
         return [
@@ -27,6 +28,12 @@ class ProductProjectionsBackend(ServiceBackend):
         results = [x for x in results if x]
         if params.get("limit"):
             results = results[: params["limit"]]
+
+        if params.get("expand"):
+            expanded_results = []
+            for result in results:
+                expanded_results.append(self._expand(request, result))
+            results = expanded_results
 
         data = {
             "count": len(results),
@@ -47,6 +54,12 @@ class ProductProjectionsBackend(ServiceBackend):
         if params.get("limit"):
             results = results[: params["limit"]]
 
+        if params.get("expand"):
+            expanded_results = []
+            for result in results:
+                expanded_results.append(self._expand(request, result))
+            results = expanded_results
+
         data = {
             "count": len(results),
             "total": len(results),
@@ -59,20 +72,22 @@ class ProductProjectionsBackend(ServiceBackend):
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            content = schemas.ProductProjectionSchema().dumps(obj)
+            expanded_obj = self._expand(request, obj)
+            content = schemas.ProductProjectionSchema().dumps(expanded_obj)
             return create_commercetools_response(request, text=content)
         return create_commercetools_response(request, status_code=404)
 
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            content = schemas.ProductProjectionSchema().dumps(obj)
+            expanded_obj = self._expand(request, obj)
+            content = schemas.ProductProjectionSchema().dumps(expanded_obj)
             return create_commercetools_response(request, text=content)
         return create_commercetools_response(request, status_code=404)
 
     def _convert_product_projection(
         self, product: typing.Dict, staged: bool = False
-    ) -> typing.Optional[types.ProductProjection]:
+    ) -> typing.Optional[typing.Dict]:
         """Convert a Product object to a ProductProjection object"""
         if product["masterData"] is None:
             return None
@@ -85,29 +100,27 @@ class ProductProjectionsBackend(ServiceBackend):
         if data is None:
             return None
 
-        return schemas.ProductProjectionSchema().load(
-            {
-                "id": product["id"],
-                "key": product["key"],
-                "version": product["version"],
-                "createdAt": product["createdAt"],
-                "lastModifiedAt": product["lastModifiedAt"],
-                "productType": product["productType"],
-                "name": data["name"],
-                "description": data["description"],
-                "slug": data["slug"],
-                "categories": data["categories"],
-                "categoryOrderHints": data["categoryOrderHints"],
-                "metaTitle": data["metaTitle"],
-                "metaDescription": data["metaDescription"],
-                "metaKeywords": data["metaKeywords"],
-                "searchKeywords": data["searchKeywords"],
-                "hasStagedChanges": product["masterData"]["hasStagedChanges"],
-                "published": product["masterData"]["published"],
-                "masterVariant": data["masterVariant"],
-                "variants": data["variants"],
-                "taxCategory": product["taxCategory"],
-                "state": product["state"],
-                "reviewRatingStatistics": product["reviewRatingStatistics"],
-            }
-        )
+        return {
+            "id": product["id"],
+            "key": product["key"],
+            "version": product["version"],
+            "createdAt": product["createdAt"],
+            "lastModifiedAt": product["lastModifiedAt"],
+            "productType": product["productType"],
+            "name": data["name"],
+            "description": data["description"],
+            "slug": data["slug"],
+            "categories": data["categories"],
+            "categoryOrderHints": data["categoryOrderHints"],
+            "metaTitle": data["metaTitle"],
+            "metaDescription": data["metaDescription"],
+            "metaKeywords": data["metaKeywords"],
+            "searchKeywords": data["searchKeywords"],
+            "hasStagedChanges": product["masterData"]["hasStagedChanges"],
+            "published": product["masterData"]["published"],
+            "masterVariant": data["masterVariant"],
+            "variants": data["variants"],
+            "taxCategory": product["taxCategory"],
+            "state": product["state"],
+            "reviewRatingStatistics": product["reviewRatingStatistics"],
+        }

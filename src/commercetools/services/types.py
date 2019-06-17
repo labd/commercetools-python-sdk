@@ -16,19 +16,25 @@ class TypeQuerySchema(abstract.AbstractQuerySchema):
 
 
 class TypeService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> types.Type:
-        return self._client._get(f"types/{id}", {}, schemas.TypeSchema)
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.Type:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"types/{id}", query_params, schemas.TypeSchema)
 
-    def get_by_key(self, key: str) -> types.Type:
-        return self._client._get(f"types/key={key}", {}, schemas.TypeSchema)
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.Type:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
+        return self._client._get(f"types/key={key}", query_params, schemas.TypeSchema)
 
     def query(
         self,
         where: OptionalListStr = None,
         sort: OptionalListStr = None,
-        expand: typing.Optional[str] = None,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
+        expand: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
     ) -> types.TypePagedQueryResponse:
         params = TypeQuerySchema().dump(
             {
@@ -41,9 +47,12 @@ class TypeService(abstract.AbstractService):
         )
         return self._client._get("types", params, schemas.TypePagedQueryResponseSchema)
 
-    def create(self, draft: types.TypeDraft) -> types.Type:
+    def create(self, draft: types.TypeDraft, expand: OptionalListStr = None) -> types.Type:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         return self._client._post(
-            "types", {}, draft, schemas.TypeDraftSchema, schemas.TypeSchema
+            "types", query_params, draft, schemas.TypeDraftSchema, schemas.TypeSchema
         )
 
     def update_by_id(
@@ -51,13 +60,17 @@ class TypeService(abstract.AbstractService):
         id: str,
         version: int,
         actions: typing.List[types.TypeUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Type:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"types/{id}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.TypeUpdateSchema,
             response_schema_cls=schemas.TypeSchema,
@@ -69,13 +82,17 @@ class TypeService(abstract.AbstractService):
         key: str,
         version: int,
         actions: typing.List[types.TypeUpdateAction],
+        expand: OptionalListStr = None,
         *,
         force_update: bool = False,
     ) -> types.Type:
+        query_params = {}
+        if expand:
+            query_params["expand"] = expand
         update_action = types.TypeUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"types/key={key}",
-            params={},
+            params=query_params,
             data_object=update_action,
             request_schema_cls=schemas.TypeUpdateSchema,
             response_schema_cls=schemas.TypeSchema,
@@ -83,23 +100,29 @@ class TypeService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, *, force_delete: bool = False
+        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
     ) -> types.Type:
-        params = TypeDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = TypeDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"types/{id}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.TypeSchema,
             force_delete=force_delete,
         )
 
     def delete_by_key(
-        self, key: str, version: int, *, force_delete: bool = False
+        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
     ) -> types.Type:
-        params = TypeDeleteSchema().dump({"version": version})
+        params = {"version": version}
+        if expand:
+            params["expand"] = expand
+        query_params = TypeDeleteSchema().dump(params)
         return self._client._delete(
             endpoint=f"types/key={key}",
-            params=params,
+            params=query_params,
             response_schema_cls=schemas.TypeSchema,
             force_delete=force_delete,
         )

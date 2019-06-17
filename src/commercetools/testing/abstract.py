@@ -1,8 +1,10 @@
+import copy
 import re
 import typing
 import uuid
 
 import marshmallow
+from requests_mock.request import _RequestObjectProxy
 
 from commercetools import schemas, types
 from commercetools.schemas import BaseResourceSchema
@@ -128,6 +130,8 @@ class ServiceBackend(BaseBackend):
     _schema_draft: typing.Optional[marshmallow.Schema] = None
     _schema_update: typing.Optional[marshmallow.Schema] = None
     _schema_query_response: typing.Optional[marshmallow.Schema] = None
+    _schema_query_params: marshmallow.Schema = abstract.AbstractQuerySchema
+
     _verify_version: bool = True
 
     @property
@@ -140,26 +144,35 @@ class ServiceBackend(BaseBackend):
     def create(self, request):
         obj = self._schema_draft().loads(request.body)
         data = self.model.add(obj)
-        return create_commercetools_response(request, json=data)
+        expanded_data = self._expand(request, data)
+        return create_commercetools_response(request, json=expanded_data)
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
-            return create_commercetools_response(request, json=obj)
+            expanded_data = self._expand(request, obj)
+            return create_commercetools_response(request, json=expanded_data)
         return create_commercetools_response(request, status_code=404)
 
     def get_by_key(self, request, key):
         obj = self.model.get_by_key(key)
         if obj:
-            return create_commercetools_response(request, json=obj)
+            expanded_data = self._expand(request, obj)
+            return create_commercetools_response(request, json=expanded_data)
         return create_commercetools_response(request, status_code=404)
 
     def query(self, request):
-        params = utils.parse_request_params(abstract.AbstractQuerySchema, request)
+        params = utils.parse_request_params(self._schema_query_params, request)
         results = self.model.query(params.get("where"))
         total_count = len(results)
         if params.get("limit"):
             results = results[: params["limit"]]
+
+        if params.get("expand"):
+            expanded_results = []
+            for result in results:
+                expanded_results.append(self._expand(request, result))
+            results = expanded_results
 
         data = {
             "count": len(results),
@@ -202,6 +215,61 @@ class ServiceBackend(BaseBackend):
             return create_commercetools_response(request, json=obj)
         return create_commercetools_response(request, status_code=404)
 
+    def _expand(self, request: _RequestObjectProxy, raw_obj):
+        params = utils.parse_request_params(self._schema_query_params, request)
+        if "expand" not in params:
+            return raw_obj
+
+        expanded_obj = copy.deepcopy(raw_obj)
+
+        for expand_term in params["expand"]:
+            self._expand_obj(expanded_obj, expand_term)
+
+        return expanded_obj
+
+    def _expand_obj(self, obj, expand_term):
+        references_to_expand = self._determine_references([obj], expand_term.split("."))
+        for reference in references_to_expand:
+            if "typeId" in reference and "id" in reference:
+                try:
+                    for document in self.model._storage._stores[reference["typeId"]].values():
+                        if document["id"] == reference["id"]:
+                            reference["obj"] = copy.deepcopy(document)
+                except KeyError:
+                    continue
+
+    def _determine_references(self, reference_list, terms):
+        term = terms[0]
+        multiple = False
+
+        if term.endswith("[*]"):
+            multiple = True
+            term = term[:-3]
+
+        if term.endswith("]"):
+            if "[" not in term:
+                return []
+
+            index = int(term.split("[")[1][:-1])
+
+            try:
+                references = [reference[term][index] for reference in reference_list]
+            except (KeyError, IndexError):
+                return []
+        else:
+            try:
+                references = [reference[term] for reference in reference_list]
+            except KeyError:
+                return []
+
+        if multiple:
+            references = [item for reference in references for item in reference]
+        if len(terms) == 1:
+            return references
+
+        if len(terms) > 1:
+            return self._determine_references(references, terms[1:])
+
     def _update(self, request, obj):
         if not obj:
             return create_commercetools_response(request, status_code=404)
@@ -211,7 +279,8 @@ class ServiceBackend(BaseBackend):
             obj, err = self._apply_update_actions(obj, update)
             if err:
                 return create_commercetools_response(request, json=err, status_code=err["statusCode"])
-        return create_commercetools_response(request, json=obj)
+        expanded_obj = self._expand(request, obj)
+        return create_commercetools_response(request, json=expanded_obj)
 
     def _validate_resource_version(self, request, obj):
         update_version = self._get_version_from_request(request)

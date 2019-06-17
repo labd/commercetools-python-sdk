@@ -206,6 +206,8 @@ class Client:
                 kwargs = {"data": data}
             else:
                 kwargs = {"json": data}
+            if params:
+                kwargs["params"] = params
 
             response = self._http_client.post(self._base_url + endpoint, **kwargs)
             if response.status_code in (200, 201):

@@ -1,5 +1,5 @@
-3.6.0 (TBD)
------------
+3.6.0 (2019-06-17)
+------------------
 - Generate with new API definitions, biggest changes are Resource -> BaseResource and ResourceSchema -> BaseResourceSchema
 - Add resource expansion to all applicable objects, see https://docs.commercetools.com/http-api#reference-expansion for details.
 

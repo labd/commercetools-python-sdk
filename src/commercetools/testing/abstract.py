@@ -251,6 +251,7 @@ class ServiceBackend(BaseBackend):
                 return []
 
             index = int(term.split("[")[1][:-1])
+            term = term[:-3]
 
             try:
                 references = [reference[term][index] for reference in reference_list]

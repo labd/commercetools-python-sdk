@@ -8,6 +8,16 @@ def test_unknown_expand_terms(client):
     assert order.id
 
 
+def test_optional_expanded_terms(client, commercetools_api):
+    order = get_test_order()
+    commercetools_api.orders.add_existing(order)
+
+    expanded_order = client.orders.get_by_id(order.id, expand="discountCodes[*].discountCode")
+
+    assert expanded_order.id
+    assert expanded_order.discount_codes is None
+
+
 def test_unknown_reference_expand_terms(client, commercetools_api):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)

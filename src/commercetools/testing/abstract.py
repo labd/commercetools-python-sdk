@@ -254,12 +254,12 @@ class ServiceBackend(BaseBackend):
             term = term[:-3]
 
             try:
-                references = [reference[term][index] for reference in reference_list]
+                references = [reference[term][index] for reference in reference_list if reference[term][index]]
             except (KeyError, IndexError):
                 return []
         else:
             try:
-                references = [reference[term] for reference in reference_list]
+                references = [reference[term] for reference in reference_list if reference[term]]
             except KeyError:
                 return []
 

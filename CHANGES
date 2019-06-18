@@ -1,3 +1,7 @@
+3.7.0 (2019-06-18)
+------------------
+- Added discount codes
+
 3.6.1 (2019-06-18)
 ------------------
 - Fix small bug in reference expansion if value is None

@@ -14,6 +14,7 @@ from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
 from commercetools.services.api_clients import ApiClientService
+from commercetools.services.cart_discounts import CartDiscountService
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
@@ -66,9 +67,11 @@ class Client:
     api_clients: ApiClientService
     categories: CategoryService
     custom_objects: CustomObjectService
+    cart_discounts: CartDiscountService
     carts: CartService
     channels: ChannelService
     customer_groups: CustomerGroupService
+    discount_codes: DiscountCodeService
     extensions: ExtensionService
     orders: OrderService
     products: ProductService
@@ -152,6 +155,7 @@ class Client:
         self.api_clients = ApiClientService(self)
         self.categories = CategoryService(self)
         self.custom_objects = CustomObjectService(self)
+        self.cart_discounts = CartDiscountService(self)
         self.carts = CartService(self)
         self.channels = ChannelService(self)
         self.customer_groups = CustomerGroupService(self)

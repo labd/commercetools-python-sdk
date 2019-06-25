@@ -1,3 +1,7 @@
+3.8.0 (2019-06-26)
+------------------
+- Implement AddZone and RemoveZone actions for shipping methods
+
 3.7.0 (2019-06-18)
 ------------------
 - Added discount codes

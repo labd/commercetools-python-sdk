@@ -100,6 +100,8 @@ def change_tax_category(backend: "ShippingMethodsBackend", obj: dict,
 def add_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
                       action: types.ShippingMethodAddZoneAction):
     new = copy.deepcopy(obj)
+    if not new.get("zoneRates"):
+        new["zoneRates"] = []
     for zone_rate in new["zoneRates"]:
         if zone_rate["zone"]["id"] == action.zone.id:
             raise InternalUpdateError("Zone already exists")
@@ -142,7 +144,7 @@ def add_shipping_rate(backend: "ShippingMethodsBackend", obj: dict,
             ))
         )
     else:
-        if "shippingRates" not in target_zone_rate:
+        if not target_zone_rate.get("shippingRates"):
             target_zone_rate["shippingRates"] = []
         target_zone_rate["shippingRates"].append(
             schemas.ShippingRateSchema().dump(shipping_rate)

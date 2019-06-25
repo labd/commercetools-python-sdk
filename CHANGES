@@ -1,3 +1,7 @@
+3.8.1 (2019-06-26)
+------------------
+- Small fixes if data was not initialized for mock shipping methods actions 
+
 3.8.0 (2019-06-26)
 ------------------
 - Implement AddZone and RemoveZone actions for shipping methods

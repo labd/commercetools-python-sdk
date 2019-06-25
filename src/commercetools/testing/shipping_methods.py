@@ -97,6 +97,33 @@ def change_tax_category(backend: "ShippingMethodsBackend", obj: dict,
     return new
 
 
+def add_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
+                      action: types.ShippingMethodAddZoneAction):
+    new = copy.deepcopy(obj)
+    for zone_rate in new["zoneRates"]:
+        if zone_rate["zone"]["id"] == action.zone.id:
+            raise InternalUpdateError("Zone already exists")
+    new["zoneRates"].append(
+        schemas.ZoneRateSchema().dump(types.ZoneRate(
+            zone=action.zone,
+        ))
+    )
+    return new
+
+
+def remove_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
+                         action: types.ShippingMethodRemoveZoneAction):
+    new = copy.deepcopy(obj)
+    for zone_rate in new["zoneRates"]:
+        if zone_rate["zone"]["id"] == action.zone.id:
+            new["zoneRates"].remove(zone_rate)
+            break
+    else:
+        raise InternalUpdateError("Zone rate not found")
+
+    return new
+
+
 def add_shipping_rate(backend: "ShippingMethodsBackend", obj: dict,
                       action: types.ShippingMethodAddShippingRateAction):
     new = copy.deepcopy(obj)
@@ -172,4 +199,6 @@ class ShippingMethodsBackend(ServiceBackend):
         "setDescription": update_attribute("description", "description"),
         "addShippingRate": add_shipping_rate,
         "removeShippingRate": remove_shipping_rate,
+        "addZone": add_shipping_zone,
+        "removeZone": remove_shipping_zone,
     }

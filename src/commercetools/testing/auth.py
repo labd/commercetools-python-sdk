@@ -35,7 +35,10 @@ class AuthBackend(BaseBackend):
         return r"/oauth/(?P<path>.*)"
 
     def urls(self):
-        return [("token", "POST", self.token)]
+        return [
+            ("token", "POST", self.token),
+            ("introspect", "POST", self.introspect)
+        ]
 
     def token(self, request):
         params = parse_qs(request.body)
@@ -69,3 +72,35 @@ class AuthBackend(BaseBackend):
             self.model.add_token(token)
             response = create_commercetools_response(request, json=token)
             return response
+
+    def introspect(self, request):
+        client_id: typing.Optional[str] = None
+        client_secret: typing.Optional[str] = None
+
+        if request.headers.get("Authorization"):
+            auth_type, auth_info = request.headers["Authorization"].split()
+            if auth_type != "Basic":
+                response = create_commercetools_response(request, status_code=401)
+                return response
+
+            client_id, client_secret = str(base64.b64decode(auth_info)).split(":")
+        else:
+            response = create_commercetools_response(request, status_code=401)
+            return response
+
+        token = request.qs.get('token', [None])[0]
+
+        if self.model.is_valid(client_id, client_secret):
+            stored_tokens = [token_object.get('access_token') for token_object in self.model.tokens]
+            if token in stored_tokens:
+                status = {
+                    "active": True,
+                    "scope": "manage_project:todo",
+                    "exp": self._expire_time
+                }
+            else:
+                status = {
+                    "active": False
+                }
+        response = create_commercetools_response(request, json=status)
+        return response

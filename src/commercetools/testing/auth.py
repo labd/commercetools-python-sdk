@@ -40,29 +40,30 @@ class AuthBackend(BaseBackend):
             ("introspect", "POST", self.introspect)
         ]
 
-    def token(self, request):
+    def _get_api_client_credentials(self, request) -> typing.Tuple[typing.Optional[str], typing.Optional[str]]:
         params = parse_qs(request.body)
-
-        client_id: typing.Optional[str] = None
-        client_secret: typing.Optional[str] = None
+        client_id = None
+        client_secret = None
 
         if request.headers.get("Authorization"):
             auth_type, auth_info = request.headers["Authorization"].split()
-            if auth_type != "Basic":
-                response = create_commercetools_response(request, status_code=401)
-                return response
-
-            client_id, client_secret = str(base64.b64decode(auth_info)).split(":")
+            if auth_type == "Basic":
+                client_id, client_secret = str(base64.b64decode(auth_info)).split(":")
         elif params.get("client_id") and params.get("client_secret"):
             client_id = params.get("client_id")
             client_secret = params.get("client_secret")
-        else:
+
+        return client_id, client_secret
+
+    def token(self, request):
+        client_id, client_secret = self._get_api_client_credentials(request)
+        if not client_id or not client_secret:
             response = create_commercetools_response(request, status_code=401)
             return response
 
-        scope = params.get("scope", "manage_project:todo")
-
         if self.model.is_valid(client_id, client_secret):
+            params = parse_qs(request.body)
+            scope = params.get("scope", "manage_project:todo")
             token = {
                 "access_token": str(uuid.uuid4()),
                 "expires_in": self._expire_time,
@@ -74,23 +75,13 @@ class AuthBackend(BaseBackend):
             return response
 
     def introspect(self, request):
-        client_id: typing.Optional[str] = None
-        client_secret: typing.Optional[str] = None
-
-        if request.headers.get("Authorization"):
-            auth_type, auth_info = request.headers["Authorization"].split()
-            if auth_type != "Basic":
-                response = create_commercetools_response(request, status_code=401)
-                return response
-
-            client_id, client_secret = str(base64.b64decode(auth_info)).split(":")
-        else:
+        client_id, client_secret = self._get_api_client_credentials(request)
+        if not client_id or not client_secret:
             response = create_commercetools_response(request, status_code=401)
             return response
 
-        token = request.qs.get('token', [None])[0]
-
         if self.model.is_valid(client_id, client_secret):
+            token = request.qs.get('token', [None])[0]
             stored_tokens = [token_object.get('access_token') for token_object in self.model.tokens]
             if token in stored_tokens:
                 status = {
@@ -102,5 +93,5 @@ class AuthBackend(BaseBackend):
                 status = {
                     "active": False
                 }
-        response = create_commercetools_response(request, json=status)
-        return response
+            response = create_commercetools_response(request, json=status)
+            return response

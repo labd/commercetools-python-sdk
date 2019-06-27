@@ -74,8 +74,6 @@ class AuthBackend(BaseBackend):
             return response
 
     def introspect(self, request):
-        params = parse_qs(request.body)
-
         client_id: typing.Optional[str] = None
         client_secret: typing.Optional[str] = None
 
@@ -90,7 +88,7 @@ class AuthBackend(BaseBackend):
             response = create_commercetools_response(request, status_code=401)
             return response
 
-        token = params.get(str.encode('token'), [None])[0].decode()
+        token = request.qs.get('token', [None])[0]
 
         if self.model.is_valid(client_id, client_secret):
             stored_tokens = [token_object.get('access_token') for token_object in self.model.tokens]

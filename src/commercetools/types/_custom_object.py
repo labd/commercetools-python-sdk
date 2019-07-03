@@ -131,16 +131,14 @@ class CustomObjectReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["CustomObject"] = None
     ) -> None:
         self.obj = obj
-        super().__init__(type_id=ReferenceTypeId.KEY_VALUE_DOCUMENT, id=id, key=key)
+        super().__init__(type_id=ReferenceTypeId.KEY_VALUE_DOCUMENT, id=id)
 
     def __repr__(self) -> str:
-        return "CustomObjectReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "CustomObjectReference(type_id=%r, id=%r, obj=%r)" % (
             self.type_id,
             self.id,
-            self.key,
             self.obj,
         )

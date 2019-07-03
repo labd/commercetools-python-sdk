@@ -9,6 +9,7 @@ from commercetools.schemas._common import (
     LocalizedStringField,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     "StoreKeyReferenceSchema",
     "StorePagedQueryResponseSchema",
     "StoreReferenceSchema",
+    "StoreResourceIdentifierSchema",
     "StoreSchema",
     "StoreSetNameActionSchema",
     "StoreUpdateActionSchema",
@@ -81,6 +83,18 @@ class StoreReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.StoreReference(**data)
+
+
+class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.StoreResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.StoreResourceIdentifier(**data)
 
 
 class StoreSchema(BaseResourceSchema):

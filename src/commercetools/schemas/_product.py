@@ -12,6 +12,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -50,6 +51,7 @@ __all__ = [
     "ProductRemoveImageActionSchema",
     "ProductRemovePriceActionSchema",
     "ProductRemoveVariantActionSchema",
+    "ProductResourceIdentifierSchema",
     "ProductRevertStagedChangesActionSchema",
     "ProductRevertStagedVariantChangesActionSchema",
     "ProductSchema",
@@ -286,10 +288,9 @@ class ProductDataSchema(marshmallow.Schema):
 class ProductDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDraft`."
     product_type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._product_type.ProductTypeReferenceSchema",
+        nested="commercetools.schemas._product_type.ProductTypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
         data_key="productType",
     )
     name = LocalizedStringField(allow_none=True)
@@ -297,7 +298,7 @@ class ProductDraftSchema(marshmallow.Schema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
     categories = marshmallow.fields.Nested(
-        nested="commercetools.schemas._category.CategoryReferenceSchema",
+        nested="commercetools.schemas._category.CategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
@@ -330,7 +331,7 @@ class ProductDraftSchema(marshmallow.Schema):
         missing=None,
     )
     tax_category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+        nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -344,7 +345,7 @@ class ProductDraftSchema(marshmallow.Schema):
         data_key="searchKeywords",
     )
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas._state.StateReferenceSchema",
+        nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -513,6 +514,18 @@ class ProductReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ProductReference(**data)
+
+
+class ProductResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ProductResourceIdentifier(**data)
 
 
 class ProductSchema(LoggedResourceSchema):
@@ -1053,7 +1066,7 @@ class ProductAddPriceActionSchema(ProductUpdateActionSchema):
 class ProductAddToCategoryActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductAddToCategoryAction`."
     category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._category.CategoryReferenceSchema",
+        nested="commercetools.schemas._category.CategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -1296,7 +1309,7 @@ class ProductRemoveAssetActionSchema(ProductUpdateActionSchema):
 class ProductRemoveFromCategoryActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductRemoveFromCategoryAction`."
     category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._category.CategoryReferenceSchema",
+        nested="commercetools.schemas._category.CategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -1422,7 +1435,7 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
         allow_none=True, missing=None, data_key="assetKey"
     )
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1747,7 +1760,7 @@ class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
     price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1818,7 +1831,7 @@ class ProductSetSkuActionSchema(ProductUpdateActionSchema):
 class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetTaxCategoryAction`."
     tax_category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+        nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1837,7 +1850,7 @@ class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
 class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductTransitionStateAction`."
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas._state.StateReferenceSchema",
+        nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

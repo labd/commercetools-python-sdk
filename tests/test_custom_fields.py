@@ -4,7 +4,7 @@ from commercetools import schemas, types
 def test_serialize_field_container():
 
     draft = types.CustomFieldsDraft(
-        type=types.ResourceIdentifier(type_id=types.ReferenceTypeId.CART, id="foobar"),
+        type=types.TypeResourceIdentifier(type_id=types.ReferenceTypeId.CART, id="foobar"),
         fields=types.FieldContainer(foobar=10),
     )
 

@@ -10,6 +10,7 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
@@ -24,6 +25,7 @@ __all__ = [
     "StatePagedQueryResponse",
     "StateReference",
     "StateRemoveRolesAction",
+    "StateResourceIdentifier",
     "StateRoleEnum",
     "StateSetDescriptionAction",
     "StateSetNameAction",
@@ -125,8 +127,8 @@ class StateDraft(_BaseType):
     initial: typing.Optional[bool]
     #: Optional list of :class:`commercetools.types.StateRoleEnum`
     roles: typing.Optional[typing.List["StateRoleEnum"]]
-    #: Optional list of :class:`commercetools.types.StateReference`
-    transitions: typing.Optional[typing.List["StateReference"]]
+    #: Optional list of :class:`commercetools.types.StateResourceIdentifier`
+    transitions: typing.Optional[typing.List["StateResourceIdentifier"]]
 
     def __init__(
         self,
@@ -137,7 +139,7 @@ class StateDraft(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         initial: typing.Optional[bool] = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
-        transitions: typing.Optional[typing.List["StateReference"]] = None
+        transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
     ) -> None:
         self.key = key
         self.type = type
@@ -198,18 +200,36 @@ class StateReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["State"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.STATE, id=id)
+
+    def __repr__(self) -> str:
+        return "StateReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class StateResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.StateResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.STATE, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "StateReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "StateResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -408,14 +428,14 @@ class StateSetRolesAction(StateUpdateAction):
 
 class StateSetTransitionsAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetTransitionsActionSchema`."
-    #: Optional list of :class:`commercetools.types.StateReference`
-    transitions: typing.Optional[typing.List["StateReference"]]
+    #: Optional list of :class:`commercetools.types.StateResourceIdentifier`
+    transitions: typing.Optional[typing.List["StateResourceIdentifier"]]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        transitions: typing.Optional[typing.List["StateReference"]] = None
+        transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
     ) -> None:
         self.transitions = transitions
         super().__init__(action="setTransitions")

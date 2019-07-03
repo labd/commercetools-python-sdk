@@ -9,6 +9,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -21,6 +22,7 @@ __all__ = [
     "ChannelPagedQueryResponseSchema",
     "ChannelReferenceSchema",
     "ChannelRemoveRolesActionSchema",
+    "ChannelResourceIdentifierSchema",
     "ChannelSchema",
     "ChannelSetAddressActionSchema",
     "ChannelSetCustomFieldActionSchema",
@@ -101,6 +103,18 @@ class ChannelReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ChannelReference(**data)
+
+
+class ChannelResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ChannelResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ChannelResourceIdentifier(**data)
 
 
 class ChannelSchema(LoggedResourceSchema):
@@ -295,7 +309,7 @@ class ChannelSetCustomFieldActionSchema(ChannelUpdateActionSchema):
 class ChannelSetCustomTypeActionSchema(ChannelUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ChannelSetCustomTypeAction`."
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

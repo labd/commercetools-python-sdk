@@ -9,6 +9,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 
 __all__ = [
@@ -52,6 +53,7 @@ __all__ = [
     "ProductTypeReferenceSchema",
     "ProductTypeRemoveAttributeDefinitionActionSchema",
     "ProductTypeRemoveEnumValuesActionSchema",
+    "ProductTypeResourceIdentifierSchema",
     "ProductTypeSchema",
     "ProductTypeSetInputTipActionSchema",
     "ProductTypeSetKeyActionSchema",
@@ -242,6 +244,18 @@ class ProductTypeReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ProductTypeReference(**data)
+
+
+class ProductTypeResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductTypeResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ProductTypeResourceIdentifier(**data)
 
 
 class ProductTypeSchema(LoggedResourceSchema):

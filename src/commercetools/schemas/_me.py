@@ -46,7 +46,7 @@ class MyCartDraftSchema(marshmallow.Schema):
         data_key="billingAddress",
     )
     shipping_method = marshmallow.fields.Nested(
-        nested="commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
+        nested="commercetools.schemas._shipping_method.ShippingMethodResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -138,14 +138,14 @@ class MyLineItemDraftSchema(marshmallow.Schema):
     variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
     quantity = marshmallow.fields.Integer(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

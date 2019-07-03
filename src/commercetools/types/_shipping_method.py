@@ -10,12 +10,13 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
     from ._common import Money, TypedMoney
-    from ._tax_category import TaxCategoryReference
-    from ._zone import ZoneReference
+    from ._tax_category import TaxCategoryReference, TaxCategoryResourceIdentifier
+    from ._zone import ZoneReference, ZoneResourceIdentifier
 __all__ = [
     "CartClassificationTier",
     "CartScoreTier",
@@ -32,6 +33,7 @@ __all__ = [
     "ShippingMethodReference",
     "ShippingMethodRemoveShippingRateAction",
     "ShippingMethodRemoveZoneAction",
+    "ShippingMethodResourceIdentifier",
     "ShippingMethodSetDescriptionAction",
     "ShippingMethodSetKeyAction",
     "ShippingMethodSetPredicateAction",
@@ -143,8 +145,8 @@ class ShippingMethodDraft(_BaseType):
     name: typing.Optional[str]
     #: Optional :class:`str`
     description: typing.Optional[str]
-    #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    #: :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: List of :class:`commercetools.types.ZoneRateDraft` `(Named` ``zoneRates`` `in Commercetools)`
     zone_rates: typing.Optional[typing.List["ZoneRateDraft"]]
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
@@ -158,7 +160,7 @@ class ShippingMethodDraft(_BaseType):
         key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         zone_rates: typing.Optional[typing.List["ZoneRateDraft"]] = None,
         is_default: typing.Optional[bool] = None,
         predicate: typing.Optional[str] = None
@@ -220,18 +222,36 @@ class ShippingMethodReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["ShippingMethod"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.SHIPPING_METHOD, id=id)
+
+    def __repr__(self) -> str:
+        return "ShippingMethodReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class ShippingMethodResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.SHIPPING_METHOD, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "ShippingMethodReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "ShippingMethodResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -377,15 +397,15 @@ class ZoneRate(_BaseType):
 
 class ZoneRateDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateDraftSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    #: :class:`commercetools.types.ZoneResourceIdentifier`
+    zone: typing.Optional["ZoneResourceIdentifier"]
     #: List of :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRates`` `in Commercetools)`
     shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]]
 
     def __init__(
         self,
         *,
-        zone: typing.Optional["ZoneReference"] = None,
+        zone: typing.Optional["ZoneResourceIdentifier"] = None,
         shipping_rates: typing.Optional[typing.List["ShippingRateDraft"]] = None
     ) -> None:
         self.zone = zone
@@ -494,8 +514,8 @@ class CartValueTier(ShippingRatePriceTier):
 
 class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddShippingRateActionSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    #: :class:`commercetools.types.ZoneResourceIdentifier`
+    zone: typing.Optional["ZoneResourceIdentifier"]
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
     shipping_rate: typing.Optional["ShippingRateDraft"]
 
@@ -503,7 +523,7 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None,
+        zone: typing.Optional["ZoneResourceIdentifier"] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None
     ) -> None:
         self.zone = zone
@@ -519,14 +539,14 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
 
 class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddZoneActionSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    #: :class:`commercetools.types.ZoneResourceIdentifier`
+    zone: typing.Optional["ZoneResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None
+        zone: typing.Optional["ZoneResourceIdentifier"] = None
     ) -> None:
         self.zone = zone
         super().__init__(action="addZone")
@@ -579,14 +599,14 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
 
 class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeTaxCategoryActionSchema`."
-    #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    #: :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None
     ) -> None:
         self.tax_category = tax_category
         super().__init__(action="changeTaxCategory")
@@ -600,8 +620,8 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
 
 class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveShippingRateActionSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    #: :class:`commercetools.types.ZoneResourceIdentifier`
+    zone: typing.Optional["ZoneResourceIdentifier"]
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
     shipping_rate: typing.Optional["ShippingRateDraft"]
 
@@ -609,7 +629,7 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None,
+        zone: typing.Optional["ZoneResourceIdentifier"] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None
     ) -> None:
         self.zone = zone
@@ -625,14 +645,14 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
 
 class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveZoneActionSchema`."
-    #: :class:`commercetools.types.ZoneReference`
-    zone: typing.Optional["ZoneReference"]
+    #: :class:`commercetools.types.ZoneResourceIdentifier`
+    zone: typing.Optional["ZoneResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        zone: typing.Optional["ZoneReference"] = None
+        zone: typing.Optional["ZoneResourceIdentifier"] = None
     ) -> None:
         self.zone = zone
         super().__init__(action="removeZone")

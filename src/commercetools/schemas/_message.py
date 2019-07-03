@@ -2314,7 +2314,7 @@ class ProductDeletedMessagePayloadSchema(MessagePayloadSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDeletedMessagePayload`."
     removed_image_urls = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.None.anySchema",
+            nested="commercetools.schemas.None.stringSchema",
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
         ),
@@ -2341,7 +2341,7 @@ class ProductDeletedMessageSchema(MessageSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDeletedMessage`."
     removed_image_urls = marshmallow.fields.List(
         marshmallow.fields.Nested(
-            nested="commercetools.schemas.None.anySchema",
+            nested="commercetools.schemas.None.stringSchema",
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
         ),

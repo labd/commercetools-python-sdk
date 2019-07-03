@@ -9,18 +9,25 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
-    from ._channel import ChannelReference
+    from ._channel import ChannelResourceIdentifier
     from ._common import CreatedBy, LastModifiedBy
-    from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
+    from ._type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 __all__ = [
     "InventoryAddQuantityAction",
     "InventoryChangeQuantityAction",
     "InventoryEntry",
     "InventoryEntryDraft",
     "InventoryEntryReference",
+    "InventoryEntryResourceIdentifier",
     "InventoryPagedQueryResponse",
     "InventoryRemoveQuantityAction",
     "InventorySetCustomFieldAction",
@@ -37,8 +44,8 @@ class InventoryEntry(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySchema`."
     #: :class:`str`
     sku: typing.Optional[str]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
     quantity_on_stock: typing.Optional[int]
     #: :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
@@ -60,7 +67,7 @@ class InventoryEntry(LoggedResource):
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         sku: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         quantity_on_stock: typing.Optional[int] = None,
         available_quantity: typing.Optional[int] = None,
         restockable_in_days: typing.Optional[int] = None,
@@ -108,8 +115,8 @@ class InventoryEntryDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDraftSchema`."
     #: :class:`str`
     sku: typing.Optional[str]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
     quantity_on_stock: typing.Optional[int]
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
@@ -123,7 +130,7 @@ class InventoryEntryDraft(_BaseType):
         self,
         *,
         sku: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         quantity_on_stock: typing.Optional[int] = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
@@ -161,18 +168,36 @@ class InventoryEntryReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["InventoryEntry"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.INVENTORY_ENTRY, id=id)
+
+    def __repr__(self) -> str:
+        return "InventoryEntryReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class InventoryEntryResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.INVENTORY_ENTRY, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "InventoryEntryReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "InventoryEntryResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -324,8 +349,8 @@ class InventorySetCustomFieldAction(InventoryUpdateAction):
 
 class InventorySetCustomTypeAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -333,7 +358,7 @@ class InventorySetCustomTypeAction(InventoryUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type
@@ -392,14 +417,14 @@ class InventorySetRestockableInDaysAction(InventoryUpdateAction):
 
 class InventorySetSupplyChannelAction(InventoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetSupplyChannelActionSchema`."
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ) -> None:
         self.supply_channel = supply_channel
         super().__init__(action="setSupplyChannel")

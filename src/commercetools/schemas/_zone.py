@@ -7,6 +7,7 @@ from commercetools.schemas._common import (
     BaseResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "ZonePagedQueryResponseSchema",
     "ZoneReferenceSchema",
     "ZoneRemoveLocationActionSchema",
+    "ZoneResourceIdentifierSchema",
     "ZoneSchema",
     "ZoneSetDescriptionActionSchema",
     "ZoneSetKeyActionSchema",
@@ -91,6 +93,18 @@ class ZoneReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ZoneReference(**data)
+
+
+class ZoneResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ZoneResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ZoneResourceIdentifier(**data)
 
 
 class ZoneSchema(BaseResourceSchema):

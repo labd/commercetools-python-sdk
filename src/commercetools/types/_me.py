@@ -7,9 +7,9 @@ from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._cart import InventoryMode, ItemShippingDetailsDraft, TaxMode
-    from ._channel import ChannelReference
+    from ._channel import ChannelResourceIdentifier
     from ._common import Address
-    from ._shipping_method import ShippingMethodReference
+    from ._shipping_method import ShippingMethodResourceIdentifier
     from ._type import CustomFields, CustomFieldsDraft
 __all__ = ["MyCartDraft", "MyCustomerDraft", "MyLineItemDraft", "MyOrderFromCartDraft"]
 
@@ -30,8 +30,8 @@ class MyCartDraft(_BaseType):
     shipping_address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``billingAddress`` `in Commercetools)`
     billing_address: typing.Optional["Address"]
-    #: Optional :class:`commercetools.types.ShippingMethodReference` `(Named` ``shippingMethod`` `in Commercetools)`
-    shipping_method: typing.Optional["ShippingMethodReference"]
+    #: Optional :class:`commercetools.types.ShippingMethodResourceIdentifier` `(Named` ``shippingMethod`` `in Commercetools)`
+    shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`str`
@@ -53,7 +53,7 @@ class MyCartDraft(_BaseType):
         line_items: typing.Optional[typing.List["MyLineItemDraft"]] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
-        shipping_method: typing.Optional["ShippingMethodReference"] = None,
+        shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         locale: typing.Optional[str] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
@@ -191,10 +191,10 @@ class MyLineItemDraft(_BaseType):
     variant_id: typing.Optional[int]
     #: :class:`int`
     quantity: typing.Optional[int]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
-    distribution_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
@@ -206,8 +206,8 @@ class MyLineItemDraft(_BaseType):
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         quantity: typing.Optional[int] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ) -> None:

@@ -9,14 +9,20 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
     from ._common import CreatedBy, LastModifiedBy, LocalizedString
-    from ._customer import CustomerReference
+    from ._customer import CustomerReference, CustomerResourceIdentifier
     from ._product import ProductVariant
     from ._product_type import ProductTypeReference
-    from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
+    from ._type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 __all__ = [
     "ShoppingList",
     "ShoppingListAddLineItemAction",
@@ -34,6 +40,7 @@ __all__ = [
     "ShoppingListReference",
     "ShoppingListRemoveLineItemAction",
     "ShoppingListRemoveTextLineItemAction",
+    "ShoppingListResourceIdentifier",
     "ShoppingListSetAnonymousIdAction",
     "ShoppingListSetCustomFieldAction",
     "ShoppingListSetCustomTypeAction",
@@ -144,8 +151,8 @@ class ShoppingListDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListDraftSchema`."
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
+    customer: typing.Optional["CustomerResourceIdentifier"]
     #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
     delete_days_after_last_modification: typing.Optional[int]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -167,7 +174,7 @@ class ShoppingListDraft(_BaseType):
         self,
         *,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        customer: typing.Optional["CustomerReference"] = None,
+        customer: typing.Optional["CustomerResourceIdentifier"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
         description: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
@@ -359,18 +366,36 @@ class ShoppingListReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["ShoppingList"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.SHOPPING_LIST, id=id)
+
+    def __repr__(self) -> str:
+        return "ShoppingListReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class ShoppingListResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.SHOPPING_LIST, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "ShoppingListReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "ShoppingListResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -824,8 +849,8 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
 
 class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -833,7 +858,7 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type
@@ -850,14 +875,14 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
 
 class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomerActionSchema`."
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
+    customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        customer: typing.Optional["CustomerReference"] = None
+        customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
         super().__init__(action="setCustomer")
@@ -959,8 +984,8 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -969,7 +994,7 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
         *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.line_item_id = line_item_id
@@ -1038,8 +1063,8 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -1048,7 +1073,7 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
         *,
         action: typing.Optional[str] = None,
         text_line_item_id: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id

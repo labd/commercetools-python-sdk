@@ -306,6 +306,22 @@ class ImageSchema(marshmallow.Schema):
         return types.Image(**data)
 
 
+class KeyReferenceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.KeyReference`."
+    type_id = marshmallow_enum.EnumField(
+        types.ReferenceTypeId, by_value=True, data_key="typeId"
+    )
+    key = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.KeyReference(**data)
+
+
 class MoneySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Money`."
     cent_amount = marshmallow.fields.Integer(allow_none=True, data_key="centAmount")
@@ -348,14 +364,14 @@ class PriceDraftSchema(marshmallow.Schema):
     )
     country = marshmallow.fields.String(missing=None)
     customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="customerGroup",
     )
     channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -463,6 +479,22 @@ class PriceTierSchema(marshmallow.Schema):
         return types.PriceTier(**data)
 
 
+class ReferenceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.Reference`."
+    type_id = marshmallow_enum.EnumField(
+        types.ReferenceTypeId, by_value=True, data_key="typeId"
+    )
+    id = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.Reference(**data)
+
+
 class ResourceIdentifierSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ResourceIdentifier`."
     type_id = marshmallow_enum.EnumField(
@@ -476,6 +508,7 @@ class ResourceIdentifierSchema(marshmallow.Schema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type_id"]
         return types.ResourceIdentifier(**data)
 
 
@@ -605,21 +638,6 @@ class GeoJsonPointSchema(GeoJsonSchema):
         return types.GeoJsonPoint(**data)
 
 
-class KeyReferenceSchema(ResourceIdentifierSchema):
-    "Marshmallow schema for :class:`commercetools.types.KeyReference`."
-    type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, missing=None, data_key="typeId"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type_id"]
-        return types.KeyReference(**data)
-
-
 class LastModifiedBySchema(ClientLoggingSchema):
     "Marshmallow schema for :class:`commercetools.types.LastModifiedBy`."
 
@@ -654,21 +672,6 @@ class LoggedResourceSchema(BaseResourceSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.LoggedResource(**data)
-
-
-class ReferenceSchema(ResourceIdentifierSchema):
-    "Marshmallow schema for :class:`commercetools.types.Reference`."
-    type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, missing=None, data_key="typeId"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["type_id"]
-        return types.Reference(**data)
 
 
 class TypedMoneySchema(MoneySchema):

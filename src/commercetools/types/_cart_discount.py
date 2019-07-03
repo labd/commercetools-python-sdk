@@ -10,13 +10,14 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
     from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money
     from ._product import ProductReference
-    from ._type import CustomFields, TypeReference
+    from ._type import CustomFields, TypeResourceIdentifier
 __all__ = [
     "CartDiscount",
     "CartDiscountChangeCartPredicateAction",
@@ -32,6 +33,7 @@ __all__ = [
     "CartDiscountLineItemsTarget",
     "CartDiscountPagedQueryResponse",
     "CartDiscountReference",
+    "CartDiscountResourceIdentifier",
     "CartDiscountSetCustomFieldAction",
     "CartDiscountSetCustomTypeAction",
     "CartDiscountSetDescriptionAction",
@@ -275,18 +277,36 @@ class CartDiscountReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["CartDiscount"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.CART_DISCOUNT, id=id)
+
+    def __repr__(self) -> str:
+        return "CartDiscountReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class CartDiscountResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.CART_DISCOUNT, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "CartDiscountReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "CartDiscountResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -601,8 +621,8 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
 
 class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`object`
     fields: typing.Optional[object]
 
@@ -610,7 +630,7 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional[object] = None
     ) -> None:
         self.type = type

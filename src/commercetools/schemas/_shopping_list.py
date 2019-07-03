@@ -8,6 +8,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -27,6 +28,7 @@ __all__ = [
     "ShoppingListReferenceSchema",
     "ShoppingListRemoveLineItemActionSchema",
     "ShoppingListRemoveTextLineItemActionSchema",
+    "ShoppingListResourceIdentifierSchema",
     "ShoppingListSchema",
     "ShoppingListSetAnonymousIdActionSchema",
     "ShoppingListSetCustomFieldActionSchema",
@@ -57,7 +59,7 @@ class ShoppingListDraftSchema(marshmallow.Schema):
         missing=None,
     )
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        nested="commercetools.schemas._customer.CustomerResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -201,6 +203,18 @@ class ShoppingListReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ShoppingListReference(**data)
+
+
+class ShoppingListResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ShoppingListResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ShoppingListResourceIdentifier(**data)
 
 
 class ShoppingListSchema(LoggedResourceSchema):
@@ -561,7 +575,7 @@ class ShoppingListSetCustomFieldActionSchema(ShoppingListUpdateActionSchema):
 class ShoppingListSetCustomTypeActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetCustomTypeAction`."
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -580,7 +594,7 @@ class ShoppingListSetCustomTypeActionSchema(ShoppingListUpdateActionSchema):
 class ShoppingListSetCustomerActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetCustomerAction`."
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        nested="commercetools.schemas._customer.CustomerResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -657,7 +671,7 @@ class ShoppingListSetLineItemCustomTypeActionSchema(ShoppingListUpdateActionSche
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetLineItemCustomTypeAction`."
     line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -711,7 +725,7 @@ class ShoppingListSetTextLineItemCustomTypeActionSchema(ShoppingListUpdateAction
         allow_none=True, data_key="textLineItemId"
     )
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

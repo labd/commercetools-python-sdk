@@ -8,6 +8,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -28,6 +29,7 @@ __all__ = [
     "CustomerRemoveBillingAddressIdActionSchema",
     "CustomerRemoveShippingAddressIdActionSchema",
     "CustomerResetPasswordSchema",
+    "CustomerResourceIdentifierSchema",
     "CustomerSchema",
     "CustomerSetCompanyNameActionSchema",
     "CustomerSetCustomFieldActionSchema",
@@ -160,7 +162,7 @@ class CustomerDraftSchema(marshmallow.Schema):
         allow_none=True, missing=None, data_key="externalId"
     )
     customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -244,6 +246,18 @@ class CustomerResetPasswordSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.CustomerResetPassword(**data)
+
+
+class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.CustomerResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.CustomerResourceIdentifier(**data)
 
 
 class CustomerSchema(LoggedResourceSchema):
@@ -589,7 +603,7 @@ class CustomerSetCustomFieldActionSchema(CustomerUpdateActionSchema):
 class CustomerSetCustomTypeActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetCustomTypeAction`."
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -608,7 +622,7 @@ class CustomerSetCustomTypeActionSchema(CustomerUpdateActionSchema):
 class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetCustomerGroupAction`."
     customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

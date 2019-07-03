@@ -7,6 +7,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 
 __all__ = [
@@ -18,6 +19,7 @@ __all__ = [
     "TaxCategoryReferenceSchema",
     "TaxCategoryRemoveTaxRateActionSchema",
     "TaxCategoryReplaceTaxRateActionSchema",
+    "TaxCategoryResourceIdentifierSchema",
     "TaxCategorySchema",
     "TaxCategorySetDescriptionActionSchema",
     "TaxCategorySetKeyActionSchema",
@@ -94,6 +96,18 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.TaxCategoryReference(**data)
+
+
+class TaxCategoryResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.TaxCategoryResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.TaxCategoryResourceIdentifier(**data)
 
 
 class TaxCategorySchema(LoggedResourceSchema):

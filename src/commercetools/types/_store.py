@@ -10,6 +10,7 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
@@ -20,6 +21,7 @@ __all__ = [
     "StoreKeyReference",
     "StorePagedQueryResponse",
     "StoreReference",
+    "StoreResourceIdentifier",
     "StoreSetNameAction",
     "StoreUpdate",
     "StoreUpdateAction",
@@ -94,17 +96,12 @@ class StoreKeyReference(KeyReference):
         self,
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
         key: typing.Optional[str] = None
     ) -> None:
-        super().__init__(type_id=ReferenceTypeId.STORE, id=id, key=key)
+        super().__init__(type_id=ReferenceTypeId.STORE, key=key)
 
     def __repr__(self) -> str:
-        return "StoreKeyReference(type_id=%r, id=%r, key=%r)" % (
-            self.type_id,
-            self.id,
-            self.key,
-        )
+        return "StoreKeyReference(type_id=%r, key=%r)" % (self.type_id, self.key)
 
 
 class StorePagedQueryResponse(PagedQueryResponse):
@@ -142,18 +139,36 @@ class StoreReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["Store"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.STORE, id=id)
+
+    def __repr__(self) -> str:
+        return "StoreReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class StoreResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.STORE, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "StoreReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "StoreResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 

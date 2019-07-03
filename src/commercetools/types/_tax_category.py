@@ -9,6 +9,7 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
@@ -23,6 +24,7 @@ __all__ = [
     "TaxCategoryReference",
     "TaxCategoryRemoveTaxRateAction",
     "TaxCategoryReplaceTaxRateAction",
+    "TaxCategoryResourceIdentifier",
     "TaxCategorySetDescriptionAction",
     "TaxCategorySetKeyAction",
     "TaxCategoryUpdate",
@@ -176,18 +178,36 @@ class TaxCategoryReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["TaxCategory"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.TAX_CATEGORY, id=id)
+
+    def __repr__(self) -> str:
+        return "TaxCategoryReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class TaxCategoryResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.TAX_CATEGORY, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "TaxCategoryReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "TaxCategoryResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 

@@ -8,6 +8,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 
 __all__ = [
@@ -20,6 +21,7 @@ __all__ = [
     "ProductDiscountMatchQuerySchema",
     "ProductDiscountPagedQueryResponseSchema",
     "ProductDiscountReferenceSchema",
+    "ProductDiscountResourceIdentifierSchema",
     "ProductDiscountSchema",
     "ProductDiscountSetDescriptionActionSchema",
     "ProductDiscountSetKeyActionSchema",
@@ -120,6 +122,18 @@ class ProductDiscountReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ProductDiscountReference(**data)
+
+
+class ProductDiscountResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ProductDiscountResourceIdentifier(**data)
 
 
 class ProductDiscountSchema(LoggedResourceSchema):

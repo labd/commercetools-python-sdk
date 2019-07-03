@@ -9,6 +9,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -36,6 +37,7 @@ __all__ = [
     "CartRemoveItemShippingAddressActionSchema",
     "CartRemoveLineItemActionSchema",
     "CartRemovePaymentActionSchema",
+    "CartResourceIdentifierSchema",
     "CartSchema",
     "CartSetAnonymousIdActionSchema",
     "CartSetBillingAddressActionSchema",
@@ -107,7 +109,7 @@ class CartDraftSchema(marshmallow.Schema):
         allow_none=True, missing=None, data_key="customerEmail"
     )
     customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -117,7 +119,7 @@ class CartDraftSchema(marshmallow.Schema):
         allow_none=True, missing=None, data_key="anonymousId"
     )
     store = marshmallow.fields.Nested(
-        nested="commercetools.schemas._store.StoreReferenceSchema",
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -169,7 +171,7 @@ class CartDraftSchema(marshmallow.Schema):
         data_key="billingAddress",
     )
     shipping_method = marshmallow.fields.Nested(
-        nested="commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
+        nested="commercetools.schemas._shipping_method.ShippingMethodResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -254,6 +256,18 @@ class CartReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.CartReference(**data)
+
+
+class CartResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.CartResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.CartResourceIdentifier(**data)
 
 
 class CartSchema(LoggedResourceSchema):
@@ -505,7 +519,7 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
     )
     slug = marshmallow.fields.String(allow_none=True)
     tax_category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+        nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -836,14 +850,14 @@ class LineItemDraftSchema(marshmallow.Schema):
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -994,33 +1008,8 @@ class LineItemSchema(marshmallow.Schema):
 
 class ReplicaCartDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReplicaCartDraft`."
-    reference = helpers.Discriminator(
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": "commercetools.schemas._cart_discount.CartDiscountReferenceSchema",
-            "cart": "commercetools.schemas._cart.CartReferenceSchema",
-            "category": "commercetools.schemas._category.CategoryReferenceSchema",
-            "channel": "commercetools.schemas._channel.ChannelReferenceSchema",
-            "key-value-document": "commercetools.schemas._custom_object.CustomObjectReferenceSchema",
-            "customer-group": "commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
-            "customer": "commercetools.schemas._customer.CustomerReferenceSchema",
-            "discount-code": "commercetools.schemas._discount_code.DiscountCodeReferenceSchema",
-            "inventory-entry": "commercetools.schemas._inventory.InventoryEntryReferenceSchema",
-            "order-edit": "commercetools.schemas._order_edit.OrderEditReferenceSchema",
-            "order": "commercetools.schemas._order.OrderReferenceSchema",
-            "payment": "commercetools.schemas._payment.PaymentReferenceSchema",
-            "product-discount": "commercetools.schemas._product_discount.ProductDiscountReferenceSchema",
-            "product-type": "commercetools.schemas._product_type.ProductTypeReferenceSchema",
-            "product": "commercetools.schemas._product.ProductReferenceSchema",
-            "review": "commercetools.schemas._review.ReviewReferenceSchema",
-            "shipping-method": "commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
-            "shopping-list": "commercetools.schemas._shopping_list.ShoppingListReferenceSchema",
-            "state": "commercetools.schemas._state.StateReferenceSchema",
-            "store": "commercetools.schemas._store.StoreReferenceSchema",
-            "tax-category": "commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
-            "type": "commercetools.schemas._type.TypeReferenceSchema",
-            "zone": "commercetools.schemas._zone.ZoneReferenceSchema",
-        },
+    reference = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.CartReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -1223,7 +1212,7 @@ class CartAddCustomLineItemActionSchema(CartUpdateActionSchema):
     quantity = marshmallow.fields.Integer(allow_none=True)
     slug = marshmallow.fields.String(allow_none=True)
     tax_category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+        nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1291,7 +1280,7 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
         missing=None,
     )
     distribution_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1313,7 +1302,7 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1353,7 +1342,7 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
 class CartAddPaymentActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartAddPaymentAction`."
     payment = marshmallow.fields.Nested(
-        nested="commercetools.schemas._payment.PaymentReferenceSchema",
+        nested="commercetools.schemas._payment.PaymentResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -1370,20 +1359,20 @@ class CartAddPaymentActionSchema(CartUpdateActionSchema):
 class CartAddShoppingListActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartAddShoppingListAction`."
     shopping_list = marshmallow.fields.Nested(
-        nested="commercetools.schemas._shopping_list.ShoppingListReferenceSchema",
+        nested="commercetools.schemas._shopping_list.ShoppingListResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shoppingList",
     )
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1653,7 +1642,7 @@ class CartRemoveLineItemActionSchema(CartUpdateActionSchema):
 class CartRemovePaymentActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartRemovePaymentAction`."
     payment = marshmallow.fields.Nested(
-        nested="commercetools.schemas._payment.PaymentReferenceSchema",
+        nested="commercetools.schemas._payment.PaymentResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -1776,7 +1765,7 @@ class CartSetCustomLineItemCustomTypeActionSchema(CartUpdateActionSchema):
         allow_none=True, data_key="customLineItemId"
     )
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1870,7 +1859,7 @@ class CartSetCustomShippingMethodActionSchema(CartUpdateActionSchema):
         data_key="shippingRate",
     )
     tax_category = marshmallow.fields.Nested(
-        nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+        nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1896,7 +1885,7 @@ class CartSetCustomShippingMethodActionSchema(CartUpdateActionSchema):
 class CartSetCustomTypeActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartSetCustomTypeAction`."
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1928,7 +1917,7 @@ class CartSetCustomerEmailActionSchema(CartUpdateActionSchema):
 class CartSetCustomerGroupActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartSetCustomerGroupAction`."
     customer_group = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1993,7 +1982,7 @@ class CartSetLineItemCustomTypeActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartSetLineItemCustomTypeAction`."
     line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -2143,7 +2132,7 @@ class CartSetShippingAddressActionSchema(CartUpdateActionSchema):
 class CartSetShippingMethodActionSchema(CartUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartSetShippingMethodAction`."
     shipping_method = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._shipping_method.ShippingMethodResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

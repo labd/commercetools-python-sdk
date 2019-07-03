@@ -10,6 +10,7 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
@@ -21,7 +22,12 @@ if typing.TYPE_CHECKING:
         LocalizedString,
     )
     from ._review import ReviewRatingStatistics
-    from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
+    from ._type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 __all__ = [
     "Channel",
     "ChannelAddRolesAction",
@@ -32,6 +38,7 @@ __all__ = [
     "ChannelPagedQueryResponse",
     "ChannelReference",
     "ChannelRemoveRolesAction",
+    "ChannelResourceIdentifier",
     "ChannelRoleEnum",
     "ChannelSetAddressAction",
     "ChannelSetCustomFieldAction",
@@ -204,18 +211,36 @@ class ChannelReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["Channel"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.CHANNEL, id=id)
+
+    def __repr__(self) -> str:
+        return "ChannelReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class ChannelResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.CHANNEL, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "ChannelReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "ChannelResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -403,8 +428,8 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
 
 class ChannelSetCustomTypeAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -412,7 +437,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type

@@ -9,20 +9,27 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
-    from ._common import CreatedBy, LastModifiedBy, ResourceIdentifier
-    from ._customer import CustomerReference
-    from ._product import ProductReference
-    from ._state import StateReference
-    from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
+    from ._common import CreatedBy, LastModifiedBy
+    from ._customer import CustomerReference, CustomerResourceIdentifier
+    from ._product import ProductReference, ProductResourceIdentifier
+    from ._state import StateReference, StateResourceIdentifier
+    from ._type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 __all__ = [
     "Review",
     "ReviewDraft",
     "ReviewPagedQueryResponse",
     "ReviewRatingStatistics",
     "ReviewReference",
+    "ReviewResourceIdentifier",
     "ReviewSetAuthorNameAction",
     "ReviewSetCustomFieldAction",
     "ReviewSetCustomTypeAction",
@@ -149,14 +156,14 @@ class ReviewDraft(_BaseType):
     title: typing.Optional[str]
     #: Optional :class:`str`
     text: typing.Optional[str]
-    #: Optional :class:`commercetools.types.ProductReference`
-    target: typing.Optional["ProductReference"]
-    #: Optional :class:`commercetools.types.ResourceIdentifier`
-    state: typing.Optional["ResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ProductResourceIdentifier`
+    target: typing.Optional["ProductResourceIdentifier"]
+    #: Optional :class:`commercetools.types.StateResourceIdentifier`
+    state: typing.Optional["StateResourceIdentifier"]
     #: Optional :class:`int`
     rating: typing.Optional[int]
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
+    customer: typing.Optional["CustomerResourceIdentifier"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
 
@@ -169,10 +176,10 @@ class ReviewDraft(_BaseType):
         author_name: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
         text: typing.Optional[str] = None,
-        target: typing.Optional["ProductReference"] = None,
-        state: typing.Optional["ResourceIdentifier"] = None,
+        target: typing.Optional["ProductResourceIdentifier"] = None,
+        state: typing.Optional["StateResourceIdentifier"] = None,
         rating: typing.Optional[int] = None,
-        customer: typing.Optional["CustomerReference"] = None,
+        customer: typing.Optional["CustomerResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ) -> None:
         self.key = key
@@ -284,18 +291,36 @@ class ReviewReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["Review"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.REVIEW, id=id)
+
+    def __repr__(self) -> str:
+        return "ReviewReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class ReviewResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.REVIEW, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "ReviewReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "ReviewResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -382,8 +407,8 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
 
 class ReviewSetCustomTypeAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -391,7 +416,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type
@@ -408,14 +433,14 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
 
 class ReviewSetCustomerAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomerActionSchema`."
-    #: Optional :class:`commercetools.types.CustomerReference`
-    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
+    customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        customer: typing.Optional["CustomerReference"] = None
+        customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
         super().__init__(action="setCustomer")
@@ -486,14 +511,14 @@ class ReviewSetRatingAction(ReviewUpdateAction):
 
 class ReviewSetTargetAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTargetActionSchema`."
-    #: Optional :class:`commercetools.types.ProductReference`
-    target: typing.Optional["ProductReference"]
+    #: :class:`commercetools.types.ProductResourceIdentifier`
+    target: typing.Optional["ProductResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        target: typing.Optional["ProductReference"] = None
+        target: typing.Optional["ProductResourceIdentifier"] = None
     ) -> None:
         self.target = target
         super().__init__(action="setTarget")
@@ -537,8 +562,8 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
 class ReviewTransitionStateAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewTransitionStateActionSchema`."
-    #: :class:`commercetools.types.StateReference`
-    state: typing.Optional["StateReference"]
+    #: :class:`commercetools.types.StateResourceIdentifier`
+    state: typing.Optional["StateResourceIdentifier"]
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
@@ -546,7 +571,7 @@ class ReviewTransitionStateAction(ReviewUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None,
+        state: typing.Optional["StateResourceIdentifier"] = None,
         force: typing.Optional[bool] = None
     ) -> None:
         self.state = state

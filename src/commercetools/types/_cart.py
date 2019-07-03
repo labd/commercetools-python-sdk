@@ -10,11 +10,12 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
     from ._cart_discount import CartDiscountReference
-    from ._channel import ChannelReference
+    from ._channel import ChannelReference, ChannelResourceIdentifier
     from ._common import (
         Address,
         CreatedBy,
@@ -24,21 +25,32 @@ if typing.TYPE_CHECKING:
         Price,
         TypedMoney,
     )
-    from ._customer_group import CustomerGroupReference
+    from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from ._discount_code import DiscountCodeReference
     from ._order import Delivery, ItemState, PaymentInfo
-    from ._payment import PaymentReference
+    from ._payment import PaymentResourceIdentifier
     from ._product import ProductVariant
     from ._product_type import ProductTypeReference
     from ._shipping_method import (
         ShippingMethodReference,
+        ShippingMethodResourceIdentifier,
         ShippingRate,
         ShippingRateDraft,
     )
-    from ._shopping_list import ShoppingListReference
-    from ._store import StoreKeyReference, StoreReference
-    from ._tax_category import SubRate, TaxCategoryReference, TaxRate
-    from ._type import CustomFields, CustomFieldsDraft, FieldContainer, TypeReference
+    from ._shopping_list import ShoppingListResourceIdentifier
+    from ._store import StoreKeyReference, StoreResourceIdentifier
+    from ._tax_category import (
+        SubRate,
+        TaxCategoryReference,
+        TaxCategoryResourceIdentifier,
+        TaxRate,
+    )
+    from ._type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 __all__ = [
     "Cart",
     "CartAddCustomLineItemAction",
@@ -65,6 +77,7 @@ __all__ = [
     "CartRemoveItemShippingAddressAction",
     "CartRemoveLineItemAction",
     "CartRemovePaymentAction",
+    "CartResourceIdentifier",
     "CartSetAnonymousIdAction",
     "CartSetBillingAddressAction",
     "CartSetCartTotalTaxAction",
@@ -314,12 +327,12 @@ class CartDraft(_BaseType):
     customer_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
     customer_email: typing.Optional[str]
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.CustomerGroupResourceIdentifier` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.StoreReference`
-    store: typing.Optional["StoreReference"]
+    #: Optional :class:`commercetools.types.StoreResourceIdentifier`
+    store: typing.Optional["StoreResourceIdentifier"]
     #: Optional :class:`str`
     country: typing.Optional[str]
     #: Optional :class:`commercetools.types.InventoryMode` `(Named` ``inventoryMode`` `in Commercetools)`
@@ -338,8 +351,8 @@ class CartDraft(_BaseType):
     shipping_address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``billingAddress`` `in Commercetools)`
     billing_address: typing.Optional["Address"]
-    #: Optional :class:`commercetools.types.ShippingMethodReference` `(Named` ``shippingMethod`` `in Commercetools)`
-    shipping_method: typing.Optional["ShippingMethodReference"]
+    #: Optional :class:`commercetools.types.ShippingMethodResourceIdentifier` `(Named` ``shippingMethod`` `in Commercetools)`
+    shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRateForShippingMethod`` `in Commercetools)`
     external_tax_rate_for_shipping_method: typing.Optional["ExternalTaxRateDraft"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -361,9 +374,9 @@ class CartDraft(_BaseType):
         currency: typing.Optional["str"] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         anonymous_id: typing.Optional[str] = None,
-        store: typing.Optional["StoreReference"] = None,
+        store: typing.Optional["StoreResourceIdentifier"] = None,
         country: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
@@ -373,7 +386,7 @@ class CartDraft(_BaseType):
         custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
-        shipping_method: typing.Optional["ShippingMethodReference"] = None,
+        shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         external_tax_rate_for_shipping_method: typing.Optional[
             "ExternalTaxRateDraft"
         ] = None,
@@ -482,18 +495,36 @@ class CartReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["Cart"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.CART, id=id)
+
+    def __repr__(self) -> str:
+        return "CartReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class CartResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.CART, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "CartReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "CartResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 
@@ -633,8 +664,8 @@ class CustomLineItemDraft(_BaseType):
     money: typing.Optional["Money"]
     #: :class:`str`
     slug: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    #: Optional :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: Optional :class:`commercetools.types.CustomFields`
@@ -649,7 +680,7 @@ class CustomLineItemDraft(_BaseType):
         quantity: typing.Optional[int] = None,
         money: typing.Optional["Money"] = None,
         slug: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         custom: typing.Optional["CustomFields"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
@@ -1072,10 +1103,10 @@ class LineItemDraft(_BaseType):
     sku: typing.Optional[str]
     #: Optional :class:`int`
     quantity: typing.Optional[int]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
-    distribution_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -1094,8 +1125,8 @@ class LineItemDraft(_BaseType):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_price: typing.Optional["Money"] = None,
@@ -1152,10 +1183,10 @@ class ProductPublishScope(enum.Enum):
 
 class ReplicaCartDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReplicaCartDraftSchema`."
-    #: :class:`commercetools.types.Reference`
-    reference: typing.Optional["Reference"]
+    #: :class:`commercetools.types.CartReference`
+    reference: typing.Optional["CartReference"]
 
-    def __init__(self, *, reference: typing.Optional["Reference"] = None) -> None:
+    def __init__(self, *, reference: typing.Optional["CartReference"] = None) -> None:
         self.reference = reference
         super().__init__()
 
@@ -1371,8 +1402,8 @@ class CartAddCustomLineItemAction(CartUpdateAction):
     quantity: typing.Optional[int]
     #: :class:`str`
     slug: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    #: Optional :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
@@ -1386,7 +1417,7 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         name: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         slug: typing.Optional[str] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ) -> None:
@@ -1458,8 +1489,8 @@ class CartAddLineItemAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddLineItemActionSchema`."
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
-    distribution_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
@@ -1470,8 +1501,8 @@ class CartAddLineItemAction(CartUpdateAction):
     sku: typing.Optional[str]
     #: Optional :class:`int`
     quantity: typing.Optional[int]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
     external_price: typing.Optional["Money"]
     #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
@@ -1484,13 +1515,13 @@ class CartAddLineItemAction(CartUpdateAction):
         *,
         action: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
@@ -1530,14 +1561,14 @@ class CartAddLineItemAction(CartUpdateAction):
 
 class CartAddPaymentAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddPaymentActionSchema`."
-    #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    #: :class:`commercetools.types.PaymentResourceIdentifier`
+    payment: typing.Optional["PaymentResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None
+        payment: typing.Optional["PaymentResourceIdentifier"] = None
     ) -> None:
         self.payment = payment
         super().__init__(action="addPayment")
@@ -1551,20 +1582,20 @@ class CartAddPaymentAction(CartUpdateAction):
 
 class CartAddShoppingListAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartAddShoppingListActionSchema`."
-    #: :class:`commercetools.types.ShoppingListReference` `(Named` ``shoppingList`` `in Commercetools)`
-    shopping_list: typing.Optional["ShoppingListReference"]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
-    distribution_channel: typing.Optional["ChannelReference"]
+    #: :class:`commercetools.types.ShoppingListResourceIdentifier` `(Named` ``shoppingList`` `in Commercetools)`
+    shopping_list: typing.Optional["ShoppingListResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        shopping_list: typing.Optional["ShoppingListReference"] = None,
-        supply_channel: typing.Optional["ChannelReference"] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None
+        shopping_list: typing.Optional["ShoppingListResourceIdentifier"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ) -> None:
         self.shopping_list = shopping_list
         self.supply_channel = supply_channel
@@ -1915,14 +1946,14 @@ class CartRemoveLineItemAction(CartUpdateAction):
 
 class CartRemovePaymentAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartRemovePaymentActionSchema`."
-    #: :class:`commercetools.types.PaymentReference`
-    payment: typing.Optional["PaymentReference"]
+    #: :class:`commercetools.types.PaymentResourceIdentifier`
+    payment: typing.Optional["PaymentResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        payment: typing.Optional["PaymentReference"] = None
+        payment: typing.Optional["PaymentResourceIdentifier"] = None
     ) -> None:
         self.payment = payment
         super().__init__(action="removePayment")
@@ -2081,8 +2112,8 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -2091,7 +2122,7 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
         *,
         action: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -2187,8 +2218,8 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
     shipping_method_name: typing.Optional[str]
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
     shipping_rate: typing.Optional["ShippingRateDraft"]
-    #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
-    tax_category: typing.Optional["TaxCategoryReference"]
+    #: Optional :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2198,7 +2229,7 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
         action: typing.Optional[str] = None,
         shipping_method_name: typing.Optional[str] = None,
         shipping_rate: typing.Optional["ShippingRateDraft"] = None,
-        tax_category: typing.Optional["TaxCategoryReference"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ) -> None:
         self.shipping_method_name = shipping_method_name
@@ -2222,8 +2253,8 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
 
 class CartSetCustomTypeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomTypeActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -2231,7 +2262,7 @@ class CartSetCustomTypeAction(CartUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type
@@ -2266,14 +2297,14 @@ class CartSetCustomerEmailAction(CartUpdateAction):
 
 class CartSetCustomerGroupAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCustomerGroupActionSchema`."
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.CustomerGroupResourceIdentifier` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
     ) -> None:
         self.customer_group = customer_group
         super().__init__(action="setCustomerGroup")
@@ -2360,8 +2391,8 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetLineItemCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: typing.Optional[str]
-    #: Optional :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
@@ -2370,7 +2401,7 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
         *,
         action: typing.Optional[str] = None,
         line_item_id: typing.Optional[str] = None,
-        type: typing.Optional["TypeReference"] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.line_item_id = line_item_id
@@ -2551,8 +2582,8 @@ class CartSetShippingAddressAction(CartUpdateAction):
 
 class CartSetShippingMethodAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetShippingMethodActionSchema`."
-    #: Optional :class:`commercetools.types.TypeReference` `(Named` ``shippingMethod`` `in Commercetools)`
-    shipping_method: typing.Optional["TypeReference"]
+    #: Optional :class:`commercetools.types.ShippingMethodResourceIdentifier` `(Named` ``shippingMethod`` `in Commercetools)`
+    shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2560,7 +2591,7 @@ class CartSetShippingMethodAction(CartUpdateAction):
         self,
         *,
         action: typing.Optional[str] = None,
-        shipping_method: typing.Optional["TypeReference"] = None,
+        shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ) -> None:
         self.shipping_method = shipping_method

@@ -9,6 +9,7 @@ from commercetools.types._common import (
     PagedQueryResponse,
     Reference,
     ReferenceTypeId,
+    ResourceIdentifier,
 )
 
 __all__ = [
@@ -20,6 +21,7 @@ __all__ = [
     "ZonePagedQueryResponse",
     "ZoneReference",
     "ZoneRemoveLocationAction",
+    "ZoneResourceIdentifier",
     "ZoneSetDescriptionAction",
     "ZoneSetKeyAction",
     "ZoneUpdate",
@@ -167,18 +169,36 @@ class ZoneReference(Reference):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         obj: typing.Optional["Zone"] = None
     ) -> None:
         self.obj = obj
+        super().__init__(type_id=ReferenceTypeId.ZONE, id=id)
+
+    def __repr__(self) -> str:
+        return "ZoneReference(type_id=%r, id=%r, obj=%r)" % (
+            self.type_id,
+            self.id,
+            self.obj,
+        )
+
+
+class ZoneResourceIdentifier(ResourceIdentifier):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneResourceIdentifierSchema`."
+
+    def __init__(
+        self,
+        *,
+        type_id: typing.Optional["ReferenceTypeId"] = None,
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
         super().__init__(type_id=ReferenceTypeId.ZONE, id=id, key=key)
 
     def __repr__(self) -> str:
-        return "ZoneReference(type_id=%r, id=%r, key=%r, obj=%r)" % (
+        return "ZoneResourceIdentifier(type_id=%r, id=%r, key=%r)" % (
             self.type_id,
             self.id,
             self.key,
-            self.obj,
         )
 
 

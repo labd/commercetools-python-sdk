@@ -7,6 +7,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -15,6 +16,7 @@ __all__ = [
     "InventoryChangeQuantityActionSchema",
     "InventoryEntryDraftSchema",
     "InventoryEntryReferenceSchema",
+    "InventoryEntryResourceIdentifierSchema",
     "InventoryEntrySchema",
     "InventoryPagedQueryResponseSchema",
     "InventoryRemoveQuantityActionSchema",
@@ -32,7 +34,7 @@ class InventoryEntryDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.InventoryEntryDraft`."
     sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -80,11 +82,23 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
         return types.InventoryEntryReference(**data)
 
 
+class InventoryEntryResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntryResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.InventoryEntryResourceIdentifier(**data)
+
+
 class InventoryEntrySchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.InventoryEntry`."
     sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -233,7 +247,7 @@ class InventorySetCustomFieldActionSchema(InventoryUpdateActionSchema):
 class InventorySetCustomTypeActionSchema(InventoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.InventorySetCustomTypeAction`."
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -282,7 +296,7 @@ class InventorySetRestockableInDaysActionSchema(InventoryUpdateActionSchema):
 class InventorySetSupplyChannelActionSchema(InventoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.InventorySetSupplyChannelAction`."
     supply_channel = marshmallow.fields.Nested(
-        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

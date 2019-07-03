@@ -7,6 +7,7 @@ from commercetools.schemas._common import (
     LoggedResourceSchema,
     PagedQueryResponseSchema,
     ReferenceSchema,
+    ResourceIdentifierSchema,
 )
 from commercetools.schemas._type import FieldContainerField
 
@@ -15,6 +16,7 @@ __all__ = [
     "ReviewPagedQueryResponseSchema",
     "ReviewRatingStatisticsSchema",
     "ReviewReferenceSchema",
+    "ReviewResourceIdentifierSchema",
     "ReviewSchema",
     "ReviewSetAuthorNameActionSchema",
     "ReviewSetCustomFieldActionSchema",
@@ -45,20 +47,20 @@ class ReviewDraftSchema(marshmallow.Schema):
     title = marshmallow.fields.String(allow_none=True, missing=None)
     text = marshmallow.fields.String(allow_none=True, missing=None)
     target = marshmallow.fields.Nested(
-        nested="commercetools.schemas._product.ProductReferenceSchema",
+        nested="commercetools.schemas._product.ProductResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
     )
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.ResourceIdentifierSchema",
+        nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
     )
     rating = marshmallow.fields.Integer(allow_none=True, missing=None)
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        nested="commercetools.schemas._customer.CustomerResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -133,6 +135,18 @@ class ReviewReferenceSchema(ReferenceSchema):
     def post_load(self, data):
         del data["type_id"]
         return types.ReviewReference(**data)
+
+
+class ReviewResourceIdentifierSchema(ResourceIdentifierSchema):
+    "Marshmallow schema for :class:`commercetools.types.ReviewResourceIdentifier`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type_id"]
+        return types.ReviewResourceIdentifier(**data)
 
 
 class ReviewSchema(LoggedResourceSchema):
@@ -262,7 +276,7 @@ class ReviewSetCustomFieldActionSchema(ReviewUpdateActionSchema):
 class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ReviewSetCustomTypeAction`."
     type = marshmallow.fields.Nested(
-        nested="commercetools.schemas._type.TypeReferenceSchema",
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -281,7 +295,7 @@ class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
 class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ReviewSetCustomerAction`."
     customer = marshmallow.fields.Nested(
-        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        nested="commercetools.schemas._customer.CustomerResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -338,10 +352,9 @@ class ReviewSetRatingActionSchema(ReviewUpdateActionSchema):
 class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ReviewSetTargetAction`."
     target = marshmallow.fields.Nested(
-        nested="commercetools.schemas._product.ProductReferenceSchema",
+        nested="commercetools.schemas._product.ProductResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        missing=None,
     )
 
     class Meta:
@@ -382,7 +395,7 @@ class ReviewSetTitleActionSchema(ReviewUpdateActionSchema):
 class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ReviewTransitionStateAction`."
     state = marshmallow.fields.Nested(
-        nested="commercetools.schemas._state.StateReferenceSchema",
+        nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )

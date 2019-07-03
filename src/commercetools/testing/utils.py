@@ -49,7 +49,7 @@ def custom_fields_from_draft(
     storage, draft: types.CustomFieldsDraft
 ) -> types.CustomFields:
     return types.CustomFields(
-        type=storage.get_by_resource_identifier(draft.type), fields=draft.fields
+        type=types.TypeReference(id=storage.get_by_resource_identifier(draft.type)['id']), fields=draft.fields
     )
 
 

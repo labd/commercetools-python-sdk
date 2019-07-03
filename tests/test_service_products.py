@@ -11,6 +11,9 @@ def test_products_create(client):
         types.TypeDraft(
             name=types.LocalizedString(en="myType"),
             resource_type_ids=[types.ResourceTypeId.ASSET],
+            field_definitions=[
+                types.FieldDefinition(name="foo")
+            ]
         )
     )
     assert custom_type.id
@@ -22,9 +25,7 @@ def test_products_create(client):
             assets=[
                 types.AssetDraft(
                     custom=types.CustomFieldsDraft(
-                        type=types.ResourceIdentifier(
-                            type_id=types.ReferenceTypeId.TYPE, id=custom_type.id
-                        ),
+                        type=types.TypeResourceIdentifier(id=custom_type.id),
                         fields=types.FieldContainer(foo="bar"),
                     )
                 )

@@ -5,7 +5,6 @@ import marshmallow
 from commercetools import helpers, types
 from commercetools.schemas._common import (
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -45,8 +44,11 @@ class CustomerGroupDraftSchema(marshmallow.Schema):
         return types.CustomerGroupDraft(**data)
 
 
-class CustomerGroupPagedQueryResponseSchema(PagedQueryResponseSchema):
+class CustomerGroupPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerGroupPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer_group.CustomerGroupSchema",
         unknown=marshmallow.EXCLUDE,

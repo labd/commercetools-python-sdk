@@ -7,7 +7,6 @@ from commercetools import helpers, types
 from commercetools.schemas._common import (
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -159,8 +158,11 @@ class PaymentMethodInfoSchema(marshmallow.Schema):
         return types.PaymentMethodInfo(**data)
 
 
-class PaymentPagedQueryResponseSchema(PagedQueryResponseSchema):
+class PaymentPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PaymentPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.PaymentSchema",
         unknown=marshmallow.EXCLUDE,

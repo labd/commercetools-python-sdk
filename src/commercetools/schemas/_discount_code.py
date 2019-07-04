@@ -6,7 +6,6 @@ from commercetools import helpers, types
 from commercetools.schemas._common import (
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -90,8 +89,11 @@ class DiscountCodeDraftSchema(marshmallow.Schema):
         return types.DiscountCodeDraft(**data)
 
 
-class DiscountCodePagedQueryResponseSchema(PagedQueryResponseSchema):
+class DiscountCodePagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodePagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._discount_code.DiscountCodeSchema",
         unknown=marshmallow.EXCLUDE,

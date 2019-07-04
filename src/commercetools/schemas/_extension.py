@@ -4,7 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import LoggedResourceSchema, PagedQueryResponseSchema
+from commercetools.schemas._common import LoggedResourceSchema
 
 __all__ = [
     "ExtensionAWSLambdaDestinationSchema",
@@ -125,8 +125,11 @@ class ExtensionInputSchema(marshmallow.Schema):
         return types.ExtensionInput(**data)
 
 
-class ExtensionPagedQueryResponseSchema(PagedQueryResponseSchema):
+class ExtensionPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._extension.ExtensionSchema",
         unknown=marshmallow.EXCLUDE,

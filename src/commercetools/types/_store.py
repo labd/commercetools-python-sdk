@@ -7,7 +7,6 @@ from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
     BaseResource,
     KeyReference,
-    PagedQueryResponse,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -104,8 +103,14 @@ class StoreKeyReference(KeyReference):
         return "StoreKeyReference(type_id=%r, key=%r)" % (self.type_id, self.key)
 
 
-class StorePagedQueryResponse(PagedQueryResponse):
+class StorePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StorePagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Store`
     results: typing.Optional[typing.Sequence["Store"]]
 
@@ -117,8 +122,11 @@ class StorePagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Store"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "StorePagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (

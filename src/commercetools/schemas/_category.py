@@ -6,7 +6,6 @@ from commercetools import helpers, types
 from commercetools.schemas._common import (
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -94,8 +93,11 @@ class CategoryDraftSchema(marshmallow.Schema):
         return types.CategoryDraft(**data)
 
 
-class CategoryPagedQueryResponseSchema(PagedQueryResponseSchema):
+class CategoryPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CategoryPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._category.CategorySchema",
         unknown=marshmallow.EXCLUDE,

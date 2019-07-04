@@ -7,7 +7,6 @@ import typing
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
     LoggedResource,
-    PagedQueryResponse,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -664,8 +663,14 @@ class OrderImportDraft(_BaseType):
         )
 
 
-class OrderPagedQueryResponse(PagedQueryResponse):
+class OrderPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Order`
     results: typing.Optional[typing.Sequence["Order"]]
 
@@ -677,8 +682,11 @@ class OrderPagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Order"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "OrderPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (

@@ -7,7 +7,6 @@ from commercetools import helpers, types
 from commercetools.schemas._common import (
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -110,8 +109,11 @@ class CartDiscountDraftSchema(marshmallow.Schema):
         return types.CartDiscountDraft(**data)
 
 
-class CartDiscountPagedQueryResponseSchema(PagedQueryResponseSchema):
+class CartDiscountPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart_discount.CartDiscountSchema",
         unknown=marshmallow.EXCLUDE,

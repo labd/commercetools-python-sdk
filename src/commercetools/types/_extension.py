@@ -5,7 +5,7 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import LoggedResource, PagedQueryResponse
+from commercetools.types._common import LoggedResource
 
 if typing.TYPE_CHECKING:
     from ._common import CreatedBy, LastModifiedBy, Reference
@@ -172,8 +172,14 @@ class ExtensionInput(_BaseType):
         return "ExtensionInput(action=%r, resource=%r)" % (self.action, self.resource)
 
 
-class ExtensionPagedQueryResponse(PagedQueryResponse):
+class ExtensionPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Extension`
     results: typing.Optional[typing.Sequence["Extension"]]
 
@@ -185,8 +191,11 @@ class ExtensionPagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Extension"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (

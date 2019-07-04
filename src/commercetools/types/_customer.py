@@ -7,7 +7,6 @@ import typing
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
     LoggedResource,
-    PagedQueryResponse,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -464,8 +463,14 @@ class CustomerEmailVerify(_BaseType):
         )
 
 
-class CustomerPagedQueryResponse(PagedQueryResponse):
+class CustomerPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Customer`
     results: typing.Optional[typing.Sequence["Customer"]]
 
@@ -477,8 +482,11 @@ class CustomerPagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Customer"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (

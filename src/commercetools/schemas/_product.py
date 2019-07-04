@@ -10,7 +10,6 @@ from commercetools.schemas._common import (
     BaseResourceSchema,
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -360,8 +359,11 @@ class ProductDraftSchema(marshmallow.Schema):
         return types.ProductDraft(**data)
 
 
-class ProductPagedQueryResponseSchema(PagedQueryResponseSchema):
+class ProductPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductSchema",
         unknown=marshmallow.EXCLUDE,
@@ -377,8 +379,11 @@ class ProductPagedQueryResponseSchema(PagedQueryResponseSchema):
         return types.ProductPagedQueryResponse(**data)
 
 
-class ProductProjectionPagedQueryResponseSchema(PagedQueryResponseSchema):
+class ProductProjectionPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductProjectionPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,
@@ -394,8 +399,11 @@ class ProductProjectionPagedQueryResponseSchema(PagedQueryResponseSchema):
         return types.ProductProjectionPagedQueryResponse(**data)
 
 
-class ProductProjectionPagedSearchResponseSchema(PagedQueryResponseSchema):
+class ProductProjectionPagedSearchResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductProjectionPagedSearchResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductProjectionSchema",
         unknown=marshmallow.EXCLUDE,

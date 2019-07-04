@@ -7,7 +7,6 @@ import typing
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
     LoggedResource,
-    PagedQueryResponse,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -460,8 +459,14 @@ class CartOrigin(enum.Enum):
     MERCHANT = "Merchant"
 
 
-class CartPagedQueryResponse(PagedQueryResponse):
+class CartPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Cart`
     results: typing.Optional[typing.Sequence["Cart"]]
 
@@ -473,8 +478,11 @@ class CartPagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Cart"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return "CartPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (

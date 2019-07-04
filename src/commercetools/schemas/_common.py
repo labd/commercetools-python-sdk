@@ -257,14 +257,6 @@ class DiscountedPriceSchema(marshmallow.Schema):
 class GeoJsonSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.GeoJson`."
     type = marshmallow.fields.String(allow_none=True)
-    coordinates = marshmallow.fields.List(
-        marshmallow.fields.Nested(
-            nested="commercetools.schemas.None.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -346,6 +338,13 @@ class PagedQueryResponseSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
     )
+    facets = marshmallow.fields.Nested(
+        nested="commercetools.schemas._product.FacetResultsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    meta = marshmallow.fields.Dict(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE

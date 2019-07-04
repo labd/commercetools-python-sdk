@@ -7,7 +7,6 @@ import typing
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
     LoggedResource,
-    PagedQueryResponse,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -335,8 +334,14 @@ class ProductTypeDraft(_BaseType):
         )
 
 
-class ProductTypePagedQueryResponse(PagedQueryResponse):
+class ProductTypePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypePagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.ProductType`
     results: typing.Optional[typing.Sequence["ProductType"]]
 
@@ -348,8 +353,11 @@ class ProductTypePagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["ProductType"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (

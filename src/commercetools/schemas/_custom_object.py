@@ -3,11 +3,7 @@
 import marshmallow
 
 from commercetools import types
-from commercetools.schemas._common import (
-    BaseResourceSchema,
-    PagedQueryResponseSchema,
-    ReferenceSchema,
-)
+from commercetools.schemas._common import BaseResourceSchema, ReferenceSchema
 
 __all__ = [
     "CustomObjectDraftSchema",
@@ -32,8 +28,11 @@ class CustomObjectDraftSchema(marshmallow.Schema):
         return types.CustomObjectDraft(**data)
 
 
-class CustomObjectPagedQueryResponseSchema(PagedQueryResponseSchema):
+class CustomObjectPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomObjectPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._custom_object.CustomObjectSchema",
         unknown=marshmallow.EXCLUDE,

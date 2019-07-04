@@ -6,7 +6,6 @@ from commercetools import helpers, types
 from commercetools.schemas._common import (
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -170,8 +169,11 @@ class ShoppingListLineItemSchema(marshmallow.Schema):
         return types.ShoppingListLineItem(**data)
 
 
-class ShoppingListPagedQueryResponseSchema(PagedQueryResponseSchema):
+class ShoppingListPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._shopping_list.ShoppingListSchema",
         unknown=marshmallow.EXCLUDE,

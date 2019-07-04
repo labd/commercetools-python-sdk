@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import BaseResource, PagedQueryResponse
+from commercetools.types._common import BaseResource
 
 if typing.TYPE_CHECKING:
     from ._cart import (
@@ -291,8 +291,14 @@ class MessageConfigurationDraft(_BaseType):
         )
 
 
-class MessagePagedQueryResponse(PagedQueryResponse):
+class MessagePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Message`
     results: typing.Optional[typing.Sequence["Message"]]
 
@@ -304,8 +310,11 @@ class MessagePagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Message"]] = None
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (

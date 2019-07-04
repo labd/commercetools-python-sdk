@@ -5,7 +5,6 @@ import marshmallow
 from commercetools import helpers, types
 from commercetools.schemas._common import (
     BaseResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -60,8 +59,11 @@ class ZoneDraftSchema(marshmallow.Schema):
         return types.ZoneDraft(**data)
 
 
-class ZonePagedQueryResponseSchema(PagedQueryResponseSchema):
+class ZonePagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ZonePagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._zone.ZoneSchema",
         unknown=marshmallow.EXCLUDE,

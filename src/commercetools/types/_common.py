@@ -10,6 +10,7 @@ if typing.TYPE_CHECKING:
     from ._channel import ChannelReference, ChannelResourceIdentifier
     from ._customer import CustomerReference
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
+    from ._product import FacetResults
     from ._product_discount import ProductDiscountReference
     from ._type import CustomFields, CustomFieldsDraft
 __all__ = [
@@ -432,21 +433,13 @@ class GeoJson(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonSchema`."
     #: :class:`str`
     type: typing.Optional[str]
-    #: :class:`list`
-    coordinates: typing.Optional[list]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        coordinates: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
         self.type = type
-        self.coordinates = coordinates
         super().__init__()
 
     def __repr__(self) -> str:
-        return "GeoJson(type=%r, coordinates=%r)" % (self.type, self.coordinates)
+        return "GeoJson(type=%r)" % (self.type,)
 
 
 class Image(_BaseType):
@@ -563,6 +556,10 @@ class PagedQueryResponse(_BaseType):
     offset: typing.Optional[int]
     #: List of :class:`commercetools.types.BaseResource`
     results: typing.Optional[typing.Sequence["BaseResource"]]
+    #: Optional :class:`commercetools.types.FacetResults`
+    facets: typing.Optional["FacetResults"]
+    #: Optional :class:`object`
+    meta: typing.Optional[object]
 
     def __init__(
         self,
@@ -571,19 +568,28 @@ class PagedQueryResponse(_BaseType):
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["BaseResource"]] = None,
+        facets: typing.Optional["FacetResults"] = None,
+        meta: typing.Optional[object] = None,
     ) -> None:
         self.count = count
         self.total = total
         self.offset = offset
         self.results = results
+        self.facets = facets
+        self.meta = meta
         super().__init__()
 
     def __repr__(self) -> str:
-        return "PagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
-            self.count,
-            self.total,
-            self.offset,
-            self.results,
+        return (
+            "PagedQueryResponse(count=%r, total=%r, offset=%r, results=%r, facets=%r, meta=%r)"
+            % (
+                self.count,
+                self.total,
+                self.offset,
+                self.results,
+                self.facets,
+                self.meta,
+            )
         )
 
 
@@ -949,7 +955,7 @@ class GeoJsonPoint(GeoJson):
         coordinates: typing.Optional[list] = None,
     ) -> None:
         self.coordinates = coordinates
-        super().__init__(type="Point", coordinates=coordinates)
+        super().__init__(type="Point")
 
     def __repr__(self) -> str:
         return "GeoJsonPoint(type=%r, coordinates=%r)" % (self.type, self.coordinates)

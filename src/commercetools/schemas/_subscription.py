@@ -4,7 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import LoggedResourceSchema, PagedQueryResponseSchema
+from commercetools.schemas._common import LoggedResourceSchema
 
 __all__ = [
     "AzureEventGridDestinationSchema",
@@ -209,8 +209,11 @@ class SubscriptionDraftSchema(marshmallow.Schema):
         return types.SubscriptionDraft(**data)
 
 
-class SubscriptionPagedQueryResponseSchema(PagedQueryResponseSchema):
+class SubscriptionPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.SubscriptionPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._subscription.SubscriptionSchema",
         unknown=marshmallow.EXCLUDE,

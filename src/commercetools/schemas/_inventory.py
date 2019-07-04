@@ -5,7 +5,6 @@ import marshmallow
 from commercetools import helpers, types
 from commercetools.schemas._common import (
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -131,8 +130,11 @@ class InventoryEntrySchema(LoggedResourceSchema):
         return types.InventoryEntry(**data)
 
 
-class InventoryPagedQueryResponseSchema(PagedQueryResponseSchema):
+class InventoryPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.InventoryPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._inventory.InventoryEntrySchema",
         unknown=marshmallow.EXCLUDE,

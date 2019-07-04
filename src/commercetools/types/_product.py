@@ -8,7 +8,6 @@ from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
     BaseResource,
     LoggedResource,
-    PagedQueryResponse,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -546,8 +545,14 @@ class ProductDraft(_BaseType):
         )
 
 
-class ProductPagedQueryResponse(PagedQueryResponse):
+class ProductPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.Product`
     results: typing.Optional[typing.Sequence["Product"]]
 
@@ -559,8 +564,11 @@ class ProductPagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Product"]] = None,
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -689,8 +697,14 @@ class ProductProjection(BaseResource):
         )
 
 
-class ProductProjectionPagedQueryResponse(PagedQueryResponse):
+class ProductProjectionPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedQueryResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.ProductProjection`
     results: typing.Optional[typing.Sequence["ProductProjection"]]
 
@@ -702,8 +716,11 @@ class ProductProjectionPagedQueryResponse(PagedQueryResponse):
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["ProductProjection"]] = None,
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (
@@ -712,8 +729,14 @@ class ProductProjectionPagedQueryResponse(PagedQueryResponse):
         )
 
 
-class ProductProjectionPagedSearchResponse(PagedQueryResponse):
+class ProductProjectionPagedSearchResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedSearchResponseSchema`."
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.ProductProjection`
     results: typing.Optional[typing.List["ProductProjection"]]
     #: :class:`commercetools.types.FacetResults`
@@ -728,9 +751,12 @@ class ProductProjectionPagedSearchResponse(PagedQueryResponse):
         results: typing.Optional[typing.List["ProductProjection"]] = None,
         facets: typing.Optional["FacetResults"] = None,
     ) -> None:
+        self.count = count
+        self.total = total
+        self.offset = offset
         self.results = results
         self.facets = facets
-        super().__init__(count=count, total=total, offset=offset, results=results)
+        super().__init__()
 
     def __repr__(self) -> str:
         return (

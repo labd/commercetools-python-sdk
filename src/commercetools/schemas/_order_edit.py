@@ -7,7 +7,6 @@ from commercetools import helpers, types
 from commercetools.schemas._common import (
     LocalizedStringField,
     LoggedResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -228,8 +227,11 @@ class OrderEditDraftSchema(marshmallow.Schema):
         return types.OrderEditDraft(**data)
 
 
-class OrderEditPagedQueryResponseSchema(PagedQueryResponseSchema):
+class OrderEditPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._order_edit.OrderEditSchema",
         unknown=marshmallow.EXCLUDE,

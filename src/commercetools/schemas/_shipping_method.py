@@ -6,7 +6,6 @@ import marshmallow_enum
 from commercetools import helpers, types
 from commercetools.schemas._common import (
     BaseResourceSchema,
-    PagedQueryResponseSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -83,8 +82,11 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
         return types.ShippingMethodDraft(**data)
 
 
-class ShippingMethodPagedQueryResponseSchema(PagedQueryResponseSchema):
+class ShippingMethodPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethodPagedQueryResponse`."
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ShippingMethodSchema",
         unknown=marshmallow.EXCLUDE,

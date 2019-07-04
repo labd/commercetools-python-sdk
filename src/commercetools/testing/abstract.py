@@ -228,17 +228,17 @@ class ServiceBackend(BaseBackend):
         return expanded_obj
 
     def _expand_obj(self, obj, expand_term):
-        references_to_expand = self._determine_references([obj], expand_term.split("."))
-        for reference in references_to_expand:
-            if "typeId" in reference and "id" in reference:
+        resource_ids_to_expand = self._determine_resource_identifiers([obj], expand_term.split("."))
+        for resource_identifier in resource_ids_to_expand:
+            if "typeId" in resource_identifier and "id" in resource_identifier:
                 try:
-                    for document in self.model._storage._stores[reference["typeId"]].values():
-                        if document["id"] == reference["id"]:
-                            reference["obj"] = copy.deepcopy(document)
+                    for document in self.model._storage._stores[resource_identifier["typeId"]].values():
+                        if document["id"] == resource_identifier["id"]:
+                            resource_identifier["obj"] = copy.deepcopy(document)
                 except KeyError:
                     continue
 
-    def _determine_references(self, reference_list, terms):
+    def _determine_resource_identifiers(self, resource_id_list, terms):
         term = terms[0]
         multiple = False
 
@@ -254,22 +254,22 @@ class ServiceBackend(BaseBackend):
             term = term[:-3]
 
             try:
-                references = [reference[term][index] for reference in reference_list if reference[term][index]]
+                resource_identifiers = [resource_id[term][index] for resource_id in resource_id_list if resource_id[term][index]]
             except (KeyError, IndexError):
                 return []
         else:
             try:
-                references = [reference[term] for reference in reference_list if reference[term]]
+                resource_identifiers = [resource_id[term] for resource_id in resource_id_list if resource_id[term]]
             except KeyError:
                 return []
 
         if multiple:
-            references = [item for reference in references for item in reference]
+            resource_identifiers = [item for resource_id in resource_identifiers for item in resource_id]
         if len(terms) == 1:
-            return references
+            return resource_identifiers
 
         if len(terms) > 1:
-            return self._determine_references(references, terms[1:])
+            return self._determine_resource_identifiers(resource_identifiers, terms[1:])
 
     def _update(self, request, obj):
         if not obj:

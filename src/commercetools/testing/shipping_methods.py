@@ -93,7 +93,7 @@ def change_tax_category(backend: "ShippingMethodsBackend", obj: dict,
     else:
         raise InternalUpdateError("Tax Category does not exist")
     new = copy.deepcopy(obj)
-    new["taxCategory"] = schemas.TaxCategoryReferenceSchema().dump(action.tax_category)
+    new["taxCategory"] = schemas.TaxCategoryResourceIdentifierSchema().dump(action.tax_category)
     return new
 
 

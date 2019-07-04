@@ -1,3 +1,7 @@
+4.0.0 (2019-07-04)
+------------------
+- *Breaking* Generate with new API definitions, main difference is Reference -> ResourceIdentifier type.
+
 3.9.0 (2019-06-27)
 ------------------
 - Implement testing/introspect token endpoint, thanks to @mbarga!

@@ -126,7 +126,7 @@ class CartsModel(BaseModel):
 def add_payment():
     def updater(self, obj, action):
         value = getattr(action, "payment")
-        value = schemas.PaymentReferenceSchema().dump(value)
+        value = schemas.PaymentResourceIdentifierSchema().dump(value)
         if not obj["paymentInfo"]:
             obj["paymentInfo"] = schemas.PaymentInfoSchema().dump(
                 types.PaymentInfo(payments=[])

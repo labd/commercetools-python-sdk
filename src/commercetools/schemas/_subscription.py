@@ -40,7 +40,7 @@ __all__ = [
 class ChangeSubscriptionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ChangeSubscription`."
     resource_type_id = marshmallow.fields.String(
-        allow_none=True, data_key="resourceTypeId"
+        allow_none=True, data_key="resourceTypeId", attribute="resourceTypeId"
     )
 
     class Meta:
@@ -80,7 +80,7 @@ class DestinationSchema(marshmallow.Schema):
 class MessageSubscriptionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.MessageSubscription`."
     resource_type_id = marshmallow.fields.String(
-        allow_none=True, data_key="resourceTypeId"
+        allow_none=True, data_key="resourceTypeId", attribute="resourceTypeId"
     )
     types = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True), missing=None
@@ -97,7 +97,7 @@ class MessageSubscriptionSchema(marshmallow.Schema):
 class PayloadNotIncludedSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PayloadNotIncluded`."
     reason = marshmallow.fields.String(allow_none=True)
-    payload_type = marshmallow.fields.String(allow_none=True, data_key="payloadType")
+    payload_type = marshmallow.fields.String(allow_none=True, data_key="payloadType", attribute="payloadType")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -109,9 +109,9 @@ class PayloadNotIncludedSchema(marshmallow.Schema):
 
 class SubscriptionDeliverySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.SubscriptionDelivery`."
-    project_key = marshmallow.fields.String(allow_none=True, data_key="projectKey")
+    project_key = marshmallow.fields.String(allow_none=True, data_key="projectKey", attribute="projectKey")
     notification_type = marshmallow.fields.String(
-        allow_none=True, data_key="notificationType"
+        allow_none=True, data_key="notificationType", attribute="notificationType"
     )
     resource = helpers.Discriminator(
         discriminator_field=("typeId", "type_id"),
@@ -149,6 +149,7 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="resourceUserProvidedIdentifiers",
+        attribute="resourceUserProvidedIdentifiers",
     )
 
     class Meta:
@@ -318,7 +319,7 @@ class SubscriptionUpdateSchema(marshmallow.Schema):
 class AzureEventGridDestinationSchema(DestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.AzureEventGridDestination`."
     uri = marshmallow.fields.String(allow_none=True)
-    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey", attribute="accessKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -332,7 +333,7 @@ class AzureEventGridDestinationSchema(DestinationSchema):
 class AzureServiceBusDestinationSchema(DestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.AzureServiceBusDestination`."
     connection_string = marshmallow.fields.String(
-        allow_none=True, data_key="connectionString"
+        allow_none=True, data_key="connectionString", attribute="connectionString"
     )
 
     class Meta:
@@ -347,7 +348,7 @@ class AzureServiceBusDestinationSchema(DestinationSchema):
 class DeliveryCloudEventsFormatSchema(DeliveryFormatSchema):
     "Marshmallow schema for :class:`commercetools.types.DeliveryCloudEventsFormat`."
     cloud_events_version = marshmallow.fields.String(
-        allow_none=True, data_key="cloudEventsVersion"
+        allow_none=True, data_key="cloudEventsVersion", attribute="cloudEventsVersion"
     )
 
     class Meta:
@@ -373,7 +374,7 @@ class DeliveryPlatformFormatSchema(DeliveryFormatSchema):
 
 class GoogleCloudPubSubDestinationSchema(DestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.GoogleCloudPubSubDestination`."
-    project_id = marshmallow.fields.String(allow_none=True, data_key="projectId")
+    project_id = marshmallow.fields.String(allow_none=True, data_key="projectId", attribute="projectId")
     topic = marshmallow.fields.String(allow_none=True)
 
     class Meta:
@@ -402,21 +403,22 @@ class MessageDeliverySchema(SubscriptionDeliverySchema):
     "Marshmallow schema for :class:`commercetools.types.MessageDelivery`."
     id = marshmallow.fields.String(allow_none=True)
     version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
+        allow_none=True, data_key="lastModifiedAt", attribute="lastModifiedAt"
     )
     sequence_number = marshmallow.fields.Integer(
-        allow_none=True, data_key="sequenceNumber"
+        allow_none=True, data_key="sequenceNumber", attribute="sequenceNumber"
     )
     resource_version = marshmallow.fields.Integer(
-        allow_none=True, data_key="resourceVersion"
+        allow_none=True, data_key="resourceVersion", attribute="resourceVersion"
     )
     payload_not_included = marshmallow.fields.Nested(
         nested="commercetools.schemas._subscription.PayloadNotIncludedSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="payloadNotIncluded",
+        attribute="payloadNotIncluded",
     )
 
     class Meta:
@@ -431,7 +433,7 @@ class MessageDeliverySchema(SubscriptionDeliverySchema):
 class ResourceCreatedDeliverySchema(SubscriptionDeliverySchema):
     "Marshmallow schema for :class:`commercetools.types.ResourceCreatedDelivery`."
     version = marshmallow.fields.Integer(allow_none=True)
-    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
+    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt", attribute="modifiedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -445,7 +447,7 @@ class ResourceCreatedDeliverySchema(SubscriptionDeliverySchema):
 class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
     "Marshmallow schema for :class:`commercetools.types.ResourceDeletedDelivery`."
     version = marshmallow.fields.Integer(allow_none=True)
-    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
+    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt", attribute="modifiedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -459,8 +461,8 @@ class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
 class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
     "Marshmallow schema for :class:`commercetools.types.ResourceUpdatedDelivery`."
     version = marshmallow.fields.Integer(allow_none=True)
-    old_version = marshmallow.fields.Integer(allow_none=True, data_key="oldVersion")
-    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
+    old_version = marshmallow.fields.Integer(allow_none=True, data_key="oldVersion", attribute="oldVersion")
+    modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt", attribute="modifiedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -473,9 +475,9 @@ class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
 
 class SnsDestinationSchema(DestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.SnsDestination`."
-    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
-    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
-    topic_arn = marshmallow.fields.String(allow_none=True, data_key="topicArn")
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey", attribute="accessKey")
+    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret", attribute="accessSecret")
+    topic_arn = marshmallow.fields.String(allow_none=True, data_key="topicArn", attribute="topicArn")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -488,9 +490,9 @@ class SnsDestinationSchema(DestinationSchema):
 
 class SqsDestinationSchema(DestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.SqsDestination`."
-    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
-    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
-    queue_url = marshmallow.fields.String(allow_none=True, data_key="queueUrl")
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey", attribute="accessKey")
+    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret", attribute="accessSecret")
+    queue_url = marshmallow.fields.String(allow_none=True, data_key="queueUrl", attribute="queueUrl")
     region = marshmallow.fields.String(allow_none=True)
 
     class Meta:

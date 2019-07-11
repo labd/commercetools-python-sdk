@@ -59,6 +59,7 @@ class ChannelDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="geoLocation",
+        attribute="geoLocation",
     )
 
     class Meta:
@@ -139,6 +140,7 @@ class ChannelSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="reviewRatingStatistics",
+        attribute="reviewRatingStatistics",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -152,6 +154,7 @@ class ChannelSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="geoLocation",
+        attribute="geoLocation",
     )
 
     class Meta:
@@ -335,6 +338,7 @@ class ChannelSetGeoLocationActionSchema(ChannelUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="geoLocation",
+        attribute="geoLocation",
     )
 
     class Meta:

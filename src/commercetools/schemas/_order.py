@@ -100,7 +100,7 @@ class DeliveryItemSchema(marshmallow.Schema):
 class DeliverySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Delivery`."
     id = marshmallow.fields.String(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
@@ -141,6 +141,7 @@ class DiscountedLineItemPriceDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         data_key="includedDiscounts",
+        attribute="includedDiscounts",
     )
 
     class Meta:
@@ -171,7 +172,7 @@ class ItemStateSchema(marshmallow.Schema):
 class LineItemImportDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.LineItemImportDraft`."
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True, missing=None, data_key="productId", attribute="productId"
     )
     name = LocalizedStringField(allow_none=True)
     variant = marshmallow.fields.Nested(
@@ -198,6 +199,7 @@ class LineItemImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
@@ -205,6 +207,7 @@ class LineItemImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="distributionChannel",
+        attribute="distributionChannel",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxRateSchema",
@@ -212,6 +215,7 @@ class LineItemImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="taxRate",
+        attribute="taxRate",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -225,6 +229,7 @@ class LineItemImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:
@@ -240,10 +245,10 @@ class OrderFromCartDraftSchema(marshmallow.Schema):
     id = marshmallow.fields.String(allow_none=True)
     version = marshmallow.fields.Integer(allow_none=True)
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True, missing=None, data_key="orderNumber", attribute="orderNumber"
     )
     payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState", attribute="paymentState"
     )
 
     class Meta:
@@ -257,13 +262,13 @@ class OrderFromCartDraftSchema(marshmallow.Schema):
 class OrderImportDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderImportDraft`."
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True, missing=None, data_key="orderNumber", attribute="orderNumber"
     )
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True, missing=None, data_key="customerId", attribute="customerId"
     )
     customer_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerEmail"
+        allow_none=True, missing=None, data_key="customerEmail", attribute="customerEmail"
     )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.LineItemImportDraftSchema",
@@ -272,6 +277,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="lineItems",
+        attribute="lineItems",
     )
     custom_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.CustomLineItemDraftSchema",
@@ -280,12 +286,14 @@ class OrderImportDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="customLineItems",
+        attribute="customLineItems",
     )
     total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalPrice",
+        attribute="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.TaxedPriceSchema",
@@ -293,6 +301,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="taxedPrice",
+        attribute="taxedPrice",
     )
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -300,6 +309,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingAddress",
+        attribute="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -307,6 +317,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="billingAddress",
+        attribute="billingAddress",
     )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
@@ -314,16 +325,17 @@ class OrderImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     country = marshmallow.fields.String(allow_none=True, missing=None)
     order_state = marshmallow_enum.EnumField(
-        types.OrderState, by_value=True, missing=None, data_key="orderState"
+        types.OrderState, by_value=True, missing=None, data_key="orderState", attribute="orderState"
     )
     shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState", attribute="shipmentState"
     )
     payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState", attribute="paymentState"
     )
     shipping_info = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ShippingInfoImportDraftSchema",
@@ -331,9 +343,10 @@ class OrderImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingInfo",
+        attribute="shippingInfo",
     )
     completed_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="completedAt"
+        allow_none=True, missing=None, data_key="completedAt", attribute="completedAt"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -342,10 +355,10 @@ class OrderImportDraftSchema(marshmallow.Schema):
         missing=None,
     )
     inventory_mode = marshmallow_enum.EnumField(
-        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
+        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode", attribute="inventoryMode"
     )
     tax_rounding_mode = marshmallow_enum.EnumField(
-        types.RoundingMode, by_value=True, missing=None, data_key="taxRoundingMode"
+        types.RoundingMode, by_value=True, missing=None, data_key="taxRoundingMode", attribute="taxRoundingMode"
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -354,6 +367,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="itemShippingAddresses",
+        attribute="itemShippingAddresses",
     )
 
     class Meta:
@@ -417,19 +431,19 @@ class OrderResourceIdentifierSchema(ResourceIdentifierSchema):
 class OrderSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Order`."
     completed_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="completedAt"
+        allow_none=True, missing=None, data_key="completedAt", attribute="completedAt"
     )
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True, missing=None, data_key="orderNumber", attribute="orderNumber"
     )
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True, missing=None, data_key="customerId", attribute="customerId"
     )
     customer_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerEmail"
+        allow_none=True, missing=None, data_key="customerEmail", attribute="customerEmail"
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
     store = marshmallow.fields.Nested(
         nested="commercetools.schemas._store.StoreKeyReferenceSchema",
@@ -443,6 +457,7 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         data_key="lineItems",
+        attribute="lineItems",
     )
     custom_line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.CustomLineItemSchema",
@@ -450,12 +465,14 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         data_key="customLineItems",
+        attribute="customLineItems",
     )
     total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalPrice",
+        attribute="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.TaxedPriceSchema",
@@ -463,6 +480,7 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="taxedPrice",
+        attribute="taxedPrice",
     )
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -470,6 +488,7 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="shippingAddress",
+        attribute="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -477,12 +496,13 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="billingAddress",
+        attribute="billingAddress",
     )
     tax_mode = marshmallow_enum.EnumField(
-        types.TaxMode, by_value=True, missing=None, data_key="taxMode"
+        types.TaxMode, by_value=True, missing=None, data_key="taxMode", attribute="taxMode"
     )
     tax_rounding_mode = marshmallow_enum.EnumField(
-        types.RoundingMode, by_value=True, missing=None, data_key="taxRoundingMode"
+        types.RoundingMode, by_value=True, missing=None, data_key="taxRoundingMode", attribute="taxRoundingMode"
     )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
@@ -490,10 +510,11 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     country = marshmallow.fields.String(allow_none=True, missing=None)
     order_state = marshmallow_enum.EnumField(
-        types.OrderState, by_value=True, data_key="orderState"
+        types.OrderState, by_value=True, data_key="orderState", attribute="orderState"
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateReferenceSchema",
@@ -502,10 +523,10 @@ class OrderSchema(LoggedResourceSchema):
         missing=None,
     )
     shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState", attribute="shipmentState"
     )
     payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState", attribute="paymentState"
     )
     shipping_info = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ShippingInfoSchema",
@@ -513,6 +534,7 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="shippingInfo",
+        attribute="shippingInfo",
     )
     sync_info = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.SyncInfoSchema",
@@ -520,6 +542,7 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         data_key="syncInfo",
+        attribute="syncInfo",
     )
     return_info = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ReturnInfoSchema",
@@ -528,6 +551,7 @@ class OrderSchema(LoggedResourceSchema):
         many=True,
         missing=None,
         data_key="returnInfo",
+        attribute="returnInfo",
     )
     discount_codes = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.DiscountCodeInfoSchema",
@@ -536,9 +560,10 @@ class OrderSchema(LoggedResourceSchema):
         many=True,
         missing=None,
         data_key="discountCodes",
+        attribute="discountCodes",
     )
     last_message_sequence_number = marshmallow.fields.Integer(
-        allow_none=True, data_key="lastMessageSequenceNumber"
+        allow_none=True, data_key="lastMessageSequenceNumber", attribute="lastMessageSequenceNumber"
     )
     cart = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.CartReferenceSchema",
@@ -558,10 +583,11 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="paymentInfo",
+        attribute="paymentInfo",
     )
     locale = marshmallow.fields.String(allow_none=True, missing=None)
     inventory_mode = marshmallow_enum.EnumField(
-        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
+        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode", attribute="inventoryMode"
     )
     origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True)
     tax_calculation_mode = marshmallow_enum.EnumField(
@@ -569,6 +595,7 @@ class OrderSchema(LoggedResourceSchema):
         by_value=True,
         missing=None,
         data_key="taxCalculationMode",
+        attribute="taxCalculationMode",
     )
     shipping_rate_input = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -580,6 +607,7 @@ class OrderSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="shippingRateInput",
+        attribute="shippingRateInput",
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -588,6 +616,7 @@ class OrderSchema(LoggedResourceSchema):
         many=True,
         missing=None,
         data_key="itemShippingAddresses",
+        attribute="itemShippingAddresses",
     )
 
     class Meta:
@@ -687,6 +716,7 @@ class ParcelDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="trackingData",
+        attribute="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
@@ -707,16 +737,16 @@ class ParcelDraftSchema(marshmallow.Schema):
 class ParcelMeasurementsSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ParcelMeasurements`."
     height_in_millimeter = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="heightInMillimeter"
+        allow_none=True, missing=None, data_key="heightInMillimeter", attribute="heightInMillimeter"
     )
     length_in_millimeter = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="lengthInMillimeter"
+        allow_none=True, missing=None, data_key="lengthInMillimeter", attribute="lengthInMillimeter"
     )
     width_in_millimeter = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="widthInMillimeter"
+        allow_none=True, missing=None, data_key="widthInMillimeter", attribute="widthInMillimeter"
     )
     weight_in_gram = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="weightInGram"
+        allow_none=True, missing=None, data_key="weightInGram", attribute="weightInGram"
     )
 
     class Meta:
@@ -730,7 +760,7 @@ class ParcelMeasurementsSchema(marshmallow.Schema):
 class ParcelSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Parcel`."
     id = marshmallow.fields.String(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -743,6 +773,7 @@ class ParcelSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="trackingData",
+        attribute="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
@@ -825,10 +856,10 @@ class ReturnInfoSchema(marshmallow.Schema):
         )
     )
     return_tracking_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="returnTrackingId"
+        allow_none=True, missing=None, data_key="returnTrackingId", attribute="returnTrackingId"
     )
     return_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="returnDate"
+        allow_none=True, missing=None, data_key="returnDate", attribute="returnDate"
     )
 
     class Meta:
@@ -843,14 +874,14 @@ class ReturnItemDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReturnItemDraft`."
     quantity = marshmallow.fields.Integer(allow_none=True)
     line_item_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lineItemId"
+        allow_none=True, missing=None, data_key="lineItemId", attribute="lineItemId"
     )
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customLineItemId"
+        allow_none=True, missing=None, data_key="customLineItemId", attribute="customLineItemId"
     )
     comment = marshmallow.fields.String(allow_none=True, missing=None)
     shipment_state = marshmallow_enum.EnumField(
-        types.ReturnShipmentState, by_value=True, data_key="shipmentState"
+        types.ReturnShipmentState, by_value=True, data_key="shipmentState", attribute="shipmentState"
     )
 
     class Meta:
@@ -868,15 +899,15 @@ class ReturnItemSchema(marshmallow.Schema):
     type = marshmallow.fields.String(allow_none=True)
     comment = marshmallow.fields.String(allow_none=True, missing=None)
     shipment_state = marshmallow_enum.EnumField(
-        types.ReturnShipmentState, by_value=True, data_key="shipmentState"
+        types.ReturnShipmentState, by_value=True, data_key="shipmentState", attribute="shipmentState"
     )
     payment_state = marshmallow_enum.EnumField(
-        types.ReturnPaymentState, by_value=True, data_key="paymentState"
+        types.ReturnPaymentState, by_value=True, data_key="paymentState", attribute="paymentState"
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
+        allow_none=True, data_key="lastModifiedAt", attribute="lastModifiedAt"
     )
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -890,7 +921,7 @@ class ReturnItemSchema(marshmallow.Schema):
 class ShippingInfoImportDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShippingInfoImportDraft`."
     shipping_method_name = marshmallow.fields.String(
-        allow_none=True, data_key="shippingMethodName"
+        allow_none=True, data_key="shippingMethodName", attribute="shippingMethodName"
     )
     price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -902,6 +933,7 @@ class ShippingInfoImportDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
+        attribute="shippingRate",
     )
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxRateSchema",
@@ -909,6 +941,7 @@ class ShippingInfoImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="taxRate",
+        attribute="taxRate",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
@@ -916,6 +949,7 @@ class ShippingInfoImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ShippingMethodResourceIdentifierSchema",
@@ -923,6 +957,7 @@ class ShippingInfoImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingMethod",
+        attribute="shippingMethod",
     )
     deliveries = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliverySchema",
@@ -937,12 +972,14 @@ class ShippingInfoImportDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="discountedPrice",
+        attribute="discountedPrice",
     )
     shipping_method_state = marshmallow_enum.EnumField(
         types.ShippingMethodState,
         by_value=True,
         missing=None,
         data_key="shippingMethodState",
+        attribute="shippingMethodState",
     )
 
     class Meta:
@@ -974,9 +1011,9 @@ class SyncInfoSchema(marshmallow.Schema):
         allow_none=True,
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
-    synced_at = marshmallow.fields.DateTime(allow_none=True, data_key="syncedAt")
+    synced_at = marshmallow.fields.DateTime(allow_none=True, data_key="syncedAt", attribute="syncedAt")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -993,12 +1030,14 @@ class TaxedItemPriceDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalNet",
+        attribute="totalNet",
     )
     total_gross = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalGross",
+        attribute="totalGross",
     )
 
     class Meta:
@@ -1012,15 +1051,15 @@ class TaxedItemPriceDraftSchema(marshmallow.Schema):
 class TrackingDataSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TrackingData`."
     tracking_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="trackingId"
+        allow_none=True, missing=None, data_key="trackingId", attribute="trackingId"
     )
     carrier = marshmallow.fields.String(allow_none=True, missing=None)
     provider = marshmallow.fields.String(allow_none=True, missing=None)
     provider_transaction = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="providerTransaction"
+        allow_none=True, missing=None, data_key="providerTransaction", attribute="providerTransaction"
     )
     is_return = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isReturn"
+        allow_none=True, missing=None, data_key="isReturn", attribute="isReturn"
     )
 
     class Meta:
@@ -1034,7 +1073,7 @@ class TrackingDataSchema(marshmallow.Schema):
 class CustomLineItemReturnItemSchema(ReturnItemSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomLineItemReturnItem`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
 
     class Meta:
@@ -1048,7 +1087,7 @@ class CustomLineItemReturnItemSchema(ReturnItemSchema):
 
 class LineItemReturnItemSchema(ReturnItemSchema):
     "Marshmallow schema for :class:`commercetools.types.LineItemReturnItem`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1110,7 +1149,7 @@ class OrderAddItemShippingAddressActionSchema(OrderUpdateActionSchema):
 
 class OrderAddParcelToDeliveryActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderAddParcelToDeliveryAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1123,6 +1162,7 @@ class OrderAddParcelToDeliveryActionSchema(OrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="trackingData",
+        attribute="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
@@ -1161,7 +1201,7 @@ class OrderAddPaymentActionSchema(OrderUpdateActionSchema):
 class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderAddReturnInfoAction`."
     return_tracking_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="returnTrackingId"
+        allow_none=True, missing=None, data_key="returnTrackingId", attribute="returnTrackingId"
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ReturnItemDraftSchema",
@@ -1170,7 +1210,7 @@ class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
         many=True,
     )
     return_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="returnDate"
+        allow_none=True, missing=None, data_key="returnDate", attribute="returnDate"
     )
 
     class Meta:
@@ -1185,7 +1225,7 @@ class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
 class OrderChangeOrderStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderChangeOrderStateAction`."
     order_state = marshmallow_enum.EnumField(
-        types.OrderState, by_value=True, data_key="orderState"
+        types.OrderState, by_value=True, data_key="orderState", attribute="orderState"
     )
 
     class Meta:
@@ -1200,7 +1240,7 @@ class OrderChangeOrderStateActionSchema(OrderUpdateActionSchema):
 class OrderChangePaymentStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderChangePaymentStateAction`."
     payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState", attribute="paymentState"
     )
 
     class Meta:
@@ -1215,7 +1255,7 @@ class OrderChangePaymentStateActionSchema(OrderUpdateActionSchema):
 class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderChangeShipmentStateAction`."
     shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState", attribute="shipmentState"
     )
 
     class Meta:
@@ -1230,7 +1270,7 @@ class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
 class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderImportCustomLineItemStateAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ItemStateSchema",
@@ -1250,7 +1290,7 @@ class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderImportLineItemStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderImportLineItemStateAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1269,7 +1309,7 @@ class OrderImportLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderRemoveDeliveryActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderRemoveDeliveryAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1282,7 +1322,7 @@ class OrderRemoveDeliveryActionSchema(OrderUpdateActionSchema):
 
 class OrderRemoveItemShippingAddressActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderRemoveItemShippingAddressAction`."
-    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey")
+    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey", attribute="addressKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1295,7 +1335,7 @@ class OrderRemoveItemShippingAddressActionSchema(OrderUpdateActionSchema):
 
 class OrderRemoveParcelFromDeliveryActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderRemoveParcelFromDeliveryAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1358,7 +1398,7 @@ class OrderSetCustomFieldActionSchema(OrderUpdateActionSchema):
 class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetCustomLineItemCustomFieldAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
@@ -1375,7 +1415,7 @@ class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetCustomLineItemCustomTypeAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
@@ -1397,7 +1437,7 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
 class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetCustomLineItemShippingDetailsAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
@@ -1405,6 +1445,7 @@ class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema)
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:
@@ -1451,7 +1492,7 @@ class OrderSetCustomerEmailActionSchema(OrderUpdateActionSchema):
 class OrderSetCustomerIdActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetCustomerIdAction`."
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True, missing=None, data_key="customerId", attribute="customerId"
     )
 
     class Meta:
@@ -1465,7 +1506,7 @@ class OrderSetCustomerIdActionSchema(OrderUpdateActionSchema):
 
 class OrderSetDeliveryAddressActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetDeliveryAddressAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1484,7 +1525,7 @@ class OrderSetDeliveryAddressActionSchema(OrderUpdateActionSchema):
 
 class OrderSetDeliveryItemsActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetDeliveryItemsAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1503,7 +1544,7 @@ class OrderSetDeliveryItemsActionSchema(OrderUpdateActionSchema):
 
 class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetLineItemCustomFieldAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
@@ -1518,7 +1559,7 @@ class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetLineItemCustomTypeAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1538,13 +1579,14 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
 
 class OrderSetLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetLineItemShippingDetailsAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:
@@ -1572,7 +1614,7 @@ class OrderSetLocaleActionSchema(OrderUpdateActionSchema):
 class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetOrderNumberAction`."
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True, missing=None, data_key="orderNumber", attribute="orderNumber"
     )
 
     class Meta:
@@ -1586,7 +1628,7 @@ class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
 
 class OrderSetParcelItemsActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetParcelItemsAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1605,7 +1647,7 @@ class OrderSetParcelItemsActionSchema(OrderUpdateActionSchema):
 
 class OrderSetParcelMeasurementsActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetParcelMeasurementsAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1624,13 +1666,14 @@ class OrderSetParcelMeasurementsActionSchema(OrderUpdateActionSchema):
 
 class OrderSetParcelTrackingDataActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetParcelTrackingDataAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="trackingData",
+        attribute="trackingData",
     )
 
     class Meta:
@@ -1644,9 +1687,9 @@ class OrderSetParcelTrackingDataActionSchema(OrderUpdateActionSchema):
 
 class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetReturnPaymentStateAction`."
-    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId", attribute="returnItemId")
     payment_state = marshmallow_enum.EnumField(
-        types.ReturnPaymentState, by_value=True, data_key="paymentState"
+        types.ReturnPaymentState, by_value=True, data_key="paymentState", attribute="paymentState"
     )
 
     class Meta:
@@ -1660,9 +1703,9 @@ class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
 
 class OrderSetReturnShipmentStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderSetReturnShipmentStateAction`."
-    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId", attribute="returnItemId")
     shipment_state = marshmallow_enum.EnumField(
-        types.ReturnShipmentState, by_value=True, data_key="shipmentState"
+        types.ReturnShipmentState, by_value=True, data_key="shipmentState", attribute="shipmentState"
     )
 
     class Meta:
@@ -1695,7 +1738,7 @@ class OrderSetShippingAddressActionSchema(OrderUpdateActionSchema):
 class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderTransitionCustomLineItemStateAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
@@ -1703,15 +1746,17 @@ class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fromState",
+        attribute="fromState",
     )
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="toState",
+        attribute="toState",
     )
     actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
+        allow_none=True, missing=None, data_key="actualTransitionDate", attribute="actualTransitionDate"
     )
 
     class Meta:
@@ -1725,22 +1770,24 @@ class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderTransitionLineItemStateActionSchema(OrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderTransitionLineItemStateAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fromState",
+        attribute="fromState",
     )
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="toState",
+        attribute="toState",
     )
     actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
+        allow_none=True, missing=None, data_key="actualTransitionDate", attribute="actualTransitionDate"
     )
 
     class Meta:
@@ -1795,10 +1842,10 @@ class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
         allow_none=True,
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     synced_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="syncedAt"
+        allow_none=True, missing=None, data_key="syncedAt", attribute="syncedAt"
     )
 
     class Meta:

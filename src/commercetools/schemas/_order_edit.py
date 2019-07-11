@@ -109,9 +109,9 @@ __all__ = [
 
 class OrderEditApplySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditApply`."
-    edit_version = marshmallow.fields.Integer(allow_none=True, data_key="editVersion")
+    edit_version = marshmallow.fields.Integer(allow_none=True, data_key="editVersion", attribute="editVersion")
     resource_version = marshmallow.fields.Integer(
-        allow_none=True, data_key="resourceVersion"
+        allow_none=True, data_key="resourceVersion", attribute="resourceVersion"
     )
 
     class Meta:
@@ -209,6 +209,7 @@ class OrderEditDraftSchema(marshmallow.Schema):
         ),
         missing=None,
         data_key="stagedActions",
+        attribute="stagedActions",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -217,7 +218,7 @@ class OrderEditDraftSchema(marshmallow.Schema):
         missing=None,
     )
     comment = marshmallow.fields.String(allow_none=True, missing=None)
-    dry_run = marshmallow.fields.Bool(allow_none=True, missing=None, data_key="dryRun")
+    dry_run = marshmallow.fields.Bool(allow_none=True, missing=None, data_key="dryRun", attribute="dryRun")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -292,9 +293,9 @@ class OrderEditResultSchema(marshmallow.Schema):
 
 class OrderEditSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEdit`."
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
+        allow_none=True, data_key="lastModifiedAt", attribute="lastModifiedAt"
     )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     resource = marshmallow.fields.Nested(
@@ -380,6 +381,7 @@ class OrderEditSchema(LoggedResourceSchema):
             allow_none=True,
         ),
         data_key="stagedActions",
+        attribute="stagedActions",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -439,7 +441,7 @@ class OrderEditUpdateSchema(marshmallow.Schema):
             allow_none=True,
         )
     )
-    dry_run = marshmallow.fields.Bool(allow_none=True, data_key="dryRun")
+    dry_run = marshmallow.fields.Bool(allow_none=True, data_key="dryRun", attribute="dryRun")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -456,6 +458,7 @@ class OrderExcerptSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalPrice",
+        attribute="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.TaxedPriceSchema",
@@ -463,6 +466,7 @@ class OrderExcerptSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="taxedPrice",
+        attribute="taxedPrice",
     )
     version = marshmallow.fields.Integer(allow_none=True)
 
@@ -490,6 +494,7 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -503,6 +508,7 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -590,6 +596,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="distributionChannel",
+        attribute="distributionChannel",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
@@ -597,12 +604,13 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True, missing=None, data_key="productId", attribute="productId"
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -612,6 +620,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -619,6 +628,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalPrice",
+        attribute="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
@@ -626,6 +636,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
+        attribute="externalTotalPrice",
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
@@ -633,6 +644,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:
@@ -646,7 +658,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderAddParcelToDeliveryActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderAddParcelToDeliveryAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -659,6 +671,7 @@ class StagedOrderAddParcelToDeliveryActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="trackingData",
+        attribute="trackingData",
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
@@ -697,7 +710,7 @@ class StagedOrderAddPaymentActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderAddReturnInfoActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderAddReturnInfoAction`."
     return_tracking_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="returnTrackingId"
+        allow_none=True, missing=None, data_key="returnTrackingId", attribute="returnTrackingId"
     )
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ReturnItemDraftSchema",
@@ -706,7 +719,7 @@ class StagedOrderAddReturnInfoActionSchema(StagedOrderUpdateActionSchema):
         many=True,
     )
     return_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="returnDate"
+        allow_none=True, missing=None, data_key="returnDate", attribute="returnDate"
     )
 
     class Meta:
@@ -725,6 +738,7 @@ class StagedOrderAddShoppingListActionSchema(StagedOrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shoppingList",
+        attribute="shoppingList",
     )
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
@@ -732,6 +746,7 @@ class StagedOrderAddShoppingListActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
@@ -739,6 +754,7 @@ class StagedOrderAddShoppingListActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="distributionChannel",
+        attribute="distributionChannel",
     )
 
     class Meta:
@@ -753,7 +769,7 @@ class StagedOrderAddShoppingListActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderChangeCustomLineItemMoneyActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeCustomLineItemMoneyAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     money = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -775,7 +791,7 @@ class StagedOrderChangeCustomLineItemQuantityActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeCustomLineItemQuantityAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True)
 
@@ -790,7 +806,7 @@ class StagedOrderChangeCustomLineItemQuantityActionSchema(
 
 class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeLineItemQuantityAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     quantity = marshmallow.fields.Integer(allow_none=True)
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -798,6 +814,7 @@ class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchem
         allow_none=True,
         missing=None,
         data_key="externalPrice",
+        attribute="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
@@ -805,6 +822,7 @@ class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchem
         allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
+        attribute="externalTotalPrice",
     )
 
     class Meta:
@@ -819,7 +837,7 @@ class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchem
 class StagedOrderChangeOrderStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeOrderStateAction`."
     order_state = marshmallow_enum.EnumField(
-        types.OrderState, by_value=True, data_key="orderState"
+        types.OrderState, by_value=True, data_key="orderState", attribute="orderState"
     )
 
     class Meta:
@@ -834,7 +852,7 @@ class StagedOrderChangeOrderStateActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderChangePaymentStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangePaymentStateAction`."
     payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState", attribute="paymentState"
     )
 
     class Meta:
@@ -849,7 +867,7 @@ class StagedOrderChangePaymentStateActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderChangeShipmentStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeShipmentStateAction`."
     shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState", attribute="shipmentState"
     )
 
     class Meta:
@@ -864,7 +882,7 @@ class StagedOrderChangeShipmentStateActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderChangeTaxCalculationModeActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeTaxCalculationModeAction`."
     tax_calculation_mode = marshmallow_enum.EnumField(
-        types.TaxCalculationMode, by_value=True, data_key="taxCalculationMode"
+        types.TaxCalculationMode, by_value=True, data_key="taxCalculationMode", attribute="taxCalculationMode"
     )
 
     class Meta:
@@ -879,7 +897,7 @@ class StagedOrderChangeTaxCalculationModeActionSchema(StagedOrderUpdateActionSch
 class StagedOrderChangeTaxModeActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeTaxModeAction`."
     tax_mode = marshmallow_enum.EnumField(
-        types.TaxMode, by_value=True, data_key="taxMode"
+        types.TaxMode, by_value=True, data_key="taxMode", attribute="taxMode"
     )
 
     class Meta:
@@ -894,7 +912,7 @@ class StagedOrderChangeTaxModeActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderChangeTaxRoundingModeActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderChangeTaxRoundingModeAction`."
     tax_rounding_mode = marshmallow_enum.EnumField(
-        types.RoundingMode, by_value=True, data_key="taxRoundingMode"
+        types.RoundingMode, by_value=True, data_key="taxRoundingMode", attribute="taxRoundingMode"
     )
 
     class Meta:
@@ -909,7 +927,7 @@ class StagedOrderChangeTaxRoundingModeActionSchema(StagedOrderUpdateActionSchema
 class StagedOrderImportCustomLineItemStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderImportCustomLineItemStateAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ItemStateSchema",
@@ -929,7 +947,7 @@ class StagedOrderImportCustomLineItemStateActionSchema(StagedOrderUpdateActionSc
 
 class StagedOrderImportLineItemStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderImportLineItemStateAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,
@@ -949,7 +967,7 @@ class StagedOrderImportLineItemStateActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderRemoveCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderRemoveCustomLineItemAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
 
     class Meta:
@@ -963,7 +981,7 @@ class StagedOrderRemoveCustomLineItemActionSchema(StagedOrderUpdateActionSchema)
 
 class StagedOrderRemoveDeliveryActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderRemoveDeliveryAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -981,6 +999,7 @@ class StagedOrderRemoveDiscountCodeActionSchema(StagedOrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="discountCode",
+        attribute="discountCode",
     )
 
     class Meta:
@@ -994,7 +1013,7 @@ class StagedOrderRemoveDiscountCodeActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderRemoveItemShippingAddressActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderRemoveItemShippingAddressAction`."
-    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey")
+    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey", attribute="addressKey")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1007,7 +1026,7 @@ class StagedOrderRemoveItemShippingAddressActionSchema(StagedOrderUpdateActionSc
 
 class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderRemoveLineItemAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -1015,6 +1034,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalPrice",
+        attribute="externalPrice",
     )
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
@@ -1022,6 +1042,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
+        attribute="externalTotalPrice",
     )
     shipping_details_to_remove = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
@@ -1029,6 +1050,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="shippingDetailsToRemove",
+        attribute="shippingDetailsToRemove",
     )
 
     class Meta:
@@ -1042,7 +1064,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderRemoveParcelFromDeliveryActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderRemoveParcelFromDeliveryAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1131,7 +1153,7 @@ class StagedOrderSetCustomLineItemCustomFieldActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomLineItemCustomFieldAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
@@ -1148,7 +1170,7 @@ class StagedOrderSetCustomLineItemCustomFieldActionSchema(
 class StagedOrderSetCustomLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomLineItemCustomTypeAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
@@ -1172,7 +1194,7 @@ class StagedOrderSetCustomLineItemShippingDetailsActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomLineItemShippingDetailsAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
@@ -1180,6 +1202,7 @@ class StagedOrderSetCustomLineItemShippingDetailsActionSchema(
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:
@@ -1194,7 +1217,7 @@ class StagedOrderSetCustomLineItemShippingDetailsActionSchema(
 class StagedOrderSetCustomLineItemTaxAmountActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomLineItemTaxAmountAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     external_tax_amount = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxAmountDraftSchema",
@@ -1202,6 +1225,7 @@ class StagedOrderSetCustomLineItemTaxAmountActionSchema(StagedOrderUpdateActionS
         allow_none=True,
         missing=None,
         data_key="externalTaxAmount",
+        attribute="externalTaxAmount",
     )
 
     class Meta:
@@ -1216,7 +1240,7 @@ class StagedOrderSetCustomLineItemTaxAmountActionSchema(StagedOrderUpdateActionS
 class StagedOrderSetCustomLineItemTaxRateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomLineItemTaxRateAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
@@ -1224,6 +1248,7 @@ class StagedOrderSetCustomLineItemTaxRateActionSchema(StagedOrderUpdateActionSch
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1238,13 +1263,14 @@ class StagedOrderSetCustomLineItemTaxRateActionSchema(StagedOrderUpdateActionSch
 class StagedOrderSetCustomShippingMethodActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomShippingMethodAction`."
     shipping_method_name = marshmallow.fields.String(
-        allow_none=True, data_key="shippingMethodName"
+        allow_none=True, data_key="shippingMethodName", attribute="shippingMethodName"
     )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
+        attribute="shippingRate",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
@@ -1252,6 +1278,7 @@ class StagedOrderSetCustomShippingMethodActionSchema(StagedOrderUpdateActionSche
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
@@ -1259,6 +1286,7 @@ class StagedOrderSetCustomShippingMethodActionSchema(StagedOrderUpdateActionSche
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1310,6 +1338,7 @@ class StagedOrderSetCustomerGroupActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
 
     class Meta:
@@ -1324,7 +1353,7 @@ class StagedOrderSetCustomerGroupActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderSetCustomerIdActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetCustomerIdAction`."
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True, missing=None, data_key="customerId", attribute="customerId"
     )
 
     class Meta:
@@ -1338,7 +1367,7 @@ class StagedOrderSetCustomerIdActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetDeliveryAddressActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetDeliveryAddressAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1357,7 +1386,7 @@ class StagedOrderSetDeliveryAddressActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetDeliveryItemsActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetDeliveryItemsAction`."
-    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId")
+    delivery_id = marshmallow.fields.String(allow_none=True, data_key="deliveryId", attribute="deliveryId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1376,7 +1405,7 @@ class StagedOrderSetDeliveryItemsActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetLineItemCustomFieldActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemCustomFieldAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
@@ -1391,7 +1420,7 @@ class StagedOrderSetLineItemCustomFieldActionSchema(StagedOrderUpdateActionSchem
 
 class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemCustomTypeAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1411,13 +1440,14 @@ class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema
 
 class StagedOrderSetLineItemPriceActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemPriceAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     external_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="externalPrice",
+        attribute="externalPrice",
     )
 
     class Meta:
@@ -1431,13 +1461,14 @@ class StagedOrderSetLineItemPriceActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetLineItemShippingDetailsActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemShippingDetailsAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     shipping_details = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:
@@ -1451,13 +1482,14 @@ class StagedOrderSetLineItemShippingDetailsActionSchema(StagedOrderUpdateActionS
 
 class StagedOrderSetLineItemTaxAmountActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemTaxAmountAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     external_tax_amount = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxAmountDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="externalTaxAmount",
+        attribute="externalTaxAmount",
     )
 
     class Meta:
@@ -1471,13 +1503,14 @@ class StagedOrderSetLineItemTaxAmountActionSchema(StagedOrderUpdateActionSchema)
 
 class StagedOrderSetLineItemTaxRateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemTaxRateAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1491,13 +1524,14 @@ class StagedOrderSetLineItemTaxRateActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetLineItemTotalPriceActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemTotalPriceAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     external_total_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="externalTotalPrice",
+        attribute="externalTotalPrice",
     )
 
     class Meta:
@@ -1525,7 +1559,7 @@ class StagedOrderSetLocaleActionSchema(StagedOrderUpdateActionSchema):
 class StagedOrderSetOrderNumberActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetOrderNumberAction`."
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True, missing=None, data_key="orderNumber", attribute="orderNumber"
     )
 
     class Meta:
@@ -1544,6 +1578,7 @@ class StagedOrderSetOrderTotalTaxActionSchema(StagedOrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="externalTotalGross",
+        attribute="externalTotalGross",
     )
     external_tax_portions = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.TaxPortionSchema",
@@ -1552,6 +1587,7 @@ class StagedOrderSetOrderTotalTaxActionSchema(StagedOrderUpdateActionSchema):
         many=True,
         missing=None,
         data_key="externalTaxPortions",
+        attribute="externalTaxPortions",
     )
 
     class Meta:
@@ -1565,7 +1601,7 @@ class StagedOrderSetOrderTotalTaxActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetParcelItemsActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetParcelItemsAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
     items = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.DeliveryItemSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1584,7 +1620,7 @@ class StagedOrderSetParcelItemsActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetParcelMeasurementsActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetParcelMeasurementsAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
     measurements = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.ParcelMeasurementsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1603,13 +1639,14 @@ class StagedOrderSetParcelMeasurementsActionSchema(StagedOrderUpdateActionSchema
 
 class StagedOrderSetParcelTrackingDataActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetParcelTrackingDataAction`."
-    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId")
+    parcel_id = marshmallow.fields.String(allow_none=True, data_key="parcelId", attribute="parcelId")
     tracking_data = marshmallow.fields.Nested(
         nested="commercetools.schemas._order.TrackingDataSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="trackingData",
+        attribute="trackingData",
     )
 
     class Meta:
@@ -1623,9 +1660,9 @@ class StagedOrderSetParcelTrackingDataActionSchema(StagedOrderUpdateActionSchema
 
 class StagedOrderSetReturnPaymentStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetReturnPaymentStateAction`."
-    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId", attribute="returnItemId")
     payment_state = marshmallow_enum.EnumField(
-        types.ReturnPaymentState, by_value=True, data_key="paymentState"
+        types.ReturnPaymentState, by_value=True, data_key="paymentState", attribute="paymentState"
     )
 
     class Meta:
@@ -1639,9 +1676,9 @@ class StagedOrderSetReturnPaymentStateActionSchema(StagedOrderUpdateActionSchema
 
 class StagedOrderSetReturnShipmentStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderSetReturnShipmentStateAction`."
-    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId")
+    return_item_id = marshmallow.fields.String(allow_none=True, data_key="returnItemId", attribute="returnItemId")
     shipment_state = marshmallow_enum.EnumField(
-        types.ReturnShipmentState, by_value=True, data_key="shipmentState"
+        types.ReturnShipmentState, by_value=True, data_key="shipmentState", attribute="shipmentState"
     )
 
     class Meta:
@@ -1681,13 +1718,14 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema(
         allow_none=True,
     )
     shipping_method_name = marshmallow.fields.String(
-        allow_none=True, data_key="shippingMethodName"
+        allow_none=True, data_key="shippingMethodName", attribute="shippingMethodName"
     )
     shipping_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ShippingRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
+        attribute="shippingRate",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
@@ -1695,6 +1733,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema(
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
@@ -1702,6 +1741,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema(
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1728,6 +1768,7 @@ class StagedOrderSetShippingAddressAndShippingMethodActionSchema(
         allow_none=True,
         missing=None,
         data_key="shippingMethod",
+        attribute="shippingMethod",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
@@ -1735,6 +1776,7 @@ class StagedOrderSetShippingAddressAndShippingMethodActionSchema(
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1754,6 +1796,7 @@ class StagedOrderSetShippingMethodActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="shippingMethod",
+        attribute="shippingMethod",
     )
     external_tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
@@ -1761,6 +1804,7 @@ class StagedOrderSetShippingMethodActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1780,6 +1824,7 @@ class StagedOrderSetShippingMethodTaxAmountActionSchema(StagedOrderUpdateActionS
         allow_none=True,
         missing=None,
         data_key="externalTaxAmount",
+        attribute="externalTaxAmount",
     )
 
     class Meta:
@@ -1799,6 +1844,7 @@ class StagedOrderSetShippingMethodTaxRateActionSchema(StagedOrderUpdateActionSch
         allow_none=True,
         missing=None,
         data_key="externalTaxRate",
+        attribute="externalTaxRate",
     )
 
     class Meta:
@@ -1822,6 +1868,7 @@ class StagedOrderSetShippingRateInputActionSchema(StagedOrderUpdateActionSchema)
         allow_none=True,
         missing=None,
         data_key="shippingRateInput",
+        attribute="shippingRateInput",
     )
 
     class Meta:
@@ -1838,7 +1885,7 @@ class StagedOrderTransitionCustomLineItemStateActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderTransitionCustomLineItemStateAction`."
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="customLineItemId"
+        allow_none=True, data_key="customLineItemId", attribute="customLineItemId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
@@ -1846,15 +1893,17 @@ class StagedOrderTransitionCustomLineItemStateActionSchema(
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fromState",
+        attribute="fromState",
     )
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="toState",
+        attribute="toState",
     )
     actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
+        allow_none=True, missing=None, data_key="actualTransitionDate", attribute="actualTransitionDate"
     )
 
     class Meta:
@@ -1868,22 +1917,24 @@ class StagedOrderTransitionCustomLineItemStateActionSchema(
 
 class StagedOrderTransitionLineItemStateActionSchema(StagedOrderUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.StagedOrderTransitionLineItemStateAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     quantity = marshmallow.fields.Integer(allow_none=True)
     from_state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fromState",
+        attribute="fromState",
     )
     to_state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="toState",
+        attribute="toState",
     )
     actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
+        allow_none=True, missing=None, data_key="actualTransitionDate", attribute="actualTransitionDate"
     )
 
     class Meta:
@@ -1938,10 +1989,10 @@ class StagedOrderUpdateSyncInfoActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     synced_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="syncedAt"
+        allow_none=True, missing=None, data_key="syncedAt", attribute="syncedAt"
     )
 
     class Meta:
@@ -2031,6 +2082,7 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="stagedAction",
+        attribute="stagedAction",
     )
 
     class Meta:
@@ -2044,18 +2096,20 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
 
 class OrderEditAppliedSchema(OrderEditResultSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditApplied`."
-    applied_at = marshmallow.fields.DateTime(allow_none=True, data_key="appliedAt")
+    applied_at = marshmallow.fields.DateTime(allow_none=True, data_key="appliedAt", attribute="appliedAt")
     excerpt_before_edit = marshmallow.fields.Nested(
         nested="commercetools.schemas._order_edit.OrderExcerptSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="excerptBeforeEdit",
+        attribute="excerptBeforeEdit",
     )
     excerpt_after_edit = marshmallow.fields.Nested(
         nested="commercetools.schemas._order_edit.OrderExcerptSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="excerptAfterEdit",
+        attribute="excerptAfterEdit",
     )
 
     class Meta:
@@ -2212,6 +2266,7 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
             allow_none=True,
         ),
         data_key="messagePayloads",
+        attribute="messagePayloads",
     )
 
     class Meta:
@@ -2362,6 +2417,7 @@ class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
             allow_none=True,
         ),
         data_key="stagedActions",
+        attribute="stagedActions",
     )
 
     class Meta:

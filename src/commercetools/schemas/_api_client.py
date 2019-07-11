@@ -16,7 +16,7 @@ class ApiClientDraftSchema(marshmallow.Schema):
     name = marshmallow.fields.String(allow_none=True)
     scope = marshmallow.fields.String(allow_none=True)
     delete_days_after_creation = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
+        allow_none=True, missing=None, data_key="deleteDaysAfterCreation", attribute="deleteDaysAfterCreation"
     )
 
     class Meta:
@@ -53,13 +53,13 @@ class ApiClientSchema(marshmallow.Schema):
     name = marshmallow.fields.String(allow_none=True)
     scope = marshmallow.fields.String(allow_none=True)
     created_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="createdAt"
+        allow_none=True, missing=None, data_key="createdAt", attribute="createdAt"
     )
     last_used_at = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="lastUsedAt"
+        allow_none=True, missing=None, data_key="lastUsedAt", attribute="lastUsedAt"
     )
     delete_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="deleteAt"
+        allow_none=True, missing=None, data_key="deleteAt", attribute="deleteAt"
     )
     secret = marshmallow.fields.String(allow_none=True, missing=None)
 

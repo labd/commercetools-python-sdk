@@ -118,13 +118,13 @@ class AttributeSchema(marshmallow.Schema):
 
 class FacetResultRangeSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.FacetResultRange`."
-    from_ = marshmallow.fields.Integer(allow_none=True, data_key="from")
-    from_str = marshmallow.fields.String(allow_none=True, data_key="fromStr")
+    from_ = marshmallow.fields.Integer(allow_none=True, data_key="from", attribute="from")
+    from_str = marshmallow.fields.String(allow_none=True, data_key="fromStr", attribute="fromStr")
     to = marshmallow.fields.Integer(allow_none=True)
-    to_str = marshmallow.fields.String(allow_none=True, data_key="toStr")
+    to_str = marshmallow.fields.String(allow_none=True, data_key="toStr", attribute="toStr")
     count = marshmallow.fields.Integer(allow_none=True)
     product_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productCount"
+        allow_none=True, missing=None, data_key="productCount", attribute="productCount"
     )
     total = marshmallow.fields.Integer(allow_none=True)
     min = marshmallow.fields.Integer(allow_none=True)
@@ -157,7 +157,7 @@ class FacetResultTermSchema(marshmallow.Schema):
     term = marshmallow.fields.Raw(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     product_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productCount"
+        allow_none=True, missing=None, data_key="productCount", attribute="productCount"
     )
 
     class Meta:
@@ -223,7 +223,7 @@ class ProductCatalogDataSchema(marshmallow.Schema):
         allow_none=True,
     )
     has_staged_changes = marshmallow.fields.Bool(
-        allow_none=True, data_key="hasStagedChanges"
+        allow_none=True, data_key="hasStagedChanges", attribute="hasStagedChanges"
     )
 
     class Meta:
@@ -244,24 +244,25 @@ class ProductDataSchema(marshmallow.Schema):
         many=True,
     )
     category_order_hints = CategoryOrderHintsField(
-        allow_none=True, missing=None, data_key="categoryOrderHints"
+        allow_none=True, missing=None, data_key="categoryOrderHints", attribute="categoryOrderHints"
     )
     description = LocalizedStringField(allow_none=True, missing=None)
     slug = LocalizedStringField(allow_none=True)
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
     master_variant = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductVariantSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="masterVariant",
+        attribute="masterVariant",
     )
     variants = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductVariantSchema",
@@ -274,6 +275,7 @@ class ProductDataSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="searchKeywords",
+        attribute="searchKeywords",
     )
 
     class Meta:
@@ -291,6 +293,7 @@ class ProductDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="productType",
+        attribute="productType",
     )
     name = LocalizedStringField(allow_none=True)
     slug = LocalizedStringField(allow_none=True)
@@ -304,16 +307,16 @@ class ProductDraftSchema(marshmallow.Schema):
         missing=None,
     )
     category_order_hints = CategoryOrderHintsField(
-        allow_none=True, missing=None, data_key="categoryOrderHints"
+        allow_none=True, missing=None, data_key="categoryOrderHints", attribute="categoryOrderHints"
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
     master_variant = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductVariantDraftSchema",
@@ -321,6 +324,7 @@ class ProductDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="masterVariant",
+        attribute="masterVariant",
     )
     variants = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductVariantDraftSchema",
@@ -335,6 +339,7 @@ class ProductDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     search_keywords = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.SearchKeywordsSchema",
@@ -342,6 +347,7 @@ class ProductDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="searchKeywords",
+        attribute="searchKeywords",
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
@@ -432,6 +438,7 @@ class ProductProjectionSchema(BaseResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="productType",
+        attribute="productType",
     )
     name = LocalizedStringField(allow_none=True)
     description = LocalizedStringField(allow_none=True, missing=None)
@@ -443,16 +450,16 @@ class ProductProjectionSchema(BaseResourceSchema):
         many=True,
     )
     category_order_hints = CategoryOrderHintsField(
-        allow_none=True, missing=None, data_key="categoryOrderHints"
+        allow_none=True, missing=None, data_key="categoryOrderHints", attribute="categoryOrderHints"
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
     search_keywords = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.SearchKeywordsSchema",
@@ -460,9 +467,10 @@ class ProductProjectionSchema(BaseResourceSchema):
         allow_none=True,
         missing=None,
         data_key="searchKeywords",
+        attribute="searchKeywords",
     )
     has_staged_changes = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="hasStagedChanges"
+        allow_none=True, missing=None, data_key="hasStagedChanges", attribute="hasStagedChanges"
     )
     published = marshmallow.fields.Bool(allow_none=True, missing=None)
     master_variant = marshmallow.fields.Nested(
@@ -470,6 +478,7 @@ class ProductProjectionSchema(BaseResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="masterVariant",
+        attribute="masterVariant",
     )
     variants = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductVariantSchema",
@@ -483,6 +492,7 @@ class ProductProjectionSchema(BaseResourceSchema):
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateReferenceSchema",
@@ -496,6 +506,7 @@ class ProductProjectionSchema(BaseResourceSchema):
         allow_none=True,
         missing=None,
         data_key="reviewRatingStatistics",
+        attribute="reviewRatingStatistics",
     )
 
     class Meta:
@@ -544,12 +555,14 @@ class ProductSchema(LoggedResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="productType",
+        attribute="productType",
     )
     master_data = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductCatalogDataSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="masterData",
+        attribute="masterData",
     )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
@@ -557,6 +570,7 @@ class ProductSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateReferenceSchema",
@@ -570,6 +584,7 @@ class ProductSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="reviewRatingStatistics",
+        attribute="reviewRatingStatistics",
     )
 
     class Meta:
@@ -664,13 +679,13 @@ class ProductUpdateSchema(marshmallow.Schema):
 class ProductVariantAvailabilitySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductVariantAvailability`."
     is_on_stock = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isOnStock"
+        allow_none=True, missing=None, data_key="isOnStock", attribute="isOnStock"
     )
     restockable_in_days = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays", attribute="restockableInDays"
     )
     available_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="availableQuantity"
+        allow_none=True, missing=None, data_key="availableQuantity", attribute="availableQuantity"
     )
     channels = marshmallow.fields.Nested(
         nested="commercetools.schemas._product.ProductVariantChannelAvailabilityMapSchema",
@@ -726,13 +741,13 @@ class ProductVariantChannelAvailabilityMapSchema(marshmallow.Schema):
 class ProductVariantChannelAvailabilitySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductVariantChannelAvailability`."
     is_on_stock = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isOnStock"
+        allow_none=True, missing=None, data_key="isOnStock", attribute="isOnStock"
     )
     restockable_in_days = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays", attribute="restockableInDays"
     )
     available_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="availableQuantity"
+        allow_none=True, missing=None, data_key="availableQuantity", attribute="availableQuantity"
     )
 
     class Meta:
@@ -830,7 +845,7 @@ class ProductVariantSchema(marshmallow.Schema):
         missing=None,
     )
     is_matching_variant = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isMatchingVariant"
+        allow_none=True, missing=None, data_key="isMatchingVariant", attribute="isMatchingVariant"
     )
     scoped_price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.ScopedPriceSchema",
@@ -838,9 +853,10 @@ class ProductVariantSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="scopedPrice",
+        attribute="scopedPrice",
     )
     scoped_price_discounted = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="scopedPriceDiscounted"
+        allow_none=True, missing=None, data_key="scopedPriceDiscounted", attribute="scopedPriceDiscounted"
     )
 
     class Meta:
@@ -864,6 +880,7 @@ class SearchKeywordSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="suggestTokenizer",
+        attribute="suggestTokenizer",
     )
 
     class Meta:
@@ -992,7 +1009,7 @@ class FilteredFacetResultSchema(FacetResultSchema):
     "Marshmallow schema for :class:`commercetools.types.FilteredFacetResult`."
     count = marshmallow.fields.Integer(allow_none=True)
     product_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productCount"
+        allow_none=True, missing=None, data_key="productCount", attribute="productCount"
     )
 
     class Meta:
@@ -1007,7 +1024,7 @@ class FilteredFacetResultSchema(FacetResultSchema):
 class ProductAddAssetActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductAddAssetAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
@@ -1030,7 +1047,7 @@ class ProductAddAssetActionSchema(ProductUpdateActionSchema):
 class ProductAddExternalImageActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductAddExternalImageAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     image = marshmallow.fields.Nested(
@@ -1052,7 +1069,7 @@ class ProductAddExternalImageActionSchema(ProductUpdateActionSchema):
 class ProductAddPriceActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductAddPriceAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     price = marshmallow.fields.Nested(
@@ -1079,7 +1096,7 @@ class ProductAddToCategoryActionSchema(ProductUpdateActionSchema):
         allow_none=True,
     )
     order_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderHint"
+        allow_none=True, missing=None, data_key="orderHint", attribute="orderHint"
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1138,15 +1155,15 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
 class ProductChangeAssetNameActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductChangeAssetNameAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     name = LocalizedStringField(allow_none=True)
 
@@ -1162,12 +1179,12 @@ class ProductChangeAssetNameActionSchema(ProductUpdateActionSchema):
 class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductChangeAssetOrderAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_order = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="assetOrder"
+        marshmallow.fields.String(allow_none=True), data_key="assetOrder", attribute="assetOrder"
     )
 
     class Meta:
@@ -1182,7 +1199,7 @@ class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
 class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductChangeMasterVariantAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
@@ -1212,7 +1229,7 @@ class ProductChangeNameActionSchema(ProductUpdateActionSchema):
 
 class ProductChangePriceActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductChangePriceAction`."
-    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId", attribute="priceId")
     price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.PriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1246,7 +1263,7 @@ class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
 class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductLegacySetSkuAction`."
     sku = marshmallow.fields.String(allow_none=True, missing=None)
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1260,10 +1277,10 @@ class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
 class ProductMoveImageToPositionActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductMoveImageToPositionAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
-    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl")
+    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl", attribute="imageUrl")
     position = marshmallow.fields.Integer(allow_none=True)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1294,15 +1311,15 @@ class ProductPublishActionSchema(ProductUpdateActionSchema):
 class ProductRemoveAssetActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductRemoveAssetAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
 
     class Meta:
@@ -1335,10 +1352,10 @@ class ProductRemoveFromCategoryActionSchema(ProductUpdateActionSchema):
 class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductRemoveImageAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
-    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl")
+    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl", attribute="imageUrl")
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
@@ -1352,7 +1369,7 @@ class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
 
 class ProductRemovePriceActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductRemovePriceAction`."
-    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId", attribute="priceId")
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
     class Meta:
@@ -1393,7 +1410,7 @@ class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
 
 class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductRevertStagedVariantChangesAction`."
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1407,15 +1424,15 @@ class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
 class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAssetCustomFieldAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
@@ -1432,15 +1449,15 @@ class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
 class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAssetCustomTypeAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
@@ -1462,15 +1479,15 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
 class ProductSetAssetDescriptionActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAssetDescriptionAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     description = LocalizedStringField(allow_none=True, missing=None)
 
@@ -1486,13 +1503,13 @@ class ProductSetAssetDescriptionActionSchema(ProductUpdateActionSchema):
 class ProductSetAssetKeyActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAssetKeyAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
-    asset_id = marshmallow.fields.String(allow_none=True, data_key="assetId")
+    asset_id = marshmallow.fields.String(allow_none=True, data_key="assetId", attribute="assetId")
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
 
     class Meta:
@@ -1507,15 +1524,15 @@ class ProductSetAssetKeyActionSchema(ProductUpdateActionSchema):
 class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAssetSourcesAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     sources = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AssetSourceSchema",
@@ -1536,15 +1553,15 @@ class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
 class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAssetTagsAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True), missing=None
@@ -1562,7 +1579,7 @@ class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
 class ProductSetAttributeActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetAttributeAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
@@ -1595,9 +1612,9 @@ class ProductSetAttributeInAllVariantsActionSchema(ProductUpdateActionSchema):
 
 class ProductSetCategoryOrderHintActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetCategoryOrderHintAction`."
-    category_id = marshmallow.fields.String(allow_none=True, data_key="categoryId")
+    category_id = marshmallow.fields.String(allow_none=True, data_key="categoryId", attribute="categoryId")
     order_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderHint"
+        allow_none=True, missing=None, data_key="orderHint", attribute="orderHint"
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1626,7 +1643,7 @@ class ProductSetDescriptionActionSchema(ProductUpdateActionSchema):
 
 class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetDiscountedPriceAction`."
-    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId", attribute="priceId")
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     discounted = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.DiscountedPriceSchema",
@@ -1648,9 +1665,9 @@ class ProductSetImageLabelActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetImageLabelAction`."
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
-    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl")
+    image_url = marshmallow.fields.String(allow_none=True, data_key="imageUrl", attribute="imageUrl")
     label = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1679,7 +1696,7 @@ class ProductSetKeyActionSchema(ProductUpdateActionSchema):
 class ProductSetMetaDescriptionActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetMetaDescriptionAction`."
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1695,7 +1712,7 @@ class ProductSetMetaDescriptionActionSchema(ProductUpdateActionSchema):
 class ProductSetMetaKeywordsActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetMetaKeywordsAction`."
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1711,7 +1728,7 @@ class ProductSetMetaKeywordsActionSchema(ProductUpdateActionSchema):
 class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetMetaTitleAction`."
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1727,7 +1744,7 @@ class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
 class ProductSetPricesActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetPricesAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
@@ -1749,7 +1766,7 @@ class ProductSetPricesActionSchema(ProductUpdateActionSchema):
 
 class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetProductPriceCustomFieldAction`."
-    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId", attribute="priceId")
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
@@ -1765,7 +1782,7 @@ class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
 
 class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetProductPriceCustomTypeAction`."
-    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId")
+    price_id = marshmallow.fields.String(allow_none=True, data_key="priceId", attribute="priceId")
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
@@ -1787,7 +1804,7 @@ class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
 class ProductSetProductVariantKeyActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetProductVariantKeyAction`."
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
@@ -1809,6 +1826,7 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="searchKeywords",
+        attribute="searchKeywords",
     )
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1823,7 +1841,7 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
 
 class ProductSetSkuActionSchema(ProductUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductSetSkuAction`."
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     staged = marshmallow.fields.Bool(allow_none=True, missing=None)
 
@@ -1844,6 +1862,7 @@ class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
 
     class Meta:
@@ -1907,7 +1926,7 @@ class RangeFacetResultSchema(FacetResultSchema):
 class TermFacetResultSchema(FacetResultSchema):
     "Marshmallow schema for :class:`commercetools.types.TermFacetResult`."
     data_type = marshmallow_enum.EnumField(
-        types.TermFacetResultType, by_value=True, data_key="dataType"
+        types.TermFacetResultType, by_value=True, data_key="dataType", attribute="dataType"
     )
     missing = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True)

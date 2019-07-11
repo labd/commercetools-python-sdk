@@ -29,7 +29,7 @@ class ExternalOAuthSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ExternalOAuth`."
     url = marshmallow.fields.String(allow_none=True)
     authorization_header = marshmallow.fields.String(
-        allow_none=True, data_key="authorizationHeader"
+        allow_none=True, data_key="authorizationHeader", attribute="authorizationHeader"
     )
 
     class Meta:
@@ -48,9 +48,9 @@ class ProjectSchema(marshmallow.Schema):
     countries = marshmallow.fields.List(marshmallow.fields.String())
     currencies = marshmallow.fields.List(marshmallow.fields.String())
     languages = marshmallow.fields.List(marshmallow.fields.String())
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     trial_until = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="trialUntil"
+        allow_none=True, missing=None, data_key="trialUntil", attribute="trialUntil"
     )
     messages = marshmallow.fields.Nested(
         nested="commercetools.schemas._message.MessageConfigurationSchema",
@@ -68,6 +68,7 @@ class ProjectSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingRateInputType",
+        attribute="shippingRateInputType",
     )
     external_o_auth = marshmallow.fields.Nested(
         nested="commercetools.schemas._project.ExternalOAuthSchema",
@@ -75,6 +76,7 @@ class ProjectSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="externalOAuth",
+        attribute="externalOAuth",
     )
 
     class Meta:
@@ -231,6 +233,7 @@ class ProjectChangeMessagesConfigurationActionSchema(ProjectUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="messagesConfiguration",
+        attribute="messagesConfiguration",
     )
 
     class Meta:
@@ -245,7 +248,7 @@ class ProjectChangeMessagesConfigurationActionSchema(ProjectUpdateActionSchema):
 class ProjectChangeMessagesEnabledActionSchema(ProjectUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProjectChangeMessagesEnabledAction`."
     messages_enabled = marshmallow.fields.Bool(
-        allow_none=True, data_key="messagesEnabled"
+        allow_none=True, data_key="messagesEnabled", attribute="messagesEnabled"
     )
 
     class Meta:
@@ -278,6 +281,7 @@ class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="externalOAuth",
+        attribute="externalOAuth",
     )
 
     class Meta:
@@ -302,6 +306,7 @@ class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="shippingRateInputType",
+        attribute="shippingRateInputType",
     )
 
     class Meta:

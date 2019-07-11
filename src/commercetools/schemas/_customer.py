@@ -60,9 +60,9 @@ class CustomerChangePasswordSchema(marshmallow.Schema):
     id = marshmallow.fields.String(allow_none=True)
     version = marshmallow.fields.Integer(allow_none=True)
     current_password = marshmallow.fields.String(
-        allow_none=True, data_key="currentPassword"
+        allow_none=True, data_key="currentPassword", attribute="currentPassword"
     )
-    new_password = marshmallow.fields.String(allow_none=True, data_key="newPassword")
+    new_password = marshmallow.fields.String(allow_none=True, data_key="newPassword", attribute="newPassword")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -76,7 +76,7 @@ class CustomerCreateEmailTokenSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerCreateEmailToken`."
     id = marshmallow.fields.String(allow_none=True)
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    ttl_minutes = marshmallow.fields.Integer(allow_none=True, data_key="ttlMinutes")
+    ttl_minutes = marshmallow.fields.Integer(allow_none=True, data_key="ttlMinutes", attribute="ttlMinutes")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -90,7 +90,7 @@ class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerCreatePasswordResetToken`."
     email = marshmallow.fields.String(allow_none=True)
     ttl_minutes = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="ttlMinutes"
+        allow_none=True, missing=None, data_key="ttlMinutes", attribute="ttlMinutes"
     )
 
     class Meta:
@@ -104,33 +104,33 @@ class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
 class CustomerDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerDraft`."
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True, missing=None, data_key="customerNumber", attribute="customerNumber"
     )
     email = marshmallow.fields.String(allow_none=True)
     password = marshmallow.fields.String(allow_none=True)
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True, missing=None, data_key="firstName", attribute="firstName"
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True, missing=None, data_key="lastName", attribute="lastName"
     )
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True, missing=None, data_key="middleName", attribute="middleName"
     )
     title = marshmallow.fields.String(allow_none=True, missing=None)
     anonymous_cart_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousCartId"
+        allow_none=True, missing=None, data_key="anonymousCartId", attribute="anonymousCartId"
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True, missing=None, data_key="dateOfBirth", attribute="dateOfBirth"
     )
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True, missing=None, data_key="companyName", attribute="companyName"
     )
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId", attribute="vatId")
     addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -139,26 +139,28 @@ class CustomerDraftSchema(marshmallow.Schema):
         missing=None,
     )
     default_shipping_address = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="defaultShippingAddress"
+        allow_none=True, missing=None, data_key="defaultShippingAddress", attribute="defaultShippingAddress"
     )
     shipping_addresses = marshmallow.fields.List(
         marshmallow.fields.Integer(allow_none=True),
         missing=None,
         data_key="shippingAddresses",
+        attribute="shippingAddresses",
     )
     default_billing_address = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="defaultBillingAddress"
+        allow_none=True, missing=None, data_key="defaultBillingAddress", attribute="defaultBillingAddress"
     )
     billing_addresses = marshmallow.fields.List(
         marshmallow.fields.Integer(allow_none=True),
         missing=None,
         data_key="billingAddresses",
+        attribute="billingAddresses",
     )
     is_email_verified = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isEmailVerified"
+        allow_none=True, missing=None, data_key="isEmailVerified", attribute="isEmailVerified"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer_group.CustomerGroupResourceIdentifierSchema",
@@ -166,6 +168,7 @@ class CustomerDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -188,7 +191,7 @@ class CustomerDraftSchema(marshmallow.Schema):
 class CustomerEmailVerifySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerEmailVerify`."
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    token_value = marshmallow.fields.String(allow_none=True, data_key="tokenValue")
+    token_value = marshmallow.fields.String(allow_none=True, data_key="tokenValue", attribute="tokenValue")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -238,8 +241,8 @@ class CustomerReferenceSchema(ReferenceSchema):
 
 class CustomerResetPasswordSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerResetPassword`."
-    token_value = marshmallow.fields.String(allow_none=True, data_key="tokenValue")
-    new_password = marshmallow.fields.String(allow_none=True, data_key="newPassword")
+    token_value = marshmallow.fields.String(allow_none=True, data_key="tokenValue", attribute="tokenValue")
+    new_password = marshmallow.fields.String(allow_none=True, data_key="newPassword", attribute="newPassword")
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
@@ -265,27 +268,27 @@ class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
 class CustomerSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Customer`."
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True, missing=None, data_key="customerNumber", attribute="customerNumber"
     )
     email = marshmallow.fields.String(allow_none=True)
     password = marshmallow.fields.String(allow_none=True)
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True, missing=None, data_key="firstName", attribute="firstName"
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True, missing=None, data_key="lastName", attribute="lastName"
     )
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True, missing=None, data_key="middleName", attribute="middleName"
     )
     title = marshmallow.fields.String(allow_none=True, missing=None)
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True, missing=None, data_key="dateOfBirth", attribute="dateOfBirth"
     )
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True, missing=None, data_key="companyName", attribute="companyName"
     )
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId", attribute="vatId")
     addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -293,26 +296,28 @@ class CustomerSchema(LoggedResourceSchema):
         many=True,
     )
     default_shipping_address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="defaultShippingAddressId"
+        allow_none=True, missing=None, data_key="defaultShippingAddressId", attribute="defaultShippingAddressId"
     )
     shipping_address_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         missing=None,
         data_key="shippingAddressIds",
+        attribute="shippingAddressIds",
     )
     default_billing_address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="defaultBillingAddressId"
+        allow_none=True, missing=None, data_key="defaultBillingAddressId", attribute="defaultBillingAddressId"
     )
     billing_address_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         missing=None,
         data_key="billingAddressIds",
+        attribute="billingAddressIds",
     )
     is_email_verified = marshmallow.fields.Bool(
-        allow_none=True, data_key="isEmailVerified"
+        allow_none=True, data_key="isEmailVerified", attribute="isEmailVerified"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     customer_group = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
@@ -320,6 +325,7 @@ class CustomerSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -361,16 +367,17 @@ class CustomerSigninSchema(marshmallow.Schema):
     email = marshmallow.fields.String(allow_none=True)
     password = marshmallow.fields.String(allow_none=True)
     anonymous_cart_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousCartId"
+        allow_none=True, missing=None, data_key="anonymousCartId", attribute="anonymousCartId"
     )
     anonymous_cart_sign_in_mode = marshmallow_enum.EnumField(
         types.AnonymousCartSignInMode,
         by_value=True,
         missing=None,
         data_key="anonymousCartSignInMode",
+        attribute="anonymousCartSignInMode",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
 
     class Meta:
@@ -384,12 +391,12 @@ class CustomerSigninSchema(marshmallow.Schema):
 class CustomerTokenSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerToken`."
     id = marshmallow.fields.String(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
+        allow_none=True, missing=None, data_key="lastModifiedAt", attribute="lastModifiedAt"
     )
-    customer_id = marshmallow.fields.String(allow_none=True, data_key="customerId")
-    expires_at = marshmallow.fields.DateTime(allow_none=True, data_key="expiresAt")
+    customer_id = marshmallow.fields.String(allow_none=True, data_key="customerId", attribute="customerId")
+    expires_at = marshmallow.fields.DateTime(allow_none=True, data_key="expiresAt", attribute="expiresAt")
     value = marshmallow.fields.String(allow_none=True)
 
     class Meta:
@@ -479,7 +486,7 @@ class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
 
 class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerAddBillingAddressIdAction`."
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId", attribute="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -492,7 +499,7 @@ class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerAddShippingAddressIdAction`."
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId", attribute="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -505,7 +512,7 @@ class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerChangeAddressAction`."
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId", attribute="addressId")
     address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -536,7 +543,7 @@ class CustomerChangeEmailActionSchema(CustomerUpdateActionSchema):
 
 class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerRemoveAddressAction`."
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId", attribute="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -549,7 +556,7 @@ class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
 
 class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerRemoveBillingAddressIdAction`."
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId", attribute="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -562,7 +569,7 @@ class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerRemoveShippingAddressIdAction`."
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId", attribute="addressId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -576,7 +583,7 @@ class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
 class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetCompanyNameAction`."
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True, missing=None, data_key="companyName", attribute="companyName"
     )
 
     class Meta:
@@ -629,6 +636,7 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
 
     class Meta:
@@ -643,7 +651,7 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
 class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetCustomerNumberAction`."
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True, missing=None, data_key="customerNumber", attribute="customerNumber"
     )
 
     class Meta:
@@ -658,7 +666,7 @@ class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
 class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetDateOfBirthAction`."
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True, missing=None, data_key="dateOfBirth", attribute="dateOfBirth"
     )
 
     class Meta:
@@ -673,7 +681,7 @@ class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
 class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetDefaultBillingAddressAction`."
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True, missing=None, data_key="addressId", attribute="addressId"
     )
 
     class Meta:
@@ -688,7 +696,7 @@ class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
 class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetDefaultShippingAddressAction`."
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True, missing=None, data_key="addressId", attribute="addressId"
     )
 
     class Meta:
@@ -703,7 +711,7 @@ class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
 class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetExternalIdAction`."
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
 
     class Meta:
@@ -718,7 +726,7 @@ class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
 class CustomerSetFirstNameActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetFirstNameAction`."
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True, missing=None, data_key="firstName", attribute="firstName"
     )
 
     class Meta:
@@ -746,7 +754,7 @@ class CustomerSetKeyActionSchema(CustomerUpdateActionSchema):
 class CustomerSetLastNameActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetLastNameAction`."
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True, missing=None, data_key="lastName", attribute="lastName"
     )
 
     class Meta:
@@ -774,7 +782,7 @@ class CustomerSetLocaleActionSchema(CustomerUpdateActionSchema):
 class CustomerSetMiddleNameActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetMiddleNameAction`."
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True, missing=None, data_key="middleName", attribute="middleName"
     )
 
     class Meta:
@@ -814,7 +822,7 @@ class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetVatIdActionSchema(CustomerUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomerSetVatIdAction`."
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId", attribute="vatId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE

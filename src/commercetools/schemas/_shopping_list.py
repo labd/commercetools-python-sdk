@@ -64,7 +64,7 @@ class ShoppingListDraftSchema(marshmallow.Schema):
         missing=None,
     )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification", attribute="deleteDaysAfterLastModification"
     )
     description = LocalizedStringField(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
@@ -74,7 +74,7 @@ class ShoppingListDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         missing=None,
-        data_key="lineItems",
+        data_key="lineItems", attribute="lineItems",
     )
     name = LocalizedStringField(allow_none=True)
     slug = LocalizedStringField(allow_none=True, missing=None)
@@ -84,10 +84,10 @@ class ShoppingListDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         missing=None,
-        data_key="textLineItems",
+        data_key="textLineItems", attribute="textLineItems",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
 
     class Meta:
@@ -101,7 +101,7 @@ class ShoppingListDraftSchema(marshmallow.Schema):
 class ShoppingListLineItemDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListLineItemDraft`."
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, missing=None, data_key="addedAt", attribute="addedAt"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -111,11 +111,11 @@ class ShoppingListLineItemDraftSchema(marshmallow.Schema):
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True, missing=None, data_key="productId", attribute="productId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
 
     class Meta:
@@ -128,7 +128,7 @@ class ShoppingListLineItemDraftSchema(marshmallow.Schema):
 
 class ShoppingListLineItemSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListLineItem`."
-    added_at = marshmallow.fields.DateTime(allow_none=True, data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(allow_none=True, data_key="addedAt", attribute="addedAt")
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -136,19 +136,19 @@ class ShoppingListLineItemSchema(marshmallow.Schema):
         missing=None,
     )
     deactivated_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="deactivatedAt"
+        allow_none=True, missing=None, data_key="deactivatedAt", attribute="deactivatedAt"
     )
     id = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True)
-    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId", attribute="productId")
     product_slug = LocalizedStringField(
-        allow_none=True, missing=None, data_key="productSlug"
+        allow_none=True, missing=None, data_key="productSlug", attribute="productSlug"
     )
     product_type = marshmallow.fields.Nested(
         nested="commercetools.schemas._product_type.ProductTypeReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
-        data_key="productType",
+        data_key="productType", attribute="productType",
     )
     quantity = marshmallow.fields.Integer(allow_none=True)
     variant = marshmallow.fields.Nested(
@@ -158,7 +158,7 @@ class ShoppingListLineItemSchema(marshmallow.Schema):
         missing=None,
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
 
     class Meta:
@@ -234,7 +234,7 @@ class ShoppingListSchema(LoggedResourceSchema):
         missing=None,
     )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification", attribute="deleteDaysAfterLastModification"
     )
     description = LocalizedStringField(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
@@ -244,7 +244,7 @@ class ShoppingListSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         missing=None,
-        data_key="lineItems",
+        data_key="lineItems", attribute="lineItems",
     )
     name = LocalizedStringField(allow_none=True)
     slug = LocalizedStringField(allow_none=True, missing=None)
@@ -254,10 +254,10 @@ class ShoppingListSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         missing=None,
-        data_key="textLineItems",
+        data_key="textLineItems", attribute="textLineItems",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
 
     class Meta:
@@ -329,7 +329,7 @@ class ShoppingListUpdateSchema(marshmallow.Schema):
 class TextLineItemDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TextLineItemDraft`."
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, missing=None, data_key="addedAt", attribute="addedAt"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -351,7 +351,7 @@ class TextLineItemDraftSchema(marshmallow.Schema):
 
 class TextLineItemSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TextLineItem`."
-    added_at = marshmallow.fields.DateTime(allow_none=True, data_key="addedAt")
+    added_at = marshmallow.fields.DateTime(allow_none=True, data_key="addedAt", attribute="addedAt")
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -375,14 +375,14 @@ class ShoppingListAddLineItemActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListAddLineItemAction`."
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True, missing=None, data_key="productId", attribute="productId"
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, missing=None, data_key="variantId", attribute="variantId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, missing=None, data_key="addedAt", attribute="addedAt"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -406,7 +406,7 @@ class ShoppingListAddTextLineItemActionSchema(ShoppingListUpdateActionSchema):
     description = LocalizedStringField(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, missing=None, data_key="addedAt", attribute="addedAt"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -426,7 +426,7 @@ class ShoppingListAddTextLineItemActionSchema(ShoppingListUpdateActionSchema):
 
 class ShoppingListChangeLineItemQuantityActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeLineItemQuantityAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
@@ -441,7 +441,7 @@ class ShoppingListChangeLineItemQuantityActionSchema(ShoppingListUpdateActionSch
 class ShoppingListChangeLineItemsOrderActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeLineItemsOrderAction`."
     line_item_order = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="lineItemOrder"
+        marshmallow.fields.String(allow_none=True), data_key="lineItemOrder", attribute="lineItemOrder"
     )
 
     class Meta:
@@ -469,7 +469,7 @@ class ShoppingListChangeNameActionSchema(ShoppingListUpdateActionSchema):
 class ShoppingListChangeTextLineItemNameActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeTextLineItemNameAction`."
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="textLineItemId"
+        allow_none=True, data_key="textLineItemId", attribute="textLineItemId"
     )
     name = LocalizedStringField(allow_none=True)
 
@@ -487,7 +487,7 @@ class ShoppingListChangeTextLineItemQuantityActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeTextLineItemQuantityAction`."
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="textLineItemId"
+        allow_none=True, data_key="textLineItemId", attribute="textLineItemId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True)
 
@@ -503,7 +503,7 @@ class ShoppingListChangeTextLineItemQuantityActionSchema(
 class ShoppingListChangeTextLineItemsOrderActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListChangeTextLineItemsOrderAction`."
     text_line_item_order = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="textLineItemOrder"
+        marshmallow.fields.String(allow_none=True), data_key="textLineItemOrder", attribute="textLineItemOrder"
     )
 
     class Meta:
@@ -517,7 +517,7 @@ class ShoppingListChangeTextLineItemsOrderActionSchema(ShoppingListUpdateActionS
 
 class ShoppingListRemoveLineItemActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListRemoveLineItemAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
@@ -532,7 +532,7 @@ class ShoppingListRemoveLineItemActionSchema(ShoppingListUpdateActionSchema):
 class ShoppingListRemoveTextLineItemActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListRemoveTextLineItemAction`."
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="textLineItemId"
+        allow_none=True, data_key="textLineItemId", attribute="textLineItemId"
     )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
@@ -548,7 +548,7 @@ class ShoppingListRemoveTextLineItemActionSchema(ShoppingListUpdateActionSchema)
 class ShoppingListSetAnonymousIdActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetAnonymousIdAction`."
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
 
     class Meta:
@@ -616,7 +616,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetDeleteDaysAfterLastModificationAction`."
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification", attribute="deleteDaysAfterLastModification"
     )
 
     class Meta:
@@ -656,7 +656,7 @@ class ShoppingListSetKeyActionSchema(ShoppingListUpdateActionSchema):
 
 class ShoppingListSetLineItemCustomFieldActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetLineItemCustomFieldAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
@@ -671,7 +671,7 @@ class ShoppingListSetLineItemCustomFieldActionSchema(ShoppingListUpdateActionSch
 
 class ShoppingListSetLineItemCustomTypeActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetLineItemCustomTypeAction`."
-    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId", attribute="lineItemId")
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -707,7 +707,7 @@ class ShoppingListSetTextLineItemCustomFieldActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetTextLineItemCustomFieldAction`."
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="textLineItemId"
+        allow_none=True, data_key="textLineItemId", attribute="textLineItemId"
     )
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
@@ -724,7 +724,7 @@ class ShoppingListSetTextLineItemCustomFieldActionSchema(
 class ShoppingListSetTextLineItemCustomTypeActionSchema(ShoppingListUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetTextLineItemCustomTypeAction`."
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="textLineItemId"
+        allow_none=True, data_key="textLineItemId", attribute="textLineItemId"
     )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
@@ -748,7 +748,7 @@ class ShoppingListSetTextLineItemDescriptionActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListSetTextLineItemDescriptionAction`."
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, data_key="textLineItemId"
+        allow_none=True, data_key="textLineItemId", attribute="textLineItemId"
     )
     description = LocalizedStringField(allow_none=True, missing=None)
 

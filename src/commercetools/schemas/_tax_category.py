@@ -178,7 +178,7 @@ class TaxRateDraftSchema(marshmallow.Schema):
     name = marshmallow.fields.String(allow_none=True)
     amount = marshmallow.fields.Float(allow_none=True, missing=None)
     included_in_price = marshmallow.fields.Bool(
-        allow_none=True, data_key="includedInPrice"
+        allow_none=True, data_key="includedInPrice", attribute="includedInPrice"
     )
     country = marshmallow.fields.String()
     state = marshmallow.fields.String(allow_none=True, missing=None)
@@ -189,6 +189,7 @@ class TaxRateDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="subRates",
+        attribute="subRates",
     )
 
     class Meta:
@@ -205,7 +206,7 @@ class TaxRateSchema(marshmallow.Schema):
     name = marshmallow.fields.String(allow_none=True)
     amount = marshmallow.fields.Float(allow_none=True)
     included_in_price = marshmallow.fields.Bool(
-        allow_none=True, data_key="includedInPrice"
+        allow_none=True, data_key="includedInPrice", attribute="includedInPrice"
     )
     country = marshmallow.fields.String()
     state = marshmallow.fields.String(allow_none=True, missing=None)
@@ -216,6 +217,7 @@ class TaxRateSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="subRates",
+        attribute="subRates",
     )
 
     class Meta:
@@ -233,6 +235,7 @@ class TaxCategoryAddTaxRateActionSchema(TaxCategoryUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="taxRate",
+        attribute="taxRate",
     )
 
     class Meta:
@@ -259,7 +262,7 @@ class TaxCategoryChangeNameActionSchema(TaxCategoryUpdateActionSchema):
 
 class TaxCategoryRemoveTaxRateActionSchema(TaxCategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TaxCategoryRemoveTaxRateAction`."
-    tax_rate_id = marshmallow.fields.String(allow_none=True, data_key="taxRateId")
+    tax_rate_id = marshmallow.fields.String(allow_none=True, data_key="taxRateId", attribute="taxRateId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -272,12 +275,13 @@ class TaxCategoryRemoveTaxRateActionSchema(TaxCategoryUpdateActionSchema):
 
 class TaxCategoryReplaceTaxRateActionSchema(TaxCategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TaxCategoryReplaceTaxRateAction`."
-    tax_rate_id = marshmallow.fields.String(allow_none=True, data_key="taxRateId")
+    tax_rate_id = marshmallow.fields.String(allow_none=True, data_key="taxRateId", attribute="taxRateId")
     tax_rate = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxRateDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="taxRate",
+        attribute="taxRate",
     )
 
     class Meta:

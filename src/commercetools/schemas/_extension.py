@@ -59,7 +59,7 @@ class ExtensionDraftSchema(marshmallow.Schema):
         many=True,
     )
     timeout_in_ms = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="timeoutInMs"
+        allow_none=True, missing=None, data_key="timeoutInMs", attribute="timeoutInMs"
     )
 
     class Meta:
@@ -164,7 +164,7 @@ class ExtensionSchema(LoggedResourceSchema):
         many=True,
     )
     timeout_in_ms = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="timeoutInMs"
+        allow_none=True, missing=None, data_key="timeoutInMs", attribute="timeoutInMs"
     )
 
     class Meta:
@@ -178,7 +178,7 @@ class ExtensionSchema(LoggedResourceSchema):
 class ExtensionTriggerSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionTrigger`."
     resource_type_id = marshmallow_enum.EnumField(
-        types.ExtensionResourceTypeId, by_value=True, data_key="resourceTypeId"
+        types.ExtensionResourceTypeId, by_value=True, data_key="resourceTypeId", attribute="resourceTypeId"
     )
     actions = marshmallow.fields.List(
         marshmallow_enum.EnumField(types.ExtensionAction, by_value=True)
@@ -234,8 +234,8 @@ class ExtensionUpdateSchema(marshmallow.Schema):
 class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionAWSLambdaDestination`."
     arn = marshmallow.fields.String(allow_none=True)
-    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey")
-    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret")
+    access_key = marshmallow.fields.String(allow_none=True, data_key="accessKey", attribute="accessKey")
+    access_secret = marshmallow.fields.String(allow_none=True, data_key="accessSecret", attribute="accessSecret")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -250,7 +250,7 @@ class ExtensionAuthorizationHeaderAuthenticationSchema(
     ExtensionHttpDestinationAuthenticationSchema
 ):
     "Marshmallow schema for :class:`commercetools.types.ExtensionAuthorizationHeaderAuthentication`."
-    header_value = marshmallow.fields.String(allow_none=True, data_key="headerValue")
+    header_value = marshmallow.fields.String(allow_none=True, data_key="headerValue", attribute="headerValue")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -354,7 +354,7 @@ class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
 class ExtensionSetTimeoutInMsActionSchema(ExtensionUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionSetTimeoutInMsAction`."
     timeout_in_ms = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="timeoutInMs"
+        allow_none=True, missing=None, data_key="timeoutInMs", attribute="timeoutInMs"
     )
 
     class Meta:

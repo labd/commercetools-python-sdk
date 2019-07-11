@@ -114,7 +114,7 @@ class StateSchema(LoggedResourceSchema):
     name = LocalizedStringField(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)
     initial = marshmallow.fields.Bool(allow_none=True)
-    built_in = marshmallow.fields.Bool(allow_none=True, data_key="builtIn")
+    built_in = marshmallow.fields.Bool(allow_none=True, data_key="builtIn", attribute="builtIn")
     roles = marshmallow.fields.List(
         marshmallow_enum.EnumField(types.StateRoleEnum, by_value=True), missing=None
     )

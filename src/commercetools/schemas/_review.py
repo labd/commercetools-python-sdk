@@ -37,11 +37,11 @@ class ReviewDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReviewDraft`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     uniqueness_value = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="uniquenessValue"
+        allow_none=True, missing=None, data_key="uniquenessValue", attribute="uniquenessValue"
     )
     locale = marshmallow.fields.String(allow_none=True, missing=None)
     author_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorName"
+        allow_none=True, missing=None, data_key="authorName", attribute="authorName"
     )
     title = marshmallow.fields.String(allow_none=True, missing=None)
     text = marshmallow.fields.String(allow_none=True, missing=None)
@@ -102,15 +102,15 @@ class ReviewPagedQueryResponseSchema(marshmallow.Schema):
 class ReviewRatingStatisticsSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReviewRatingStatistics`."
     average_rating = marshmallow.fields.Integer(
-        allow_none=True, data_key="averageRating"
+        allow_none=True, data_key="averageRating", attribute="averageRating"
     )
     highest_rating = marshmallow.fields.Integer(
-        allow_none=True, data_key="highestRating"
+        allow_none=True, data_key="highestRating", attribute="highestRating"
     )
-    lowest_rating = marshmallow.fields.Integer(allow_none=True, data_key="lowestRating")
+    lowest_rating = marshmallow.fields.Integer(allow_none=True, data_key="lowestRating", attribute="lowestRating")
     count = marshmallow.fields.Integer(allow_none=True)
     ratings_distribution = marshmallow.fields.Dict(
-        allow_none=True, data_key="ratingsDistribution"
+        allow_none=True, data_key="ratingsDistribution", attribute="ratingsDistribution"
     )
 
     class Meta:
@@ -155,11 +155,11 @@ class ReviewSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Review`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     uniqueness_value = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="uniquenessValue"
+        allow_none=True, missing=None, data_key="uniquenessValue", attribute="uniquenessValue"
     )
     locale = marshmallow.fields.String(allow_none=True, missing=None)
     author_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorName"
+        allow_none=True, missing=None, data_key="authorName", attribute="authorName"
     )
     title = marshmallow.fields.String(allow_none=True, missing=None)
     text = marshmallow.fields.String(allow_none=True, missing=None)
@@ -170,7 +170,7 @@ class ReviewSchema(LoggedResourceSchema):
         missing=None,
     )
     included_in_statistics = marshmallow.fields.Bool(
-        allow_none=True, data_key="includedInStatistics"
+        allow_none=True, data_key="includedInStatistics", attribute="includedInStatistics"
     )
     rating = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = marshmallow.fields.Nested(
@@ -249,7 +249,7 @@ class ReviewUpdateSchema(marshmallow.Schema):
 class ReviewSetAuthorNameActionSchema(ReviewUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ReviewSetAuthorNameAction`."
     author_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorName"
+        allow_none=True, missing=None, data_key="authorName", attribute="authorName"
     )
 
     class Meta:

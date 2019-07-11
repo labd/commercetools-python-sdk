@@ -59,19 +59,20 @@ class PaymentDraftSchema(marshmallow.Schema):
         missing=None,
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     interface_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceId"
+        allow_none=True, missing=None, data_key="interfaceId", attribute="interfaceId"
     )
     amount_planned = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="amountPlanned",
+        attribute="amountPlanned",
     )
     amount_authorized = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -79,9 +80,10 @@ class PaymentDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="amountAuthorized",
+        attribute="amountAuthorized",
     )
     authorized_until = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorizedUntil"
+        allow_none=True, missing=None, data_key="authorizedUntil", attribute="authorizedUntil"
     )
     amount_paid = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -89,6 +91,7 @@ class PaymentDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="amountPaid",
+        attribute="amountPaid",
     )
     amount_refunded = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -96,6 +99,7 @@ class PaymentDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="amountRefunded",
+        attribute="amountRefunded",
     )
     payment_method_info = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.PaymentMethodInfoSchema",
@@ -103,6 +107,7 @@ class PaymentDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="paymentMethodInfo",
+        attribute="paymentMethodInfo",
     )
     payment_status = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.PaymentStatusDraftSchema",
@@ -110,6 +115,7 @@ class PaymentDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="paymentStatus",
+        attribute="paymentStatus",
     )
     transactions = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.TransactionDraftSchema",
@@ -125,6 +131,7 @@ class PaymentDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="interfaceInteractions",
+        attribute="interfaceInteractions",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -145,7 +152,7 @@ class PaymentDraftSchema(marshmallow.Schema):
 class PaymentMethodInfoSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PaymentMethodInfo`."
     payment_interface = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="paymentInterface"
+        allow_none=True, missing=None, data_key="paymentInterface", attribute="paymentInterface"
     )
     method = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(allow_none=True, missing=None)
@@ -217,13 +224,13 @@ class PaymentSchema(LoggedResourceSchema):
         missing=None,
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     interface_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceId"
+        allow_none=True, missing=None, data_key="interfaceId", attribute="interfaceId"
     )
     amount_planned = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -234,6 +241,7 @@ class PaymentSchema(LoggedResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="amountPlanned",
+        attribute="amountPlanned",
     )
     amount_authorized = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -245,9 +253,10 @@ class PaymentSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="amountAuthorized",
+        attribute="amountAuthorized",
     )
     authorized_until = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorizedUntil"
+        allow_none=True, missing=None, data_key="authorizedUntil", attribute="authorizedUntil"
     )
     amount_paid = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -259,6 +268,7 @@ class PaymentSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="amountPaid",
+        attribute="amountPaid",
     )
     amount_refunded = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -270,18 +280,21 @@ class PaymentSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="amountRefunded",
+        attribute="amountRefunded",
     )
     payment_method_info = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.PaymentMethodInfoSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="paymentMethodInfo",
+        attribute="paymentMethodInfo",
     )
     payment_status = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.PaymentStatusSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="paymentStatus",
+        attribute="paymentStatus",
     )
     transactions = marshmallow.fields.Nested(
         nested="commercetools.schemas._payment.TransactionSchema",
@@ -295,6 +308,7 @@ class PaymentSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         data_key="interfaceInteractions",
+        attribute="interfaceInteractions",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -315,10 +329,10 @@ class PaymentSchema(LoggedResourceSchema):
 class PaymentStatusDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PaymentStatusDraft`."
     interface_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceCode"
+        allow_none=True, missing=None, data_key="interfaceCode", attribute="interfaceCode"
     )
     interface_text = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceText"
+        allow_none=True, missing=None, data_key="interfaceText", attribute="interfaceText"
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateResourceIdentifierSchema",
@@ -338,10 +352,10 @@ class PaymentStatusDraftSchema(marshmallow.Schema):
 class PaymentStatusSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PaymentStatus`."
     interface_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceCode"
+        allow_none=True, missing=None, data_key="interfaceCode", attribute="interfaceCode"
     )
     interface_text = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceText"
+        allow_none=True, missing=None, data_key="interfaceText", attribute="interfaceText"
     )
     state = marshmallow.fields.Nested(
         nested="commercetools.schemas._state.StateReferenceSchema",
@@ -425,7 +439,7 @@ class TransactionDraftSchema(marshmallow.Schema):
         allow_none=True,
     )
     interaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interactionId"
+        allow_none=True, missing=None, data_key="interactionId", attribute="interactionId"
     )
     state = marshmallow_enum.EnumField(
         types.TransactionState, by_value=True, missing=None
@@ -454,7 +468,7 @@ class TransactionSchema(marshmallow.Schema):
         allow_none=True,
     )
     interaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interactionId"
+        allow_none=True, missing=None, data_key="interactionId", attribute="interactionId"
     )
     state = marshmallow_enum.EnumField(
         types.TransactionState, by_value=True, missing=None
@@ -523,10 +537,10 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
 class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentChangeTransactionInteractionIdAction`."
     transaction_id = marshmallow.fields.String(
-        allow_none=True, data_key="transactionId"
+        allow_none=True, data_key="transactionId", attribute="transactionId"
     )
     interaction_id = marshmallow.fields.String(
-        allow_none=True, data_key="interactionId"
+        allow_none=True, data_key="interactionId", attribute="interactionId"
     )
 
     class Meta:
@@ -541,7 +555,7 @@ class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchem
 class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentChangeTransactionStateAction`."
     transaction_id = marshmallow.fields.String(
-        allow_none=True, data_key="transactionId"
+        allow_none=True, data_key="transactionId", attribute="transactionId"
     )
     state = marshmallow_enum.EnumField(types.TransactionState, by_value=True)
 
@@ -557,7 +571,7 @@ class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
 class PaymentChangeTransactionTimestampActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentChangeTransactionTimestampAction`."
     transaction_id = marshmallow.fields.String(
-        allow_none=True, data_key="transactionId"
+        allow_none=True, data_key="transactionId", attribute="transactionId"
     )
     timestamp = marshmallow.fields.DateTime(allow_none=True)
 
@@ -609,7 +623,7 @@ class PaymentSetAmountRefundedActionSchema(PaymentUpdateActionSchema):
 class PaymentSetAnonymousIdActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentSetAnonymousIdAction`."
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
 
     class Meta:
@@ -694,7 +708,7 @@ class PaymentSetCustomerActionSchema(PaymentUpdateActionSchema):
 class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentSetExternalIdAction`."
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
 
     class Meta:
@@ -708,7 +722,7 @@ class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetInterfaceIdActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentSetInterfaceIdAction`."
-    interface_id = marshmallow.fields.String(allow_none=True, data_key="interfaceId")
+    interface_id = marshmallow.fields.String(allow_none=True, data_key="interfaceId", attribute="interfaceId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -774,7 +788,7 @@ class PaymentSetMethodInfoNameActionSchema(PaymentUpdateActionSchema):
 class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentSetStatusInterfaceCodeAction`."
     interface_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceCode"
+        allow_none=True, missing=None, data_key="interfaceCode", attribute="interfaceCode"
     )
 
     class Meta:
@@ -789,7 +803,7 @@ class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
 class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.PaymentSetStatusInterfaceTextAction`."
     interface_text = marshmallow.fields.String(
-        allow_none=True, data_key="interfaceText"
+        allow_none=True, data_key="interfaceText", attribute="interfaceText"
     )
 
     class Meta:

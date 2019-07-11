@@ -128,7 +128,7 @@ class FieldDefinitionSchema(marshmallow.Schema):
     label = LocalizedStringField(allow_none=True)
     required = marshmallow.fields.Bool(allow_none=True)
     input_hint = marshmallow_enum.EnumField(
-        types.TypeTextInputHint, by_value=True, missing=None, data_key="inputHint"
+        types.TypeTextInputHint, by_value=True, missing=None, data_key="inputHint", attribute="inputHint"
     )
 
     class Meta:
@@ -160,6 +160,7 @@ class TypeDraftSchema(marshmallow.Schema):
     resource_type_ids = marshmallow.fields.List(
         marshmallow_enum.EnumField(types.ResourceTypeId, by_value=True),
         data_key="resourceTypeIds",
+        attribute="resourceTypeIds",
     )
     field_definitions = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.FieldDefinitionSchema",
@@ -168,6 +169,7 @@ class TypeDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="fieldDefinitions",
+        attribute="fieldDefinitions",
     )
 
     class Meta:
@@ -236,6 +238,7 @@ class TypeSchema(LoggedResourceSchema):
     resource_type_ids = marshmallow.fields.List(
         marshmallow_enum.EnumField(types.ResourceTypeId, by_value=True),
         data_key="resourceTypeIds",
+        attribute="resourceTypeIds",
     )
     field_definitions = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.FieldDefinitionSchema",
@@ -243,6 +246,7 @@ class TypeSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         data_key="fieldDefinitions",
+        attribute="fieldDefinitions",
     )
 
     class Meta:
@@ -414,7 +418,7 @@ class CustomFieldNumberTypeSchema(FieldTypeSchema):
 class CustomFieldReferenceTypeSchema(FieldTypeSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomFieldReferenceType`."
     reference_type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, data_key="referenceTypeId"
+        types.ReferenceTypeId, by_value=True, data_key="referenceTypeId", attribute="referenceTypeId"
     )
 
     class Meta:
@@ -447,6 +451,7 @@ class CustomFieldSetTypeSchema(FieldTypeSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="elementType",
+        attribute="elementType",
     )
 
     class Meta:
@@ -484,7 +489,7 @@ class CustomFieldTimeTypeSchema(FieldTypeSchema):
 
 class TypeAddEnumValueActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeAddEnumValueAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
@@ -507,6 +512,7 @@ class TypeAddFieldDefinitionActionSchema(TypeUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="fieldDefinition",
+        attribute="fieldDefinition",
     )
 
     class Meta:
@@ -520,7 +526,7 @@ class TypeAddFieldDefinitionActionSchema(TypeUpdateActionSchema):
 
 class TypeAddLocalizedEnumValueActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeAddLocalizedEnumValueAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
@@ -538,7 +544,7 @@ class TypeAddLocalizedEnumValueActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeEnumValueLabelActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeEnumValueLabelAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
@@ -556,7 +562,7 @@ class TypeChangeEnumValueLabelActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeEnumValueOrderAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     keys = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
@@ -570,7 +576,7 @@ class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeFieldDefinitionLabelAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     label = LocalizedStringField(allow_none=True)
 
     class Meta:
@@ -585,7 +591,7 @@ class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
 class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeFieldDefinitionOrderAction`."
     field_names = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="fieldNames"
+        marshmallow.fields.String(allow_none=True), data_key="fieldNames", attribute="fieldNames"
     )
 
     class Meta:
@@ -599,9 +605,9 @@ class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeInputHintActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeInputHintAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     input_hint = marshmallow_enum.EnumField(
-        types.TypeTextInputHint, by_value=True, data_key="inputHint"
+        types.TypeTextInputHint, by_value=True, data_key="inputHint", attribute="inputHint"
     )
 
     class Meta:
@@ -628,7 +634,7 @@ class TypeChangeKeyActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeLabelAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     label = LocalizedStringField(allow_none=True)
 
     class Meta:
@@ -642,7 +648,7 @@ class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeLocalizedEnumValueLabelActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeLocalizedEnumValueLabelAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldLocalizedEnumValueSchema",
         unknown=marshmallow.EXCLUDE,
@@ -660,7 +666,7 @@ class TypeChangeLocalizedEnumValueLabelActionSchema(TypeUpdateActionSchema):
 
 class TypeChangeLocalizedEnumValueOrderActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeChangeLocalizedEnumValueOrderAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
     keys = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
     class Meta:
@@ -687,7 +693,7 @@ class TypeChangeNameActionSchema(TypeUpdateActionSchema):
 
 class TypeRemoveFieldDefinitionActionSchema(TypeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.TypeRemoveFieldDefinitionAction`."
-    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName")
+    field_name = marshmallow.fields.String(allow_none=True, data_key="fieldName", attribute="fieldName")
 
     class Meta:
         unknown = marshmallow.EXCLUDE

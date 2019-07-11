@@ -42,7 +42,7 @@ __all__ = [
 
 class PriceFunctionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PriceFunction`."
-    currency_code = marshmallow.fields.String(data_key="currencyCode")
+    currency_code = marshmallow.fields.String(data_key="currencyCode", attribute="currencyCode")
     function = marshmallow.fields.String(allow_none=True)
 
     class Meta:
@@ -63,6 +63,7 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     zone_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ZoneRateDraftSchema",
@@ -70,8 +71,9 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         data_key="zoneRates",
+        attribute="zoneRates",
     )
-    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault")
+    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault", attribute="isDefault")
     predicate = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -142,6 +144,7 @@ class ShippingMethodSchema(BaseResourceSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
     zone_rates = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ZoneRateSchema",
@@ -149,8 +152,9 @@ class ShippingMethodSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         data_key="zoneRates",
+        attribute="zoneRates",
     )
-    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault")
+    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault", attribute="isDefault")
     predicate = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -219,6 +223,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="freeAbove",
+        attribute="freeAbove",
     )
     tiers = marshmallow.fields.List(
         helpers.Discriminator(
@@ -276,9 +281,10 @@ class ShippingRateSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="freeAbove",
+        attribute="freeAbove",
     )
     is_matching = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True, missing=None, data_key="isMatching", attribute="isMatching"
     )
     tiers = marshmallow.fields.List(
         helpers.Discriminator(
@@ -314,6 +320,7 @@ class ZoneRateDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         data_key="shippingRates",
+        attribute="shippingRates",
     )
 
     class Meta:
@@ -337,6 +344,7 @@ class ZoneRateSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         data_key="shippingRates",
+        attribute="shippingRates",
     )
 
     class Meta:
@@ -356,7 +364,7 @@ class CartClassificationTierSchema(ShippingRatePriceTierSchema):
         allow_none=True,
     )
     is_matching = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True, missing=None, data_key="isMatching", attribute="isMatching"
     )
 
     class Meta:
@@ -383,9 +391,10 @@ class CartScoreTierSchema(ShippingRatePriceTierSchema):
         allow_none=True,
         missing=None,
         data_key="priceFunction",
+        attribute="priceFunction",
     )
     is_matching = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True, missing=None, data_key="isMatching", attribute="isMatching"
     )
 
     class Meta:
@@ -400,7 +409,7 @@ class CartScoreTierSchema(ShippingRatePriceTierSchema):
 class CartValueTierSchema(ShippingRatePriceTierSchema):
     "Marshmallow schema for :class:`commercetools.types.CartValueTier`."
     minimum_cent_amount = marshmallow.fields.Integer(
-        allow_none=True, data_key="minimumCentAmount"
+        allow_none=True, data_key="minimumCentAmount", attribute="minimumCentAmount"
     )
     price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -408,7 +417,7 @@ class CartValueTierSchema(ShippingRatePriceTierSchema):
         allow_none=True,
     )
     is_matching = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True, missing=None, data_key="isMatching", attribute="isMatching"
     )
 
     class Meta:
@@ -432,6 +441,7 @@ class ShippingMethodAddShippingRateActionSchema(ShippingMethodUpdateActionSchema
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
+        attribute="shippingRate",
     )
 
     class Meta:
@@ -462,7 +472,7 @@ class ShippingMethodAddZoneActionSchema(ShippingMethodUpdateActionSchema):
 
 class ShippingMethodChangeIsDefaultActionSchema(ShippingMethodUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethodChangeIsDefaultAction`."
-    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault")
+    is_default = marshmallow.fields.Bool(allow_none=True, data_key="isDefault", attribute="isDefault")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -493,6 +503,7 @@ class ShippingMethodChangeTaxCategoryActionSchema(ShippingMethodUpdateActionSche
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="taxCategory",
+        attribute="taxCategory",
     )
 
     class Meta:
@@ -516,6 +527,7 @@ class ShippingMethodRemoveShippingRateActionSchema(ShippingMethodUpdateActionSch
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="shippingRate",
+        attribute="shippingRate",
     )
 
     class Meta:

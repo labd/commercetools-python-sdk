@@ -28,7 +28,7 @@ __all__ = [
 class CustomerGroupDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerGroupDraft`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    group_name = marshmallow.fields.String(allow_none=True, data_key="groupName")
+    group_name = marshmallow.fields.String(allow_none=True, data_key="groupName", attribute="groupName")
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,

@@ -46,18 +46,19 @@ class DiscountCodeDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         data_key="cartDiscounts",
+        attribute="cartDiscounts",
     )
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cartPredicate"
+        allow_none=True, missing=None, data_key="cartPredicate", attribute="cartPredicate"
     )
     is_active = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isActive"
+        allow_none=True, missing=None, data_key="isActive", attribute="isActive"
     )
     max_applications = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxApplications"
+        allow_none=True, missing=None, data_key="maxApplications", attribute="maxApplications"
     )
     max_applications_per_customer = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer"
+        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer", attribute="maxApplicationsPerCustomer"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -75,10 +76,10 @@ class DiscountCodeDraftSchema(marshmallow.Schema):
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -150,11 +151,12 @@ class DiscountCodeSchema(LoggedResourceSchema):
         allow_none=True,
         many=True,
         data_key="cartDiscounts",
+        attribute="cartDiscounts",
     )
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cartPredicate"
+        allow_none=True, missing=None, data_key="cartPredicate", attribute="cartPredicate"
     )
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
     references = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("typeId", "type_id"),
@@ -188,10 +190,10 @@ class DiscountCodeSchema(LoggedResourceSchema):
         )
     )
     max_applications = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxApplications"
+        allow_none=True, missing=None, data_key="maxApplications", attribute="maxApplications"
     )
     max_applications_per_customer = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer"
+        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer", attribute="maxApplicationsPerCustomer"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -201,10 +203,10 @@ class DiscountCodeSchema(LoggedResourceSchema):
     )
     groups = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -271,6 +273,7 @@ class DiscountCodeChangeCartDiscountsActionSchema(DiscountCodeUpdateActionSchema
         allow_none=True,
         many=True,
         data_key="cartDiscounts",
+        attribute="cartDiscounts",
     )
 
     class Meta:
@@ -297,7 +300,7 @@ class DiscountCodeChangeGroupsActionSchema(DiscountCodeUpdateActionSchema):
 
 class DiscountCodeChangeIsActiveActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeChangeIsActiveAction`."
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -311,7 +314,7 @@ class DiscountCodeChangeIsActiveActionSchema(DiscountCodeUpdateActionSchema):
 class DiscountCodeSetCartPredicateActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeSetCartPredicateAction`."
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cartPredicate"
+        allow_none=True, missing=None, data_key="cartPredicate", attribute="cartPredicate"
     )
 
     class Meta:
@@ -372,7 +375,7 @@ class DiscountCodeSetDescriptionActionSchema(DiscountCodeUpdateActionSchema):
 class DiscountCodeSetMaxApplicationsActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeSetMaxApplicationsAction`."
     max_applications = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxApplications"
+        allow_none=True, missing=None, data_key="maxApplications", attribute="maxApplications"
     )
 
     class Meta:
@@ -389,7 +392,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeSetMaxApplicationsPerCustomerAction`."
     max_applications_per_customer = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer"
+        allow_none=True, missing=None, data_key="maxApplicationsPerCustomer", attribute="maxApplicationsPerCustomer"
     )
 
     class Meta:
@@ -417,7 +420,7 @@ class DiscountCodeSetNameActionSchema(DiscountCodeUpdateActionSchema):
 class DiscountCodeSetValidFromActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeSetValidFromAction`."
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
 
     class Meta:
@@ -432,10 +435,10 @@ class DiscountCodeSetValidFromActionSchema(DiscountCodeUpdateActionSchema):
 class DiscountCodeSetValidFromAndUntilActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeSetValidFromAndUntilAction`."
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -450,7 +453,7 @@ class DiscountCodeSetValidFromAndUntilActionSchema(DiscountCodeUpdateActionSchem
 class DiscountCodeSetValidUntilActionSchema(DiscountCodeUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeSetValidUntilAction`."
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:

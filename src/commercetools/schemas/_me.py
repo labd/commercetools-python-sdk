@@ -17,11 +17,11 @@ class MyCartDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.MyCartDraft`."
     currency = marshmallow.fields.String()
     customer_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerEmail"
+        allow_none=True, missing=None, data_key="customerEmail", attribute="customerEmail"
     )
     country = marshmallow.fields.String(allow_none=True, missing=None)
     inventory_mode = marshmallow_enum.EnumField(
-        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
+        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode", attribute="inventoryMode"
     )
     line_items = marshmallow.fields.Nested(
         nested="commercetools.schemas._me.MyLineItemDraftSchema",
@@ -30,6 +30,7 @@ class MyCartDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="lineItems",
+        attribute="lineItems",
     )
     shipping_address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -37,6 +38,7 @@ class MyCartDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingAddress",
+        attribute="shippingAddress",
     )
     billing_address = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -44,6 +46,7 @@ class MyCartDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="billingAddress",
+        attribute="billingAddress",
     )
     shipping_method = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ShippingMethodResourceIdentifierSchema",
@@ -51,6 +54,7 @@ class MyCartDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingMethod",
+        attribute="shippingMethod",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -60,10 +64,10 @@ class MyCartDraftSchema(marshmallow.Schema):
     )
     locale = marshmallow.fields.String(allow_none=True, missing=None)
     tax_mode = marshmallow_enum.EnumField(
-        types.TaxMode, by_value=True, missing=None, data_key="taxMode"
+        types.TaxMode, by_value=True, missing=None, data_key="taxMode", attribute="taxMode"
     )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification", attribute="deleteDaysAfterLastModification"
     )
     item_shipping_addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
@@ -72,6 +76,7 @@ class MyCartDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="itemShippingAddresses",
+        attribute="itemShippingAddresses",
     )
 
     class Meta:
@@ -87,22 +92,22 @@ class MyCustomerDraftSchema(marshmallow.Schema):
     email = marshmallow.fields.String(allow_none=True)
     password = marshmallow.fields.String(allow_none=True)
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True, missing=None, data_key="firstName", attribute="firstName"
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True, missing=None, data_key="lastName", attribute="lastName"
     )
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True, missing=None, data_key="middleName", attribute="middleName"
     )
     title = marshmallow.fields.String(allow_none=True, missing=None)
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True, missing=None, data_key="dateOfBirth", attribute="dateOfBirth"
     )
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True, missing=None, data_key="companyName", attribute="companyName"
     )
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId", attribute="vatId")
     addresses = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -111,10 +116,10 @@ class MyCustomerDraftSchema(marshmallow.Schema):
         missing=None,
     )
     default_shipping_address = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="defaultShippingAddress"
+        allow_none=True, missing=None, data_key="defaultShippingAddress", attribute="defaultShippingAddress"
     )
     default_billing_address = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="defaultBillingAddress"
+        allow_none=True, missing=None, data_key="defaultBillingAddress", attribute="defaultBillingAddress"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -134,8 +139,8 @@ class MyCustomerDraftSchema(marshmallow.Schema):
 
 class MyLineItemDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.MyLineItemDraft`."
-    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId", attribute="productId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
     quantity = marshmallow.fields.Integer(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
@@ -143,6 +148,7 @@ class MyLineItemDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
@@ -150,6 +156,7 @@ class MyLineItemDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="distributionChannel",
+        attribute="distributionChannel",
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -163,6 +170,7 @@ class MyLineItemDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+        attribute="shippingDetails",
     )
 
     class Meta:

@@ -63,7 +63,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
         allow_none=True,
     )
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, data_key="cartPredicate"
+        allow_none=True, data_key="cartPredicate", attribute="cartPredicate"
     )
     target = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -78,21 +78,21 @@ class CartDiscountDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
     )
-    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder", attribute="sortOrder")
     is_active = marshmallow.fields.Bool(
-        allow_none=True, missing=None, data_key="isActive"
+        allow_none=True, missing=None, data_key="isActive", attribute="isActive"
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
     requires_discount_code = marshmallow.fields.Bool(
-        allow_none=True, data_key="requiresDiscountCode"
+        allow_none=True, data_key="requiresDiscountCode", attribute="requiresDiscountCode"
     )
     stacking_mode = marshmallow_enum.EnumField(
-        types.StackingMode, by_value=True, missing=None, data_key="stackingMode"
+        types.StackingMode, by_value=True, missing=None, data_key="stackingMode", attribute="stackingMode"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -175,7 +175,7 @@ class CartDiscountSchema(LoggedResourceSchema):
         allow_none=True,
     )
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, data_key="cartPredicate"
+        allow_none=True, data_key="cartPredicate", attribute="cartPredicate"
     )
     target = helpers.Discriminator(
         discriminator_field=("type", "type"),
@@ -190,16 +190,16 @@ class CartDiscountSchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
     )
-    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder", attribute="sortOrder")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
     requires_discount_code = marshmallow.fields.Bool(
-        allow_none=True, data_key="requiresDiscountCode"
+        allow_none=True, data_key="requiresDiscountCode", attribute="requiresDiscountCode"
     )
     references = marshmallow.fields.List(
         helpers.Discriminator(
@@ -234,7 +234,7 @@ class CartDiscountSchema(LoggedResourceSchema):
         )
     )
     stacking_mode = marshmallow_enum.EnumField(
-        types.StackingMode, by_value=True, data_key="stackingMode"
+        types.StackingMode, by_value=True, data_key="stackingMode", attribute="stackingMode"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -330,7 +330,7 @@ class CartDiscountValueSchema(marshmallow.Schema):
 class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountChangeCartPredicateAction`."
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, data_key="cartPredicate"
+        allow_none=True, data_key="cartPredicate", attribute="cartPredicate"
     )
 
     class Meta:
@@ -344,7 +344,7 @@ class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema
 
 class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountChangeIsActiveAction`."
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -373,7 +373,7 @@ class CartDiscountChangeRequiresDiscountCodeActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountChangeRequiresDiscountCodeAction`."
     requires_discount_code = marshmallow.fields.Bool(
-        allow_none=True, data_key="requiresDiscountCode"
+        allow_none=True, data_key="requiresDiscountCode", attribute="requiresDiscountCode"
     )
 
     class Meta:
@@ -387,7 +387,7 @@ class CartDiscountChangeRequiresDiscountCodeActionSchema(
 
 class CartDiscountChangeSortOrderActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountChangeSortOrderAction`."
-    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder", attribute="sortOrder")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -401,7 +401,7 @@ class CartDiscountChangeSortOrderActionSchema(CartDiscountUpdateActionSchema):
 class CartDiscountChangeStackingModeActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountChangeStackingModeAction`."
     stacking_mode = marshmallow_enum.EnumField(
-        types.StackingMode, by_value=True, data_key="stackingMode"
+        types.StackingMode, by_value=True, data_key="stackingMode", attribute="stackingMode"
     )
 
     class Meta:
@@ -547,7 +547,7 @@ class CartDiscountSetKeyActionSchema(CartDiscountUpdateActionSchema):
 class CartDiscountSetValidFromActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountSetValidFromAction`."
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
 
     class Meta:
@@ -562,10 +562,10 @@ class CartDiscountSetValidFromActionSchema(CartDiscountUpdateActionSchema):
 class CartDiscountSetValidFromAndUntilActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountSetValidFromAndUntilAction`."
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -580,7 +580,7 @@ class CartDiscountSetValidFromAndUntilActionSchema(CartDiscountUpdateActionSchem
 class CartDiscountSetValidUntilActionSchema(CartDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountSetValidUntilAction`."
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -629,13 +629,14 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     distribution_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelReferenceSchema",
@@ -643,6 +644,7 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
         allow_none=True,
         missing=None,
         data_key="distributionChannel",
+        attribute="distributionChannel",
     )
 
     class Meta:
@@ -671,16 +673,16 @@ class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
     "Marshmallow schema for :class:`commercetools.types.MultiBuyCustomLineItemsTarget`."
     predicate = marshmallow.fields.String(allow_none=True)
     trigger_quantity = marshmallow.fields.Integer(
-        allow_none=True, data_key="triggerQuantity"
+        allow_none=True, data_key="triggerQuantity", attribute="triggerQuantity"
     )
     discounted_quantity = marshmallow.fields.Integer(
-        allow_none=True, data_key="discountedQuantity"
+        allow_none=True, data_key="discountedQuantity", attribute="discountedQuantity"
     )
     max_occurrence = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxOccurrence"
+        allow_none=True, missing=None, data_key="maxOccurrence", attribute="maxOccurrence"
     )
     selection_mode = marshmallow_enum.EnumField(
-        types.SelectionMode, by_value=True, data_key="selectionMode"
+        types.SelectionMode, by_value=True, data_key="selectionMode", attribute="selectionMode"
     )
 
     class Meta:
@@ -696,16 +698,16 @@ class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
     "Marshmallow schema for :class:`commercetools.types.MultiBuyLineItemsTarget`."
     predicate = marshmallow.fields.String(allow_none=True)
     trigger_quantity = marshmallow.fields.Integer(
-        allow_none=True, data_key="triggerQuantity"
+        allow_none=True, data_key="triggerQuantity", attribute="triggerQuantity"
     )
     discounted_quantity = marshmallow.fields.Integer(
-        allow_none=True, data_key="discountedQuantity"
+        allow_none=True, data_key="discountedQuantity", attribute="discountedQuantity"
     )
     max_occurrence = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="maxOccurrence"
+        allow_none=True, missing=None, data_key="maxOccurrence", attribute="maxOccurrence"
     )
     selection_mode = marshmallow_enum.EnumField(
-        types.SelectionMode, by_value=True, data_key="selectionMode"
+        types.SelectionMode, by_value=True, data_key="selectionMode", attribute="selectionMode"
     )
 
     class Meta:

@@ -52,13 +52,13 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
         allow_none=True,
     )
     predicate = marshmallow.fields.String(allow_none=True)
-    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder", attribute="sortOrder")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -71,8 +71,8 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
 
 class ProductDiscountMatchQuerySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountMatchQuery`."
-    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId", attribute="productId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
     staged = marshmallow.fields.Bool(allow_none=True)
     price = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.PriceSchema",
@@ -154,8 +154,8 @@ class ProductDiscountSchema(LoggedResourceSchema):
         allow_none=True,
     )
     predicate = marshmallow.fields.String(allow_none=True)
-    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder", attribute="sortOrder")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
     references = marshmallow.fields.List(
         helpers.Discriminator(
             discriminator_field=("typeId", "type_id"),
@@ -189,10 +189,10 @@ class ProductDiscountSchema(LoggedResourceSchema):
         )
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -263,7 +263,7 @@ class ProductDiscountValueSchema(marshmallow.Schema):
 
 class ProductDiscountChangeIsActiveActionSchema(ProductDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountChangeIsActiveAction`."
-    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive")
+    is_active = marshmallow.fields.Bool(allow_none=True, data_key="isActive", attribute="isActive")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -302,7 +302,7 @@ class ProductDiscountChangePredicateActionSchema(ProductDiscountUpdateActionSche
 
 class ProductDiscountChangeSortOrderActionSchema(ProductDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountChangeSortOrderAction`."
-    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder")
+    sort_order = marshmallow.fields.String(allow_none=True, data_key="sortOrder", attribute="sortOrder")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -364,7 +364,7 @@ class ProductDiscountSetKeyActionSchema(ProductDiscountUpdateActionSchema):
 class ProductDiscountSetValidFromActionSchema(ProductDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountSetValidFromAction`."
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
 
     class Meta:
@@ -381,10 +381,10 @@ class ProductDiscountSetValidFromAndUntilActionSchema(
 ):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountSetValidFromAndUntilAction`."
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:
@@ -399,7 +399,7 @@ class ProductDiscountSetValidFromAndUntilActionSchema(
 class ProductDiscountSetValidUntilActionSchema(ProductDiscountUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountSetValidUntilAction`."
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
 
     class Meta:

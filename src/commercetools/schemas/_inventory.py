@@ -38,15 +38,16 @@ class InventoryEntryDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     quantity_on_stock = marshmallow.fields.Integer(
-        allow_none=True, data_key="quantityOnStock"
+        allow_none=True, data_key="quantityOnStock", attribute="quantityOnStock"
     )
     restockable_in_days = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays", attribute="restockableInDays"
     )
     expected_delivery = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="expectedDelivery"
+        allow_none=True, missing=None, data_key="expectedDelivery", attribute="expectedDelivery"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -102,18 +103,19 @@ class InventoryEntrySchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
     quantity_on_stock = marshmallow.fields.Integer(
-        allow_none=True, data_key="quantityOnStock"
+        allow_none=True, data_key="quantityOnStock", attribute="quantityOnStock"
     )
     available_quantity = marshmallow.fields.Integer(
-        allow_none=True, data_key="availableQuantity"
+        allow_none=True, data_key="availableQuantity", attribute="availableQuantity"
     )
     restockable_in_days = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays", attribute="restockableInDays"
     )
     expected_delivery = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="expectedDelivery"
+        allow_none=True, missing=None, data_key="expectedDelivery", attribute="expectedDelivery"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -268,7 +270,7 @@ class InventorySetCustomTypeActionSchema(InventoryUpdateActionSchema):
 class InventorySetExpectedDeliveryActionSchema(InventoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.InventorySetExpectedDeliveryAction`."
     expected_delivery = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="expectedDelivery"
+        allow_none=True, missing=None, data_key="expectedDelivery", attribute="expectedDelivery"
     )
 
     class Meta:
@@ -283,7 +285,7 @@ class InventorySetExpectedDeliveryActionSchema(InventoryUpdateActionSchema):
 class InventorySetRestockableInDaysActionSchema(InventoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.InventorySetRestockableInDaysAction`."
     restockable_in_days = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="restockableInDays"
+        allow_none=True, missing=None, data_key="restockableInDays", attribute="restockableInDays"
     )
 
     class Meta:
@@ -303,6 +305,7 @@ class InventorySetSupplyChannelActionSchema(InventoryUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
+        attribute="supplyChannel",
     )
 
     class Meta:

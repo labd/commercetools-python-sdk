@@ -51,22 +51,22 @@ class AddressSchema(marshmallow.Schema):
     title = marshmallow.fields.String(allow_none=True, missing=None)
     salutation = marshmallow.fields.String(allow_none=True, missing=None)
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True, missing=None, data_key="firstName", attribute="firstName"
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True, missing=None, data_key="lastName", attribute="lastName"
     )
     street_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="streetName"
+        allow_none=True, missing=None, data_key="streetName", attribute="streetName"
     )
     street_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="streetNumber"
+        allow_none=True, missing=None, data_key="streetNumber", attribute="streetNumber"
     )
     additional_street_info = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="additionalStreetInfo"
+        allow_none=True, missing=None, data_key="additionalStreetInfo", attribute="additionalStreetInfo"
     )
     postal_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="postalCode"
+        allow_none=True, missing=None, data_key="postalCode", attribute="postalCode"
     )
     city = marshmallow.fields.String(allow_none=True, missing=None)
     region = marshmallow.fields.String(allow_none=True, missing=None)
@@ -76,16 +76,16 @@ class AddressSchema(marshmallow.Schema):
     department = marshmallow.fields.String(allow_none=True, missing=None)
     building = marshmallow.fields.String(allow_none=True, missing=None)
     apartment = marshmallow.fields.String(allow_none=True, missing=None)
-    p_o_box = marshmallow.fields.String(allow_none=True, missing=None, data_key="pOBox")
+    p_o_box = marshmallow.fields.String(allow_none=True, missing=None, data_key="pOBox", attribute="pOBox")
     phone = marshmallow.fields.String(allow_none=True, missing=None)
     mobile = marshmallow.fields.String(allow_none=True, missing=None)
     email = marshmallow.fields.String(allow_none=True, missing=None)
     fax = marshmallow.fields.String(allow_none=True, missing=None)
     additional_address_info = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="additionalAddressInfo"
+        allow_none=True, missing=None, data_key="additionalAddressInfo", attribute="additionalAddressInfo"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
 
     class Meta:
@@ -179,7 +179,7 @@ class AssetSourceSchema(marshmallow.Schema):
         missing=None,
     )
     content_type = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="contentType"
+        allow_none=True, missing=None, data_key="contentType", attribute="contentType"
     )
 
     class Meta:
@@ -194,9 +194,9 @@ class BaseResourceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.BaseResource`."
     id = marshmallow.fields.String(allow_none=True)
     version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt", attribute="createdAt")
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
+        allow_none=True, data_key="lastModifiedAt", attribute="lastModifiedAt"
     )
 
     class Meta:
@@ -210,10 +210,10 @@ class BaseResourceSchema(marshmallow.Schema):
 class ClientLoggingSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ClientLogging`."
     client_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="clientId"
+        allow_none=True, missing=None, data_key="clientId", attribute="clientId"
     )
     external_user_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalUserId"
+        allow_none=True, missing=None, data_key="externalUserId", attribute="externalUserId"
     )
     customer = marshmallow.fields.Nested(
         nested="commercetools.schemas._customer.CustomerReferenceSchema",
@@ -222,7 +222,7 @@ class ClientLoggingSchema(marshmallow.Schema):
         missing=None,
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True, missing=None, data_key="anonymousId", attribute="anonymousId"
     )
 
     class Meta:
@@ -301,7 +301,7 @@ class ImageSchema(marshmallow.Schema):
 class KeyReferenceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.KeyReference`."
     type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, data_key="typeId"
+        types.ReferenceTypeId, by_value=True, data_key="typeId", attribute="typeId"
     )
     key = marshmallow.fields.String(allow_none=True)
 
@@ -316,8 +316,8 @@ class KeyReferenceSchema(marshmallow.Schema):
 
 class MoneySchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Money`."
-    cent_amount = marshmallow.fields.Integer(allow_none=True, data_key="centAmount")
-    currency_code = marshmallow.fields.String(data_key="currencyCode")
+    cent_amount = marshmallow.fields.Integer(allow_none=True, data_key="centAmount", attribute="centAmount")
+    currency_code = marshmallow.fields.String(data_key="currencyCode", attribute="currencyCode")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -368,6 +368,7 @@ class PriceDraftSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
@@ -376,10 +377,10 @@ class PriceDraftSchema(marshmallow.Schema):
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -418,6 +419,7 @@ class PriceSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelReferenceSchema",
@@ -426,10 +428,10 @@ class PriceSchema(marshmallow.Schema):
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
     discounted = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.DiscountedPriceSchema",
@@ -462,7 +464,7 @@ class PriceSchema(marshmallow.Schema):
 class PriceTierSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PriceTier`."
     minimum_quantity = marshmallow.fields.Integer(
-        allow_none=True, data_key="minimumQuantity"
+        allow_none=True, data_key="minimumQuantity", attribute="minimumQuantity"
     )
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
@@ -481,7 +483,7 @@ class PriceTierSchema(marshmallow.Schema):
 class ReferenceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Reference`."
     type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, data_key="typeId"
+        types.ReferenceTypeId, by_value=True, data_key="typeId", attribute="typeId"
     )
     id = marshmallow.fields.String(allow_none=True)
 
@@ -497,7 +499,7 @@ class ReferenceSchema(marshmallow.Schema):
 class ResourceIdentifierSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ResourceIdentifier`."
     type_id = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, missing=None, data_key="typeId"
+        types.ReferenceTypeId, by_value=True, missing=None, data_key="typeId", attribute="typeId"
     )
     id = marshmallow.fields.String(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
@@ -532,6 +534,7 @@ class ScopedPriceSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="currentValue",
+        attribute="currentValue",
     )
     country = marshmallow.fields.String(missing=None)
     customer_group = marshmallow.fields.Nested(
@@ -540,6 +543,7 @@ class ScopedPriceSchema(marshmallow.Schema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelReferenceSchema",
@@ -548,10 +552,10 @@ class ScopedPriceSchema(marshmallow.Schema):
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
     discounted = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.DiscountedPriceSchema",
@@ -656,6 +660,7 @@ class LoggedResourceSchema(BaseResourceSchema):
         allow_none=True,
         missing=None,
         data_key="lastModifiedBy",
+        attribute="lastModifiedBy",
     )
     created_by = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.CreatedBySchema",
@@ -663,6 +668,7 @@ class LoggedResourceSchema(BaseResourceSchema):
         allow_none=True,
         missing=None,
         data_key="createdBy",
+        attribute="createdBy",
     )
 
     class Meta:
@@ -677,7 +683,7 @@ class TypedMoneySchema(MoneySchema):
     "Marshmallow schema for :class:`commercetools.types.TypedMoney`."
     type = marshmallow_enum.EnumField(types.MoneyType, by_value=True)
     fraction_digits = marshmallow.fields.Integer(
-        allow_none=True, data_key="fractionDigits"
+        allow_none=True, data_key="fractionDigits", attribute="fractionDigits"
     )
 
     class Meta:
@@ -704,7 +710,7 @@ class CentPrecisionMoneySchema(TypedMoneySchema):
 class HighPrecisionMoneySchema(TypedMoneySchema):
     "Marshmallow schema for :class:`commercetools.types.HighPrecisionMoney`."
     precise_amount = marshmallow.fields.Integer(
-        allow_none=True, data_key="preciseAmount"
+        allow_none=True, data_key="preciseAmount", attribute="preciseAmount"
     )
 
     class Meta:

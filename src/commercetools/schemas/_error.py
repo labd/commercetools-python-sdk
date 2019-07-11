@@ -75,7 +75,7 @@ class ErrorObjectSchema(marshmallow.Schema):
 
 class ErrorResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ErrorResponse`."
-    status_code = marshmallow.fields.Integer(allow_none=True, data_key="statusCode")
+    status_code = marshmallow.fields.Integer(allow_none=True, data_key="statusCode", attribute="statusCode")
     message = marshmallow.fields.String(allow_none=True)
     error = marshmallow.fields.String(allow_none=True, missing=None)
     error_description = marshmallow.fields.String(allow_none=True, missing=None)
@@ -170,7 +170,7 @@ class AccessDeniedErrorSchema(ErrorObjectSchema):
 class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ConcurrentModificationError`."
     current_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="currentVersion"
+        allow_none=True, missing=None, data_key="currentVersion", attribute="currentVersion"
     )
 
     class Meta:
@@ -185,20 +185,20 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DiscountCodeNonApplicableError`."
     discount_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="discountCode"
+        allow_none=True, missing=None, data_key="discountCode", attribute="discountCode"
     )
     reason = marshmallow.fields.String(allow_none=True, missing=None)
     dicount_code_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="dicountCodeId"
+        allow_none=True, missing=None, data_key="dicountCodeId", attribute="dicountCodeId"
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True, missing=None, data_key="validFrom", attribute="validFrom"
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True, missing=None, data_key="validUntil", attribute="validUntil"
     )
     validity_check_time = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validityCheckTime"
+        allow_none=True, missing=None, data_key="validityCheckTime", attribute="validityCheckTime"
     )
 
     class Meta:
@@ -249,7 +249,7 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DuplicateFieldError`."
     field = marshmallow.fields.String(allow_none=True, missing=None)
     duplicate_value = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="duplicateValue"
+        allow_none=True, missing=None, data_key="duplicateValue", attribute="duplicateValue"
     )
 
     class Meta:
@@ -264,7 +264,7 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
 class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.DuplicateFieldWithConflictingResourceError`."
     field = marshmallow.fields.String(allow_none=True)
-    duplicate_value = marshmallow.fields.Raw(allow_none=True, data_key="duplicateValue")
+    duplicate_value = marshmallow.fields.Raw(allow_none=True, data_key="duplicateValue", attribute="duplicateValue")
     conflicting_resource = helpers.Discriminator(
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
@@ -295,6 +295,7 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="conflictingResource",
+        attribute="conflictingResource",
     )
 
     class Meta:
@@ -314,6 +315,7 @@ class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
         allow_none=True,
         many=True,
         data_key="conflictingPrices",
+        attribute="conflictingPrices",
     )
 
     class Meta:
@@ -332,6 +334,7 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="variantValues",
+        attribute="variantValues",
     )
 
     class Meta:
@@ -358,16 +361,17 @@ class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
 class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionBadResponseError`."
     localized_message = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedMessage"
+        allow_none=True, missing=None, data_key="localizedMessage", attribute="localizedMessage"
     )
     extension_extra_info = marshmallow.fields.Dict(
-        allow_none=True, missing=None, data_key="extensionExtraInfo"
+        allow_none=True, missing=None, data_key="extensionExtraInfo", attribute="extensionExtraInfo"
     )
     error_by_extension = marshmallow.fields.Nested(
         nested="commercetools.schemas._error.ErrorByExtensionSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="errorByExtension",
+        attribute="errorByExtension",
     )
 
     class Meta:
@@ -382,16 +386,17 @@ class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
 class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionNoResponseError`."
     localized_message = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedMessage"
+        allow_none=True, missing=None, data_key="localizedMessage", attribute="localizedMessage"
     )
     extension_extra_info = marshmallow.fields.Dict(
-        allow_none=True, missing=None, data_key="extensionExtraInfo"
+        allow_none=True, missing=None, data_key="extensionExtraInfo", attribute="extensionExtraInfo"
     )
     error_by_extension = marshmallow.fields.Nested(
         nested="commercetools.schemas._error.ErrorByExtensionSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="errorByExtension",
+        attribute="errorByExtension",
     )
 
     class Meta:
@@ -406,16 +411,17 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
 class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ExtensionUpdateActionsFailedError`."
     localized_message = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedMessage"
+        allow_none=True, missing=None, data_key="localizedMessage", attribute="localizedMessage"
     )
     extension_extra_info = marshmallow.fields.Dict(
-        allow_none=True, missing=None, data_key="extensionExtraInfo"
+        allow_none=True, missing=None, data_key="extensionExtraInfo", attribute="extensionExtraInfo"
     )
     error_by_extension = marshmallow.fields.Nested(
         nested="commercetools.schemas._error.ErrorByExtensionSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="errorByExtension",
+        attribute="errorByExtension",
     )
 
     class Meta:
@@ -466,7 +472,7 @@ class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
 class InvalidFieldErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.InvalidFieldError`."
     field = marshmallow.fields.String(allow_none=True)
-    invalid_value = marshmallow.fields.Raw(allow_none=True, data_key="invalidValue")
+    invalid_value = marshmallow.fields.Raw(allow_none=True, data_key="invalidValue", attribute="invalidValue")
     allowed_values = marshmallow.fields.List(
         marshmallow.fields.Nested(
             nested="commercetools.schemas.None.anySchema",
@@ -476,6 +482,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
         allow_none=True,
         missing=None,
         data_key="allowedValues",
+        attribute="allowedValues",
     )
 
     class Meta:
@@ -502,7 +509,7 @@ class InvalidInputErrorSchema(ErrorObjectSchema):
 class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.InvalidItemShippingDetailsError`."
     subject = marshmallow.fields.String(allow_none=True)
-    item_id = marshmallow.fields.String(allow_none=True, data_key="itemId")
+    item_id = marshmallow.fields.String(allow_none=True, data_key="itemId", attribute="itemId")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -563,8 +570,8 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
 
 class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.MatchingPriceNotFoundError`."
-    product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
-    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    product_id = marshmallow.fields.String(allow_none=True, data_key="productId", attribute="productId")
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId", attribute="variantId")
     currency = marshmallow.fields.String(allow_none=True, missing=None)
     country = marshmallow.fields.String(allow_none=True, missing=None)
     customer_group = marshmallow.fields.Nested(
@@ -573,6 +580,7 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
         allow_none=True,
         missing=None,
         data_key="customerGroup",
+        attribute="customerGroup",
     )
     channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelReferenceSchema",
@@ -593,7 +601,7 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
 class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.MissingTaxRateForCountryError`."
     tax_category_id = marshmallow.fields.String(
-        allow_none=True, data_key="taxCategoryId"
+        allow_none=True, data_key="taxCategoryId", attribute="taxCategoryId"
     )
     country = marshmallow.fields.String(allow_none=True, missing=None)
     state = marshmallow.fields.String(allow_none=True, missing=None)
@@ -622,7 +630,7 @@ class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
 class OutOfStockErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.OutOfStockError`."
     line_items = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="lineItems"
+        marshmallow.fields.String(allow_none=True), data_key="lineItems", attribute="lineItems"
     )
     skus = marshmallow.fields.List(marshmallow.fields.String(allow_none=True))
 
@@ -638,7 +646,7 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
 class PriceChangedErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.PriceChangedError`."
     line_items = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="lineItems"
+        marshmallow.fields.String(allow_none=True), data_key="lineItems", attribute="lineItems"
     )
     shipping = marshmallow.fields.Bool(allow_none=True)
 
@@ -654,7 +662,7 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
 class ReferenceExistsErrorSchema(ErrorObjectSchema):
     "Marshmallow schema for :class:`commercetools.types.ReferenceExistsError`."
     referenced_by = marshmallow_enum.EnumField(
-        types.ReferenceTypeId, by_value=True, missing=None, data_key="referencedBy"
+        types.ReferenceTypeId, by_value=True, missing=None, data_key="referencedBy", attribute="referencedBy"
     )
 
     class Meta:

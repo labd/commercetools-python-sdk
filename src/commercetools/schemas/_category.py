@@ -56,19 +56,19 @@ class CategoryDraftSchema(marshmallow.Schema):
         missing=None,
     )
     order_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderHint"
+        allow_none=True, missing=None, data_key="orderHint", attribute="orderHint"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsDraftSchema",
@@ -160,18 +160,18 @@ class CategorySchema(LoggedResourceSchema):
         allow_none=True,
         missing=None,
     )
-    order_hint = marshmallow.fields.String(allow_none=True, data_key="orderHint")
+    order_hint = marshmallow.fields.String(allow_none=True, data_key="orderHint", attribute="orderHint")
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
@@ -274,10 +274,10 @@ class CategoryAddAssetActionSchema(CategoryUpdateActionSchema):
 class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategoryChangeAssetNameAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     name = LocalizedStringField(allow_none=True)
 
@@ -293,7 +293,7 @@ class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
 class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategoryChangeAssetOrderAction`."
     asset_order = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), data_key="assetOrder"
+        marshmallow.fields.String(allow_none=True), data_key="assetOrder", attribute="assetOrder"
     )
 
     class Meta:
@@ -320,7 +320,7 @@ class CategoryChangeNameActionSchema(CategoryUpdateActionSchema):
 
 class CategoryChangeOrderHintActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategoryChangeOrderHintAction`."
-    order_hint = marshmallow.fields.String(allow_none=True, data_key="orderHint")
+    order_hint = marshmallow.fields.String(allow_none=True, data_key="orderHint", attribute="orderHint")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -364,10 +364,10 @@ class CategoryChangeSlugActionSchema(CategoryUpdateActionSchema):
 class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategoryRemoveAssetAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
 
     class Meta:
@@ -382,10 +382,10 @@ class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
 class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetAssetCustomFieldAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
@@ -402,10 +402,10 @@ class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
 class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetAssetCustomTypeAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
@@ -427,10 +427,10 @@ class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
 class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetAssetDescriptionAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     description = LocalizedStringField(allow_none=True, missing=None)
 
@@ -445,9 +445,9 @@ class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetAssetKeyAction`."
-    asset_id = marshmallow.fields.String(allow_none=True, data_key="assetId")
+    asset_id = marshmallow.fields.String(allow_none=True, data_key="assetId", attribute="assetId")
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
 
     class Meta:
@@ -462,10 +462,10 @@ class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
 class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetAssetSourcesAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     sources = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.AssetSourceSchema",
@@ -486,10 +486,10 @@ class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
 class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetAssetTagsAction`."
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, missing=None, data_key="assetId", attribute="assetId"
     )
     asset_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetKey"
+        allow_none=True, missing=None, data_key="assetKey", attribute="assetKey"
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True), missing=None
@@ -553,7 +553,7 @@ class CategorySetDescriptionActionSchema(CategoryUpdateActionSchema):
 class CategorySetExternalIdActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetExternalIdAction`."
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True, missing=None, data_key="externalId", attribute="externalId"
     )
 
     class Meta:
@@ -581,7 +581,7 @@ class CategorySetKeyActionSchema(CategoryUpdateActionSchema):
 class CategorySetMetaDescriptionActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetMetaDescriptionAction`."
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True, missing=None, data_key="metaDescription", attribute="metaDescription"
     )
 
     class Meta:
@@ -596,7 +596,7 @@ class CategorySetMetaDescriptionActionSchema(CategoryUpdateActionSchema):
 class CategorySetMetaKeywordsActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetMetaKeywordsAction`."
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True, missing=None, data_key="metaKeywords", attribute="metaKeywords"
     )
 
     class Meta:
@@ -611,7 +611,7 @@ class CategorySetMetaKeywordsActionSchema(CategoryUpdateActionSchema):
 class CategorySetMetaTitleActionSchema(CategoryUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.CategorySetMetaTitleAction`."
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True, missing=None, data_key="metaTitle", attribute="metaTitle"
     )
 
     class Meta:

@@ -71,3 +71,27 @@ And then constructing a client without arguments:
 
     product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
     print(product)
+
+
+Releasing
+---------
+
+To release this package first (pip) install bumpversion and update the CHANGES file.
+Then update the version (either major/minor/patch depending on the change)
+
+
+.. code-block:: sh
+
+    bumpversion --tag <major,minor,patch>
+
+bumpversion is naive because it string replaces, so do a sanity check it didn't
+accidentally update a Pypi dependency. If not, push the code:
+
+
+.. code-block:: sh
+
+    git push --follow-tags
+
+Then go to Azure Pipelines and wait for the build to create an artifact.
+Once the build succeeded go to Releases and create a release with the correct artifact.
+This will release the package to Pypi.

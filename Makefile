@@ -16,6 +16,9 @@ mypy:
 coverage:
 	pytest --cov=commercetools
 
+runserver:
+	python -mcommercetools.testing.server
+
 format:
 	black src/ tests/
 	isort --recursive src tests

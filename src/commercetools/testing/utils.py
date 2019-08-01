@@ -8,6 +8,7 @@ from requests_mock import create_response
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import schemas, types
+from commercetools.types._abstract import _BaseType
 from commercetools.constants import HEADER_CORRELATION_ID
 
 
@@ -49,7 +50,10 @@ def custom_fields_from_draft(
     storage, draft: types.CustomFieldsDraft
 ) -> types.CustomFields:
     return types.CustomFields(
-        type=types.TypeReference(id=storage.get_by_resource_identifier(draft.type)['id']), fields=draft.fields
+        type=types.TypeReference(
+            id=storage.get_by_resource_identifier(draft.type)["id"]
+        ),
+        fields=draft.fields,
     )
 
 
@@ -69,6 +73,11 @@ def _money_to_typed(
 def update_attribute(dst: str, src: str):
     def updater(self, obj, action):
         value = getattr(action, src)
+
+        if isinstance(value, _BaseType):
+            schema = getattr(schemas, value.__class__.__name__ + "Schema", None)
+            if schema:
+                value = schema().dump(value)
         if obj[dst] != value:
             new = copy.deepcopy(obj)
             new[dst] = value
@@ -171,7 +180,9 @@ def get_product_from_storage(
 
 
 def create_commercetools_response(request, **kwargs):
-    correlation_id = request.headers.get(HEADER_CORRELATION_ID, f"projects-{str(uuid.uuid4())}")
+    correlation_id = request.headers.get(
+        HEADER_CORRELATION_ID, f"projects-{str(uuid.uuid4())}"
+    )
     headers = kwargs.pop("headers", {})
     headers.update({HEADER_CORRELATION_ID: correlation_id})
     return create_response(request, headers=headers, **kwargs)

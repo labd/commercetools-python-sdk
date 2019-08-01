@@ -6,7 +6,7 @@ from commercetools.testing.utils import update_attribute
 
 
 class ProjectsModel(BaseModel):
-    _resource_schema = schemas.ChannelSchema
+    _resource_schema = schemas.ProjectSchema
     _primary_type_name = "project"
 
 
@@ -29,6 +29,7 @@ class ProjectBackend(ServiceBackend):
             "createdAt": "2018-10-04T11:32:12.603Z",
             "trialUntil": "2018-12",
             "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
+            "externalOAuth": None,
             "version": 4,
         }
 
@@ -53,4 +54,5 @@ class ProjectBackend(ServiceBackend):
         "changeCurrencies": update_attribute("currencies", "currencies"),
         "changeName": update_attribute("name", "name"),
         "changeLanguages": update_attribute("languages", "languages"),
+        "setExternalOAuth": update_attribute("externalOAuth", "external_oauth")
     }

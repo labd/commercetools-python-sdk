@@ -59,7 +59,7 @@ class InventoryService(abstract.AbstractService):
         self,
         id: str,
         version: int,
-        actions: List[types.InventoryUpdateAction],
+        actions: List[types.InventoryEntryUpdateAction],
         expand: OptionalListStr = None,
         *,
         force_update: bool = False,

@@ -33,7 +33,7 @@ class InventoryEntryModel(BaseModel):
 
 
 def change_stock():
-    def updater(self, obj, action: types.InventoryUpdateAction):
+    def updater(self, obj, action: types.InventoryEntryUpdateAction):
         quantity = getattr(action, "quantity")
 
         new = copy.deepcopy(obj)
@@ -58,7 +58,7 @@ class InventoryEntryBackend(ServiceBackend):
     service_path = "inventory"
     model_class = InventoryEntryModel
     _schema_draft = schemas.InventoryEntryDraftSchema
-    _schema_update = schemas.InventoryUpdateSchema
+    _schema_update = schemas.InventoryEntryUpdateSchema
     _schema_query_response = schemas.InventoryPagedQueryResponseSchema
 
     def urls(self):

@@ -39,7 +39,6 @@ if typing.TYPE_CHECKING:
         LastModifiedBy,
         LocalizedString,
         Money,
-        Price,
         PriceDraft,
     )
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
@@ -918,8 +917,8 @@ class ProductVariantImportDraft(_BaseType):
     id: typing.Optional[int]
     #: Optional :class:`str`
     sku: typing.Optional[str]
-    #: Optional list of :class:`commercetools.types.Price`
-    prices: typing.Optional[typing.List["Price"]]
+    #: Optional list of :class:`commercetools.types.PriceDraft`
+    prices: typing.Optional[typing.List["PriceDraft"]]
     #: Optional list of :class:`commercetools.types.Attribute`
     attributes: typing.Optional[typing.List["Attribute"]]
     #: Optional list of :class:`commercetools.types.Image`
@@ -930,7 +929,7 @@ class ProductVariantImportDraft(_BaseType):
         *,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["Price"]] = None,
+        prices: typing.Optional[typing.List["PriceDraft"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None
     ) -> None:

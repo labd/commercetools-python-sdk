@@ -11,21 +11,21 @@ from commercetools.schemas._common import (
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
-    "InventoryAddQuantityActionSchema",
-    "InventoryChangeQuantityActionSchema",
+    "InventoryEntryAddQuantityActionSchema",
+    "InventoryEntryChangeQuantityActionSchema",
     "InventoryEntryDraftSchema",
     "InventoryEntryReferenceSchema",
+    "InventoryEntryRemoveQuantityActionSchema",
     "InventoryEntryResourceIdentifierSchema",
     "InventoryEntrySchema",
+    "InventoryEntrySetCustomFieldActionSchema",
+    "InventoryEntrySetCustomTypeActionSchema",
+    "InventoryEntrySetExpectedDeliveryActionSchema",
+    "InventoryEntrySetRestockableInDaysActionSchema",
+    "InventoryEntrySetSupplyChannelActionSchema",
+    "InventoryEntryUpdateActionSchema",
+    "InventoryEntryUpdateSchema",
     "InventoryPagedQueryResponseSchema",
-    "InventoryRemoveQuantityActionSchema",
-    "InventorySetCustomFieldActionSchema",
-    "InventorySetCustomTypeActionSchema",
-    "InventorySetExpectedDeliveryActionSchema",
-    "InventorySetRestockableInDaysActionSchema",
-    "InventorySetSupplyChannelActionSchema",
-    "InventoryUpdateActionSchema",
-    "InventoryUpdateSchema",
 ]
 
 
@@ -130,6 +130,49 @@ class InventoryEntrySchema(LoggedResourceSchema):
         return types.InventoryEntry(**data)
 
 
+class InventoryEntryUpdateActionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntryUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.InventoryEntryUpdateAction(**data)
+
+
+class InventoryEntryUpdateSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntryUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addQuantity": "commercetools.schemas._inventory.InventoryEntryAddQuantityActionSchema",
+                "changeQuantity": "commercetools.schemas._inventory.InventoryEntryChangeQuantityActionSchema",
+                "removeQuantity": "commercetools.schemas._inventory.InventoryEntryRemoveQuantityActionSchema",
+                "setCustomField": "commercetools.schemas._inventory.InventoryEntrySetCustomFieldActionSchema",
+                "setCustomType": "commercetools.schemas._inventory.InventoryEntrySetCustomTypeActionSchema",
+                "setExpectedDelivery": "commercetools.schemas._inventory.InventoryEntrySetExpectedDeliveryActionSchema",
+                "setRestockableInDays": "commercetools.schemas._inventory.InventoryEntrySetRestockableInDaysActionSchema",
+                "setSupplyChannel": "commercetools.schemas._inventory.InventoryEntrySetSupplyChannelActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.InventoryEntryUpdate(**data)
+
+
 class InventoryPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.InventoryPagedQueryResponse`."
     count = marshmallow.fields.Integer(allow_none=True)
@@ -150,51 +193,8 @@ class InventoryPagedQueryResponseSchema(marshmallow.Schema):
         return types.InventoryPagedQueryResponse(**data)
 
 
-class InventoryUpdateActionSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.InventoryUpdateAction`."
-    action = marshmallow.fields.String(allow_none=True)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        del data["action"]
-        return types.InventoryUpdateAction(**data)
-
-
-class InventoryUpdateSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.InventoryUpdate`."
-    version = marshmallow.fields.Integer(allow_none=True)
-    actions = marshmallow.fields.List(
-        helpers.Discriminator(
-            discriminator_field=("action", "action"),
-            discriminator_schemas={
-                "addQuantity": "commercetools.schemas._inventory.InventoryAddQuantityActionSchema",
-                "changeQuantity": "commercetools.schemas._inventory.InventoryChangeQuantityActionSchema",
-                "removeQuantity": "commercetools.schemas._inventory.InventoryRemoveQuantityActionSchema",
-                "setCustomField": "commercetools.schemas._inventory.InventorySetCustomFieldActionSchema",
-                "setCustomType": "commercetools.schemas._inventory.InventorySetCustomTypeActionSchema",
-                "setExpectedDelivery": "commercetools.schemas._inventory.InventorySetExpectedDeliveryActionSchema",
-                "setRestockableInDays": "commercetools.schemas._inventory.InventorySetRestockableInDaysActionSchema",
-                "setSupplyChannel": "commercetools.schemas._inventory.InventorySetSupplyChannelActionSchema",
-            },
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data):
-        return types.InventoryUpdate(**data)
-
-
-class InventoryAddQuantityActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventoryAddQuantityAction`."
+class InventoryEntryAddQuantityActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntryAddQuantityAction`."
     quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
@@ -203,11 +203,11 @@ class InventoryAddQuantityActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventoryAddQuantityAction(**data)
+        return types.InventoryEntryAddQuantityAction(**data)
 
 
-class InventoryChangeQuantityActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventoryChangeQuantityAction`."
+class InventoryEntryChangeQuantityActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntryChangeQuantityAction`."
     quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
@@ -216,11 +216,11 @@ class InventoryChangeQuantityActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventoryChangeQuantityAction(**data)
+        return types.InventoryEntryChangeQuantityAction(**data)
 
 
-class InventoryRemoveQuantityActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventoryRemoveQuantityAction`."
+class InventoryEntryRemoveQuantityActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntryRemoveQuantityAction`."
     quantity = marshmallow.fields.Integer(allow_none=True)
 
     class Meta:
@@ -229,11 +229,11 @@ class InventoryRemoveQuantityActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventoryRemoveQuantityAction(**data)
+        return types.InventoryEntryRemoveQuantityAction(**data)
 
 
-class InventorySetCustomFieldActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventorySetCustomFieldAction`."
+class InventoryEntrySetCustomFieldActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntrySetCustomFieldAction`."
     name = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
 
@@ -243,11 +243,11 @@ class InventorySetCustomFieldActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventorySetCustomFieldAction(**data)
+        return types.InventoryEntrySetCustomFieldAction(**data)
 
 
-class InventorySetCustomTypeActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventorySetCustomTypeAction`."
+class InventoryEntrySetCustomTypeActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntrySetCustomTypeAction`."
     type = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -262,11 +262,11 @@ class InventorySetCustomTypeActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventorySetCustomTypeAction(**data)
+        return types.InventoryEntrySetCustomTypeAction(**data)
 
 
-class InventorySetExpectedDeliveryActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventorySetExpectedDeliveryAction`."
+class InventoryEntrySetExpectedDeliveryActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntrySetExpectedDeliveryAction`."
     expected_delivery = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="expectedDelivery"
     )
@@ -277,11 +277,11 @@ class InventorySetExpectedDeliveryActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventorySetExpectedDeliveryAction(**data)
+        return types.InventoryEntrySetExpectedDeliveryAction(**data)
 
 
-class InventorySetRestockableInDaysActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventorySetRestockableInDaysAction`."
+class InventoryEntrySetRestockableInDaysActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntrySetRestockableInDaysAction`."
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="restockableInDays"
     )
@@ -292,11 +292,11 @@ class InventorySetRestockableInDaysActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventorySetRestockableInDaysAction(**data)
+        return types.InventoryEntrySetRestockableInDaysAction(**data)
 
 
-class InventorySetSupplyChannelActionSchema(InventoryUpdateActionSchema):
-    "Marshmallow schema for :class:`commercetools.types.InventorySetSupplyChannelAction`."
+class InventoryEntrySetSupplyChannelActionSchema(InventoryEntryUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.InventoryEntrySetSupplyChannelAction`."
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -311,4 +311,4 @@ class InventorySetSupplyChannelActionSchema(InventoryUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["action"]
-        return types.InventorySetSupplyChannelAction(**data)
+        return types.InventoryEntrySetSupplyChannelAction(**data)

@@ -75,7 +75,7 @@ class Project(_BaseType):
     #: Optional :class:`commercetools.types.ShippingRateInputType` `(Named` ``shippingRateInputType`` `in Commercetools)`
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
     #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
-    external_o_auth: typing.Optional["ExternalOAuth"]
+    external_oauth: typing.Optional["ExternalOAuth"]
 
     def __init__(
         self,
@@ -90,7 +90,7 @@ class Project(_BaseType):
         trial_until: typing.Optional[str] = None,
         messages: typing.Optional["MessageConfiguration"] = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
-        external_o_auth: typing.Optional["ExternalOAuth"] = None
+        external_oauth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
         self.version = version
         self.key = key
@@ -102,12 +102,12 @@ class Project(_BaseType):
         self.trial_until = trial_until
         self.messages = messages
         self.shipping_rate_input_type = shipping_rate_input_type
-        self.external_o_auth = external_o_auth
+        self.external_oauth = external_oauth
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "Project(version=%r, key=%r, name=%r, countries=%r, currencies=%r, languages=%r, created_at=%r, trial_until=%r, messages=%r, shipping_rate_input_type=%r, external_o_auth=%r)"
+            "Project(version=%r, key=%r, name=%r, countries=%r, currencies=%r, languages=%r, created_at=%r, trial_until=%r, messages=%r, shipping_rate_input_type=%r, external_oauth=%r)"
             % (
                 self.version,
                 self.key,
@@ -119,7 +119,7 @@ class Project(_BaseType):
                 self.trial_until,
                 self.messages,
                 self.shipping_rate_input_type,
-                self.external_o_auth,
+                self.external_oauth,
             )
         )
 
@@ -332,21 +332,21 @@ class ProjectChangeNameAction(ProjectUpdateAction):
 class ProjectSetExternalOAuthAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSetExternalOAuthActionSchema`."
     #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
-    external_o_auth: typing.Optional["ExternalOAuth"]
+    external_oauth: typing.Optional["ExternalOAuth"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        external_o_auth: typing.Optional["ExternalOAuth"] = None
+        external_oauth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
-        self.external_o_auth = external_o_auth
+        self.external_oauth = external_oauth
         super().__init__(action="setExternalOAuth")
 
     def __repr__(self) -> str:
-        return "ProjectSetExternalOAuthAction(action=%r, external_o_auth=%r)" % (
+        return "ProjectSetExternalOAuthAction(action=%r, external_oauth=%r)" % (
             self.action,
-            self.external_o_auth,
+            self.external_oauth,
         )
 
 

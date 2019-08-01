@@ -21,21 +21,21 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 __all__ = [
-    "InventoryAddQuantityAction",
-    "InventoryChangeQuantityAction",
     "InventoryEntry",
+    "InventoryEntryAddQuantityAction",
+    "InventoryEntryChangeQuantityAction",
     "InventoryEntryDraft",
     "InventoryEntryReference",
+    "InventoryEntryRemoveQuantityAction",
     "InventoryEntryResourceIdentifier",
+    "InventoryEntrySetCustomFieldAction",
+    "InventoryEntrySetCustomTypeAction",
+    "InventoryEntrySetExpectedDeliveryAction",
+    "InventoryEntrySetRestockableInDaysAction",
+    "InventoryEntrySetSupplyChannelAction",
+    "InventoryEntryUpdate",
+    "InventoryEntryUpdateAction",
     "InventoryPagedQueryResponse",
-    "InventoryRemoveQuantityAction",
-    "InventorySetCustomFieldAction",
-    "InventorySetCustomTypeAction",
-    "InventorySetExpectedDeliveryAction",
-    "InventorySetRestockableInDaysAction",
-    "InventorySetSupplyChannelAction",
-    "InventoryUpdate",
-    "InventoryUpdateAction",
 ]
 
 
@@ -200,6 +200,43 @@ class InventoryEntryResourceIdentifier(ResourceIdentifier):
         )
 
 
+class InventoryEntryUpdate(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`list`
+    actions: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        version: typing.Optional[int] = None,
+        actions: typing.Optional[list] = None
+    ) -> None:
+        self.version = version
+        self.actions = actions
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "InventoryEntryUpdate(version=%r, actions=%r)" % (
+            self.version,
+            self.actions,
+        )
+
+
+class InventoryEntryUpdateAction(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
+
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+        self.action = action
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "InventoryEntryUpdateAction(action=%r)" % (self.action,)
+
+
 class InventoryPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryPagedQueryResponseSchema`."
     #: :class:`int`
@@ -232,42 +269,8 @@ class InventoryPagedQueryResponse(_BaseType):
         )
 
 
-class InventoryUpdate(_BaseType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryUpdateSchema`."
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`list`
-    actions: typing.Optional[list]
-
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
-        self.version = version
-        self.actions = actions
-        super().__init__()
-
-    def __repr__(self) -> str:
-        return "InventoryUpdate(version=%r, actions=%r)" % (self.version, self.actions)
-
-
-class InventoryUpdateAction(_BaseType):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryUpdateActionSchema`."
-    #: :class:`str`
-    action: typing.Optional[str]
-
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
-        self.action = action
-        super().__init__()
-
-    def __repr__(self) -> str:
-        return "InventoryUpdateAction(action=%r)" % (self.action,)
-
-
-class InventoryAddQuantityAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryAddQuantityActionSchema`."
+class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryAddQuantityActionSchema`."
     #: :class:`int`
     quantity: typing.Optional[int]
 
@@ -281,14 +284,14 @@ class InventoryAddQuantityAction(InventoryUpdateAction):
         super().__init__(action="addQuantity")
 
     def __repr__(self) -> str:
-        return "InventoryAddQuantityAction(action=%r, quantity=%r)" % (
+        return "InventoryEntryAddQuantityAction(action=%r, quantity=%r)" % (
             self.action,
             self.quantity,
         )
 
 
-class InventoryChangeQuantityAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryChangeQuantityActionSchema`."
+class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryChangeQuantityActionSchema`."
     #: :class:`int`
     quantity: typing.Optional[int]
 
@@ -302,14 +305,14 @@ class InventoryChangeQuantityAction(InventoryUpdateAction):
         super().__init__(action="changeQuantity")
 
     def __repr__(self) -> str:
-        return "InventoryChangeQuantityAction(action=%r, quantity=%r)" % (
+        return "InventoryEntryChangeQuantityAction(action=%r, quantity=%r)" % (
             self.action,
             self.quantity,
         )
 
 
-class InventoryRemoveQuantityAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryRemoveQuantityActionSchema`."
+class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryRemoveQuantityActionSchema`."
     #: :class:`int`
     quantity: typing.Optional[int]
 
@@ -323,14 +326,14 @@ class InventoryRemoveQuantityAction(InventoryUpdateAction):
         super().__init__(action="removeQuantity")
 
     def __repr__(self) -> str:
-        return "InventoryRemoveQuantityAction(action=%r, quantity=%r)" % (
+        return "InventoryEntryRemoveQuantityAction(action=%r, quantity=%r)" % (
             self.action,
             self.quantity,
         )
 
 
-class InventorySetCustomFieldAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetCustomFieldActionSchema`."
+class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetCustomFieldActionSchema`."
     #: :class:`str`
     name: typing.Optional[str]
     #: Optional :class:`typing.Any`
@@ -348,15 +351,15 @@ class InventorySetCustomFieldAction(InventoryUpdateAction):
         super().__init__(action="setCustomField")
 
     def __repr__(self) -> str:
-        return "InventorySetCustomFieldAction(action=%r, name=%r, value=%r)" % (
+        return "InventoryEntrySetCustomFieldAction(action=%r, name=%r, value=%r)" % (
             self.action,
             self.name,
             self.value,
         )
 
 
-class InventorySetCustomTypeAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetCustomTypeActionSchema`."
+class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetCustomTypeActionSchema`."
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -374,15 +377,15 @@ class InventorySetCustomTypeAction(InventoryUpdateAction):
         super().__init__(action="setCustomType")
 
     def __repr__(self) -> str:
-        return "InventorySetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
+        return "InventoryEntrySetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
             self.action,
             self.type,
             self.fields,
         )
 
 
-class InventorySetExpectedDeliveryAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetExpectedDeliveryActionSchema`."
+class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetExpectedDeliveryActionSchema`."
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
     expected_delivery: typing.Optional[datetime.datetime]
 
@@ -396,14 +399,14 @@ class InventorySetExpectedDeliveryAction(InventoryUpdateAction):
         super().__init__(action="setExpectedDelivery")
 
     def __repr__(self) -> str:
-        return "InventorySetExpectedDeliveryAction(action=%r, expected_delivery=%r)" % (
-            self.action,
-            self.expected_delivery,
+        return (
+            "InventoryEntrySetExpectedDeliveryAction(action=%r, expected_delivery=%r)"
+            % (self.action, self.expected_delivery)
         )
 
 
-class InventorySetRestockableInDaysAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetRestockableInDaysActionSchema`."
+class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetRestockableInDaysActionSchema`."
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
 
@@ -418,13 +421,13 @@ class InventorySetRestockableInDaysAction(InventoryUpdateAction):
 
     def __repr__(self) -> str:
         return (
-            "InventorySetRestockableInDaysAction(action=%r, restockable_in_days=%r)"
+            "InventoryEntrySetRestockableInDaysAction(action=%r, restockable_in_days=%r)"
             % (self.action, self.restockable_in_days)
         )
 
 
-class InventorySetSupplyChannelAction(InventoryUpdateAction):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventorySetSupplyChannelActionSchema`."
+class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetSupplyChannelActionSchema`."
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
@@ -438,7 +441,7 @@ class InventorySetSupplyChannelAction(InventoryUpdateAction):
         super().__init__(action="setSupplyChannel")
 
     def __repr__(self) -> str:
-        return "InventorySetSupplyChannelAction(action=%r, supply_channel=%r)" % (
+        return "InventoryEntrySetSupplyChannelAction(action=%r, supply_channel=%r)" % (
             self.action,
             self.supply_channel,
         )

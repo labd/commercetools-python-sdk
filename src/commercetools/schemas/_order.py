@@ -782,7 +782,7 @@ class ProductVariantImportDraftSchema(marshmallow.Schema):
     id = marshmallow.fields.Integer(allow_none=True, missing=None)
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.PriceSchema",
+        nested="commercetools.schemas._common.PriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,

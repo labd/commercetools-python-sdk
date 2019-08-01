@@ -70,6 +70,8 @@ __all__ = [
     "OrderEditAppliedMessageSchema",
     "OrderImportedMessagePayloadSchema",
     "OrderImportedMessageSchema",
+    "OrderLineItemAddedMessagePayloadSchema",
+    "OrderLineItemAddedMessageSchema",
     "OrderLineItemDiscountSetMessagePayloadSchema",
     "OrderLineItemDiscountSetMessageSchema",
     "OrderPaymentStateChangedMessagePayloadSchema",
@@ -1423,6 +1425,47 @@ class OrderImportedMessageSchema(MessageSchema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.OrderImportedMessage(**data)
+
+
+class OrderLineItemAddedMessagePayloadSchema(MessagePayloadSchema):
+    "Marshmallow schema for :class:`commercetools.types.OrderLineItemAddedMessagePayload`."
+    line_item = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.LineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="lineItem",
+    )
+    added_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="addedQuantity"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.OrderLineItemAddedMessagePayload(**data)
+
+
+class OrderLineItemAddedMessageSchema(MessageSchema):
+    "Marshmallow schema for :class:`commercetools.types.OrderLineItemAddedMessage`."
+    line_item = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.LineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="lineItem",
+    )
+    added_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="addedQuantity"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.OrderLineItemAddedMessage(**data)
 
 
 class OrderLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):

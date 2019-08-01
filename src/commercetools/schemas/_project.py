@@ -69,7 +69,7 @@ class ProjectSchema(marshmallow.Schema):
         missing=None,
         data_key="shippingRateInputType",
     )
-    external_o_auth = marshmallow.fields.Nested(
+    external_oauth = marshmallow.fields.Nested(
         nested="commercetools.schemas._project.ExternalOAuthSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
@@ -272,7 +272,7 @@ class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
 
 class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):
     "Marshmallow schema for :class:`commercetools.types.ProjectSetExternalOAuthAction`."
-    external_o_auth = marshmallow.fields.Nested(
+    external_oauth = marshmallow.fields.Nested(
         nested="commercetools.schemas._project.ExternalOAuthSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,

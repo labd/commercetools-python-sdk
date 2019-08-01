@@ -10,6 +10,7 @@ if typing.TYPE_CHECKING:
     from ._cart import (
         DiscountCodeState,
         DiscountedLineItemPriceForQuantity,
+        LineItem,
         ProductPublishScope,
         ShippingInfo,
         ShippingRateInput,
@@ -111,6 +112,8 @@ __all__ = [
     "OrderEditAppliedMessagePayload",
     "OrderImportedMessage",
     "OrderImportedMessagePayload",
+    "OrderLineItemAddedMessage",
+    "OrderLineItemAddedMessagePayload",
     "OrderLineItemDiscountSetMessage",
     "OrderLineItemDiscountSetMessagePayload",
     "OrderPaymentStateChangedMessage",
@@ -2760,6 +2763,88 @@ class OrderImportedMessagePayload(MessagePayload):
         return "OrderImportedMessagePayload(type=%r, order=%r)" % (
             self.type,
             self.order,
+        )
+
+
+class OrderLineItemAddedMessage(Message):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemAddedMessageSchema`."
+    #: :class:`commercetools.types.LineItem` `(Named` ``lineItem`` `in Commercetools)`
+    line_item: typing.Optional["LineItem"]
+    #: :class:`int` `(Named` ``addedQuantity`` `in Commercetools)`
+    added_quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        sequence_number: typing.Optional[int] = None,
+        resource: typing.Optional["Reference"] = None,
+        resource_version: typing.Optional[int] = None,
+        type: typing.Optional[str] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        line_item: typing.Optional["LineItem"] = None,
+        added_quantity: typing.Optional[int] = None
+    ) -> None:
+        self.line_item = line_item
+        self.added_quantity = added_quantity
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "OrderLineItemAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item=%r, added_quantity=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.resource_user_provided_identifiers,
+                self.line_item,
+                self.added_quantity,
+            )
+        )
+
+
+class OrderLineItemAddedMessagePayload(MessagePayload):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemAddedMessagePayloadSchema`."
+    #: :class:`commercetools.types.LineItem` `(Named` ``lineItem`` `in Commercetools)`
+    line_item: typing.Optional["LineItem"]
+    #: :class:`int` `(Named` ``addedQuantity`` `in Commercetools)`
+    added_quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        line_item: typing.Optional["LineItem"] = None,
+        added_quantity: typing.Optional[int] = None
+    ) -> None:
+        self.line_item = line_item
+        self.added_quantity = added_quantity
+        super().__init__(type="OrderLineItemAdded")
+
+    def __repr__(self) -> str:
+        return (
+            "OrderLineItemAddedMessagePayload(type=%r, line_item=%r, added_quantity=%r)"
+            % (self.type, self.line_item, self.added_quantity)
         )
 
 

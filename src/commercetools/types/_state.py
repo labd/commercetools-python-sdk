@@ -243,6 +243,7 @@ class StateResourceIdentifier(ResourceIdentifier):
 
 class StateRoleEnum(enum.Enum):
     REVIEW_INCLUDED_IN_STATISTICS = "ReviewIncludedInStatistics"
+    RETURN_ = "Return"
 
 
 class StateTypeEnum(enum.Enum):

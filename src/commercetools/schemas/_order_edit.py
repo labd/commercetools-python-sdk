@@ -2172,6 +2172,7 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "OrderDiscountCodeStateSet": "commercetools.schemas._message.OrderDiscountCodeStateSetMessagePayloadSchema",
                 "OrderEditApplied": "commercetools.schemas._message.OrderEditAppliedMessagePayloadSchema",
                 "OrderImported": "commercetools.schemas._message.OrderImportedMessagePayloadSchema",
+                "OrderLineItemAdded": "commercetools.schemas._message.OrderLineItemAddedMessagePayloadSchema",
                 "OrderLineItemDiscountSet": "commercetools.schemas._message.OrderLineItemDiscountSetMessagePayloadSchema",
                 "OrderPaymentStateChanged": "commercetools.schemas._message.OrderPaymentStateChangedMessagePayloadSchema",
                 "ReturnInfoAdded": "commercetools.schemas._message.OrderReturnInfoAddedMessagePayloadSchema",

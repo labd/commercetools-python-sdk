@@ -194,13 +194,14 @@ class ShippingMethodsBackend(ServiceBackend):
         ]
 
     _actions = {
+        "addShippingRate": add_shipping_rate,
+        "addZone": add_shipping_zone,
         "changeIsDefault": change_is_default,
         "changeName": update_attribute("name", "name"),
         "changeTaxCategory": change_tax_category,
-        "setKey": update_attribute("key", "key"),
-        "setDescription": update_attribute("description", "description"),
-        "addShippingRate": add_shipping_rate,
         "removeShippingRate": remove_shipping_rate,
-        "addZone": add_shipping_zone,
         "removeZone": remove_shipping_zone,
+        "setDescription": update_attribute("description", "description"),
+        "setKey": update_attribute("key", "key"),
+        "setPredicate": update_attribute("predicate", "predicate"),
     }

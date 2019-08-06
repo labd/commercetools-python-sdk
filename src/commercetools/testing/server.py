@@ -55,7 +55,7 @@ class Server:
             url=req.url,
             headers=req.headers,
             data=req.body,
-            params=req.params,
+            params=req.GET,
             cookies=req.cookies,
         )
 

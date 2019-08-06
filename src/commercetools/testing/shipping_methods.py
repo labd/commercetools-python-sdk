@@ -12,7 +12,7 @@ from commercetools.testing.utils import update_attribute, InternalUpdateError
 class ShippingMethodsModel(BaseModel):
     _primary_type_name = "shipping-method"
     _resource_schema = schemas.ShippingMethodSchema
-    _schema_update = schemas.ProjectUpdateSchema
+    _schema_update = schemas.ShippingMethodUpdateSchema
 
     def _create_from_draft(
         self, draft: types.ShippingMethodDraft, id: typing.Optional[str] = None

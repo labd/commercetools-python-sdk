@@ -22,6 +22,7 @@ class ExtensionsModel(BaseModel):
             key=draft.key,
             destination=draft.destination,
             triggers=draft.triggers,
+            timeout_in_ms=draft.timeout_in_ms,
         )
 
 

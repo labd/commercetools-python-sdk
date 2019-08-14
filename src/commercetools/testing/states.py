@@ -25,10 +25,28 @@ class StateModel(BaseModel):
             description=draft.description,
             roles=draft.roles,
             initial=draft.initial or False,
-            transitions=draft.transitions,
+            transitions=create_references_from_resources(self, draft.transitions),
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
         )
+
+
+def create_references_from_resources(
+    model: StateModel,
+    state_transitions: typing.Optional[typing.List[types.StateResourceIdentifier]],
+) -> typing.List[types.StateReference]:
+    if not state_transitions:
+        return []
+    references = []
+    for state_identifier in state_transitions:
+        if state_identifier.id:
+            references.append(types.StateReference(id=state_identifier.id))
+        if state_identifier.key:
+            obj = model.get_by_key(state_identifier.key)
+            if obj:
+                references.append(types.StateReference(id=obj["id"]))
+
+    return references
 
 
 def set_roles():
@@ -41,6 +59,23 @@ def set_roles():
         if obj["roles"] != roles:
             new = copy.deepcopy(obj)
             new["roles"] = roles
+            return new
+        return obj
+
+    return updater
+
+
+def set_transitions():
+    def updater(self, obj: dict, action: types.StateSetTransitionsAction):
+        transitions = action.transitions
+        references = []
+        if action.transitions:
+            for reference in create_references_from_resources(self.model, transitions):
+                references.append(schemas.StateReferenceSchema().dump(reference))
+
+        if obj["transitions"] != references:
+            new = copy.deepcopy(obj)
+            new["transitions"] = references
             return new
         return obj
 
@@ -70,7 +105,5 @@ class StatesBackend(ServiceBackend):
         "changeType": update_attribute("type", "type"),
         "changeInitial": update_attribute("initial", "initial"),
         "setRoles": set_roles(),
+        "setTransitions": set_transitions(),
     }
-
-
-

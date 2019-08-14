@@ -67,12 +67,12 @@ class InventoryService(abstract.AbstractService):
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        update_action = types.InventoryUpdate(version=version, actions=actions)
+        update_action = types.InventoryEntryUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"inventory/{id}",
             params=query_params,
             data_object=update_action,
-            request_schema_cls=schemas.InventoryUpdateSchema,
+            request_schema_cls=schemas.InventoryEntryUpdateSchema,
             response_schema_cls=schemas.InventoryEntrySchema,
             force_update=force_update,
         )

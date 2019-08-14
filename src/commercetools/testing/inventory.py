@@ -38,11 +38,11 @@ def change_stock():
 
         new = copy.deepcopy(obj)
 
-        if isinstance(action, types.InventoryAddQuantityAction):
+        if isinstance(action, types.InventoryEntryAddQuantityAction):
             new["availableQuantity"] += quantity
-        elif isinstance(action, types.InventoryRemoveQuantityAction):
+        elif isinstance(action, types.InventoryEntryRemoveQuantityAction):
             new["availableQuantity"] -= quantity
-        elif isinstance(action, types.InventoryChangeQuantityAction):
+        elif isinstance(action, types.InventoryEntryChangeQuantityAction):
             new["availableQuantity"] = quantity
         else:
             raise InternalUpdateError("Unknown action to change stock: %r", action)

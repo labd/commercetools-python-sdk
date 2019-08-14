@@ -1,3 +1,11 @@
+4.1.0 (2019-08-14)
+------------------
+- Fix Inventory Entry types *This may break Inventory related types*
+- Add external_oauth field on project
+- Small runserver fixes
+- Mock ShippingMethod.setPredicate
+- Mock State.setTransitions
+
 4.0.0 (2019-07-04)
 ------------------
 - *Breaking* Generate with new API definitions, main difference is Reference -> ResourceIdentifier type.

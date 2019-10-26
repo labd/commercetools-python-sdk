@@ -12,12 +12,14 @@ __all__ = [
     "AssetSchema",
     "AssetSourceSchema",
     "BaseResourceSchema",
+    "CentPrecisionMoneyDraftSchema",
     "CentPrecisionMoneySchema",
     "ClientLoggingSchema",
     "CreatedBySchema",
     "DiscountedPriceSchema",
     "GeoJsonPointSchema",
     "GeoJsonSchema",
+    "HighPrecisionMoneyDraftSchema",
     "HighPrecisionMoneySchema",
     "ImageDimensionsSchema",
     "ImageSchema",
@@ -28,10 +30,12 @@ __all__ = [
     "PagedQueryResponseSchema",
     "PriceDraftSchema",
     "PriceSchema",
+    "PriceTierDraftSchema",
     "PriceTierSchema",
     "ReferenceSchema",
     "ResourceIdentifierSchema",
     "ScopedPriceSchema",
+    "TypedMoneyDraftSchema",
     "TypedMoneySchema",
     "UpdateActionSchema",
     "UpdateSchema",
@@ -329,6 +333,7 @@ class MoneySchema(marshmallow.Schema):
 
 class PagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.PagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -388,10 +393,16 @@ class PriceDraftSchema(marshmallow.Schema):
         missing=None,
     )
     tiers = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.PriceTierSchema",
+        nested="commercetools.schemas._common.PriceTierDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
+        missing=None,
+    )
+    discounted = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.DiscountedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
         missing=None,
     )
 
@@ -405,9 +416,13 @@ class PriceDraftSchema(marshmallow.Schema):
 
 class PriceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Price`."
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    id = marshmallow.fields.String(allow_none=True)
+    value = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -459,13 +474,36 @@ class PriceSchema(marshmallow.Schema):
         return types.Price(**data)
 
 
-class PriceTierSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.PriceTier`."
+class PriceTierDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.PriceTierDraft`."
     minimum_quantity = marshmallow.fields.Integer(
         allow_none=True, data_key="minimumQuantity"
     )
     value = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.PriceTierDraft(**data)
+
+
+class PriceTierSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.PriceTier`."
+    minimum_quantity = marshmallow.fields.Integer(
+        allow_none=True, data_key="minimumQuantity"
+    )
+    value = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -574,6 +612,24 @@ class ScopedPriceSchema(marshmallow.Schema):
         return types.ScopedPrice(**data)
 
 
+class TypedMoneySchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.TypedMoney`."
+    type = marshmallow_enum.EnumField(types.MoneyType, by_value=True)
+    fraction_digits = marshmallow.fields.Integer(
+        allow_none=True, data_key="fractionDigits"
+    )
+    cent_amount = marshmallow.fields.Integer(allow_none=True, data_key="centAmount")
+    currency_code = marshmallow.fields.String(data_key="currencyCode")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.TypedMoney(**data)
+
+
 class UpdateActionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.UpdateAction`."
     action = marshmallow.fields.String(allow_none=True)
@@ -606,6 +662,18 @@ class UpdateSchema(marshmallow.Schema):
         return types.Update(**data)
 
 
+class CentPrecisionMoneySchema(TypedMoneySchema):
+    "Marshmallow schema for :class:`commercetools.types.CentPrecisionMoney`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CentPrecisionMoney(**data)
+
+
 class CreatedBySchema(ClientLoggingSchema):
     "Marshmallow schema for :class:`commercetools.types.CreatedBy`."
 
@@ -635,6 +703,21 @@ class GeoJsonPointSchema(GeoJsonSchema):
     def post_load(self, data):
         del data["type"]
         return types.GeoJsonPoint(**data)
+
+
+class HighPrecisionMoneySchema(TypedMoneySchema):
+    "Marshmallow schema for :class:`commercetools.types.HighPrecisionMoney`."
+    precise_amount = marshmallow.fields.Integer(
+        allow_none=True, data_key="preciseAmount"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.HighPrecisionMoney(**data)
 
 
 class LastModifiedBySchema(ClientLoggingSchema):
@@ -673,12 +756,9 @@ class LoggedResourceSchema(BaseResourceSchema):
         return types.LoggedResource(**data)
 
 
-class TypedMoneySchema(MoneySchema):
-    "Marshmallow schema for :class:`commercetools.types.TypedMoney`."
+class TypedMoneyDraftSchema(MoneySchema):
+    "Marshmallow schema for :class:`commercetools.types.TypedMoneyDraft`."
     type = marshmallow_enum.EnumField(types.MoneyType, by_value=True)
-    fraction_digits = marshmallow.fields.Integer(
-        allow_none=True, data_key="fractionDigits"
-    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -686,11 +766,11 @@ class TypedMoneySchema(MoneySchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["type"]
-        return types.TypedMoney(**data)
+        return types.TypedMoneyDraft(**data)
 
 
-class CentPrecisionMoneySchema(TypedMoneySchema):
-    "Marshmallow schema for :class:`commercetools.types.CentPrecisionMoney`."
+class CentPrecisionMoneyDraftSchema(TypedMoneyDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.CentPrecisionMoneyDraft`."
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -698,11 +778,11 @@ class CentPrecisionMoneySchema(TypedMoneySchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["type"]
-        return types.CentPrecisionMoney(**data)
+        return types.CentPrecisionMoneyDraft(**data)
 
 
-class HighPrecisionMoneySchema(TypedMoneySchema):
-    "Marshmallow schema for :class:`commercetools.types.HighPrecisionMoney`."
+class HighPrecisionMoneyDraftSchema(TypedMoneyDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.HighPrecisionMoneyDraft`."
     precise_amount = marshmallow.fields.Integer(
         allow_none=True, data_key="preciseAmount"
     )
@@ -713,4 +793,4 @@ class HighPrecisionMoneySchema(TypedMoneySchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["type"]
-        return types.HighPrecisionMoney(**data)
+        return types.HighPrecisionMoneyDraft(**data)

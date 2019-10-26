@@ -4,9 +4,9 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    BaseResourceSchema,
     KeyReferenceSchema,
     LocalizedStringField,
+    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -51,6 +51,7 @@ class StoreKeyReferenceSchema(KeyReferenceSchema):
 
 class StorePagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.StorePagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -99,7 +100,7 @@ class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.StoreResourceIdentifier(**data)
 
 
-class StoreSchema(BaseResourceSchema):
+class StoreSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Store`."
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True, missing=None)

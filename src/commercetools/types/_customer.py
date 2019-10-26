@@ -15,6 +15,7 @@ from commercetools.types._common import (
 if typing.TYPE_CHECKING:
     from ._common import Address, CreatedBy, LastModifiedBy
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
+    from ._store import StoreKeyReference, StoreResourceIdentifier
     from ._type import (
         CustomFields,
         CustomFieldsDraft,
@@ -117,6 +118,8 @@ class Customer(LoggedResource):
     salutation: typing.Optional[str]
     #: Optional :class:`str`
     key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.StoreKeyReference`
+    stores: typing.Optional[typing.List["StoreKeyReference"]]
 
     def __init__(
         self,
@@ -148,7 +151,8 @@ class Customer(LoggedResource):
         custom: typing.Optional["CustomFields"] = None,
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
+        stores: typing.Optional[typing.List["StoreKeyReference"]] = None
     ) -> None:
         self.customer_number = customer_number
         self.email = email
@@ -172,6 +176,7 @@ class Customer(LoggedResource):
         self.locale = locale
         self.salutation = salutation
         self.key = key
+        self.stores = stores
         super().__init__(
             id=id,
             version=version,
@@ -183,7 +188,7 @@ class Customer(LoggedResource):
 
     def __repr__(self) -> str:
         return (
-            "Customer(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address_id=%r, shipping_address_ids=%r, default_billing_address_id=%r, billing_address_ids=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r)"
+            "Customer(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address_id=%r, shipping_address_ids=%r, default_billing_address_id=%r, billing_address_ids=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r, stores=%r)"
             % (
                 self.id,
                 self.version,
@@ -213,6 +218,7 @@ class Customer(LoggedResource):
                 self.locale,
                 self.salutation,
                 self.key,
+                self.stores,
             )
         )
 
@@ -352,6 +358,8 @@ class CustomerDraft(_BaseType):
     salutation: typing.Optional[str]
     #: Optional :class:`str`
     key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.StoreResourceIdentifier`
+    stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
     def __init__(
         self,
@@ -379,7 +387,8 @@ class CustomerDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
     ) -> None:
         self.customer_number = customer_number
         self.email = email
@@ -405,11 +414,12 @@ class CustomerDraft(_BaseType):
         self.locale = locale
         self.salutation = salutation
         self.key = key
+        self.stores = stores
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "CustomerDraft(customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, anonymous_cart_id=%r, anonymous_id=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address=%r, shipping_addresses=%r, default_billing_address=%r, billing_addresses=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r)"
+            "CustomerDraft(customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, anonymous_cart_id=%r, anonymous_id=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address=%r, shipping_addresses=%r, default_billing_address=%r, billing_addresses=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r, stores=%r)"
             % (
                 self.customer_number,
                 self.email,
@@ -435,6 +445,7 @@ class CustomerDraft(_BaseType):
                 self.locale,
                 self.salutation,
                 self.key,
+                self.stores,
             )
         )
 
@@ -466,6 +477,8 @@ class CustomerEmailVerify(_BaseType):
 class CustomerPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -477,11 +490,13 @@ class CustomerPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Customer"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -490,8 +505,8 @@ class CustomerPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "CustomerPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "CustomerPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 
@@ -600,6 +615,8 @@ class CustomerSignin(_BaseType):
     anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
+    #: Optional :class:`bool` `(Named` ``updateProductData`` `in Commercetools)`
+    update_product_data: typing.Optional[bool]
 
     def __init__(
         self,
@@ -608,24 +625,27 @@ class CustomerSignin(_BaseType):
         password: typing.Optional[str] = None,
         anonymous_cart_id: typing.Optional[str] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
-        anonymous_id: typing.Optional[str] = None
+        anonymous_id: typing.Optional[str] = None,
+        update_product_data: typing.Optional[bool] = None
     ) -> None:
         self.email = email
         self.password = password
         self.anonymous_cart_id = anonymous_cart_id
         self.anonymous_cart_sign_in_mode = anonymous_cart_sign_in_mode
         self.anonymous_id = anonymous_id
+        self.update_product_data = update_product_data
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "CustomerSignin(email=%r, password=%r, anonymous_cart_id=%r, anonymous_cart_sign_in_mode=%r, anonymous_id=%r)"
+            "CustomerSignin(email=%r, password=%r, anonymous_cart_id=%r, anonymous_cart_sign_in_mode=%r, anonymous_id=%r, update_product_data=%r)"
             % (
                 self.email,
                 self.password,
                 self.anonymous_cart_id,
                 self.anonymous_cart_sign_in_mode,
                 self.anonymous_id,
+                self.update_product_data,
             )
         )
 

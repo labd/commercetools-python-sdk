@@ -81,6 +81,7 @@ class ReviewDraftSchema(marshmallow.Schema):
 
 class ReviewPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ReviewPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)

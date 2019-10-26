@@ -4,8 +4,10 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import BaseResource, Reference, ReferenceTypeId
+from commercetools.types._common import LoggedResource, Reference, ReferenceTypeId
 
+if typing.TYPE_CHECKING:
+    from ._common import CreatedBy, LastModifiedBy
 __all__ = [
     "CustomObject",
     "CustomObjectDraft",
@@ -14,7 +16,7 @@ __all__ = [
 ]
 
 
-class CustomObject(BaseResource):
+class CustomObject(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."
     #: :class:`str`
     container: typing.Optional[str]
@@ -30,6 +32,8 @@ class CustomObject(BaseResource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         container: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         value: typing.Optional[typing.Any] = None
@@ -42,16 +46,20 @@ class CustomObject(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomObject(id=%r, version=%r, created_at=%r, last_modified_at=%r, container=%r, key=%r, value=%r)"
+            "CustomObject(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, container=%r, key=%r, value=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.container,
                 self.key,
                 self.value,
@@ -96,6 +104,8 @@ class CustomObjectDraft(_BaseType):
 class CustomObjectPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -107,11 +117,13 @@ class CustomObjectPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["CustomObject"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -120,8 +132,8 @@ class CustomObjectPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "CustomObjectPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "CustomObjectPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

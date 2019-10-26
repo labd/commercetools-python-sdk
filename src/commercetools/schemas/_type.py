@@ -123,7 +123,25 @@ class CustomFieldsSchema(marshmallow.Schema):
 
 class FieldDefinitionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.FieldDefinition`."
-    type = marshmallow.fields.Dict(allow_none=True)
+    type = helpers.Discriminator(
+        discriminator_field=("name", "name"),
+        discriminator_schemas={
+            "Boolean": "commercetools.schemas._type.CustomFieldBooleanTypeSchema",
+            "DateTime": "commercetools.schemas._type.CustomFieldDateTimeTypeSchema",
+            "Date": "commercetools.schemas._type.CustomFieldDateTypeSchema",
+            "Enum": "commercetools.schemas._type.CustomFieldEnumTypeSchema",
+            "LocalizedEnum": "commercetools.schemas._type.CustomFieldLocalizedEnumTypeSchema",
+            "LocalizedString": "commercetools.schemas._type.CustomFieldLocalizedStringTypeSchema",
+            "Money": "commercetools.schemas._type.CustomFieldMoneyTypeSchema",
+            "Number": "commercetools.schemas._type.CustomFieldNumberTypeSchema",
+            "Reference": "commercetools.schemas._type.CustomFieldReferenceTypeSchema",
+            "Set": "commercetools.schemas._type.CustomFieldSetTypeSchema",
+            "String": "commercetools.schemas._type.CustomFieldStringTypeSchema",
+            "Time": "commercetools.schemas._type.CustomFieldTimeTypeSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
     name = marshmallow.fields.String(allow_none=True)
     label = LocalizedStringField(allow_none=True)
     required = marshmallow.fields.Bool(allow_none=True)
@@ -180,6 +198,7 @@ class TypeDraftSchema(marshmallow.Schema):
 
 class TypePagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TypePagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)

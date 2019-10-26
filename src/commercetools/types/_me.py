@@ -4,14 +4,329 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
+from commercetools.types._common import LoggedResource
 
 if typing.TYPE_CHECKING:
-    from ._cart import InventoryMode, ItemShippingDetailsDraft, TaxMode
+    from ._cart import (
+        CartOrigin,
+        CartReference,
+        CartState,
+        CustomLineItem,
+        DiscountCodeInfo,
+        ExternalLineItemTotalPrice,
+        ExternalTaxRateDraft,
+        InventoryMode,
+        ItemShippingDetailsDraft,
+        ItemShippingTarget,
+        LineItem,
+        RoundingMode,
+        ShippingInfo,
+        ShippingRateInput,
+        TaxCalculationMode,
+        TaxMode,
+        TaxedPrice,
+    )
+    from ._cart_discount import CartDiscountReference
     from ._channel import ChannelResourceIdentifier
-    from ._common import Address
-    from ._shipping_method import ShippingMethodResourceIdentifier
-    from ._type import CustomFields, CustomFieldsDraft
-__all__ = ["MyCartDraft", "MyCustomerDraft", "MyLineItemDraft", "MyOrderFromCartDraft"]
+    from ._common import (
+        Address,
+        CreatedBy,
+        LastModifiedBy,
+        LocalizedString,
+        Money,
+        TypedMoney,
+    )
+    from ._customer import CustomerReference
+    from ._customer_group import CustomerGroupReference
+    from ._discount_code import DiscountCodeReference
+    from ._order import (
+        OrderState,
+        PaymentInfo,
+        PaymentState,
+        ReturnInfo,
+        ShipmentState,
+        SyncInfo,
+    )
+    from ._payment import (
+        PaymentMethodInfo,
+        PaymentResourceIdentifier,
+        Transaction,
+        TransactionDraft,
+        TransactionType,
+    )
+    from ._shipping_method import ShippingMethodResourceIdentifier, ShippingRateDraft
+    from ._shopping_list import ShoppingListLineItemDraft, TextLineItemDraft
+    from ._state import StateReference
+    from ._store import StoreKeyReference, StoreResourceIdentifier
+    from ._tax_category import TaxCategoryResourceIdentifier
+    from ._type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
+__all__ = [
+    "MyCart",
+    "MyCartAddDiscountCodeAction",
+    "MyCartAddItemShippingAddressAction",
+    "MyCartAddLineItemAction",
+    "MyCartAddPaymentAction",
+    "MyCartApplyDeltaToLineItemShippingDetailsTargetsAction",
+    "MyCartChangeLineItemQuantityAction",
+    "MyCartChangeTaxModeAction",
+    "MyCartDraft",
+    "MyCartRecalculateAction",
+    "MyCartRemoveDiscountCodeAction",
+    "MyCartRemoveItemShippingAddressAction",
+    "MyCartRemoveLineItemAction",
+    "MyCartRemovePaymentAction",
+    "MyCartSetBillingAddressAction",
+    "MyCartSetCountryAction",
+    "MyCartSetCustomFieldAction",
+    "MyCartSetCustomShippingMethodAction",
+    "MyCartSetCustomTypeAction",
+    "MyCartSetDeleteDaysAfterLastModificationAction",
+    "MyCartSetLineItemCustomFieldAction",
+    "MyCartSetLineItemCustomTypeAction",
+    "MyCartSetLineItemShippingDetailsAction",
+    "MyCartSetLocaleAction",
+    "MyCartSetShippingAddressAction",
+    "MyCartSetShippingMethodAction",
+    "MyCartUpdateAction",
+    "MyCartUpdateItemShippingAddressAction",
+    "MyCustomer",
+    "MyCustomerAddAddressAction",
+    "MyCustomerAddBillingAddressIdAction",
+    "MyCustomerAddShippingAddressIdAction",
+    "MyCustomerChangeAddressAction",
+    "MyCustomerChangeEmailAction",
+    "MyCustomerDraft",
+    "MyCustomerRemoveAddressAction",
+    "MyCustomerRemoveBillingAddressIdAction",
+    "MyCustomerRemoveShippingAddressIdAction",
+    "MyCustomerSetCompanyNameAction",
+    "MyCustomerSetCustomFieldAction",
+    "MyCustomerSetCustomTypeAction",
+    "MyCustomerSetDateOfBirthAction",
+    "MyCustomerSetDefaultBillingAddressAction",
+    "MyCustomerSetDefaultShippingAddressAction",
+    "MyCustomerSetFirstNameAction",
+    "MyCustomerSetLastNameAction",
+    "MyCustomerSetLocaleAction",
+    "MyCustomerSetMiddleNameAction",
+    "MyCustomerSetSalutationAction",
+    "MyCustomerSetTitleAction",
+    "MyCustomerSetVatIdAction",
+    "MyCustomerUpdateAction",
+    "MyLineItemDraft",
+    "MyOrder",
+    "MyOrderFromCartDraft",
+    "MyPayment",
+    "MyPaymentAddTransactionAction",
+    "MyPaymentChangeAmountPlannedAction",
+    "MyPaymentDraft",
+    "MyPaymentPagedQueryResponse",
+    "MyPaymentSetCustomFieldAction",
+    "MyPaymentSetMethodInfoInterfaceAction",
+    "MyPaymentSetMethodInfoMethodAction",
+    "MyPaymentSetMethodInfoNameAction",
+    "MyPaymentUpdate",
+    "MyPaymentUpdateAction",
+    "MyShoppingListAddLineItemAction",
+    "MyShoppingListAddTextLineItemAction",
+    "MyShoppingListChangeLineItemQuantityAction",
+    "MyShoppingListChangeLineItemsOrderAction",
+    "MyShoppingListChangeNameAction",
+    "MyShoppingListChangeTextLineItemNameAction",
+    "MyShoppingListChangeTextLineItemQuantityAction",
+    "MyShoppingListChangeTextLineItemsOrderAction",
+    "MyShoppingListDraft",
+    "MyShoppingListRemoveLineItemAction",
+    "MyShoppingListRemoveTextLineItemAction",
+    "MyShoppingListSetCustomFieldAction",
+    "MyShoppingListSetCustomTypeAction",
+    "MyShoppingListSetDeleteDaysAfterLastModificationAction",
+    "MyShoppingListSetDescriptionAction",
+    "MyShoppingListSetLineItemCustomFieldAction",
+    "MyShoppingListSetLineItemCustomTypeAction",
+    "MyShoppingListSetTextLineItemCustomFieldAction",
+    "MyShoppingListSetTextLineItemCustomTypeAction",
+    "MyShoppingListSetTextLineItemDescriptionAction",
+    "MyShoppingListUpdate",
+    "MyShoppingListUpdateAction",
+    "MyTransactionDraft",
+]
+
+
+class MyCart(LoggedResource):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSchema`."
+    #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
+    customer_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
+    customer_email: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.StoreKeyReference`
+    store: typing.Optional["StoreKeyReference"]
+    #: List of :class:`commercetools.types.LineItem` `(Named` ``lineItems`` `in Commercetools)`
+    line_items: typing.Optional[typing.List["LineItem"]]
+    #: List of :class:`commercetools.types.CustomLineItem` `(Named` ``customLineItems`` `in Commercetools)`
+    custom_line_items: typing.Optional[typing.List["CustomLineItem"]]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["TypedMoney"]
+    #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedPrice"]
+    #: :class:`commercetools.types.CartState` `(Named` ``cartState`` `in Commercetools)`
+    cart_state: typing.Optional["CartState"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
+    shipping_address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``billingAddress`` `in Commercetools)`
+    billing_address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.InventoryMode` `(Named` ``inventoryMode`` `in Commercetools)`
+    inventory_mode: typing.Optional["InventoryMode"]
+    #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
+    tax_mode: typing.Optional["TaxMode"]
+    #: :class:`commercetools.types.RoundingMode` `(Named` ``taxRoundingMode`` `in Commercetools)`
+    tax_rounding_mode: typing.Optional["RoundingMode"]
+    #: :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
+    tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`str`
+    country: typing.Optional["str"]
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
+    shipping_info: typing.Optional["ShippingInfo"]
+    #: Optional list of :class:`commercetools.types.DiscountCodeInfo` `(Named` ``discountCodes`` `in Commercetools)`
+    discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`commercetools.types.PaymentInfo` `(Named` ``paymentInfo`` `in Commercetools)`
+    payment_info: typing.Optional["PaymentInfo"]
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
+    delete_days_after_last_modification: typing.Optional[int]
+    #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``refusedGifts`` `in Commercetools)`
+    refused_gifts: typing.Optional[typing.List["CartDiscountReference"]]
+    #: :class:`commercetools.types.CartOrigin`
+    origin: typing.Optional["CartOrigin"]
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
+    shipping_rate_input: typing.Optional["ShippingRateInput"]
+    #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
+    item_shipping_addresses: typing.Optional[typing.List["Address"]]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        customer_id: typing.Optional[str] = None,
+        customer_email: typing.Optional[str] = None,
+        anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreKeyReference"] = None,
+        line_items: typing.Optional[typing.List["LineItem"]] = None,
+        custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
+        total_price: typing.Optional["TypedMoney"] = None,
+        taxed_price: typing.Optional["TaxedPrice"] = None,
+        cart_state: typing.Optional["CartState"] = None,
+        shipping_address: typing.Optional["Address"] = None,
+        billing_address: typing.Optional["Address"] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
+        tax_mode: typing.Optional["TaxMode"] = None,
+        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
+        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        country: typing.Optional["str"] = None,
+        shipping_info: typing.Optional["ShippingInfo"] = None,
+        discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        payment_info: typing.Optional["PaymentInfo"] = None,
+        locale: typing.Optional[str] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None,
+        refused_gifts: typing.Optional[typing.List["CartDiscountReference"]] = None,
+        origin: typing.Optional["CartOrigin"] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+    ) -> None:
+        self.customer_id = customer_id
+        self.customer_email = customer_email
+        self.anonymous_id = anonymous_id
+        self.store = store
+        self.line_items = line_items
+        self.custom_line_items = custom_line_items
+        self.total_price = total_price
+        self.taxed_price = taxed_price
+        self.cart_state = cart_state
+        self.shipping_address = shipping_address
+        self.billing_address = billing_address
+        self.inventory_mode = inventory_mode
+        self.tax_mode = tax_mode
+        self.tax_rounding_mode = tax_rounding_mode
+        self.tax_calculation_mode = tax_calculation_mode
+        self.customer_group = customer_group
+        self.country = country
+        self.shipping_info = shipping_info
+        self.discount_codes = discount_codes
+        self.custom = custom
+        self.payment_info = payment_info
+        self.locale = locale
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        self.refused_gifts = refused_gifts
+        self.origin = origin
+        self.shipping_rate_input = shipping_rate_input
+        self.item_shipping_addresses = item_shipping_addresses
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "MyCart(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, cart_state=%r, shipping_address=%r, billing_address=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, customer_group=%r, country=%r, shipping_info=%r, discount_codes=%r, custom=%r, payment_info=%r, locale=%r, delete_days_after_last_modification=%r, refused_gifts=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
+                self.customer_id,
+                self.customer_email,
+                self.anonymous_id,
+                self.store,
+                self.line_items,
+                self.custom_line_items,
+                self.total_price,
+                self.taxed_price,
+                self.cart_state,
+                self.shipping_address,
+                self.billing_address,
+                self.inventory_mode,
+                self.tax_mode,
+                self.tax_rounding_mode,
+                self.tax_calculation_mode,
+                self.customer_group,
+                self.country,
+                self.shipping_info,
+                self.discount_codes,
+                self.custom,
+                self.payment_info,
+                self.locale,
+                self.delete_days_after_last_modification,
+                self.refused_gifts,
+                self.origin,
+                self.shipping_rate_input,
+                self.item_shipping_addresses,
+            )
+        )
 
 
 class MyCartDraft(_BaseType):
@@ -96,6 +411,170 @@ class MyCartDraft(_BaseType):
         )
 
 
+class MyCartUpdateAction(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
+
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+        self.action = action
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MyCartUpdateAction(action=%r)" % (self.action,)
+
+
+class MyCustomer(LoggedResource):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSchema`."
+    #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
+    customer_number: typing.Optional[str]
+    #: :class:`str`
+    email: typing.Optional[str]
+    #: :class:`str`
+    password: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
+    first_name: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
+    last_name: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
+    middle_name: typing.Optional[str]
+    #: Optional :class:`str`
+    title: typing.Optional[str]
+    #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
+    date_of_birth: typing.Optional[datetime.date]
+    #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
+    company_name: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
+    vat_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.Address`
+    addresses: typing.Optional[typing.List["Address"]]
+    #: Optional :class:`str` `(Named` ``defaultShippingAddressId`` `in Commercetools)`
+    default_shipping_address_id: typing.Optional[str]
+    #: Optional list of :class:`str` `(Named` ``shippingAddressIds`` `in Commercetools)`
+    shipping_address_ids: typing.Optional[typing.List[str]]
+    #: Optional :class:`str` `(Named` ``defaultBillingAddressId`` `in Commercetools)`
+    default_billing_address_id: typing.Optional[str]
+    #: Optional list of :class:`str` `(Named` ``billingAddressIds`` `in Commercetools)`
+    billing_address_ids: typing.Optional[typing.List[str]]
+    #: :class:`bool` `(Named` ``isEmailVerified`` `in Commercetools)`
+    is_email_verified: typing.Optional[bool]
+    #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
+    external_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+    #: Optional :class:`str`
+    salutation: typing.Optional[str]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.StoreKeyReference`
+    stores: typing.Optional[typing.List["StoreKeyReference"]]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        customer_number: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        password: typing.Optional[str] = None,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        middle_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None,
+        company_name: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None,
+        addresses: typing.Optional[typing.List["Address"]] = None,
+        default_shipping_address_id: typing.Optional[str] = None,
+        shipping_address_ids: typing.Optional[typing.List[str]] = None,
+        default_billing_address_id: typing.Optional[str] = None,
+        billing_address_ids: typing.Optional[typing.List[str]] = None,
+        is_email_verified: typing.Optional[bool] = None,
+        external_id: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        locale: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        stores: typing.Optional[typing.List["StoreKeyReference"]] = None
+    ) -> None:
+        self.customer_number = customer_number
+        self.email = email
+        self.password = password
+        self.first_name = first_name
+        self.last_name = last_name
+        self.middle_name = middle_name
+        self.title = title
+        self.date_of_birth = date_of_birth
+        self.company_name = company_name
+        self.vat_id = vat_id
+        self.addresses = addresses
+        self.default_shipping_address_id = default_shipping_address_id
+        self.shipping_address_ids = shipping_address_ids
+        self.default_billing_address_id = default_billing_address_id
+        self.billing_address_ids = billing_address_ids
+        self.is_email_verified = is_email_verified
+        self.external_id = external_id
+        self.customer_group = customer_group
+        self.custom = custom
+        self.locale = locale
+        self.salutation = salutation
+        self.key = key
+        self.stores = stores
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "MyCustomer(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, customer_number=%r, email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address_id=%r, shipping_address_ids=%r, default_billing_address_id=%r, billing_address_ids=%r, is_email_verified=%r, external_id=%r, customer_group=%r, custom=%r, locale=%r, salutation=%r, key=%r, stores=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
+                self.customer_number,
+                self.email,
+                self.password,
+                self.first_name,
+                self.last_name,
+                self.middle_name,
+                self.title,
+                self.date_of_birth,
+                self.company_name,
+                self.vat_id,
+                self.addresses,
+                self.default_shipping_address_id,
+                self.shipping_address_ids,
+                self.default_billing_address_id,
+                self.billing_address_ids,
+                self.is_email_verified,
+                self.external_id,
+                self.customer_group,
+                self.custom,
+                self.locale,
+                self.salutation,
+                self.key,
+                self.stores,
+            )
+        )
+
+
 class MyCustomerDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerDraftSchema`."
     #: :class:`str`
@@ -126,6 +605,8 @@ class MyCustomerDraft(_BaseType):
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`str`
     locale: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.StoreResourceIdentifier`
+    stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
     def __init__(
         self,
@@ -143,7 +624,8 @@ class MyCustomerDraft(_BaseType):
         default_shipping_address: typing.Optional[int] = None,
         default_billing_address: typing.Optional[int] = None,
         custom: typing.Optional["CustomFields"] = None,
-        locale: typing.Optional[str] = None
+        locale: typing.Optional[str] = None,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
     ) -> None:
         self.email = email
         self.password = password
@@ -159,11 +641,12 @@ class MyCustomerDraft(_BaseType):
         self.default_billing_address = default_billing_address
         self.custom = custom
         self.locale = locale
+        self.stores = stores
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "MyCustomerDraft(email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address=%r, default_billing_address=%r, custom=%r, locale=%r)"
+            "MyCustomerDraft(email=%r, password=%r, first_name=%r, last_name=%r, middle_name=%r, title=%r, date_of_birth=%r, company_name=%r, vat_id=%r, addresses=%r, default_shipping_address=%r, default_billing_address=%r, custom=%r, locale=%r, stores=%r)"
             % (
                 self.email,
                 self.password,
@@ -179,8 +662,22 @@ class MyCustomerDraft(_BaseType):
                 self.default_billing_address,
                 self.custom,
                 self.locale,
+                self.stores,
             )
         )
+
+
+class MyCustomerUpdateAction(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
+
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+        self.action = action
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MyCustomerUpdateAction(action=%r)" % (self.action,)
 
 
 class MyLineItemDraft(_BaseType):
@@ -235,6 +732,217 @@ class MyLineItemDraft(_BaseType):
         )
 
 
+class MyOrder(LoggedResource):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyOrderSchema`."
+    #: Optional :class:`datetime.datetime` `(Named` ``completedAt`` `in Commercetools)`
+    completed_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
+    order_number: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
+    customer_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
+    customer_email: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.StoreKeyReference`
+    store: typing.Optional["StoreKeyReference"]
+    #: List of :class:`commercetools.types.LineItem` `(Named` ``lineItems`` `in Commercetools)`
+    line_items: typing.Optional[typing.List["LineItem"]]
+    #: List of :class:`commercetools.types.CustomLineItem` `(Named` ``customLineItems`` `in Commercetools)`
+    custom_line_items: typing.Optional[typing.List["CustomLineItem"]]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["TypedMoney"]
+    #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedPrice"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
+    shipping_address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.Address` `(Named` ``billingAddress`` `in Commercetools)`
+    billing_address: typing.Optional["Address"]
+    #: Optional :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
+    tax_mode: typing.Optional["TaxMode"]
+    #: Optional :class:`commercetools.types.RoundingMode` `(Named` ``taxRoundingMode`` `in Commercetools)`
+    tax_rounding_mode: typing.Optional["RoundingMode"]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`str`
+    country: typing.Optional[str]
+    #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
+    order_state: typing.Optional["OrderState"]
+    #: Optional :class:`commercetools.types.StateReference`
+    state: typing.Optional["StateReference"]
+    #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
+    shipment_state: typing.Optional["ShipmentState"]
+    #: Optional :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
+    payment_state: typing.Optional["PaymentState"]
+    #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
+    shipping_info: typing.Optional["ShippingInfo"]
+    #: List of :class:`commercetools.types.SyncInfo` `(Named` ``syncInfo`` `in Commercetools)`
+    sync_info: typing.Optional[typing.List["SyncInfo"]]
+    #: Optional list of :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
+    return_info: typing.Optional[typing.List["ReturnInfo"]]
+    #: Optional list of :class:`commercetools.types.DiscountCodeInfo` `(Named` ``discountCodes`` `in Commercetools)`
+    discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
+    #: :class:`int` `(Named` ``lastMessageSequenceNumber`` `in Commercetools)`
+    last_message_sequence_number: typing.Optional[int]
+    #: Optional :class:`commercetools.types.CartReference`
+    cart: typing.Optional["CartReference"]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`commercetools.types.PaymentInfo` `(Named` ``paymentInfo`` `in Commercetools)`
+    payment_info: typing.Optional["PaymentInfo"]
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+    #: Optional :class:`commercetools.types.InventoryMode` `(Named` ``inventoryMode`` `in Commercetools)`
+    inventory_mode: typing.Optional["InventoryMode"]
+    #: :class:`commercetools.types.CartOrigin`
+    origin: typing.Optional["CartOrigin"]
+    #: Optional :class:`commercetools.types.TaxCalculationMode` `(Named` ``taxCalculationMode`` `in Commercetools)`
+    tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
+    shipping_rate_input: typing.Optional["ShippingRateInput"]
+    #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
+    item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``refusedGifts`` `in Commercetools)`
+    refused_gifts: typing.Optional[typing.List["CartDiscountReference"]]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        completed_at: typing.Optional[datetime.datetime] = None,
+        order_number: typing.Optional[str] = None,
+        customer_id: typing.Optional[str] = None,
+        customer_email: typing.Optional[str] = None,
+        anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreKeyReference"] = None,
+        line_items: typing.Optional[typing.List["LineItem"]] = None,
+        custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
+        total_price: typing.Optional["TypedMoney"] = None,
+        taxed_price: typing.Optional["TaxedPrice"] = None,
+        shipping_address: typing.Optional["Address"] = None,
+        billing_address: typing.Optional["Address"] = None,
+        tax_mode: typing.Optional["TaxMode"] = None,
+        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        country: typing.Optional[str] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        state: typing.Optional["StateReference"] = None,
+        shipment_state: typing.Optional["ShipmentState"] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        shipping_info: typing.Optional["ShippingInfo"] = None,
+        sync_info: typing.Optional[typing.List["SyncInfo"]] = None,
+        return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
+        discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
+        last_message_sequence_number: typing.Optional[int] = None,
+        cart: typing.Optional["CartReference"] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        payment_info: typing.Optional["PaymentInfo"] = None,
+        locale: typing.Optional[str] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
+        origin: typing.Optional["CartOrigin"] = None,
+        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        refused_gifts: typing.Optional[typing.List["CartDiscountReference"]] = None
+    ) -> None:
+        self.completed_at = completed_at
+        self.order_number = order_number
+        self.customer_id = customer_id
+        self.customer_email = customer_email
+        self.anonymous_id = anonymous_id
+        self.store = store
+        self.line_items = line_items
+        self.custom_line_items = custom_line_items
+        self.total_price = total_price
+        self.taxed_price = taxed_price
+        self.shipping_address = shipping_address
+        self.billing_address = billing_address
+        self.tax_mode = tax_mode
+        self.tax_rounding_mode = tax_rounding_mode
+        self.customer_group = customer_group
+        self.country = country
+        self.order_state = order_state
+        self.state = state
+        self.shipment_state = shipment_state
+        self.payment_state = payment_state
+        self.shipping_info = shipping_info
+        self.sync_info = sync_info
+        self.return_info = return_info
+        self.discount_codes = discount_codes
+        self.last_message_sequence_number = last_message_sequence_number
+        self.cart = cart
+        self.custom = custom
+        self.payment_info = payment_info
+        self.locale = locale
+        self.inventory_mode = inventory_mode
+        self.origin = origin
+        self.tax_calculation_mode = tax_calculation_mode
+        self.shipping_rate_input = shipping_rate_input
+        self.item_shipping_addresses = item_shipping_addresses
+        self.refused_gifts = refused_gifts
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "MyOrder(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r, refused_gifts=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
+                self.completed_at,
+                self.order_number,
+                self.customer_id,
+                self.customer_email,
+                self.anonymous_id,
+                self.store,
+                self.line_items,
+                self.custom_line_items,
+                self.total_price,
+                self.taxed_price,
+                self.shipping_address,
+                self.billing_address,
+                self.tax_mode,
+                self.tax_rounding_mode,
+                self.customer_group,
+                self.country,
+                self.order_state,
+                self.state,
+                self.shipment_state,
+                self.payment_state,
+                self.shipping_info,
+                self.sync_info,
+                self.return_info,
+                self.discount_codes,
+                self.last_message_sequence_number,
+                self.cart,
+                self.custom,
+                self.payment_info,
+                self.locale,
+                self.inventory_mode,
+                self.origin,
+                self.tax_calculation_mode,
+                self.shipping_rate_input,
+                self.item_shipping_addresses,
+                self.refused_gifts,
+            )
+        )
+
+
 class MyOrderFromCartDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyOrderFromCartDraftSchema`."
     #: :class:`str`
@@ -251,3 +959,2054 @@ class MyOrderFromCartDraft(_BaseType):
 
     def __repr__(self) -> str:
         return "MyOrderFromCartDraft(id=%r, version=%r)" % (self.id, self.version)
+
+
+class MyPayment(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: Optional :class:`commercetools.types.CustomerReference`
+    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``amountPlanned`` `in Commercetools)`
+    amount_planned: typing.Optional["TypedMoney"]
+    #: :class:`commercetools.types.PaymentMethodInfo` `(Named` ``paymentMethodInfo`` `in Commercetools)`
+    payment_method_info: typing.Optional["PaymentMethodInfo"]
+    #: List of :class:`commercetools.types.Transaction`
+    transactions: typing.Optional[typing.List["Transaction"]]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        anonymous_id: typing.Optional[str] = None,
+        amount_planned: typing.Optional["TypedMoney"] = None,
+        payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
+        transactions: typing.Optional[typing.List["Transaction"]] = None,
+        custom: typing.Optional["CustomFields"] = None
+    ) -> None:
+        self.id = id
+        self.version = version
+        self.customer = customer
+        self.anonymous_id = anonymous_id
+        self.amount_planned = amount_planned
+        self.payment_method_info = payment_method_info
+        self.transactions = transactions
+        self.custom = custom
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "MyPayment(id=%r, version=%r, customer=%r, anonymous_id=%r, amount_planned=%r, payment_method_info=%r, transactions=%r, custom=%r)"
+            % (
+                self.id,
+                self.version,
+                self.customer,
+                self.anonymous_id,
+                self.amount_planned,
+                self.payment_method_info,
+                self.transactions,
+                self.custom,
+            )
+        )
+
+
+class MyPaymentDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentDraftSchema`."
+    #: :class:`commercetools.types.Money` `(Named` ``amountPlanned`` `in Commercetools)`
+    amount_planned: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.PaymentMethodInfo` `(Named` ``paymentMethodInfo`` `in Commercetools)`
+    payment_method_info: typing.Optional["PaymentMethodInfo"]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`commercetools.types.MyTransactionDraft`
+    transaction: typing.Optional["MyTransactionDraft"]
+
+    def __init__(
+        self,
+        *,
+        amount_planned: typing.Optional["Money"] = None,
+        payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        transaction: typing.Optional["MyTransactionDraft"] = None
+    ) -> None:
+        self.amount_planned = amount_planned
+        self.payment_method_info = payment_method_info
+        self.custom = custom
+        self.transaction = transaction
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "MyPaymentDraft(amount_planned=%r, payment_method_info=%r, custom=%r, transaction=%r)"
+            % (
+                self.amount_planned,
+                self.payment_method_info,
+                self.custom,
+                self.transaction,
+            )
+        )
+
+
+class MyPaymentPagedQueryResponse(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentPagedQueryResponseSchema`."
+    #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
+    count: typing.Optional[int]
+    #: Optional :class:`int`
+    total: typing.Optional[int]
+    #: :class:`int`
+    offset: typing.Optional[int]
+    #: List of :class:`commercetools.types.MyPayment`
+    results: typing.Optional[typing.Sequence["MyPayment"]]
+
+    def __init__(
+        self,
+        *,
+        limit: typing.Optional[int] = None,
+        count: typing.Optional[int] = None,
+        total: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        results: typing.Optional[typing.Sequence["MyPayment"]] = None
+    ) -> None:
+        self.limit = limit
+        self.count = count
+        self.total = total
+        self.offset = offset
+        self.results = results
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "MyPaymentPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
+        )
+
+
+class MyPaymentUpdate(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`list`
+    actions: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        version: typing.Optional[int] = None,
+        actions: typing.Optional[list] = None
+    ) -> None:
+        self.version = version
+        self.actions = actions
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MyPaymentUpdate(version=%r, actions=%r)" % (self.version, self.actions)
+
+
+class MyPaymentUpdateAction(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
+
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+        self.action = action
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MyPaymentUpdateAction(action=%r)" % (self.action,)
+
+
+class MyShoppingListDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListDraftSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: Optional list of :class:`commercetools.types.ShoppingListLineItemDraft` `(Named` ``lineItems`` `in Commercetools)`
+    line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
+    #: Optional list of :class:`commercetools.types.TextLineItemDraft` `(Named` ``textLineItems`` `in Commercetools)`
+    text_line_items: typing.Optional[typing.List["TextLineItemDraft"]]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
+    delete_days_after_last_modification: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional["LocalizedString"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
+        text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None
+    ) -> None:
+        self.name = name
+        self.description = description
+        self.line_items = line_items
+        self.text_line_items = text_line_items
+        self.custom = custom
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListDraft(name=%r, description=%r, line_items=%r, text_line_items=%r, custom=%r, delete_days_after_last_modification=%r)"
+            % (
+                self.name,
+                self.description,
+                self.line_items,
+                self.text_line_items,
+                self.custom,
+                self.delete_days_after_last_modification,
+            )
+        )
+
+
+class MyShoppingListUpdate(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListUpdateSchema`."
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`list`
+    actions: typing.Optional[list]
+
+    def __init__(
+        self,
+        *,
+        version: typing.Optional[int] = None,
+        actions: typing.Optional[list] = None
+    ) -> None:
+        self.version = version
+        self.actions = actions
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MyShoppingListUpdate(version=%r, actions=%r)" % (
+            self.version,
+            self.actions,
+        )
+
+
+class MyShoppingListUpdateAction(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListUpdateActionSchema`."
+    #: :class:`str`
+    action: typing.Optional[str]
+
+    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+        self.action = action
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "MyShoppingListUpdateAction(action=%r)" % (self.action,)
+
+
+class MyTransactionDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyTransactionDraftSchema`."
+    #: Optional :class:`datetime.datetime`
+    timestamp: typing.Optional[datetime.datetime]
+    #: :class:`commercetools.types.TransactionType`
+    type: typing.Optional["TransactionType"]
+    #: :class:`commercetools.types.Money`
+    amount: typing.Optional["Money"]
+    #: Optional :class:`str` `(Named` ``interactionId`` `in Commercetools)`
+    interaction_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        timestamp: typing.Optional[datetime.datetime] = None,
+        type: typing.Optional["TransactionType"] = None,
+        amount: typing.Optional["Money"] = None,
+        interaction_id: typing.Optional[str] = None
+    ) -> None:
+        self.timestamp = timestamp
+        self.type = type
+        self.amount = amount
+        self.interaction_id = interaction_id
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "MyTransactionDraft(timestamp=%r, type=%r, amount=%r, interaction_id=%r)"
+            % (self.timestamp, self.type, self.amount, self.interaction_id)
+        )
+
+
+class MyCartAddDiscountCodeAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartAddDiscountCodeActionSchema`."
+    #: :class:`str`
+    code: typing.Optional[str]
+
+    def __init__(
+        self, *, action: typing.Optional[str] = None, code: typing.Optional[str] = None
+    ) -> None:
+        self.code = code
+        super().__init__(action="addDiscountCode")
+
+    def __repr__(self) -> str:
+        return "MyCartAddDiscountCodeAction(action=%r, code=%r)" % (
+            self.action,
+            self.code,
+        )
+
+
+class MyCartAddItemShippingAddressAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartAddItemShippingAddressActionSchema`."
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(action="addItemShippingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCartAddItemShippingAddressAction(action=%r, address=%r)" % (
+            self.action,
+            self.address,
+        )
+
+
+class MyCartAddLineItemAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartAddLineItemActionSchema`."
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
+    external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
+    #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
+    product_id: typing.Optional[str]
+    #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
+    external_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
+    external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
+    #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
+    shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        external_price: typing.Optional["Money"] = None,
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+    ) -> None:
+        self.custom = custom
+        self.distribution_channel = distribution_channel
+        self.external_tax_rate = external_tax_rate
+        self.product_id = product_id
+        self.variant_id = variant_id
+        self.sku = sku
+        self.quantity = quantity
+        self.supply_channel = supply_channel
+        self.external_price = external_price
+        self.external_total_price = external_total_price
+        self.shipping_details = shipping_details
+        super().__init__(action="addLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartAddLineItemAction(action=%r, custom=%r, distribution_channel=%r, external_tax_rate=%r, product_id=%r, variant_id=%r, sku=%r, quantity=%r, supply_channel=%r, external_price=%r, external_total_price=%r, shipping_details=%r)"
+            % (
+                self.action,
+                self.custom,
+                self.distribution_channel,
+                self.external_tax_rate,
+                self.product_id,
+                self.variant_id,
+                self.sku,
+                self.quantity,
+                self.supply_channel,
+                self.external_price,
+                self.external_total_price,
+                self.shipping_details,
+            )
+        )
+
+
+class MyCartAddPaymentAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartAddPaymentActionSchema`."
+    #: :class:`commercetools.types.PaymentResourceIdentifier`
+    payment: typing.Optional["PaymentResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        payment: typing.Optional["PaymentResourceIdentifier"] = None
+    ) -> None:
+        self.payment = payment
+        super().__init__(action="addPayment")
+
+    def __repr__(self) -> str:
+        return "MyCartAddPaymentAction(action=%r, payment=%r)" % (
+            self.action,
+            self.payment,
+        )
+
+
+class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartApplyDeltaToLineItemShippingDetailsTargetsActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: List of :class:`commercetools.types.ItemShippingTarget` `(Named` ``targetsDelta`` `in Commercetools)`
+    targets_delta: typing.Optional[typing.List["ItemShippingTarget"]]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        targets_delta: typing.Optional[typing.List["ItemShippingTarget"]] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.targets_delta = targets_delta
+        super().__init__(action="applyDeltaToLineItemShippingDetailsTargets")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(action=%r, line_item_id=%r, targets_delta=%r)"
+            % (self.action, self.line_item_id, self.targets_delta)
+        )
+
+
+class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartChangeLineItemQuantityActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
+    external_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
+    external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        external_price: typing.Optional["Money"] = None,
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.quantity = quantity
+        self.external_price = external_price
+        self.external_total_price = external_total_price
+        super().__init__(action="changeLineItemQuantity")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartChangeLineItemQuantityAction(action=%r, line_item_id=%r, quantity=%r, external_price=%r, external_total_price=%r)"
+            % (
+                self.action,
+                self.line_item_id,
+                self.quantity,
+                self.external_price,
+                self.external_total_price,
+            )
+        )
+
+
+class MyCartChangeTaxModeAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartChangeTaxModeActionSchema`."
+    #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
+    tax_mode: typing.Optional["TaxMode"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        tax_mode: typing.Optional["TaxMode"] = None
+    ) -> None:
+        self.tax_mode = tax_mode
+        super().__init__(action="changeTaxMode")
+
+    def __repr__(self) -> str:
+        return "MyCartChangeTaxModeAction(action=%r, tax_mode=%r)" % (
+            self.action,
+            self.tax_mode,
+        )
+
+
+class MyCartRecalculateAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartRecalculateActionSchema`."
+    #: Optional :class:`bool` `(Named` ``updateProductData`` `in Commercetools)`
+    update_product_data: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        update_product_data: typing.Optional[bool] = None
+    ) -> None:
+        self.update_product_data = update_product_data
+        super().__init__(action="recalculate")
+
+    def __repr__(self) -> str:
+        return "MyCartRecalculateAction(action=%r, update_product_data=%r)" % (
+            self.action,
+            self.update_product_data,
+        )
+
+
+class MyCartRemoveDiscountCodeAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartRemoveDiscountCodeActionSchema`."
+    #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
+    discount_code: typing.Optional["DiscountCodeReference"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        discount_code: typing.Optional["DiscountCodeReference"] = None
+    ) -> None:
+        self.discount_code = discount_code
+        super().__init__(action="removeDiscountCode")
+
+    def __repr__(self) -> str:
+        return "MyCartRemoveDiscountCodeAction(action=%r, discount_code=%r)" % (
+            self.action,
+            self.discount_code,
+        )
+
+
+class MyCartRemoveItemShippingAddressAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartRemoveItemShippingAddressActionSchema`."
+    #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
+        self.address_key = address_key
+        super().__init__(action="removeItemShippingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCartRemoveItemShippingAddressAction(action=%r, address_key=%r)" % (
+            self.action,
+            self.address_key,
+        )
+
+
+class MyCartRemoveLineItemAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartRemoveLineItemActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
+    external_price: typing.Optional["Money"]
+    #: Optional :class:`commercetools.types.ExternalLineItemTotalPrice` `(Named` ``externalTotalPrice`` `in Commercetools)`
+    external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
+    #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetailsToRemove`` `in Commercetools)`
+    shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        external_price: typing.Optional["Money"] = None,
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
+        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.quantity = quantity
+        self.external_price = external_price
+        self.external_total_price = external_total_price
+        self.shipping_details_to_remove = shipping_details_to_remove
+        super().__init__(action="removeLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartRemoveLineItemAction(action=%r, line_item_id=%r, quantity=%r, external_price=%r, external_total_price=%r, shipping_details_to_remove=%r)"
+            % (
+                self.action,
+                self.line_item_id,
+                self.quantity,
+                self.external_price,
+                self.external_total_price,
+                self.shipping_details_to_remove,
+            )
+        )
+
+
+class MyCartRemovePaymentAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartRemovePaymentActionSchema`."
+    #: :class:`commercetools.types.PaymentResourceIdentifier`
+    payment: typing.Optional["PaymentResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        payment: typing.Optional["PaymentResourceIdentifier"] = None
+    ) -> None:
+        self.payment = payment
+        super().__init__(action="removePayment")
+
+    def __repr__(self) -> str:
+        return "MyCartRemovePaymentAction(action=%r, payment=%r)" % (
+            self.action,
+            self.payment,
+        )
+
+
+class MyCartSetBillingAddressAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetBillingAddressActionSchema`."
+    #: Optional :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(action="setBillingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCartSetBillingAddressAction(action=%r, address=%r)" % (
+            self.action,
+            self.address,
+        )
+
+
+class MyCartSetCountryAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetCountryActionSchema`."
+    #: Optional :class:`str`
+    country: typing.Optional["str"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        country: typing.Optional["str"] = None
+    ) -> None:
+        self.country = country
+        super().__init__(action="setCountry")
+
+    def __repr__(self) -> str:
+        return "MyCartSetCountryAction(action=%r, country=%r)" % (
+            self.action,
+            self.country,
+        )
+
+
+class MyCartSetCustomFieldAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetCustomFieldActionSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.name = name
+        self.value = value
+        super().__init__(action="setCustomField")
+
+    def __repr__(self) -> str:
+        return "MyCartSetCustomFieldAction(action=%r, name=%r, value=%r)" % (
+            self.action,
+            self.name,
+            self.value,
+        )
+
+
+class MyCartSetCustomShippingMethodAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetCustomShippingMethodActionSchema`."
+    #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
+    shipping_method_name: typing.Optional[str]
+    #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
+    shipping_rate: typing.Optional["ShippingRateDraft"]
+    #: Optional :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
+    external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        shipping_method_name: typing.Optional[str] = None,
+        shipping_rate: typing.Optional["ShippingRateDraft"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+    ) -> None:
+        self.shipping_method_name = shipping_method_name
+        self.shipping_rate = shipping_rate
+        self.tax_category = tax_category
+        self.external_tax_rate = external_tax_rate
+        super().__init__(action="setCustomShippingMethod")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetCustomShippingMethodAction(action=%r, shipping_method_name=%r, shipping_rate=%r, tax_category=%r, external_tax_rate=%r)"
+            % (
+                self.action,
+                self.shipping_method_name,
+                self.shipping_rate,
+                self.tax_category,
+                self.external_tax_rate,
+            )
+        )
+
+
+class MyCartSetCustomTypeAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetCustomTypeActionSchema`."
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Optional :class:`commercetools.types.FieldContainer`
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ) -> None:
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setCustomType")
+
+    def __repr__(self) -> str:
+        return "MyCartSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
+            self.action,
+            self.type,
+            self.fields,
+        )
+
+
+class MyCartSetDeleteDaysAfterLastModificationAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetDeleteDaysAfterLastModificationActionSchema`."
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
+    delete_days_after_last_modification: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None
+    ) -> None:
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        super().__init__(action="setDeleteDaysAfterLastModification")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetDeleteDaysAfterLastModificationAction(action=%r, delete_days_after_last_modification=%r)"
+            % (self.action, self.delete_days_after_last_modification)
+        )
+
+
+class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetLineItemCustomFieldActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setLineItemCustomField")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetLineItemCustomFieldAction(action=%r, line_item_id=%r, name=%r, value=%r)"
+            % (self.action, self.line_item_id, self.name, self.value)
+        )
+
+
+class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetLineItemCustomTypeActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Optional :class:`commercetools.types.FieldContainer`
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setLineItemCustomType")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetLineItemCustomTypeAction(action=%r, line_item_id=%r, type=%r, fields=%r)"
+            % (self.action, self.line_item_id, self.type, self.fields)
+        )
+
+
+class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetLineItemShippingDetailsActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
+    shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.shipping_details = shipping_details
+        super().__init__(action="setLineItemShippingDetails")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetLineItemShippingDetailsAction(action=%r, line_item_id=%r, shipping_details=%r)"
+            % (self.action, self.line_item_id, self.shipping_details)
+        )
+
+
+class MyCartSetLocaleAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetLocaleActionSchema`."
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None
+    ) -> None:
+        self.locale = locale
+        super().__init__(action="setLocale")
+
+    def __repr__(self) -> str:
+        return "MyCartSetLocaleAction(action=%r, locale=%r)" % (
+            self.action,
+            self.locale,
+        )
+
+
+class MyCartSetShippingAddressAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetShippingAddressActionSchema`."
+    #: Optional :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(action="setShippingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCartSetShippingAddressAction(action=%r, address=%r)" % (
+            self.action,
+            self.address,
+        )
+
+
+class MyCartSetShippingMethodAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSetShippingMethodActionSchema`."
+    #: Optional :class:`commercetools.types.ShippingMethodResourceIdentifier` `(Named` ``shippingMethod`` `in Commercetools)`
+    shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
+    external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+    ) -> None:
+        self.shipping_method = shipping_method
+        self.external_tax_rate = external_tax_rate
+        super().__init__(action="setShippingMethod")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetShippingMethodAction(action=%r, shipping_method=%r, external_tax_rate=%r)"
+            % (self.action, self.shipping_method, self.external_tax_rate)
+        )
+
+
+class MyCartUpdateItemShippingAddressAction(MyCartUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartUpdateItemShippingAddressActionSchema`."
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(action="updateItemShippingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCartUpdateItemShippingAddressAction(action=%r, address=%r)" % (
+            self.action,
+            self.address,
+        )
+
+
+class MyCustomerAddAddressAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerAddAddressActionSchema`."
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address = address
+        super().__init__(action="addAddress")
+
+    def __repr__(self) -> str:
+        return "MyCustomerAddAddressAction(action=%r, address=%r)" % (
+            self.action,
+            self.address,
+        )
+
+
+class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerAddBillingAddressIdActionSchema`."
+    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="addBillingAddressId")
+
+    def __repr__(self) -> str:
+        return "MyCustomerAddBillingAddressIdAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerAddShippingAddressIdActionSchema`."
+    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="addShippingAddressId")
+
+    def __repr__(self) -> str:
+        return "MyCustomerAddShippingAddressIdAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerChangeAddressActionSchema`."
+    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: :class:`commercetools.types.Address`
+    address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None,
+        address: typing.Optional["Address"] = None
+    ) -> None:
+        self.address_id = address_id
+        self.address = address
+        super().__init__(action="changeAddress")
+
+    def __repr__(self) -> str:
+        return "MyCustomerChangeAddressAction(action=%r, address_id=%r, address=%r)" % (
+            self.action,
+            self.address_id,
+            self.address,
+        )
+
+
+class MyCustomerChangeEmailAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerChangeEmailActionSchema`."
+    #: :class:`str`
+    email: typing.Optional[str]
+
+    def __init__(
+        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
+    ) -> None:
+        self.email = email
+        super().__init__(action="changeEmail")
+
+    def __repr__(self) -> str:
+        return "MyCustomerChangeEmailAction(action=%r, email=%r)" % (
+            self.action,
+            self.email,
+        )
+
+
+class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerRemoveAddressActionSchema`."
+    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="removeAddress")
+
+    def __repr__(self) -> str:
+        return "MyCustomerRemoveAddressAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerRemoveBillingAddressIdActionSchema`."
+    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="removeBillingAddressId")
+
+    def __repr__(self) -> str:
+        return "MyCustomerRemoveBillingAddressIdAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerRemoveShippingAddressIdActionSchema`."
+    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="removeShippingAddressId")
+
+    def __repr__(self) -> str:
+        return "MyCustomerRemoveShippingAddressIdAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerSetCompanyNameAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetCompanyNameActionSchema`."
+    #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
+    company_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        company_name: typing.Optional[str] = None
+    ) -> None:
+        self.company_name = company_name
+        super().__init__(action="setCompanyName")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetCompanyNameAction(action=%r, company_name=%r)" % (
+            self.action,
+            self.company_name,
+        )
+
+
+class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetCustomFieldActionSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.name = name
+        self.value = value
+        super().__init__(action="setCustomField")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetCustomFieldAction(action=%r, name=%r, value=%r)" % (
+            self.action,
+            self.name,
+            self.value,
+        )
+
+
+class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetCustomTypeActionSchema`."
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Optional :class:`commercetools.types.FieldContainer`
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ) -> None:
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setCustomType")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
+            self.action,
+            self.type,
+            self.fields,
+        )
+
+
+class MyCustomerSetDateOfBirthAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetDateOfBirthActionSchema`."
+    #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
+    date_of_birth: typing.Optional[datetime.date]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None
+    ) -> None:
+        self.date_of_birth = date_of_birth
+        super().__init__(action="setDateOfBirth")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetDateOfBirthAction(action=%r, date_of_birth=%r)" % (
+            self.action,
+            self.date_of_birth,
+        )
+
+
+class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetDefaultBillingAddressActionSchema`."
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="setDefaultBillingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetDefaultBillingAddressAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetDefaultShippingAddressActionSchema`."
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        address_id: typing.Optional[str] = None
+    ) -> None:
+        self.address_id = address_id
+        super().__init__(action="setDefaultShippingAddress")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetDefaultShippingAddressAction(action=%r, address_id=%r)" % (
+            self.action,
+            self.address_id,
+        )
+
+
+class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetFirstNameActionSchema`."
+    #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
+    first_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        first_name: typing.Optional[str] = None
+    ) -> None:
+        self.first_name = first_name
+        super().__init__(action="setFirstName")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetFirstNameAction(action=%r, first_name=%r)" % (
+            self.action,
+            self.first_name,
+        )
+
+
+class MyCustomerSetLastNameAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetLastNameActionSchema`."
+    #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
+    last_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None
+    ) -> None:
+        self.last_name = last_name
+        super().__init__(action="setLastName")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetLastNameAction(action=%r, last_name=%r)" % (
+            self.action,
+            self.last_name,
+        )
+
+
+class MyCustomerSetLocaleAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetLocaleActionSchema`."
+    #: Optional :class:`str`
+    locale: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None
+    ) -> None:
+        self.locale = locale
+        super().__init__(action="setLocale")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetLocaleAction(action=%r, locale=%r)" % (
+            self.action,
+            self.locale,
+        )
+
+
+class MyCustomerSetMiddleNameAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetMiddleNameActionSchema`."
+    #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
+    middle_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        middle_name: typing.Optional[str] = None
+    ) -> None:
+        self.middle_name = middle_name
+        super().__init__(action="setMiddleName")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetMiddleNameAction(action=%r, middle_name=%r)" % (
+            self.action,
+            self.middle_name,
+        )
+
+
+class MyCustomerSetSalutationAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetSalutationActionSchema`."
+    #: Optional :class:`str`
+    salutation: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None
+    ) -> None:
+        self.salutation = salutation
+        super().__init__(action="setSalutation")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetSalutationAction(action=%r, salutation=%r)" % (
+            self.action,
+            self.salutation,
+        )
+
+
+class MyCustomerSetTitleAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetTitleActionSchema`."
+    #: Optional :class:`str`
+    title: typing.Optional[str]
+
+    def __init__(
+        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+    ) -> None:
+        self.title = title
+        super().__init__(action="setTitle")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetTitleAction(action=%r, title=%r)" % (
+            self.action,
+            self.title,
+        )
+
+
+class MyCustomerSetVatIdAction(MyCustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSetVatIdActionSchema`."
+    #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
+    vat_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None
+    ) -> None:
+        self.vat_id = vat_id
+        super().__init__(action="setVatId")
+
+    def __repr__(self) -> str:
+        return "MyCustomerSetVatIdAction(action=%r, vat_id=%r)" % (
+            self.action,
+            self.vat_id,
+        )
+
+
+class MyPaymentAddTransactionAction(MyPaymentUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentAddTransactionActionSchema`."
+    #: :class:`commercetools.types.TransactionDraft`
+    transaction: typing.Optional["TransactionDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        transaction: typing.Optional["TransactionDraft"] = None
+    ) -> None:
+        self.transaction = transaction
+        super().__init__(action="addTransaction")
+
+    def __repr__(self) -> str:
+        return "MyPaymentAddTransactionAction(action=%r, transaction=%r)" % (
+            self.action,
+            self.transaction,
+        )
+
+
+class MyPaymentChangeAmountPlannedAction(MyPaymentUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentChangeAmountPlannedActionSchema`."
+    #: :class:`commercetools.types.Money`
+    amount: typing.Optional["Money"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        amount: typing.Optional["Money"] = None
+    ) -> None:
+        self.amount = amount
+        super().__init__(action="changeAmountPlanned")
+
+    def __repr__(self) -> str:
+        return "MyPaymentChangeAmountPlannedAction(action=%r, amount=%r)" % (
+            self.action,
+            self.amount,
+        )
+
+
+class MyPaymentSetCustomFieldAction(MyPaymentUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentSetCustomFieldActionSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.name = name
+        self.value = value
+        super().__init__(action="setCustomField")
+
+    def __repr__(self) -> str:
+        return "MyPaymentSetCustomFieldAction(action=%r, name=%r, value=%r)" % (
+            self.action,
+            self.name,
+            self.value,
+        )
+
+
+class MyPaymentSetMethodInfoInterfaceAction(MyPaymentUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentSetMethodInfoInterfaceActionSchema`."
+    #: :class:`str`
+    interface: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        interface: typing.Optional[str] = None
+    ) -> None:
+        self.interface = interface
+        super().__init__(action="setMethodInfoInterface")
+
+    def __repr__(self) -> str:
+        return "MyPaymentSetMethodInfoInterfaceAction(action=%r, interface=%r)" % (
+            self.action,
+            self.interface,
+        )
+
+
+class MyPaymentSetMethodInfoMethodAction(MyPaymentUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentSetMethodInfoMethodActionSchema`."
+    #: Optional :class:`str`
+    method: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        method: typing.Optional[str] = None
+    ) -> None:
+        self.method = method
+        super().__init__(action="setMethodInfoMethod")
+
+    def __repr__(self) -> str:
+        return "MyPaymentSetMethodInfoMethodAction(action=%r, method=%r)" % (
+            self.action,
+            self.method,
+        )
+
+
+class MyPaymentSetMethodInfoNameAction(MyPaymentUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyPaymentSetMethodInfoNameActionSchema`."
+    #: Optional :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.name = name
+        super().__init__(action="setMethodInfoName")
+
+    def __repr__(self) -> str:
+        return "MyPaymentSetMethodInfoNameAction(action=%r, name=%r)" % (
+            self.action,
+            self.name,
+        )
+
+
+class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListAddLineItemActionSchema`."
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
+    product_id: typing.Optional[str]
+    #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        sku: typing.Optional[str] = None,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        quantity: typing.Optional[int] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ) -> None:
+        self.sku = sku
+        self.product_id = product_id
+        self.variant_id = variant_id
+        self.quantity = quantity
+        self.added_at = added_at
+        self.custom = custom
+        super().__init__(action="addLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListAddLineItemAction(action=%r, sku=%r, product_id=%r, variant_id=%r, quantity=%r, added_at=%r, custom=%r)"
+            % (
+                self.action,
+                self.sku,
+                self.product_id,
+                self.variant_id,
+                self.quantity,
+                self.added_at,
+                self.custom,
+            )
+        )
+
+
+class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListAddTextLineItemActionSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        quantity: typing.Optional[int] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ) -> None:
+        self.name = name
+        self.description = description
+        self.quantity = quantity
+        self.added_at = added_at
+        self.custom = custom
+        super().__init__(action="addTextLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListAddTextLineItemAction(action=%r, name=%r, description=%r, quantity=%r, added_at=%r, custom=%r)"
+            % (
+                self.action,
+                self.name,
+                self.description,
+                self.quantity,
+                self.added_at,
+                self.custom,
+            )
+        )
+
+
+class MyShoppingListChangeLineItemQuantityAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListChangeLineItemQuantityActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.quantity = quantity
+        super().__init__(action="changeLineItemQuantity")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListChangeLineItemQuantityAction(action=%r, line_item_id=%r, quantity=%r)"
+            % (self.action, self.line_item_id, self.quantity)
+        )
+
+
+class MyShoppingListChangeLineItemsOrderAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListChangeLineItemsOrderActionSchema`."
+    #: List of :class:`str` `(Named` ``lineItemOrder`` `in Commercetools)`
+    line_item_order: typing.Optional[typing.List[str]]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_order: typing.Optional[typing.List[str]] = None
+    ) -> None:
+        self.line_item_order = line_item_order
+        super().__init__(action="changeLineItemsOrder")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListChangeLineItemsOrderAction(action=%r, line_item_order=%r)"
+            % (self.action, self.line_item_order)
+        )
+
+
+class MyShoppingListChangeNameAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListChangeNameActionSchema`."
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.name = name
+        super().__init__(action="changeName")
+
+    def __repr__(self) -> str:
+        return "MyShoppingListChangeNameAction(action=%r, name=%r)" % (
+            self.action,
+            self.name,
+        )
+
+
+class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListChangeTextLineItemNameActionSchema`."
+    #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
+    text_line_item_id: typing.Optional[str]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_id: typing.Optional[str] = None,
+        name: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.text_line_item_id = text_line_item_id
+        self.name = name
+        super().__init__(action="changeTextLineItemName")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListChangeTextLineItemNameAction(action=%r, text_line_item_id=%r, name=%r)"
+            % (self.action, self.text_line_item_id, self.name)
+        )
+
+
+class MyShoppingListChangeTextLineItemQuantityAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListChangeTextLineItemQuantityActionSchema`."
+    #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
+    text_line_item_id: typing.Optional[str]
+    #: :class:`int`
+    quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None
+    ) -> None:
+        self.text_line_item_id = text_line_item_id
+        self.quantity = quantity
+        super().__init__(action="changeTextLineItemQuantity")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListChangeTextLineItemQuantityAction(action=%r, text_line_item_id=%r, quantity=%r)"
+            % (self.action, self.text_line_item_id, self.quantity)
+        )
+
+
+class MyShoppingListChangeTextLineItemsOrderAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListChangeTextLineItemsOrderActionSchema`."
+    #: List of :class:`str` `(Named` ``textLineItemOrder`` `in Commercetools)`
+    text_line_item_order: typing.Optional[typing.List[str]]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_order: typing.Optional[typing.List[str]] = None
+    ) -> None:
+        self.text_line_item_order = text_line_item_order
+        super().__init__(action="changeTextLineItemsOrder")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListChangeTextLineItemsOrderAction(action=%r, text_line_item_order=%r)"
+            % (self.action, self.text_line_item_order)
+        )
+
+
+class MyShoppingListRemoveLineItemAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListRemoveLineItemActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.quantity = quantity
+        super().__init__(action="removeLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListRemoveLineItemAction(action=%r, line_item_id=%r, quantity=%r)"
+            % (self.action, self.line_item_id, self.quantity)
+        )
+
+
+class MyShoppingListRemoveTextLineItemAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListRemoveTextLineItemActionSchema`."
+    #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
+    text_line_item_id: typing.Optional[str]
+    #: Optional :class:`int`
+    quantity: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_id: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None
+    ) -> None:
+        self.text_line_item_id = text_line_item_id
+        self.quantity = quantity
+        super().__init__(action="removeTextLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListRemoveTextLineItemAction(action=%r, text_line_item_id=%r, quantity=%r)"
+            % (self.action, self.text_line_item_id, self.quantity)
+        )
+
+
+class MyShoppingListSetCustomFieldAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetCustomFieldActionSchema`."
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.name = name
+        self.value = value
+        super().__init__(action="setCustomField")
+
+    def __repr__(self) -> str:
+        return "MyShoppingListSetCustomFieldAction(action=%r, name=%r, value=%r)" % (
+            self.action,
+            self.name,
+            self.value,
+        )
+
+
+class MyShoppingListSetCustomTypeAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetCustomTypeActionSchema`."
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Optional :class:`commercetools.types.FieldContainer`
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ) -> None:
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setCustomType")
+
+    def __repr__(self) -> str:
+        return "MyShoppingListSetCustomTypeAction(action=%r, type=%r, fields=%r)" % (
+            self.action,
+            self.type,
+            self.fields,
+        )
+
+
+class MyShoppingListSetDeleteDaysAfterLastModificationAction(
+    MyShoppingListUpdateAction
+):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetDeleteDaysAfterLastModificationActionSchema`."
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
+    delete_days_after_last_modification: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None
+    ) -> None:
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        super().__init__(action="setDeleteDaysAfterLastModification")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListSetDeleteDaysAfterLastModificationAction(action=%r, delete_days_after_last_modification=%r)"
+            % (self.action, self.delete_days_after_last_modification)
+        )
+
+
+class MyShoppingListSetDescriptionAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetDescriptionActionSchema`."
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        description: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.description = description
+        super().__init__(action="setDescription")
+
+    def __repr__(self) -> str:
+        return "MyShoppingListSetDescriptionAction(action=%r, description=%r)" % (
+            self.action,
+            self.description,
+        )
+
+
+class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetLineItemCustomFieldActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setLineItemCustomField")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListSetLineItemCustomFieldAction(action=%r, line_item_id=%r, name=%r, value=%r)"
+            % (self.action, self.line_item_id, self.name, self.value)
+        )
+
+
+class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetLineItemCustomTypeActionSchema`."
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Optional :class:`commercetools.types.FieldContainer`
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        line_item_id: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setLineItemCustomType")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListSetLineItemCustomTypeAction(action=%r, line_item_id=%r, type=%r, fields=%r)"
+            % (self.action, self.line_item_id, self.type, self.fields)
+        )
+
+
+class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetTextLineItemCustomFieldActionSchema`."
+    #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
+    text_line_item_id: typing.Optional[str]
+    #: :class:`str`
+    name: typing.Optional[str]
+    #: Optional :class:`typing.Any`
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        value: typing.Optional[typing.Any] = None
+    ) -> None:
+        self.text_line_item_id = text_line_item_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setTextLineItemCustomField")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListSetTextLineItemCustomFieldAction(action=%r, text_line_item_id=%r, name=%r, value=%r)"
+            % (self.action, self.text_line_item_id, self.name, self.value)
+        )
+
+
+class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetTextLineItemCustomTypeActionSchema`."
+    #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
+    text_line_item_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.TypeResourceIdentifier`
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Optional :class:`commercetools.types.FieldContainer`
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_id: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ) -> None:
+        self.text_line_item_id = text_line_item_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setTextLineItemCustomType")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListSetTextLineItemCustomTypeAction(action=%r, text_line_item_id=%r, type=%r, fields=%r)"
+            % (self.action, self.text_line_item_id, self.type, self.fields)
+        )
+
+
+class MyShoppingListSetTextLineItemDescriptionAction(MyShoppingListUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSetTextLineItemDescriptionActionSchema`."
+    #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
+    text_line_item_id: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+
+    def __init__(
+        self,
+        *,
+        action: typing.Optional[str] = None,
+        text_line_item_id: typing.Optional[str] = None,
+        description: typing.Optional["LocalizedString"] = None
+    ) -> None:
+        self.text_line_item_id = text_line_item_id
+        self.description = description
+        super().__init__(action="setTextLineItemDescription")
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingListSetTextLineItemDescriptionAction(action=%r, text_line_item_id=%r, description=%r)"
+            % (self.action, self.text_line_item_id, self.description)
+        )

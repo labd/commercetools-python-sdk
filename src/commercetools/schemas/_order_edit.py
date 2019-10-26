@@ -229,6 +229,7 @@ class OrderEditDraftSchema(marshmallow.Schema):
 
 class OrderEditPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderEditPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -439,7 +440,7 @@ class OrderEditUpdateSchema(marshmallow.Schema):
             allow_none=True,
         )
     )
-    dry_run = marshmallow.fields.Bool(allow_none=True, data_key="dryRun")
+    dry_run = marshmallow.fields.Bool(allow_none=True, missing=None, data_key="dryRun")
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -451,8 +452,12 @@ class OrderEditUpdateSchema(marshmallow.Schema):
 
 class OrderExcerptSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderExcerpt`."
-    total_price = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    total_price = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalPrice",
@@ -1546,7 +1551,7 @@ class StagedOrderSetOrderTotalTaxActionSchema(StagedOrderUpdateActionSchema):
         data_key="externalTotalGross",
     )
     external_tax_portions = marshmallow.fields.Nested(
-        nested="commercetools.schemas._cart.TaxPortionSchema",
+        nested="commercetools.schemas._cart.TaxPortionDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,

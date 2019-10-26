@@ -4,7 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import BaseResourceSchema, LocalizedStringField
+from commercetools.schemas._common import LocalizedStringField, LoggedResourceSchema
 
 __all__ = [
     "CategoryCreatedMessagePayloadSchema",
@@ -179,14 +179,83 @@ class MessageConfigurationSchema(marshmallow.Schema):
 
 class MessagePagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.MessagePagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
-    results = marshmallow.fields.Nested(
-        nested="commercetools.schemas._message.MessageSchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        many=True,
+    results = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "CategoryCreated": "commercetools.schemas._message.CategoryCreatedMessageSchema",
+                "CategorySlugChanged": "commercetools.schemas._message.CategorySlugChangedMessageSchema",
+                "CustomLineItemStateTransition": "commercetools.schemas._message.CustomLineItemStateTransitionMessageSchema",
+                "CustomerAddressAdded": "commercetools.schemas._message.CustomerAddressAddedMessageSchema",
+                "CustomerAddressChanged": "commercetools.schemas._message.CustomerAddressChangedMessageSchema",
+                "CustomerAddressRemoved": "commercetools.schemas._message.CustomerAddressRemovedMessageSchema",
+                "CustomerCompanyNameSet": "commercetools.schemas._message.CustomerCompanyNameSetMessageSchema",
+                "CustomerCreated": "commercetools.schemas._message.CustomerCreatedMessageSchema",
+                "CustomerDateOfBirthSet": "commercetools.schemas._message.CustomerDateOfBirthSetMessageSchema",
+                "CustomerEmailChanged": "commercetools.schemas._message.CustomerEmailChangedMessageSchema",
+                "CustomerEmailVerified": "commercetools.schemas._message.CustomerEmailVerifiedMessageSchema",
+                "CustomerGroupSet": "commercetools.schemas._message.CustomerGroupSetMessageSchema",
+                "DeliveryAdded": "commercetools.schemas._message.DeliveryAddedMessageSchema",
+                "DeliveryAddressSet": "commercetools.schemas._message.DeliveryAddressSetMessageSchema",
+                "DeliveryItemsUpdated": "commercetools.schemas._message.DeliveryItemsUpdatedMessageSchema",
+                "DeliveryRemoved": "commercetools.schemas._message.DeliveryRemovedMessageSchema",
+                "InventoryEntryDeleted": "commercetools.schemas._message.InventoryEntryDeletedMessageSchema",
+                "LineItemStateTransition": "commercetools.schemas._message.LineItemStateTransitionMessageSchema",
+                "OrderBillingAddressSet": "commercetools.schemas._message.OrderBillingAddressSetMessageSchema",
+                "OrderCreated": "commercetools.schemas._message.OrderCreatedMessageSchema",
+                "OrderCustomLineItemDiscountSet": "commercetools.schemas._message.OrderCustomLineItemDiscountSetMessageSchema",
+                "OrderCustomerEmailSet": "commercetools.schemas._message.OrderCustomerEmailSetMessageSchema",
+                "OrderCustomerSet": "commercetools.schemas._message.OrderCustomerSetMessageSchema",
+                "OrderDeleted": "commercetools.schemas._message.OrderDeletedMessageSchema",
+                "OrderDiscountCodeAdded": "commercetools.schemas._message.OrderDiscountCodeAddedMessageSchema",
+                "OrderDiscountCodeRemoved": "commercetools.schemas._message.OrderDiscountCodeRemovedMessageSchema",
+                "OrderDiscountCodeStateSet": "commercetools.schemas._message.OrderDiscountCodeStateSetMessageSchema",
+                "OrderEditApplied": "commercetools.schemas._message.OrderEditAppliedMessageSchema",
+                "OrderImported": "commercetools.schemas._message.OrderImportedMessageSchema",
+                "OrderLineItemAdded": "commercetools.schemas._message.OrderLineItemAddedMessageSchema",
+                "OrderLineItemDiscountSet": "commercetools.schemas._message.OrderLineItemDiscountSetMessageSchema",
+                "OrderPaymentStateChanged": "commercetools.schemas._message.OrderPaymentStateChangedMessageSchema",
+                "ReturnInfoAdded": "commercetools.schemas._message.OrderReturnInfoAddedMessageSchema",
+                "OrderReturnShipmentStateChanged": "commercetools.schemas._message.OrderReturnShipmentStateChangedMessageSchema",
+                "OrderShipmentStateChanged": "commercetools.schemas._message.OrderShipmentStateChangedMessageSchema",
+                "OrderShippingAddressSet": "commercetools.schemas._message.OrderShippingAddressSetMessageSchema",
+                "OrderShippingInfoSet": "commercetools.schemas._message.OrderShippingInfoSetMessageSchema",
+                "OrderShippingRateInputSet": "commercetools.schemas._message.OrderShippingRateInputSetMessageSchema",
+                "OrderStateChanged": "commercetools.schemas._message.OrderStateChangedMessageSchema",
+                "OrderStateTransition": "commercetools.schemas._message.OrderStateTransitionMessageSchema",
+                "ParcelAddedToDelivery": "commercetools.schemas._message.ParcelAddedToDeliveryMessageSchema",
+                "ParcelItemsUpdated": "commercetools.schemas._message.ParcelItemsUpdatedMessageSchema",
+                "ParcelMeasurementsUpdated": "commercetools.schemas._message.ParcelMeasurementsUpdatedMessageSchema",
+                "ParcelRemovedFromDelivery": "commercetools.schemas._message.ParcelRemovedFromDeliveryMessageSchema",
+                "ParcelTrackingDataUpdated": "commercetools.schemas._message.ParcelTrackingDataUpdatedMessageSchema",
+                "PaymentCreated": "commercetools.schemas._message.PaymentCreatedMessageSchema",
+                "PaymentInteractionAdded": "commercetools.schemas._message.PaymentInteractionAddedMessageSchema",
+                "PaymentStatusInterfaceCodeSet": "commercetools.schemas._message.PaymentStatusInterfaceCodeSetMessageSchema",
+                "PaymentStatusStateTransition": "commercetools.schemas._message.PaymentStatusStateTransitionMessageSchema",
+                "PaymentTransactionAdded": "commercetools.schemas._message.PaymentTransactionAddedMessageSchema",
+                "PaymentTransactionStateChanged": "commercetools.schemas._message.PaymentTransactionStateChangedMessageSchema",
+                "ProductCreated": "commercetools.schemas._message.ProductCreatedMessageSchema",
+                "ProductDeleted": "commercetools.schemas._message.ProductDeletedMessageSchema",
+                "ProductImageAdded": "commercetools.schemas._message.ProductImageAddedMessageSchema",
+                "ProductPriceDiscountsSet": "commercetools.schemas._message.ProductPriceDiscountsSetMessageSchema",
+                "ProductPriceExternalDiscountSet": "commercetools.schemas._message.ProductPriceExternalDiscountSetMessageSchema",
+                "ProductPublished": "commercetools.schemas._message.ProductPublishedMessageSchema",
+                "ProductRevertedStagedChanges": "commercetools.schemas._message.ProductRevertedStagedChangesMessageSchema",
+                "ProductSlugChanged": "commercetools.schemas._message.ProductSlugChangedMessageSchema",
+                "ProductStateTransition": "commercetools.schemas._message.ProductStateTransitionMessageSchema",
+                "ProductUnpublished": "commercetools.schemas._message.ProductUnpublishedMessageSchema",
+                "ProductVariantDeleted": "commercetools.schemas._message.ProductVariantDeletedMessageSchema",
+                "ReviewCreated": "commercetools.schemas._message.ReviewCreatedMessageSchema",
+                "ReviewRatingSet": "commercetools.schemas._message.ReviewRatingSetMessageSchema",
+                "ReviewStateTransition": "commercetools.schemas._message.ReviewStateTransitionMessageSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
     )
 
     class Meta:
@@ -210,7 +279,7 @@ class MessagePayloadSchema(marshmallow.Schema):
         return types.MessagePayload(**data)
 
 
-class MessageSchema(BaseResourceSchema):
+class MessageSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Message`."
     sequence_number = marshmallow.fields.Integer(
         allow_none=True, data_key="sequenceNumber"
@@ -262,6 +331,7 @@ class MessageSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.Message(**data)
 
 
@@ -342,6 +412,7 @@ class CategoryCreatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CategoryCreatedMessage(**data)
 
 
@@ -367,6 +438,7 @@ class CategorySlugChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CategorySlugChangedMessage(**data)
 
 
@@ -428,6 +500,7 @@ class CustomLineItemStateTransitionMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomLineItemStateTransitionMessage(**data)
 
 
@@ -461,6 +534,7 @@ class CustomerAddressAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerAddressAddedMessage(**data)
 
 
@@ -494,6 +568,7 @@ class CustomerAddressChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerAddressChangedMessage(**data)
 
 
@@ -527,6 +602,7 @@ class CustomerAddressRemovedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerAddressRemovedMessage(**data)
 
 
@@ -552,6 +628,7 @@ class CustomerCompanyNameSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerCompanyNameSetMessage(**data)
 
 
@@ -585,6 +662,7 @@ class CustomerCreatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerCreatedMessage(**data)
 
 
@@ -610,6 +688,7 @@ class CustomerDateOfBirthSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerDateOfBirthSetMessage(**data)
 
 
@@ -635,6 +714,7 @@ class CustomerEmailChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerEmailChangedMessage(**data)
 
 
@@ -658,6 +738,7 @@ class CustomerEmailVerifiedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerEmailVerifiedMessage(**data)
 
 
@@ -693,6 +774,7 @@ class CustomerGroupSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.CustomerGroupSetMessage(**data)
 
 
@@ -726,6 +808,7 @@ class DeliveryAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.DeliveryAddedMessage(**data)
 
 
@@ -777,6 +860,7 @@ class DeliveryAddressSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.DeliveryAddressSetMessage(**data)
 
 
@@ -828,6 +912,7 @@ class DeliveryItemsUpdatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.DeliveryItemsUpdatedMessage(**data)
 
 
@@ -861,6 +946,7 @@ class DeliveryRemovedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.DeliveryRemovedMessage(**data)
 
 
@@ -898,6 +984,7 @@ class InventoryEntryDeletedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.InventoryEntryDeletedMessage(**data)
 
 
@@ -955,6 +1042,7 @@ class LineItemStateTransitionMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.LineItemStateTransitionMessage(**data)
 
 
@@ -1004,6 +1092,7 @@ class OrderBillingAddressSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderBillingAddressSetMessage(**data)
 
 
@@ -1037,6 +1126,7 @@ class OrderCreatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderCreatedMessage(**data)
 
 
@@ -1094,6 +1184,7 @@ class OrderCustomLineItemDiscountSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderCustomLineItemDiscountSetMessage(**data)
 
 
@@ -1125,6 +1216,7 @@ class OrderCustomerEmailSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderCustomerEmailSetMessage(**data)
 
 
@@ -1202,6 +1294,7 @@ class OrderCustomerSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderCustomerSetMessage(**data)
 
 
@@ -1235,6 +1328,7 @@ class OrderDeletedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderDeletedMessage(**data)
 
 
@@ -1270,6 +1364,7 @@ class OrderDiscountCodeAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderDiscountCodeAddedMessage(**data)
 
 
@@ -1305,6 +1400,7 @@ class OrderDiscountCodeRemovedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderDiscountCodeRemovedMessage(**data)
 
 
@@ -1348,6 +1444,7 @@ class OrderDiscountCodeStateSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderDiscountCodeStateSetMessage(**data)
 
 
@@ -1391,6 +1488,7 @@ class OrderEditAppliedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderEditAppliedMessage(**data)
 
 
@@ -1424,6 +1522,7 @@ class OrderImportedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderImportedMessage(**data)
 
 
@@ -1465,6 +1564,7 @@ class OrderLineItemAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderLineItemAddedMessage(**data)
 
 
@@ -1530,6 +1630,7 @@ class OrderLineItemDiscountSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderLineItemDiscountSetMessage(**data)
 
 
@@ -1539,7 +1640,7 @@ class OrderPaymentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         types.PaymentState, by_value=True, data_key="paymentState"
     )
     old_payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, data_key="oldPaymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="oldPaymentState"
     )
 
     class Meta:
@@ -1557,7 +1658,7 @@ class OrderPaymentStateChangedMessageSchema(MessageSchema):
         types.PaymentState, by_value=True, data_key="paymentState"
     )
     old_payment_state = marshmallow_enum.EnumField(
-        types.PaymentState, by_value=True, data_key="oldPaymentState"
+        types.PaymentState, by_value=True, missing=None, data_key="oldPaymentState"
     )
 
     class Meta:
@@ -1565,6 +1666,7 @@ class OrderPaymentStateChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderPaymentStateChangedMessage(**data)
 
 
@@ -1600,6 +1702,7 @@ class OrderReturnInfoAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderReturnInfoAddedMessage(**data)
 
 
@@ -1631,6 +1734,7 @@ class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderReturnShipmentStateChangedMessage(**data)
 
 
@@ -1640,7 +1744,7 @@ class OrderShipmentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         types.ShipmentState, by_value=True, data_key="shipmentState"
     )
     old_shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, data_key="oldShipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="oldShipmentState"
     )
 
     class Meta:
@@ -1658,7 +1762,7 @@ class OrderShipmentStateChangedMessageSchema(MessageSchema):
         types.ShipmentState, by_value=True, data_key="shipmentState"
     )
     old_shipment_state = marshmallow_enum.EnumField(
-        types.ShipmentState, by_value=True, data_key="oldShipmentState"
+        types.ShipmentState, by_value=True, missing=None, data_key="oldShipmentState"
     )
 
     class Meta:
@@ -1666,6 +1770,7 @@ class OrderShipmentStateChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderShipmentStateChangedMessage(**data)
 
 
@@ -1715,6 +1820,7 @@ class OrderShippingAddressSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderShippingAddressSetMessage(**data)
 
 
@@ -1766,6 +1872,7 @@ class OrderShippingInfoSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderShippingInfoSetMessage(**data)
 
 
@@ -1833,6 +1940,7 @@ class OrderShippingRateInputSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderShippingRateInputSetMessage(**data)
 
 
@@ -1868,6 +1976,7 @@ class OrderStateChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderStateChangedMessage(**data)
 
 
@@ -1903,6 +2012,7 @@ class OrderStateTransitionMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.OrderStateTransitionMessage(**data)
 
 
@@ -1946,6 +2056,7 @@ class ParcelAddedToDeliveryMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ParcelAddedToDeliveryMessage(**data)
 
 
@@ -2003,6 +2114,7 @@ class ParcelItemsUpdatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ParcelItemsUpdatedMessage(**data)
 
 
@@ -2042,6 +2154,7 @@ class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ParcelMeasurementsUpdatedMessage(**data)
 
 
@@ -2077,6 +2190,7 @@ class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ParcelRemovedFromDeliveryMessage(**data)
 
 
@@ -2118,6 +2232,7 @@ class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ParcelTrackingDataUpdatedMessage(**data)
 
 
@@ -2151,6 +2266,7 @@ class PaymentCreatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.PaymentCreatedMessage(**data)
 
 
@@ -2184,6 +2300,7 @@ class PaymentInteractionAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.PaymentInteractionAddedMessage(**data)
 
 
@@ -2215,6 +2332,7 @@ class PaymentStatusInterfaceCodeSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.PaymentStatusInterfaceCodeSetMessage(**data)
 
 
@@ -2250,6 +2368,7 @@ class PaymentStatusStateTransitionMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.PaymentStatusStateTransitionMessage(**data)
 
 
@@ -2283,6 +2402,7 @@ class PaymentTransactionAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.PaymentTransactionAddedMessage(**data)
 
 
@@ -2314,6 +2434,7 @@ class PaymentTransactionStateChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.PaymentTransactionStateChangedMessage(**data)
 
 
@@ -2349,6 +2470,7 @@ class ProductCreatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductCreatedMessage(**data)
 
 
@@ -2402,6 +2524,7 @@ class ProductDeletedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductDeletedMessage(**data)
 
 
@@ -2439,6 +2562,7 @@ class ProductImageAddedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductImageAddedMessage(**data)
 
 
@@ -2476,6 +2600,7 @@ class ProductPriceDiscountsSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductPriceDiscountsSetMessage(**data)
 
 
@@ -2525,6 +2650,7 @@ class ProductPriceExternalDiscountSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductPriceExternalDiscountSetMessage(**data)
 
 
@@ -2580,6 +2706,7 @@ class ProductPublishedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductPublishedMessage(**data)
 
 
@@ -2621,6 +2748,7 @@ class ProductRevertedStagedChangesMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductRevertedStagedChangesMessage(**data)
 
 
@@ -2646,6 +2774,7 @@ class ProductSlugChangedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductSlugChangedMessage(**data)
 
 
@@ -2681,6 +2810,7 @@ class ProductStateTransitionMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductStateTransitionMessage(**data)
 
 
@@ -2704,6 +2834,7 @@ class ProductUnpublishedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductUnpublishedMessage(**data)
 
 
@@ -2755,6 +2886,7 @@ class ProductVariantDeletedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ProductVariantDeletedMessage(**data)
 
 
@@ -2788,6 +2920,7 @@ class ReviewCreatedMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ReviewCreatedMessage(**data)
 
 
@@ -2891,6 +3024,7 @@ class ReviewRatingSetMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ReviewRatingSetMessage(**data)
 
 
@@ -3012,4 +3146,5 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
 
     @marshmallow.post_load
     def post_load(self, data):
+        del data["type"]
         return types.ReviewStateTransitionMessage(**data)

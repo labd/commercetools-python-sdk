@@ -30,11 +30,19 @@ if typing.TYPE_CHECKING:
         ShippingRateInputDraft,
         TaxCalculationMode,
         TaxMode,
-        TaxPortion,
+        TaxPortionDraft,
         TaxedPrice,
     )
+    from ._cart_discount import CartDiscountReference
     from ._channel import ChannelResourceIdentifier
-    from ._common import Address, CreatedBy, LastModifiedBy, LocalizedString, Money
+    from ._common import (
+        Address,
+        CreatedBy,
+        LastModifiedBy,
+        LocalizedString,
+        Money,
+        TypedMoney,
+    )
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from ._discount_code import DiscountCodeReference
     from ._error import ErrorObject
@@ -308,6 +316,8 @@ class OrderEditDraft(_BaseType):
 class OrderEditPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -319,11 +329,13 @@ class OrderEditPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["OrderEdit"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -332,8 +344,8 @@ class OrderEditPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "OrderEditPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "OrderEditPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 
@@ -399,7 +411,7 @@ class OrderEditUpdate(_BaseType):
     version: typing.Optional[int]
     #: List of :class:`commercetools.types.OrderEditUpdateAction`
     actions: typing.Optional[typing.List["OrderEditUpdateAction"]]
-    #: :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
+    #: Optional :class:`bool` `(Named` ``dryRun`` `in Commercetools)`
     dry_run: typing.Optional[bool]
 
     def __init__(
@@ -437,8 +449,8 @@ class OrderEditUpdateAction(_BaseType):
 
 class OrderExcerpt(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderExcerptSchema`."
-    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["TypedMoney"]
     #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedPrice"]
     #: :class:`int`
@@ -447,7 +459,7 @@ class OrderExcerpt(_BaseType):
     def __init__(
         self,
         *,
-        total_price: typing.Optional["Money"] = None,
+        total_price: typing.Optional["TypedMoney"] = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         version: typing.Optional[int] = None
     ) -> None:
@@ -484,7 +496,7 @@ class StagedOrder(Order):
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.Optional[typing.List["LineItem"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
-        total_price: typing.Optional["Money"] = None,
+        total_price: typing.Optional["TypedMoney"] = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
@@ -509,7 +521,8 @@ class StagedOrder(Order):
         origin: typing.Optional["CartOrigin"] = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        refused_gifts: typing.Optional[typing.List["CartDiscountReference"]] = None
     ) -> None:
         super().__init__(
             id=id,
@@ -552,11 +565,12 @@ class StagedOrder(Order):
             tax_calculation_mode=tax_calculation_mode,
             shipping_rate_input=shipping_rate_input,
             item_shipping_addresses=item_shipping_addresses,
+            refused_gifts=refused_gifts,
         )
 
     def __repr__(self) -> str:
         return (
-            "StagedOrder(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "StagedOrder(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r, refused_gifts=%r)"
             % (
                 self.id,
                 self.version,
@@ -598,6 +612,7 @@ class StagedOrder(Order):
                 self.tax_calculation_mode,
                 self.shipping_rate_input,
                 self.item_shipping_addresses,
+                self.refused_gifts,
             )
         )
 
@@ -1961,15 +1976,15 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderSetOrderTotalTaxActionSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``externalTotalGross`` `in Commercetools)`
     external_total_gross: typing.Optional["Money"]
-    #: Optional list of :class:`commercetools.types.TaxPortion` `(Named` ``externalTaxPortions`` `in Commercetools)`
-    external_tax_portions: typing.Optional[typing.List["TaxPortion"]]
+    #: Optional list of :class:`commercetools.types.TaxPortionDraft` `(Named` ``externalTaxPortions`` `in Commercetools)`
+    external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
         external_total_gross: typing.Optional["Money"] = None,
-        external_tax_portions: typing.Optional[typing.List["TaxPortion"]] = None
+        external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None
     ) -> None:
         self.external_total_gross = external_total_gross
         self.external_tax_portions = external_tax_portions

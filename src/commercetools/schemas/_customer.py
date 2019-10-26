@@ -176,6 +176,13 @@ class CustomerDraftSchema(marshmallow.Schema):
     locale = marshmallow.fields.String(allow_none=True, missing=None)
     salutation = marshmallow.fields.String(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
+    stores = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -200,6 +207,7 @@ class CustomerEmailVerifySchema(marshmallow.Schema):
 
 class CustomerPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CustomerPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -330,6 +338,13 @@ class CustomerSchema(LoggedResourceSchema):
     locale = marshmallow.fields.String(allow_none=True, missing=None)
     salutation = marshmallow.fields.String(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
+    stores = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -371,6 +386,9 @@ class CustomerSigninSchema(marshmallow.Schema):
     )
     anonymous_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="anonymousId"
+    )
+    update_product_data = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="updateProductData"
     )
 
     class Meta:

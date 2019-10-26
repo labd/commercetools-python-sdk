@@ -4,7 +4,7 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    BaseResourceSchema,
+    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -61,6 +61,7 @@ class ZoneDraftSchema(marshmallow.Schema):
 
 class ZonePagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ZonePagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -109,7 +110,7 @@ class ZoneResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.ZoneResourceIdentifier(**data)
 
 
-class ZoneSchema(BaseResourceSchema):
+class ZoneSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Zone`."
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)

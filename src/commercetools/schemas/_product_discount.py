@@ -29,8 +29,12 @@ __all__ = [
     "ProductDiscountSetValidUntilActionSchema",
     "ProductDiscountUpdateActionSchema",
     "ProductDiscountUpdateSchema",
+    "ProductDiscountValueAbsoluteDraftSchema",
     "ProductDiscountValueAbsoluteSchema",
+    "ProductDiscountValueDraftSchema",
+    "ProductDiscountValueExternalDraftSchema",
     "ProductDiscountValueExternalSchema",
+    "ProductDiscountValueRelativeDraftSchema",
     "ProductDiscountValueRelativeSchema",
     "ProductDiscountValueSchema",
 ]
@@ -44,9 +48,9 @@ class ProductDiscountDraftSchema(marshmallow.Schema):
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "absolute": "commercetools.schemas._product_discount.ProductDiscountValueAbsoluteSchema",
-            "external": "commercetools.schemas._product_discount.ProductDiscountValueExternalSchema",
-            "relative": "commercetools.schemas._product_discount.ProductDiscountValueRelativeSchema",
+            "absolute": "commercetools.schemas._product_discount.ProductDiscountValueAbsoluteDraftSchema",
+            "external": "commercetools.schemas._product_discount.ProductDiscountValueExternalDraftSchema",
+            "relative": "commercetools.schemas._product_discount.ProductDiscountValueRelativeDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
@@ -90,6 +94,7 @@ class ProductDiscountMatchQuerySchema(marshmallow.Schema):
 
 class ProductDiscountPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -248,6 +253,19 @@ class ProductDiscountUpdateSchema(marshmallow.Schema):
         return types.ProductDiscountUpdate(**data)
 
 
+class ProductDiscountValueDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountValueDraft`."
+    type = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductDiscountValueDraft(**data)
+
+
 class ProductDiscountValueSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscountValue`."
     type = marshmallow.fields.String(allow_none=True)
@@ -318,9 +336,9 @@ class ProductDiscountChangeValueActionSchema(ProductDiscountUpdateActionSchema):
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "absolute": "commercetools.schemas._product_discount.ProductDiscountValueAbsoluteSchema",
-            "external": "commercetools.schemas._product_discount.ProductDiscountValueExternalSchema",
-            "relative": "commercetools.schemas._product_discount.ProductDiscountValueRelativeSchema",
+            "absolute": "commercetools.schemas._product_discount.ProductDiscountValueAbsoluteDraftSchema",
+            "external": "commercetools.schemas._product_discount.ProductDiscountValueExternalDraftSchema",
+            "relative": "commercetools.schemas._product_discount.ProductDiscountValueRelativeDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
@@ -411,8 +429,8 @@ class ProductDiscountSetValidUntilActionSchema(ProductDiscountUpdateActionSchema
         return types.ProductDiscountSetValidUntilAction(**data)
 
 
-class ProductDiscountValueAbsoluteSchema(ProductDiscountValueSchema):
-    "Marshmallow schema for :class:`commercetools.types.ProductDiscountValueAbsolute`."
+class ProductDiscountValueAbsoluteDraftSchema(ProductDiscountValueDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountValueAbsoluteDraft`."
     money = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
@@ -426,7 +444,42 @@ class ProductDiscountValueAbsoluteSchema(ProductDiscountValueSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["type"]
+        return types.ProductDiscountValueAbsoluteDraft(**data)
+
+
+class ProductDiscountValueAbsoluteSchema(ProductDiscountValueSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountValueAbsolute`."
+    money = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+                "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
         return types.ProductDiscountValueAbsolute(**data)
+
+
+class ProductDiscountValueExternalDraftSchema(ProductDiscountValueDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountValueExternalDraft`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductDiscountValueExternalDraft(**data)
 
 
 class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
@@ -439,6 +492,19 @@ class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
     def post_load(self, data):
         del data["type"]
         return types.ProductDiscountValueExternal(**data)
+
+
+class ProductDiscountValueRelativeDraftSchema(ProductDiscountValueDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProductDiscountValueRelativeDraft`."
+    permyriad = marshmallow.fields.Integer(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.ProductDiscountValueRelativeDraft(**data)
 
 
 class ProductDiscountValueRelativeSchema(ProductDiscountValueSchema):

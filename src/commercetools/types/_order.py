@@ -30,7 +30,9 @@ if typing.TYPE_CHECKING:
         TaxCalculationMode,
         TaxMode,
         TaxedPrice,
+        TaxedPriceDraft,
     )
+    from ._cart_discount import CartDiscountReference
     from ._channel import ChannelReference, ChannelResourceIdentifier
     from ._common import (
         Address,
@@ -40,13 +42,14 @@ if typing.TYPE_CHECKING:
         LocalizedString,
         Money,
         PriceDraft,
+        TypedMoney,
     )
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from ._payment import PaymentReference, PaymentResourceIdentifier
     from ._product import Attribute
     from ._shipping_method import ShippingMethodResourceIdentifier, ShippingRateDraft
     from ._state import StateReference, StateResourceIdentifier
-    from ._store import StoreKeyReference
+    from ._store import StoreKeyReference, StoreResourceIdentifier
     from ._tax_category import TaxCategoryResourceIdentifier, TaxRate
     from ._type import (
         CustomFields,
@@ -325,8 +328,8 @@ class Order(LoggedResource):
     line_items: typing.Optional[typing.List["LineItem"]]
     #: List of :class:`commercetools.types.CustomLineItem` `(Named` ``customLineItems`` `in Commercetools)`
     custom_line_items: typing.Optional[typing.List["CustomLineItem"]]
-    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["TypedMoney"]
     #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedPrice"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
@@ -377,6 +380,8 @@ class Order(LoggedResource):
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: List of :class:`commercetools.types.CartDiscountReference` `(Named` ``refusedGifts`` `in Commercetools)`
+    refused_gifts: typing.Optional[typing.List["CartDiscountReference"]]
 
     def __init__(
         self,
@@ -395,7 +400,7 @@ class Order(LoggedResource):
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.Optional[typing.List["LineItem"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItem"]] = None,
-        total_price: typing.Optional["Money"] = None,
+        total_price: typing.Optional["TypedMoney"] = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
@@ -420,7 +425,8 @@ class Order(LoggedResource):
         origin: typing.Optional["CartOrigin"] = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        refused_gifts: typing.Optional[typing.List["CartDiscountReference"]] = None
     ) -> None:
         self.completed_at = completed_at
         self.order_number = order_number
@@ -456,6 +462,7 @@ class Order(LoggedResource):
         self.tax_calculation_mode = tax_calculation_mode
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
+        self.refused_gifts = refused_gifts
         super().__init__(
             id=id,
             version=version,
@@ -467,7 +474,7 @@ class Order(LoggedResource):
 
     def __repr__(self) -> str:
         return (
-            "Order(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "Order(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, completed_at=%r, order_number=%r, customer_id=%r, customer_email=%r, anonymous_id=%r, store=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, tax_mode=%r, tax_rounding_mode=%r, customer_group=%r, country=%r, order_state=%r, state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, sync_info=%r, return_info=%r, discount_codes=%r, last_message_sequence_number=%r, cart=%r, custom=%r, payment_info=%r, locale=%r, inventory_mode=%r, origin=%r, tax_calculation_mode=%r, shipping_rate_input=%r, item_shipping_addresses=%r, refused_gifts=%r)"
             % (
                 self.id,
                 self.version,
@@ -509,6 +516,7 @@ class Order(LoggedResource):
                 self.tax_calculation_mode,
                 self.shipping_rate_input,
                 self.item_shipping_addresses,
+                self.refused_gifts,
             )
         )
 
@@ -523,6 +531,12 @@ class OrderFromCartDraft(_BaseType):
     order_number: typing.Optional[str]
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: typing.Optional["PaymentState"]
+    #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
+    shipment_state: typing.Optional["ShipmentState"]
+    #: Optional :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
+    order_state: typing.Optional["OrderState"]
+    #: Optional :class:`commercetools.types.StateResourceIdentifier`
+    state: typing.Optional["StateResourceIdentifier"]
 
     def __init__(
         self,
@@ -530,18 +544,32 @@ class OrderFromCartDraft(_BaseType):
         id: typing.Optional[str] = None,
         version: typing.Optional[int] = None,
         order_number: typing.Optional[str] = None,
-        payment_state: typing.Optional["PaymentState"] = None
+        payment_state: typing.Optional["PaymentState"] = None,
+        shipment_state: typing.Optional["ShipmentState"] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        state: typing.Optional["StateResourceIdentifier"] = None
     ) -> None:
         self.id = id
         self.version = version
         self.order_number = order_number
         self.payment_state = payment_state
+        self.shipment_state = shipment_state
+        self.order_state = order_state
+        self.state = state
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "OrderFromCartDraft(id=%r, version=%r, order_number=%r, payment_state=%r)"
-            % (self.id, self.version, self.order_number, self.payment_state)
+            "OrderFromCartDraft(id=%r, version=%r, order_number=%r, payment_state=%r, shipment_state=%r, order_state=%r, state=%r)"
+            % (
+                self.id,
+                self.version,
+                self.order_number,
+                self.payment_state,
+                self.shipment_state,
+                self.order_state,
+                self.state,
+            )
         )
 
 
@@ -559,8 +587,8 @@ class OrderImportDraft(_BaseType):
     custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]]
     #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
     total_price: typing.Optional["Money"]
-    #: Optional :class:`commercetools.types.TaxedPrice` `(Named` ``taxedPrice`` `in Commercetools)`
-    taxed_price: typing.Optional["TaxedPrice"]
+    #: Optional :class:`commercetools.types.TaxedPriceDraft` `(Named` ``taxedPrice`` `in Commercetools)`
+    taxed_price: typing.Optional["TaxedPriceDraft"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``shippingAddress`` `in Commercetools)`
     shipping_address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``billingAddress`` `in Commercetools)`
@@ -587,6 +615,10 @@ class OrderImportDraft(_BaseType):
     tax_rounding_mode: typing.Optional["RoundingMode"]
     #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: Optional :class:`commercetools.types.StoreResourceIdentifier`
+    store: typing.Optional["StoreResourceIdentifier"]
+    #: Optional :class:`commercetools.types.CartOrigin`
+    origin: typing.Optional["CartOrigin"]
 
     def __init__(
         self,
@@ -597,7 +629,7 @@ class OrderImportDraft(_BaseType):
         line_items: typing.Optional[typing.List["LineItemImportDraft"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]] = None,
         total_price: typing.Optional["Money"] = None,
-        taxed_price: typing.Optional["TaxedPrice"] = None,
+        taxed_price: typing.Optional["TaxedPriceDraft"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
@@ -610,7 +642,9 @@ class OrderImportDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        store: typing.Optional["StoreResourceIdentifier"] = None,
+        origin: typing.Optional["CartOrigin"] = None
     ) -> None:
         self.order_number = order_number
         self.customer_id = customer_id
@@ -632,11 +666,13 @@ class OrderImportDraft(_BaseType):
         self.inventory_mode = inventory_mode
         self.tax_rounding_mode = tax_rounding_mode
         self.item_shipping_addresses = item_shipping_addresses
+        self.store = store
+        self.origin = origin
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "OrderImportDraft(order_number=%r, customer_id=%r, customer_email=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, customer_group=%r, country=%r, order_state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, completed_at=%r, custom=%r, inventory_mode=%r, tax_rounding_mode=%r, item_shipping_addresses=%r)"
+            "OrderImportDraft(order_number=%r, customer_id=%r, customer_email=%r, line_items=%r, custom_line_items=%r, total_price=%r, taxed_price=%r, shipping_address=%r, billing_address=%r, customer_group=%r, country=%r, order_state=%r, shipment_state=%r, payment_state=%r, shipping_info=%r, completed_at=%r, custom=%r, inventory_mode=%r, tax_rounding_mode=%r, item_shipping_addresses=%r, store=%r, origin=%r)"
             % (
                 self.order_number,
                 self.customer_id,
@@ -658,12 +694,16 @@ class OrderImportDraft(_BaseType):
                 self.inventory_mode,
                 self.tax_rounding_mode,
                 self.item_shipping_addresses,
+                self.store,
+                self.origin,
             )
         )
 
 
 class OrderPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPagedQueryResponseSchema`."
+    #: :class:`int`
+    limit: typing.Optional[int]
     #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
@@ -676,11 +716,13 @@ class OrderPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Order"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -688,11 +730,9 @@ class OrderPagedQueryResponse(_BaseType):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "OrderPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
-            self.count,
-            self.total,
-            self.offset,
-            self.results,
+        return (
+            "OrderPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

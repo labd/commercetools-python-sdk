@@ -5,12 +5,14 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
 )
 
+if typing.TYPE_CHECKING:
+    from ._common import CreatedBy, LastModifiedBy
 __all__ = [
     "Location",
     "Zone",
@@ -49,7 +51,7 @@ class Location(_BaseType):
         return "Location(country=%r, state=%r)" % (self.country, self.state)
 
 
-class Zone(BaseResource):
+class Zone(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSchema`."
     #: Optional :class:`str`
     key: typing.Optional[str]
@@ -67,6 +69,8 @@ class Zone(BaseResource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
@@ -81,16 +85,20 @@ class Zone(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Zone(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, name=%r, description=%r, locations=%r)"
+            "Zone(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, description=%r, locations=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.name,
                 self.description,
@@ -136,6 +144,8 @@ class ZoneDraft(_BaseType):
 class ZonePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZonePagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -147,11 +157,13 @@ class ZonePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Zone"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -159,11 +171,9 @@ class ZonePagedQueryResponse(_BaseType):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "ZonePagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
-            self.count,
-            self.total,
-            self.offset,
-            self.results,
+        return (
+            "ZonePagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

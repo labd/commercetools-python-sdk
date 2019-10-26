@@ -12,7 +12,14 @@ from commercetools.types._common import (
 )
 
 if typing.TYPE_CHECKING:
-    from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money, Price
+    from ._common import (
+        CreatedBy,
+        LastModifiedBy,
+        LocalizedString,
+        Money,
+        Price,
+        TypedMoney,
+    )
 __all__ = [
     "ProductDiscount",
     "ProductDiscountChangeIsActiveAction",
@@ -34,8 +41,12 @@ __all__ = [
     "ProductDiscountUpdateAction",
     "ProductDiscountValue",
     "ProductDiscountValueAbsolute",
+    "ProductDiscountValueAbsoluteDraft",
+    "ProductDiscountValueDraft",
     "ProductDiscountValueExternal",
+    "ProductDiscountValueExternalDraft",
     "ProductDiscountValueRelative",
+    "ProductDiscountValueRelativeDraft",
 ]
 
 
@@ -133,8 +144,8 @@ class ProductDiscountDraft(_BaseType):
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
-    #: :class:`commercetools.types.ProductDiscountValue`
-    value: typing.Optional["ProductDiscountValue"]
+    #: :class:`commercetools.types.ProductDiscountValueDraft`
+    value: typing.Optional["ProductDiscountValueDraft"]
     #: :class:`str`
     predicate: typing.Optional[str]
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
@@ -152,7 +163,7 @@ class ProductDiscountDraft(_BaseType):
         name: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["ProductDiscountValue"] = None,
+        value: typing.Optional["ProductDiscountValueDraft"] = None,
         predicate: typing.Optional[str] = None,
         sort_order: typing.Optional[str] = None,
         is_active: typing.Optional[bool] = None,
@@ -222,6 +233,8 @@ class ProductDiscountMatchQuery(_BaseType):
 class ProductDiscountPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -233,11 +246,13 @@ class ProductDiscountPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["ProductDiscount"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -246,8 +261,8 @@ class ProductDiscountPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "ProductDiscountPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "ProductDiscountPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 
@@ -344,6 +359,19 @@ class ProductDiscountValue(_BaseType):
         return "ProductDiscountValue(type=%r)" % (self.type,)
 
 
+class ProductDiscountValueDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueDraftSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "ProductDiscountValueDraft(type=%r)" % (self.type,)
+
+
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeIsActiveActionSchema`."
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
@@ -430,14 +458,14 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 
 class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeValueActionSchema`."
-    #: :class:`commercetools.types.ProductDiscountValue`
-    value: typing.Optional["ProductDiscountValue"]
+    #: :class:`commercetools.types.ProductDiscountValueDraft`
+    value: typing.Optional["ProductDiscountValueDraft"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        value: typing.Optional["ProductDiscountValue"] = None
+        value: typing.Optional["ProductDiscountValueDraft"] = None
     ) -> None:
         self.value = value
         super().__init__(action="changeValue")
@@ -557,6 +585,27 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
 
 class ProductDiscountValueAbsolute(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteSchema`."
+    #: List of :class:`commercetools.types.TypedMoney`
+    money: typing.Optional[typing.List["TypedMoney"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        money: typing.Optional[typing.List["TypedMoney"]] = None
+    ) -> None:
+        self.money = money
+        super().__init__(type="absolute")
+
+    def __repr__(self) -> str:
+        return "ProductDiscountValueAbsolute(type=%r, money=%r)" % (
+            self.type,
+            self.money,
+        )
+
+
+class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteDraftSchema`."
     #: List of :class:`commercetools.types.Money`
     money: typing.Optional[typing.List["Money"]]
 
@@ -570,7 +619,7 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
         super().__init__(type="absolute")
 
     def __repr__(self) -> str:
-        return "ProductDiscountValueAbsolute(type=%r, money=%r)" % (
+        return "ProductDiscountValueAbsoluteDraft(type=%r, money=%r)" % (
             self.type,
             self.money,
         )
@@ -584,6 +633,16 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 
     def __repr__(self) -> str:
         return "ProductDiscountValueExternal(type=%r)" % (self.type,)
+
+
+class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueExternalDraftSchema`."
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        super().__init__(type="external")
+
+    def __repr__(self) -> str:
+        return "ProductDiscountValueExternalDraft(type=%r)" % (self.type,)
 
 
 class ProductDiscountValueRelative(ProductDiscountValue):
@@ -602,6 +661,27 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 
     def __repr__(self) -> str:
         return "ProductDiscountValueRelative(type=%r, permyriad=%r)" % (
+            self.type,
+            self.permyriad,
+        )
+
+
+class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueRelativeDraftSchema`."
+    #: :class:`int`
+    permyriad: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        permyriad: typing.Optional[int] = None
+    ) -> None:
+        self.permyriad = permyriad
+        super().__init__(type="relative")
+
+    def __repr__(self) -> str:
+        return "ProductDiscountValueRelativeDraft(type=%r, permyriad=%r)" % (
             self.type,
             self.permyriad,
         )

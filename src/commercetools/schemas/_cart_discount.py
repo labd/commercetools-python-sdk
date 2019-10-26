@@ -38,8 +38,12 @@ __all__ = [
     "CartDiscountTargetSchema",
     "CartDiscountUpdateActionSchema",
     "CartDiscountUpdateSchema",
+    "CartDiscountValueAbsoluteDraftSchema",
     "CartDiscountValueAbsoluteSchema",
+    "CartDiscountValueDraftSchema",
+    "CartDiscountValueGiftLineItemDraftSchema",
     "CartDiscountValueGiftLineItemSchema",
+    "CartDiscountValueRelativeDraftSchema",
     "CartDiscountValueRelativeSchema",
     "CartDiscountValueSchema",
     "MultiBuyCustomLineItemsTargetSchema",
@@ -55,9 +59,9 @@ class CartDiscountDraftSchema(marshmallow.Schema):
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "absolute": "commercetools.schemas._cart_discount.CartDiscountValueAbsoluteSchema",
-            "giftLineItem": "commercetools.schemas._cart_discount.CartDiscountValueGiftLineItemSchema",
-            "relative": "commercetools.schemas._cart_discount.CartDiscountValueRelativeSchema",
+            "absolute": "commercetools.schemas._cart_discount.CartDiscountValueAbsoluteDraftSchema",
+            "giftLineItem": "commercetools.schemas._cart_discount.CartDiscountValueGiftLineItemDraftSchema",
+            "relative": "commercetools.schemas._cart_discount.CartDiscountValueRelativeDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
@@ -111,6 +115,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
 
 class CartDiscountPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -314,6 +319,19 @@ class CartDiscountUpdateSchema(marshmallow.Schema):
         return types.CartDiscountUpdate(**data)
 
 
+class CartDiscountValueDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.CartDiscountValueDraft`."
+    type = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CartDiscountValueDraft(**data)
+
+
 class CartDiscountValueSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CartDiscountValue`."
     type = marshmallow.fields.String(allow_none=True)
@@ -442,9 +460,9 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "absolute": "commercetools.schemas._cart_discount.CartDiscountValueAbsoluteSchema",
-            "giftLineItem": "commercetools.schemas._cart_discount.CartDiscountValueGiftLineItemSchema",
-            "relative": "commercetools.schemas._cart_discount.CartDiscountValueRelativeSchema",
+            "absolute": "commercetools.schemas._cart_discount.CartDiscountValueAbsoluteDraftSchema",
+            "giftLineItem": "commercetools.schemas._cart_discount.CartDiscountValueGiftLineItemDraftSchema",
+            "relative": "commercetools.schemas._cart_discount.CartDiscountValueRelativeDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
@@ -604,8 +622,8 @@ class CartDiscountShippingCostTargetSchema(CartDiscountTargetSchema):
         return types.CartDiscountShippingCostTarget(**data)
 
 
-class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
-    "Marshmallow schema for :class:`commercetools.types.CartDiscountValueAbsolute`."
+class CartDiscountValueAbsoluteDraftSchema(CartDiscountValueDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.CartDiscountValueAbsoluteDraft`."
     money = marshmallow.fields.Nested(
         nested="commercetools.schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
@@ -619,7 +637,62 @@ class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
     @marshmallow.post_load
     def post_load(self, data):
         del data["type"]
+        return types.CartDiscountValueAbsoluteDraft(**data)
+
+
+class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
+    "Marshmallow schema for :class:`commercetools.types.CartDiscountValueAbsolute`."
+    money = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+                "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        )
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
         return types.CartDiscountValueAbsolute(**data)
+
+
+class CartDiscountValueGiftLineItemDraftSchema(CartDiscountValueDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.CartDiscountValueGiftLineItemDraft`."
+    product = marshmallow.fields.Nested(
+        nested="commercetools.schemas._product.ProductReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
+    supply_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="supplyChannel",
+    )
+    distribution_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CartDiscountValueGiftLineItemDraft(**data)
 
 
 class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
@@ -652,6 +725,19 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
     def post_load(self, data):
         del data["type"]
         return types.CartDiscountValueGiftLineItem(**data)
+
+
+class CartDiscountValueRelativeDraftSchema(CartDiscountValueDraftSchema):
+    "Marshmallow schema for :class:`commercetools.types.CartDiscountValueRelativeDraft`."
+    permyriad = marshmallow.fields.Integer(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["type"]
+        return types.CartDiscountValueRelativeDraft(**data)
 
 
 class CartDiscountValueRelativeSchema(CartDiscountValueSchema):

@@ -22,23 +22,23 @@ class CartsModel(BaseModel):
             id=line_id,
             name=types.LocalizedString({"en": line_id}),
             price=types.Price(
-                value=types.Money(currency_code=draft.currency, cent_amount=price)
+                value=types.CentPrecisionMoney(
+                    currency_code=draft.currency, cent_amount=price
+                )
             ),
             taxed_price=types.TaxedItemPrice(
-                total_net=types.TypedMoney(
-                    type=types.MoneyType.CENT_PRECISION,
+                total_net=types.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
-                total_gross=types.TypedMoney(
-                    type=types.MoneyType.CENT_PRECISION,
+                total_gross=types.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
             ),
-            total_price=types.Money(
+            total_price=types.CentPrecisionMoney(
                 currency_code=draft.currency,
                 cent_amount=price * (line_item_draft.quantity or 0),
             ),
@@ -60,8 +60,7 @@ class CartsModel(BaseModel):
         taxed_price = None
         if line_items:
 
-            total_price = types.TypedMoney(
-                type=types.MoneyType.CENT_PRECISION,
+            total_price = types.CentPrecisionMoney(
                 currency_code=draft.currency,
                 cent_amount=sum(
                     line_item.taxed_price.total_gross.cent_amount
@@ -71,7 +70,7 @@ class CartsModel(BaseModel):
                 fraction_digits=2,
             )
             taxed_price = types.TaxedPrice(
-                total_net=types.Money(
+                total_net=types.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=sum(
                         line_item.taxed_price.total_net.cent_amount
@@ -79,7 +78,7 @@ class CartsModel(BaseModel):
                         if line_item.taxed_price and line_item.taxed_price.total_net
                     ),
                 ),
-                total_gross=types.Money(
+                total_gross=types.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=sum(
                         line_item.taxed_price.total_gross.cent_amount
@@ -90,7 +89,9 @@ class CartsModel(BaseModel):
                 tax_portions=[
                     types.TaxPortion(
                         name="0% VAT",
-                        amount=types.Money(currency_code=draft.currency, cent_amount=0),
+                        amount=types.CentPrecisionMoney(
+                            currency_code=draft.currency, cent_amount=0
+                        ),
                     )
                 ],
             )

@@ -7,7 +7,7 @@ from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
-    from ._common import LocalizedString, Price, Reference, ReferenceTypeId
+    from ._common import LocalizedString, Price, PriceDraft, Reference, ReferenceTypeId
     from ._customer_group import CustomerGroupReference
     from ._product import Attribute
 __all__ = [
@@ -132,8 +132,8 @@ class VariantValues(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.VariantValuesSchema`."
     #: Optional :class:`str`
     sku: typing.Optional[str]
-    #: List of :class:`commercetools.types.Price`
-    prices: typing.Optional[typing.List["Price"]]
+    #: List of :class:`commercetools.types.PriceDraft`
+    prices: typing.Optional[typing.List["PriceDraft"]]
     #: List of :class:`commercetools.types.Attribute`
     attributes: typing.Optional[typing.List["Attribute"]]
 
@@ -141,7 +141,7 @@ class VariantValues(_BaseType):
         self,
         *,
         sku: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["Price"]] = None,
+        prices: typing.Optional[typing.List["PriceDraft"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None
     ) -> None:
         self.sku = sku
@@ -294,6 +294,8 @@ class DuplicateFieldError(ErrorObject):
     field: typing.Optional[str]
     #: Optional :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
     duplicate_value: typing.Optional[typing.Any]
+    #: Optional :class:`commercetools.types.Reference` `(Named` ``conflictingResource`` `in Commercetools)`
+    conflicting_resource: typing.Optional["Reference"]
 
     def __init__(
         self,
@@ -301,16 +303,24 @@ class DuplicateFieldError(ErrorObject):
         code: typing.Optional[str] = None,
         message: typing.Optional[str] = None,
         field: typing.Optional[str] = None,
-        duplicate_value: typing.Optional[typing.Any] = None
+        duplicate_value: typing.Optional[typing.Any] = None,
+        conflicting_resource: typing.Optional["Reference"] = None
     ) -> None:
         self.field = field
         self.duplicate_value = duplicate_value
+        self.conflicting_resource = conflicting_resource
         super().__init__(code="DuplicateField", message=message)
 
     def __repr__(self) -> str:
         return (
-            "DuplicateFieldError(code=%r, message=%r, field=%r, duplicate_value=%r)"
-            % (self.code, self.message, self.field, self.duplicate_value)
+            "DuplicateFieldError(code=%r, message=%r, field=%r, duplicate_value=%r, conflicting_resource=%r)"
+            % (
+                self.code,
+                self.message,
+                self.field,
+                self.duplicate_value,
+                self.conflicting_resource,
+            )
         )
 
 

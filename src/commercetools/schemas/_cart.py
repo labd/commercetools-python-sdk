@@ -92,8 +92,10 @@ __all__ = [
     "ShippingInfoSchema",
     "ShippingRateInputDraftSchema",
     "ShippingRateInputSchema",
+    "TaxPortionDraftSchema",
     "TaxPortionSchema",
     "TaxedItemPriceSchema",
+    "TaxedPriceDraftSchema",
     "TaxedPriceSchema",
 ]
 
@@ -224,6 +226,7 @@ class CartDraftSchema(marshmallow.Schema):
 
 class CartPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.CartPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -662,8 +665,12 @@ class DiscountedLineItemPortionSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    discounted_amount = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    discounted_amount = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="discountedAmount",
@@ -939,8 +946,12 @@ class LineItemSchema(marshmallow.Schema):
         missing=None,
         data_key="taxedPrice",
     )
-    total_price = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    total_price = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalPrice",
@@ -1124,12 +1135,38 @@ class ShippingRateInputSchema(marshmallow.Schema):
         return types.ShippingRateInput(**data)
 
 
+class TaxPortionDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.TaxPortionDraft`."
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    rate = marshmallow.fields.Float(allow_none=True)
+    amount = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneyDraftSchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneyDraftSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.TaxPortionDraft(**data)
+
+
 class TaxPortionSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxPortion`."
     name = marshmallow.fields.String(allow_none=True, missing=None)
     rate = marshmallow.fields.Float(allow_none=True)
-    amount = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    amount = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -1173,16 +1210,62 @@ class TaxedItemPriceSchema(marshmallow.Schema):
         return types.TaxedItemPrice(**data)
 
 
-class TaxedPriceSchema(marshmallow.Schema):
-    "Marshmallow schema for :class:`commercetools.types.TaxedPrice`."
-    total_net = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+class TaxedPriceDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.TaxedPriceDraft`."
+    total_net = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneyDraftSchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneyDraftSchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalNet",
     )
-    total_gross = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    total_gross = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneyDraftSchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneyDraftSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="totalGross",
+    )
+    tax_portions = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.TaxPortionDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="taxPortions",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.TaxedPriceDraft(**data)
+
+
+class TaxedPriceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.TaxedPrice`."
+    total_net = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="totalNet",
+    )
+    total_gross = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalGross",
@@ -1700,7 +1783,7 @@ class CartSetCartTotalTaxActionSchema(CartUpdateActionSchema):
         data_key="externalTotalGross",
     )
     external_tax_portions = marshmallow.fields.Nested(
-        nested="commercetools.schemas._cart.TaxPortionSchema",
+        nested="commercetools.schemas._cart.TaxPortionDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,

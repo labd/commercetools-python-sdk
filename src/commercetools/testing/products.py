@@ -105,8 +105,9 @@ class ProductsModel(BaseModel):
             custom = None
             if draft.custom:
                 custom = custom_fields_from_draft(self._storage, draft.custom)
+
             price = types.Price(
-                value=draft.value,
+                value=self._create_price_from_draft(draft.value),
                 country=draft.country,
                 customer_group=draft.customer_group,
                 channel=draft.channel,
@@ -118,6 +119,33 @@ class ProductsModel(BaseModel):
             )
             prices.append(price)
         return prices
+
+    def _create_price_from_draft(
+        self, draft: typing.Optional[types.TypedMoneyDraft]
+    ) -> typing.Optional[types.TypedMoney]:
+        if draft is None:
+            return None
+
+        if isinstance(draft, types.CentPrecisionMoneyDraft):
+            return types.CentPrecisionMoney(
+                cent_amount=draft.cent_amount, currency_code=draft.currency_code
+            )
+        elif isinstance(draft, types.HighPrecisionMoneyDraft):
+            return types.HighPrecisionMoney(
+                cent_amount=draft.cent_amount,
+                currency_code=draft.currency_code,
+                precise_amount=draft.precise_amount,
+            )
+        elif isinstance(draft, types.Money):
+            return types.CentPrecisionMoney(
+                cent_amount=draft.cent_amount, currency_code=draft.currency_code
+            )
+        else:
+            return types.TypedMoney(
+                cent_amount=draft.cent_amount,
+                currency_code=draft.currency_code,
+                type=draft.type,
+            )
 
 
 class ProductsBackend(ServiceBackend):

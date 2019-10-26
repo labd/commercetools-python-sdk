@@ -14,7 +14,7 @@ from commercetools.types._common import (
 
 if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
-    from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money
+    from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money, TypedMoney
     from ._product import ProductReference
     from ._type import CustomFields, TypeResourceIdentifier
 __all__ = [
@@ -46,8 +46,12 @@ __all__ = [
     "CartDiscountUpdateAction",
     "CartDiscountValue",
     "CartDiscountValueAbsolute",
+    "CartDiscountValueAbsoluteDraft",
+    "CartDiscountValueDraft",
     "CartDiscountValueGiftLineItem",
+    "CartDiscountValueGiftLineItemDraft",
     "CartDiscountValueRelative",
+    "CartDiscountValueRelativeDraft",
     "MultiBuyCustomLineItemsTarget",
     "MultiBuyLineItemsTarget",
     "SelectionMode",
@@ -169,8 +173,8 @@ class CartDiscountDraft(_BaseType):
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
-    #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
+    #: :class:`commercetools.types.CartDiscountValueDraft`
+    value: typing.Optional["CartDiscountValueDraft"]
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: typing.Optional[str]
     #: Optional :class:`commercetools.types.CartDiscountTarget`
@@ -196,7 +200,7 @@ class CartDiscountDraft(_BaseType):
         name: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["CartDiscountValue"] = None,
+        value: typing.Optional["CartDiscountValueDraft"] = None,
         cart_predicate: typing.Optional[str] = None,
         target: typing.Optional["CartDiscountTarget"] = None,
         sort_order: typing.Optional[str] = None,
@@ -246,6 +250,8 @@ class CartDiscountDraft(_BaseType):
 class CartDiscountPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -257,11 +263,13 @@ class CartDiscountPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["CartDiscount"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -270,8 +278,8 @@ class CartDiscountPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "CartDiscountPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "CartDiscountPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 
@@ -379,6 +387,19 @@ class CartDiscountValue(_BaseType):
 
     def __repr__(self) -> str:
         return "CartDiscountValue(type=%r)" % (self.type,)
+
+
+class CartDiscountValueDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueDraftSchema`."
+    #: :class:`str`
+    type: typing.Optional[str]
+
+    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+        self.type = type
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CartDiscountValueDraft(type=%r)" % (self.type,)
 
 
 class SelectionMode(enum.Enum):
@@ -540,14 +561,14 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 
 class CartDiscountChangeValueAction(CartDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeValueActionSchema`."
-    #: :class:`commercetools.types.CartDiscountValue`
-    value: typing.Optional["CartDiscountValue"]
+    #: :class:`commercetools.types.CartDiscountValueDraft`
+    value: typing.Optional["CartDiscountValueDraft"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        value: typing.Optional["CartDiscountValue"] = None
+        value: typing.Optional["CartDiscountValueDraft"] = None
     ) -> None:
         self.value = value
         super().__init__(action="changeValue")
@@ -768,6 +789,24 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
 
 class CartDiscountValueAbsolute(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueAbsoluteSchema`."
+    #: List of :class:`commercetools.types.TypedMoney`
+    money: typing.Optional[typing.List["TypedMoney"]]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        money: typing.Optional[typing.List["TypedMoney"]] = None
+    ) -> None:
+        self.money = money
+        super().__init__(type="absolute")
+
+    def __repr__(self) -> str:
+        return "CartDiscountValueAbsolute(type=%r, money=%r)" % (self.type, self.money)
+
+
+class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueAbsoluteDraftSchema`."
     #: List of :class:`commercetools.types.Money`
     money: typing.Optional[typing.List["Money"]]
 
@@ -781,7 +820,10 @@ class CartDiscountValueAbsolute(CartDiscountValue):
         super().__init__(type="absolute")
 
     def __repr__(self) -> str:
-        return "CartDiscountValueAbsolute(type=%r, money=%r)" % (self.type, self.money)
+        return "CartDiscountValueAbsoluteDraft(type=%r, money=%r)" % (
+            self.type,
+            self.money,
+        )
 
 
 class CartDiscountValueGiftLineItem(CartDiscountValue):
@@ -823,6 +865,45 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
         )
 
 
+class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueGiftLineItemDraftSchema`."
+    #: :class:`commercetools.types.ProductReference`
+    product: typing.Optional["ProductReference"]
+    #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
+    variant_id: typing.Optional[int]
+    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelReference"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        product: typing.Optional["ProductReference"] = None,
+        variant_id: typing.Optional[int] = None,
+        supply_channel: typing.Optional["ChannelReference"] = None,
+        distribution_channel: typing.Optional["ChannelReference"] = None
+    ) -> None:
+        self.product = product
+        self.variant_id = variant_id
+        self.supply_channel = supply_channel
+        self.distribution_channel = distribution_channel
+        super().__init__(type="giftLineItem")
+
+    def __repr__(self) -> str:
+        return (
+            "CartDiscountValueGiftLineItemDraft(type=%r, product=%r, variant_id=%r, supply_channel=%r, distribution_channel=%r)"
+            % (
+                self.type,
+                self.product,
+                self.variant_id,
+                self.supply_channel,
+                self.distribution_channel,
+            )
+        )
+
+
 class CartDiscountValueRelative(CartDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueRelativeSchema`."
     #: :class:`int`
@@ -839,6 +920,27 @@ class CartDiscountValueRelative(CartDiscountValue):
 
     def __repr__(self) -> str:
         return "CartDiscountValueRelative(type=%r, permyriad=%r)" % (
+            self.type,
+            self.permyriad,
+        )
+
+
+class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueRelativeDraftSchema`."
+    #: :class:`int`
+    permyriad: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional[str] = None,
+        permyriad: typing.Optional[int] = None
+    ) -> None:
+        self.permyriad = permyriad
+        super().__init__(type="relative")
+
+    def __repr__(self) -> str:
+        return "CartDiscountValueRelativeDraft(type=%r, permyriad=%r)" % (
             self.type,
             self.permyriad,
         )

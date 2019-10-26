@@ -88,14 +88,16 @@ def get_test_order():
         customer_email="d.weterings@labdigital.nl",
         anonymous_id="a706a9bf-4cd5-4bd0-b35d-b2373fb0c15e",
         locale="en",
-        total_price=types.Money(cent_amount=2000, currency_code="GBP"),
+        total_price=types.CentPrecisionMoney(cent_amount=2000, currency_code="GBP"),
         taxed_price=types.TaxedPrice(
-            total_net=types.Money(cent_amount=1666, currency_code="GBP"),
-            total_gross=types.Money(cent_amount=2000, currency_code="GBP"),
+            total_net=types.CentPrecisionMoney(cent_amount=1666, currency_code="GBP"),
+            total_gross=types.CentPrecisionMoney(cent_amount=2000, currency_code="GBP"),
             tax_portions=[
                 types.TaxPortion(
                     rate=0.2,
-                    amount=types.Money(cent_amount=334, currency_code="GBP"),
+                    amount=types.CentPrecisionMoney(
+                        cent_amount=334, currency_code="GBP"
+                    ),
                     name="GB",
                 )
             ],
@@ -106,24 +108,15 @@ def get_test_order():
         payment_state=types.PaymentState.PAID,
         shipping_info=types.ShippingInfo(
             shipping_method_name="Shipwire",
-            price=types.TypedMoney(
-                currency_code="GBP",
-                cent_amount=1000,
-                type=types.MoneyType.CENT_PRECISION,
-                fraction_digits=2,
+            price=types.CentPrecisionMoney(
+                currency_code="GBP", cent_amount=1000, fraction_digits=2
             ),
             shipping_rate=types.ShippingRate(
-                price=types.TypedMoney(
-                    currency_code="GBP",
-                    cent_amount=1000,
-                    type=types.MoneyType.CENT_PRECISION,
-                    fraction_digits=2,
+                price=types.CentPrecisionMoney(
+                    currency_code="GBP", cent_amount=1000, fraction_digits=2
                 ),
-                free_above=types.TypedMoney(
-                    currency_code="GBP",
-                    cent_amount=5000,
-                    type=types.MoneyType.CENT_PRECISION,
-                    fraction_digits=2,
+                free_above=types.CentPrecisionMoney(
+                    currency_code="GBP", cent_amount=5000, fraction_digits=2
                 ),
                 tiers=[],
             ),
@@ -142,17 +135,11 @@ def get_test_order():
                 id="b0e88c41-8553-4904-a2d5-a096c5f6f09f"
             ),
             taxed_price=types.TaxedItemPrice(
-                total_net=types.TypedMoney(
-                    cent_amount=833,
-                    currency_code="GBP",
-                    type=types.MoneyType.CENT_PRECISION,
-                    fraction_digits=2,
+                total_net=types.CentPrecisionMoney(
+                    cent_amount=833, currency_code="GBP", fraction_digits=2
                 ),
-                total_gross=types.TypedMoney(
-                    cent_amount=1000,
-                    currency_code="GBP",
-                    type=types.MoneyType.CENT_PRECISION,
-                    fraction_digits=2,
+                total_gross=types.CentPrecisionMoney(
+                    cent_amount=1000, currency_code="GBP", fraction_digits=2
                 ),
             ),
             shipping_method_state=types.ShippingMethodState.MATCHES_CART,
@@ -176,13 +163,17 @@ def get_test_order():
                     prices=[
                         types.Price(
                             id="fb424988-79b3-4418-8730-9f324025a13c",
-                            value=types.Money(cent_amount=1000, currency_code="GBP"),
+                            value=types.CentPrecisionMoney(
+                                cent_amount=1000, currency_code="GBP"
+                            ),
                         )
                     ],
                 ),
                 price=types.Price(
                     id="fb424988-79b3-4418-8730-9f324025a13c",
-                    value=types.Money(cent_amount=1000, currency_code="GBP"),
+                    value=types.CentPrecisionMoney(
+                        cent_amount=1000, currency_code="GBP"
+                    ),
                 ),
                 quantity=1,
                 tax_rate=types.TaxRate(
@@ -201,19 +192,15 @@ def get_test_order():
                     )
                 ],
                 price_mode=types.LineItemPriceMode.PLATFORM,
-                total_price=types.Money(cent_amount=1000, currency_code="GBP"),
+                total_price=types.CentPrecisionMoney(
+                    cent_amount=1000, currency_code="GBP"
+                ),
                 taxed_price=types.TaxedItemPrice(
-                    total_net=types.TypedMoney(
-                        cent_amount=1190,
-                        currency_code="GBP",
-                        type=types.MoneyType.CENT_PRECISION,
-                        fraction_digits=2,
+                    total_net=types.CentPrecisionMoney(
+                        cent_amount=1190, currency_code="GBP", fraction_digits=2
                     ),
-                    total_gross=types.TypedMoney(
-                        cent_amount=1190,
-                        currency_code="GBP",
-                        type=types.MoneyType.CENT_PRECISION,
-                        fraction_digits=2,
+                    total_gross=types.CentPrecisionMoney(
+                        cent_amount=1190, currency_code="GBP", fraction_digits=2
                     ),
                 ),
                 line_item_mode=types.LineItemMode.STANDARD,

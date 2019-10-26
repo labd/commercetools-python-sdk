@@ -3,6 +3,8 @@ import requests
 from commercetools import Client
 from commercetools.types import LocalizedString, ProductDraft
 
+import pytest
+
 
 def test_http_server(commercetools_client, commercetools_http_server):
     import os

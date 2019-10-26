@@ -245,6 +245,18 @@ class OrderFromCartDraftSchema(marshmallow.Schema):
     payment_state = marshmallow_enum.EnumField(
         types.PaymentState, by_value=True, missing=None, data_key="paymentState"
     )
+    shipment_state = marshmallow_enum.EnumField(
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
+    )
+    order_state = marshmallow_enum.EnumField(
+        types.OrderState, by_value=True, missing=None, data_key="orderState"
+    )
+    state = marshmallow.fields.Nested(
+        nested="commercetools.schemas._state.StateResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -288,7 +300,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         data_key="totalPrice",
     )
     taxed_price = marshmallow.fields.Nested(
-        nested="commercetools.schemas._cart.TaxedPriceSchema",
+        nested="commercetools.schemas._cart.TaxedPriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -355,6 +367,13 @@ class OrderImportDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="itemShippingAddresses",
     )
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -366,6 +385,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
 
 class OrderPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.OrderPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)
@@ -451,8 +471,12 @@ class OrderSchema(LoggedResourceSchema):
         many=True,
         data_key="customLineItems",
     )
-    total_price = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    total_price = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalPrice",
@@ -588,6 +612,13 @@ class OrderSchema(LoggedResourceSchema):
         many=True,
         missing=None,
         data_key="itemShippingAddresses",
+    )
+    refused_gifts = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart_discount.CartDiscountReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="refusedGifts",
     )
 
     class Meta:

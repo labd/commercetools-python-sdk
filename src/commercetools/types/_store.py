@@ -5,15 +5,15 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
     KeyReference,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
-    from ._common import LocalizedString
+    from ._common import CreatedBy, LastModifiedBy, LocalizedString
 __all__ = [
     "Store",
     "StoreDraft",
@@ -27,7 +27,7 @@ __all__ = [
 ]
 
 
-class Store(BaseResource):
+class Store(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSchema`."
     #: :class:`str`
     key: typing.Optional[str]
@@ -41,6 +41,8 @@ class Store(BaseResource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None
     ) -> None:
@@ -51,16 +53,20 @@ class Store(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, name=%r)"
+            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.name,
             )
@@ -106,6 +112,8 @@ class StoreKeyReference(KeyReference):
 class StorePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StorePagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -117,11 +125,13 @@ class StorePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Store"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -129,11 +139,9 @@ class StorePagedQueryResponse(_BaseType):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "StorePagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
-            self.count,
-            self.total,
-            self.offset,
-            self.results,
+        return (
+            "StorePagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

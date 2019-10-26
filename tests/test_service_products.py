@@ -32,7 +32,7 @@ def test_products_create(client):
             ],
             prices=[
                 types.PriceDraft(
-                    value=types.Money(cent_amount=1000, currency_code="EUR"),
+                    value=types.CentPrecisionMoneyDraft(cent_amount=1000, currency_code="EUR"),
                     country="NL",
                 )
             ],
@@ -95,7 +95,7 @@ def test_product_query_where(client):
                 prices=[
                     types.PriceDraft(
                         country="NL",
-                        value=types.Money(cent_amount=8750, currency_code="EUR"),
+                        value=types.CentPrecisionMoneyDraft(cent_amount=8750, currency_code="EUR"),
                     )
                 ]
             ),
@@ -108,7 +108,7 @@ def test_product_query_where(client):
                 prices=[
                     types.PriceDraft(
                         country="UK",
-                        value=types.Money(cent_amount=8750, currency_code="EUR"),
+                        value=types.CentPrecisionMoneyDraft(cent_amount=8750, currency_code="EUR"),
                     )
                 ]
             ),

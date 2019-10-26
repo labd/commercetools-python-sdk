@@ -12,6 +12,7 @@ from commercetools.schemas._common import (
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
+    "MyShoppingListSchema",
     "ShoppingListAddLineItemActionSchema",
     "ShoppingListAddTextLineItemActionSchema",
     "ShoppingListChangeLineItemQuantityActionSchema",
@@ -47,6 +48,55 @@ __all__ = [
     "TextLineItemDraftSchema",
     "TextLineItemSchema",
 ]
+
+
+class MyShoppingListSchema(LoggedResourceSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingList`."
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    customer = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+    )
+    description = LocalizedStringField(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._shopping_list.ShoppingListLineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="lineItems",
+    )
+    name = LocalizedStringField(allow_none=True)
+    slug = LocalizedStringField(allow_none=True, missing=None)
+    text_line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._shopping_list.TextLineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="textLineItems",
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyShoppingList(**data)
 
 
 class ShoppingListDraftSchema(marshmallow.Schema):
@@ -171,6 +221,7 @@ class ShoppingListLineItemSchema(marshmallow.Schema):
 
 class ShoppingListPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingListPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)

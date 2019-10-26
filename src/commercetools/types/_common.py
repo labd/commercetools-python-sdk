@@ -21,12 +21,14 @@ __all__ = [
     "AssetSource",
     "BaseResource",
     "CentPrecisionMoney",
+    "CentPrecisionMoneyDraft",
     "ClientLogging",
     "CreatedBy",
     "DiscountedPrice",
     "GeoJson",
     "GeoJsonPoint",
     "HighPrecisionMoney",
+    "HighPrecisionMoneyDraft",
     "Image",
     "ImageDimensions",
     "KeyReference",
@@ -39,11 +41,13 @@ __all__ = [
     "Price",
     "PriceDraft",
     "PriceTier",
+    "PriceTierDraft",
     "Reference",
     "ReferenceTypeId",
     "ResourceIdentifier",
     "ScopedPrice",
     "TypedMoney",
+    "TypedMoneyDraft",
     "Update",
     "UpdateAction",
 ]
@@ -549,6 +553,8 @@ class MoneyType(enum.Enum):
 class PagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -564,6 +570,7 @@ class PagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
@@ -571,6 +578,7 @@ class PagedQueryResponse(_BaseType):
         facets: typing.Optional["FacetResults"] = None,
         meta: typing.Optional[object] = None,
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -581,8 +589,9 @@ class PagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "PagedQueryResponse(count=%r, total=%r, offset=%r, results=%r, facets=%r, meta=%r)"
+            "PagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r, facets=%r, meta=%r)"
             % (
+                self.limit,
                 self.count,
                 self.total,
                 self.offset,
@@ -595,10 +604,10 @@ class PagedQueryResponse(_BaseType):
 
 class Price(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceSchema`."
-    #: Optional :class:`str`
+    #: :class:`str`
     id: typing.Optional[str]
-    #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney`
+    value: typing.Optional["TypedMoney"]
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -620,7 +629,7 @@ class Price(_BaseType):
         self,
         *,
         id: typing.Optional[str] = None,
-        value: typing.Optional["Money"] = None,
+        value: typing.Optional["TypedMoney"] = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -676,8 +685,10 @@ class PriceDraft(_BaseType):
     valid_until: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional list of :class:`commercetools.types.PriceTier`
-    tiers: typing.Optional[typing.List["PriceTier"]]
+    #: Optional list of :class:`commercetools.types.PriceTierDraft`
+    tiers: typing.Optional[typing.List["PriceTierDraft"]]
+    #: Optional :class:`commercetools.types.DiscountedPrice`
+    discounted: typing.Optional["DiscountedPrice"]
 
     def __init__(
         self,
@@ -689,7 +700,8 @@ class PriceDraft(_BaseType):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        tiers: typing.Optional[typing.List["PriceTier"]] = None,
+        tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
+        discounted: typing.Optional["DiscountedPrice"] = None,
     ) -> None:
         self.value = value
         self.country = country
@@ -699,11 +711,12 @@ class PriceDraft(_BaseType):
         self.valid_until = valid_until
         self.custom = custom
         self.tiers = tiers
+        self.discounted = discounted
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "PriceDraft(value=%r, country=%r, customer_group=%r, channel=%r, valid_from=%r, valid_until=%r, custom=%r, tiers=%r)"
+            "PriceDraft(value=%r, country=%r, customer_group=%r, channel=%r, valid_from=%r, valid_until=%r, custom=%r, tiers=%r, discounted=%r)"
             % (
                 self.value,
                 self.country,
@@ -713,12 +726,37 @@ class PriceDraft(_BaseType):
                 self.valid_until,
                 self.custom,
                 self.tiers,
+                self.discounted,
             )
         )
 
 
 class PriceTier(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierSchema`."
+    #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
+    minimum_quantity: typing.Optional[int]
+    #: :class:`commercetools.types.TypedMoney`
+    value: typing.Optional["TypedMoney"]
+
+    def __init__(
+        self,
+        *,
+        minimum_quantity: typing.Optional[int] = None,
+        value: typing.Optional["TypedMoney"] = None,
+    ) -> None:
+        self.minimum_quantity = minimum_quantity
+        self.value = value
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "PriceTier(minimum_quantity=%r, value=%r)" % (
+            self.minimum_quantity,
+            self.value,
+        )
+
+
+class PriceTierDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierDraftSchema`."
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
     minimum_quantity: typing.Optional[int]
     #: :class:`commercetools.types.Money`
@@ -735,7 +773,7 @@ class PriceTier(_BaseType):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "PriceTier(minimum_quantity=%r, value=%r)" % (
+        return "PriceTierDraft(minimum_quantity=%r, value=%r)" % (
             self.minimum_quantity,
             self.value,
         )
@@ -884,6 +922,38 @@ class ScopedPrice(_BaseType):
         )
 
 
+class TypedMoney(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneySchema`."
+    #: :class:`commercetools.types.MoneyType`
+    type: typing.Optional["MoneyType"]
+    #: :class:`int` `(Named` ``fractionDigits`` `in Commercetools)`
+    fraction_digits: typing.Optional[int]
+    #: :class:`int` `(Named` ``centAmount`` `in Commercetools)`
+    cent_amount: typing.Optional[int]
+    #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
+    currency_code: typing.Optional["str"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["MoneyType"] = None,
+        fraction_digits: typing.Optional[int] = None,
+        cent_amount: typing.Optional[int] = None,
+        currency_code: typing.Optional["str"] = None,
+    ) -> None:
+        self.type = type
+        self.fraction_digits = fraction_digits
+        self.cent_amount = cent_amount
+        self.currency_code = currency_code
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "TypedMoney(type=%r, fraction_digits=%r, cent_amount=%r, currency_code=%r)"
+            % (self.type, self.fraction_digits, self.cent_amount, self.currency_code)
+        )
+
+
 class Update(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateSchema`."
     #: :class:`int`
@@ -916,6 +986,31 @@ class UpdateAction(_BaseType):
 
     def __repr__(self) -> str:
         return "UpdateAction(action=%r)" % (self.action,)
+
+
+class CentPrecisionMoney(TypedMoney):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CentPrecisionMoneySchema`."
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["MoneyType"] = None,
+        fraction_digits: typing.Optional[int] = None,
+        cent_amount: typing.Optional[int] = None,
+        currency_code: typing.Optional["str"] = None,
+    ) -> None:
+        super().__init__(
+            type=MoneyType.CENT_PRECISION,
+            fraction_digits=fraction_digits,
+            cent_amount=cent_amount,
+            currency_code=currency_code,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "CentPrecisionMoney(type=%r, fraction_digits=%r, cent_amount=%r, currency_code=%r)"
+            % (self.type, self.fraction_digits, self.cent_amount, self.currency_code)
+        )
 
 
 class CreatedBy(ClientLogging):
@@ -959,6 +1054,41 @@ class GeoJsonPoint(GeoJson):
 
     def __repr__(self) -> str:
         return "GeoJsonPoint(type=%r, coordinates=%r)" % (self.type, self.coordinates)
+
+
+class HighPrecisionMoney(TypedMoney):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneySchema`."
+    #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
+    precise_amount: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["MoneyType"] = None,
+        fraction_digits: typing.Optional[int] = None,
+        cent_amount: typing.Optional[int] = None,
+        currency_code: typing.Optional["str"] = None,
+        precise_amount: typing.Optional[int] = None,
+    ) -> None:
+        self.precise_amount = precise_amount
+        super().__init__(
+            type=MoneyType.HIGH_PRECISION,
+            fraction_digits=fraction_digits,
+            cent_amount=cent_amount,
+            currency_code=currency_code,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "HighPrecisionMoney(type=%r, fraction_digits=%r, cent_amount=%r, currency_code=%r, precise_amount=%r)"
+            % (
+                self.type,
+                self.fraction_digits,
+                self.cent_amount,
+                self.currency_code,
+                self.precise_amount,
+            )
+        )
 
 
 class LastModifiedBy(ClientLogging):
@@ -1026,12 +1156,10 @@ class LoggedResource(BaseResource):
         )
 
 
-class TypedMoney(Money):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneySchema`."
+class TypedMoneyDraft(Money):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneyDraftSchema`."
     #: :class:`commercetools.types.MoneyType`
     type: typing.Optional["MoneyType"]
-    #: :class:`int` `(Named` ``fractionDigits`` `in Commercetools)`
-    fraction_digits: typing.Optional[int]
 
     def __init__(
         self,
@@ -1039,21 +1167,20 @@ class TypedMoney(Money):
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
         type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
     ) -> None:
         self.type = type
-        self.fraction_digits = fraction_digits
         super().__init__(cent_amount=cent_amount, currency_code=currency_code)
 
     def __repr__(self) -> str:
-        return (
-            "TypedMoney(cent_amount=%r, currency_code=%r, type=%r, fraction_digits=%r)"
-            % (self.cent_amount, self.currency_code, self.type, self.fraction_digits)
+        return "TypedMoneyDraft(cent_amount=%r, currency_code=%r, type=%r)" % (
+            self.cent_amount,
+            self.currency_code,
+            self.type,
         )
 
 
-class CentPrecisionMoney(TypedMoney):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.CentPrecisionMoneySchema`."
+class CentPrecisionMoneyDraft(TypedMoneyDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CentPrecisionMoneyDraftSchema`."
 
     def __init__(
         self,
@@ -1061,24 +1188,23 @@ class CentPrecisionMoney(TypedMoney):
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
         type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
     ) -> None:
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,
             type=MoneyType.CENT_PRECISION,
-            fraction_digits=fraction_digits,
         )
 
     def __repr__(self) -> str:
-        return (
-            "CentPrecisionMoney(cent_amount=%r, currency_code=%r, type=%r, fraction_digits=%r)"
-            % (self.cent_amount, self.currency_code, self.type, self.fraction_digits)
+        return "CentPrecisionMoneyDraft(cent_amount=%r, currency_code=%r, type=%r)" % (
+            self.cent_amount,
+            self.currency_code,
+            self.type,
         )
 
 
-class HighPrecisionMoney(TypedMoney):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneySchema`."
+class HighPrecisionMoneyDraft(TypedMoneyDraft):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneyDraftSchema`."
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
     precise_amount: typing.Optional[int]
 
@@ -1088,7 +1214,6 @@ class HighPrecisionMoney(TypedMoney):
         cent_amount: typing.Optional[int] = None,
         currency_code: typing.Optional["str"] = None,
         type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
         precise_amount: typing.Optional[int] = None,
     ) -> None:
         self.precise_amount = precise_amount
@@ -1096,17 +1221,10 @@ class HighPrecisionMoney(TypedMoney):
             cent_amount=cent_amount,
             currency_code=currency_code,
             type=MoneyType.HIGH_PRECISION,
-            fraction_digits=fraction_digits,
         )
 
     def __repr__(self) -> str:
         return (
-            "HighPrecisionMoney(cent_amount=%r, currency_code=%r, type=%r, fraction_digits=%r, precise_amount=%r)"
-            % (
-                self.cent_amount,
-                self.currency_code,
-                self.type,
-                self.fraction_digits,
-                self.precise_amount,
-            )
+            "HighPrecisionMoneyDraft(cent_amount=%r, currency_code=%r, type=%r, precise_amount=%r)"
+            % (self.cent_amount, self.currency_code, self.type, self.precise_amount)
         )

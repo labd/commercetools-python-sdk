@@ -23,6 +23,7 @@ if typing.TYPE_CHECKING:
         Money,
         Price,
         TypedMoney,
+        TypedMoneyDraft,
     )
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from ._discount_code import DiscountCodeReference
@@ -142,8 +143,10 @@ __all__ = [
     "TaxCalculationMode",
     "TaxMode",
     "TaxPortion",
+    "TaxPortionDraft",
     "TaxedItemPrice",
     "TaxedPrice",
+    "TaxedPriceDraft",
 ]
 
 
@@ -462,6 +465,8 @@ class CartOrigin(enum.Enum):
 class CartPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -473,11 +478,13 @@ class CartPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Cart"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -485,11 +492,9 @@ class CartPagedQueryResponse(_BaseType):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "CartPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
-            self.count,
-            self.total,
-            self.offset,
-            self.results,
+        return (
+            "CartPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 
@@ -754,14 +759,14 @@ class DiscountedLineItemPortion(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedLineItemPortionSchema`."
     #: :class:`commercetools.types.CartDiscountReference`
     discount: typing.Optional["CartDiscountReference"]
-    #: :class:`commercetools.types.Money` `(Named` ``discountedAmount`` `in Commercetools)`
-    discounted_amount: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``discountedAmount`` `in Commercetools)`
+    discounted_amount: typing.Optional["TypedMoney"]
 
     def __init__(
         self,
         *,
         discount: typing.Optional["CartDiscountReference"] = None,
-        discounted_amount: typing.Optional["Money"] = None
+        discounted_amount: typing.Optional["TypedMoney"] = None
     ) -> None:
         self.discount = discount
         self.discounted_amount = discounted_amount
@@ -1003,8 +1008,8 @@ class LineItem(_BaseType):
     price: typing.Optional["Price"]
     #: Optional :class:`commercetools.types.TaxedItemPrice` `(Named` ``taxedPrice`` `in Commercetools)`
     taxed_price: typing.Optional["TaxedItemPrice"]
-    #: :class:`commercetools.types.Money` `(Named` ``totalPrice`` `in Commercetools)`
-    total_price: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalPrice`` `in Commercetools)`
+    total_price: typing.Optional["TypedMoney"]
     #: :class:`int`
     quantity: typing.Optional[int]
     #: List of :class:`commercetools.types.ItemState`
@@ -1039,7 +1044,7 @@ class LineItem(_BaseType):
         variant: typing.Optional["ProductVariant"] = None,
         price: typing.Optional["Price"] = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
-        total_price: typing.Optional["Money"] = None,
+        total_price: typing.Optional["TypedMoney"] = None,
         quantity: typing.Optional[int] = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -1324,15 +1329,15 @@ class TaxPortion(_BaseType):
     name: typing.Optional[str]
     #: :class:`float`
     rate: typing.Optional[float]
-    #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney`
+    amount: typing.Optional["TypedMoney"]
 
     def __init__(
         self,
         *,
         name: typing.Optional[str] = None,
         rate: typing.Optional[float] = None,
-        amount: typing.Optional["Money"] = None
+        amount: typing.Optional["TypedMoney"] = None
     ) -> None:
         self.name = name
         self.rate = rate
@@ -1341,6 +1346,35 @@ class TaxPortion(_BaseType):
 
     def __repr__(self) -> str:
         return "TaxPortion(name=%r, rate=%r, amount=%r)" % (
+            self.name,
+            self.rate,
+            self.amount,
+        )
+
+
+class TaxPortionDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxPortionDraftSchema`."
+    #: Optional :class:`str`
+    name: typing.Optional[str]
+    #: :class:`float`
+    rate: typing.Optional[float]
+    #: :class:`commercetools.types.TypedMoneyDraft`
+    amount: typing.Optional["TypedMoneyDraft"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        rate: typing.Optional[float] = None,
+        amount: typing.Optional["TypedMoneyDraft"] = None
+    ) -> None:
+        self.name = name
+        self.rate = rate
+        self.amount = amount
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "TaxPortionDraft(name=%r, rate=%r, amount=%r)" % (
             self.name,
             self.rate,
             self.amount,
@@ -1373,18 +1407,18 @@ class TaxedItemPrice(_BaseType):
 
 class TaxedPrice(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxedPriceSchema`."
-    #: :class:`commercetools.types.Money` `(Named` ``totalNet`` `in Commercetools)`
-    total_net: typing.Optional["Money"]
-    #: :class:`commercetools.types.Money` `(Named` ``totalGross`` `in Commercetools)`
-    total_gross: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalNet`` `in Commercetools)`
+    total_net: typing.Optional["TypedMoney"]
+    #: :class:`commercetools.types.TypedMoney` `(Named` ``totalGross`` `in Commercetools)`
+    total_gross: typing.Optional["TypedMoney"]
     #: List of :class:`commercetools.types.TaxPortion` `(Named` ``taxPortions`` `in Commercetools)`
     tax_portions: typing.Optional[typing.List["TaxPortion"]]
 
     def __init__(
         self,
         *,
-        total_net: typing.Optional["Money"] = None,
-        total_gross: typing.Optional["Money"] = None,
+        total_net: typing.Optional["TypedMoney"] = None,
+        total_gross: typing.Optional["TypedMoney"] = None,
         tax_portions: typing.Optional[typing.List["TaxPortion"]] = None
     ) -> None:
         self.total_net = total_net
@@ -1394,6 +1428,35 @@ class TaxedPrice(_BaseType):
 
     def __repr__(self) -> str:
         return "TaxedPrice(total_net=%r, total_gross=%r, tax_portions=%r)" % (
+            self.total_net,
+            self.total_gross,
+            self.tax_portions,
+        )
+
+
+class TaxedPriceDraft(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.TaxedPriceDraftSchema`."
+    #: :class:`commercetools.types.TypedMoneyDraft` `(Named` ``totalNet`` `in Commercetools)`
+    total_net: typing.Optional["TypedMoneyDraft"]
+    #: :class:`commercetools.types.TypedMoneyDraft` `(Named` ``totalGross`` `in Commercetools)`
+    total_gross: typing.Optional["TypedMoneyDraft"]
+    #: List of :class:`commercetools.types.TaxPortionDraft` `(Named` ``taxPortions`` `in Commercetools)`
+    tax_portions: typing.Optional[typing.List["TaxPortionDraft"]]
+
+    def __init__(
+        self,
+        *,
+        total_net: typing.Optional["TypedMoneyDraft"] = None,
+        total_gross: typing.Optional["TypedMoneyDraft"] = None,
+        tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None
+    ) -> None:
+        self.total_net = total_net
+        self.total_gross = total_gross
+        self.tax_portions = tax_portions
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "TaxedPriceDraft(total_net=%r, total_gross=%r, tax_portions=%r)" % (
             self.total_net,
             self.total_gross,
             self.tax_portions,
@@ -2019,15 +2082,15 @@ class CartSetCartTotalTaxAction(CartUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSetCartTotalTaxActionSchema`."
     #: :class:`commercetools.types.Money` `(Named` ``externalTotalGross`` `in Commercetools)`
     external_total_gross: typing.Optional["Money"]
-    #: Optional list of :class:`commercetools.types.TaxPortion` `(Named` ``externalTaxPortions`` `in Commercetools)`
-    external_tax_portions: typing.Optional[typing.List["TaxPortion"]]
+    #: Optional list of :class:`commercetools.types.TaxPortionDraft` `(Named` ``externalTaxPortions`` `in Commercetools)`
+    external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
         external_total_gross: typing.Optional["Money"] = None,
-        external_tax_portions: typing.Optional[typing.List["TaxPortion"]] = None
+        external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None
     ) -> None:
         self.external_total_gross = external_total_gross
         self.external_tax_portions = external_tax_portions

@@ -23,6 +23,7 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 __all__ = [
+    "MyShoppingList",
     "ShoppingList",
     "ShoppingListAddLineItemAction",
     "ShoppingListAddTextLineItemAction",
@@ -58,6 +59,92 @@ __all__ = [
     "TextLineItem",
     "TextLineItemDraft",
 ]
+
+
+class MyShoppingList(LoggedResource):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSchema`."
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`commercetools.types.CustomerReference`
+    customer: typing.Optional["CustomerReference"]
+    #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
+    delete_days_after_last_modification: typing.Optional[int]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    description: typing.Optional["LocalizedString"]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+    #: Optional list of :class:`commercetools.types.ShoppingListLineItem` `(Named` ``lineItems`` `in Commercetools)`
+    line_items: typing.Optional[typing.List["ShoppingListLineItem"]]
+    #: :class:`commercetools.types.LocalizedString`
+    name: typing.Optional["LocalizedString"]
+    #: Optional :class:`commercetools.types.LocalizedString`
+    slug: typing.Optional["LocalizedString"]
+    #: Optional list of :class:`commercetools.types.TextLineItem` `(Named` ``textLineItems`` `in Commercetools)`
+    text_line_items: typing.Optional[typing.List["TextLineItem"]]
+    #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
+    anonymous_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        customer: typing.Optional["CustomerReference"] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        key: typing.Optional[str] = None,
+        line_items: typing.Optional[typing.List["ShoppingListLineItem"]] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        slug: typing.Optional["LocalizedString"] = None,
+        text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
+        anonymous_id: typing.Optional[str] = None
+    ) -> None:
+        self.custom = custom
+        self.customer = customer
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        self.description = description
+        self.key = key
+        self.line_items = line_items
+        self.name = name
+        self.slug = slug
+        self.text_line_items = text_line_items
+        self.anonymous_id = anonymous_id
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "MyShoppingList(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, custom=%r, customer=%r, delete_days_after_last_modification=%r, description=%r, key=%r, line_items=%r, name=%r, slug=%r, text_line_items=%r, anonymous_id=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
+                self.custom,
+                self.customer,
+                self.delete_days_after_last_modification,
+                self.description,
+                self.key,
+                self.line_items,
+                self.name,
+                self.slug,
+                self.text_line_items,
+                self.anonymous_id,
+            )
+        )
 
 
 class ShoppingList(LoggedResource):
@@ -335,6 +422,8 @@ class ShoppingListLineItemDraft(_BaseType):
 class ShoppingListPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -346,11 +435,13 @@ class ShoppingListPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["ShoppingList"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -359,8 +450,8 @@ class ShoppingListPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "ShoppingListPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "ShoppingListPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

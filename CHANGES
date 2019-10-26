@@ -1,3 +1,12 @@
+5.0.0 (unreleased)
+------------------
+This is breaking change since the commercetools api specification is moving
+from the `Money` type to the `TypedMoney` type. You should generally be able to
+replace references to `Money` with `CentPrecisionMoney`.
+
+ - Sync with latest API definitions (dd371e12506af969b8edfeb1540eec1e8cd5ab9d)
+
+
 4.1.0 (2019-08-14)
 ------------------
 - Fix Inventory Entry types *This may break Inventory related types*
@@ -16,7 +25,7 @@
 
 3.8.1 (2019-06-26)
 ------------------
-- Small fixes if data was not initialized for mock shipping methods actions 
+- Small fixes if data was not initialized for mock shipping methods actions
 
 3.8.0 (2019-06-26)
 ------------------

@@ -3,13 +3,100 @@
 import marshmallow
 import marshmallow_enum
 
-from commercetools import types
+from commercetools import helpers, types
+from commercetools.schemas._common import LocalizedStringField, LoggedResourceSchema
+from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
+    "MyCartAddDiscountCodeActionSchema",
+    "MyCartAddItemShippingAddressActionSchema",
+    "MyCartAddLineItemActionSchema",
+    "MyCartAddPaymentActionSchema",
+    "MyCartApplyDeltaToLineItemShippingDetailsTargetsActionSchema",
+    "MyCartChangeLineItemQuantityActionSchema",
+    "MyCartChangeTaxModeActionSchema",
     "MyCartDraftSchema",
+    "MyCartRecalculateActionSchema",
+    "MyCartRemoveDiscountCodeActionSchema",
+    "MyCartRemoveItemShippingAddressActionSchema",
+    "MyCartRemoveLineItemActionSchema",
+    "MyCartRemovePaymentActionSchema",
+    "MyCartSchema",
+    "MyCartSetBillingAddressActionSchema",
+    "MyCartSetCountryActionSchema",
+    "MyCartSetCustomFieldActionSchema",
+    "MyCartSetCustomShippingMethodActionSchema",
+    "MyCartSetCustomTypeActionSchema",
+    "MyCartSetDeleteDaysAfterLastModificationActionSchema",
+    "MyCartSetLineItemCustomFieldActionSchema",
+    "MyCartSetLineItemCustomTypeActionSchema",
+    "MyCartSetLineItemShippingDetailsActionSchema",
+    "MyCartSetLocaleActionSchema",
+    "MyCartSetShippingAddressActionSchema",
+    "MyCartSetShippingMethodActionSchema",
+    "MyCartUpdateActionSchema",
+    "MyCartUpdateItemShippingAddressActionSchema",
+    "MyCustomerAddAddressActionSchema",
+    "MyCustomerAddBillingAddressIdActionSchema",
+    "MyCustomerAddShippingAddressIdActionSchema",
+    "MyCustomerChangeAddressActionSchema",
+    "MyCustomerChangeEmailActionSchema",
     "MyCustomerDraftSchema",
+    "MyCustomerRemoveAddressActionSchema",
+    "MyCustomerRemoveBillingAddressIdActionSchema",
+    "MyCustomerRemoveShippingAddressIdActionSchema",
+    "MyCustomerSchema",
+    "MyCustomerSetCompanyNameActionSchema",
+    "MyCustomerSetCustomFieldActionSchema",
+    "MyCustomerSetCustomTypeActionSchema",
+    "MyCustomerSetDateOfBirthActionSchema",
+    "MyCustomerSetDefaultBillingAddressActionSchema",
+    "MyCustomerSetDefaultShippingAddressActionSchema",
+    "MyCustomerSetFirstNameActionSchema",
+    "MyCustomerSetLastNameActionSchema",
+    "MyCustomerSetLocaleActionSchema",
+    "MyCustomerSetMiddleNameActionSchema",
+    "MyCustomerSetSalutationActionSchema",
+    "MyCustomerSetTitleActionSchema",
+    "MyCustomerSetVatIdActionSchema",
+    "MyCustomerUpdateActionSchema",
     "MyLineItemDraftSchema",
     "MyOrderFromCartDraftSchema",
+    "MyOrderSchema",
+    "MyPaymentAddTransactionActionSchema",
+    "MyPaymentChangeAmountPlannedActionSchema",
+    "MyPaymentDraftSchema",
+    "MyPaymentPagedQueryResponseSchema",
+    "MyPaymentSchema",
+    "MyPaymentSetCustomFieldActionSchema",
+    "MyPaymentSetMethodInfoInterfaceActionSchema",
+    "MyPaymentSetMethodInfoMethodActionSchema",
+    "MyPaymentSetMethodInfoNameActionSchema",
+    "MyPaymentUpdateActionSchema",
+    "MyPaymentUpdateSchema",
+    "MyShoppingListAddLineItemActionSchema",
+    "MyShoppingListAddTextLineItemActionSchema",
+    "MyShoppingListChangeLineItemQuantityActionSchema",
+    "MyShoppingListChangeLineItemsOrderActionSchema",
+    "MyShoppingListChangeNameActionSchema",
+    "MyShoppingListChangeTextLineItemNameActionSchema",
+    "MyShoppingListChangeTextLineItemQuantityActionSchema",
+    "MyShoppingListChangeTextLineItemsOrderActionSchema",
+    "MyShoppingListDraftSchema",
+    "MyShoppingListRemoveLineItemActionSchema",
+    "MyShoppingListRemoveTextLineItemActionSchema",
+    "MyShoppingListSetCustomFieldActionSchema",
+    "MyShoppingListSetCustomTypeActionSchema",
+    "MyShoppingListSetDeleteDaysAfterLastModificationActionSchema",
+    "MyShoppingListSetDescriptionActionSchema",
+    "MyShoppingListSetLineItemCustomFieldActionSchema",
+    "MyShoppingListSetLineItemCustomTypeActionSchema",
+    "MyShoppingListSetTextLineItemCustomFieldActionSchema",
+    "MyShoppingListSetTextLineItemCustomTypeActionSchema",
+    "MyShoppingListSetTextLineItemDescriptionActionSchema",
+    "MyShoppingListUpdateActionSchema",
+    "MyShoppingListUpdateSchema",
+    "MyTransactionDraftSchema",
 ]
 
 
@@ -82,6 +169,172 @@ class MyCartDraftSchema(marshmallow.Schema):
         return types.MyCartDraft(**data)
 
 
+class MyCartSchema(LoggedResourceSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCart`."
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.LineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="lineItems",
+    )
+    custom_line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.CustomLineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="customLineItems",
+    )
+    total_price = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="totalPrice",
+    )
+    taxed_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.TaxedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="taxedPrice",
+    )
+    cart_state = marshmallow_enum.EnumField(
+        types.CartState, by_value=True, data_key="cartState"
+    )
+    shipping_address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingAddress",
+    )
+    billing_address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="billingAddress",
+    )
+    inventory_mode = marshmallow_enum.EnumField(
+        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
+    )
+    tax_mode = marshmallow_enum.EnumField(
+        types.TaxMode, by_value=True, data_key="taxMode"
+    )
+    tax_rounding_mode = marshmallow_enum.EnumField(
+        types.RoundingMode, by_value=True, data_key="taxRoundingMode"
+    )
+    tax_calculation_mode = marshmallow_enum.EnumField(
+        types.TaxCalculationMode, by_value=True, data_key="taxCalculationMode"
+    )
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="customerGroup",
+    )
+    country = marshmallow.fields.String(missing=None)
+    shipping_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ShippingInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingInfo",
+    )
+    discount_codes = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.DiscountCodeInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="discountCodes",
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    payment_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._order.PaymentInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="paymentInfo",
+    )
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+    )
+    refused_gifts = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart_discount.CartDiscountReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="refusedGifts",
+    )
+    origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True)
+    shipping_rate_input = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "Classification": "commercetools.schemas._cart.ClassificationShippingRateInputSchema",
+            "Score": "commercetools.schemas._cart.ScoreShippingRateInputSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingRateInput",
+    )
+    item_shipping_addresses = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="itemShippingAddresses",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyCart(**data)
+
+
+class MyCartUpdateActionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartUpdateAction(**data)
+
+
 class MyCustomerDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.MyCustomerDraft`."
     email = marshmallow.fields.String(allow_none=True)
@@ -123,6 +376,13 @@ class MyCustomerDraftSchema(marshmallow.Schema):
         missing=None,
     )
     locale = marshmallow.fields.String(allow_none=True, missing=None)
+    stores = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -130,6 +390,103 @@ class MyCustomerDraftSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.MyCustomerDraft(**data)
+
+
+class MyCustomerSchema(LoggedResourceSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomer`."
+    customer_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerNumber"
+    )
+    email = marshmallow.fields.String(allow_none=True)
+    password = marshmallow.fields.String(allow_none=True)
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
+    middle_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="middleName"
+    )
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+    date_of_birth = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="dateOfBirth"
+    )
+    company_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="companyName"
+    )
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    addresses = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+    default_shipping_address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="defaultShippingAddressId"
+    )
+    shipping_address_ids = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        missing=None,
+        data_key="shippingAddressIds",
+    )
+    default_billing_address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="defaultBillingAddressId"
+    )
+    billing_address_ids = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        missing=None,
+        data_key="billingAddressIds",
+    )
+    is_email_verified = marshmallow.fields.Bool(
+        allow_none=True, data_key="isEmailVerified"
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="externalId"
+    )
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="customerGroup",
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    stores = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyCustomer(**data)
+
+
+class MyCustomerUpdateActionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerUpdateAction(**data)
 
 
 class MyLineItemDraftSchema(marshmallow.Schema):
@@ -184,3 +541,1711 @@ class MyOrderFromCartDraftSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data):
         return types.MyOrderFromCartDraft(**data)
+
+
+class MyOrderSchema(LoggedResourceSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyOrder`."
+    completed_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="completedAt"
+    )
+    order_number = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="orderNumber"
+    )
+    customer_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerId"
+    )
+    customer_email = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customerEmail"
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.LineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="lineItems",
+    )
+    custom_line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.CustomLineItemSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="customLineItems",
+    )
+    total_price = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="totalPrice",
+    )
+    taxed_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.TaxedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="taxedPrice",
+    )
+    shipping_address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingAddress",
+    )
+    billing_address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="billingAddress",
+    )
+    tax_mode = marshmallow_enum.EnumField(
+        types.TaxMode, by_value=True, missing=None, data_key="taxMode"
+    )
+    tax_rounding_mode = marshmallow_enum.EnumField(
+        types.RoundingMode, by_value=True, missing=None, data_key="taxRoundingMode"
+    )
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="customerGroup",
+    )
+    country = marshmallow.fields.String(allow_none=True, missing=None)
+    order_state = marshmallow_enum.EnumField(
+        types.OrderState, by_value=True, data_key="orderState"
+    )
+    state = marshmallow.fields.Nested(
+        nested="commercetools.schemas._state.StateReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    shipment_state = marshmallow_enum.EnumField(
+        types.ShipmentState, by_value=True, missing=None, data_key="shipmentState"
+    )
+    payment_state = marshmallow_enum.EnumField(
+        types.PaymentState, by_value=True, missing=None, data_key="paymentState"
+    )
+    shipping_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ShippingInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingInfo",
+    )
+    sync_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._order.SyncInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="syncInfo",
+    )
+    return_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._order.ReturnInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="returnInfo",
+    )
+    discount_codes = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.DiscountCodeInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="discountCodes",
+    )
+    last_message_sequence_number = marshmallow.fields.Integer(
+        allow_none=True, data_key="lastMessageSequenceNumber"
+    )
+    cart = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.CartReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    payment_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._order.PaymentInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="paymentInfo",
+    )
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    inventory_mode = marshmallow_enum.EnumField(
+        types.InventoryMode, by_value=True, missing=None, data_key="inventoryMode"
+    )
+    origin = marshmallow_enum.EnumField(types.CartOrigin, by_value=True)
+    tax_calculation_mode = marshmallow_enum.EnumField(
+        types.TaxCalculationMode,
+        by_value=True,
+        missing=None,
+        data_key="taxCalculationMode",
+    )
+    shipping_rate_input = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "Classification": "commercetools.schemas._cart.ClassificationShippingRateInputSchema",
+            "Score": "commercetools.schemas._cart.ScoreShippingRateInputSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingRateInput",
+    )
+    item_shipping_addresses = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="itemShippingAddresses",
+    )
+    refused_gifts = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart_discount.CartDiscountReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="refusedGifts",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyOrder(**data)
+
+
+class MyPaymentDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentDraft`."
+    amount_planned = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="amountPlanned",
+    )
+    payment_method_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._payment.PaymentMethodInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="paymentMethodInfo",
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    transaction = marshmallow.fields.Nested(
+        nested="commercetools.schemas._me.MyTransactionDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyPaymentDraft(**data)
+
+
+class MyPaymentPagedQueryResponseSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentPagedQueryResponse`."
+    limit = marshmallow.fields.Integer(allow_none=True)
+    count = marshmallow.fields.Integer(allow_none=True)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True)
+    results = marshmallow.fields.Nested(
+        nested="commercetools.schemas._me.MyPaymentSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyPaymentPagedQueryResponse(**data)
+
+
+class MyPaymentSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyPayment`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    customer = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer.CustomerReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    anonymous_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="anonymousId"
+    )
+    amount_planned = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneySchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneySchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="amountPlanned",
+    )
+    payment_method_info = marshmallow.fields.Nested(
+        nested="commercetools.schemas._payment.PaymentMethodInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="paymentMethodInfo",
+    )
+    transactions = marshmallow.fields.Nested(
+        nested="commercetools.schemas._payment.TransactionSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyPayment(**data)
+
+
+class MyPaymentUpdateActionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentUpdateAction(**data)
+
+
+class MyPaymentUpdateSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addTransaction": "commercetools.schemas._me.MyPaymentAddTransactionActionSchema",
+                "changeAmountPlanned": "commercetools.schemas._me.MyPaymentChangeAmountPlannedActionSchema",
+                "setCustomField": "commercetools.schemas._me.MyPaymentSetCustomFieldActionSchema",
+                "setMethodInfoInterface": "commercetools.schemas._me.MyPaymentSetMethodInfoInterfaceActionSchema",
+                "setMethodInfoMethod": "commercetools.schemas._me.MyPaymentSetMethodInfoMethodActionSchema",
+                "setMethodInfoName": "commercetools.schemas._me.MyPaymentSetMethodInfoNameActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyPaymentUpdate(**data)
+
+
+class MyShoppingListDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListDraft`."
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._shopping_list.ShoppingListLineItemDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="lineItems",
+    )
+    text_line_items = marshmallow.fields.Nested(
+        nested="commercetools.schemas._shopping_list.TextLineItemDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="textLineItems",
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyShoppingListDraft(**data)
+
+
+class MyShoppingListUpdateActionSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListUpdateAction`."
+    action = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListUpdateAction(**data)
+
+
+class MyShoppingListUpdateSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListUpdate`."
+    version = marshmallow.fields.Integer(allow_none=True)
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addLineItem": "commercetools.schemas._me.MyShoppingListAddLineItemActionSchema",
+                "addTextLineItem": "commercetools.schemas._me.MyShoppingListAddTextLineItemActionSchema",
+                "changeLineItemQuantity": "commercetools.schemas._me.MyShoppingListChangeLineItemQuantityActionSchema",
+                "changeLineItemsOrder": "commercetools.schemas._me.MyShoppingListChangeLineItemsOrderActionSchema",
+                "changeName": "commercetools.schemas._me.MyShoppingListChangeNameActionSchema",
+                "changeTextLineItemName": "commercetools.schemas._me.MyShoppingListChangeTextLineItemNameActionSchema",
+                "changeTextLineItemQuantity": "commercetools.schemas._me.MyShoppingListChangeTextLineItemQuantityActionSchema",
+                "changeTextLineItemsOrder": "commercetools.schemas._me.MyShoppingListChangeTextLineItemsOrderActionSchema",
+                "removeLineItem": "commercetools.schemas._me.MyShoppingListRemoveLineItemActionSchema",
+                "removeTextLineItem": "commercetools.schemas._me.MyShoppingListRemoveTextLineItemActionSchema",
+                "setCustomField": "commercetools.schemas._me.MyShoppingListSetCustomFieldActionSchema",
+                "setCustomType": "commercetools.schemas._me.MyShoppingListSetCustomTypeActionSchema",
+                "setDeleteDaysAfterLastModification": "commercetools.schemas._me.MyShoppingListSetDeleteDaysAfterLastModificationActionSchema",
+                "setDescription": "commercetools.schemas._me.MyShoppingListSetDescriptionActionSchema",
+                "setLineItemCustomField": "commercetools.schemas._me.MyShoppingListSetLineItemCustomFieldActionSchema",
+                "setLineItemCustomType": "commercetools.schemas._me.MyShoppingListSetLineItemCustomTypeActionSchema",
+                "setTextLineItemCustomField": "commercetools.schemas._me.MyShoppingListSetTextLineItemCustomFieldActionSchema",
+                "setTextLineItemCustomType": "commercetools.schemas._me.MyShoppingListSetTextLineItemCustomTypeActionSchema",
+                "setTextLineItemDescription": "commercetools.schemas._me.MyShoppingListSetTextLineItemDescriptionActionSchema",
+            },
+            unknown=marshmallow.EXCLUDE,
+            allow_none=True,
+        ),
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyShoppingListUpdate(**data)
+
+
+class MyTransactionDraftSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.MyTransactionDraft`."
+    timestamp = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    type = marshmallow_enum.EnumField(types.TransactionType, by_value=True)
+    amount = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    interaction_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="interactionId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        return types.MyTransactionDraft(**data)
+
+
+class MyCartAddDiscountCodeActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartAddDiscountCodeAction`."
+    code = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartAddDiscountCodeAction(**data)
+
+
+class MyCartAddItemShippingAddressActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartAddItemShippingAddressAction`."
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartAddItemShippingAddressAction(**data)
+
+
+class MyCartAddLineItemActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartAddLineItemAction`."
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    distribution_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="distributionChannel",
+    )
+    external_tax_rate = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalTaxRate",
+    )
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    supply_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="supplyChannel",
+    )
+    external_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalPrice",
+    )
+    external_total_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalTotalPrice",
+    )
+    shipping_details = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingDetails",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartAddLineItemAction(**data)
+
+
+class MyCartAddPaymentActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartAddPaymentAction`."
+    payment = marshmallow.fields.Nested(
+        nested="commercetools.schemas._payment.PaymentResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartAddPaymentAction(**data)
+
+
+class MyCartApplyDeltaToLineItemShippingDetailsTargetsActionSchema(
+    MyCartUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyCartApplyDeltaToLineItemShippingDetailsTargetsAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    targets_delta = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ItemShippingTargetSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="targetsDelta",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(**data)
+
+
+class MyCartChangeLineItemQuantityActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartChangeLineItemQuantityAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
+    external_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalPrice",
+    )
+    external_total_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalTotalPrice",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartChangeLineItemQuantityAction(**data)
+
+
+class MyCartChangeTaxModeActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartChangeTaxModeAction`."
+    tax_mode = marshmallow_enum.EnumField(
+        types.TaxMode, by_value=True, data_key="taxMode"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartChangeTaxModeAction(**data)
+
+
+class MyCartRecalculateActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartRecalculateAction`."
+    update_product_data = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="updateProductData"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartRecalculateAction(**data)
+
+
+class MyCartRemoveDiscountCodeActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartRemoveDiscountCodeAction`."
+    discount_code = marshmallow.fields.Nested(
+        nested="commercetools.schemas._discount_code.DiscountCodeReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="discountCode",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartRemoveDiscountCodeAction(**data)
+
+
+class MyCartRemoveItemShippingAddressActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartRemoveItemShippingAddressAction`."
+    address_key = marshmallow.fields.String(allow_none=True, data_key="addressKey")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartRemoveItemShippingAddressAction(**data)
+
+
+class MyCartRemoveLineItemActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartRemoveLineItemAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    external_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalPrice",
+    )
+    external_total_price = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ExternalLineItemTotalPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalTotalPrice",
+    )
+    shipping_details_to_remove = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingDetailsToRemove",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartRemoveLineItemAction(**data)
+
+
+class MyCartRemovePaymentActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartRemovePaymentAction`."
+    payment = marshmallow.fields.Nested(
+        nested="commercetools.schemas._payment.PaymentResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartRemovePaymentAction(**data)
+
+
+class MyCartSetBillingAddressActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetBillingAddressAction`."
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetBillingAddressAction(**data)
+
+
+class MyCartSetCountryActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetCountryAction`."
+    country = marshmallow.fields.String(missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetCountryAction(**data)
+
+
+class MyCartSetCustomFieldActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetCustomFieldAction`."
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetCustomFieldAction(**data)
+
+
+class MyCartSetCustomShippingMethodActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetCustomShippingMethodAction`."
+    shipping_method_name = marshmallow.fields.String(
+        allow_none=True, data_key="shippingMethodName"
+    )
+    shipping_rate = marshmallow.fields.Nested(
+        nested="commercetools.schemas._shipping_method.ShippingRateDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="shippingRate",
+    )
+    tax_category = marshmallow.fields.Nested(
+        nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="taxCategory",
+    )
+    external_tax_rate = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalTaxRate",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetCustomShippingMethodAction(**data)
+
+
+class MyCartSetCustomTypeActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetCustomTypeAction`."
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    fields = FieldContainerField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetCustomTypeAction(**data)
+
+
+class MyCartSetDeleteDaysAfterLastModificationActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetDeleteDaysAfterLastModificationAction`."
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetDeleteDaysAfterLastModificationAction(**data)
+
+
+class MyCartSetLineItemCustomFieldActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetLineItemCustomFieldAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetLineItemCustomFieldAction(**data)
+
+
+class MyCartSetLineItemCustomTypeActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetLineItemCustomTypeAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    fields = FieldContainerField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetLineItemCustomTypeAction(**data)
+
+
+class MyCartSetLineItemShippingDetailsActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetLineItemShippingDetailsAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    shipping_details = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ItemShippingDetailsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingDetails",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetLineItemShippingDetailsAction(**data)
+
+
+class MyCartSetLocaleActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetLocaleAction`."
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetLocaleAction(**data)
+
+
+class MyCartSetShippingAddressActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetShippingAddressAction`."
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetShippingAddressAction(**data)
+
+
+class MyCartSetShippingMethodActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartSetShippingMethodAction`."
+    shipping_method = marshmallow.fields.Nested(
+        nested="commercetools.schemas._shipping_method.ShippingMethodResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="shippingMethod",
+    )
+    external_tax_rate = marshmallow.fields.Nested(
+        nested="commercetools.schemas._cart.ExternalTaxRateDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="externalTaxRate",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartSetShippingMethodAction(**data)
+
+
+class MyCartUpdateItemShippingAddressActionSchema(MyCartUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCartUpdateItemShippingAddressAction`."
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCartUpdateItemShippingAddressAction(**data)
+
+
+class MyCustomerAddAddressActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerAddAddressAction`."
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerAddAddressAction(**data)
+
+
+class MyCustomerAddBillingAddressIdActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerAddBillingAddressIdAction`."
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerAddBillingAddressIdAction(**data)
+
+
+class MyCustomerAddShippingAddressIdActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerAddShippingAddressIdAction`."
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerAddShippingAddressIdAction(**data)
+
+
+class MyCustomerChangeAddressActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerChangeAddressAction`."
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.AddressSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerChangeAddressAction(**data)
+
+
+class MyCustomerChangeEmailActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerChangeEmailAction`."
+    email = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerChangeEmailAction(**data)
+
+
+class MyCustomerRemoveAddressActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerRemoveAddressAction`."
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerRemoveAddressAction(**data)
+
+
+class MyCustomerRemoveBillingAddressIdActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerRemoveBillingAddressIdAction`."
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerRemoveBillingAddressIdAction(**data)
+
+
+class MyCustomerRemoveShippingAddressIdActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerRemoveShippingAddressIdAction`."
+    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerRemoveShippingAddressIdAction(**data)
+
+
+class MyCustomerSetCompanyNameActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetCompanyNameAction`."
+    company_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="companyName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetCompanyNameAction(**data)
+
+
+class MyCustomerSetCustomFieldActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetCustomFieldAction`."
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetCustomFieldAction(**data)
+
+
+class MyCustomerSetCustomTypeActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetCustomTypeAction`."
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    fields = FieldContainerField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetCustomTypeAction(**data)
+
+
+class MyCustomerSetDateOfBirthActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetDateOfBirthAction`."
+    date_of_birth = marshmallow.fields.Date(
+        allow_none=True, missing=None, data_key="dateOfBirth"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetDateOfBirthAction(**data)
+
+
+class MyCustomerSetDefaultBillingAddressActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetDefaultBillingAddressAction`."
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetDefaultBillingAddressAction(**data)
+
+
+class MyCustomerSetDefaultShippingAddressActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetDefaultShippingAddressAction`."
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetDefaultShippingAddressAction(**data)
+
+
+class MyCustomerSetFirstNameActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetFirstNameAction`."
+    first_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="firstName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetFirstNameAction(**data)
+
+
+class MyCustomerSetLastNameActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetLastNameAction`."
+    last_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lastName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetLastNameAction(**data)
+
+
+class MyCustomerSetLocaleActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetLocaleAction`."
+    locale = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetLocaleAction(**data)
+
+
+class MyCustomerSetMiddleNameActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetMiddleNameAction`."
+    middle_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="middleName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetMiddleNameAction(**data)
+
+
+class MyCustomerSetSalutationActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetSalutationAction`."
+    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetSalutationAction(**data)
+
+
+class MyCustomerSetTitleActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetTitleAction`."
+    title = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetTitleAction(**data)
+
+
+class MyCustomerSetVatIdActionSchema(MyCustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyCustomerSetVatIdAction`."
+    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyCustomerSetVatIdAction(**data)
+
+
+class MyPaymentAddTransactionActionSchema(MyPaymentUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentAddTransactionAction`."
+    transaction = marshmallow.fields.Nested(
+        nested="commercetools.schemas._payment.TransactionDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentAddTransactionAction(**data)
+
+
+class MyPaymentChangeAmountPlannedActionSchema(MyPaymentUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentChangeAmountPlannedAction`."
+    amount = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentChangeAmountPlannedAction(**data)
+
+
+class MyPaymentSetCustomFieldActionSchema(MyPaymentUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentSetCustomFieldAction`."
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentSetCustomFieldAction(**data)
+
+
+class MyPaymentSetMethodInfoInterfaceActionSchema(MyPaymentUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentSetMethodInfoInterfaceAction`."
+    interface = marshmallow.fields.String(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentSetMethodInfoInterfaceAction(**data)
+
+
+class MyPaymentSetMethodInfoMethodActionSchema(MyPaymentUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentSetMethodInfoMethodAction`."
+    method = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentSetMethodInfoMethodAction(**data)
+
+
+class MyPaymentSetMethodInfoNameActionSchema(MyPaymentUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyPaymentSetMethodInfoNameAction`."
+    name = LocalizedStringField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyPaymentSetMethodInfoNameAction(**data)
+
+
+class MyShoppingListAddLineItemActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListAddLineItemAction`."
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    product_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="productId"
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="variantId"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListAddLineItemAction(**data)
+
+
+class MyShoppingListAddTextLineItemActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListAddTextLineItemAction`."
+    name = LocalizedStringField(allow_none=True)
+    description = LocalizedStringField(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListAddTextLineItemAction(**data)
+
+
+class MyShoppingListChangeLineItemQuantityActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListChangeLineItemQuantityAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListChangeLineItemQuantityAction(**data)
+
+
+class MyShoppingListChangeLineItemsOrderActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListChangeLineItemsOrderAction`."
+    line_item_order = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="lineItemOrder"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListChangeLineItemsOrderAction(**data)
+
+
+class MyShoppingListChangeNameActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListChangeNameAction`."
+    name = LocalizedStringField(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListChangeNameAction(**data)
+
+
+class MyShoppingListChangeTextLineItemNameActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListChangeTextLineItemNameAction`."
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    name = LocalizedStringField(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListChangeTextLineItemNameAction(**data)
+
+
+class MyShoppingListChangeTextLineItemQuantityActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListChangeTextLineItemQuantityAction`."
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListChangeTextLineItemQuantityAction(**data)
+
+
+class MyShoppingListChangeTextLineItemsOrderActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListChangeTextLineItemsOrderAction`."
+    text_line_item_order = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), data_key="textLineItemOrder"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListChangeTextLineItemsOrderAction(**data)
+
+
+class MyShoppingListRemoveLineItemActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListRemoveLineItemAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListRemoveLineItemAction(**data)
+
+
+class MyShoppingListRemoveTextLineItemActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListRemoveTextLineItemAction`."
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListRemoveTextLineItemAction(**data)
+
+
+class MyShoppingListSetCustomFieldActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetCustomFieldAction`."
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetCustomFieldAction(**data)
+
+
+class MyShoppingListSetCustomTypeActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetCustomTypeAction`."
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    fields = FieldContainerField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetCustomTypeAction(**data)
+
+
+class MyShoppingListSetDeleteDaysAfterLastModificationActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetDeleteDaysAfterLastModificationAction`."
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetDeleteDaysAfterLastModificationAction(**data)
+
+
+class MyShoppingListSetDescriptionActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetDescriptionAction`."
+    description = LocalizedStringField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetDescriptionAction(**data)
+
+
+class MyShoppingListSetLineItemCustomFieldActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetLineItemCustomFieldAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetLineItemCustomFieldAction(**data)
+
+
+class MyShoppingListSetLineItemCustomTypeActionSchema(MyShoppingListUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetLineItemCustomTypeAction`."
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    fields = FieldContainerField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetLineItemCustomTypeAction(**data)
+
+
+class MyShoppingListSetTextLineItemCustomFieldActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetTextLineItemCustomFieldAction`."
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    name = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetTextLineItemCustomFieldAction(**data)
+
+
+class MyShoppingListSetTextLineItemCustomTypeActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetTextLineItemCustomTypeAction`."
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    type = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.TypeResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    fields = FieldContainerField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetTextLineItemCustomTypeAction(**data)
+
+
+class MyShoppingListSetTextLineItemDescriptionActionSchema(
+    MyShoppingListUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.MyShoppingListSetTextLineItemDescriptionAction`."
+    text_line_item_id = marshmallow.fields.String(
+        allow_none=True, data_key="textLineItemId"
+    )
+    description = LocalizedStringField(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data):
+        del data["action"]
+        return types.MyShoppingListSetTextLineItemDescriptionAction(**data)

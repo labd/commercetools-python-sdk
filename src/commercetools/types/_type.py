@@ -152,8 +152,8 @@ class FieldContainer(typing.Dict[(str, typing.Any)]):
 
 class FieldDefinition(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldDefinitionSchema`."
-    #: :class:`object`
-    type: typing.Optional[object]
+    #: :class:`commercetools.types.FieldType`
+    type: typing.Optional["FieldType"]
     #: :class:`str`
     name: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
@@ -166,7 +166,7 @@ class FieldDefinition(_BaseType):
     def __init__(
         self,
         *,
-        type: typing.Optional[object] = None,
+        type: typing.Optional["FieldType"] = None,
         name: typing.Optional[str] = None,
         label: typing.Optional["LocalizedString"] = None,
         required: typing.Optional[bool] = None,
@@ -326,6 +326,8 @@ class TypeDraft(_BaseType):
 class TypePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypePagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -337,11 +339,13 @@ class TypePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Type"]] = None,
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -349,11 +353,9 @@ class TypePagedQueryResponse(_BaseType):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "TypePagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)" % (
-            self.count,
-            self.total,
-            self.offset,
-            self.results,
+        return (
+            "TypePagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

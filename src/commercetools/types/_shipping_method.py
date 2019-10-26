@@ -6,14 +6,14 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
-    from ._common import Money, TypedMoney
+    from ._common import CreatedBy, LastModifiedBy, Money, TypedMoney
     from ._tax_category import TaxCategoryReference, TaxCategoryResourceIdentifier
     from ._zone import ZoneReference, ZoneResourceIdentifier
 __all__ = [
@@ -71,7 +71,7 @@ class PriceFunction(_BaseType):
         )
 
 
-class ShippingMethod(BaseResource):
+class ShippingMethod(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSchema`."
     #: Optional :class:`str`
     key: typing.Optional[str]
@@ -95,6 +95,8 @@ class ShippingMethod(BaseResource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         name: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
@@ -115,16 +117,20 @@ class ShippingMethod(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "ShippingMethod(id=%r, version=%r, created_at=%r, last_modified_at=%r, key=%r, name=%r, description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
+            "ShippingMethod(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.key,
                 self.name,
                 self.description,
@@ -191,6 +197,8 @@ class ShippingMethodDraft(_BaseType):
 class ShippingMethodPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodPagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -202,11 +210,13 @@ class ShippingMethodPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["ShippingMethod"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -215,8 +225,8 @@ class ShippingMethodPagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "ShippingMethodPagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "ShippingMethodPagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 

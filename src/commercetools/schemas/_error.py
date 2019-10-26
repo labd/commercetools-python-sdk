@@ -135,7 +135,7 @@ class VariantValuesSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.VariantValues`."
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     prices = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.PriceSchema",
+        nested="commercetools.schemas._common.PriceDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,
@@ -250,6 +250,38 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
     field = marshmallow.fields.String(allow_none=True, missing=None)
     duplicate_value = marshmallow.fields.Raw(
         allow_none=True, missing=None, data_key="duplicateValue"
+    )
+    conflicting_resource = helpers.Discriminator(
+        discriminator_field=("typeId", "type_id"),
+        discriminator_schemas={
+            "cart-discount": "commercetools.schemas._cart_discount.CartDiscountReferenceSchema",
+            "cart": "commercetools.schemas._cart.CartReferenceSchema",
+            "category": "commercetools.schemas._category.CategoryReferenceSchema",
+            "channel": "commercetools.schemas._channel.ChannelReferenceSchema",
+            "key-value-document": "commercetools.schemas._custom_object.CustomObjectReferenceSchema",
+            "customer-group": "commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+            "customer": "commercetools.schemas._customer.CustomerReferenceSchema",
+            "discount-code": "commercetools.schemas._discount_code.DiscountCodeReferenceSchema",
+            "inventory-entry": "commercetools.schemas._inventory.InventoryEntryReferenceSchema",
+            "order-edit": "commercetools.schemas._order_edit.OrderEditReferenceSchema",
+            "order": "commercetools.schemas._order.OrderReferenceSchema",
+            "payment": "commercetools.schemas._payment.PaymentReferenceSchema",
+            "product-discount": "commercetools.schemas._product_discount.ProductDiscountReferenceSchema",
+            "product-type": "commercetools.schemas._product_type.ProductTypeReferenceSchema",
+            "product": "commercetools.schemas._product.ProductReferenceSchema",
+            "review": "commercetools.schemas._review.ReviewReferenceSchema",
+            "shipping-method": "commercetools.schemas._shipping_method.ShippingMethodReferenceSchema",
+            "shopping-list": "commercetools.schemas._shopping_list.ShoppingListReferenceSchema",
+            "state": "commercetools.schemas._state.StateReferenceSchema",
+            "store": "commercetools.schemas._store.StoreReferenceSchema",
+            "tax-category": "commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
+            "type": "commercetools.schemas._type.TypeReferenceSchema",
+            "zone": "commercetools.schemas._zone.ZoneReferenceSchema",
+        },
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="conflictingResource",
     )
 
     class Meta:

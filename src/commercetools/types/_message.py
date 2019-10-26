@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import BaseResource
+from commercetools.types._common import LoggedResource
 
 if typing.TYPE_CHECKING:
     from ._cart import (
@@ -20,8 +20,10 @@ if typing.TYPE_CHECKING:
     from ._channel import ChannelReference
     from ._common import (
         Address,
+        CreatedBy,
         DiscountedPrice,
         Image,
+        LastModifiedBy,
         LocalizedString,
         Money,
         Reference,
@@ -189,7 +191,7 @@ __all__ = [
 ]
 
 
-class Message(BaseResource):
+class Message(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSchema`."
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
     sequence_number: typing.Optional[int]
@@ -209,6 +211,8 @@ class Message(BaseResource):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -227,16 +231,20 @@ class Message(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Message(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r)"
+            "Message(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -297,6 +305,8 @@ class MessageConfigurationDraft(_BaseType):
 class MessagePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePagedQueryResponseSchema`."
     #: :class:`int`
+    limit: typing.Optional[int]
+    #: :class:`int`
     count: typing.Optional[int]
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -308,11 +318,13 @@ class MessagePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: typing.Optional[int] = None,
         count: typing.Optional[int] = None,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         results: typing.Optional[typing.Sequence["Message"]] = None
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -321,8 +333,8 @@ class MessagePagedQueryResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "MessagePagedQueryResponse(count=%r, total=%r, offset=%r, results=%r)"
-            % (self.count, self.total, self.offset, self.results)
+            "MessagePagedQueryResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r)"
+            % (self.limit, self.count, self.total, self.offset, self.results)
         )
 
 
@@ -445,6 +457,8 @@ class CategoryCreatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -460,21 +474,25 @@ class CategoryCreatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CategoryCreated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CategoryCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, category=%r)"
+            "CategoryCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, category=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -518,6 +536,8 @@ class CategorySlugChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -533,21 +553,25 @@ class CategorySlugChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CategorySlugChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CategorySlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, slug=%r)"
+            "CategorySlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, slug=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -599,6 +623,8 @@ class CustomLineItemStateTransitionMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -622,21 +648,25 @@ class CustomLineItemStateTransitionMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomLineItemStateTransition",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomLineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, custom_line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            "CustomLineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, custom_line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -707,6 +737,8 @@ class CustomerAddressAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -722,21 +754,25 @@ class CustomerAddressAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerAddressAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerAddressAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r)"
+            "CustomerAddressAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -780,6 +816,8 @@ class CustomerAddressChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -795,21 +833,25 @@ class CustomerAddressChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerAddressChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerAddressChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r)"
+            "CustomerAddressChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -853,6 +895,8 @@ class CustomerAddressRemovedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -868,21 +912,25 @@ class CustomerAddressRemovedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerAddressRemoved",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerAddressRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r)"
+            "CustomerAddressRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -926,6 +974,8 @@ class CustomerCompanyNameSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -941,21 +991,25 @@ class CustomerCompanyNameSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerCompanyNameSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerCompanyNameSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, company_name=%r)"
+            "CustomerCompanyNameSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, company_name=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -999,6 +1053,8 @@ class CustomerCreatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1014,21 +1070,25 @@ class CustomerCreatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerCreated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer=%r)"
+            "CustomerCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1072,6 +1132,8 @@ class CustomerDateOfBirthSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1087,21 +1149,25 @@ class CustomerDateOfBirthSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerDateOfBirthSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerDateOfBirthSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, date_of_birth=%r)"
+            "CustomerDateOfBirthSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, date_of_birth=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1145,6 +1211,8 @@ class CustomerEmailChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1160,21 +1228,25 @@ class CustomerEmailChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerEmailChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerEmailChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, email=%r)"
+            "CustomerEmailChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, email=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1213,6 +1285,8 @@ class CustomerEmailVerifiedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1226,21 +1300,25 @@ class CustomerEmailVerifiedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerEmailVerified",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerEmailVerifiedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r)"
+            "CustomerEmailVerifiedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1272,6 +1350,8 @@ class CustomerGroupSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1287,21 +1367,25 @@ class CustomerGroupSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="CustomerGroupSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "CustomerGroupSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer_group=%r)"
+            "CustomerGroupSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer_group=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1345,6 +1429,8 @@ class DeliveryAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1360,21 +1446,25 @@ class DeliveryAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="DeliveryAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "DeliveryAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery=%r)"
+            "DeliveryAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1422,6 +1512,8 @@ class DeliveryAddressSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1441,21 +1533,25 @@ class DeliveryAddressSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="DeliveryAddressSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "DeliveryAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, address=%r, old_address=%r)"
+            "DeliveryAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, address=%r, old_address=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1513,6 +1609,8 @@ class DeliveryItemsUpdatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1532,21 +1630,25 @@ class DeliveryItemsUpdatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="DeliveryItemsUpdated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "DeliveryItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, items=%r, old_items=%r)"
+            "DeliveryItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, items=%r, old_items=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1600,6 +1702,8 @@ class DeliveryRemovedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1615,21 +1719,25 @@ class DeliveryRemovedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="DeliveryRemoved",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "DeliveryRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery=%r)"
+            "DeliveryRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1675,6 +1783,8 @@ class InventoryEntryDeletedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1692,21 +1802,25 @@ class InventoryEntryDeletedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="InventoryEntryDeleted",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "InventoryEntryDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, sku=%r, supply_channel=%r)"
+            "InventoryEntryDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, sku=%r, supply_channel=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1763,6 +1877,8 @@ class LineItemStateTransitionMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1786,21 +1902,25 @@ class LineItemStateTransitionMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="LineItemStateTransition",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "LineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
+            "LineItemStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item_id=%r, transition_date=%r, quantity=%r, from_state=%r, to_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1873,6 +1993,8 @@ class OrderBillingAddressSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1890,21 +2012,25 @@ class OrderBillingAddressSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderBillingAddressSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderBillingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r, old_address=%r)"
+            "OrderBillingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r, old_address=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -1953,6 +2079,8 @@ class OrderCreatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -1968,21 +2096,25 @@ class OrderCreatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderCreated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order=%r)"
+            "OrderCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2029,6 +2161,8 @@ class OrderCustomLineItemDiscountSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2050,21 +2184,25 @@ class OrderCustomLineItemDiscountSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderCustomLineItemDiscountSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderCustomLineItemDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, custom_line_item_id=%r, discounted_price_per_quantity=%r, taxed_price=%r)"
+            "OrderCustomLineItemDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, custom_line_item_id=%r, discounted_price_per_quantity=%r, taxed_price=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2129,6 +2267,8 @@ class OrderCustomerEmailSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2146,21 +2286,25 @@ class OrderCustomerEmailSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderCustomerEmailSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderCustomerEmailSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, email=%r, old_email=%r)"
+            "OrderCustomerEmailSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, email=%r, old_email=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2215,6 +2359,8 @@ class OrderCustomerSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2236,21 +2382,25 @@ class OrderCustomerSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderCustomerSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderCustomerSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer=%r, customer_group=%r, old_customer=%r, old_customer_group=%r)"
+            "OrderCustomerSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer=%r, customer_group=%r, old_customer=%r, old_customer_group=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2315,6 +2465,8 @@ class OrderDeletedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2330,21 +2482,25 @@ class OrderDeletedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderDeleted",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order=%r)"
+            "OrderDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2385,6 +2541,8 @@ class OrderDiscountCodeAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2400,21 +2558,25 @@ class OrderDiscountCodeAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderDiscountCodeAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderDiscountCodeAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, discount_code=%r)"
+            "OrderDiscountCodeAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, discount_code=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2458,6 +2620,8 @@ class OrderDiscountCodeRemovedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2473,21 +2637,25 @@ class OrderDiscountCodeRemovedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderDiscountCodeRemoved",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderDiscountCodeRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, discount_code=%r)"
+            "OrderDiscountCodeRemovedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, discount_code=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2535,6 +2703,8 @@ class OrderDiscountCodeStateSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2554,21 +2724,25 @@ class OrderDiscountCodeStateSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderDiscountCodeStateSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderDiscountCodeStateSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, discount_code=%r, state=%r, old_state=%r)"
+            "OrderDiscountCodeStateSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, discount_code=%r, state=%r, old_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2624,6 +2798,8 @@ class OrderEditAppliedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2641,21 +2817,25 @@ class OrderEditAppliedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderEditApplied",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderEditAppliedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, edit=%r, result=%r)"
+            "OrderEditAppliedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, edit=%r, result=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2705,6 +2885,8 @@ class OrderImportedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2720,21 +2902,25 @@ class OrderImportedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderImported",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderImportedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order=%r)"
+            "OrderImportedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2780,6 +2966,8 @@ class OrderLineItemAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2797,21 +2985,25 @@ class OrderLineItemAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderLineItemAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderLineItemAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item=%r, added_quantity=%r)"
+            "OrderLineItemAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item=%r, added_quantity=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2868,6 +3060,8 @@ class OrderLineItemDiscountSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2891,21 +3085,25 @@ class OrderLineItemDiscountSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderLineItemDiscountSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderLineItemDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item_id=%r, discounted_price_per_quantity=%r, total_price=%r, taxed_price=%r)"
+            "OrderLineItemDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, line_item_id=%r, discounted_price_per_quantity=%r, total_price=%r, taxed_price=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -2966,7 +3164,7 @@ class OrderPaymentStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessageSchema`."
     #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: typing.Optional["PaymentState"]
-    #: :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
+    #: Optional :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
     old_payment_state: typing.Optional["PaymentState"]
 
     def __init__(
@@ -2976,6 +3174,8 @@ class OrderPaymentStateChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -2993,21 +3193,25 @@ class OrderPaymentStateChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderPaymentStateChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderPaymentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, payment_state=%r, old_payment_state=%r)"
+            "OrderPaymentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, payment_state=%r, old_payment_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3023,7 +3227,7 @@ class OrderPaymentStateChangedMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessagePayloadSchema`."
     #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: typing.Optional["PaymentState"]
-    #: :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
+    #: Optional :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
     old_payment_state: typing.Optional["PaymentState"]
 
     def __init__(
@@ -3056,6 +3260,8 @@ class OrderReturnInfoAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3071,21 +3277,25 @@ class OrderReturnInfoAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ReturnInfoAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderReturnInfoAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, return_info=%r)"
+            "OrderReturnInfoAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, return_info=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3131,6 +3341,8 @@ class OrderReturnShipmentStateChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3148,21 +3360,25 @@ class OrderReturnShipmentStateChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderReturnShipmentStateChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderReturnShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, return_item_id=%r, return_shipment_state=%r)"
+            "OrderReturnShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, return_item_id=%r, return_shipment_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3203,7 +3419,7 @@ class OrderShipmentStateChangedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessageSchema`."
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: typing.Optional["ShipmentState"]
-    #: :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
+    #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
     old_shipment_state: typing.Optional["ShipmentState"]
 
     def __init__(
@@ -3213,6 +3429,8 @@ class OrderShipmentStateChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3230,21 +3448,25 @@ class OrderShipmentStateChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderShipmentStateChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, shipment_state=%r, old_shipment_state=%r)"
+            "OrderShipmentStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, shipment_state=%r, old_shipment_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3260,7 +3482,7 @@ class OrderShipmentStateChangedMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessagePayloadSchema`."
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: typing.Optional["ShipmentState"]
-    #: :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
+    #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
     old_shipment_state: typing.Optional["ShipmentState"]
 
     def __init__(
@@ -3295,6 +3517,8 @@ class OrderShippingAddressSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3312,21 +3536,25 @@ class OrderShippingAddressSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderShippingAddressSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderShippingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r, old_address=%r)"
+            "OrderShippingAddressSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, address=%r, old_address=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3377,6 +3605,8 @@ class OrderShippingInfoSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3394,21 +3624,25 @@ class OrderShippingInfoSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderShippingInfoSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderShippingInfoSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, shipping_info=%r, old_shipping_info=%r)"
+            "OrderShippingInfoSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, shipping_info=%r, old_shipping_info=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3459,6 +3693,8 @@ class OrderShippingRateInputSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3476,21 +3712,25 @@ class OrderShippingRateInputSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderShippingRateInputSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderShippingRateInputSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, shipping_rate_input=%r, old_shipping_rate_input=%r)"
+            "OrderShippingRateInputSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, shipping_rate_input=%r, old_shipping_rate_input=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3541,6 +3781,8 @@ class OrderStateChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3558,21 +3800,25 @@ class OrderStateChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderStateChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order_state=%r, old_order_state=%r)"
+            "OrderStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, order_state=%r, old_order_state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3623,6 +3869,8 @@ class OrderStateTransitionMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3640,21 +3888,25 @@ class OrderStateTransitionMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="OrderStateTransition",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "OrderStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, state=%r, force=%r)"
+            "OrderStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, state=%r, force=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3706,6 +3958,8 @@ class ParcelAddedToDeliveryMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3723,21 +3977,25 @@ class ParcelAddedToDeliveryMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ParcelAddedToDelivery",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ParcelAddedToDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery=%r, parcel=%r)"
+            "ParcelAddedToDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery=%r, parcel=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3792,6 +4050,8 @@ class ParcelItemsUpdatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3813,21 +4073,25 @@ class ParcelItemsUpdatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ParcelItemsUpdated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ParcelItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, parcel_id=%r, delivery_id=%r, items=%r, old_items=%r)"
+            "ParcelItemsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, parcel_id=%r, delivery_id=%r, items=%r, old_items=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3890,6 +4154,8 @@ class ParcelMeasurementsUpdatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3909,21 +4175,25 @@ class ParcelMeasurementsUpdatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ParcelMeasurementsUpdated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ParcelMeasurementsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, parcel_id=%r, measurements=%r)"
+            "ParcelMeasurementsUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, parcel_id=%r, measurements=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -3979,6 +4249,8 @@ class ParcelRemovedFromDeliveryMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -3996,21 +4268,25 @@ class ParcelRemovedFromDeliveryMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ParcelRemovedFromDelivery",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ParcelRemovedFromDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, parcel=%r)"
+            "ParcelRemovedFromDeliveryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, parcel=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4063,6 +4339,8 @@ class ParcelTrackingDataUpdatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4082,21 +4360,25 @@ class ParcelTrackingDataUpdatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ParcelTrackingDataUpdated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ParcelTrackingDataUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, parcel_id=%r, tracking_data=%r)"
+            "ParcelTrackingDataUpdatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, delivery_id=%r, parcel_id=%r, tracking_data=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4150,6 +4432,8 @@ class PaymentCreatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4165,21 +4449,25 @@ class PaymentCreatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="PaymentCreated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "PaymentCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, payment=%r)"
+            "PaymentCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, payment=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4223,6 +4511,8 @@ class PaymentInteractionAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4238,21 +4528,25 @@ class PaymentInteractionAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="PaymentInteractionAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "PaymentInteractionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, interaction=%r)"
+            "PaymentInteractionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, interaction=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4298,6 +4592,8 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4315,21 +4611,25 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="PaymentStatusInterfaceCodeSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "PaymentStatusInterfaceCodeSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, payment_id=%r, interface_code=%r)"
+            "PaymentStatusInterfaceCodeSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, payment_id=%r, interface_code=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4380,6 +4680,8 @@ class PaymentStatusStateTransitionMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4397,21 +4699,25 @@ class PaymentStatusStateTransitionMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="PaymentStatusStateTransition",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "PaymentStatusStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, state=%r, force=%r)"
+            "PaymentStatusStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, state=%r, force=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4460,6 +4766,8 @@ class PaymentTransactionAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4475,21 +4783,25 @@ class PaymentTransactionAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="PaymentTransactionAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "PaymentTransactionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, transaction=%r)"
+            "PaymentTransactionAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, transaction=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4535,6 +4847,8 @@ class PaymentTransactionStateChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4552,21 +4866,25 @@ class PaymentTransactionStateChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="PaymentTransactionStateChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "PaymentTransactionStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, transaction_id=%r, state=%r)"
+            "PaymentTransactionStateChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, transaction_id=%r, state=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4615,6 +4933,8 @@ class ProductCreatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4630,21 +4950,25 @@ class ProductCreatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductCreated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, product_projection=%r)"
+            "ProductCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, product_projection=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4690,6 +5014,8 @@ class ProductDeletedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4707,21 +5033,25 @@ class ProductDeletedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductDeleted",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, current_projection=%r)"
+            "ProductDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, current_projection=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4774,6 +5104,8 @@ class ProductImageAddedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4793,21 +5125,25 @@ class ProductImageAddedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductImageAdded",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductImageAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, variant_id=%r, image=%r, staged=%r)"
+            "ProductImageAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, variant_id=%r, image=%r, staged=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4861,6 +5197,8 @@ class ProductPriceDiscountsSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4878,21 +5216,25 @@ class ProductPriceDiscountsSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductPriceDiscountsSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductPriceDiscountsSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, updated_prices=%r)"
+            "ProductPriceDiscountsSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, updated_prices=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -4948,6 +5290,8 @@ class ProductPriceExternalDiscountSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -4973,21 +5317,25 @@ class ProductPriceExternalDiscountSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductPriceExternalDiscountSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductPriceExternalDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, variant_id=%r, variant_key=%r, sku=%r, price_id=%r, discounted=%r, staged=%r)"
+            "ProductPriceExternalDiscountSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, variant_id=%r, variant_key=%r, sku=%r, price_id=%r, discounted=%r, staged=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5068,6 +5416,8 @@ class ProductPublishedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5087,21 +5437,25 @@ class ProductPublishedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductPublished",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductPublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, product_projection=%r, scope=%r)"
+            "ProductPublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, product_projection=%r, scope=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5155,6 +5509,8 @@ class ProductRevertedStagedChangesMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5170,21 +5526,25 @@ class ProductRevertedStagedChangesMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductRevertedStagedChanges",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductRevertedStagedChangesMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r)"
+            "ProductRevertedStagedChangesMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5228,6 +5588,8 @@ class ProductSlugChangedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5243,21 +5605,25 @@ class ProductSlugChangedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductSlugChanged",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductSlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, slug=%r)"
+            "ProductSlugChangedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, slug=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5303,6 +5669,8 @@ class ProductStateTransitionMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5320,21 +5688,25 @@ class ProductStateTransitionMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductStateTransition",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, state=%r, force=%r)"
+            "ProductStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, state=%r, force=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5382,6 +5754,8 @@ class ProductUnpublishedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5395,21 +5769,25 @@ class ProductUnpublishedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductUnpublished",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductUnpublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r)"
+            "ProductUnpublishedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5443,6 +5821,8 @@ class ProductVariantDeletedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5460,21 +5840,25 @@ class ProductVariantDeletedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ProductVariantDeleted",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ProductVariantDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, variant=%r)"
+            "ProductVariantDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, variant=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5523,6 +5907,8 @@ class ReviewCreatedMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5538,21 +5924,25 @@ class ReviewCreatedMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ReviewCreated",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ReviewCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, review=%r)"
+            "ReviewCreatedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, review=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5602,6 +5992,8 @@ class ReviewRatingSetMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5623,21 +6015,25 @@ class ReviewRatingSetMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ReviewRatingSet",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ReviewRatingSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, old_rating=%r, new_rating=%r, included_in_statistics=%r, target=%r)"
+            "ReviewRatingSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, old_rating=%r, new_rating=%r, included_in_statistics=%r, target=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,
@@ -5712,6 +6108,8 @@ class ReviewStateTransitionMessage(Message):
         version: typing.Optional[int] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
         sequence_number: typing.Optional[int] = None,
         resource: typing.Optional["Reference"] = None,
         resource_version: typing.Optional[int] = None,
@@ -5737,21 +6135,25 @@ class ReviewStateTransitionMessage(Message):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
             sequence_number=sequence_number,
             resource=resource,
             resource_version=resource_version,
-            type=type,
+            type="ReviewStateTransition",
             resource_user_provided_identifiers=resource_user_provided_identifiers,
         )
 
     def __repr__(self) -> str:
         return (
-            "ReviewStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, old_state=%r, new_state=%r, old_included_in_statistics=%r, new_included_in_statistics=%r, target=%r, force=%r)"
+            "ReviewStateTransitionMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, old_state=%r, new_state=%r, old_included_in_statistics=%r, new_included_in_statistics=%r, target=%r, force=%r)"
             % (
                 self.id,
                 self.version,
                 self.created_at,
                 self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
                 self.sequence_number,
                 self.resource,
                 self.resource_version,

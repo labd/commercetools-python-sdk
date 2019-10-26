@@ -102,7 +102,27 @@ class Discriminator(Field):
         if nested_obj is None:
             return None
 
-        discriminator_value = getattr(nested_obj, self.discriminator_field[1])
+        try:
+            discriminator_value = getattr(nested_obj, self.discriminator_field[1])
+        except AttributeError:
+
+            # We could make the error a bit more descriptive in the future
+            raise ValueError(
+                "The value of %s.%s doesn't have the attribute %r (expected object of %s)"
+                % (
+                    obj.__class__.__name__,
+                    attr,
+                    self.discriminator_field[1],
+                    ", ".join(self.discriminator_schemas.keys()),
+                )
+            )
+
+        if discriminator_value is None:
+            raise ValueError(
+                "The value of %s.%s doesn't have a value (are you using a base class?)"
+                % (obj.__class__.__name__, attr)
+            )
+
         if isinstance(discriminator_value, str):
             schema_name = self.discriminator_schemas[discriminator_value]
         else:

@@ -93,7 +93,7 @@ class DeliveryItemSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DeliveryItem(**data)
 
 
@@ -124,7 +124,7 @@ class DeliverySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Delivery(**data)
 
 
@@ -147,7 +147,7 @@ class DiscountedLineItemPriceDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DiscountedLineItemPriceDraft(**data)
 
 
@@ -164,7 +164,7 @@ class ItemStateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ItemState(**data)
 
 
@@ -231,7 +231,7 @@ class LineItemImportDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.LineItemImportDraft(**data)
 
 
@@ -262,7 +262,7 @@ class OrderFromCartDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.OrderFromCartDraft(**data)
 
 
@@ -379,7 +379,7 @@ class OrderImportDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.OrderImportDraft(**data)
 
 
@@ -400,7 +400,7 @@ class OrderPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.OrderPagedQueryResponse(**data)
 
 
@@ -417,7 +417,7 @@ class OrderReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.OrderReference(**data)
 
@@ -429,7 +429,7 @@ class OrderResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.OrderResourceIdentifier(**data)
 
@@ -625,7 +625,7 @@ class OrderSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Order(**data)
 
 
@@ -637,7 +637,7 @@ class OrderUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderUpdateAction(**data)
 
@@ -700,7 +700,7 @@ class OrderUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.OrderUpdate(**data)
 
 
@@ -731,7 +731,7 @@ class ParcelDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ParcelDraft(**data)
 
 
@@ -754,7 +754,7 @@ class ParcelMeasurementsSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ParcelMeasurements(**data)
 
 
@@ -787,7 +787,7 @@ class ParcelSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Parcel(**data)
 
 
@@ -804,7 +804,7 @@ class PaymentInfoSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentInfo(**data)
 
 
@@ -838,7 +838,7 @@ class ProductVariantImportDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductVariantImportDraft(**data)
 
 
@@ -866,7 +866,7 @@ class ReturnInfoSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ReturnInfo(**data)
 
 
@@ -888,7 +888,7 @@ class ReturnItemDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ReturnItemDraft(**data)
 
 
@@ -913,7 +913,7 @@ class ReturnItemSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ReturnItem(**data)
 
@@ -980,7 +980,7 @@ class ShippingInfoImportDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingInfoImportDraft(**data)
 
 
@@ -992,7 +992,7 @@ class StagedOrderUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StagedOrderUpdateAction(**data)
 
@@ -1013,7 +1013,7 @@ class SyncInfoSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.SyncInfo(**data)
 
 
@@ -1036,7 +1036,7 @@ class TaxedItemPriceDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxedItemPriceDraft(**data)
 
 
@@ -1058,7 +1058,7 @@ class TrackingDataSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TrackingData(**data)
 
 
@@ -1072,7 +1072,7 @@ class CustomLineItemReturnItemSchema(ReturnItemSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CustomLineItemReturnItem(**data)
 
@@ -1085,7 +1085,7 @@ class LineItemReturnItemSchema(ReturnItemSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.LineItemReturnItem(**data)
 
@@ -1117,7 +1117,7 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderAddDeliveryAction(**data)
 
@@ -1134,7 +1134,7 @@ class OrderAddItemShippingAddressActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderAddItemShippingAddressAction(**data)
 
@@ -1167,7 +1167,7 @@ class OrderAddParcelToDeliveryActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderAddParcelToDeliveryAction(**data)
 
@@ -1184,7 +1184,7 @@ class OrderAddPaymentActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderAddPaymentAction(**data)
 
@@ -1208,7 +1208,7 @@ class OrderAddReturnInfoActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderAddReturnInfoAction(**data)
 
@@ -1223,7 +1223,7 @@ class OrderChangeOrderStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderChangeOrderStateAction(**data)
 
@@ -1238,7 +1238,7 @@ class OrderChangePaymentStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderChangePaymentStateAction(**data)
 
@@ -1253,7 +1253,7 @@ class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderChangeShipmentStateAction(**data)
 
@@ -1274,7 +1274,7 @@ class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderImportCustomLineItemStateAction(**data)
 
@@ -1293,7 +1293,7 @@ class OrderImportLineItemStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderImportLineItemStateAction(**data)
 
@@ -1306,7 +1306,7 @@ class OrderRemoveDeliveryActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderRemoveDeliveryAction(**data)
 
@@ -1319,7 +1319,7 @@ class OrderRemoveItemShippingAddressActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderRemoveItemShippingAddressAction(**data)
 
@@ -1332,7 +1332,7 @@ class OrderRemoveParcelFromDeliveryActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderRemoveParcelFromDeliveryAction(**data)
 
@@ -1349,7 +1349,7 @@ class OrderRemovePaymentActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderRemovePaymentAction(**data)
 
@@ -1367,7 +1367,7 @@ class OrderSetBillingAddressActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetBillingAddressAction(**data)
 
@@ -1381,7 +1381,7 @@ class OrderSetCustomFieldActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomFieldAction(**data)
 
@@ -1398,7 +1398,7 @@ class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomLineItemCustomFieldAction(**data)
 
@@ -1420,7 +1420,7 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomLineItemCustomTypeAction(**data)
 
@@ -1442,7 +1442,7 @@ class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomLineItemShippingDetailsAction(**data)
 
@@ -1461,7 +1461,7 @@ class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomTypeAction(**data)
 
@@ -1474,7 +1474,7 @@ class OrderSetCustomerEmailActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomerEmailAction(**data)
 
@@ -1489,7 +1489,7 @@ class OrderSetCustomerIdActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetCustomerIdAction(**data)
 
@@ -1508,7 +1508,7 @@ class OrderSetDeliveryAddressActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetDeliveryAddressAction(**data)
 
@@ -1527,7 +1527,7 @@ class OrderSetDeliveryItemsActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetDeliveryItemsAction(**data)
 
@@ -1542,7 +1542,7 @@ class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetLineItemCustomFieldAction(**data)
 
@@ -1562,7 +1562,7 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetLineItemCustomTypeAction(**data)
 
@@ -1582,7 +1582,7 @@ class OrderSetLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetLineItemShippingDetailsAction(**data)
 
@@ -1595,7 +1595,7 @@ class OrderSetLocaleActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetLocaleAction(**data)
 
@@ -1610,7 +1610,7 @@ class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetOrderNumberAction(**data)
 
@@ -1629,7 +1629,7 @@ class OrderSetParcelItemsActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetParcelItemsAction(**data)
 
@@ -1648,7 +1648,7 @@ class OrderSetParcelMeasurementsActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetParcelMeasurementsAction(**data)
 
@@ -1668,7 +1668,7 @@ class OrderSetParcelTrackingDataActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetParcelTrackingDataAction(**data)
 
@@ -1684,7 +1684,7 @@ class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetReturnPaymentStateAction(**data)
 
@@ -1700,7 +1700,7 @@ class OrderSetReturnShipmentStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetReturnShipmentStateAction(**data)
 
@@ -1718,7 +1718,7 @@ class OrderSetShippingAddressActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderSetShippingAddressAction(**data)
 
@@ -1749,7 +1749,7 @@ class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderTransitionCustomLineItemStateAction(**data)
 
@@ -1778,7 +1778,7 @@ class OrderTransitionLineItemStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderTransitionLineItemStateAction(**data)
 
@@ -1796,7 +1796,7 @@ class OrderTransitionStateActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderTransitionStateAction(**data)
 
@@ -1813,7 +1813,7 @@ class OrderUpdateItemShippingAddressActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderUpdateItemShippingAddressAction(**data)
 
@@ -1836,6 +1836,6 @@ class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.OrderUpdateSyncInfoAction(**data)

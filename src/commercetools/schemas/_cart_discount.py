@@ -109,7 +109,7 @@ class CartDiscountDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CartDiscountDraft(**data)
 
 
@@ -130,7 +130,7 @@ class CartDiscountPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CartDiscountPagedQueryResponse(**data)
 
 
@@ -147,7 +147,7 @@ class CartDiscountReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CartDiscountReference(**data)
 
@@ -159,7 +159,7 @@ class CartDiscountResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CartDiscountResourceIdentifier(**data)
 
@@ -252,7 +252,7 @@ class CartDiscountSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CartDiscount(**data)
 
 
@@ -264,7 +264,7 @@ class CartDiscountTargetSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountTarget(**data)
 
@@ -277,7 +277,7 @@ class CartDiscountUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountUpdateAction(**data)
 
@@ -315,7 +315,7 @@ class CartDiscountUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CartDiscountUpdate(**data)
 
 
@@ -327,7 +327,7 @@ class CartDiscountValueDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueDraft(**data)
 
@@ -340,7 +340,7 @@ class CartDiscountValueSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValue(**data)
 
@@ -355,7 +355,7 @@ class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeCartPredicateAction(**data)
 
@@ -368,7 +368,7 @@ class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeIsActiveAction(**data)
 
@@ -381,7 +381,7 @@ class CartDiscountChangeNameActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeNameAction(**data)
 
@@ -398,7 +398,7 @@ class CartDiscountChangeRequiresDiscountCodeActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeRequiresDiscountCodeAction(**data)
 
@@ -411,7 +411,7 @@ class CartDiscountChangeSortOrderActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeSortOrderAction(**data)
 
@@ -426,7 +426,7 @@ class CartDiscountChangeStackingModeActionSchema(CartDiscountUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeStackingModeAction(**data)
 
@@ -450,7 +450,7 @@ class CartDiscountChangeTargetActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeTargetAction(**data)
 
@@ -472,7 +472,7 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountChangeValueAction(**data)
 
@@ -485,7 +485,7 @@ class CartDiscountCustomLineItemsTargetSchema(CartDiscountTargetSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountCustomLineItemsTarget(**data)
 
@@ -498,7 +498,7 @@ class CartDiscountLineItemsTargetSchema(CartDiscountTargetSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountLineItemsTarget(**data)
 
@@ -512,7 +512,7 @@ class CartDiscountSetCustomFieldActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetCustomFieldAction(**data)
 
@@ -531,7 +531,7 @@ class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetCustomTypeAction(**data)
 
@@ -544,7 +544,7 @@ class CartDiscountSetDescriptionActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetDescriptionAction(**data)
 
@@ -557,7 +557,7 @@ class CartDiscountSetKeyActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetKeyAction(**data)
 
@@ -572,7 +572,7 @@ class CartDiscountSetValidFromActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetValidFromAction(**data)
 
@@ -590,7 +590,7 @@ class CartDiscountSetValidFromAndUntilActionSchema(CartDiscountUpdateActionSchem
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetValidFromAndUntilAction(**data)
 
@@ -605,7 +605,7 @@ class CartDiscountSetValidUntilActionSchema(CartDiscountUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartDiscountSetValidUntilAction(**data)
 
@@ -617,7 +617,7 @@ class CartDiscountShippingCostTargetSchema(CartDiscountTargetSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountShippingCostTarget(**data)
 
@@ -635,7 +635,7 @@ class CartDiscountValueAbsoluteDraftSchema(CartDiscountValueDraftSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueAbsoluteDraft(**data)
 
@@ -658,7 +658,7 @@ class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueAbsolute(**data)
 
@@ -690,7 +690,7 @@ class CartDiscountValueGiftLineItemDraftSchema(CartDiscountValueDraftSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueGiftLineItemDraft(**data)
 
@@ -722,7 +722,7 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueGiftLineItem(**data)
 
@@ -735,7 +735,7 @@ class CartDiscountValueRelativeDraftSchema(CartDiscountValueDraftSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueRelativeDraft(**data)
 
@@ -748,7 +748,7 @@ class CartDiscountValueRelativeSchema(CartDiscountValueSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartDiscountValueRelative(**data)
 
@@ -773,7 +773,7 @@ class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.MultiBuyCustomLineItemsTarget(**data)
 
@@ -798,6 +798,6 @@ class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.MultiBuyLineItemsTarget(**data)

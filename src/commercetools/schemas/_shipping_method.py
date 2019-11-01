@@ -49,7 +49,7 @@ class PriceFunctionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PriceFunction(**data)
 
 
@@ -78,7 +78,7 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingMethodDraft(**data)
 
 
@@ -99,7 +99,7 @@ class ShippingMethodPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingMethodPagedQueryResponse(**data)
 
 
@@ -116,7 +116,7 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ShippingMethodReference(**data)
 
@@ -128,7 +128,7 @@ class ShippingMethodResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ShippingMethodResourceIdentifier(**data)
 
@@ -158,7 +158,7 @@ class ShippingMethodSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingMethod(**data)
 
 
@@ -170,7 +170,7 @@ class ShippingMethodUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodUpdateAction(**data)
 
@@ -203,7 +203,7 @@ class ShippingMethodUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingMethodUpdate(**data)
 
 
@@ -239,7 +239,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingRateDraft(**data)
 
 
@@ -251,7 +251,7 @@ class ShippingRatePriceTierSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ShippingRatePriceTier(**data)
 
@@ -298,7 +298,7 @@ class ShippingRateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShippingRate(**data)
 
 
@@ -321,7 +321,7 @@ class ZoneRateDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ZoneRateDraft(**data)
 
 
@@ -344,7 +344,7 @@ class ZoneRateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ZoneRate(**data)
 
 
@@ -364,7 +364,7 @@ class CartClassificationTierSchema(ShippingRatePriceTierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartClassificationTier(**data)
 
@@ -393,7 +393,7 @@ class CartScoreTierSchema(ShippingRatePriceTierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartScoreTier(**data)
 
@@ -416,7 +416,7 @@ class CartValueTierSchema(ShippingRatePriceTierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartValueTier(**data)
 
@@ -439,7 +439,7 @@ class ShippingMethodAddShippingRateActionSchema(ShippingMethodUpdateActionSchema
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodAddShippingRateAction(**data)
 
@@ -456,7 +456,7 @@ class ShippingMethodAddZoneActionSchema(ShippingMethodUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodAddZoneAction(**data)
 
@@ -469,7 +469,7 @@ class ShippingMethodChangeIsDefaultActionSchema(ShippingMethodUpdateActionSchema
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodChangeIsDefaultAction(**data)
 
@@ -482,7 +482,7 @@ class ShippingMethodChangeNameActionSchema(ShippingMethodUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodChangeNameAction(**data)
 
@@ -500,7 +500,7 @@ class ShippingMethodChangeTaxCategoryActionSchema(ShippingMethodUpdateActionSche
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodChangeTaxCategoryAction(**data)
 
@@ -523,7 +523,7 @@ class ShippingMethodRemoveShippingRateActionSchema(ShippingMethodUpdateActionSch
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodRemoveShippingRateAction(**data)
 
@@ -540,7 +540,7 @@ class ShippingMethodRemoveZoneActionSchema(ShippingMethodUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodRemoveZoneAction(**data)
 
@@ -553,7 +553,7 @@ class ShippingMethodSetDescriptionActionSchema(ShippingMethodUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodSetDescriptionAction(**data)
 
@@ -566,7 +566,7 @@ class ShippingMethodSetKeyActionSchema(ShippingMethodUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodSetKeyAction(**data)
 
@@ -579,6 +579,6 @@ class ShippingMethodSetPredicateActionSchema(ShippingMethodUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodSetPredicateAction(**data)

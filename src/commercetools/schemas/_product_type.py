@@ -104,7 +104,7 @@ class AttributeDefinitionDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AttributeDefinitionDraft(**data)
 
 
@@ -146,7 +146,7 @@ class AttributeDefinitionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AttributeDefinition(**data)
 
 
@@ -159,7 +159,7 @@ class AttributeLocalizedEnumValueSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AttributeLocalizedEnumValue(**data)
 
 
@@ -172,7 +172,7 @@ class AttributePlainEnumValueSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AttributePlainEnumValue(**data)
 
 
@@ -184,7 +184,7 @@ class AttributeTypeSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeType(**data)
 
@@ -206,7 +206,7 @@ class ProductTypeDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductTypeDraft(**data)
 
 
@@ -227,7 +227,7 @@ class ProductTypePagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductTypePagedQueryResponse(**data)
 
 
@@ -244,7 +244,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ProductTypeReference(**data)
 
@@ -256,7 +256,7 @@ class ProductTypeResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ProductTypeResourceIdentifier(**data)
 
@@ -278,7 +278,7 @@ class ProductTypeSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductType(**data)
 
 
@@ -290,7 +290,7 @@ class ProductTypeUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeUpdateAction(**data)
 
@@ -334,7 +334,7 @@ class ProductTypeUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductTypeUpdate(**data)
 
 
@@ -345,7 +345,7 @@ class AttributeBooleanTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeBooleanType(**data)
 
@@ -357,7 +357,7 @@ class AttributeDateTimeTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeDateTimeType(**data)
 
@@ -369,7 +369,7 @@ class AttributeDateTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeDateType(**data)
 
@@ -387,7 +387,7 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeEnumType(**data)
 
@@ -399,7 +399,7 @@ class AttributeLocalizableTextTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeLocalizableTextType(**data)
 
@@ -417,7 +417,7 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeLocalizedEnumType(**data)
 
@@ -429,7 +429,7 @@ class AttributeMoneyTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeMoneyType(**data)
 
@@ -447,7 +447,7 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeNestedType(**data)
 
@@ -459,7 +459,7 @@ class AttributeNumberTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeNumberType(**data)
 
@@ -474,7 +474,7 @@ class AttributeReferenceTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeReferenceType(**data)
 
@@ -507,7 +507,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeSetType(**data)
 
@@ -519,7 +519,7 @@ class AttributeTextTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeTextType(**data)
 
@@ -531,7 +531,7 @@ class AttributeTimeTypeSchema(AttributeTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["name"]
         return types.AttributeTimeType(**data)
 
@@ -548,7 +548,7 @@ class ProductTypeAddAttributeDefinitionActionSchema(ProductTypeUpdateActionSchem
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeAddAttributeDefinitionAction(**data)
 
@@ -568,7 +568,7 @@ class ProductTypeAddLocalizedEnumValueActionSchema(ProductTypeUpdateActionSchema
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeAddLocalizedEnumValueAction(**data)
 
@@ -588,7 +588,7 @@ class ProductTypeAddPlainEnumValueActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeAddPlainEnumValueAction(**data)
 
@@ -606,7 +606,7 @@ class ProductTypeChangeAttributeConstraintActionSchema(ProductTypeUpdateActionSc
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeAttributeConstraintAction(**data)
 
@@ -624,7 +624,7 @@ class ProductTypeChangeAttributeNameActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeAttributeNameAction(**data)
 
@@ -642,7 +642,7 @@ class ProductTypeChangeAttributeOrderActionSchema(ProductTypeUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeAttributeOrderAction(**data)
 
@@ -657,7 +657,7 @@ class ProductTypeChangeAttributeOrderByNameActionSchema(ProductTypeUpdateActionS
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeAttributeOrderByNameAction(**data)
 
@@ -670,7 +670,7 @@ class ProductTypeChangeDescriptionActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeDescriptionAction(**data)
 
@@ -687,7 +687,7 @@ class ProductTypeChangeEnumKeyActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeEnumKeyAction(**data)
 
@@ -705,7 +705,7 @@ class ProductTypeChangeInputHintActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeInputHintAction(**data)
 
@@ -721,7 +721,7 @@ class ProductTypeChangeIsSearchableActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeIsSearchableAction(**data)
 
@@ -737,7 +737,7 @@ class ProductTypeChangeLabelActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeLabelAction(**data)
 
@@ -760,7 +760,7 @@ class ProductTypeChangeLocalizedEnumValueLabelActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeLocalizedEnumValueLabelAction(**data)
 
@@ -783,7 +783,7 @@ class ProductTypeChangeLocalizedEnumValueOrderActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeLocalizedEnumValueOrderAction(**data)
 
@@ -796,7 +796,7 @@ class ProductTypeChangeNameActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangeNameAction(**data)
 
@@ -817,7 +817,7 @@ class ProductTypeChangePlainEnumValueLabelActionSchema(ProductTypeUpdateActionSc
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangePlainEnumValueLabelAction(**data)
 
@@ -838,7 +838,7 @@ class ProductTypeChangePlainEnumValueOrderActionSchema(ProductTypeUpdateActionSc
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeChangePlainEnumValueOrderAction(**data)
 
@@ -851,7 +851,7 @@ class ProductTypeRemoveAttributeDefinitionActionSchema(ProductTypeUpdateActionSc
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeRemoveAttributeDefinitionAction(**data)
 
@@ -867,7 +867,7 @@ class ProductTypeRemoveEnumValuesActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeRemoveEnumValuesAction(**data)
 
@@ -883,7 +883,7 @@ class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeSetInputTipAction(**data)
 
@@ -896,6 +896,6 @@ class ProductTypeSetKeyActionSchema(ProductTypeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTypeSetKeyAction(**data)

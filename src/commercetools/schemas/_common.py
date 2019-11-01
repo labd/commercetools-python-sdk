@@ -43,7 +43,7 @@ __all__ = [
 
 
 class LocalizedStringField(marshmallow.fields.Dict):
-    def _deserialize(self, value, attr, data):
+    def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return types.LocalizedString(**result)
 
@@ -96,7 +96,7 @@ class AddressSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Address(**data)
 
 
@@ -109,7 +109,7 @@ class AssetDimensionsSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AssetDimensions(**data)
 
 
@@ -138,7 +138,7 @@ class AssetDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AssetDraft(**data)
 
 
@@ -168,7 +168,7 @@ class AssetSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Asset(**data)
 
 
@@ -190,7 +190,7 @@ class AssetSourceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.AssetSource(**data)
 
 
@@ -207,7 +207,7 @@ class BaseResourceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.BaseResource(**data)
 
 
@@ -233,7 +233,7 @@ class ClientLoggingSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ClientLogging(**data)
 
 
@@ -254,7 +254,7 @@ class DiscountedPriceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DiscountedPrice(**data)
 
 
@@ -266,7 +266,7 @@ class GeoJsonSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.GeoJson(**data)
 
@@ -280,7 +280,7 @@ class ImageDimensionsSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ImageDimensions(**data)
 
 
@@ -298,7 +298,7 @@ class ImageSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Image(**data)
 
 
@@ -313,7 +313,7 @@ class KeyReferenceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.KeyReference(**data)
 
@@ -327,7 +327,7 @@ class MoneySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Money(**data)
 
 
@@ -355,7 +355,7 @@ class PagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PagedQueryResponse(**data)
 
 
@@ -410,7 +410,7 @@ class PriceDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PriceDraft(**data)
 
 
@@ -470,7 +470,7 @@ class PriceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Price(**data)
 
 
@@ -489,7 +489,7 @@ class PriceTierDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PriceTierDraft(**data)
 
 
@@ -512,7 +512,7 @@ class PriceTierSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PriceTier(**data)
 
 
@@ -527,7 +527,7 @@ class ReferenceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.Reference(**data)
 
@@ -544,7 +544,7 @@ class ResourceIdentifierSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ResourceIdentifier(**data)
 
@@ -608,7 +608,7 @@ class ScopedPriceSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ScopedPrice(**data)
 
 
@@ -625,7 +625,7 @@ class TypedMoneySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.TypedMoney(**data)
 
@@ -638,7 +638,7 @@ class UpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.UpdateAction(**data)
 
 
@@ -658,7 +658,7 @@ class UpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Update(**data)
 
 
@@ -669,7 +669,7 @@ class CentPrecisionMoneySchema(TypedMoneySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CentPrecisionMoney(**data)
 
@@ -681,7 +681,7 @@ class CreatedBySchema(ClientLoggingSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CreatedBy(**data)
 
 
@@ -700,7 +700,7 @@ class GeoJsonPointSchema(GeoJsonSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.GeoJsonPoint(**data)
 
@@ -715,7 +715,7 @@ class HighPrecisionMoneySchema(TypedMoneySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.HighPrecisionMoney(**data)
 
@@ -727,7 +727,7 @@ class LastModifiedBySchema(ClientLoggingSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.LastModifiedBy(**data)
 
 
@@ -752,7 +752,7 @@ class LoggedResourceSchema(BaseResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.LoggedResource(**data)
 
 
@@ -764,7 +764,7 @@ class TypedMoneyDraftSchema(MoneySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.TypedMoneyDraft(**data)
 
@@ -776,7 +776,7 @@ class CentPrecisionMoneyDraftSchema(TypedMoneyDraftSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CentPrecisionMoneyDraft(**data)
 
@@ -791,6 +791,6 @@ class HighPrecisionMoneyDraftSchema(TypedMoneyDraftSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.HighPrecisionMoneyDraft(**data)

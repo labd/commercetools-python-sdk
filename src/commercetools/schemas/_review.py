@@ -75,7 +75,7 @@ class ReviewDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ReviewDraft(**data)
 
 
@@ -96,7 +96,7 @@ class ReviewPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ReviewPagedQueryResponse(**data)
 
 
@@ -118,7 +118,7 @@ class ReviewRatingStatisticsSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ReviewRatingStatistics(**data)
 
 
@@ -135,7 +135,7 @@ class ReviewReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ReviewReference(**data)
 
@@ -147,7 +147,7 @@ class ReviewResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ReviewResourceIdentifier(**data)
 
@@ -197,7 +197,7 @@ class ReviewSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Review(**data)
 
 
@@ -209,7 +209,7 @@ class ReviewUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewUpdateAction(**data)
 
@@ -243,7 +243,7 @@ class ReviewUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ReviewUpdate(**data)
 
 
@@ -257,7 +257,7 @@ class ReviewSetAuthorNameActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetAuthorNameAction(**data)
 
@@ -271,7 +271,7 @@ class ReviewSetCustomFieldActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetCustomFieldAction(**data)
 
@@ -290,7 +290,7 @@ class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetCustomTypeAction(**data)
 
@@ -308,7 +308,7 @@ class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetCustomerAction(**data)
 
@@ -321,7 +321,7 @@ class ReviewSetKeyActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetKeyAction(**data)
 
@@ -334,7 +334,7 @@ class ReviewSetLocaleActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetLocaleAction(**data)
 
@@ -347,7 +347,7 @@ class ReviewSetRatingActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetRatingAction(**data)
 
@@ -364,7 +364,7 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetTargetAction(**data)
 
@@ -377,7 +377,7 @@ class ReviewSetTextActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetTextAction(**data)
 
@@ -390,7 +390,7 @@ class ReviewSetTitleActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewSetTitleAction(**data)
 
@@ -408,6 +408,6 @@ class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ReviewTransitionStateAction(**data)

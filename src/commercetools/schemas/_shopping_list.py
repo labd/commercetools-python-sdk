@@ -95,7 +95,7 @@ class MyShoppingListSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.MyShoppingList(**data)
 
 
@@ -144,7 +144,7 @@ class ShoppingListDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShoppingListDraft(**data)
 
 
@@ -172,7 +172,7 @@ class ShoppingListLineItemDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShoppingListLineItemDraft(**data)
 
 
@@ -215,7 +215,7 @@ class ShoppingListLineItemSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShoppingListLineItem(**data)
 
 
@@ -236,7 +236,7 @@ class ShoppingListPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShoppingListPagedQueryResponse(**data)
 
 
@@ -253,7 +253,7 @@ class ShoppingListReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ShoppingListReference(**data)
 
@@ -265,7 +265,7 @@ class ShoppingListResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ShoppingListResourceIdentifier(**data)
 
@@ -315,7 +315,7 @@ class ShoppingListSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShoppingList(**data)
 
 
@@ -327,7 +327,7 @@ class ShoppingListUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListUpdateAction(**data)
 
@@ -373,7 +373,7 @@ class ShoppingListUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ShoppingListUpdate(**data)
 
 
@@ -396,7 +396,7 @@ class TextLineItemDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TextLineItemDraft(**data)
 
 
@@ -418,7 +418,7 @@ class TextLineItemSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TextLineItem(**data)
 
 
@@ -446,7 +446,7 @@ class ShoppingListAddLineItemActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListAddLineItemAction(**data)
 
@@ -470,7 +470,7 @@ class ShoppingListAddTextLineItemActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListAddTextLineItemAction(**data)
 
@@ -484,7 +484,7 @@ class ShoppingListChangeLineItemQuantityActionSchema(ShoppingListUpdateActionSch
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListChangeLineItemQuantityAction(**data)
 
@@ -499,7 +499,7 @@ class ShoppingListChangeLineItemsOrderActionSchema(ShoppingListUpdateActionSchem
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListChangeLineItemsOrderAction(**data)
 
@@ -512,7 +512,7 @@ class ShoppingListChangeNameActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListChangeNameAction(**data)
 
@@ -528,7 +528,7 @@ class ShoppingListChangeTextLineItemNameActionSchema(ShoppingListUpdateActionSch
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListChangeTextLineItemNameAction(**data)
 
@@ -546,7 +546,7 @@ class ShoppingListChangeTextLineItemQuantityActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListChangeTextLineItemQuantityAction(**data)
 
@@ -561,7 +561,7 @@ class ShoppingListChangeTextLineItemsOrderActionSchema(ShoppingListUpdateActionS
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListChangeTextLineItemsOrderAction(**data)
 
@@ -575,7 +575,7 @@ class ShoppingListRemoveLineItemActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListRemoveLineItemAction(**data)
 
@@ -591,7 +591,7 @@ class ShoppingListRemoveTextLineItemActionSchema(ShoppingListUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListRemoveTextLineItemAction(**data)
 
@@ -606,7 +606,7 @@ class ShoppingListSetAnonymousIdActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetAnonymousIdAction(**data)
 
@@ -620,7 +620,7 @@ class ShoppingListSetCustomFieldActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetCustomFieldAction(**data)
 
@@ -639,7 +639,7 @@ class ShoppingListSetCustomTypeActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetCustomTypeAction(**data)
 
@@ -657,7 +657,7 @@ class ShoppingListSetCustomerActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetCustomerAction(**data)
 
@@ -674,7 +674,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetDeleteDaysAfterLastModificationAction(**data)
 
@@ -687,7 +687,7 @@ class ShoppingListSetDescriptionActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetDescriptionAction(**data)
 
@@ -700,7 +700,7 @@ class ShoppingListSetKeyActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetKeyAction(**data)
 
@@ -715,7 +715,7 @@ class ShoppingListSetLineItemCustomFieldActionSchema(ShoppingListUpdateActionSch
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetLineItemCustomFieldAction(**data)
 
@@ -735,7 +735,7 @@ class ShoppingListSetLineItemCustomTypeActionSchema(ShoppingListUpdateActionSche
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetLineItemCustomTypeAction(**data)
 
@@ -748,7 +748,7 @@ class ShoppingListSetSlugActionSchema(ShoppingListUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetSlugAction(**data)
 
@@ -767,7 +767,7 @@ class ShoppingListSetTextLineItemCustomFieldActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetTextLineItemCustomFieldAction(**data)
 
@@ -789,7 +789,7 @@ class ShoppingListSetTextLineItemCustomTypeActionSchema(ShoppingListUpdateAction
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetTextLineItemCustomTypeAction(**data)
 
@@ -807,6 +807,6 @@ class ShoppingListSetTextLineItemDescriptionActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShoppingListSetTextLineItemDescriptionAction(**data)

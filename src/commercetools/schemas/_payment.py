@@ -138,7 +138,7 @@ class PaymentDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentDraft(**data)
 
 
@@ -154,7 +154,7 @@ class PaymentMethodInfoSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentMethodInfo(**data)
 
 
@@ -175,7 +175,7 @@ class PaymentPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentPagedQueryResponse(**data)
 
 
@@ -192,7 +192,7 @@ class PaymentReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.PaymentReference(**data)
 
@@ -204,7 +204,7 @@ class PaymentResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.PaymentResourceIdentifier(**data)
 
@@ -309,7 +309,7 @@ class PaymentSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Payment(**data)
 
 
@@ -332,7 +332,7 @@ class PaymentStatusDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentStatusDraft(**data)
 
 
@@ -355,7 +355,7 @@ class PaymentStatusSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentStatus(**data)
 
 
@@ -367,7 +367,7 @@ class PaymentUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentUpdateAction(**data)
 
@@ -412,7 +412,7 @@ class PaymentUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PaymentUpdate(**data)
 
 
@@ -436,7 +436,7 @@ class TransactionDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TransactionDraft(**data)
 
 
@@ -465,7 +465,7 @@ class TransactionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Transaction(**data)
 
 
@@ -482,7 +482,7 @@ class PaymentAddInterfaceInteractionActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentAddInterfaceInteractionAction(**data)
 
@@ -499,7 +499,7 @@ class PaymentAddTransactionActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentAddTransactionAction(**data)
 
@@ -516,7 +516,7 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentChangeAmountPlannedAction(**data)
 
@@ -534,7 +534,7 @@ class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchem
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentChangeTransactionInteractionIdAction(**data)
 
@@ -550,7 +550,7 @@ class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentChangeTransactionStateAction(**data)
 
@@ -566,7 +566,7 @@ class PaymentChangeTransactionTimestampActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentChangeTransactionTimestampAction(**data)
 
@@ -584,7 +584,7 @@ class PaymentSetAmountPaidActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetAmountPaidAction(**data)
 
@@ -602,7 +602,7 @@ class PaymentSetAmountRefundedActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetAmountRefundedAction(**data)
 
@@ -617,7 +617,7 @@ class PaymentSetAnonymousIdActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetAnonymousIdAction(**data)
 
@@ -636,7 +636,7 @@ class PaymentSetAuthorizationActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetAuthorizationAction(**data)
 
@@ -650,7 +650,7 @@ class PaymentSetCustomFieldActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetCustomFieldAction(**data)
 
@@ -669,7 +669,7 @@ class PaymentSetCustomTypeActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetCustomTypeAction(**data)
 
@@ -687,7 +687,7 @@ class PaymentSetCustomerActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetCustomerAction(**data)
 
@@ -702,7 +702,7 @@ class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetExternalIdAction(**data)
 
@@ -715,7 +715,7 @@ class PaymentSetInterfaceIdActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetInterfaceIdAction(**data)
 
@@ -728,7 +728,7 @@ class PaymentSetKeyActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetKeyAction(**data)
 
@@ -741,7 +741,7 @@ class PaymentSetMethodInfoInterfaceActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetMethodInfoInterfaceAction(**data)
 
@@ -754,7 +754,7 @@ class PaymentSetMethodInfoMethodActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetMethodInfoMethodAction(**data)
 
@@ -767,7 +767,7 @@ class PaymentSetMethodInfoNameActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetMethodInfoNameAction(**data)
 
@@ -782,7 +782,7 @@ class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetStatusInterfaceCodeAction(**data)
 
@@ -797,7 +797,7 @@ class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentSetStatusInterfaceTextAction(**data)
 
@@ -815,6 +815,6 @@ class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.PaymentTransitionStateAction(**data)

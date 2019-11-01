@@ -24,7 +24,7 @@ class CustomObjectDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomObjectDraft(**data)
 
 
@@ -45,7 +45,7 @@ class CustomObjectPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomObjectPagedQueryResponse(**data)
 
 
@@ -62,7 +62,7 @@ class CustomObjectReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CustomObjectReference(**data)
 
@@ -77,5 +77,5 @@ class CustomObjectSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomObject(**data)

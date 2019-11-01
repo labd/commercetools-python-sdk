@@ -85,7 +85,7 @@ class DiscountCodeDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DiscountCodeDraft(**data)
 
 
@@ -106,7 +106,7 @@ class DiscountCodePagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DiscountCodePagedQueryResponse(**data)
 
 
@@ -123,7 +123,7 @@ class DiscountCodeReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.DiscountCodeReference(**data)
 
@@ -135,7 +135,7 @@ class DiscountCodeResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.DiscountCodeResourceIdentifier(**data)
 
@@ -212,7 +212,7 @@ class DiscountCodeSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DiscountCode(**data)
 
 
@@ -224,7 +224,7 @@ class DiscountCodeUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeUpdateAction(**data)
 
@@ -260,7 +260,7 @@ class DiscountCodeUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.DiscountCodeUpdate(**data)
 
 
@@ -278,7 +278,7 @@ class DiscountCodeChangeCartDiscountsActionSchema(DiscountCodeUpdateActionSchema
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeChangeCartDiscountsAction(**data)
 
@@ -291,7 +291,7 @@ class DiscountCodeChangeGroupsActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeChangeGroupsAction(**data)
 
@@ -304,7 +304,7 @@ class DiscountCodeChangeIsActiveActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeChangeIsActiveAction(**data)
 
@@ -319,7 +319,7 @@ class DiscountCodeSetCartPredicateActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetCartPredicateAction(**data)
 
@@ -333,7 +333,7 @@ class DiscountCodeSetCustomFieldActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetCustomFieldAction(**data)
 
@@ -352,7 +352,7 @@ class DiscountCodeSetCustomTypeActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetCustomTypeAction(**data)
 
@@ -365,7 +365,7 @@ class DiscountCodeSetDescriptionActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetDescriptionAction(**data)
 
@@ -380,7 +380,7 @@ class DiscountCodeSetMaxApplicationsActionSchema(DiscountCodeUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetMaxApplicationsAction(**data)
 
@@ -397,7 +397,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerActionSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetMaxApplicationsPerCustomerAction(**data)
 
@@ -410,7 +410,7 @@ class DiscountCodeSetNameActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetNameAction(**data)
 
@@ -425,7 +425,7 @@ class DiscountCodeSetValidFromActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetValidFromAction(**data)
 
@@ -443,7 +443,7 @@ class DiscountCodeSetValidFromAndUntilActionSchema(DiscountCodeUpdateActionSchem
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetValidFromAndUntilAction(**data)
 
@@ -458,6 +458,6 @@ class DiscountCodeSetValidUntilActionSchema(DiscountCodeUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.DiscountCodeSetValidUntilAction(**data)

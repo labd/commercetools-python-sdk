@@ -35,7 +35,7 @@ class LocationSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Location(**data)
 
 
@@ -55,7 +55,7 @@ class ZoneDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ZoneDraft(**data)
 
 
@@ -76,7 +76,7 @@ class ZonePagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ZonePagedQueryResponse(**data)
 
 
@@ -93,7 +93,7 @@ class ZoneReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ZoneReference(**data)
 
@@ -105,7 +105,7 @@ class ZoneResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ZoneResourceIdentifier(**data)
 
@@ -126,7 +126,7 @@ class ZoneSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Zone(**data)
 
 
@@ -138,7 +138,7 @@ class ZoneUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ZoneUpdateAction(**data)
 
@@ -166,7 +166,7 @@ class ZoneUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ZoneUpdate(**data)
 
 
@@ -182,7 +182,7 @@ class ZoneAddLocationActionSchema(ZoneUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ZoneAddLocationAction(**data)
 
@@ -195,7 +195,7 @@ class ZoneChangeNameActionSchema(ZoneUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ZoneChangeNameAction(**data)
 
@@ -212,7 +212,7 @@ class ZoneRemoveLocationActionSchema(ZoneUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ZoneRemoveLocationAction(**data)
 
@@ -225,7 +225,7 @@ class ZoneSetDescriptionActionSchema(ZoneUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ZoneSetDescriptionAction(**data)
 
@@ -238,6 +238,6 @@ class ZoneSetKeyActionSchema(ZoneUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ZoneSetKeyAction(**data)

@@ -67,11 +67,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
     def generate_init_module(self, modules):
         nodes = [
             ast.ImportFrom(
-                module=module,
-                names=[
-                    ast.alias(name="*  # noqa", asname=None)
-                ],
-                level=1,
+                module=module, names=[ast.alias(name="*  # noqa", asname=None)], level=1
             )
             for module in sorted(modules)
         ]
@@ -118,7 +114,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
                     vararg=None,
                     kwonlyargs=[],
                     kw_defaults=[],
-                    kwarg=None,
+                    kwarg=ast.arg(arg="kwargs", annotation=None),
                     defaults=[],
                 ),
                 body=[
@@ -136,6 +132,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
                                 ast.Name(id="attr"),
                                 ast.Name(id="data"),
                             ],
+                            kwarg=ast.arg(arg="kwargs", annotation=None),
                             keywords=[],
                         ),
                     ),
@@ -495,7 +492,7 @@ class SchemaClassGenerator:
                 vararg=None,
                 kwonlyargs=[],
                 kw_defaults=[],
-                kwarg=None,
+                kwarg=ast.arg(arg="kwargs", annotation=None),
                 defaults=[],
             ),
             body=[],

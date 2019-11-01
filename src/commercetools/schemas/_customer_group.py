@@ -40,7 +40,7 @@ class CustomerGroupDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerGroupDraft(**data)
 
 
@@ -61,7 +61,7 @@ class CustomerGroupPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerGroupPagedQueryResponse(**data)
 
 
@@ -78,7 +78,7 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CustomerGroupReference(**data)
 
@@ -90,7 +90,7 @@ class CustomerGroupResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CustomerGroupResourceIdentifier(**data)
 
@@ -110,7 +110,7 @@ class CustomerGroupSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerGroup(**data)
 
 
@@ -122,7 +122,7 @@ class CustomerGroupUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerGroupUpdateAction(**data)
 
@@ -149,7 +149,7 @@ class CustomerGroupUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerGroupUpdate(**data)
 
 
@@ -161,7 +161,7 @@ class CustomerGroupChangeNameActionSchema(CustomerGroupUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerGroupChangeNameAction(**data)
 
@@ -175,7 +175,7 @@ class CustomerGroupSetCustomFieldActionSchema(CustomerGroupUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerGroupSetCustomFieldAction(**data)
 
@@ -194,7 +194,7 @@ class CustomerGroupSetCustomTypeActionSchema(CustomerGroupUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerGroupSetCustomTypeAction(**data)
 
@@ -207,6 +207,6 @@ class CustomerGroupSetKeyActionSchema(CustomerGroupUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerGroupSetKeyAction(**data)

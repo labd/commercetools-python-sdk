@@ -68,7 +68,7 @@ class CustomerChangePasswordSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerChangePassword(**data)
 
 
@@ -82,7 +82,7 @@ class CustomerCreateEmailTokenSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerCreateEmailToken(**data)
 
 
@@ -97,7 +97,7 @@ class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerCreatePasswordResetToken(**data)
 
 
@@ -188,7 +188,7 @@ class CustomerDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerDraft(**data)
 
 
@@ -201,7 +201,7 @@ class CustomerEmailVerifySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerEmailVerify(**data)
 
 
@@ -222,7 +222,7 @@ class CustomerPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerPagedQueryResponse(**data)
 
 
@@ -239,7 +239,7 @@ class CustomerReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CustomerReference(**data)
 
@@ -254,7 +254,7 @@ class CustomerResetPasswordSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerResetPassword(**data)
 
 
@@ -265,7 +265,7 @@ class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CustomerResourceIdentifier(**data)
 
@@ -350,7 +350,7 @@ class CustomerSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Customer(**data)
 
 
@@ -367,7 +367,7 @@ class CustomerSignInResultSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerSignInResult(**data)
 
 
@@ -395,7 +395,7 @@ class CustomerSigninSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerSignin(**data)
 
 
@@ -414,7 +414,7 @@ class CustomerTokenSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerToken(**data)
 
 
@@ -426,7 +426,7 @@ class CustomerUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerUpdateAction(**data)
 
@@ -474,7 +474,7 @@ class CustomerUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CustomerUpdate(**data)
 
 
@@ -490,7 +490,7 @@ class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerAddAddressAction(**data)
 
@@ -503,7 +503,7 @@ class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerAddBillingAddressIdAction(**data)
 
@@ -516,7 +516,7 @@ class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerAddShippingAddressIdAction(**data)
 
@@ -534,7 +534,7 @@ class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerChangeAddressAction(**data)
 
@@ -547,7 +547,7 @@ class CustomerChangeEmailActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerChangeEmailAction(**data)
 
@@ -560,7 +560,7 @@ class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerRemoveAddressAction(**data)
 
@@ -573,7 +573,7 @@ class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerRemoveBillingAddressIdAction(**data)
 
@@ -586,7 +586,7 @@ class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerRemoveShippingAddressIdAction(**data)
 
@@ -601,7 +601,7 @@ class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetCompanyNameAction(**data)
 
@@ -615,7 +615,7 @@ class CustomerSetCustomFieldActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetCustomFieldAction(**data)
 
@@ -634,7 +634,7 @@ class CustomerSetCustomTypeActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetCustomTypeAction(**data)
 
@@ -653,7 +653,7 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetCustomerGroupAction(**data)
 
@@ -668,7 +668,7 @@ class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetCustomerNumberAction(**data)
 
@@ -683,7 +683,7 @@ class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetDateOfBirthAction(**data)
 
@@ -698,7 +698,7 @@ class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetDefaultBillingAddressAction(**data)
 
@@ -713,7 +713,7 @@ class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetDefaultShippingAddressAction(**data)
 
@@ -728,7 +728,7 @@ class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetExternalIdAction(**data)
 
@@ -743,7 +743,7 @@ class CustomerSetFirstNameActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetFirstNameAction(**data)
 
@@ -756,7 +756,7 @@ class CustomerSetKeyActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetKeyAction(**data)
 
@@ -771,7 +771,7 @@ class CustomerSetLastNameActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetLastNameAction(**data)
 
@@ -784,7 +784,7 @@ class CustomerSetLocaleActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetLocaleAction(**data)
 
@@ -799,7 +799,7 @@ class CustomerSetMiddleNameActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetMiddleNameAction(**data)
 
@@ -812,7 +812,7 @@ class CustomerSetSalutationActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetSalutationAction(**data)
 
@@ -825,7 +825,7 @@ class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetTitleAction(**data)
 
@@ -838,6 +838,6 @@ class CustomerSetVatIdActionSchema(CustomerUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetVatIdAction(**data)

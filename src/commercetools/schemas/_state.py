@@ -53,7 +53,7 @@ class StateDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.StateDraft(**data)
 
 
@@ -74,7 +74,7 @@ class StatePagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.StatePagedQueryResponse(**data)
 
 
@@ -91,7 +91,7 @@ class StateReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.StateReference(**data)
 
@@ -103,7 +103,7 @@ class StateResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.StateResourceIdentifier(**data)
 
@@ -131,7 +131,7 @@ class StateSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.State(**data)
 
 
@@ -143,7 +143,7 @@ class StateUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateUpdateAction(**data)
 
@@ -175,7 +175,7 @@ class StateUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.StateUpdate(**data)
 
 
@@ -189,7 +189,7 @@ class StateAddRolesActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateAddRolesAction(**data)
 
@@ -202,7 +202,7 @@ class StateChangeInitialActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateChangeInitialAction(**data)
 
@@ -215,7 +215,7 @@ class StateChangeKeyActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateChangeKeyAction(**data)
 
@@ -228,7 +228,7 @@ class StateChangeTypeActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateChangeTypeAction(**data)
 
@@ -243,7 +243,7 @@ class StateRemoveRolesActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateRemoveRolesAction(**data)
 
@@ -256,7 +256,7 @@ class StateSetDescriptionActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateSetDescriptionAction(**data)
 
@@ -269,7 +269,7 @@ class StateSetNameActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateSetNameAction(**data)
 
@@ -284,7 +284,7 @@ class StateSetRolesActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateSetRolesAction(**data)
 
@@ -303,6 +303,6 @@ class StateSetTransitionsActionSchema(StateUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.StateSetTransitionsAction(**data)

@@ -38,7 +38,7 @@ class SubRateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.SubRate(**data)
 
 
@@ -58,7 +58,7 @@ class TaxCategoryDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxCategoryDraft(**data)
 
 
@@ -79,7 +79,7 @@ class TaxCategoryPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxCategoryPagedQueryResponse(**data)
 
 
@@ -96,7 +96,7 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.TaxCategoryReference(**data)
 
@@ -108,7 +108,7 @@ class TaxCategoryResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.TaxCategoryResourceIdentifier(**data)
 
@@ -129,7 +129,7 @@ class TaxCategorySchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxCategory(**data)
 
 
@@ -141,7 +141,7 @@ class TaxCategoryUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategoryUpdateAction(**data)
 
@@ -170,7 +170,7 @@ class TaxCategoryUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxCategoryUpdate(**data)
 
 
@@ -196,7 +196,7 @@ class TaxRateDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxRateDraft(**data)
 
 
@@ -223,7 +223,7 @@ class TaxRateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.TaxRate(**data)
 
 
@@ -240,7 +240,7 @@ class TaxCategoryAddTaxRateActionSchema(TaxCategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategoryAddTaxRateAction(**data)
 
@@ -253,7 +253,7 @@ class TaxCategoryChangeNameActionSchema(TaxCategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategoryChangeNameAction(**data)
 
@@ -266,7 +266,7 @@ class TaxCategoryRemoveTaxRateActionSchema(TaxCategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategoryRemoveTaxRateAction(**data)
 
@@ -285,7 +285,7 @@ class TaxCategoryReplaceTaxRateActionSchema(TaxCategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategoryReplaceTaxRateAction(**data)
 
@@ -298,7 +298,7 @@ class TaxCategorySetDescriptionActionSchema(TaxCategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategorySetDescriptionAction(**data)
 
@@ -311,6 +311,6 @@ class TaxCategorySetKeyActionSchema(TaxCategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.TaxCategorySetKeyAction(**data)

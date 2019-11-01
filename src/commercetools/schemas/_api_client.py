@@ -23,7 +23,7 @@ class ApiClientDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ApiClientDraft(**data)
 
 
@@ -44,7 +44,7 @@ class ApiClientPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ApiClientPagedQueryResponse(**data)
 
 
@@ -68,5 +68,5 @@ class ApiClientSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ApiClient(**data)

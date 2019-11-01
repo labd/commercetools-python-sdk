@@ -5,6 +5,7 @@ from the `Money` type to the `TypedMoney` type. You should generally be able to
 replace references to `Money` with `CentPrecisionMoney`.
 
  - Sync with latest API definitions (dd371e12506af969b8edfeb1540eec1e8cd5ab9d)
+ - Updated to work with marshmallow > 3.0.0
 
 
 4.1.0 (2019-08-14)

@@ -47,7 +47,7 @@ class ChangeSubscriptionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ChangeSubscription(**data)
 
 
@@ -59,7 +59,7 @@ class DeliveryFormatSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.DeliveryFormat(**data)
 
@@ -72,7 +72,7 @@ class DestinationSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.Destination(**data)
 
@@ -90,7 +90,7 @@ class MessageSubscriptionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.MessageSubscription(**data)
 
 
@@ -103,7 +103,7 @@ class PayloadNotIncludedSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.PayloadNotIncluded(**data)
 
 
@@ -155,7 +155,7 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["notification_type"]
         return types.SubscriptionDelivery(**data)
 
@@ -205,7 +205,7 @@ class SubscriptionDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.SubscriptionDraft(**data)
 
 
@@ -226,7 +226,7 @@ class SubscriptionPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.SubscriptionPagedQueryResponse(**data)
 
 
@@ -273,7 +273,7 @@ class SubscriptionSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Subscription(**data)
 
 
@@ -285,7 +285,7 @@ class SubscriptionUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.SubscriptionUpdateAction(**data)
 
@@ -312,7 +312,7 @@ class SubscriptionUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.SubscriptionUpdate(**data)
 
 
@@ -325,7 +325,7 @@ class AzureEventGridDestinationSchema(DestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.AzureEventGridDestination(**data)
 
@@ -340,7 +340,7 @@ class AzureServiceBusDestinationSchema(DestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.AzureServiceBusDestination(**data)
 
@@ -355,7 +355,7 @@ class DeliveryCloudEventsFormatSchema(DeliveryFormatSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.DeliveryCloudEventsFormat(**data)
 
@@ -367,7 +367,7 @@ class DeliveryPlatformFormatSchema(DeliveryFormatSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.DeliveryPlatformFormat(**data)
 
@@ -381,7 +381,7 @@ class GoogleCloudPubSubDestinationSchema(DestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.GoogleCloudPubSubDestination(**data)
 
@@ -394,7 +394,7 @@ class IronMqDestinationSchema(DestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.IronMqDestination(**data)
 
@@ -424,7 +424,7 @@ class MessageDeliverySchema(SubscriptionDeliverySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["notification_type"]
         return types.MessageDelivery(**data)
 
@@ -438,7 +438,7 @@ class ResourceCreatedDeliverySchema(SubscriptionDeliverySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["notification_type"]
         return types.ResourceCreatedDelivery(**data)
 
@@ -452,7 +452,7 @@ class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["notification_type"]
         return types.ResourceDeletedDelivery(**data)
 
@@ -467,7 +467,7 @@ class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["notification_type"]
         return types.ResourceUpdatedDelivery(**data)
 
@@ -482,7 +482,7 @@ class SnsDestinationSchema(DestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.SnsDestination(**data)
 
@@ -498,7 +498,7 @@ class SqsDestinationSchema(DestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.SqsDestination(**data)
 
@@ -523,7 +523,7 @@ class SubscriptionChangeDestinationActionSchema(SubscriptionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.SubscriptionChangeDestinationAction(**data)
 
@@ -542,7 +542,7 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.SubscriptionSetChangesAction(**data)
 
@@ -555,7 +555,7 @@ class SubscriptionSetKeyActionSchema(SubscriptionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.SubscriptionSetKeyAction(**data)
 
@@ -574,6 +574,6 @@ class SubscriptionSetMessagesActionSchema(SubscriptionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.SubscriptionSetMessagesAction(**data)

@@ -65,7 +65,7 @@ class ChannelDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ChannelDraft(**data)
 
 
@@ -86,7 +86,7 @@ class ChannelPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ChannelPagedQueryResponse(**data)
 
 
@@ -103,7 +103,7 @@ class ChannelReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ChannelReference(**data)
 
@@ -115,7 +115,7 @@ class ChannelResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ChannelResourceIdentifier(**data)
 
@@ -159,7 +159,7 @@ class ChannelSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Channel(**data)
 
 
@@ -171,7 +171,7 @@ class ChannelUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelUpdateAction(**data)
 
@@ -204,7 +204,7 @@ class ChannelUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ChannelUpdate(**data)
 
 
@@ -218,7 +218,7 @@ class ChannelAddRolesActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelAddRolesAction(**data)
 
@@ -231,7 +231,7 @@ class ChannelChangeDescriptionActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelChangeDescriptionAction(**data)
 
@@ -244,7 +244,7 @@ class ChannelChangeKeyActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelChangeKeyAction(**data)
 
@@ -257,7 +257,7 @@ class ChannelChangeNameActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelChangeNameAction(**data)
 
@@ -272,7 +272,7 @@ class ChannelRemoveRolesActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelRemoveRolesAction(**data)
 
@@ -290,7 +290,7 @@ class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelSetAddressAction(**data)
 
@@ -304,7 +304,7 @@ class ChannelSetCustomFieldActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelSetCustomFieldAction(**data)
 
@@ -323,7 +323,7 @@ class ChannelSetCustomTypeActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelSetCustomTypeAction(**data)
 
@@ -342,7 +342,7 @@ class ChannelSetGeoLocationActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelSetGeoLocationAction(**data)
 
@@ -357,6 +357,6 @@ class ChannelSetRolesActionSchema(ChannelUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ChannelSetRolesAction(**data)

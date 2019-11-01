@@ -10,11 +10,18 @@ from commercetools.exceptions import CommercetoolsError
 
 
 class OptionalList(fields.List):
-    def _deserialize(self, value, attr, data):
+
+    def _serialize(
+        self, value, attr, obj, **kwargs
+    ) -> typing.Optional[typing.List[typing.Any]]:
         if not isinstance(value, list):
             value = [value]
-        result = super()._deserialize(value, attr, data)
-        return result
+        return super()._serialize(value, attr, obj, **kwargs)
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        if not isinstance(value, list):
+            value = [value]
+        return super()._deserialize(value, attr, data, **kwargs)
 
 
 class RegexField(Field):
@@ -29,10 +36,10 @@ class RegexField(Field):
             assert result[key]
         return result
 
-    def _deserialize(self, value, attr, data):
+    def _deserialize(self, value, attr, data, **kwargs):
         result = {}
         for key, subvalue in value.items():
-            result[key] = self.metadata["type"].deserialize(subvalue)
+            result[key] = self.metadata["type"].deserialize(subvalue, **kwargs)
         return result
 
     def postprocess(self, data):
@@ -138,7 +145,7 @@ class Discriminator(Field):
         if self.many and not is_collection(value):
             self.fail("type", input=value, type=value.__class__.__name__)
 
-    def _load(self, value, data):
+    def _load(self, value, data, **kwargs):
         if not value:
             return None
 
@@ -152,9 +159,9 @@ class Discriminator(Field):
             raise ValidationError(exc.messages, data=data, valid_data=exc.valid_data)
         return valid_data
 
-    def _deserialize(self, value, attr, data):
+    def _deserialize(self, value, attr, data, **kwargs):
         self._test_collection(value)
-        return self._load(value, data)
+        return self._load(value, data, **kwargs)
 
 
 def _concurrent_retry(num):

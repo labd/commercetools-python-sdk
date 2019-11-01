@@ -55,7 +55,7 @@ class ErrorByExtensionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ErrorByExtension(**data)
 
 
@@ -68,7 +68,7 @@ class ErrorObjectSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ErrorObject(**data)
 
@@ -127,7 +127,7 @@ class ErrorResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ErrorResponse(**data)
 
 
@@ -151,7 +151,7 @@ class VariantValuesSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.VariantValues(**data)
 
 
@@ -162,7 +162,7 @@ class AccessDeniedErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.AccessDeniedError(**data)
 
@@ -177,7 +177,7 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ConcurrentModificationError(**data)
 
@@ -205,7 +205,7 @@ class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DiscountCodeNonApplicableError(**data)
 
@@ -222,7 +222,7 @@ class DuplicateAttributeValueErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DuplicateAttributeValueError(**data)
 
@@ -240,7 +240,7 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DuplicateAttributeValuesError(**data)
 
@@ -288,7 +288,7 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DuplicateFieldError(**data)
 
@@ -333,7 +333,7 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DuplicateFieldWithConflictingResourceError(**data)
 
@@ -352,7 +352,7 @@ class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DuplicatePriceScopeError(**data)
 
@@ -370,7 +370,7 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.DuplicateVariantValuesError(**data)
 
@@ -382,7 +382,7 @@ class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.EnumValueIsUsedError(**data)
 
@@ -406,7 +406,7 @@ class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ExtensionBadResponseError(**data)
 
@@ -430,7 +430,7 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ExtensionNoResponseError(**data)
 
@@ -454,7 +454,7 @@ class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ExtensionUpdateActionsFailedError(**data)
 
@@ -466,7 +466,7 @@ class InsufficientScopeErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InsufficientScopeError(**data)
 
@@ -478,7 +478,7 @@ class InvalidCredentialsErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidCredentialsError(**data)
 
@@ -490,7 +490,7 @@ class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidCurrentPasswordError(**data)
 
@@ -514,7 +514,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidFieldError(**data)
 
@@ -526,7 +526,7 @@ class InvalidInputErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidInputError(**data)
 
@@ -540,7 +540,7 @@ class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidItemShippingDetailsError(**data)
 
@@ -552,7 +552,7 @@ class InvalidJsonInputErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidJsonInputError(**data)
 
@@ -564,7 +564,7 @@ class InvalidOperationErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidOperationError(**data)
 
@@ -576,7 +576,7 @@ class InvalidSubjectErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidSubjectError(**data)
 
@@ -588,7 +588,7 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidTokenError(**data)
 
@@ -617,7 +617,7 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.MatchingPriceNotFoundError(**data)
 
@@ -634,7 +634,7 @@ class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.MissingTaxRateForCountryError(**data)
 
@@ -646,7 +646,7 @@ class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.NoMatchingProductDiscountFoundError(**data)
 
@@ -662,7 +662,7 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.OutOfStockError(**data)
 
@@ -678,7 +678,7 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.PriceChangedError(**data)
 
@@ -693,7 +693,7 @@ class ReferenceExistsErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ReferenceExistsError(**data)
 
@@ -706,7 +706,7 @@ class RequiredFieldErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.RequiredFieldError(**data)
 
@@ -718,7 +718,7 @@ class ResourceNotFoundErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ResourceNotFoundError(**data)
 
@@ -730,6 +730,6 @@ class ShippingMethodDoesNotMatchCartErrorSchema(ErrorObjectSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["code"]
         return types.ShippingMethodDoesNotMatchCartError(**data)

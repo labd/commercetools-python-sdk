@@ -89,7 +89,7 @@ class CategoryDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CategoryDraft(**data)
 
 
@@ -110,7 +110,7 @@ class CategoryPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CategoryPagedQueryResponse(**data)
 
 
@@ -127,7 +127,7 @@ class CategoryReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CategoryReference(**data)
 
@@ -139,7 +139,7 @@ class CategoryResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.CategoryResourceIdentifier(**data)
 
@@ -193,7 +193,7 @@ class CategorySchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Category(**data)
 
 
@@ -205,7 +205,7 @@ class CategoryUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryUpdateAction(**data)
 
@@ -250,7 +250,7 @@ class CategoryUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.CategoryUpdate(**data)
 
 
@@ -267,7 +267,7 @@ class CategoryAddAssetActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryAddAssetAction(**data)
 
@@ -286,7 +286,7 @@ class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryChangeAssetNameAction(**data)
 
@@ -301,7 +301,7 @@ class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryChangeAssetOrderAction(**data)
 
@@ -314,7 +314,7 @@ class CategoryChangeNameActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryChangeNameAction(**data)
 
@@ -327,7 +327,7 @@ class CategoryChangeOrderHintActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryChangeOrderHintAction(**data)
 
@@ -344,7 +344,7 @@ class CategoryChangeParentActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryChangeParentAction(**data)
 
@@ -357,7 +357,7 @@ class CategoryChangeSlugActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryChangeSlugAction(**data)
 
@@ -375,7 +375,7 @@ class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategoryRemoveAssetAction(**data)
 
@@ -395,7 +395,7 @@ class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetAssetCustomFieldAction(**data)
 
@@ -420,7 +420,7 @@ class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetAssetCustomTypeAction(**data)
 
@@ -439,7 +439,7 @@ class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetAssetDescriptionAction(**data)
 
@@ -455,7 +455,7 @@ class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetAssetKeyAction(**data)
 
@@ -479,7 +479,7 @@ class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetAssetSourcesAction(**data)
 
@@ -500,7 +500,7 @@ class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetAssetTagsAction(**data)
 
@@ -514,7 +514,7 @@ class CategorySetCustomFieldActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetCustomFieldAction(**data)
 
@@ -533,7 +533,7 @@ class CategorySetCustomTypeActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetCustomTypeAction(**data)
 
@@ -546,7 +546,7 @@ class CategorySetDescriptionActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetDescriptionAction(**data)
 
@@ -561,7 +561,7 @@ class CategorySetExternalIdActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetExternalIdAction(**data)
 
@@ -574,7 +574,7 @@ class CategorySetKeyActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetKeyAction(**data)
 
@@ -589,7 +589,7 @@ class CategorySetMetaDescriptionActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetMetaDescriptionAction(**data)
 
@@ -604,7 +604,7 @@ class CategorySetMetaKeywordsActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetMetaKeywordsAction(**data)
 
@@ -619,6 +619,6 @@ class CategorySetMetaTitleActionSchema(CategoryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.CategorySetMetaTitleAction(**data)

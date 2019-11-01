@@ -35,7 +35,7 @@ class ExtensionDestinationSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ExtensionDestination(**data)
 
@@ -66,7 +66,7 @@ class ExtensionDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ExtensionDraft(**data)
 
 
@@ -78,7 +78,7 @@ class ExtensionHttpDestinationAuthenticationSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ExtensionHttpDestinationAuthentication(**data)
 
@@ -121,7 +121,7 @@ class ExtensionInputSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ExtensionInput(**data)
 
 
@@ -142,7 +142,7 @@ class ExtensionPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ExtensionPagedQueryResponse(**data)
 
 
@@ -172,7 +172,7 @@ class ExtensionSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Extension(**data)
 
 
@@ -189,7 +189,7 @@ class ExtensionTriggerSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ExtensionTrigger(**data)
 
 
@@ -201,7 +201,7 @@ class ExtensionUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ExtensionUpdateAction(**data)
 
@@ -228,7 +228,7 @@ class ExtensionUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ExtensionUpdate(**data)
 
 
@@ -242,7 +242,7 @@ class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ExtensionAWSLambdaDestination(**data)
 
@@ -257,7 +257,7 @@ class ExtensionAuthorizationHeaderAuthenticationSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ExtensionAuthorizationHeaderAuthentication(**data)
 
@@ -272,7 +272,7 @@ class ExtensionAzureFunctionsAuthenticationSchema(
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ExtensionAzureFunctionsAuthentication(**data)
 
@@ -293,7 +293,7 @@ class ExtensionChangeDestinationActionSchema(ExtensionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ExtensionChangeDestinationAction(**data)
 
@@ -311,7 +311,7 @@ class ExtensionChangeTriggersActionSchema(ExtensionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ExtensionChangeTriggersAction(**data)
 
@@ -334,7 +334,7 @@ class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ExtensionHttpDestination(**data)
 
@@ -347,7 +347,7 @@ class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ExtensionSetKeyAction(**data)
 
@@ -362,6 +362,6 @@ class ExtensionSetTimeoutInMsActionSchema(ExtensionUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ExtensionSetTimeoutInMsAction(**data)

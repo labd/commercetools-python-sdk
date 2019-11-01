@@ -10,7 +10,7 @@ class AbstractService:
 
 class RemoveEmptyValuesMixin:
     @post_dump
-    def remove_empty_values(self, data):
+    def remove_empty_values(self, data, **kwargs):
         """Remove the key, value pairs for which the value is None.
 
         This doesn't work if allow_none is set. And in the future we might also

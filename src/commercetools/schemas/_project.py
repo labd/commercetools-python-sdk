@@ -36,7 +36,7 @@ class ExternalOAuthSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ExternalOAuth(**data)
 
 
@@ -81,7 +81,7 @@ class ProjectSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Project(**data)
 
 
@@ -93,7 +93,7 @@ class ProjectUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectUpdateAction(**data)
 
@@ -124,7 +124,7 @@ class ProjectUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProjectUpdate(**data)
 
 
@@ -136,7 +136,7 @@ class ShippingRateInputTypeSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.ShippingRateInputType(**data)
 
@@ -156,7 +156,7 @@ class CartClassificationTypeSchema(ShippingRateInputTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartClassificationType(**data)
 
@@ -168,7 +168,7 @@ class CartScoreTypeSchema(ShippingRateInputTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartScoreType(**data)
 
@@ -180,7 +180,7 @@ class CartValueTypeSchema(ShippingRateInputTypeSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CartValueType(**data)
 
@@ -193,7 +193,7 @@ class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeCountriesAction(**data)
 
@@ -206,7 +206,7 @@ class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeCurrenciesAction(**data)
 
@@ -219,7 +219,7 @@ class ProjectChangeLanguagesActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeLanguagesAction(**data)
 
@@ -237,7 +237,7 @@ class ProjectChangeMessagesConfigurationActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeMessagesConfigurationAction(**data)
 
@@ -252,7 +252,7 @@ class ProjectChangeMessagesEnabledActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeMessagesEnabledAction(**data)
 
@@ -265,7 +265,7 @@ class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeNameAction(**data)
 
@@ -284,7 +284,7 @@ class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectSetExternalOAuthAction(**data)
 
@@ -308,6 +308,6 @@ class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectSetShippingRateInputTypeAction(**data)

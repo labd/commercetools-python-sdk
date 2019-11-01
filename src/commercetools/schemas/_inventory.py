@@ -59,7 +59,7 @@ class InventoryEntryDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.InventoryEntryDraft(**data)
 
 
@@ -76,7 +76,7 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.InventoryEntryReference(**data)
 
@@ -88,7 +88,7 @@ class InventoryEntryResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.InventoryEntryResourceIdentifier(**data)
 
@@ -126,7 +126,7 @@ class InventoryEntrySchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.InventoryEntry(**data)
 
 
@@ -138,7 +138,7 @@ class InventoryEntryUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntryUpdateAction(**data)
 
@@ -169,7 +169,7 @@ class InventoryEntryUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.InventoryEntryUpdate(**data)
 
 
@@ -190,7 +190,7 @@ class InventoryPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.InventoryPagedQueryResponse(**data)
 
 
@@ -202,7 +202,7 @@ class InventoryEntryAddQuantityActionSchema(InventoryEntryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntryAddQuantityAction(**data)
 
@@ -215,7 +215,7 @@ class InventoryEntryChangeQuantityActionSchema(InventoryEntryUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntryChangeQuantityAction(**data)
 
@@ -228,7 +228,7 @@ class InventoryEntryRemoveQuantityActionSchema(InventoryEntryUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntryRemoveQuantityAction(**data)
 
@@ -242,7 +242,7 @@ class InventoryEntrySetCustomFieldActionSchema(InventoryEntryUpdateActionSchema)
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntrySetCustomFieldAction(**data)
 
@@ -261,7 +261,7 @@ class InventoryEntrySetCustomTypeActionSchema(InventoryEntryUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntrySetCustomTypeAction(**data)
 
@@ -276,7 +276,7 @@ class InventoryEntrySetExpectedDeliveryActionSchema(InventoryEntryUpdateActionSc
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntrySetExpectedDeliveryAction(**data)
 
@@ -291,7 +291,7 @@ class InventoryEntrySetRestockableInDaysActionSchema(InventoryEntryUpdateActionS
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntrySetRestockableInDaysAction(**data)
 
@@ -310,6 +310,6 @@ class InventoryEntrySetSupplyChannelActionSchema(InventoryEntryUpdateActionSchem
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.InventoryEntrySetSupplyChannelAction(**data)

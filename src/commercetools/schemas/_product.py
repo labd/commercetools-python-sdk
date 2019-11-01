@@ -98,7 +98,7 @@ __all__ = [
 
 
 class CategoryOrderHintsField(marshmallow.fields.Dict):
-    def _deserialize(self, value, attr, data):
+    def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return types.CategoryOrderHints(**result)
 
@@ -112,7 +112,7 @@ class AttributeSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Attribute(**data)
 
 
@@ -135,7 +135,7 @@ class FacetResultRangeSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.FacetResultRange(**data)
 
 
@@ -147,7 +147,7 @@ class FacetResultSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.FacetResult(**data)
 
@@ -164,7 +164,7 @@ class FacetResultTermSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.FacetResultTerm(**data)
 
 
@@ -189,22 +189,22 @@ class FacetResultsSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return types.FacetResults(**data)
 
     @marshmallow.pre_load
-    def pre_load(self, data):
+    def pre_load(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.pre_dump
-    def pre_dump(self, data):
+    def pre_dump(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.post_dump
-    def post_dump(self, data):
+    def post_dump(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return data
 
@@ -230,7 +230,7 @@ class ProductCatalogDataSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductCatalogData(**data)
 
 
@@ -280,7 +280,7 @@ class ProductDataSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductData(**data)
 
 
@@ -355,7 +355,7 @@ class ProductDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductDraft(**data)
 
 
@@ -376,7 +376,7 @@ class ProductPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductPagedQueryResponse(**data)
 
 
@@ -397,7 +397,7 @@ class ProductProjectionPagedQueryResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductProjectionPagedQueryResponse(**data)
 
 
@@ -422,7 +422,7 @@ class ProductProjectionPagedSearchResponseSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductProjectionPagedSearchResponse(**data)
 
 
@@ -504,7 +504,7 @@ class ProductProjectionSchema(BaseResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductProjection(**data)
 
 
@@ -521,7 +521,7 @@ class ProductReferenceSchema(ReferenceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ProductReference(**data)
 
@@ -533,7 +533,7 @@ class ProductResourceIdentifierSchema(ResourceIdentifierSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type_id"]
         return types.ProductResourceIdentifier(**data)
 
@@ -578,7 +578,7 @@ class ProductSchema(LoggedResourceSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Product(**data)
 
 
@@ -590,7 +590,7 @@ class ProductUpdateActionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductUpdateAction(**data)
 
@@ -659,7 +659,7 @@ class ProductUpdateSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductUpdate(**data)
 
 
@@ -685,7 +685,7 @@ class ProductVariantAvailabilitySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductVariantAvailability(**data)
 
 
@@ -705,22 +705,22 @@ class ProductVariantChannelAvailabilityMapSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return types.ProductVariantChannelAvailabilityMap(**data)
 
     @marshmallow.pre_load
-    def pre_load(self, data):
+    def pre_load(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.pre_dump
-    def pre_dump(self, data):
+    def pre_dump(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.post_dump
-    def post_dump(self, data):
+    def post_dump(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return data
 
@@ -741,7 +741,7 @@ class ProductVariantChannelAvailabilitySchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductVariantChannelAvailability(**data)
 
 
@@ -782,7 +782,7 @@ class ProductVariantDraftSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductVariantDraft(**data)
 
 
@@ -849,7 +849,7 @@ class ProductVariantSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.ProductVariant(**data)
 
 
@@ -872,7 +872,7 @@ class SearchKeywordSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.SearchKeyword(**data)
 
 
@@ -893,22 +893,22 @@ class SearchKeywordsSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return types.SearchKeywords(**data)
 
     @marshmallow.pre_load
-    def pre_load(self, data):
+    def pre_load(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.pre_dump
-    def pre_dump(self, data):
+    def pre_dump(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.post_dump
-    def post_dump(self, data):
+    def post_dump(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return data
 
@@ -921,7 +921,7 @@ class SuggestTokenizerSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.SuggestTokenizer(**data)
 
@@ -945,22 +945,22 @@ class SuggestionResultSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return types.SuggestionResult(**data)
 
     @marshmallow.pre_load
-    def pre_load(self, data):
+    def pre_load(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.pre_dump
-    def pre_dump(self, data):
+    def pre_dump(self, data, **kwargs):
         data = self.fields["_regex"].preprocess(data)
         return data
 
     @marshmallow.post_dump
-    def post_dump(self, data):
+    def post_dump(self, data, **kwargs):
         data = self.fields["_regex"].postprocess(data)
         return data
 
@@ -973,7 +973,7 @@ class SuggestionSchema(marshmallow.Schema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         return types.Suggestion(**data)
 
 
@@ -985,7 +985,7 @@ class CustomTokenizerSchema(SuggestTokenizerSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.CustomTokenizer(**data)
 
@@ -1001,7 +1001,7 @@ class FilteredFacetResultSchema(FacetResultSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.FilteredFacetResult(**data)
 
@@ -1024,7 +1024,7 @@ class ProductAddAssetActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductAddAssetAction(**data)
 
@@ -1046,7 +1046,7 @@ class ProductAddExternalImageActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductAddExternalImageAction(**data)
 
@@ -1068,7 +1068,7 @@ class ProductAddPriceActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductAddPriceAction(**data)
 
@@ -1089,7 +1089,7 @@ class ProductAddToCategoryActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductAddToCategoryAction(**data)
 
@@ -1132,7 +1132,7 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductAddVariantAction(**data)
 
@@ -1156,7 +1156,7 @@ class ProductChangeAssetNameActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductChangeAssetNameAction(**data)
 
@@ -1176,7 +1176,7 @@ class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductChangeAssetOrderAction(**data)
 
@@ -1193,7 +1193,7 @@ class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductChangeMasterVariantAction(**data)
 
@@ -1207,7 +1207,7 @@ class ProductChangeNameActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductChangeNameAction(**data)
 
@@ -1226,7 +1226,7 @@ class ProductChangePriceActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductChangePriceAction(**data)
 
@@ -1240,7 +1240,7 @@ class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductChangeSlugAction(**data)
 
@@ -1254,7 +1254,7 @@ class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductLegacySetSkuAction(**data)
 
@@ -1273,7 +1273,7 @@ class ProductMoveImageToPositionActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductMoveImageToPositionAction(**data)
 
@@ -1288,7 +1288,7 @@ class ProductPublishActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductPublishAction(**data)
 
@@ -1311,7 +1311,7 @@ class ProductRemoveAssetActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRemoveAssetAction(**data)
 
@@ -1329,7 +1329,7 @@ class ProductRemoveFromCategoryActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRemoveFromCategoryAction(**data)
 
@@ -1347,7 +1347,7 @@ class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRemoveImageAction(**data)
 
@@ -1361,7 +1361,7 @@ class ProductRemovePriceActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRemovePriceAction(**data)
 
@@ -1376,7 +1376,7 @@ class ProductRemoveVariantActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRemoveVariantAction(**data)
 
@@ -1388,7 +1388,7 @@ class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRevertStagedChangesAction(**data)
 
@@ -1401,7 +1401,7 @@ class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductRevertStagedVariantChangesAction(**data)
 
@@ -1426,7 +1426,7 @@ class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAssetCustomFieldAction(**data)
 
@@ -1456,7 +1456,7 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAssetCustomTypeAction(**data)
 
@@ -1480,7 +1480,7 @@ class ProductSetAssetDescriptionActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAssetDescriptionAction(**data)
 
@@ -1501,7 +1501,7 @@ class ProductSetAssetKeyActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAssetKeyAction(**data)
 
@@ -1530,7 +1530,7 @@ class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAssetSourcesAction(**data)
 
@@ -1556,7 +1556,7 @@ class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAssetTagsAction(**data)
 
@@ -1575,7 +1575,7 @@ class ProductSetAttributeActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAttributeAction(**data)
 
@@ -1590,7 +1590,7 @@ class ProductSetAttributeInAllVariantsActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetAttributeInAllVariantsAction(**data)
 
@@ -1607,7 +1607,7 @@ class ProductSetCategoryOrderHintActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetCategoryOrderHintAction(**data)
 
@@ -1621,7 +1621,7 @@ class ProductSetDescriptionActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetDescriptionAction(**data)
 
@@ -1641,7 +1641,7 @@ class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetDiscountedPriceAction(**data)
 
@@ -1660,7 +1660,7 @@ class ProductSetImageLabelActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetImageLabelAction(**data)
 
@@ -1673,7 +1673,7 @@ class ProductSetKeyActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetKeyAction(**data)
 
@@ -1689,7 +1689,7 @@ class ProductSetMetaDescriptionActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetMetaDescriptionAction(**data)
 
@@ -1705,7 +1705,7 @@ class ProductSetMetaKeywordsActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetMetaKeywordsAction(**data)
 
@@ -1721,7 +1721,7 @@ class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetMetaTitleAction(**data)
 
@@ -1744,7 +1744,7 @@ class ProductSetPricesActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetPricesAction(**data)
 
@@ -1760,7 +1760,7 @@ class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetProductPriceCustomFieldAction(**data)
 
@@ -1781,7 +1781,7 @@ class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetProductPriceCustomTypeAction(**data)
 
@@ -1799,7 +1799,7 @@ class ProductSetProductVariantKeyActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetProductVariantKeyAction(**data)
 
@@ -1818,7 +1818,7 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetSearchKeywordsAction(**data)
 
@@ -1833,7 +1833,7 @@ class ProductSetSkuActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetSkuAction(**data)
 
@@ -1852,7 +1852,7 @@ class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductSetTaxCategoryAction(**data)
 
@@ -1871,7 +1871,7 @@ class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductTransitionStateAction(**data)
 
@@ -1883,7 +1883,7 @@ class ProductUnpublishActionSchema(ProductUpdateActionSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProductUnpublishAction(**data)
 
@@ -1901,7 +1901,7 @@ class RangeFacetResultSchema(FacetResultSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.RangeFacetResult(**data)
 
@@ -1925,7 +1925,7 @@ class TermFacetResultSchema(FacetResultSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.TermFacetResult(**data)
 
@@ -1937,6 +1937,6 @@ class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
-    def post_load(self, data):
+    def post_load(self, data, **kwargs):
         del data["type"]
         return types.WhitespaceTokenizer(**data)

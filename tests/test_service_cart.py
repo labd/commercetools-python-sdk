@@ -37,10 +37,28 @@ def test_update_actions(commercetools_api, client, cart_draft):
     payment_reference = types.PaymentReference(
         type_id=types.ReferenceTypeId.PAYMENT, id=str(uuid.uuid4())
     )
-    updated_cart = client.carts.update_by_id(
+    cart = client.carts.update_by_id(
         cart.id,
         cart.version,
         actions=[types.CartAddPaymentAction(payment=payment_reference)],
     )
 
-    assert updated_cart.payment_info.payments[0] == payment_reference
+    assert cart.payment_info.payments[0] == payment_reference
+
+    client.carts.update_by_id(
+        cart.id,
+        cart.version,
+        actions=[
+            types.CartSetCustomFieldAction(name="foo1", value="bar"),
+            types.CartSetCustomFieldAction(name="foo2", value=["bar"]),
+            types.CartSetCustomFieldAction(name="foo3", value=False),
+        ]
+    )
+
+    cart = client.carts.get_by_id(cart.id)
+
+    assert all(key in cart.custom.fields for key in ["foo1", "foo2", "foo3"])
+    assert cart.custom.fields["foo1"] == "bar"
+    assert cart.custom.fields["foo2"] == ["bar"]
+    assert cart.custom.fields["foo3"] is False
+

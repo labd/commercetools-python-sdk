@@ -8,6 +8,7 @@ from requests_mock import create_response
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import schemas, types
+from commercetools.types import OrderSetCustomFieldAction, CartSetCustomFieldAction
 from commercetools.types._abstract import _BaseType
 from commercetools.constants import HEADER_CORRELATION_ID
 
@@ -150,6 +151,24 @@ def update_attribute_delete_item_by_id(dst: str, src: str):
                 return new
 
         raise InternalUpdateError("No item found with id %r" % value)
+
+    return updater
+
+
+def set_custom_field():
+    """Set custom field. Note it always sets the type now, instead of type checking the custom field type!"""
+    def updater(self, obj, action: typing.Union[OrderSetCustomFieldAction, CartSetCustomFieldAction]):
+        name = action.name
+        value = action.value
+        if not obj["custom"]:
+            obj["custom"] = {
+                "fields": {}
+            }
+        if name not in obj["custom"]["fields"]:
+            new = copy.deepcopy(obj)
+            new["custom"]["fields"][name] = value
+            return new
+        return obj
 
     return updater
 

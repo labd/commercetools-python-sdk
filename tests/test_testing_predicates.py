@@ -24,6 +24,7 @@ from commercetools.testing import predicates
         "isDefault = true",
         "isDefault = false",
         'variants(attributes(name="attribute-name" and value(centAmount > 999 and centAmount < 1001 and currencyCode="EUR")))',
+        'custom(fields(someCustomField="123123123")) and createdAt >= "2019-10-15T14:12:36.464465"',
     ],
 )
 def test_tokenize(predicate):

@@ -160,15 +160,15 @@ def set_custom_field():
     def updater(self, obj, action: typing.Union[OrderSetCustomFieldAction, CartSetCustomFieldAction]):
         name = action.name
         value = action.value
-        if not obj["custom"]:
-            obj["custom"] = {
+
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        if not new["custom"]:
+            new["custom"] = {
                 "fields": {}
             }
-        if name not in obj["custom"]["fields"]:
-            new = copy.deepcopy(obj)
-            new["custom"]["fields"][name] = value
-            return new
-        return obj
+        new["custom"]["fields"][name] = value
+        return new
 
     return updater
 

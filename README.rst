@@ -95,3 +95,4 @@ accidentally update a Pypi dependency. If not, push the code:
 Then go to Azure Pipelines and wait for the build to create an artifact.
 Once the build succeeded go to Releases and create a release with the correct artifact.
 This will release the package to Pypi.
+

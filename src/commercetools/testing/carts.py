@@ -6,7 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute_add_item
+from commercetools.testing.utils import set_custom_field
 
 
 class CartsModel(BaseModel):
@@ -156,4 +156,7 @@ class CartsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
 
-    _actions = {"addPayment": add_payment()}
+    _actions = {
+        "addPayment": add_payment(),
+        "setCustomField": set_custom_field(),
+    }

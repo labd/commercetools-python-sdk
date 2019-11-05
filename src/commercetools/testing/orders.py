@@ -5,7 +5,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_enum_attribute
+from commercetools.testing.utils import update_enum_attribute, set_custom_field
 from commercetools.types import CartOrigin, OrderState
 
 
@@ -94,4 +94,5 @@ class OrdersBackend(ServiceBackend):
         "changePaymentState": update_enum_attribute("paymentState", "payment_state"),
         "changeShipmentState": update_enum_attribute("shipmentState", "shipment_state"),
         "addDelivery": add_delivery(),
+        "setCustomField": set_custom_field(),
     }

@@ -20,7 +20,6 @@ token_pat = re.compile(
         (?:\d+\.\d+) |       # Floats
         (?:\d+) |            # Integers
         "(?:\\.|[^"\\])*" |  # Double quoted strings
-        '(?:\\.|[^'\\])*' |  # Single quoted strings
         (?:true|false)       # Booleans
     )
     |

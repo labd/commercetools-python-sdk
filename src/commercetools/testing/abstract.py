@@ -47,6 +47,8 @@ class BaseModel:
         objects = list(self.objects.values())
         if not where:
             return objects
+        if "'" in where:
+            raise ValueError("' not allowed")
         where_clause = " AND ".join(where)
         predicate_filter = PredicateFilter(where_clause, schema=self._resource_schema)
         return [obj for obj in objects if predicate_filter.match(obj)]
@@ -163,7 +165,12 @@ class ServiceBackend(BaseBackend):
 
     def query(self, request):
         params = utils.parse_request_params(self._schema_query_params, request)
-        results = self.model.query(params.get("where"))
+        try:
+            results = self.model.query(params.get("where"))
+        except ValueError:
+            err = self._create_input_error_response("Malformed parameter: where: Syntax error "
+                                                     "while parsing 'where'. Invalid input '''")
+            return create_commercetools_response(request, json=err, status_code=err["statusCode"])
         total_count = len(results)
         if params.get("limit"):
             results = results[: params["limit"]]
@@ -329,6 +336,19 @@ class ServiceBackend(BaseBackend):
                     types.ConcurrentModificationError(
                         message=message,
                         current_version=obj['version']
+                    )
+                ],
+            )
+        )
+
+    def _create_input_error_response(self, message):
+        return schemas.ErrorResponseSchema().dump(
+            types.ErrorResponse(
+                status_code=400,
+                message=message,
+                errors=[
+                    types.InvalidInputError(
+                        message=message,
                     )
                 ],
             )

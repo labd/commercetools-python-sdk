@@ -20,6 +20,15 @@ def test_orders_query(client):
     assert results.total == 1
 
 
+def test_orders_query_filter(commercetools_api, client):
+    order = get_test_order()
+    commercetools_api.orders.add_existing(order)
+    where = ['custom(fields(shipwireServiceLevelCode="GD"))', 'createdAt >= "2019-10-15T14:12:36.464465"']
+
+    results = client.orders.query(where=where)
+    assert results.total == 1
+
+
 def test_orders_delete(commercetools_api, client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)

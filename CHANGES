@@ -1,3 +1,7 @@
+5.0.1 (2019-11-18)
+------------------
+ - Allow passing in the base auth URL when creating a Client
+
 5.0.0 (2019-11-05)
 ------------------
 This is breaking change since the commercetools api specification is moving

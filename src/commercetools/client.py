@@ -39,7 +39,7 @@ from commercetools.services.stores import StoreService
 from commercetools.services.subscriptions import SubscriptionService
 from commercetools.services.tax_categories import TaxCategoryService
 from commercetools.services.types import TypeService
-from commercetools.utils import BaseTokenSaver, DefaultTokenSaver
+from commercetools.utils import BaseTokenSaver, DefaultTokenSaver, fix_token_url
 
 
 class RefreshingOAuth2Session(OAuth2Session):
@@ -112,6 +112,7 @@ class Client:
         del project_key, client_id, client_secret, url, token_url, scope
 
         self._config = self._read_env_vars(config)
+        self._config["token_url"] = fix_token_url(self._config["token_url"])
         self._token_saver = token_saver or DefaultTokenSaver()
         self._url = self._config["url"]
         self._base_url = f"{self._config['url']}/{self._config['project_key']}/"
@@ -281,16 +282,6 @@ class Client:
 
         if not config.get("token_url"):
             config["token_url"] = os.environ.get("CTP_AUTH_URL")
-
-            # When the token_url is passed via environment variables we
-            # check if we need to append /oauth/token to the url. This is
-            # required since commercetools doesn't do this when outputting
-            # the settings when you create an API Client.
-            parts = urllib.parse.urlparse(config["token_url"])
-            if parts.path == "":
-                config["token_url"] = urllib.parse.urlunparse(
-                    (*parts[:2], "/oauth/token", *parts[3:])
-                )
 
         if not config["scope"]:
             config["scope"] = os.environ.get("CTP_SCOPES")

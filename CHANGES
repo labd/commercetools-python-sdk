@@ -2,6 +2,7 @@
 ------------------
  - Allow passing in the base auth URL when creating a Client
  - Add missing DELETE endpoint for Carts mock backend
+ - Implement mocked actions for Orders mock backend
 
 5.0.0 (2019-11-05)
 ------------------

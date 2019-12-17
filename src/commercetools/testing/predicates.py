@@ -410,6 +410,7 @@ class PredicateFilter:
         ">=": operator.ge,
         "=": operator.eq,
         "!=": operator.ne,
+        "<>": operator.ne,
         "is not": operator.is_not,
     }
 

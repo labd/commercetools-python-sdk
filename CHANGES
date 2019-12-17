@@ -1,6 +1,7 @@
-5.0.1 (2019-11-18)
+5.0.1 (2019-12-17)
 ------------------
  - Allow passing in the base auth URL when creating a Client
+ - Add missing DELETE endpoint for Carts mock backend
 
 5.0.0 (2019-11-05)
 ------------------

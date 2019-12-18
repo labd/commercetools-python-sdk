@@ -131,6 +131,7 @@ class PaymentsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
+            ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
     _actions = {

@@ -1,5 +1,4 @@
 import json
-import typing
 from collections.abc import Collection
 from decimal import Decimal
 from functools import reduce
@@ -21,7 +20,8 @@ class QueryPredicate:
     }
 
     def __init__(self, **filters: str) -> None:
-        self._connector = filters.pop("_connector", self.AND)
+        self._sibling_connector = filters.pop("_sibling_connector", self.AND)
+        self._sibling = filters.pop("_sibling", None)
         self._filters = filters
 
     def __str__(self) -> str:
@@ -39,21 +39,16 @@ class QueryPredicate:
             fields.append(val)
             result.append(reduce(lambda x, y: f"{y}({x})", fields[::-1]))
 
-        if self._connector == self.OR:
-            return " OR ".join(result)
-        return " AND ".join(result)
+        val = " AND ".join(result)
+        if self._sibling:
+            return "(%s) %s (%s)" % (val, self._sibling_connector, self._sibling)
+        return val
 
     def __or__(self, other):
-        data: typing.Dict[str, typing.Any] = {}
-        data.update(self._filters)
-        data.update(other._filters)
-        return self.__class__(**data, _connector=self.OR)
+        return self.__class__(**self._filters, _sibling_connector=self.OR, _sibling=other)
 
     def __and__(self, other):
-        data: typing.Dict[str, typing.Any] = {}
-        data.update(self._filters)
-        data.update(other._filters)
-        return self.__class__(**data, _connector=self.AND)
+        return self.__class__(**self._filters, _sibling_connector=self.AND, _sibling=other)
 
     def _clause(self, lhs, operator, rhs) -> str:
         assert operator in self._operators

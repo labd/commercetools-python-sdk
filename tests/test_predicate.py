@@ -59,11 +59,32 @@ def test_qp_or():
     obj = QueryPredicate(
         masterVariant__slug=QueryPredicate(nl="test-nl") | QueryPredicate(en="test-en")
     )
-    assert str(obj) == 'masterVariant(slug(nl = "test-nl" OR en = "test-en"))'
+    assert str(obj) == 'masterVariant(slug((nl = "test-nl") OR (en = "test-en")))'
 
 
 def test_qp_and():
     obj = QueryPredicate(
         masterVariant__slug=QueryPredicate(nl="test-nl") & QueryPredicate(en="test-en")
     )
-    assert str(obj) == 'masterVariant(slug(nl = "test-nl" AND en = "test-en"))'
+    assert str(obj) == 'masterVariant(slug((nl = "test-nl") AND (en = "test-en")))'
+
+
+def test_qp_nested():
+    obj = (
+        QueryPredicate(masterVariant__slug__nl="test-nl1") | (
+            QueryPredicate(
+                masterVariant__slug=(
+                    QueryPredicate(nl="test-nl2")
+                    & (
+                        QueryPredicate(en="test-en")
+                        | QueryPredicate(fr="test-fr")
+                    )
+                )
+            )
+        )
+    )
+    assert str(obj) == (
+        '(masterVariant(slug(nl = "test-nl1")))'
+        ' OR '
+        '(masterVariant(slug((nl = "test-nl2") AND ((en = "test-en") OR (fr = "test-fr")))))'
+    )

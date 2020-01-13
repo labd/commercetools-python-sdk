@@ -1,3 +1,7 @@
+6.1.0 (2020-01-13)
+------------------
+- Added nested query predicate support
+
 6.0.0 (2020-01-13)
 ------------------
  - Allow passing in the base auth URL when creating a Client

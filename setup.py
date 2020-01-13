@@ -51,7 +51,7 @@ with open("README.rst") as fh:
 
 setup(
     name="commercetools",
-    version="5.0.1",
+    version="6.0.0",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",

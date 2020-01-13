@@ -1,4 +1,4 @@
-5.0.1 (2019-12-19)
+5.0.1 (2020-01-13)
 ------------------
  - Allow passing in the base auth URL when creating a Client
  - Add multiple DELETE endpoints for various backends

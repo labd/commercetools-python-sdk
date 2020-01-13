@@ -69,6 +69,13 @@ def test_qp_and():
     assert str(obj) == 'masterVariant(slug((nl = "test-nl") AND (en = "test-en")))'
 
 
+def test_qp_in():
+    obj = QueryPredicate(
+        masterVariant__slug__nl__in=["test-nl", "test-en"],
+    )
+    assert str(obj) == 'masterVariant(slug(nl in ("test-nl", "test-en")))'
+
+
 def test_qp_nested():
     obj = (
         QueryPredicate(masterVariant__slug__nl="test-nl1") | (
@@ -88,3 +95,4 @@ def test_qp_nested():
         ' OR '
         '(masterVariant(slug((nl = "test-nl2") AND ((en = "test-en") OR (fr = "test-fr")))))'
     )
+

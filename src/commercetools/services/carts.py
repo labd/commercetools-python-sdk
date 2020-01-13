@@ -101,9 +101,9 @@ class CartService(abstract.AbstractService):
 
     def replicate(self, draft: types.ReplicaCartDraft) -> types.Cart:
         return self._client._post(
-            endpoint="carts",
+            endpoint="carts/replicate",
             params={},
             data_object=draft,
-            request_schema_cls=schemas.CartUpdateSchema,
+            request_schema_cls=schemas.ReplicaCartDraftSchema,
             response_schema_cls=schemas.CartSchema,
         )

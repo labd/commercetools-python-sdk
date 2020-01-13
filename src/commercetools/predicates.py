@@ -11,6 +11,7 @@ class QueryPredicate:
     _operators = {
         "exact": "=",
         "gte": ">=",
+        "in": "in",
         "lte": "=<",
         "lt": "<",
         "gt": ">",

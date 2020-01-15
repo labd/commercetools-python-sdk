@@ -21,8 +21,7 @@ class QueryPredicate:
     }
 
     def __init__(self, **filters: str) -> None:
-        self._sibling_connector = filters.pop("_sibling_connector", self.AND)
-        self._sibling = filters.pop("_sibling", None)
+        self._siblings = filters.pop("_siblings", [])
         self._filters = filters
 
     def __str__(self) -> str:
@@ -41,15 +40,21 @@ class QueryPredicate:
             result.append(reduce(lambda x, y: f"{y}({x})", fields[::-1]))
 
         val = " AND ".join(result)
-        if self._sibling:
-            return "(%s) %s (%s)" % (val, self._sibling_connector, self._sibling)
+        if self._siblings:
+            return reduce(
+                lambda x, y: f"({x}) {y.connector} ({y.query_predicate})",
+                self._siblings,
+                val,
+            )
         return val
 
     def __or__(self, other):
-        return self.__class__(**self._filters, _sibling_connector=self.OR, _sibling=other)
+        _siblings = self._siblings[:] + [_SiblingQueryPredicate(self.OR, other)]
+        return self.__class__(**self._filters, _siblings=_siblings)
 
     def __and__(self, other):
-        return self.__class__(**self._filters, _sibling_connector=self.AND, _sibling=other)
+        _siblings = self._siblings[:] + [_SiblingQueryPredicate(self.AND, other)]
+        return self.__class__(**self._filters, _siblings=_siblings)
 
     def _clause(self, lhs, operator, rhs) -> str:
         assert operator in self._operators
@@ -76,3 +81,9 @@ class QueryPredicate:
         if not isinstance(value, str) and isinstance(value, Collection):
             return "(%s)" % (", ".join(self._escape_value(v) for v in value))
         return json.dumps(value)
+
+
+class _SiblingQueryPredicate:
+    def __init__(self, connector: str, query_predicate: QueryPredicate):
+        self.connector = connector
+        self.query_predicate = query_predicate

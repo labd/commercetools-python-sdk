@@ -96,3 +96,21 @@ def test_qp_nested():
         '(masterVariant(slug((nl = "test-nl2") AND ((en = "test-en") OR (fr = "test-fr")))))'
     )
 
+
+def test_qp_chained():
+    obj = (
+        QueryPredicate(masterVariant__slug__nl="test-nl1") &
+        QueryPredicate(
+            masterVariant__slug__nl="test-nl2",
+        ) & (
+            QueryPredicate(
+                masterVariant__prices__is_defined=True,
+            ) | QueryPredicate(masterVariant__prices__amount__gte=100)
+        )
+    )
+    assert str(obj) == (
+        '((masterVariant(slug(nl = "test-nl1")))'
+        ' AND (masterVariant(slug(nl = "test-nl2"))))'
+        ' AND ((masterVariant(prices is defined)) OR (masterVariant(prices(amount >= 100))))'
+    )
+

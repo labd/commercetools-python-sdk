@@ -1,7 +1,5 @@
 .. start-no-pypi
 
-![Python Tests](https://github.com/labd/commercetools-python-sdk/workflows/Python%20Tests/badge.svg)
-
 .. image:: https://github.com/labd/commercetools-python-sdk/workflows/Python%20Tests/badge.svg
     :target: https://github.com/labd/commercetools-python-sdk/actions
 

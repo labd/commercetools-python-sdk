@@ -4,7 +4,7 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    LoggedResourceSchema,
+    BaseResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -113,8 +113,28 @@ class TaxCategoryResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.TaxCategoryResourceIdentifier(**data)
 
 
-class TaxCategorySchema(LoggedResourceSchema):
+class TaxCategorySchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.TaxCategory`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     name = marshmallow.fields.String(allow_none=True)
     description = marshmallow.fields.String(allow_none=True, missing=None)
     rates = marshmallow.fields.Nested(

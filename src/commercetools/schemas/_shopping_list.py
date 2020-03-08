@@ -4,8 +4,8 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     LocalizedStringField,
-    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -50,8 +50,28 @@ __all__ = [
 ]
 
 
-class MyShoppingListSchema(LoggedResourceSchema):
+class MyShoppingListSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.MyShoppingList`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,
@@ -270,8 +290,28 @@ class ShoppingListResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.ShoppingListResourceIdentifier(**data)
 
 
-class ShoppingListSchema(LoggedResourceSchema):
+class ShoppingListSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ShoppingList`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     custom = marshmallow.fields.Nested(
         nested="commercetools.schemas._type.CustomFieldsSchema",
         unknown=marshmallow.EXCLUDE,

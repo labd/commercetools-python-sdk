@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import LoggedResource
+from commercetools.types._common import BaseResource
 
 if typing.TYPE_CHECKING:
     from ._cart import (
@@ -158,8 +158,20 @@ __all__ = [
 ]
 
 
-class MyCart(LoggedResource):
+class MyCart(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCartSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
     customer_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
@@ -252,6 +264,12 @@ class MyCart(LoggedResource):
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.customer_id = customer_id
         self.customer_email = customer_email
         self.anonymous_id = anonymous_id
@@ -284,8 +302,6 @@ class MyCart(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -424,8 +440,20 @@ class MyCartUpdateAction(_BaseType):
         return "MyCartUpdateAction(action=%r)" % (self.action,)
 
 
-class MyCustomer(LoggedResource):
+class MyCustomer(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyCustomerSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
@@ -506,6 +534,12 @@ class MyCustomer(LoggedResource):
         key: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreKeyReference"]] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.customer_number = customer_number
         self.email = email
         self.password = password
@@ -534,8 +568,6 @@ class MyCustomer(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -696,6 +728,8 @@ class MyLineItemDraft(_BaseType):
     custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: Optional :class:`str`
+    sku: typing.Optional[str]
 
     def __init__(
         self,
@@ -706,7 +740,8 @@ class MyLineItemDraft(_BaseType):
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        sku: typing.Optional[str] = None
     ) -> None:
         self.product_id = product_id
         self.variant_id = variant_id
@@ -715,11 +750,12 @@ class MyLineItemDraft(_BaseType):
         self.distribution_channel = distribution_channel
         self.custom = custom
         self.shipping_details = shipping_details
+        self.sku = sku
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "MyLineItemDraft(product_id=%r, variant_id=%r, quantity=%r, supply_channel=%r, distribution_channel=%r, custom=%r, shipping_details=%r)"
+            "MyLineItemDraft(product_id=%r, variant_id=%r, quantity=%r, supply_channel=%r, distribution_channel=%r, custom=%r, shipping_details=%r, sku=%r)"
             % (
                 self.product_id,
                 self.variant_id,
@@ -728,12 +764,25 @@ class MyLineItemDraft(_BaseType):
                 self.distribution_channel,
                 self.custom,
                 self.shipping_details,
+                self.sku,
             )
         )
 
 
-class MyOrder(LoggedResource):
+class MyOrder(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyOrderSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`datetime.datetime` `(Named` ``completedAt`` `in Commercetools)`
     completed_at: typing.Optional[datetime.datetime]
     #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
@@ -850,6 +899,12 @@ class MyOrder(LoggedResource):
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         refused_gifts: typing.Optional[typing.List["CartDiscountReference"]] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.completed_at = completed_at
         self.order_number = order_number
         self.customer_id = customer_id
@@ -890,8 +945,6 @@ class MyOrder(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:

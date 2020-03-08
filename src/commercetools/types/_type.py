@@ -6,7 +6,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    LoggedResource,
+    BaseResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -220,8 +220,20 @@ class ResourceTypeId(enum.Enum):
     CUSTOMER_GROUP = "customer-group"
 
 
-class Type(LoggedResource):
+class Type(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSchema`."
+    #: :class:`str`
+    id: typing.Optional[str]
+    #: :class:`int`
+    version: typing.Optional[int]
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: typing.Optional[datetime.datetime]
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
@@ -248,6 +260,12 @@ class Type(LoggedResource):
         resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
         field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.key = key
         self.name = name
         self.description = description
@@ -258,8 +276,6 @@ class Type(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:

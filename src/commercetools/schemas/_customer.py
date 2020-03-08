@@ -5,7 +5,7 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    LoggedResourceSchema,
+    BaseResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -15,6 +15,7 @@ __all__ = [
     "CustomerAddAddressActionSchema",
     "CustomerAddBillingAddressIdActionSchema",
     "CustomerAddShippingAddressIdActionSchema",
+    "CustomerAddStoreActionSchema",
     "CustomerChangeAddressActionSchema",
     "CustomerChangeEmailActionSchema",
     "CustomerChangePasswordSchema",
@@ -27,6 +28,7 @@ __all__ = [
     "CustomerRemoveAddressActionSchema",
     "CustomerRemoveBillingAddressIdActionSchema",
     "CustomerRemoveShippingAddressIdActionSchema",
+    "CustomerRemoveStoreActionSchema",
     "CustomerResetPasswordSchema",
     "CustomerResourceIdentifierSchema",
     "CustomerSchema",
@@ -45,6 +47,7 @@ __all__ = [
     "CustomerSetLocaleActionSchema",
     "CustomerSetMiddleNameActionSchema",
     "CustomerSetSalutationActionSchema",
+    "CustomerSetStoresActionSchema",
     "CustomerSetTitleActionSchema",
     "CustomerSetVatIdActionSchema",
     "CustomerSignInResultSchema",
@@ -270,8 +273,28 @@ class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.CustomerResourceIdentifier(**data)
 
 
-class CustomerSchema(LoggedResourceSchema):
+class CustomerSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Customer`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     customer_number = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customerNumber"
     )
@@ -441,11 +464,13 @@ class CustomerUpdateSchema(marshmallow.Schema):
                 "addAddress": "commercetools.schemas._customer.CustomerAddAddressActionSchema",
                 "addBillingAddressId": "commercetools.schemas._customer.CustomerAddBillingAddressIdActionSchema",
                 "addShippingAddressId": "commercetools.schemas._customer.CustomerAddShippingAddressIdActionSchema",
+                "addStore": "commercetools.schemas._customer.CustomerAddStoreActionSchema",
                 "changeAddress": "commercetools.schemas._customer.CustomerChangeAddressActionSchema",
                 "changeEmail": "commercetools.schemas._customer.CustomerChangeEmailActionSchema",
                 "removeAddress": "commercetools.schemas._customer.CustomerRemoveAddressActionSchema",
                 "removeBillingAddressId": "commercetools.schemas._customer.CustomerRemoveBillingAddressIdActionSchema",
                 "removeShippingAddressId": "commercetools.schemas._customer.CustomerRemoveShippingAddressIdActionSchema",
+                "removeStore": "commercetools.schemas._customer.CustomerRemoveStoreActionSchema",
                 "setCompanyName": "commercetools.schemas._customer.CustomerSetCompanyNameActionSchema",
                 "setCustomField": "commercetools.schemas._customer.CustomerSetCustomFieldActionSchema",
                 "setCustomType": "commercetools.schemas._customer.CustomerSetCustomTypeActionSchema",
@@ -461,6 +486,7 @@ class CustomerUpdateSchema(marshmallow.Schema):
                 "setLocale": "commercetools.schemas._customer.CustomerSetLocaleActionSchema",
                 "setMiddleName": "commercetools.schemas._customer.CustomerSetMiddleNameActionSchema",
                 "setSalutation": "commercetools.schemas._customer.CustomerSetSalutationActionSchema",
+                "setStores": "commercetools.schemas._customer.CustomerSetStoresActionSchema",
                 "setTitle": "commercetools.schemas._customer.CustomerSetTitleActionSchema",
                 "setVatId": "commercetools.schemas._customer.CustomerSetVatIdActionSchema",
             },
@@ -519,6 +545,23 @@ class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerAddShippingAddressIdAction(**data)
+
+
+class CustomerAddStoreActionSchema(CustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.CustomerAddStoreAction`."
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.CustomerAddStoreAction(**data)
 
 
 class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
@@ -589,6 +632,23 @@ class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerRemoveShippingAddressIdAction(**data)
+
+
+class CustomerRemoveStoreActionSchema(CustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.CustomerRemoveStoreAction`."
+    store = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.CustomerRemoveStoreAction(**data)
 
 
 class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
@@ -815,6 +875,25 @@ class CustomerSetSalutationActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.CustomerSetSalutationAction(**data)
+
+
+class CustomerSetStoresActionSchema(CustomerUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.CustomerSetStoresAction`."
+    stores = marshmallow.fields.Nested(
+        nested="commercetools.schemas._store.StoreResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.CustomerSetStoresAction(**data)
 
 
 class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):

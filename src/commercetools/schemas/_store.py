@@ -4,9 +4,9 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     KeyReferenceSchema,
     LocalizedStringField,
-    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -100,8 +100,28 @@ class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.StoreResourceIdentifier(**data)
 
 
-class StoreSchema(LoggedResourceSchema):
+class StoreSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Store`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True, missing=None)
 

@@ -77,7 +77,7 @@ And then constructing a client without arguments:
 Releasing
 ---------
 
-To release this package first (pip) install bumpversion and update the CHANGES file.
+To release this package first (pip) install bump2version and update the CHANGES file.
 Then update the version (either major/minor/patch depending on the change)
 
 
@@ -92,6 +92,13 @@ accidentally update a Pypi dependency. If not, push the code:
 .. code-block:: sh
 
     git push --follow-tags
+
+We use GitHub actions so make sure the build succeeds and then go to the release tab.
+GitHub will already have created a release for the tag, but ignore that for now and
+draft a new release and enter the tag which you created.
+
+Copy the changelog items in in the release description and save. This will then 
+automatically trigger a GitHub action to create and upload the package to PyPi.
 
 Then go to Azure Pipelines and wait for the build to create an artifact.
 Once the build succeeded go to Releases and create a release with the correct artifact.

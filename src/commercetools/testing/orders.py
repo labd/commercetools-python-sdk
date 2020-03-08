@@ -5,7 +5,11 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_enum_attribute, set_custom_field, update_attribute
+from commercetools.testing.utils import (
+    set_custom_field,
+    update_attribute,
+    update_enum_attribute,
+)
 from commercetools.types import CartOrigin, OrderState
 
 

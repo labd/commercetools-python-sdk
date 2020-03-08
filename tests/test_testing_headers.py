@@ -1,6 +1,6 @@
 import pytest
 
-from commercetools import types, CommercetoolsError
+from commercetools import CommercetoolsError, types
 
 
 def test_correlation_id_is_set_in_exception(client):

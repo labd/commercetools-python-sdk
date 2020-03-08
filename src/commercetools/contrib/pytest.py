@@ -34,6 +34,7 @@ def commercetools_http_server(commercetools_api):
 
     def serve():
         from werkzeug.serving import run_simple
+
         is_running.set()
         server.api_url = "http://localhost:8989"
         run_simple("localhost", port=8989, application=server)

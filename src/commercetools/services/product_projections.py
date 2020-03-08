@@ -91,7 +91,9 @@ class ProductProjectionService(abstract.AbstractService):
         }
         query_params = ProductProjectionsBaseSchema().dump(params)
         return self._client._get(
-            f"product-projections/key={key}", query_params, schemas.ProductProjectionSchema
+            f"product-projections/key={key}",
+            query_params,
+            schemas.ProductProjectionSchema,
         )
 
     def query(

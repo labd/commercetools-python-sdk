@@ -8,7 +8,7 @@ def test_cart_discount_get_by_id(client):
     cart_discount = client.cart_discounts.create(
         types.CartDiscountDraft(
             name=types.LocalizedString({"en": "test discount"}),
-            value=types.CartDiscountValueRelative(permyriad=10)
+            value=types.CartDiscountValueRelative(permyriad=10),
         )
     )
 
@@ -25,13 +25,13 @@ def test_cart_discount_query(client):
     client.cart_discounts.create(
         types.CartDiscountDraft(
             name=types.LocalizedString({"en:": "test discount"}),
-            value=types.CartDiscountValueRelative(permyriad=10)
+            value=types.CartDiscountValueRelative(permyriad=10),
         )
     )
     client.cart_discounts.create(
         types.CartDiscountDraft(
             name=types.LocalizedString({"en:": "test discount"}),
-            value=types.CartDiscountValueRelative(permyriad=10)
+            value=types.CartDiscountValueRelative(permyriad=10),
         )
     )
 
@@ -59,9 +59,7 @@ def test_cart_discount_update(client):
     cart_discount = client.cart_discounts.update_by_id(
         id=cart_discount.id,
         version=cart_discount.version,
-        actions=[
-            types.CartDiscountChangeIsActiveAction(is_active=False)
-        ],
+        actions=[types.CartDiscountChangeIsActiveAction(is_active=False)],
     )
 
     assert cart_discount.is_active is False

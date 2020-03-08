@@ -47,7 +47,9 @@ class TypeService(abstract.AbstractService):
         )
         return self._client._get("types", params, schemas.TypePagedQueryResponseSchema)
 
-    def create(self, draft: types.TypeDraft, expand: OptionalListStr = None) -> types.Type:
+    def create(
+        self, draft: types.TypeDraft, expand: OptionalListStr = None
+    ) -> types.Type:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -100,7 +102,12 @@ class TypeService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = False,
     ) -> types.Type:
         params = {"version": version}
         if expand:
@@ -114,7 +121,12 @@ class TypeService(abstract.AbstractService):
         )
 
     def delete_by_key(
-        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
+        self,
+        key: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = False,
     ) -> types.Type:
         params = {"version": version}
         if expand:

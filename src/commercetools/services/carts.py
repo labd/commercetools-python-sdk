@@ -18,13 +18,17 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Cart]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.Cart]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._get(f"carts/{id}", query_params, schemas.CartSchema)
 
-    def get_by_customer_id(self, customer_id: str, expand: OptionalListStr = None) -> types.Cart:
+    def get_by_customer_id(
+        self, customer_id: str, expand: OptionalListStr = None
+    ) -> types.Cart:
         query_params = {"customerId": customer_id}
         if expand:
             query_params["expand"] = expand
@@ -49,7 +53,9 @@ class CartService(abstract.AbstractService):
         )
         return self._client._get("carts", params, schemas.CartPagedQueryResponseSchema)
 
-    def create(self, draft: types.CartDraft, expand: OptionalListStr = None) -> types.Cart:
+    def create(
+        self, draft: types.CartDraft, expand: OptionalListStr = None
+    ) -> types.Cart:
         query_params = {}
         if expand:
             query_params["expand"] = expand

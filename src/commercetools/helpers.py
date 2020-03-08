@@ -3,14 +3,13 @@ import typing
 from marshmallow import class_registry, fields, missing
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
-from marshmallow.utils import missing as missing_
 from marshmallow.utils import RAISE, is_collection
+from marshmallow.utils import missing as missing_
 
 from commercetools.exceptions import CommercetoolsError
 
 
 class OptionalList(fields.List):
-
     def _serialize(
         self, value, attr, obj, **kwargs
     ) -> typing.Optional[typing.List[typing.Any]]:

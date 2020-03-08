@@ -16,11 +16,15 @@ class InventoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class InventoryService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.InventoryEntry]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.InventoryEntry]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"inventory/{id}", query_params, schemas.InventoryEntrySchema)
+        return self._client._get(
+            f"inventory/{id}", query_params, schemas.InventoryEntrySchema
+        )
 
     def query(
         self,
@@ -43,7 +47,9 @@ class InventoryService(abstract.AbstractService):
             "inventory", params, schemas.InventoryPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.InventoryEntryDraft, expand: OptionalListStr = None) -> types.InventoryEntry:
+    def create(
+        self, draft: types.InventoryEntryDraft, expand: OptionalListStr = None
+    ) -> types.InventoryEntry:
         query_params = {}
         if expand:
             query_params["expand"] = expand

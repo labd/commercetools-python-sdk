@@ -26,10 +26,15 @@ class ProductQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ProductService(abstract.AbstractService):
-    def get_by_id(self, id: str, price_currency: str = None,
-                  price_country: str = None, price_customer_group: UUID = None,
-                  price_channel: UUID = None, expand: OptionalListStr = None
-                  ) -> Optional[types.Product]:
+    def get_by_id(
+        self,
+        id: str,
+        price_currency: str = None,
+        price_country: str = None,
+        price_customer_group: UUID = None,
+        price_channel: UUID = None,
+        expand: OptionalListStr = None,
+    ) -> Optional[types.Product]:
         params = ProductQuerySchema().dump(
             {
                 "expand": expand,
@@ -41,9 +46,15 @@ class ProductService(abstract.AbstractService):
         )
         return self._client._get(f"products/{id}", params, schemas.ProductSchema)
 
-    def get_by_key(self, key: str, price_currency: str = None, price_country: str = None,
-                   price_customer_group: UUID = None, price_channel: UUID = None,
-                   expand: OptionalListStr = None) -> Optional[types.Product]:
+    def get_by_key(
+        self,
+        key: str,
+        price_currency: str = None,
+        price_country: str = None,
+        price_customer_group: UUID = None,
+        price_channel: UUID = None,
+        expand: OptionalListStr = None,
+    ) -> Optional[types.Product]:
         params = ProductQuerySchema().dump(
             {
                 "expand": expand,
@@ -84,12 +95,18 @@ class ProductService(abstract.AbstractService):
             "products", params, schemas.ProductPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ProductDraft, expand: OptionalListStr = None) -> types.Product:
+    def create(
+        self, draft: types.ProductDraft, expand: OptionalListStr = None
+    ) -> types.Product:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._post(
-            "products", query_params, draft, schemas.ProductDraftSchema, schemas.ProductSchema
+            "products",
+            query_params,
+            draft,
+            schemas.ProductDraftSchema,
+            schemas.ProductSchema,
         )
 
     def update_by_id(

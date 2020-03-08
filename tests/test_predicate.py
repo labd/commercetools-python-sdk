@@ -70,47 +70,37 @@ def test_qp_and():
 
 
 def test_qp_in():
-    obj = QueryPredicate(
-        masterVariant__slug__nl__in=["test-nl", "test-en"],
-    )
+    obj = QueryPredicate(masterVariant__slug__nl__in=["test-nl", "test-en"],)
     assert str(obj) == 'masterVariant(slug(nl in ("test-nl", "test-en")))'
 
 
 def test_qp_nested():
-    obj = (
-        QueryPredicate(masterVariant__slug__nl="test-nl1") | (
-            QueryPredicate(
-                masterVariant__slug=(
-                    QueryPredicate(nl="test-nl2")
-                    & (
-                        QueryPredicate(en="test-en")
-                        | QueryPredicate(fr="test-fr")
-                    )
-                )
+    obj = QueryPredicate(masterVariant__slug__nl="test-nl1") | (
+        QueryPredicate(
+            masterVariant__slug=(
+                QueryPredicate(nl="test-nl2")
+                & (QueryPredicate(en="test-en") | QueryPredicate(fr="test-fr"))
             )
         )
     )
     assert str(obj) == (
         '(masterVariant(slug(nl = "test-nl1")))'
-        ' OR '
+        " OR "
         '(masterVariant(slug((nl = "test-nl2") AND ((en = "test-en") OR (fr = "test-fr")))))'
     )
 
 
 def test_qp_chained():
     obj = (
-        QueryPredicate(masterVariant__slug__nl="test-nl1") &
-        QueryPredicate(
-            masterVariant__slug__nl="test-nl2",
-        ) & (
-            QueryPredicate(
-                masterVariant__prices__is_defined=True,
-            ) | QueryPredicate(masterVariant__prices__amount__gte=100)
+        QueryPredicate(masterVariant__slug__nl="test-nl1")
+        & QueryPredicate(masterVariant__slug__nl="test-nl2",)
+        & (
+            QueryPredicate(masterVariant__prices__is_defined=True,)
+            | QueryPredicate(masterVariant__prices__amount__gte=100)
         )
     )
     assert str(obj) == (
         '((masterVariant(slug(nl = "test-nl1")))'
         ' AND (masterVariant(slug(nl = "test-nl2"))))'
-        ' AND ((masterVariant(prices is defined)) OR (masterVariant(prices(amount >= 100))))'
+        " AND ((masterVariant(prices is defined)) OR (masterVariant(prices(amount >= 100))))"
     )
-

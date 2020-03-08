@@ -6,7 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, InternalUpdateError
+from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 
 class ShippingMethodsModel(BaseModel):
@@ -50,7 +50,9 @@ class ShippingMethodsModel(BaseModel):
         )
 
 
-def create_shipping_rate_from_draft(draft: types.ShippingRateDraft) -> types.ShippingRate:
+def create_shipping_rate_from_draft(
+    draft: types.ShippingRateDraft,
+) -> types.ShippingRate:
     free_above = None
     if draft.free_above:
         free_above = types.CentPrecisionMoney(
@@ -72,10 +74,15 @@ def create_shipping_rate_from_draft(draft: types.ShippingRateDraft) -> types.Shi
     return shipping_rate
 
 
-def change_is_default(backend: "ShippingMethodsBackend", obj: dict,
-                      action: types.ShippingMethodChangeIsDefaultAction):
+def change_is_default(
+    backend: "ShippingMethodsBackend",
+    obj: dict,
+    action: types.ShippingMethodChangeIsDefaultAction,
+):
     if action.is_default:
-        for shipping_method in backend.model._storage._stores["shipping-method"].values():
+        for shipping_method in backend.model._storage._stores[
+            "shipping-method"
+        ].values():
             shipping_method["isDefault"] = False
             backend.model.save(shipping_method)
     new = copy.deepcopy(obj)
@@ -83,8 +90,11 @@ def change_is_default(backend: "ShippingMethodsBackend", obj: dict,
     return new
 
 
-def change_tax_category(backend: "ShippingMethodsBackend", obj: dict,
-                        action: types.ShippingMethodChangeTaxCategoryAction):
+def change_tax_category(
+    backend: "ShippingMethodsBackend",
+    obj: dict,
+    action: types.ShippingMethodChangeTaxCategoryAction,
+):
     for tax_category in backend.model._storage._stores["tax-category"].values():
         if action.tax_category.id and tax_category["id"] == action.tax_category.id:
             break
@@ -93,12 +103,17 @@ def change_tax_category(backend: "ShippingMethodsBackend", obj: dict,
     else:
         raise InternalUpdateError("Tax Category does not exist")
     new = copy.deepcopy(obj)
-    new["taxCategory"] = schemas.TaxCategoryResourceIdentifierSchema().dump(action.tax_category)
+    new["taxCategory"] = schemas.TaxCategoryResourceIdentifierSchema().dump(
+        action.tax_category
+    )
     return new
 
 
-def add_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
-                      action: types.ShippingMethodAddZoneAction):
+def add_shipping_zone(
+    backend: "ShippingMethodsBackend",
+    obj: dict,
+    action: types.ShippingMethodAddZoneAction,
+):
     new = copy.deepcopy(obj)
     if not new.get("zoneRates"):
         new["zoneRates"] = []
@@ -106,15 +121,16 @@ def add_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
         if zone_rate["zone"]["id"] == action.zone.id:
             raise InternalUpdateError("Zone already exists")
     new["zoneRates"].append(
-        schemas.ZoneRateSchema().dump(types.ZoneRate(
-            zone=action.zone,
-        ))
+        schemas.ZoneRateSchema().dump(types.ZoneRate(zone=action.zone,))
     )
     return new
 
 
-def remove_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
-                         action: types.ShippingMethodRemoveZoneAction):
+def remove_shipping_zone(
+    backend: "ShippingMethodsBackend",
+    obj: dict,
+    action: types.ShippingMethodRemoveZoneAction,
+):
     new = copy.deepcopy(obj)
     for zone_rate in new["zoneRates"]:
         if zone_rate["zone"]["id"] == action.zone.id:
@@ -126,8 +142,11 @@ def remove_shipping_zone(backend: "ShippingMethodsBackend", obj: dict,
     return new
 
 
-def add_shipping_rate(backend: "ShippingMethodsBackend", obj: dict,
-                      action: types.ShippingMethodAddShippingRateAction):
+def add_shipping_rate(
+    backend: "ShippingMethodsBackend",
+    obj: dict,
+    action: types.ShippingMethodAddShippingRateAction,
+):
     new = copy.deepcopy(obj)
     draft = action.shipping_rate
     shipping_rate = create_shipping_rate_from_draft(draft)
@@ -138,10 +157,9 @@ def add_shipping_rate(backend: "ShippingMethodsBackend", obj: dict,
             break
     if not target_zone_rate:
         new["zoneRates"].append(
-            schemas.ZoneRateSchema().dump(types.ZoneRate(
-                zone=action.zone,
-                shipping_rates=[shipping_rate]
-            ))
+            schemas.ZoneRateSchema().dump(
+                types.ZoneRate(zone=action.zone, shipping_rates=[shipping_rate])
+            )
         )
     else:
         if not target_zone_rate.get("shippingRates"):
@@ -153,8 +171,11 @@ def add_shipping_rate(backend: "ShippingMethodsBackend", obj: dict,
     return new
 
 
-def remove_shipping_rate(backend: "ShippingMethodsBackend", obj: dict,
-                         action: types.ShippingMethodRemoveShippingRateAction):
+def remove_shipping_rate(
+    backend: "ShippingMethodsBackend",
+    obj: dict,
+    action: types.ShippingMethodRemoveShippingRateAction,
+):
     target_zone_rate = None
     for zone_rate in obj["zoneRates"]:
         if zone_rate["zone"]["id"] == action.zone.id:

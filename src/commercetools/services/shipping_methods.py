@@ -16,7 +16,9 @@ class ShippingMethodQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ShippingMethodService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.ShippingMethod]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.ShippingMethod]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -45,7 +47,9 @@ class ShippingMethodService(abstract.AbstractService):
             "shipping-methods", params, schemas.ShippingMethodPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ShippingMethodDraft, expand: OptionalListStr = None) -> types.ShippingMethod:
+    def create(
+        self, draft: types.ShippingMethodDraft, expand: OptionalListStr = None
+    ) -> types.ShippingMethod:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -102,8 +106,12 @@ class ShippingMethodService(abstract.AbstractService):
         )
 
     def delete(
-        self, id: str, version: int, expand: OptionalListStr = None,
-        *, force_delete: bool = False
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = False,
     ) -> types.ShippingMethod:
         params = {"version": version}
         if expand:

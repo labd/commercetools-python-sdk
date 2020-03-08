@@ -16,17 +16,25 @@ class CartDiscountQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartDiscountService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.CartDiscount]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.CartDiscount]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"cart-discounts/{id}", query_params, schemas.CartDiscountSchema)
+        return self._client._get(
+            f"cart-discounts/{id}", query_params, schemas.CartDiscountSchema
+        )
 
-    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.CartDiscount]:
+    def get_by_key(
+        self, key: str, expand: OptionalListStr = None
+    ) -> Optional[types.CartDiscount]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"cart-discounts/key={key}", query_params, schemas.CartDiscountSchema)
+        return self._client._get(
+            f"cart-discounts/key={key}", query_params, schemas.CartDiscountSchema
+        )
 
     def query(
         self,
@@ -49,7 +57,9 @@ class CartDiscountService(abstract.AbstractService):
             "cart-discounts", params, schemas.CartDiscountPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CartDiscountDraft, expand: OptionalListStr = None) -> types.CartDiscount:
+    def create(
+        self, draft: types.CartDiscountDraft, expand: OptionalListStr = None
+    ) -> types.CartDiscount:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -106,7 +116,12 @@ class CartDiscountService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.CartDiscount:
         params = {"version": version}
         if expand:
@@ -120,7 +135,12 @@ class CartDiscountService(abstract.AbstractService):
         )
 
     def delete_by_key(
-        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        key: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.CartDiscount:
         params = {"version": version}
         if expand:

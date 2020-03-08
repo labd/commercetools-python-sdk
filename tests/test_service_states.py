@@ -13,7 +13,9 @@ def test_state_flow(client, state_draft):
         types.StateSetNameAction(name=new_name),
         types.StateSetDescriptionAction(description=new_description),
         types.StateChangeInitialAction(initial=True),
-        types.StateSetRolesAction(roles=[types.StateRoleEnum.REVIEW_INCLUDED_IN_STATISTICS]),
+        types.StateSetRolesAction(
+            roles=[types.StateRoleEnum.REVIEW_INCLUDED_IN_STATISTICS]
+        ),
     ]
     state = client.states.update_by_id(state.id, state.version, update_actions)
     assert state.name == new_name
@@ -21,7 +23,9 @@ def test_state_flow(client, state_draft):
     assert state.initial is True
     assert len(state.roles) == 1
 
-    state = client.states.update_by_id(state.id, state.version, [types.StateSetRolesAction(roles=[])])
+    state = client.states.update_by_id(
+        state.id, state.version, [types.StateSetRolesAction(roles=[])]
+    )
     assert len(state.roles) == 0
 
     deleted_state = client.states.delete_by_id(state.id, state.version)

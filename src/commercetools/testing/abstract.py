@@ -230,11 +230,15 @@ class ServiceBackend(BaseBackend):
         return expanded_obj
 
     def _expand_obj(self, obj, expand_term):
-        resource_ids_to_expand = self._determine_resource_identifiers([obj], expand_term.split("."))
+        resource_ids_to_expand = self._determine_resource_identifiers(
+            [obj], expand_term.split(".")
+        )
         for resource_identifier in resource_ids_to_expand:
             if "typeId" in resource_identifier and "id" in resource_identifier:
                 try:
-                    for document in self.model._storage._stores[resource_identifier["typeId"]].values():
+                    for document in self.model._storage._stores[
+                        resource_identifier["typeId"]
+                    ].values():
                         if document["id"] == resource_identifier["id"]:
                             resource_identifier["obj"] = copy.deepcopy(document)
                 except KeyError:
@@ -256,17 +260,27 @@ class ServiceBackend(BaseBackend):
             term = term[:-3]
 
             try:
-                resource_identifiers = [resource_id[term][index] for resource_id in resource_id_list if resource_id[term][index]]
+                resource_identifiers = [
+                    resource_id[term][index]
+                    for resource_id in resource_id_list
+                    if resource_id[term][index]
+                ]
             except (KeyError, IndexError):
                 return []
         else:
             try:
-                resource_identifiers = [resource_id[term] for resource_id in resource_id_list if resource_id[term]]
+                resource_identifiers = [
+                    resource_id[term]
+                    for resource_id in resource_id_list
+                    if resource_id[term]
+                ]
             except KeyError:
                 return []
 
         if multiple:
-            resource_identifiers = [item for resource_id in resource_identifiers for item in resource_id]
+            resource_identifiers = [
+                item for resource_id in resource_identifiers for item in resource_id
+            ]
         if len(terms) == 1:
             return resource_identifiers
 
@@ -281,7 +295,9 @@ class ServiceBackend(BaseBackend):
         if update.actions:
             obj, err = self._apply_update_actions(obj, update)
             if err:
-                return create_commercetools_response(request, json=err, status_code=err["statusCode"])
+                return create_commercetools_response(
+                    request, json=err, status_code=err["statusCode"]
+                )
         expanded_obj = self._expand(request, obj)
         return create_commercetools_response(request, json=expanded_obj)
 
@@ -329,8 +345,7 @@ class ServiceBackend(BaseBackend):
                 message=message,
                 errors=[
                     types.ConcurrentModificationError(
-                        message=message,
-                        current_version=obj['version']
+                        message=message, current_version=obj["version"]
                     )
                 ],
             )

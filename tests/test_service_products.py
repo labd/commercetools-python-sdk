@@ -11,9 +11,7 @@ def test_products_create(client):
         types.TypeDraft(
             name=types.LocalizedString(en="myType"),
             resource_type_ids=[types.ResourceTypeId.ASSET],
-            field_definitions=[
-                types.FieldDefinition(name="foo")
-            ]
+            field_definitions=[types.FieldDefinition(name="foo")],
         )
     )
     assert custom_type.id
@@ -32,7 +30,9 @@ def test_products_create(client):
             ],
             prices=[
                 types.PriceDraft(
-                    value=types.CentPrecisionMoneyDraft(cent_amount=1000, currency_code="EUR"),
+                    value=types.CentPrecisionMoneyDraft(
+                        cent_amount=1000, currency_code="EUR"
+                    ),
                     country="NL",
                 )
             ],
@@ -95,7 +95,9 @@ def test_product_query_where(client):
                 prices=[
                     types.PriceDraft(
                         country="NL",
-                        value=types.CentPrecisionMoneyDraft(cent_amount=8750, currency_code="EUR"),
+                        value=types.CentPrecisionMoneyDraft(
+                            cent_amount=8750, currency_code="EUR"
+                        ),
                     )
                 ]
             ),
@@ -108,7 +110,9 @@ def test_product_query_where(client):
                 prices=[
                     types.PriceDraft(
                         country="UK",
-                        value=types.CentPrecisionMoneyDraft(cent_amount=8750, currency_code="EUR"),
+                        value=types.CentPrecisionMoneyDraft(
+                            cent_amount=8750, currency_code="EUR"
+                        ),
                     )
                 ]
             ),

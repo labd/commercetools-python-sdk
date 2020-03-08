@@ -14,7 +14,9 @@ class CustomerGroupDeleteSchema(abstract.AbstractDeleteSchema):
 
 
 class CustomerGroupService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.CustomerGroup]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.CustomerGroup]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -22,7 +24,9 @@ class CustomerGroupService(abstract.AbstractService):
             f"customer-groups/{id}", query_params, schemas.CustomerGroupSchema
         )
 
-    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.CustomerGroup]:
+    def get_by_key(
+        self, key: str, expand: OptionalListStr = None
+    ) -> Optional[types.CustomerGroup]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -51,7 +55,9 @@ class CustomerGroupService(abstract.AbstractService):
             "customer-groups", params, schemas.CustomerGroupPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CustomerGroupDraft, expand: OptionalListStr = None) -> types.CustomerGroup:
+    def create(
+        self, draft: types.CustomerGroupDraft, expand: OptionalListStr = None
+    ) -> types.CustomerGroup:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -108,7 +114,12 @@ class CustomerGroupService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = False,
     ) -> types.CustomerGroup:
         params = {"version": version}
         if expand:
@@ -122,7 +133,12 @@ class CustomerGroupService(abstract.AbstractService):
         )
 
     def delete_by_key(
-        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
+        self,
+        key: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = False,
     ) -> types.CustomerGroup:
         params = {"version": version}
         if expand:

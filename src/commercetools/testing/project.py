@@ -54,5 +54,5 @@ class ProjectBackend(ServiceBackend):
         "changeCurrencies": update_attribute("currencies", "currencies"),
         "changeName": update_attribute("name", "name"),
         "changeLanguages": update_attribute("languages", "languages"),
-        "setExternalOAuth": update_attribute("externalOAuth", "external_oauth")
+        "setExternalOAuth": update_attribute("externalOAuth", "external_oauth"),
     }

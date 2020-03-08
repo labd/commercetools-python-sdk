@@ -16,17 +16,23 @@ class CategoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CategoryService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Category]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.Category]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"categories/{id}", query_params, schemas.CategorySchema)
+        return self._client._get(
+            f"categories/{id}", query_params, schemas.CategorySchema
+        )
 
     def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.Category:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"categories/key={key}", query_params, schemas.CategorySchema)
+        return self._client._get(
+            f"categories/key={key}", query_params, schemas.CategorySchema
+        )
 
     def query(
         self,
@@ -49,12 +55,18 @@ class CategoryService(abstract.AbstractService):
             "categories", params, schemas.CategoryPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CategoryDraft, expand: OptionalListStr = None) -> types.Category:
+    def create(
+        self, draft: types.CategoryDraft, expand: OptionalListStr = None
+    ) -> types.Category:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._post(
-            "categories", query_params, draft, schemas.CategoryDraftSchema, schemas.CategorySchema
+            "categories",
+            query_params,
+            draft,
+            schemas.CategoryDraftSchema,
+            schemas.CategorySchema,
         )
 
     def update_by_id(
@@ -102,7 +114,12 @@ class CategoryService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.Category:
         params = {"version": version}
         if expand:
@@ -116,7 +133,12 @@ class CategoryService(abstract.AbstractService):
         )
 
     def delete_by_key(
-        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        key: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.Category:
         params = {"version": version}
         if expand:

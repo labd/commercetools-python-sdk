@@ -16,6 +16,5 @@ def test_api_client_flow(client, api_client_draft):
 @pytest.fixture
 def api_client_draft():
     return types.ApiClientDraft(
-        name="Test API Client",
-        scope="manage_project:some_project_key"
+        name="Test API Client", scope="manage_project:some_project_key"
     )

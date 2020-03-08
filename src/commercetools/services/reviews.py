@@ -18,17 +18,23 @@ class ReviewQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ReviewService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Review]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.Review]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._get(f"reviews/{id}", query_params, schemas.ReviewSchema)
 
-    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.Review]:
+    def get_by_key(
+        self, key: str, expand: OptionalListStr = None
+    ) -> Optional[types.Review]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"reviews/key={key}", query_params, schemas.ReviewSchema)
+        return self._client._get(
+            f"reviews/key={key}", query_params, schemas.ReviewSchema
+        )
 
     def query(
         self,
@@ -51,12 +57,18 @@ class ReviewService(abstract.AbstractService):
             "reviews", params, schemas.ReviewPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ReviewDraft, expand: OptionalListStr = None) -> types.Review:
+    def create(
+        self, draft: types.ReviewDraft, expand: OptionalListStr = None
+    ) -> types.Review:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._post(
-            "reviews", query_params, draft, schemas.ReviewDraftSchema, schemas.ReviewSchema
+            "reviews",
+            query_params,
+            draft,
+            schemas.ReviewDraftSchema,
+            schemas.ReviewSchema,
         )
 
     def update_by_id(

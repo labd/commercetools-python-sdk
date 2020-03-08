@@ -5,7 +5,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, InternalUpdateError
+from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 
 class ProductTypesModel(BaseModel):
@@ -60,13 +60,17 @@ def change_label_action():
                 attribute["label"] = action.label
                 return new
 
-        raise InternalUpdateError("No attribute found with name %r" % action.attribute_name)
+        raise InternalUpdateError(
+            "No attribute found with name %r" % action.attribute_name
+        )
 
     return updater
 
 
 def change_localized_enum_value_label():
-    def updater(self, obj: dict, action: types.ProductTypeChangeLocalizedEnumValueLabelAction):
+    def updater(
+        self, obj: dict, action: types.ProductTypeChangeLocalizedEnumValueLabelAction
+    ):
         new = copy.deepcopy(obj)
 
         for attribute in new["attributes"]:
@@ -76,8 +80,11 @@ def change_localized_enum_value_label():
                         lenum_value["label"] = action.new_value.label
                         return new
 
-        raise InternalUpdateError("No attribute found with name %r"
-                                  " and local enum value key %r" % (action.attribute_name, action.new_value.key))
+        raise InternalUpdateError(
+            "No attribute found with name %r"
+            " and local enum value key %r"
+            % (action.attribute_name, action.new_value.key)
+        )
 
     return updater
 

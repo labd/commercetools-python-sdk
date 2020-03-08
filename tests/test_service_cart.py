@@ -52,7 +52,7 @@ def test_update_actions(commercetools_api, client, cart_draft):
             types.CartSetCustomFieldAction(name="foo1", value="bar"),
             types.CartSetCustomFieldAction(name="foo2", value=["bar"]),
             types.CartSetCustomFieldAction(name="foo3", value=False),
-        ]
+        ],
     )
 
     cart = client.carts.get_by_id(cart.id)
@@ -61,4 +61,3 @@ def test_update_actions(commercetools_api, client, cart_draft):
     assert cart.custom.fields["foo1"] == "bar"
     assert cart.custom.fields["foo2"] == ["bar"]
     assert cart.custom.fields["foo3"] is False
-

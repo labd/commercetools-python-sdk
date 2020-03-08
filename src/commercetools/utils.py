@@ -48,7 +48,5 @@ def fix_token_url(token_url: str) -> str:
     """
     parts = urllib.parse.urlparse(token_url)
     if parts.path == "":
-        token_url = urllib.parse.urlunparse(
-            (*parts[:2], "/oauth/token", *parts[3:])
-        )
+        token_url = urllib.parse.urlunparse((*parts[:2], "/oauth/token", *parts[3:]))
     return token_url

@@ -18,7 +18,9 @@ class ProductDiscountQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ProductDiscountService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.ProductDiscount]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.ProductDiscount]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -47,7 +49,9 @@ class ProductDiscountService(abstract.AbstractService):
             "product-discounts", params, schemas.ProductDiscountPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ProductDiscountDraft, expand: OptionalListStr = None) -> types.ProductDiscount:
+    def create(
+        self, draft: types.ProductDiscountDraft, expand: OptionalListStr = None
+    ) -> types.ProductDiscount:
         query_params = {}
         if expand:
             query_params["expand"] = expand

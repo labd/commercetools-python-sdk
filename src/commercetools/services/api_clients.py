@@ -37,19 +37,20 @@ class ApiClientService(abstract.AbstractService):
                 "offset": offset,
             }
         )
-        return self._client._get("api-clients", params, schemas.ApiClientPagedQueryResponseSchema)
+        return self._client._get(
+            "api-clients", params, schemas.ApiClientPagedQueryResponseSchema
+        )
 
     def create(self, draft: types.ApiClientDraft) -> types.ApiClient:
         return self._client._post(
-            "api-clients", {}, draft, schemas.ApiClientDraftSchema, schemas.ApiClientSchema
+            "api-clients",
+            {},
+            draft,
+            schemas.ApiClientDraftSchema,
+            schemas.ApiClientSchema,
         )
 
-    def delete_by_id(
-        self,
-        id: str,
-        *,
-        force_delete: bool = False,
-    ) -> types.ApiClient:
+    def delete_by_id(self, id: str, *, force_delete: bool = False,) -> types.ApiClient:
         return self._client._delete(
             endpoint=f"api-clients/{id}",
             params={},

@@ -20,7 +20,9 @@ class ProductTypeService(abstract.AbstractService):
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"product-types/{id}", query_params, schemas.ProductTypeSchema)
+        return self._client._get(
+            f"product-types/{id}", query_params, schemas.ProductTypeSchema
+        )
 
     def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.ProductType:
         query_params = {}
@@ -51,7 +53,9 @@ class ProductTypeService(abstract.AbstractService):
             "product-types", params, schemas.ProductTypePagedQueryResponseSchema
         )
 
-    def create(self, draft: types.ProductTypeDraft, expand: OptionalListStr = None) -> types.ProductType:
+    def create(
+        self, draft: types.ProductTypeDraft, expand: OptionalListStr = None
+    ) -> types.ProductType:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -108,7 +112,12 @@ class ProductTypeService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.ProductType:
         params = {"version": version}
         if expand:
@@ -122,7 +131,12 @@ class ProductTypeService(abstract.AbstractService):
         )
 
     def delete_by_key(
-        self, key: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        key: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.ProductType:
         params = {"version": version}
         if expand:

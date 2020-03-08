@@ -6,7 +6,7 @@ import uuid
 from commercetools import schemas, types
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, InternalUpdateError
+from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 
 class InventoryEntryModel(BaseModel):
@@ -75,6 +75,8 @@ class InventoryEntryBackend(ServiceBackend):
         "addQuantity": change_stock(),
         "removeQuantity": change_stock(),
         "changeQuantity": change_stock(),
-        "setRestockableInDays": update_attribute("restockableInDays", "restockableInDays"),
+        "setRestockableInDays": update_attribute(
+            "restockableInDays", "restockableInDays"
+        ),
         "setExpectedDelivery": update_attribute("expectedDelivery", "expectedDelivery"),
     }

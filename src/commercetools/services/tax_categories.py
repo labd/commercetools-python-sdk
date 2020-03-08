@@ -17,13 +17,19 @@ class TaxCategoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class TaxCategoryService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.TaxCategory]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.TaxCategory]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"tax-categories/{id}", query_params, schemas.TaxCategorySchema)
+        return self._client._get(
+            f"tax-categories/{id}", query_params, schemas.TaxCategorySchema
+        )
 
-    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.TaxCategory]:
+    def get_by_key(
+        self, key: str, expand: OptionalListStr = None
+    ) -> Optional[types.TaxCategory]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -52,7 +58,9 @@ class TaxCategoryService(abstract.AbstractService):
             "tax-categories", params, schemas.TaxCategoryPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.TaxCategoryDraft, expand: OptionalListStr = None) -> types.Channel:
+    def create(
+        self, draft: types.TaxCategoryDraft, expand: OptionalListStr = None
+    ) -> types.Channel:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -87,7 +95,12 @@ class TaxCategoryService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = False
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = False,
     ) -> types.TaxCategory:
         params = {"version": version}
         if expand:

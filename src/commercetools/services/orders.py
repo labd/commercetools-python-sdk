@@ -18,7 +18,9 @@ class OrderQuerySchema(abstract.AbstractQuerySchema):
 
 
 class OrderService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Order]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.Order]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -51,12 +53,18 @@ class OrderService(abstract.AbstractService):
             "orders", params, schemas.OrderPagedQueryResponseSchema
         )
 
-    def create(self, cart: types.OrderFromCartDraft, expand: OptionalListStr = None) -> types.Order:
+    def create(
+        self, cart: types.OrderFromCartDraft, expand: OptionalListStr = None
+    ) -> types.Order:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._post(
-            "orders", query_params, cart, schemas.OrderFromCartDraftSchema, schemas.OrderSchema
+            "orders",
+            query_params,
+            cart,
+            schemas.OrderFromCartDraftSchema,
+            schemas.OrderSchema,
         )
 
     def update_by_id(

@@ -59,5 +59,6 @@ class DiscountCodesBackend(ServiceBackend):
         "setCartPredicate": update_attribute("cartPredicate", "cart_predicate"),
         "setMaxApplications": update_attribute("maxApplications", "max_applications"),
         "setMaxApplicationsPerCustomer": update_attribute(
-            "maxApplicationsPerCustomer", "max_applications_per_customer"),
+            "maxApplicationsPerCustomer", "max_applications_per_customer"
+        ),
     }

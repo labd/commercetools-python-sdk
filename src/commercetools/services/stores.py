@@ -40,7 +40,9 @@ class StoreService(abstract.AbstractService):
                 "offset": offset,
             }
         )
-        return self._client._get("stores", params, schemas.StorePagedQueryResponseSchema)
+        return self._client._get(
+            "stores", params, schemas.StorePagedQueryResponseSchema
+        )
 
     def create(self, draft: types.StoreDraft) -> types.Store:
         return self._client._post(
@@ -83,12 +85,7 @@ class StoreService(abstract.AbstractService):
             force_update=force_update,
         )
 
-    def delete_by_id(
-        self,
-        id: str,
-        *,
-        force_delete: bool = False,
-    ) -> types.Store:
+    def delete_by_id(self, id: str, *, force_delete: bool = False,) -> types.Store:
         return self._client._delete(
             endpoint=f"stores/{id}",
             params={},
@@ -96,12 +93,7 @@ class StoreService(abstract.AbstractService):
             force_delete=force_delete,
         )
 
-    def delete_by_key(
-        self,
-        key: str,
-        *,
-        force_delete: bool = False,
-    ) -> types.Store:
+    def delete_by_key(self, key: str, *, force_delete: bool = False,) -> types.Store:
         return self._client._delete(
             endpoint=f"stores/key={key}",
             params={},

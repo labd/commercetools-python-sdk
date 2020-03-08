@@ -60,7 +60,9 @@ class SubscriptionsBackend(ServiceBackend):
                 errors=[types.InvalidInputError(message=message)],
             )
             error_data = schemas.ErrorResponseSchema().dumps(error).encode("utf-8")
-            return create_commercetools_response(request, content=error_data, status_code=400)
+            return create_commercetools_response(
+                request, content=error_data, status_code=400
+            )
 
         data = self.model.add(obj)
         return create_commercetools_response(request, json=data)

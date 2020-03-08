@@ -8,9 +8,9 @@ from requests_mock import create_response
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import schemas, types
-from commercetools.types import OrderSetCustomFieldAction, CartSetCustomFieldAction
-from commercetools.types._abstract import _BaseType
 from commercetools.constants import HEADER_CORRELATION_ID
+from commercetools.types import CartSetCustomFieldAction, OrderSetCustomFieldAction
+from commercetools.types._abstract import _BaseType
 
 
 class InternalUpdateError(ValueError):
@@ -59,7 +59,7 @@ def custom_fields_from_draft(
 
 
 def _money_to_typed(
-    money: typing.Optional[types.Money]
+    money: typing.Optional[types.Money],
 ) -> typing.Optional[types.TypedMoney]:
     if money is not None:
         return types.TypedMoney(
@@ -157,16 +157,19 @@ def update_attribute_delete_item_by_id(dst: str, src: str):
 
 def set_custom_field():
     """Set custom field. Note it always sets the type now, instead of type checking the custom field type!"""
-    def updater(self, obj, action: typing.Union[OrderSetCustomFieldAction, CartSetCustomFieldAction]):
+
+    def updater(
+        self,
+        obj,
+        action: typing.Union[OrderSetCustomFieldAction, CartSetCustomFieldAction],
+    ):
         name = action.name
         value = action.value
 
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
         if not new["custom"]:
-            new["custom"] = {
-                "fields": {}
-            }
+            new["custom"] = {"fields": {}}
         new["custom"]["fields"][name] = value
         return new
 

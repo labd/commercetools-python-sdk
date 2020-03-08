@@ -58,13 +58,12 @@ class TaxCategoryModel(BaseModel):
 
 def add_tax_rate_action():
     return update_attribute_add_item(
-        "rates", "tax_rate", schemas.TaxRateSchema, generate_tax_rate_id)
+        "rates", "tax_rate", schemas.TaxRateSchema, generate_tax_rate_id
+    )
 
 
 def replace_tax_rate_action():
-    delete_action = update_attribute_delete_item_by_id(
-        "rates", "tax_rate_id",
-    )
+    delete_action = update_attribute_delete_item_by_id("rates", "tax_rate_id",)
     add_action = add_tax_rate_action()
 
     def updater(self, obj, action):
@@ -98,8 +97,6 @@ class TaxCategoryBackend(ServiceBackend):
         "setKey": update_attribute("key", "key"),
         "setDescription": update_attribute("description", "description"),
         "addTaxRate": add_tax_rate_action(),
-        "removeTaxRate": update_attribute_delete_item_by_id(
-            "rates", "tax_rate_id",
-        ),
+        "removeTaxRate": update_attribute_delete_item_by_id("rates", "tax_rate_id",),
         "replaceTaxRate": replace_tax_rate_action(),
     }

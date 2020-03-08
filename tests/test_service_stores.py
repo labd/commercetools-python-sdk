@@ -16,6 +16,5 @@ def test_store_flow(client, store_draft):
 @pytest.fixture
 def store_draft():
     return types.StoreDraft(
-        key="test store",
-        name=types.LocalizedString({"en": "test store"})
+        key="test store", name=types.LocalizedString({"en": "test store"})
     )

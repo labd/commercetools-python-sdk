@@ -16,17 +16,25 @@ class CustomerQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CustomerService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.Customer]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.Customer]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"customers/{id}", query_params, schemas.CustomerSchema)
+        return self._client._get(
+            f"customers/{id}", query_params, schemas.CustomerSchema
+        )
 
-    def get_by_key(self, key: str, expand: OptionalListStr = None) -> Optional[types.Customer]:
+    def get_by_key(
+        self, key: str, expand: OptionalListStr = None
+    ) -> Optional[types.Customer]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"customers/key={key}", query_params, schemas.CustomerSchema)
+        return self._client._get(
+            f"customers/key={key}", query_params, schemas.CustomerSchema
+        )
 
     def query(
         self,
@@ -49,12 +57,18 @@ class CustomerService(abstract.AbstractService):
             "customers", params, schemas.CustomerPagedQueryResponseSchema
         )
 
-    def create(self, draft: types.CustomerDraft, expand: OptionalListStr = None) -> types.Customer:
+    def create(
+        self, draft: types.CustomerDraft, expand: OptionalListStr = None
+    ) -> types.Customer:
         query_params = {}
         if expand:
             query_params["expand"] = expand
         return self._client._post(
-            "customers", query_params, draft, schemas.CustomerDraftSchema, schemas.CustomerSchema
+            "customers",
+            query_params,
+            draft,
+            schemas.CustomerDraftSchema,
+            schemas.CustomerSchema,
         )
 
     def update_by_id(

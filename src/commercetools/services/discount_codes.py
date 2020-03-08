@@ -16,11 +16,15 @@ class DiscountCodeQuerySchema(abstract.AbstractQuerySchema):
 
 
 class DiscountCodeService(abstract.AbstractService):
-    def get_by_id(self, id: str, expand: OptionalListStr = None) -> Optional[types.DiscountCode]:
+    def get_by_id(
+        self, id: str, expand: OptionalListStr = None
+    ) -> Optional[types.DiscountCode]:
         query_params = {}
         if expand:
             query_params["expand"] = expand
-        return self._client._get(f"discount-codes/{id}", query_params, schemas.DiscountCodeSchema)
+        return self._client._get(
+            f"discount-codes/{id}", query_params, schemas.DiscountCodeSchema
+        )
 
     def query(
         self,
@@ -43,7 +47,9 @@ class DiscountCodeService(abstract.AbstractService):
             "discount-codes", params, schemas.DiscountCodePagedQueryResponseSchema
         )
 
-    def create(self, draft: types.DiscountCodeDraft, expand: OptionalListStr = None) -> types.DiscountCode:
+    def create(
+        self, draft: types.DiscountCodeDraft, expand: OptionalListStr = None
+    ) -> types.DiscountCode:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -78,7 +84,12 @@ class DiscountCodeService(abstract.AbstractService):
         )
 
     def delete_by_id(
-        self, id: str, version: int, expand: OptionalListStr = None, *, force_delete: bool = True
+        self,
+        id: str,
+        version: int,
+        expand: OptionalListStr = None,
+        *,
+        force_delete: bool = True,
     ) -> types.DiscountCode:
         params = {"version": version}
         if expand:

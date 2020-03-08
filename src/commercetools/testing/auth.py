@@ -35,12 +35,11 @@ class AuthBackend(BaseBackend):
         return r"/oauth/(?P<path>.*)"
 
     def urls(self):
-        return [
-            ("token", "POST", self.token),
-            ("introspect", "POST", self.introspect)
-        ]
+        return [("token", "POST", self.token), ("introspect", "POST", self.introspect)]
 
-    def _get_api_client_credentials(self, request) -> typing.Tuple[typing.Optional[str], typing.Optional[str]]:
+    def _get_api_client_credentials(
+        self, request
+    ) -> typing.Tuple[typing.Optional[str], typing.Optional[str]]:
         params = parse_qs(request.body)
         client_id = None
         client_secret = None
@@ -81,17 +80,17 @@ class AuthBackend(BaseBackend):
             return response
 
         if self.model.is_valid(client_id, client_secret):
-            token = request.qs.get('token', [None])[0]
-            stored_tokens = [token_object.get('access_token') for token_object in self.model.tokens]
+            token = request.qs.get("token", [None])[0]
+            stored_tokens = [
+                token_object.get("access_token") for token_object in self.model.tokens
+            ]
             if token in stored_tokens:
                 status = {
                     "active": True,
                     "scope": "manage_project:todo",
-                    "exp": self._expire_time
+                    "exp": self._expire_time,
                 }
             else:
-                status = {
-                    "active": False
-                }
+                status = {"active": False}
             response = create_commercetools_response(request, json=status)
             return response

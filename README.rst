@@ -1,6 +1,9 @@
 .. start-no-pypi
-.. image:: https://dev.azure.com/lab-digital/commercetools-python-sdk/_apis/build/status/labd.commercetools-python-sdk?branchName=master
-    :target: https://dev.azure.com/lab-digital/commercetools-python-sdk/_build?definitionId=3
+
+![Python Tests](https://github.com/labd/commercetools-python-sdk/workflows/Python%20Tests/badge.svg)
+
+.. image:: https://github.com/labd/commercetools-python-sdk/workflows/Python%20Tests/badge.svg
+    :target: https://github.com/labd/commercetools-python-sdk/actions
 
 .. image:: http://codecov.io/github/labd/commercetools-python-sdk/coverage.svg?branch=master
     :target: http://codecov.io/github/labd/commercetools-python-sdk?branch=master

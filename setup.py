@@ -40,7 +40,7 @@ tests_require = [
     "flake8-blind-except==0.1.1",
     "flake8-debugger==1.4.0",
     "flake8-imports==0.1.1",
-    "mypy==0.700",
+    "mypy==0.761",
 ]
 
 

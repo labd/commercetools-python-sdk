@@ -2,6 +2,7 @@ import threading
 import typing
 
 import pytest
+import requests
 
 from commercetools import Client
 from commercetools.testing import backend_mocker
@@ -41,6 +42,12 @@ def commercetools_http_server(commercetools_api):
     thread.start()
 
     if is_running.wait():
+        for i in range(0, 5):
+            response = requests.get(server.api_url + "/-/health")
+            if response.status_code == 200:
+                break
+            time.sleep(0.5)
+
         yield server
 
     thread.join(timeout=0)

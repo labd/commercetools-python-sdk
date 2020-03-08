@@ -17,6 +17,7 @@ from commercetools.testing.customer_groups import CustomerGroupBackend
 from commercetools.testing.customers import CustomerBackend
 from commercetools.testing.discount_codes import DiscountCodesBackend
 from commercetools.testing.extensions import ExtensionsBackend
+from commercetools.testing.internal import InternalBackend
 from commercetools.testing.inventory import InventoryEntryBackend
 from commercetools.testing.orders import OrdersBackend
 from commercetools.testing.payments import PaymentsBackend
@@ -67,6 +68,7 @@ class BackendRepository:
     def __init__(self):
 
         self._storage = Storage()
+        self.internal = InternalBackend()
 
         self.api_clients = ApiClientsBackend(self._storage)
         self.auth = AuthBackend()

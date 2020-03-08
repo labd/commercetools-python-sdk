@@ -81,14 +81,16 @@ class BaseModel:
 class BaseBackend:
     path = None
     _actions: typing.Dict[str, typing.Callable] = {}
+    model_class: typing.Any = None
 
     def __init__(self, storage=None, model=None):
         if model:
             self.model = model
-        elif storage:
-            self.model = self.model_class(storage)
-        else:
-            self.model = self.model_class()
+        elif self.model_class:
+            if storage:
+                self.model = self.model_class(storage)
+            else:
+                self.model = self.model_class()
 
     def register(self, adapter):
         adapter.add_matcher(self._matcher)

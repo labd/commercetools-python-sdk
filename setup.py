@@ -18,7 +18,7 @@ codegen_requires = [
     "astunparse==1.6.3",
     "attrs>=18.2.0",
     "black==18.9b0",
-    "isort",
+    "isort[pyproject]",
     "PyYAML==3.13",
 ]
 
@@ -32,6 +32,7 @@ tests_require = [
     "freezegun==0.3.8",
     "mock==2.0.0",
     "pretend==1.0.8",
+    "coverage[toml]>=5.0.2",
     "pytest-cov==2.5.1",
     "pytest==3.1.3",
     # Linting

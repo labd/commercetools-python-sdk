@@ -1,6 +1,12 @@
+6.2.0 (2020-03-08)
+------------------
+- Fix Query Predicate chaining (#75)
+- Update dependencies so that code generation works with Python 3.8
+- Update GitHub Actions integration
+
 6.1.0 (2020-01-13)
 ------------------
-- Added nested query predicate support
+- Added nested query predicate support (#72)
 
 6.0.0 (2020-01-13)
 ------------------
@@ -8,8 +14,8 @@
  - Add multiple DELETE endpoints for various backends
  - Implement mocked actions for Orders mock backend
  - Fix mock backend not properly support '<>' operator
- - Add in operator in queries
- - Fix cart replicate function
+ - Add in operator in queries (#73)
+ - Fix cart replicate function (#74)
 
 5.0.0 (2019-11-05)
 ------------------

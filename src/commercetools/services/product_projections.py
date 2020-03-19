@@ -41,7 +41,7 @@ class ProductProjectionsSearchSchema(ProductProjectionsBaseSchema):
         return result
 
     @post_dump
-    def merge_text(self, data):
+    def merge_text(self, data, **kwargs):
         value = data.pop("text")
         data.update(value)
         return data

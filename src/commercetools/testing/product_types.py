@@ -44,7 +44,7 @@ class ProductTypesModel(BaseModel):
                 is_required=draft.is_required,
                 attribute_constraint=draft.attribute_constraint,
                 input_tip=draft.input_tip,
-                input_hint=draft.input_hint,
+                input_hint=draft.input_hint or types.TextInputHint.SINGLE_LINE,
                 is_searchable=draft.is_searchable,
             )
             result.append(ad)

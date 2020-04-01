@@ -5,7 +5,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
         LastModifiedBy,
         LocalizedString,
         Money,
-        QueryPrice,
+        Price,
         TypedMoney,
     )
 __all__ = [
@@ -50,20 +50,8 @@ __all__ = [
 ]
 
 
-class ProductDiscount(BaseResource):
+class ProductDiscount(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`str`
@@ -105,12 +93,6 @@ class ProductDiscount(BaseResource):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.name = name
         self.key = key
         self.description = description
@@ -126,6 +108,8 @@ class ProductDiscount(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -222,8 +206,8 @@ class ProductDiscountMatchQuery(_BaseType):
     variant_id: typing.Optional[int]
     #: :class:`bool`
     staged: typing.Optional[bool]
-    #: :class:`commercetools.types.QueryPrice`
-    price: typing.Optional["QueryPrice"]
+    #: :class:`commercetools.types.Price`
+    price: typing.Optional["Price"]
 
     def __init__(
         self,
@@ -231,7 +215,7 @@ class ProductDiscountMatchQuery(_BaseType):
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         staged: typing.Optional[bool] = None,
-        price: typing.Optional["QueryPrice"] = None
+        price: typing.Optional["Price"] = None
     ) -> None:
         self.product_id = product_id
         self.variant_id = variant_id

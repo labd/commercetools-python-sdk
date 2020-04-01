@@ -4,7 +4,7 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    BaseResourceSchema,
+    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -93,28 +93,8 @@ class InventoryEntryResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.InventoryEntryResourceIdentifier(**data)
 
 
-class InventoryEntrySchema(BaseResourceSchema):
+class InventoryEntrySchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.InventoryEntry`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
-    )
     sku = marshmallow.fields.String(allow_none=True)
     supply_channel = marshmallow.fields.Nested(
         nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",

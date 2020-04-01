@@ -4,8 +4,8 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    BaseResourceSchema,
     LocalizedStringField,
+    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -79,7 +79,7 @@ class ProductDiscountMatchQuerySchema(marshmallow.Schema):
     variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
     staged = marshmallow.fields.Bool(allow_none=True)
     price = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.QueryPriceSchema",
+        nested="commercetools.schemas._common.PriceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
@@ -143,28 +143,8 @@ class ProductDiscountResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.ProductDiscountResourceIdentifier(**data)
 
 
-class ProductDiscountSchema(BaseResourceSchema):
+class ProductDiscountSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ProductDiscount`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
-    )
     name = LocalizedStringField(allow_none=True)
     key = marshmallow.fields.String(allow_none=True, missing=None)
     description = LocalizedStringField(allow_none=True, missing=None)

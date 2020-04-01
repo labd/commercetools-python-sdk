@@ -5,8 +5,8 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    BaseResourceSchema,
     LocalizedStringField,
+    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -291,27 +291,11 @@ class OrderEditResultSchema(marshmallow.Schema):
         return types.OrderEditResult(**data)
 
 
-class OrderEditSchema(BaseResourceSchema):
+class OrderEditSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.OrderEdit`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
     created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
     last_modified_at = marshmallow.fields.DateTime(
         allow_none=True, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
     )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     resource = marshmallow.fields.Nested(
@@ -2186,7 +2170,6 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "OrderCreated": "commercetools.schemas._message.OrderCreatedMessagePayloadSchema",
                 "OrderCustomLineItemDiscountSet": "commercetools.schemas._message.OrderCustomLineItemDiscountSetMessagePayloadSchema",
                 "OrderCustomerEmailSet": "commercetools.schemas._message.OrderCustomerEmailSetMessagePayloadSchema",
-                "OrderCustomerGroupSet": "commercetools.schemas._message.OrderCustomerGroupSetMessagePayloadSchema",
                 "OrderCustomerSet": "commercetools.schemas._message.OrderCustomerSetMessagePayloadSchema",
                 "OrderDeleted": "commercetools.schemas._message.OrderDeletedMessagePayloadSchema",
                 "OrderDiscountCodeAdded": "commercetools.schemas._message.OrderDiscountCodeAddedMessagePayloadSchema",
@@ -2205,7 +2188,6 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "OrderShippingRateInputSet": "commercetools.schemas._message.OrderShippingRateInputSetMessagePayloadSchema",
                 "OrderStateChanged": "commercetools.schemas._message.OrderStateChangedMessagePayloadSchema",
                 "OrderStateTransition": "commercetools.schemas._message.OrderStateTransitionMessagePayloadSchema",
-                "OrderStoreSet": "commercetools.schemas._message.OrderStoreSetMessagePayloadSchema",
                 "ParcelAddedToDelivery": "commercetools.schemas._message.ParcelAddedToDeliveryMessagePayloadSchema",
                 "ParcelItemsUpdated": "commercetools.schemas._message.ParcelItemsUpdatedMessagePayloadSchema",
                 "ParcelMeasurementsUpdated": "commercetools.schemas._message.ParcelMeasurementsUpdatedMessagePayloadSchema",
@@ -2217,14 +2199,12 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "PaymentStatusStateTransition": "commercetools.schemas._message.PaymentStatusStateTransitionMessagePayloadSchema",
                 "PaymentTransactionAdded": "commercetools.schemas._message.PaymentTransactionAddedMessagePayloadSchema",
                 "PaymentTransactionStateChanged": "commercetools.schemas._message.PaymentTransactionStateChangedMessagePayloadSchema",
-                "ProductAddedToCategory": "commercetools.schemas._message.ProductAddedToCategoryMessagePayloadSchema",
                 "ProductCreated": "commercetools.schemas._message.ProductCreatedMessagePayloadSchema",
                 "ProductDeleted": "commercetools.schemas._message.ProductDeletedMessagePayloadSchema",
                 "ProductImageAdded": "commercetools.schemas._message.ProductImageAddedMessagePayloadSchema",
                 "ProductPriceDiscountsSet": "commercetools.schemas._message.ProductPriceDiscountsSetMessagePayloadSchema",
                 "ProductPriceExternalDiscountSet": "commercetools.schemas._message.ProductPriceExternalDiscountSetMessagePayloadSchema",
                 "ProductPublished": "commercetools.schemas._message.ProductPublishedMessagePayloadSchema",
-                "ProductRemovedFromCategory": "commercetools.schemas._message.ProductRemovedFromCategoryMessagePayloadSchema",
                 "ProductRevertedStagedChanges": "commercetools.schemas._message.ProductRevertedStagedChangesMessagePayloadSchema",
                 "ProductSlugChanged": "commercetools.schemas._message.ProductSlugChangedMessagePayloadSchema",
                 "ProductStateTransition": "commercetools.schemas._message.ProductStateTransitionMessagePayloadSchema",

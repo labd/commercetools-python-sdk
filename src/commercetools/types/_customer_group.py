@@ -5,7 +5,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -29,20 +29,8 @@ __all__ = [
 ]
 
 
-class CustomerGroup(BaseResource):
+class CustomerGroup(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
@@ -63,12 +51,6 @@ class CustomerGroup(BaseResource):
         name: typing.Optional[str] = None,
         custom: typing.Optional["CustomFields"] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.key = key
         self.name = name
         self.custom = custom
@@ -77,6 +59,8 @@ class CustomerGroup(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:

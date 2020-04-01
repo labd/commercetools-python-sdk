@@ -45,9 +45,9 @@ __all__ = [
 class ChangeSubscription(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChangeSubscriptionSchema`."
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
-    resource_type_id: typing.Optional[str]
+    resource_type_id: str
 
-    def __init__(self, *, resource_type_id: typing.Optional[str] = None) -> None:
+    def __init__(self, *, resource_type_id: str = None) -> None:
         self.resource_type_id = resource_type_id
         super().__init__()
 
@@ -58,9 +58,9 @@ class ChangeSubscription(_BaseType):
 class DeliveryFormat(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryFormatSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -71,9 +71,9 @@ class DeliveryFormat(_BaseType):
 class Destination(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DestinationSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -84,14 +84,14 @@ class Destination(_BaseType):
 class MessageSubscription(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSubscriptionSchema`."
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
-    resource_type_id: typing.Optional[str]
+    resource_type_id: str
     #: Optional list of :class:`str`
     types: typing.Optional[typing.List[str]]
 
     def __init__(
         self,
         *,
-        resource_type_id: typing.Optional[str] = None,
+        resource_type_id: str = None,
         types: typing.Optional[typing.List[str]] = None
     ) -> None:
         self.resource_type_id = resource_type_id
@@ -108,16 +108,11 @@ class MessageSubscription(_BaseType):
 class PayloadNotIncluded(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PayloadNotIncludedSchema`."
     #: :class:`str`
-    reason: typing.Optional[str]
+    reason: str
     #: :class:`str` `(Named` ``payloadType`` `in Commercetools)`
-    payload_type: typing.Optional[str]
+    payload_type: str
 
-    def __init__(
-        self,
-        *,
-        reason: typing.Optional[str] = None,
-        payload_type: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, reason: str = None, payload_type: str = None) -> None:
         self.reason = reason
         self.payload_type = payload_type
         super().__init__()
@@ -132,33 +127,33 @@ class PayloadNotIncluded(_BaseType):
 class Subscription(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSchema`."
     #: List of :class:`commercetools.types.ChangeSubscription`
-    changes: typing.Optional[typing.List["ChangeSubscription"]]
+    changes: typing.List["ChangeSubscription"]
     #: :class:`commercetools.types.Destination`
-    destination: typing.Optional["Destination"]
+    destination: "Destination"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: List of :class:`commercetools.types.MessageSubscription`
-    messages: typing.Optional[typing.List["MessageSubscription"]]
+    messages: typing.List["MessageSubscription"]
     #: :class:`commercetools.types.DeliveryFormat`
-    format: typing.Optional["DeliveryFormat"]
+    format: "DeliveryFormat"
     #: :class:`commercetools.types.SubscriptionHealthStatus`
-    status: typing.Optional["SubscriptionHealthStatus"]
+    status: "SubscriptionHealthStatus"
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
-        destination: typing.Optional["Destination"] = None,
+        changes: typing.List["ChangeSubscription"] = None,
+        destination: "Destination" = None,
         key: typing.Optional[str] = None,
-        messages: typing.Optional[typing.List["MessageSubscription"]] = None,
-        format: typing.Optional["DeliveryFormat"] = None,
-        status: typing.Optional["SubscriptionHealthStatus"] = None
+        messages: typing.List["MessageSubscription"] = None,
+        format: "DeliveryFormat" = None,
+        status: "SubscriptionHealthStatus" = None
     ) -> None:
         self.changes = changes
         self.destination = destination
@@ -198,20 +193,20 @@ class Subscription(LoggedResource):
 class SubscriptionDelivery(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionDeliverySchema`."
     #: :class:`str` `(Named` ``projectKey`` `in Commercetools)`
-    project_key: typing.Optional[str]
+    project_key: str
     #: :class:`str` `(Named` ``notificationType`` `in Commercetools)`
-    notification_type: typing.Optional[str]
+    notification_type: str
     #: :class:`commercetools.types.Reference`
-    resource: typing.Optional["Reference"]
+    resource: "Reference"
     #: Optional :class:`commercetools.types.UserProvidedIdentifiers` `(Named` ``resourceUserProvidedIdentifiers`` `in Commercetools)`
     resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None
@@ -239,7 +234,7 @@ class SubscriptionDraft(_BaseType):
     #: Optional list of :class:`commercetools.types.ChangeSubscription`
     changes: typing.Optional[typing.List["ChangeSubscription"]]
     #: :class:`commercetools.types.Destination`
-    destination: typing.Optional["Destination"]
+    destination: "Destination"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional list of :class:`commercetools.types.MessageSubscription`
@@ -251,7 +246,7 @@ class SubscriptionDraft(_BaseType):
         self,
         *,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
-        destination: typing.Optional["Destination"] = None,
+        destination: "Destination" = None,
         key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
         format: typing.Optional["DeliveryFormat"] = None
@@ -280,24 +275,24 @@ class SubscriptionHealthStatus(enum.Enum):
 class SubscriptionPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Subscription`
-    results: typing.Optional[typing.Sequence["Subscription"]]
+    results: typing.Sequence["Subscription"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Subscription"]] = None
+        offset: int = None,
+        results: typing.Sequence["Subscription"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -316,16 +311,11 @@ class SubscriptionPagedQueryResponse(_BaseType):
 class SubscriptionUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -340,9 +330,9 @@ class SubscriptionUpdate(_BaseType):
 class SubscriptionUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -353,16 +343,12 @@ class SubscriptionUpdateAction(_BaseType):
 class AzureEventGridDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AzureEventGridDestinationSchema`."
     #: :class:`str`
-    uri: typing.Optional[str]
+    uri: str
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        uri: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None
+        self, *, type: str = None, uri: str = None, access_key: str = None
     ) -> None:
         self.uri = uri
         self.access_key = access_key
@@ -379,14 +365,9 @@ class AzureEventGridDestination(Destination):
 class AzureServiceBusDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AzureServiceBusDestinationSchema`."
     #: :class:`str` `(Named` ``connectionString`` `in Commercetools)`
-    connection_string: typing.Optional[str]
+    connection_string: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        connection_string: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, connection_string: str = None) -> None:
         self.connection_string = connection_string
         super().__init__(type="AzureServiceBus")
 
@@ -400,14 +381,9 @@ class AzureServiceBusDestination(Destination):
 class DeliveryCloudEventsFormat(DeliveryFormat):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryCloudEventsFormatSchema`."
     #: :class:`str` `(Named` ``cloudEventsVersion`` `in Commercetools)`
-    cloud_events_version: typing.Optional[str]
+    cloud_events_version: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        cloud_events_version: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, cloud_events_version: str = None) -> None:
         self.cloud_events_version = cloud_events_version
         super().__init__(type="CloudEvents")
 
@@ -421,7 +397,7 @@ class DeliveryCloudEventsFormat(DeliveryFormat):
 class DeliveryPlatformFormat(DeliveryFormat):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryPlatformFormatSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="Platform")
 
     def __repr__(self) -> str:
@@ -431,16 +407,12 @@ class DeliveryPlatformFormat(DeliveryFormat):
 class GoogleCloudPubSubDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GoogleCloudPubSubDestinationSchema`."
     #: :class:`str` `(Named` ``projectId`` `in Commercetools)`
-    project_id: typing.Optional[str]
+    project_id: str
     #: :class:`str`
-    topic: typing.Optional[str]
+    topic: str
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        topic: typing.Optional[str] = None
+        self, *, type: str = None, project_id: str = None, topic: str = None
     ) -> None:
         self.project_id = project_id
         self.topic = topic
@@ -457,11 +429,9 @@ class GoogleCloudPubSubDestination(Destination):
 class IronMqDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.IronMqDestinationSchema`."
     #: :class:`str`
-    uri: typing.Optional[str]
+    uri: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, uri: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, uri: str = None) -> None:
         self.uri = uri
         super().__init__(type="IronMQ")
 
@@ -472,36 +442,36 @@ class IronMqDestination(Destination):
 class MessageDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageDeliverySchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_at: datetime.datetime
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
-    sequence_number: typing.Optional[int]
+    sequence_number: int
     #: :class:`int` `(Named` ``resourceVersion`` `in Commercetools)`
-    resource_version: typing.Optional[int]
+    resource_version: int
     #: :class:`commercetools.types.PayloadNotIncluded` `(Named` ``payloadNotIncluded`` `in Commercetools)`
-    payload_not_included: typing.Optional["PayloadNotIncluded"]
+    payload_not_included: "PayloadNotIncluded"
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource_version: typing.Optional[int] = None,
-        payload_not_included: typing.Optional["PayloadNotIncluded"] = None
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
+        sequence_number: int = None,
+        resource_version: int = None,
+        payload_not_included: "PayloadNotIncluded" = None
     ) -> None:
         self.id = id
         self.version = version
@@ -539,21 +509,21 @@ class MessageDelivery(SubscriptionDelivery):
 class ResourceCreatedDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceCreatedDeliverySchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
-    modified_at: typing.Optional[datetime.datetime]
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        version: typing.Optional[int] = None,
-        modified_at: typing.Optional[datetime.datetime] = None
+        version: int = None,
+        modified_at: datetime.datetime = None
     ) -> None:
         self.version = version
         self.modified_at = modified_at
@@ -581,21 +551,21 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
 class ResourceDeletedDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceDeletedDeliverySchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
-    modified_at: typing.Optional[datetime.datetime]
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        version: typing.Optional[int] = None,
-        modified_at: typing.Optional[datetime.datetime] = None
+        version: int = None,
+        modified_at: datetime.datetime = None
     ) -> None:
         self.version = version
         self.modified_at = modified_at
@@ -623,24 +593,24 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 class ResourceUpdatedDelivery(SubscriptionDelivery):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceUpdatedDeliverySchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`int` `(Named` ``oldVersion`` `in Commercetools)`
-    old_version: typing.Optional[int]
+    old_version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
-    modified_at: typing.Optional[datetime.datetime]
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: typing.Optional[str] = None,
-        notification_type: typing.Optional[str] = None,
-        resource: typing.Optional["Reference"] = None,
+        project_key: str = None,
+        notification_type: str = None,
+        resource: "Reference" = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        version: typing.Optional[int] = None,
-        old_version: typing.Optional[int] = None,
-        modified_at: typing.Optional[datetime.datetime] = None
+        version: int = None,
+        old_version: int = None,
+        modified_at: datetime.datetime = None
     ) -> None:
         self.version = version
         self.old_version = old_version
@@ -670,19 +640,19 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
 class SnsDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SnsDestinationSchema`."
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
-    access_secret: typing.Optional[str]
+    access_secret: str
     #: :class:`str` `(Named` ``topicArn`` `in Commercetools)`
-    topic_arn: typing.Optional[str]
+    topic_arn: str
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
-        access_secret: typing.Optional[str] = None,
-        topic_arn: typing.Optional[str] = None
+        type: str = None,
+        access_key: str = None,
+        access_secret: str = None,
+        topic_arn: str = None
     ) -> None:
         self.access_key = access_key
         self.access_secret = access_secret
@@ -699,22 +669,22 @@ class SnsDestination(Destination):
 class SqsDestination(Destination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SqsDestinationSchema`."
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
-    access_secret: typing.Optional[str]
+    access_secret: str
     #: :class:`str` `(Named` ``queueUrl`` `in Commercetools)`
-    queue_url: typing.Optional[str]
+    queue_url: str
     #: :class:`str`
-    region: typing.Optional[str]
+    region: str
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
-        access_secret: typing.Optional[str] = None,
-        queue_url: typing.Optional[str] = None,
-        region: typing.Optional[str] = None
+        type: str = None,
+        access_key: str = None,
+        access_secret: str = None,
+        queue_url: str = None,
+        region: str = None
     ) -> None:
         self.access_key = access_key
         self.access_secret = access_secret
@@ -738,13 +708,10 @@ class SqsDestination(Destination):
 class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionChangeDestinationActionSchema`."
     #: :class:`commercetools.types.Destination`
-    destination: typing.Optional["Destination"]
+    destination: "Destination"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        destination: typing.Optional["Destination"] = None
+        self, *, action: str = None, destination: "Destination" = None
     ) -> None:
         self.destination = destination
         super().__init__(action="changeDestination")
@@ -764,7 +731,7 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None
     ) -> None:
         self.changes = changes
@@ -782,9 +749,7 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -800,7 +765,7 @@ class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None
     ) -> None:
         self.messages = messages

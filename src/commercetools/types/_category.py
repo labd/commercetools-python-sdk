@@ -62,17 +62,17 @@ __all__ = [
 class Category(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: List of :class:`commercetools.types.CategoryReference`
-    ancestors: typing.Optional[typing.List["CategoryReference"]]
+    ancestors: typing.List["CategoryReference"]
     #: Optional :class:`commercetools.types.CategoryReference`
     parent: typing.Optional["CategoryReference"]
     #: :class:`str` `(Named` ``orderHint`` `in Commercetools)`
-    order_hint: typing.Optional[str]
+    order_hint: str
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
@@ -91,18 +91,18 @@ class Category(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
+        slug: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        ancestors: typing.Optional[typing.List["CategoryReference"]] = None,
+        ancestors: typing.List["CategoryReference"] = None,
         parent: typing.Optional["CategoryReference"] = None,
-        order_hint: typing.Optional[str] = None,
+        order_hint: str = None,
         external_id: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
@@ -163,9 +163,9 @@ class Category(LoggedResource):
 class CategoryDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.CategoryResourceIdentifier`
@@ -190,8 +190,8 @@ class CategoryDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
+        slug: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         parent: typing.Optional["CategoryResourceIdentifier"] = None,
         order_hint: typing.Optional[str] = None,
@@ -240,24 +240,24 @@ class CategoryDraft(_BaseType):
 class CategoryPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Category`
-    results: typing.Optional[typing.Sequence["Category"]]
+    results: typing.Sequence["Category"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Category"]] = None
+        offset: int = None,
+        results: typing.Sequence["Category"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -281,8 +281,8 @@ class CategoryReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Category"] = None
     ) -> None:
         self.obj = obj
@@ -319,16 +319,11 @@ class CategoryResourceIdentifier(ResourceIdentifier):
 class CategoryUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -340,9 +335,9 @@ class CategoryUpdate(_BaseType):
 class CategoryUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -353,15 +348,15 @@ class CategoryUpdateAction(_BaseType):
 class CategoryAddAssetAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryAddAssetActionSchema`."
     #: :class:`commercetools.types.AssetDraft`
-    asset: typing.Optional["AssetDraft"]
+    asset: "AssetDraft"
     #: Optional :class:`int`
     position: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        asset: typing.Optional["AssetDraft"] = None,
+        action: str = None,
+        asset: "AssetDraft" = None,
         position: typing.Optional[int] = None
     ) -> None:
         self.asset = asset
@@ -383,15 +378,15 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
+        name: "LocalizedString" = None
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -408,13 +403,10 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
 class CategoryChangeAssetOrderAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeAssetOrderActionSchema`."
     #: List of :class:`str` `(Named` ``assetOrder`` `in Commercetools)`
-    asset_order: typing.Optional[typing.List[str]]
+    asset_order: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        asset_order: typing.Optional[typing.List[str]] = None
+        self, *, action: str = None, asset_order: typing.List[str] = None
     ) -> None:
         self.asset_order = asset_order
         super().__init__(action="changeAssetOrder")
@@ -429,14 +421,9 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
 class CategoryChangeNameAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -447,14 +434,9 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 class CategoryChangeOrderHintAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeOrderHintActionSchema`."
     #: :class:`str` `(Named` ``orderHint`` `in Commercetools)`
-    order_hint: typing.Optional[str]
+    order_hint: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        order_hint: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, order_hint: str = None) -> None:
         self.order_hint = order_hint
         super().__init__(action="changeOrderHint")
 
@@ -468,13 +450,10 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
 class CategoryChangeParentAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeParentActionSchema`."
     #: :class:`commercetools.types.CategoryResourceIdentifier`
-    parent: typing.Optional["CategoryResourceIdentifier"]
+    parent: "CategoryResourceIdentifier"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        parent: typing.Optional["CategoryResourceIdentifier"] = None
+        self, *, action: str = None, parent: "CategoryResourceIdentifier" = None
     ) -> None:
         self.parent = parent
         super().__init__(action="changeParent")
@@ -489,14 +468,9 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 class CategoryChangeSlugAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeSlugActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, slug: "LocalizedString" = None) -> None:
         self.slug = slug
         super().__init__(action="changeSlug")
 
@@ -514,7 +488,7 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None
     ) -> None:
@@ -537,17 +511,17 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.asset_id = asset_id
@@ -577,7 +551,7 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
@@ -608,7 +582,7 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None
@@ -628,15 +602,15 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
 class CategorySetAssetKeyAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetKeyActionSchema`."
     #: :class:`str` `(Named` ``assetId`` `in Commercetools)`
-    asset_id: typing.Optional[str]
+    asset_id: str
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        asset_id: typing.Optional[str] = None,
+        action: str = None,
+        asset_id: str = None,
         asset_key: typing.Optional[str] = None
     ) -> None:
         self.asset_id = asset_id
@@ -658,15 +632,15 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        sources: typing.Optional[typing.List["AssetSource"]] = None
+        sources: typing.List["AssetSource"] = None
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -692,7 +666,7 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         tags: typing.Optional[typing.List[str]] = None
@@ -712,15 +686,15 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
 class CategorySetCustomFieldAction(CategoryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -745,7 +719,7 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -769,7 +743,7 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
@@ -788,10 +762,7 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
     external_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None
+        self, *, action: str = None, external_id: typing.Optional[str] = None
     ) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
@@ -808,9 +779,7 @@ class CategorySetKeyAction(CategoryUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -826,7 +795,7 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.meta_description = meta_description
@@ -847,7 +816,7 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_keywords: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.meta_keywords = meta_keywords
@@ -868,7 +837,7 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_title: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.meta_title = meta_title

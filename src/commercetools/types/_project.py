@@ -31,16 +31,11 @@ __all__ = [
 class ExternalOAuth(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExternalOAuthSchema`."
     #: :class:`str`
-    url: typing.Optional[str]
+    url: str
     #: :class:`str` `(Named` ``authorizationHeader`` `in Commercetools)`
-    authorization_header: typing.Optional[str]
+    authorization_header: str
 
-    def __init__(
-        self,
-        *,
-        url: typing.Optional[str] = None,
-        authorization_header: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, url: str = None, authorization_header: str = None) -> None:
         self.url = url
         self.authorization_header = authorization_header
         super().__init__()
@@ -55,23 +50,23 @@ class ExternalOAuth(_BaseType):
 class Project(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: List of :class:`str`
-    countries: typing.Optional[typing.List["str"]]
+    countries: typing.List["str"]
     #: List of :class:`str`
-    currencies: typing.Optional[typing.List["str"]]
+    currencies: typing.List["str"]
     #: List of :class:`str`
-    languages: typing.Optional[typing.List["str"]]
+    languages: typing.List["str"]
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: Optional :class:`str` `(Named` ``trialUntil`` `in Commercetools)`
     trial_until: typing.Optional[str]
     #: :class:`commercetools.types.MessageConfiguration`
-    messages: typing.Optional["MessageConfiguration"]
+    messages: "MessageConfiguration"
     #: Optional :class:`commercetools.types.ShippingRateInputType` `(Named` ``shippingRateInputType`` `in Commercetools)`
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
     #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
@@ -80,15 +75,15 @@ class Project(_BaseType):
     def __init__(
         self,
         *,
-        version: typing.Optional[int] = None,
-        key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        countries: typing.Optional[typing.List["str"]] = None,
-        currencies: typing.Optional[typing.List["str"]] = None,
-        languages: typing.Optional[typing.List["str"]] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
+        version: int = None,
+        key: str = None,
+        name: str = None,
+        countries: typing.List["str"] = None,
+        currencies: typing.List["str"] = None,
+        languages: typing.List["str"] = None,
+        created_at: datetime.datetime = None,
         trial_until: typing.Optional[str] = None,
-        messages: typing.Optional["MessageConfiguration"] = None,
+        messages: "MessageConfiguration" = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_oauth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
@@ -127,16 +122,11 @@ class Project(_BaseType):
 class ProjectUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -148,9 +138,9 @@ class ProjectUpdate(_BaseType):
 class ProjectUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -161,9 +151,9 @@ class ProjectUpdateAction(_BaseType):
 class ShippingRateInputType(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputTypeSchema`."
     #: :class:`commercetools.types.ShippingRateTierType`
-    type: typing.Optional["ShippingRateTierType"]
+    type: "ShippingRateTierType"
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         self.type = type
         super().__init__()
 
@@ -174,13 +164,10 @@ class ShippingRateInputType(_BaseType):
 class CartClassificationType(ShippingRateInputType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTypeSchema`."
     #: :class:`list`
-    values: typing.Optional[list]
+    values: list
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional["ShippingRateTierType"] = None,
-        values: typing.Optional[list] = None
+        self, *, type: "ShippingRateTierType" = None, values: list = None
     ) -> None:
         self.values = values
         super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
@@ -192,7 +179,7 @@ class CartClassificationType(ShippingRateInputType):
 class CartScoreType(ShippingRateInputType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTypeSchema`."
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     def __repr__(self) -> str:
@@ -202,7 +189,7 @@ class CartScoreType(ShippingRateInputType):
 class CartValueType(ShippingRateInputType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTypeSchema`."
 
-    def __init__(self, *, type: typing.Optional["ShippingRateTierType"] = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     def __repr__(self) -> str:
@@ -212,13 +199,10 @@ class CartValueType(ShippingRateInputType):
 class ProjectChangeCountriesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCountriesActionSchema`."
     #: List of :class:`str`
-    countries: typing.Optional[typing.List["str"]]
+    countries: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        countries: typing.Optional[typing.List["str"]] = None
+        self, *, action: str = None, countries: typing.List["str"] = None
     ) -> None:
         self.countries = countries
         super().__init__(action="changeCountries")
@@ -233,13 +217,10 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 class ProjectChangeCurrenciesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCurrenciesActionSchema`."
     #: List of :class:`str`
-    currencies: typing.Optional[typing.List["str"]]
+    currencies: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        currencies: typing.Optional[typing.List["str"]] = None
+        self, *, action: str = None, currencies: typing.List["str"] = None
     ) -> None:
         self.currencies = currencies
         super().__init__(action="changeCurrencies")
@@ -254,13 +235,10 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeLanguagesActionSchema`."
     #: List of :class:`str`
-    languages: typing.Optional[typing.List["str"]]
+    languages: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        languages: typing.Optional[typing.List["str"]] = None
+        self, *, action: str = None, languages: typing.List["str"] = None
     ) -> None:
         self.languages = languages
         super().__init__(action="changeLanguages")
@@ -275,13 +253,13 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
 class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesConfigurationActionSchema`."
     #: :class:`commercetools.types.MessageConfigurationDraft` `(Named` ``messagesConfiguration`` `in Commercetools)`
-    messages_configuration: typing.Optional["MessageConfigurationDraft"]
+    messages_configuration: "MessageConfigurationDraft"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        messages_configuration: typing.Optional["MessageConfigurationDraft"] = None
+        action: str = None,
+        messages_configuration: "MessageConfigurationDraft" = None
     ) -> None:
         self.messages_configuration = messages_configuration
         super().__init__(action="changeMessagesConfiguration")
@@ -296,14 +274,9 @@ class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
 class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesEnabledActionSchema`."
     #: :class:`bool` `(Named` ``messagesEnabled`` `in Commercetools)`
-    messages_enabled: typing.Optional[bool]
+    messages_enabled: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        messages_enabled: typing.Optional[bool] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, messages_enabled: bool = None) -> None:
         self.messages_enabled = messages_enabled
         super().__init__(action="changeMessagesEnabled")
 
@@ -317,11 +290,9 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 class ProjectChangeNameAction(ProjectUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -337,7 +308,7 @@ class ProjectSetExternalOAuthAction(ProjectUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         external_oauth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
         self.external_oauth = external_oauth
@@ -358,7 +329,7 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None
     ) -> None:
         self.shipping_rate_input_type = shipping_rate_input_type

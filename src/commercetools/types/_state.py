@@ -39,17 +39,17 @@ __all__ = [
 class State(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.StateTypeEnum`
-    type: typing.Optional["StateTypeEnum"]
+    type: "StateTypeEnum"
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`bool`
-    initial: typing.Optional[bool]
+    initial: bool
     #: :class:`bool` `(Named` ``builtIn`` `in Commercetools)`
-    built_in: typing.Optional[bool]
+    built_in: bool
     #: Optional list of :class:`commercetools.types.StateRoleEnum`
     roles: typing.Optional[typing.List["StateRoleEnum"]]
     #: Optional list of :class:`commercetools.types.StateReference`
@@ -58,18 +58,18 @@ class State(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional[str] = None,
-        type: typing.Optional["StateTypeEnum"] = None,
+        key: str = None,
+        type: "StateTypeEnum" = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        initial: typing.Optional[bool] = None,
-        built_in: typing.Optional[bool] = None,
+        initial: bool = None,
+        built_in: bool = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
         transitions: typing.Optional[typing.List["StateReference"]] = None
     ) -> None:
@@ -115,9 +115,9 @@ class State(LoggedResource):
 class StateDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.StateTypeEnum`
-    type: typing.Optional["StateTypeEnum"]
+    type: "StateTypeEnum"
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -132,8 +132,8 @@ class StateDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: typing.Optional[str] = None,
-        type: typing.Optional["StateTypeEnum"] = None,
+        key: str = None,
+        type: "StateTypeEnum" = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         initial: typing.Optional[bool] = None,
@@ -167,24 +167,24 @@ class StateDraft(_BaseType):
 class StatePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StatePagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.State`
-    results: typing.Optional[typing.Sequence["State"]]
+    results: typing.Sequence["State"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["State"]] = None
+        offset: int = None,
+        results: typing.Sequence["State"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -208,8 +208,8 @@ class StateReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["State"] = None
     ) -> None:
         self.obj = obj
@@ -259,16 +259,11 @@ class StateTypeEnum(enum.Enum):
 class StateUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -280,9 +275,9 @@ class StateUpdate(_BaseType):
 class StateUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -293,13 +288,10 @@ class StateUpdateAction(_BaseType):
 class StateAddRolesAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateAddRolesActionSchema`."
     #: List of :class:`commercetools.types.StateRoleEnum`
-    roles: typing.Optional[typing.List["StateRoleEnum"]]
+    roles: typing.List["StateRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["StateRoleEnum"]] = None
+        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="addRoles")
@@ -311,14 +303,9 @@ class StateAddRolesAction(StateUpdateAction):
 class StateChangeInitialAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeInitialActionSchema`."
     #: :class:`bool`
-    initial: typing.Optional[bool]
+    initial: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        initial: typing.Optional[bool] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, initial: bool = None) -> None:
         self.initial = initial
         super().__init__(action="changeInitial")
 
@@ -332,11 +319,9 @@ class StateChangeInitialAction(StateUpdateAction):
 class StateChangeKeyAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeKeyActionSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -347,14 +332,9 @@ class StateChangeKeyAction(StateUpdateAction):
 class StateChangeTypeAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeTypeActionSchema`."
     #: :class:`commercetools.types.StateTypeEnum`
-    type: typing.Optional["StateTypeEnum"]
+    type: "StateTypeEnum"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        type: typing.Optional["StateTypeEnum"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, type: "StateTypeEnum" = None) -> None:
         self.type = type
         super().__init__(action="changeType")
 
@@ -365,13 +345,10 @@ class StateChangeTypeAction(StateUpdateAction):
 class StateRemoveRolesAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateRemoveRolesActionSchema`."
     #: List of :class:`commercetools.types.StateRoleEnum`
-    roles: typing.Optional[typing.List["StateRoleEnum"]]
+    roles: typing.List["StateRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["StateRoleEnum"]] = None
+        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="removeRoles")
@@ -383,13 +360,10 @@ class StateRemoveRolesAction(StateUpdateAction):
 class StateSetDescriptionAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetDescriptionActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
+    description: "LocalizedString"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, action: str = None, description: "LocalizedString" = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -404,14 +378,9 @@ class StateSetDescriptionAction(StateUpdateAction):
 class StateSetNameAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="setName")
 
@@ -422,13 +391,10 @@ class StateSetNameAction(StateUpdateAction):
 class StateSetRolesAction(StateUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetRolesActionSchema`."
     #: List of :class:`commercetools.types.StateRoleEnum`
-    roles: typing.Optional[typing.List["StateRoleEnum"]]
+    roles: typing.List["StateRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["StateRoleEnum"]] = None
+        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="setRoles")
@@ -445,7 +411,7 @@ class StateSetTransitionsAction(StateUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
     ) -> None:
         self.transitions = transitions

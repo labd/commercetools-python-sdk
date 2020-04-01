@@ -52,9 +52,9 @@ __all__ = [
 class Channel(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -71,14 +71,14 @@ class Channel(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
+        key: str = None,
+        roles: typing.List["ChannelRoleEnum"] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         address: typing.Optional["Address"] = None,
@@ -128,7 +128,7 @@ class Channel(LoggedResource):
 class ChannelDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: Optional list of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.Optional[typing.List["ChannelRoleEnum"]]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -145,7 +145,7 @@ class ChannelDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: typing.Optional[str] = None,
+        key: str = None,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -180,24 +180,24 @@ class ChannelDraft(_BaseType):
 class ChannelPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Channel`
-    results: typing.Optional[typing.Sequence["Channel"]]
+    results: typing.Sequence["Channel"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Channel"]] = None
+        offset: int = None,
+        results: typing.Sequence["Channel"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -221,8 +221,8 @@ class ChannelReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Channel"] = None
     ) -> None:
         self.obj = obj
@@ -267,16 +267,11 @@ class ChannelRoleEnum(enum.Enum):
 class ChannelUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -288,9 +283,9 @@ class ChannelUpdate(_BaseType):
 class ChannelUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -301,13 +296,10 @@ class ChannelUpdateAction(_BaseType):
 class ChannelAddRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelAddRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None
+        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="addRoles")
@@ -319,13 +311,10 @@ class ChannelAddRolesAction(ChannelUpdateAction):
 class ChannelChangeDescriptionAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeDescriptionActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    description: typing.Optional["LocalizedString"]
+    description: "LocalizedString"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, action: str = None, description: "LocalizedString" = None
     ) -> None:
         self.description = description
         super().__init__(action="changeDescription")
@@ -340,11 +329,9 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 class ChannelChangeKeyAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeKeyActionSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -355,14 +342,9 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
 class ChannelChangeNameAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -373,13 +355,10 @@ class ChannelChangeNameAction(ChannelUpdateAction):
 class ChannelRemoveRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelRemoveRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None
+        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="removeRoles")
@@ -397,10 +376,7 @@ class ChannelSetAddressAction(ChannelUpdateAction):
     address: typing.Optional["Address"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None
+        self, *, action: str = None, address: typing.Optional["Address"] = None
     ) -> None:
         self.address = address
         super().__init__(action="setAddress")
@@ -415,15 +391,15 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 class ChannelSetCustomFieldAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -448,7 +424,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -472,7 +448,7 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         geo_location: typing.Optional["GeoJsonPoint"] = None
     ) -> None:
         self.geo_location = geo_location
@@ -488,13 +464,10 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
 class ChannelSetRolesAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetRolesActionSchema`."
     #: List of :class:`commercetools.types.ChannelRoleEnum`
-    roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    roles: typing.List["ChannelRoleEnum"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None
+        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
     ) -> None:
         self.roles = roles
         super().__init__(action="setRoles")

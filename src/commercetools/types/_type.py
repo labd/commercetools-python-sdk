@@ -64,13 +64,11 @@ __all__ = [
 class CustomFieldEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str`
-    label: typing.Optional[str]
+    label: str
 
-    def __init__(
-        self, *, key: typing.Optional[str] = None, label: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, key: str = None, label: str = None) -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -82,16 +80,11 @@ class CustomFieldEnumValue(_BaseType):
 class CustomFieldLocalizedEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, key: str = None, label: "LocalizedString" = None) -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -106,15 +99,12 @@ class CustomFieldLocalizedEnumValue(_BaseType):
 class CustomFields(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsSchema`."
     #: :class:`commercetools.types.TypeReference`
-    type: typing.Optional["TypeReference"]
+    type: "TypeReference"
     #: :class:`commercetools.types.FieldContainer`
-    fields: typing.Optional["FieldContainer"]
+    fields: "FieldContainer"
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional["TypeReference"] = None,
-        fields: typing.Optional["FieldContainer"] = None,
+        self, *, type: "TypeReference" = None, fields: "FieldContainer" = None
     ) -> None:
         self.type = type
         self.fields = fields
@@ -127,14 +117,14 @@ class CustomFields(_BaseType):
 class CustomFieldsDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsDraftSchema`."
     #: :class:`commercetools.types.TypeResourceIdentifier`
-    type: typing.Optional["TypeResourceIdentifier"]
+    type: "TypeResourceIdentifier"
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
+        type: "TypeResourceIdentifier" = None,
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
         self.type = type
@@ -153,23 +143,23 @@ class FieldContainer(typing.Dict[(str, typing.Any)]):
 class FieldDefinition(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldDefinitionSchema`."
     #: :class:`commercetools.types.FieldType`
-    type: typing.Optional["FieldType"]
+    type: "FieldType"
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
     #: :class:`bool`
-    required: typing.Optional[bool]
+    required: bool
     #: Optional :class:`commercetools.types.TypeTextInputHint` `(Named` ``inputHint`` `in Commercetools)`
     input_hint: typing.Optional["TypeTextInputHint"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FieldType"] = None,
-        name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-        required: typing.Optional[bool] = None,
+        type: "FieldType" = None,
+        name: str = None,
+        label: "LocalizedString" = None,
+        required: bool = None,
         input_hint: typing.Optional["TypeTextInputHint"] = None,
     ) -> None:
         self.type = type
@@ -189,9 +179,9 @@ class FieldDefinition(_BaseType):
 class FieldType(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FieldTypeSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         self.name = name
         super().__init__()
 
@@ -223,30 +213,30 @@ class ResourceTypeId(enum.Enum):
 class Type(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: List of :class:`commercetools.types.ResourceTypeId` `(Named` ``resourceTypeIds`` `in Commercetools)`
-    resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]]
+    resource_type_ids: typing.List["ResourceTypeId"]
     #: List of :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinitions`` `in Commercetools)`
-    field_definitions: typing.Optional[typing.List["FieldDefinition"]]
+    field_definitions: typing.List["FieldDefinition"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        key: str = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
-        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
+        resource_type_ids: typing.List["ResourceTypeId"] = None,
+        field_definitions: typing.List["FieldDefinition"] = None,
     ) -> None:
         self.key = key
         self.name = name
@@ -284,23 +274,23 @@ class Type(LoggedResource):
 class TypeDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: List of :class:`commercetools.types.ResourceTypeId` `(Named` ``resourceTypeIds`` `in Commercetools)`
-    resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]]
+    resource_type_ids: typing.List["ResourceTypeId"]
     #: Optional list of :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinitions`` `in Commercetools)`
     field_definitions: typing.Optional[typing.List["FieldDefinition"]]
 
     def __init__(
         self,
         *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        key: str = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.Optional[typing.List["ResourceTypeId"]] = None,
+        resource_type_ids: typing.List["ResourceTypeId"] = None,
         field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
     ) -> None:
         self.key = key
@@ -326,24 +316,24 @@ class TypeDraft(_BaseType):
 class TypePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypePagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Type`
-    results: typing.Optional[typing.Sequence["Type"]]
+    results: typing.Sequence["Type"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Type"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Type"] = None,
     ) -> None:
         self.limit = limit
         self.count = count
@@ -367,8 +357,8 @@ class TypeReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Type"] = None,
     ) -> None:
         self.obj = obj
@@ -410,16 +400,11 @@ class TypeTextInputHint(enum.Enum):
 class TypeUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -431,9 +416,9 @@ class TypeUpdate(_BaseType):
 class TypeUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -444,7 +429,7 @@ class TypeUpdateAction(_BaseType):
 class CustomFieldBooleanType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldBooleanTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Boolean")
 
     def __repr__(self) -> str:
@@ -454,7 +439,7 @@ class CustomFieldBooleanType(FieldType):
 class CustomFieldDateTimeType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="DateTime")
 
     def __repr__(self) -> str:
@@ -464,7 +449,7 @@ class CustomFieldDateTimeType(FieldType):
 class CustomFieldDateType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Date")
 
     def __repr__(self) -> str:
@@ -474,13 +459,10 @@ class CustomFieldDateType(FieldType):
 class CustomFieldEnumType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumTypeSchema`."
     #: List of :class:`commercetools.types.CustomFieldEnumValue`
-    values: typing.Optional[typing.List["CustomFieldEnumValue"]]
+    values: typing.List["CustomFieldEnumValue"]
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["CustomFieldEnumValue"]] = None,
+        self, *, name: str = None, values: typing.List["CustomFieldEnumValue"] = None
     ) -> None:
         self.values = values
         super().__init__(name="Enum")
@@ -492,13 +474,13 @@ class CustomFieldEnumType(FieldType):
 class CustomFieldLocalizedEnumType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumTypeSchema`."
     #: List of :class:`commercetools.types.CustomFieldLocalizedEnumValue`
-    values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]]
+    values: typing.List["CustomFieldLocalizedEnumValue"]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["CustomFieldLocalizedEnumValue"]] = None,
+        name: str = None,
+        values: typing.List["CustomFieldLocalizedEnumValue"] = None,
     ) -> None:
         self.values = values
         super().__init__(name="LocalizedEnum")
@@ -513,7 +495,7 @@ class CustomFieldLocalizedEnumType(FieldType):
 class CustomFieldLocalizedStringType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedStringTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="LocalizedString")
 
     def __repr__(self) -> str:
@@ -523,7 +505,7 @@ class CustomFieldLocalizedStringType(FieldType):
 class CustomFieldMoneyType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldMoneyTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Money")
 
     def __repr__(self) -> str:
@@ -533,7 +515,7 @@ class CustomFieldMoneyType(FieldType):
 class CustomFieldNumberType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldNumberTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Number")
 
     def __repr__(self) -> str:
@@ -543,13 +525,10 @@ class CustomFieldNumberType(FieldType):
 class CustomFieldReferenceType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldReferenceTypeSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
-    reference_type_id: typing.Optional["ReferenceTypeId"]
+    reference_type_id: "ReferenceTypeId"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        reference_type_id: typing.Optional["ReferenceTypeId"] = None,
+        self, *, name: str = None, reference_type_id: "ReferenceTypeId" = None
     ) -> None:
         self.reference_type_id = reference_type_id
         super().__init__(name="Reference")
@@ -564,14 +543,9 @@ class CustomFieldReferenceType(FieldType):
 class CustomFieldSetType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldSetTypeSchema`."
     #: :class:`commercetools.types.FieldType` `(Named` ``elementType`` `in Commercetools)`
-    element_type: typing.Optional["FieldType"]
+    element_type: "FieldType"
 
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        element_type: typing.Optional["FieldType"] = None,
-    ) -> None:
+    def __init__(self, *, name: str = None, element_type: "FieldType" = None) -> None:
         self.element_type = element_type
         super().__init__(name="Set")
 
@@ -585,7 +559,7 @@ class CustomFieldSetType(FieldType):
 class CustomFieldStringType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldStringTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="String")
 
     def __repr__(self) -> str:
@@ -595,7 +569,7 @@ class CustomFieldStringType(FieldType):
 class CustomFieldTimeType(FieldType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Time")
 
     def __repr__(self) -> str:
@@ -605,16 +579,16 @@ class CustomFieldTimeType(FieldType):
 class TypeAddEnumValueAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddEnumValueActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.CustomFieldEnumValue`
-    value: typing.Optional["CustomFieldEnumValue"]
+    value: "CustomFieldEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        value: typing.Optional["CustomFieldEnumValue"] = None,
+        action: str = None,
+        field_name: str = None,
+        value: "CustomFieldEnumValue" = None,
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -631,13 +605,10 @@ class TypeAddEnumValueAction(TypeUpdateAction):
 class TypeAddFieldDefinitionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddFieldDefinitionActionSchema`."
     #: :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinition`` `in Commercetools)`
-    field_definition: typing.Optional["FieldDefinition"]
+    field_definition: "FieldDefinition"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        field_definition: typing.Optional["FieldDefinition"] = None,
+        self, *, action: str = None, field_definition: "FieldDefinition" = None
     ) -> None:
         self.field_definition = field_definition
         super().__init__(action="addFieldDefinition")
@@ -652,16 +623,16 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddLocalizedEnumValueActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.CustomFieldLocalizedEnumValue`
-    value: typing.Optional["CustomFieldLocalizedEnumValue"]
+    value: "CustomFieldLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        value: typing.Optional["CustomFieldLocalizedEnumValue"] = None,
+        action: str = None,
+        field_name: str = None,
+        value: "CustomFieldLocalizedEnumValue" = None,
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -678,16 +649,16 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
 class TypeChangeEnumValueLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.CustomFieldEnumValue`
-    value: typing.Optional["CustomFieldEnumValue"]
+    value: "CustomFieldEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        value: typing.Optional["CustomFieldEnumValue"] = None,
+        action: str = None,
+        field_name: str = None,
+        value: "CustomFieldEnumValue" = None,
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -704,16 +675,16 @@ class TypeChangeEnumValueLabelAction(TypeUpdateAction):
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: List of :class:`str`
-    keys: typing.Optional[typing.List[str]]
+    keys: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        keys: typing.Optional[typing.List[str]] = None,
+        action: str = None,
+        field_name: str = None,
+        keys: typing.List[str] = None,
     ) -> None:
         self.field_name = field_name
         self.keys = keys
@@ -730,16 +701,16 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
 class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        field_name: str = None,
+        label: "LocalizedString" = None,
     ) -> None:
         self.field_name = field_name
         self.label = label
@@ -755,13 +726,10 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
 class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionOrderActionSchema`."
     #: List of :class:`str` `(Named` ``fieldNames`` `in Commercetools)`
-    field_names: typing.Optional[typing.List[str]]
+    field_names: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        field_names: typing.Optional[typing.List[str]] = None,
+        self, *, action: str = None, field_names: typing.List[str] = None
     ) -> None:
         self.field_names = field_names
         super().__init__(action="changeFieldDefinitionOrder")
@@ -776,16 +744,16 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 class TypeChangeInputHintAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeInputHintActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.TypeTextInputHint` `(Named` ``inputHint`` `in Commercetools)`
-    input_hint: typing.Optional["TypeTextInputHint"]
+    input_hint: "TypeTextInputHint"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        input_hint: typing.Optional["TypeTextInputHint"] = None,
+        action: str = None,
+        field_name: str = None,
+        input_hint: "TypeTextInputHint" = None,
     ) -> None:
         self.field_name = field_name
         self.input_hint = input_hint
@@ -802,11 +770,9 @@ class TypeChangeInputHintAction(TypeUpdateAction):
 class TypeChangeKeyAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeKeyActionSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -817,16 +783,16 @@ class TypeChangeKeyAction(TypeUpdateAction):
 class TypeChangeLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        field_name: str = None,
+        label: "LocalizedString" = None,
     ) -> None:
         self.field_name = field_name
         self.label = label
@@ -843,16 +809,16 @@ class TypeChangeLabelAction(TypeUpdateAction):
 class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: :class:`commercetools.types.CustomFieldLocalizedEnumValue`
-    value: typing.Optional["CustomFieldLocalizedEnumValue"]
+    value: "CustomFieldLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        value: typing.Optional["CustomFieldLocalizedEnumValue"] = None,
+        action: str = None,
+        field_name: str = None,
+        value: "CustomFieldLocalizedEnumValue" = None,
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -868,16 +834,16 @@ class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
 class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
     #: List of :class:`str`
-    keys: typing.Optional[typing.List[str]]
+    keys: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-        keys: typing.Optional[typing.List[str]] = None,
+        action: str = None,
+        field_name: str = None,
+        keys: typing.List[str] = None,
     ) -> None:
         self.field_name = field_name
         self.keys = keys
@@ -893,14 +859,9 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
 class TypeChangeNameAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -911,14 +872,9 @@ class TypeChangeNameAction(TypeUpdateAction):
 class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypeRemoveFieldDefinitionActionSchema`."
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
-    field_name: typing.Optional[str]
+    field_name: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        field_name: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, field_name: str = None) -> None:
         self.field_name = field_name
         super().__init__(action="removeFieldDefinition")
 
@@ -937,7 +893,7 @@ class TypeSetDescriptionAction(TypeUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
     ) -> None:
         self.description = description

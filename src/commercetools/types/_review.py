@@ -62,7 +62,7 @@ class Review(LoggedResource):
     #: Optional :class:`commercetools.types.ProductReference`
     target: typing.Optional["ProductReference"]
     #: :class:`bool` `(Named` ``includedInStatistics`` `in Commercetools)`
-    included_in_statistics: typing.Optional[bool]
+    included_in_statistics: bool
     #: Optional :class:`int`
     rating: typing.Optional[int]
     #: Optional :class:`commercetools.types.StateReference`
@@ -75,10 +75,10 @@ class Review(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
@@ -88,7 +88,7 @@ class Review(LoggedResource):
         title: typing.Optional[str] = None,
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
-        included_in_statistics: typing.Optional[bool] = None,
+        included_in_statistics: bool = None,
         rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
@@ -216,24 +216,24 @@ class ReviewDraft(_BaseType):
 class ReviewPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Review`
-    results: typing.Optional[typing.Sequence["Review"]]
+    results: typing.Sequence["Review"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Review"]] = None
+        offset: int = None,
+        results: typing.Sequence["Review"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -252,24 +252,24 @@ class ReviewPagedQueryResponse(_BaseType):
 class ReviewRatingStatistics(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingStatisticsSchema`."
     #: :class:`int` `(Named` ``averageRating`` `in Commercetools)`
-    average_rating: typing.Optional[int]
+    average_rating: int
     #: :class:`int` `(Named` ``highestRating`` `in Commercetools)`
-    highest_rating: typing.Optional[int]
+    highest_rating: int
     #: :class:`int` `(Named` ``lowestRating`` `in Commercetools)`
-    lowest_rating: typing.Optional[int]
+    lowest_rating: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: :class:`object` `(Named` ``ratingsDistribution`` `in Commercetools)`
-    ratings_distribution: typing.Optional[object]
+    ratings_distribution: object
 
     def __init__(
         self,
         *,
-        average_rating: typing.Optional[int] = None,
-        highest_rating: typing.Optional[int] = None,
-        lowest_rating: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
-        ratings_distribution: typing.Optional[object] = None
+        average_rating: int = None,
+        highest_rating: int = None,
+        lowest_rating: int = None,
+        count: int = None,
+        ratings_distribution: object = None
     ) -> None:
         self.average_rating = average_rating
         self.highest_rating = highest_rating
@@ -299,8 +299,8 @@ class ReviewReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Review"] = None
     ) -> None:
         self.obj = obj
@@ -337,16 +337,11 @@ class ReviewResourceIdentifier(ResourceIdentifier):
 class ReviewUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -358,9 +353,9 @@ class ReviewUpdate(_BaseType):
 class ReviewUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -374,10 +369,7 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
     author_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        author_name: typing.Optional[str] = None
+        self, *, action: str = None, author_name: typing.Optional[str] = None
     ) -> None:
         self.author_name = author_name
         super().__init__(action="setAuthorName")
@@ -392,15 +384,15 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 class ReviewSetCustomFieldAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -425,7 +417,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -449,7 +441,7 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
@@ -467,9 +459,7 @@ class ReviewSetKeyAction(ReviewUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -483,10 +473,7 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -504,10 +491,7 @@ class ReviewSetRatingAction(ReviewUpdateAction):
     rating: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        rating: typing.Optional[int] = None
+        self, *, action: str = None, rating: typing.Optional[int] = None
     ) -> None:
         self.rating = rating
         super().__init__(action="setRating")
@@ -522,13 +506,10 @@ class ReviewSetRatingAction(ReviewUpdateAction):
 class ReviewSetTargetAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTargetActionSchema`."
     #: :class:`commercetools.types.ProductResourceIdentifier`
-    target: typing.Optional["ProductResourceIdentifier"]
+    target: "ProductResourceIdentifier"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        target: typing.Optional["ProductResourceIdentifier"] = None
+        self, *, action: str = None, target: "ProductResourceIdentifier" = None
     ) -> None:
         self.target = target
         super().__init__(action="setTarget")
@@ -546,7 +527,7 @@ class ReviewSetTextAction(ReviewUpdateAction):
     text: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, text: typing.Optional[str] = None
+        self, *, action: str = None, text: typing.Optional[str] = None
     ) -> None:
         self.text = text
         super().__init__(action="setText")
@@ -561,7 +542,7 @@ class ReviewSetTitleAction(ReviewUpdateAction):
     title: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+        self, *, action: str = None, title: typing.Optional[str] = None
     ) -> None:
         self.title = title
         super().__init__(action="setTitle")
@@ -573,15 +554,15 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 class ReviewTransitionStateAction(ReviewUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateResourceIdentifier`
-    state: typing.Optional["StateResourceIdentifier"]
+    state: "StateResourceIdentifier"
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        state: typing.Optional["StateResourceIdentifier"] = None,
+        action: str = None,
+        state: "StateResourceIdentifier" = None,
         force: typing.Optional[bool] = None
     ) -> None:
         self.state = state

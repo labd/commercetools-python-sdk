@@ -53,21 +53,21 @@ __all__ = [
 class ProductDiscount(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductDiscountValue`
-    value: typing.Optional["ProductDiscountValue"]
+    value: "ProductDiscountValue"
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
     #: List of :class:`commercetools.types.Reference`
-    references: typing.Optional[typing.List["Reference"]]
+    references: typing.List["Reference"]
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -76,20 +76,20 @@ class ProductDiscount(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["ProductDiscountValue"] = None,
-        predicate: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
-        references: typing.Optional[typing.List["Reference"]] = None,
+        value: "ProductDiscountValue" = None,
+        predicate: str = None,
+        sort_order: str = None,
+        is_active: bool = None,
+        references: typing.List["Reference"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -139,19 +139,19 @@ class ProductDiscount(LoggedResource):
 class ProductDiscountDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountDraftSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductDiscountValueDraft`
-    value: typing.Optional["ProductDiscountValueDraft"]
+    value: "ProductDiscountValueDraft"
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -160,13 +160,13 @@ class ProductDiscountDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: typing.Optional["ProductDiscountValueDraft"] = None,
-        predicate: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None,
+        value: "ProductDiscountValueDraft" = None,
+        predicate: str = None,
+        sort_order: str = None,
+        is_active: bool = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -201,21 +201,21 @@ class ProductDiscountDraft(_BaseType):
 class ProductDiscountMatchQuery(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountMatchQuerySchema`."
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
-    product_id: typing.Optional[str]
+    product_id: str
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: :class:`bool`
-    staged: typing.Optional[bool]
+    staged: bool
     #: :class:`commercetools.types.Price`
-    price: typing.Optional["Price"]
+    price: "Price"
 
     def __init__(
         self,
         *,
-        product_id: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-        staged: typing.Optional[bool] = None,
-        price: typing.Optional["Price"] = None
+        product_id: str = None,
+        variant_id: int = None,
+        staged: bool = None,
+        price: "Price" = None
     ) -> None:
         self.product_id = product_id
         self.variant_id = variant_id
@@ -233,24 +233,24 @@ class ProductDiscountMatchQuery(_BaseType):
 class ProductDiscountPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.ProductDiscount`
-    results: typing.Optional[typing.Sequence["ProductDiscount"]]
+    results: typing.Sequence["ProductDiscount"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ProductDiscount"]] = None
+        offset: int = None,
+        results: typing.Sequence["ProductDiscount"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -274,8 +274,8 @@ class ProductDiscountReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["ProductDiscount"] = None
     ) -> None:
         self.obj = obj
@@ -312,16 +312,11 @@ class ProductDiscountResourceIdentifier(ResourceIdentifier):
 class ProductDiscountUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -336,9 +331,9 @@ class ProductDiscountUpdate(_BaseType):
 class ProductDiscountUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -349,9 +344,9 @@ class ProductDiscountUpdateAction(_BaseType):
 class ProductDiscountValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -362,9 +357,9 @@ class ProductDiscountValue(_BaseType):
 class ProductDiscountValueDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueDraftSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -375,14 +370,9 @@ class ProductDiscountValueDraft(_BaseType):
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeIsActiveActionSchema`."
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
-    is_active: typing.Optional[bool]
+    is_active: bool
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        is_active: typing.Optional[bool] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -396,14 +386,9 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -417,14 +402,9 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangePredicateActionSchema`."
     #: :class:`str`
-    predicate: typing.Optional[str]
+    predicate: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        predicate: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, predicate: str = None) -> None:
         self.predicate = predicate
         super().__init__(action="changePredicate")
 
@@ -438,14 +418,9 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeSortOrderActionSchema`."
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
-    sort_order: typing.Optional[str]
+    sort_order: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        sort_order: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, sort_order: str = None) -> None:
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -459,13 +434,10 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeValueActionSchema`."
     #: :class:`commercetools.types.ProductDiscountValueDraft`
-    value: typing.Optional["ProductDiscountValueDraft"]
+    value: "ProductDiscountValueDraft"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        value: typing.Optional["ProductDiscountValueDraft"] = None
+        self, *, action: str = None, value: "ProductDiscountValueDraft" = None
     ) -> None:
         self.value = value
         super().__init__(action="changeValue")
@@ -485,7 +457,7 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
@@ -503,9 +475,7 @@ class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -524,7 +494,7 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_from = valid_from
@@ -547,7 +517,7 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -570,7 +540,7 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_until = valid_until
@@ -586,13 +556,10 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
 class ProductDiscountValueAbsolute(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteSchema`."
     #: List of :class:`commercetools.types.TypedMoney`
-    money: typing.Optional[typing.List["TypedMoney"]]
+    money: typing.List["TypedMoney"]
 
     def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        money: typing.Optional[typing.List["TypedMoney"]] = None
+        self, *, type: str = None, money: typing.List["TypedMoney"] = None
     ) -> None:
         self.money = money
         super().__init__(type="absolute")
@@ -607,14 +574,9 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteDraftSchema`."
     #: List of :class:`commercetools.types.Money`
-    money: typing.Optional[typing.List["Money"]]
+    money: typing.List["Money"]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        money: typing.Optional[typing.List["Money"]] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, money: typing.List["Money"] = None) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -628,7 +590,7 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
 class ProductDiscountValueExternal(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueExternalSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="external")
 
     def __repr__(self) -> str:
@@ -638,7 +600,7 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueExternalDraftSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="external")
 
     def __repr__(self) -> str:
@@ -648,14 +610,9 @@ class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
 class ProductDiscountValueRelative(ProductDiscountValue):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueRelativeSchema`."
     #: :class:`int`
-    permyriad: typing.Optional[int]
+    permyriad: int
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        permyriad: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -669,14 +626,9 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueRelativeDraftSchema`."
     #: :class:`int`
-    permyriad: typing.Optional[int]
+    permyriad: int
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        permyriad: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 

@@ -82,7 +82,7 @@ class Address(_BaseType):
     #: Optional :class:`str`
     state: typing.Optional[str]
     #: :class:`str`
-    country: typing.Optional["str"]
+    country: "str"
     #: Optional :class:`str`
     company: typing.Optional[str]
     #: Optional :class:`str`
@@ -122,7 +122,7 @@ class Address(_BaseType):
         city: typing.Optional[str] = None,
         region: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        country: typing.Optional["str"] = None,
+        country: "str" = None,
         company: typing.Optional[str] = None,
         department: typing.Optional[str] = None,
         building: typing.Optional[str] = None,
@@ -198,11 +198,11 @@ class Address(_BaseType):
 class Asset(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional list of :class:`str`
@@ -215,9 +215,9 @@ class Asset(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        id: str = None,
+        sources: typing.List["AssetSource"] = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List[str]] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -250,13 +250,11 @@ class Asset(_BaseType):
 class AssetDimensions(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDimensionsSchema`."
     #: :class:`int`
-    w: typing.Optional[int]
+    w: int
     #: :class:`int`
-    h: typing.Optional[int]
+    h: int
 
-    def __init__(
-        self, *, w: typing.Optional[int] = None, h: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, w: int = None, h: int = None) -> None:
         self.w = w
         self.h = h
         super().__init__()
@@ -268,9 +266,9 @@ class AssetDimensions(_BaseType):
 class AssetDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDraftSchema`."
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional list of :class:`str`
@@ -283,8 +281,8 @@ class AssetDraft(_BaseType):
     def __init__(
         self,
         *,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        sources: typing.List["AssetSource"] = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List[str]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -315,7 +313,7 @@ class AssetDraft(_BaseType):
 class AssetSource(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSourceSchema`."
     #: :class:`str`
-    uri: typing.Optional[str]
+    uri: str
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.AssetDimensions`
@@ -326,7 +324,7 @@ class AssetSource(_BaseType):
     def __init__(
         self,
         *,
-        uri: typing.Optional[str] = None,
+        uri: str = None,
         key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
         content_type: typing.Optional[str] = None,
@@ -349,21 +347,21 @@ class AssetSource(_BaseType):
 class BaseResource(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.BaseResourceSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
     ) -> None:
         self.id = id
         self.version = version
@@ -415,15 +413,12 @@ class ClientLogging(_BaseType):
 class DiscountedPrice(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedPriceSchema`."
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
     #: :class:`commercetools.types.ProductDiscountReference`
-    discount: typing.Optional["ProductDiscountReference"]
+    discount: "ProductDiscountReference"
 
     def __init__(
-        self,
-        *,
-        value: typing.Optional["Money"] = None,
-        discount: typing.Optional["ProductDiscountReference"] = None,
+        self, *, value: "Money" = None, discount: "ProductDiscountReference" = None
     ) -> None:
         self.value = value
         self.discount = discount
@@ -436,9 +431,9 @@ class DiscountedPrice(_BaseType):
 class GeoJson(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -449,17 +444,17 @@ class GeoJson(_BaseType):
 class Image(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ImageSchema`."
     #: :class:`str`
-    url: typing.Optional[str]
+    url: str
     #: :class:`commercetools.types.ImageDimensions`
-    dimensions: typing.Optional["ImageDimensions"]
+    dimensions: "ImageDimensions"
     #: Optional :class:`str`
     label: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        url: typing.Optional[str] = None,
-        dimensions: typing.Optional["ImageDimensions"] = None,
+        url: str = None,
+        dimensions: "ImageDimensions" = None,
         label: typing.Optional[str] = None,
     ) -> None:
         self.url = url
@@ -478,13 +473,11 @@ class Image(_BaseType):
 class ImageDimensions(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ImageDimensionsSchema`."
     #: :class:`int`
-    w: typing.Optional[int]
+    w: int
     #: :class:`int`
-    h: typing.Optional[int]
+    h: int
 
-    def __init__(
-        self, *, w: typing.Optional[int] = None, h: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, w: int = None, h: int = None) -> None:
         self.w = w
         self.h = h
         super().__init__()
@@ -496,16 +489,11 @@ class ImageDimensions(_BaseType):
 class KeyReference(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.KeyReferenceSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
-    type_id: typing.Optional["ReferenceTypeId"]
+    type_id: "ReferenceTypeId"
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        key: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type_id: "ReferenceTypeId" = None, key: str = None) -> None:
         self.type_id = type_id
         self.key = key
         super().__init__()
@@ -524,16 +512,11 @@ class LocalizedString(typing.Dict[(str, str)]):
 class Money(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MoneySchema`."
     #: :class:`int` `(Named` ``centAmount`` `in Commercetools)`
-    cent_amount: typing.Optional[int]
+    cent_amount: int
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
-    currency_code: typing.Optional["str"]
+    currency_code: "str"
 
-    def __init__(
-        self,
-        *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-    ) -> None:
+    def __init__(self, *, cent_amount: int = None, currency_code: "str" = None) -> None:
         self.cent_amount = cent_amount
         self.currency_code = currency_code
         super().__init__()
@@ -553,15 +536,15 @@ class MoneyType(enum.Enum):
 class PagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.BaseResource`
-    results: typing.Optional[typing.Sequence["BaseResource"]]
+    results: typing.Sequence["BaseResource"]
     #: Optional :class:`commercetools.types.FacetResults`
     facets: typing.Optional["FacetResults"]
     #: Optional :class:`object`
@@ -570,11 +553,11 @@ class PagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["BaseResource"]] = None,
+        offset: int = None,
+        results: typing.Sequence["BaseResource"] = None,
         facets: typing.Optional["FacetResults"] = None,
         meta: typing.Optional[object] = None,
     ) -> None:
@@ -605,9 +588,9 @@ class PagedQueryResponse(_BaseType):
 class Price(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`commercetools.types.TypedMoney`
-    value: typing.Optional["TypedMoney"]
+    value: "TypedMoney"
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -628,8 +611,8 @@ class Price(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        value: typing.Optional["TypedMoney"] = None,
+        id: str = None,
+        value: "TypedMoney" = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -672,7 +655,7 @@ class Price(_BaseType):
 class PriceDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceDraftSchema`."
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupResourceIdentifier` `(Named` ``customerGroup`` `in Commercetools)`
@@ -693,7 +676,7 @@ class PriceDraft(_BaseType):
     def __init__(
         self,
         *,
-        value: typing.Optional["Money"] = None,
+        value: "Money" = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
@@ -734,15 +717,12 @@ class PriceDraft(_BaseType):
 class PriceTier(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierSchema`."
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
-    minimum_quantity: typing.Optional[int]
+    minimum_quantity: int
     #: :class:`commercetools.types.TypedMoney`
-    value: typing.Optional["TypedMoney"]
+    value: "TypedMoney"
 
     def __init__(
-        self,
-        *,
-        minimum_quantity: typing.Optional[int] = None,
-        value: typing.Optional["TypedMoney"] = None,
+        self, *, minimum_quantity: int = None, value: "TypedMoney" = None
     ) -> None:
         self.minimum_quantity = minimum_quantity
         self.value = value
@@ -758,16 +738,11 @@ class PriceTier(_BaseType):
 class PriceTierDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierDraftSchema`."
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
-    minimum_quantity: typing.Optional[int]
+    minimum_quantity: int
     #: :class:`commercetools.types.Money`
-    value: typing.Optional["Money"]
+    value: "Money"
 
-    def __init__(
-        self,
-        *,
-        minimum_quantity: typing.Optional[int] = None,
-        value: typing.Optional["Money"] = None,
-    ) -> None:
+    def __init__(self, *, minimum_quantity: int = None, value: "Money" = None) -> None:
         self.minimum_quantity = minimum_quantity
         self.value = value
         super().__init__()
@@ -782,16 +757,11 @@ class PriceTierDraft(_BaseType):
 class Reference(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
-    type_id: typing.Optional["ReferenceTypeId"]
+    type_id: "ReferenceTypeId"
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
 
-    def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-    ) -> None:
+    def __init__(self, *, type_id: "ReferenceTypeId" = None, id: str = None) -> None:
         self.type_id = type_id
         self.id = id
         super().__init__()
@@ -858,11 +828,11 @@ class ResourceIdentifier(_BaseType):
 class ScopedPrice(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ScopedPriceSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`commercetools.types.TypedMoney`
-    value: typing.Optional["TypedMoney"]
+    value: "TypedMoney"
     #: :class:`commercetools.types.TypedMoney` `(Named` ``currentValue`` `in Commercetools)`
-    current_value: typing.Optional["TypedMoney"]
+    current_value: "TypedMoney"
     #: Optional :class:`str`
     country: typing.Optional["str"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -881,9 +851,9 @@ class ScopedPrice(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        value: typing.Optional["TypedMoney"] = None,
-        current_value: typing.Optional["TypedMoney"] = None,
+        id: str = None,
+        value: "TypedMoney" = None,
+        current_value: "TypedMoney" = None,
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -925,21 +895,21 @@ class ScopedPrice(_BaseType):
 class TypedMoney(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneySchema`."
     #: :class:`commercetools.types.MoneyType`
-    type: typing.Optional["MoneyType"]
+    type: "MoneyType"
     #: :class:`int` `(Named` ``fractionDigits`` `in Commercetools)`
-    fraction_digits: typing.Optional[int]
+    fraction_digits: int
     #: :class:`int` `(Named` ``centAmount`` `in Commercetools)`
-    cent_amount: typing.Optional[int]
+    cent_amount: int
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
-    currency_code: typing.Optional["str"]
+    currency_code: "str"
 
     def __init__(
         self,
         *,
-        type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
+        type: "MoneyType" = None,
+        fraction_digits: int = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
     ) -> None:
         self.type = type
         self.fraction_digits = fraction_digits
@@ -957,16 +927,11 @@ class TypedMoney(_BaseType):
 class Update(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -978,9 +943,9 @@ class Update(_BaseType):
 class UpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -994,10 +959,10 @@ class CentPrecisionMoney(TypedMoney):
     def __init__(
         self,
         *,
-        type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
+        type: "MoneyType" = None,
+        fraction_digits: int = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
     ) -> None:
         super().__init__(
             type=MoneyType.CENT_PRECISION,
@@ -1041,14 +1006,9 @@ class CreatedBy(ClientLogging):
 class GeoJsonPoint(GeoJson):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonPointSchema`."
     #: :class:`list`
-    coordinates: typing.Optional[list]
+    coordinates: list
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        coordinates: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, coordinates: list = None) -> None:
         self.coordinates = coordinates
         super().__init__(type="Point")
 
@@ -1059,16 +1019,16 @@ class GeoJsonPoint(GeoJson):
 class HighPrecisionMoney(TypedMoney):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneySchema`."
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
-    precise_amount: typing.Optional[int]
+    precise_amount: int
 
     def __init__(
         self,
         *,
-        type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        precise_amount: typing.Optional[int] = None,
+        type: "MoneyType" = None,
+        fraction_digits: int = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        precise_amount: int = None,
     ) -> None:
         self.precise_amount = precise_amount
         super().__init__(
@@ -1126,10 +1086,10 @@ class LoggedResource(BaseResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
     ) -> None:
@@ -1159,14 +1119,14 @@ class LoggedResource(BaseResource):
 class TypedMoneyDraft(Money):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneyDraftSchema`."
     #: :class:`commercetools.types.MoneyType`
-    type: typing.Optional["MoneyType"]
+    type: "MoneyType"
 
     def __init__(
         self,
         *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        type: typing.Optional["MoneyType"] = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        type: "MoneyType" = None,
     ) -> None:
         self.type = type
         super().__init__(cent_amount=cent_amount, currency_code=currency_code)
@@ -1185,9 +1145,9 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
     def __init__(
         self,
         *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        type: typing.Optional["MoneyType"] = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        type: "MoneyType" = None,
     ) -> None:
         super().__init__(
             cent_amount=cent_amount,
@@ -1206,15 +1166,15 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
 class HighPrecisionMoneyDraft(TypedMoneyDraft):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneyDraftSchema`."
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
-    precise_amount: typing.Optional[int]
+    precise_amount: int
 
     def __init__(
         self,
         *,
-        cent_amount: typing.Optional[int] = None,
-        currency_code: typing.Optional["str"] = None,
-        type: typing.Optional["MoneyType"] = None,
-        precise_amount: typing.Optional[int] = None,
+        cent_amount: int = None,
+        currency_code: "str" = None,
+        type: "MoneyType" = None,
+        precise_amount: int = None,
     ) -> None:
         self.precise_amount = precise_amount
         super().__init__(

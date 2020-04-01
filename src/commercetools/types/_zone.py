@@ -33,15 +33,12 @@ __all__ = [
 class Location(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.LocationSchema`."
     #: :class:`str`
-    country: typing.Optional["str"]
+    country: "str"
     #: Optional :class:`str`
     state: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        country: typing.Optional["str"] = None,
-        state: typing.Optional[str] = None
+        self, *, country: "str" = None, state: typing.Optional[str] = None
     ) -> None:
         self.country = country
         self.state = state
@@ -56,25 +53,25 @@ class Zone(LoggedResource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: List of :class:`commercetools.types.Location`
-    locations: typing.Optional[typing.List["Location"]]
+    locations: typing.List["Location"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        locations: typing.Optional[typing.List["Location"]] = None
+        locations: typing.List["Location"] = None
     ) -> None:
         self.key = key
         self.name = name
@@ -112,19 +109,19 @@ class ZoneDraft(_BaseType):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
     #: List of :class:`commercetools.types.Location`
-    locations: typing.Optional[typing.List["Location"]]
+    locations: typing.List["Location"]
 
     def __init__(
         self,
         *,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         description: typing.Optional[str] = None,
-        locations: typing.Optional[typing.List["Location"]] = None
+        locations: typing.List["Location"] = None
     ) -> None:
         self.key = key
         self.name = name
@@ -144,24 +141,24 @@ class ZoneDraft(_BaseType):
 class ZonePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZonePagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Zone`
-    results: typing.Optional[typing.Sequence["Zone"]]
+    results: typing.Sequence["Zone"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Zone"]] = None
+        offset: int = None,
+        results: typing.Sequence["Zone"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -185,8 +182,8 @@ class ZoneReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Zone"] = None
     ) -> None:
         self.obj = obj
@@ -223,16 +220,11 @@ class ZoneResourceIdentifier(ResourceIdentifier):
 class ZoneUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -244,9 +236,9 @@ class ZoneUpdate(_BaseType):
 class ZoneUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -257,14 +249,9 @@ class ZoneUpdateAction(_BaseType):
 class ZoneAddLocationAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneAddLocationActionSchema`."
     #: :class:`commercetools.types.Location`
-    location: typing.Optional["Location"]
+    location: "Location"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        location: typing.Optional["Location"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, location: "Location" = None) -> None:
         self.location = location
         super().__init__(action="addLocation")
 
@@ -278,11 +265,9 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 class ZoneChangeNameAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -293,14 +278,9 @@ class ZoneChangeNameAction(ZoneUpdateAction):
 class ZoneRemoveLocationAction(ZoneUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRemoveLocationActionSchema`."
     #: :class:`commercetools.types.Location`
-    location: typing.Optional["Location"]
+    location: "Location"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        location: typing.Optional["Location"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, location: "Location" = None) -> None:
         self.location = location
         super().__init__(action="removeLocation")
 
@@ -317,10 +297,7 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
     description: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional[str] = None
+        self, *, action: str = None, description: typing.Optional[str] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -337,9 +314,7 @@ class ZoneSetKeyAction(ZoneUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 

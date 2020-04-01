@@ -77,9 +77,9 @@ class Customer(LoggedResource):
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
@@ -95,7 +95,7 @@ class Customer(LoggedResource):
     #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
     vat_id: typing.Optional[str]
     #: List of :class:`commercetools.types.Address`
-    addresses: typing.Optional[typing.List["Address"]]
+    addresses: typing.List["Address"]
     #: Optional :class:`str` `(Named` ``defaultShippingAddressId`` `in Commercetools)`
     default_shipping_address_id: typing.Optional[str]
     #: Optional list of :class:`str` `(Named` ``shippingAddressIds`` `in Commercetools)`
@@ -105,7 +105,7 @@ class Customer(LoggedResource):
     #: Optional list of :class:`str` `(Named` ``billingAddressIds`` `in Commercetools)`
     billing_address_ids: typing.Optional[typing.List[str]]
     #: :class:`bool` `(Named` ``isEmailVerified`` `in Commercetools)`
-    is_email_verified: typing.Optional[bool]
+    is_email_verified: bool
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -124,15 +124,15 @@ class Customer(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_number: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -140,12 +140,12 @@ class Customer(LoggedResource):
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
         vat_id: typing.Optional[str] = None,
-        addresses: typing.Optional[typing.List["Address"]] = None,
+        addresses: typing.List["Address"] = None,
         default_shipping_address_id: typing.Optional[str] = None,
         shipping_address_ids: typing.Optional[typing.List[str]] = None,
         default_billing_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List[str]] = None,
-        is_email_verified: typing.Optional[bool] = None,
+        is_email_verified: bool = None,
         external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -226,21 +226,21 @@ class Customer(LoggedResource):
 class CustomerChangePassword(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangePasswordSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`str` `(Named` ``currentPassword`` `in Commercetools)`
-    current_password: typing.Optional[str]
+    current_password: str
     #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
-    new_password: typing.Optional[str]
+    new_password: str
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        current_password: typing.Optional[str] = None,
-        new_password: typing.Optional[str] = None
+        id: str = None,
+        version: int = None,
+        current_password: str = None,
+        new_password: str = None
     ) -> None:
         self.id = id
         self.version = version
@@ -258,18 +258,18 @@ class CustomerChangePassword(_BaseType):
 class CustomerCreateEmailToken(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreateEmailTokenSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: Optional :class:`int`
     version: typing.Optional[int]
     #: :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
-    ttl_minutes: typing.Optional[int]
+    ttl_minutes: int
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
+        id: str = None,
         version: typing.Optional[int] = None,
-        ttl_minutes: typing.Optional[int] = None
+        ttl_minutes: int = None
     ) -> None:
         self.id = id
         self.version = version
@@ -287,15 +287,12 @@ class CustomerCreateEmailToken(_BaseType):
 class CustomerCreatePasswordResetToken(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatePasswordResetTokenSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: Optional :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
     ttl_minutes: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        email: typing.Optional[str] = None,
-        ttl_minutes: typing.Optional[int] = None
+        self, *, email: str = None, ttl_minutes: typing.Optional[int] = None
     ) -> None:
         self.email = email
         self.ttl_minutes = ttl_minutes
@@ -313,9 +310,9 @@ class CustomerDraft(_BaseType):
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
@@ -365,8 +362,8 @@ class CustomerDraft(_BaseType):
         self,
         *,
         customer_number: typing.Optional[str] = None,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -455,13 +452,10 @@ class CustomerEmailVerify(_BaseType):
     #: Optional :class:`int`
     version: typing.Optional[int]
     #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
-    token_value: typing.Optional[str]
+    token_value: str
 
     def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        token_value: typing.Optional[str] = None
+        self, *, version: typing.Optional[int] = None, token_value: str = None
     ) -> None:
         self.version = version
         self.token_value = token_value
@@ -477,24 +471,24 @@ class CustomerEmailVerify(_BaseType):
 class CustomerPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Customer`
-    results: typing.Optional[typing.Sequence["Customer"]]
+    results: typing.Sequence["Customer"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Customer"]] = None
+        offset: int = None,
+        results: typing.Sequence["Customer"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -518,8 +512,8 @@ class CustomerReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Customer"] = None
     ) -> None:
         self.obj = obj
@@ -536,17 +530,17 @@ class CustomerReference(Reference):
 class CustomerResetPassword(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerResetPasswordSchema`."
     #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
-    token_value: typing.Optional[str]
+    token_value: str
     #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
-    new_password: typing.Optional[str]
+    new_password: str
     #: Optional :class:`int`
     version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        token_value: typing.Optional[str] = None,
-        new_password: typing.Optional[str] = None,
+        token_value: str = None,
+        new_password: str = None,
         version: typing.Optional[int] = None
     ) -> None:
         self.token_value = token_value
@@ -585,15 +579,12 @@ class CustomerResourceIdentifier(ResourceIdentifier):
 class CustomerSignInResult(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSignInResultSchema`."
     #: :class:`commercetools.types.Customer`
-    customer: typing.Optional["Customer"]
+    customer: "Customer"
     #: Optional :class:`object`
     cart: typing.Optional[object]
 
     def __init__(
-        self,
-        *,
-        customer: typing.Optional["Customer"] = None,
-        cart: typing.Optional[object] = None
+        self, *, customer: "Customer" = None, cart: typing.Optional[object] = None
     ) -> None:
         self.customer = customer
         self.cart = cart
@@ -606,9 +597,9 @@ class CustomerSignInResult(_BaseType):
 class CustomerSignin(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSigninSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
     #: :class:`str`
-    password: typing.Optional[str]
+    password: str
     #: Optional :class:`str` `(Named` ``anonymousCartId`` `in Commercetools)`
     anonymous_cart_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.AnonymousCartSignInMode` `(Named` ``anonymousCartSignInMode`` `in Commercetools)`
@@ -621,8 +612,8 @@ class CustomerSignin(_BaseType):
     def __init__(
         self,
         *,
-        email: typing.Optional[str] = None,
-        password: typing.Optional[str] = None,
+        email: str = None,
+        password: str = None,
         anonymous_cart_id: typing.Optional[str] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
         anonymous_id: typing.Optional[str] = None,
@@ -653,27 +644,27 @@ class CustomerSignin(_BaseType):
 class CustomerToken(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerTokenSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
+    created_at: datetime.datetime
     #: Optional :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
     last_modified_at: typing.Optional[datetime.datetime]
     #: :class:`str` `(Named` ``customerId`` `in Commercetools)`
-    customer_id: typing.Optional[str]
+    customer_id: str
     #: :class:`datetime.datetime` `(Named` ``expiresAt`` `in Commercetools)`
-    expires_at: typing.Optional[datetime.datetime]
+    expires_at: datetime.datetime
     #: :class:`str`
-    value: typing.Optional[str]
+    value: str
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        created_at: datetime.datetime = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
-        customer_id: typing.Optional[str] = None,
-        expires_at: typing.Optional[datetime.datetime] = None,
-        value: typing.Optional[str] = None
+        customer_id: str = None,
+        expires_at: datetime.datetime = None,
+        value: str = None
     ) -> None:
         self.id = id
         self.created_at = created_at
@@ -700,16 +691,11 @@ class CustomerToken(_BaseType):
 class CustomerUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -721,9 +707,9 @@ class CustomerUpdate(_BaseType):
 class CustomerUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -734,14 +720,9 @@ class CustomerUpdateAction(_BaseType):
 class CustomerAddAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddAddressActionSchema`."
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
         self.address = address
         super().__init__(action="addAddress")
 
@@ -755,14 +736,9 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddBillingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="addBillingAddressId")
 
@@ -776,14 +752,9 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddShippingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="addShippingAddressId")
 
@@ -797,16 +768,12 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 class CustomerChangeAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeAddressActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
     #: :class:`commercetools.types.Address`
-    address: typing.Optional["Address"]
+    address: "Address"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None,
-        address: typing.Optional["Address"] = None
+        self, *, action: str = None, address_id: str = None, address: "Address" = None
     ) -> None:
         self.address_id = address_id
         self.address = address
@@ -823,11 +790,9 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 class CustomerChangeEmailAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeEmailActionSchema`."
     #: :class:`str`
-    email: typing.Optional[str]
+    email: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, email: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, email: str = None) -> None:
         self.email = email
         super().__init__(action="changeEmail")
 
@@ -841,14 +806,9 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 class CustomerRemoveAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveAddressActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="removeAddress")
 
@@ -862,14 +822,9 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveBillingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="removeBillingAddressId")
 
@@ -883,14 +838,9 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveShippingAddressIdActionSchema`."
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: typing.Optional[str]
+    address_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, address_id: str = None) -> None:
         self.address_id = address_id
         super().__init__(action="removeShippingAddressId")
 
@@ -907,10 +857,7 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
     company_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        company_name: typing.Optional[str] = None
+        self, *, action: str = None, company_name: typing.Optional[str] = None
     ) -> None:
         self.company_name = company_name
         super().__init__(action="setCompanyName")
@@ -925,15 +872,15 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -958,7 +905,7 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -982,7 +929,7 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
     ) -> None:
         self.customer_group = customer_group
@@ -1001,10 +948,7 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
     customer_number: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        customer_number: typing.Optional[str] = None
+        self, *, action: str = None, customer_number: typing.Optional[str] = None
     ) -> None:
         self.customer_number = customer_number
         super().__init__(action="setCustomerNumber")
@@ -1024,7 +968,7 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         date_of_birth: typing.Optional[datetime.date] = None
     ) -> None:
         self.date_of_birth = date_of_birth
@@ -1043,10 +987,7 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     address_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
+        self, *, action: str = None, address_id: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
         super().__init__(action="setDefaultBillingAddress")
@@ -1064,10 +1005,7 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     address_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        address_id: typing.Optional[str] = None
+        self, *, action: str = None, address_id: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
         super().__init__(action="setDefaultShippingAddress")
@@ -1085,10 +1023,7 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
     external_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None
+        self, *, action: str = None, external_id: typing.Optional[str] = None
     ) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
@@ -1106,10 +1041,7 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
     first_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        first_name: typing.Optional[str] = None
+        self, *, action: str = None, first_name: typing.Optional[str] = None
     ) -> None:
         self.first_name = first_name
         super().__init__(action="setFirstName")
@@ -1126,9 +1058,7 @@ class CustomerSetKeyAction(CustomerUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -1142,10 +1072,7 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
     last_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        last_name: typing.Optional[str] = None
+        self, *, action: str = None, last_name: typing.Optional[str] = None
     ) -> None:
         self.last_name = last_name
         super().__init__(action="setLastName")
@@ -1163,10 +1090,7 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
     locale: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        locale: typing.Optional[str] = None
+        self, *, action: str = None, locale: typing.Optional[str] = None
     ) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
@@ -1184,10 +1108,7 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
     middle_name: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        middle_name: typing.Optional[str] = None
+        self, *, action: str = None, middle_name: typing.Optional[str] = None
     ) -> None:
         self.middle_name = middle_name
         super().__init__(action="setMiddleName")
@@ -1205,10 +1126,7 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
     salutation: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        salutation: typing.Optional[str] = None
+        self, *, action: str = None, salutation: typing.Optional[str] = None
     ) -> None:
         self.salutation = salutation
         super().__init__(action="setSalutation")
@@ -1226,7 +1144,7 @@ class CustomerSetTitleAction(CustomerUpdateAction):
     title: typing.Optional[str]
 
     def __init__(
-        self, *, action: typing.Optional[str] = None, title: typing.Optional[str] = None
+        self, *, action: str = None, title: typing.Optional[str] = None
     ) -> None:
         self.title = title
         super().__init__(action="setTitle")
@@ -1241,10 +1159,7 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
     vat_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        vat_id: typing.Optional[str] = None
+        self, *, action: str = None, vat_id: typing.Optional[str] = None
     ) -> None:
         self.vat_id = vat_id
         super().__init__(action="setVatId")

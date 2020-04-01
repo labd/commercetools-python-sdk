@@ -123,16 +123,11 @@ __all__ = [
 class Attribute(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
+    value: typing.Any
 
-    def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None,
-    ) -> None:
+    def __init__(self, *, name: str = None, value: typing.Any = None) -> None:
         self.name = name
         self.value = value
         super().__init__()
@@ -161,9 +156,9 @@ class CategoryOrderHints(typing.Dict[(str, str)]):
 class FacetResult(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultSchema`."
     #: :class:`commercetools.types.FacetTypes`
-    type: typing.Optional["FacetTypes"]
+    type: "FacetTypes"
 
-    def __init__(self, *, type: typing.Optional["FacetTypes"] = None) -> None:
+    def __init__(self, *, type: "FacetTypes" = None) -> None:
         self.type = type
         super().__init__()
 
@@ -174,39 +169,39 @@ class FacetResult(_BaseType):
 class FacetResultRange(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultRangeSchema`."
     #: :class:`int` `(Named` ``from`` `in Commercetools)`
-    from_: typing.Optional[int]
+    from_: int
     #: :class:`str` `(Named` ``fromStr`` `in Commercetools)`
-    from_str: typing.Optional[str]
+    from_str: str
     #: :class:`int`
-    to: typing.Optional[int]
+    to: int
     #: :class:`str` `(Named` ``toStr`` `in Commercetools)`
-    to_str: typing.Optional[str]
+    to_str: str
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
     product_count: typing.Optional[int]
     #: :class:`int`
-    total: typing.Optional[int]
+    total: int
     #: :class:`int`
-    min: typing.Optional[int]
+    min: int
     #: :class:`int`
-    max: typing.Optional[int]
+    max: int
     #: :class:`int`
-    mean: typing.Optional[int]
+    mean: int
 
     def __init__(
         self,
         *,
-        from_: typing.Optional[int] = None,
-        from_str: typing.Optional[str] = None,
-        to: typing.Optional[int] = None,
-        to_str: typing.Optional[str] = None,
-        count: typing.Optional[int] = None,
+        from_: int = None,
+        from_str: str = None,
+        to: int = None,
+        to_str: str = None,
+        count: int = None,
         product_count: typing.Optional[int] = None,
-        total: typing.Optional[int] = None,
-        min: typing.Optional[int] = None,
-        max: typing.Optional[int] = None,
-        mean: typing.Optional[int] = None,
+        total: int = None,
+        min: int = None,
+        max: int = None,
+        mean: int = None,
     ) -> None:
         self.from_ = from_
         self.from_str = from_str
@@ -241,17 +236,17 @@ class FacetResultRange(_BaseType):
 class FacetResultTerm(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultTermSchema`."
     #: :class:`typing.Any`
-    term: typing.Optional[typing.Any]
+    term: typing.Any
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
     product_count: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        term: typing.Optional[typing.Any] = None,
-        count: typing.Optional[int] = None,
+        term: typing.Any = None,
+        count: int = None,
         product_count: typing.Optional[int] = None,
     ) -> None:
         self.term = term
@@ -283,9 +278,9 @@ class Product(LoggedResource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
+    product_type: "ProductTypeReference"
     #: :class:`commercetools.types.ProductCatalogData` `(Named` ``masterData`` `in Commercetools)`
-    master_data: typing.Optional["ProductCatalogData"]
+    master_data: "ProductCatalogData"
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.StateReference`
@@ -296,15 +291,15 @@ class Product(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        master_data: typing.Optional["ProductCatalogData"] = None,
+        product_type: "ProductTypeReference" = None,
+        master_data: "ProductCatalogData" = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
@@ -347,21 +342,21 @@ class Product(LoggedResource):
 class ProductCatalogData(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCatalogDataSchema`."
     #: :class:`bool`
-    published: typing.Optional[bool]
+    published: bool
     #: :class:`commercetools.types.ProductData`
-    current: typing.Optional["ProductData"]
+    current: "ProductData"
     #: :class:`commercetools.types.ProductData`
-    staged: typing.Optional["ProductData"]
+    staged: "ProductData"
     #: :class:`bool` `(Named` ``hasStagedChanges`` `in Commercetools)`
-    has_staged_changes: typing.Optional[bool]
+    has_staged_changes: bool
 
     def __init__(
         self,
         *,
-        published: typing.Optional[bool] = None,
-        current: typing.Optional["ProductData"] = None,
-        staged: typing.Optional["ProductData"] = None,
-        has_staged_changes: typing.Optional[bool] = None,
+        published: bool = None,
+        current: "ProductData" = None,
+        staged: "ProductData" = None,
+        has_staged_changes: bool = None,
     ) -> None:
         self.published = published
         self.current = current
@@ -379,15 +374,15 @@ class ProductCatalogData(_BaseType):
 class ProductData(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDataSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: List of :class:`commercetools.types.CategoryReference`
-    categories: typing.Optional[typing.List["CategoryReference"]]
+    categories: typing.List["CategoryReference"]
     #: Optional :class:`commercetools.types.CategoryOrderHints` `(Named` ``categoryOrderHints`` `in Commercetools)`
     category_order_hints: typing.Optional["CategoryOrderHints"]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
     meta_title: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaDescription`` `in Commercetools)`
@@ -395,26 +390,26 @@ class ProductData(_BaseType):
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaKeywords`` `in Commercetools)`
     meta_keywords: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.ProductVariant` `(Named` ``masterVariant`` `in Commercetools)`
-    master_variant: typing.Optional["ProductVariant"]
+    master_variant: "ProductVariant"
     #: List of :class:`commercetools.types.ProductVariant`
-    variants: typing.Optional[typing.List["ProductVariant"]]
+    variants: typing.List["ProductVariant"]
     #: :class:`commercetools.types.SearchKeywords` `(Named` ``searchKeywords`` `in Commercetools)`
-    search_keywords: typing.Optional["SearchKeywords"]
+    search_keywords: "SearchKeywords"
 
     def __init__(
         self,
         *,
-        name: typing.Optional["LocalizedString"] = None,
-        categories: typing.Optional[typing.List["CategoryReference"]] = None,
+        name: "LocalizedString" = None,
+        categories: typing.List["CategoryReference"] = None,
         category_order_hints: typing.Optional["CategoryOrderHints"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        slug: "LocalizedString" = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        master_variant: typing.Optional["ProductVariant"] = None,
-        variants: typing.Optional[typing.List["ProductVariant"]] = None,
-        search_keywords: typing.Optional["SearchKeywords"] = None,
+        master_variant: "ProductVariant" = None,
+        variants: typing.List["ProductVariant"] = None,
+        search_keywords: "SearchKeywords" = None,
     ) -> None:
         self.name = name
         self.categories = categories
@@ -451,11 +446,11 @@ class ProductData(_BaseType):
 class ProductDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDraftSchema`."
     #: :class:`commercetools.types.ProductTypeResourceIdentifier` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeResourceIdentifier"]
+    product_type: "ProductTypeResourceIdentifier"
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -486,9 +481,9 @@ class ProductDraft(_BaseType):
     def __init__(
         self,
         *,
-        product_type: typing.Optional["ProductTypeResourceIdentifier"] = None,
-        name: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        product_type: "ProductTypeResourceIdentifier" = None,
+        name: "LocalizedString" = None,
+        slug: "LocalizedString" = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         categories: typing.Optional[typing.List["CategoryResourceIdentifier"]] = None,
@@ -548,24 +543,24 @@ class ProductDraft(_BaseType):
 class ProductPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Product`
-    results: typing.Optional[typing.Sequence["Product"]]
+    results: typing.Sequence["Product"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Product"]] = None,
+        offset: int = None,
+        results: typing.Sequence["Product"] = None,
     ) -> None:
         self.limit = limit
         self.count = count
@@ -586,15 +581,15 @@ class ProductProjection(BaseResource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``productType`` `in Commercetools)`
-    product_type: typing.Optional["ProductTypeReference"]
+    product_type: "ProductTypeReference"
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: List of :class:`commercetools.types.CategoryReference`
-    categories: typing.Optional[typing.List["CategoryReference"]]
+    categories: typing.List["CategoryReference"]
     #: Optional :class:`commercetools.types.CategoryOrderHints` `(Named` ``categoryOrderHints`` `in Commercetools)`
     category_order_hints: typing.Optional["CategoryOrderHints"]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
@@ -610,9 +605,9 @@ class ProductProjection(BaseResource):
     #: Optional :class:`bool`
     published: typing.Optional[bool]
     #: :class:`commercetools.types.ProductVariant` `(Named` ``masterVariant`` `in Commercetools)`
-    master_variant: typing.Optional["ProductVariant"]
+    master_variant: "ProductVariant"
     #: List of :class:`commercetools.types.ProductVariant`
-    variants: typing.Optional[typing.List["ProductVariant"]]
+    variants: typing.List["ProductVariant"]
     #: Optional :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Optional :class:`commercetools.types.StateReference`
@@ -623,16 +618,16 @@ class ProductProjection(BaseResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         key: typing.Optional[str] = None,
-        product_type: typing.Optional["ProductTypeReference"] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        product_type: "ProductTypeReference" = None,
+        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None,
-        categories: typing.Optional[typing.List["CategoryReference"]] = None,
+        slug: "LocalizedString" = None,
+        categories: typing.List["CategoryReference"] = None,
         category_order_hints: typing.Optional["CategoryOrderHints"] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
@@ -640,8 +635,8 @@ class ProductProjection(BaseResource):
         search_keywords: typing.Optional["SearchKeywords"] = None,
         has_staged_changes: typing.Optional[bool] = None,
         published: typing.Optional[bool] = None,
-        master_variant: typing.Optional["ProductVariant"] = None,
-        variants: typing.Optional[typing.List["ProductVariant"]] = None,
+        master_variant: "ProductVariant" = None,
+        variants: typing.List["ProductVariant"] = None,
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
@@ -704,24 +699,24 @@ class ProductProjection(BaseResource):
 class ProductProjectionPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.ProductProjection`
-    results: typing.Optional[typing.Sequence["ProductProjection"]]
+    results: typing.Sequence["ProductProjection"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ProductProjection"]] = None,
+        offset: int = None,
+        results: typing.Sequence["ProductProjection"] = None,
     ) -> None:
         self.limit = limit
         self.count = count
@@ -740,24 +735,24 @@ class ProductProjectionPagedQueryResponse(_BaseType):
 class ProductProjectionPagedSearchResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedSearchResponseSchema`."
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.ProductProjection`
-    results: typing.Optional[typing.List["ProductProjection"]]
+    results: typing.List["ProductProjection"]
     #: :class:`commercetools.types.FacetResults`
-    facets: typing.Optional["FacetResults"]
+    facets: "FacetResults"
 
     def __init__(
         self,
         *,
-        count: typing.Optional[int] = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.List["ProductProjection"]] = None,
-        facets: typing.Optional["FacetResults"] = None,
+        offset: int = None,
+        results: typing.List["ProductProjection"] = None,
+        facets: "FacetResults" = None,
     ) -> None:
         self.count = count
         self.total = total
@@ -781,8 +776,8 @@ class ProductReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Product"] = None,
     ) -> None:
         self.obj = obj
@@ -819,16 +814,11 @@ class ProductResourceIdentifier(ResourceIdentifier):
 class ProductUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None,
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -840,9 +830,9 @@ class ProductUpdate(_BaseType):
 class ProductUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -853,7 +843,7 @@ class ProductUpdateAction(_BaseType):
 class ProductVariant(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantSchema`."
     #: :class:`int`
-    id: typing.Optional[int]
+    id: int
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`str`
@@ -880,7 +870,7 @@ class ProductVariant(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[int] = None,
+        id: int = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["Price"]] = None,
@@ -1051,14 +1041,14 @@ class ProductVariantDraft(_BaseType):
 class SearchKeyword(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SearchKeywordSchema`."
     #: :class:`str`
-    text: typing.Optional[str]
+    text: str
     #: Optional :class:`commercetools.types.SuggestTokenizer` `(Named` ``suggestTokenizer`` `in Commercetools)`
     suggest_tokenizer: typing.Optional["SuggestTokenizer"]
 
     def __init__(
         self,
         *,
-        text: typing.Optional[str] = None,
+        text: str = None,
         suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
     ) -> None:
         self.text = text
@@ -1080,9 +1070,9 @@ class SearchKeywords(typing.Dict[(str, "SearchKeyword")]):
 class SuggestTokenizer(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestTokenizerSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -1093,9 +1083,9 @@ class SuggestTokenizer(_BaseType):
 class Suggestion(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestionSchema`."
     #: :class:`str`
-    text: typing.Optional[str]
+    text: str
 
-    def __init__(self, *, text: typing.Optional[str] = None) -> None:
+    def __init__(self, *, text: str = None) -> None:
         self.text = text
         super().__init__()
 
@@ -1122,14 +1112,9 @@ class TermFacetResultType(enum.Enum):
 class CustomTokenizer(SuggestTokenizer):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomTokenizerSchema`."
     #: List of :class:`str`
-    inputs: typing.Optional[typing.List[str]]
+    inputs: typing.List[str]
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        inputs: typing.Optional[typing.List[str]] = None,
-    ) -> None:
+    def __init__(self, *, type: str = None, inputs: typing.List[str] = None) -> None:
         self.inputs = inputs
         super().__init__(type="custom")
 
@@ -1140,15 +1125,15 @@ class CustomTokenizer(SuggestTokenizer):
 class FilteredFacetResult(FacetResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.FilteredFacetResultSchema`."
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
     product_count: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        count: typing.Optional[int] = None,
+        type: "FacetTypes" = None,
+        count: int = None,
         product_count: typing.Optional[int] = None,
     ) -> None:
         self.count = count
@@ -1172,18 +1157,18 @@ class ProductAddAssetAction(ProductUpdateAction):
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: :class:`commercetools.types.AssetDraft`
-    asset: typing.Optional["AssetDraft"]
+    asset: "AssetDraft"
     #: Optional :class:`int`
     position: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset: typing.Optional["AssetDraft"] = None,
+        asset: "AssetDraft" = None,
         position: typing.Optional[int] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -1214,17 +1199,17 @@ class ProductAddExternalImageAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`commercetools.types.Image`
-    image: typing.Optional["Image"]
+    image: "Image"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        image: typing.Optional["Image"] = None,
+        image: "Image" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -1247,17 +1232,17 @@ class ProductAddPriceAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`commercetools.types.PriceDraft`
-    price: typing.Optional["PriceDraft"]
+    price: "PriceDraft"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        price: typing.Optional["PriceDraft"] = None,
+        price: "PriceDraft" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -1276,7 +1261,7 @@ class ProductAddPriceAction(ProductUpdateAction):
 class ProductAddToCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddToCategoryActionSchema`."
     #: :class:`commercetools.types.CategoryResourceIdentifier`
-    category: typing.Optional["CategoryResourceIdentifier"]
+    category: "CategoryResourceIdentifier"
     #: Optional :class:`str` `(Named` ``orderHint`` `in Commercetools)`
     order_hint: typing.Optional[str]
     #: Optional :class:`bool`
@@ -1285,8 +1270,8 @@ class ProductAddToCategoryAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        category: typing.Optional["CategoryResourceIdentifier"] = None,
+        action: str = None,
+        category: "CategoryResourceIdentifier" = None,
         order_hint: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -1322,7 +1307,7 @@ class ProductAddVariantAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
@@ -1369,18 +1354,18 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        name: "LocalizedString" = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -1414,16 +1399,16 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: List of :class:`str` `(Named` ``assetOrder`` `in Commercetools)`
-    asset_order: typing.Optional[typing.List[str]]
+    asset_order: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset_order: typing.Optional[typing.List[str]] = None,
+        asset_order: typing.List[str] = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -1450,7 +1435,7 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -1470,15 +1455,15 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
 class ProductChangeNameAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeNameActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        name: "LocalizedString" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.name = name
@@ -1496,18 +1481,18 @@ class ProductChangeNameAction(ProductUpdateAction):
 class ProductChangePriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangePriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: :class:`commercetools.types.PriceDraft`
-    price: typing.Optional["PriceDraft"]
+    price: "PriceDraft"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
-        price: typing.Optional["PriceDraft"] = None,
+        action: str = None,
+        price_id: str = None,
+        price: "PriceDraft" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.price_id = price_id
@@ -1525,15 +1510,15 @@ class ProductChangePriceAction(ProductUpdateAction):
 class ProductChangeSlugAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeSlugActionSchema`."
     #: :class:`commercetools.types.LocalizedString`
-    slug: typing.Optional["LocalizedString"]
+    slug: "LocalizedString"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None,
+        action: str = None,
+        slug: "LocalizedString" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.slug = slug
@@ -1553,14 +1538,14 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
+        variant_id: int = None,
     ) -> None:
         self.sku = sku
         self.variant_id = variant_id
@@ -1581,20 +1566,20 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`str` `(Named` ``imageUrl`` `in Commercetools)`
-    image_url: typing.Optional[str]
+    image_url: str
     #: :class:`int`
-    position: typing.Optional[int]
+    position: int
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        image_url: typing.Optional[str] = None,
-        position: typing.Optional[int] = None,
+        image_url: str = None,
+        position: int = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -1626,7 +1611,7 @@ class ProductPublishAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         scope: typing.Optional["ProductPublishScope"] = None,
     ) -> None:
         self.scope = scope
@@ -1652,7 +1637,7 @@ class ProductRemoveAssetAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -1683,15 +1668,15 @@ class ProductRemoveAssetAction(ProductUpdateAction):
 class ProductRemoveFromCategoryAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveFromCategoryActionSchema`."
     #: :class:`commercetools.types.CategoryResourceIdentifier`
-    category: typing.Optional["CategoryResourceIdentifier"]
+    category: "CategoryResourceIdentifier"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        category: typing.Optional["CategoryResourceIdentifier"] = None,
+        action: str = None,
+        category: "CategoryResourceIdentifier" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.category = category
@@ -1713,17 +1698,17 @@ class ProductRemoveImageAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`str` `(Named` ``imageUrl`` `in Commercetools)`
-    image_url: typing.Optional[str]
+    image_url: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        image_url: typing.Optional[str] = None,
+        image_url: str = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -1742,15 +1727,15 @@ class ProductRemoveImageAction(ProductUpdateAction):
 class ProductRemovePriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovePriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.price_id = price_id
@@ -1777,7 +1762,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -1799,7 +1784,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
 class ProductRevertStagedChangesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedChangesActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action="revertStagedChanges")
 
     def __repr__(self) -> str:
@@ -1809,14 +1794,9 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
 class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedVariantChangesActionSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
-    ) -> None:
+    def __init__(self, *, action: str = None, variant_id: int = None) -> None:
         self.variant_id = variant_id
         super().__init__(action="revertStagedVariantChanges")
 
@@ -1840,20 +1820,20 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -1901,7 +1881,7 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -1953,7 +1933,7 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -1993,18 +1973,18 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: :class:`str` `(Named` ``assetId`` `in Commercetools)`
-    asset_id: typing.Optional[str]
+    asset_id: str
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset_id: typing.Optional[str] = None,
+        asset_id: str = None,
         asset_key: typing.Optional[str] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -2041,18 +2021,18 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
     asset_key: typing.Optional[str]
     #: List of :class:`commercetools.types.AssetSource`
-    sources: typing.Optional[typing.List["AssetSource"]]
+    sources: typing.List["AssetSource"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        sources: typing.Optional[typing.List["AssetSource"]] = None,
+        sources: typing.List["AssetSource"] = None,
     ) -> None:
         self.variant_id = variant_id
         self.sku = sku
@@ -2095,7 +2075,7 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
@@ -2133,7 +2113,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
     #: Optional :class:`bool`
@@ -2142,10 +2122,10 @@ class ProductSetAttributeAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2173,7 +2153,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
 class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAttributeInAllVariantsActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
     #: Optional :class:`bool`
@@ -2182,8 +2162,8 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2202,7 +2182,7 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
 class ProductSetCategoryOrderHintAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetCategoryOrderHintActionSchema`."
     #: :class:`str` `(Named` ``categoryId`` `in Commercetools)`
-    category_id: typing.Optional[str]
+    category_id: str
     #: Optional :class:`str` `(Named` ``orderHint`` `in Commercetools)`
     order_hint: typing.Optional[str]
     #: Optional :class:`bool`
@@ -2211,8 +2191,8 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        category_id: typing.Optional[str] = None,
+        action: str = None,
+        category_id: str = None,
         order_hint: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2238,7 +2218,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         description: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2257,7 +2237,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetDiscountedPriceActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: Optional :class:`commercetools.types.DiscountedPrice`
@@ -2266,8 +2246,8 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
     ) -> None:
@@ -2290,7 +2270,7 @@ class ProductSetImageLabelAction(ProductUpdateAction):
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: :class:`str` `(Named` ``imageUrl`` `in Commercetools)`
-    image_url: typing.Optional[str]
+    image_url: str
     #: Optional :class:`str`
     label: typing.Optional[str]
     #: Optional :class:`bool`
@@ -2299,10 +2279,10 @@ class ProductSetImageLabelAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
-        image_url: typing.Optional[str] = None,
+        image_url: str = None,
         label: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2332,9 +2312,7 @@ class ProductSetKeyAction(ProductUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -2352,7 +2330,7 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2377,7 +2355,7 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2402,7 +2380,7 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2425,17 +2403,17 @@ class ProductSetPricesAction(ProductUpdateAction):
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: List of :class:`commercetools.types.PriceDraft`
-    prices: typing.Optional[typing.List["PriceDraft"]]
+    prices: typing.List["PriceDraft"]
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        prices: typing.Optional[typing.List["PriceDraft"]] = None,
+        prices: typing.List["PriceDraft"] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.variant_id = variant_id
@@ -2454,21 +2432,21 @@ class ProductSetPricesAction(ProductUpdateAction):
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomFieldActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None,
     ) -> None:
         self.price_id = price_id
@@ -2487,7 +2465,7 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomTypeActionSchema`."
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
-    price_id: typing.Optional[str]
+    price_id: str
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
@@ -2498,8 +2476,8 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        price_id: typing.Optional[str] = None,
+        action: str = None,
+        price_id: str = None,
         staged: typing.Optional[bool] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None,
@@ -2531,7 +2509,7 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
@@ -2553,15 +2531,15 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
 class ProductSetSearchKeywordsAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSearchKeywordsActionSchema`."
     #: :class:`commercetools.types.SearchKeywords` `(Named` ``searchKeywords`` `in Commercetools)`
-    search_keywords: typing.Optional["SearchKeywords"]
+    search_keywords: "SearchKeywords"
     #: Optional :class:`bool`
     staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        search_keywords: typing.Optional["SearchKeywords"] = None,
+        action: str = None,
+        search_keywords: "SearchKeywords" = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
         self.search_keywords = search_keywords
@@ -2578,7 +2556,7 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 class ProductSetSkuAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSkuActionSchema`."
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
-    variant_id: typing.Optional[int]
+    variant_id: int
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`bool`
@@ -2587,8 +2565,8 @@ class ProductSetSkuAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        variant_id: typing.Optional[int] = None,
+        action: str = None,
+        variant_id: int = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
     ) -> None:
@@ -2614,7 +2592,7 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
     ) -> None:
         self.tax_category = tax_category
@@ -2637,7 +2615,7 @@ class ProductTransitionStateAction(ProductUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         state: typing.Optional["StateResourceIdentifier"] = None,
         force: typing.Optional[bool] = None,
     ) -> None:
@@ -2656,7 +2634,7 @@ class ProductTransitionStateAction(ProductUpdateAction):
 class ProductUnpublishAction(ProductUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishActionSchema`."
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         super().__init__(action="unpublish")
 
     def __repr__(self) -> str:
@@ -2666,13 +2644,13 @@ class ProductUnpublishAction(ProductUpdateAction):
 class RangeFacetResult(FacetResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.RangeFacetResultSchema`."
     #: List of :class:`commercetools.types.FacetResultRange`
-    ranges: typing.Optional[typing.List["FacetResultRange"]]
+    ranges: typing.List["FacetResultRange"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        ranges: typing.Optional[typing.List["FacetResultRange"]] = None,
+        type: "FacetTypes" = None,
+        ranges: typing.List["FacetResultRange"] = None,
     ) -> None:
         self.ranges = ranges
         super().__init__(type=FacetTypes.RANGE)
@@ -2684,25 +2662,25 @@ class RangeFacetResult(FacetResult):
 class TermFacetResult(FacetResult):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TermFacetResultSchema`."
     #: :class:`commercetools.types.TermFacetResultType` `(Named` ``dataType`` `in Commercetools)`
-    data_type: typing.Optional["TermFacetResultType"]
+    data_type: "TermFacetResultType"
     #: :class:`int`
-    missing: typing.Optional[int]
+    missing: int
     #: :class:`int`
-    total: typing.Optional[int]
+    total: int
     #: :class:`int`
-    other: typing.Optional[int]
+    other: int
     #: List of :class:`commercetools.types.FacetResultTerm`
-    terms: typing.Optional[typing.List["FacetResultTerm"]]
+    terms: typing.List["FacetResultTerm"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional["FacetTypes"] = None,
-        data_type: typing.Optional["TermFacetResultType"] = None,
-        missing: typing.Optional[int] = None,
-        total: typing.Optional[int] = None,
-        other: typing.Optional[int] = None,
-        terms: typing.Optional[typing.List["FacetResultTerm"]] = None,
+        type: "FacetTypes" = None,
+        data_type: "TermFacetResultType" = None,
+        missing: int = None,
+        total: int = None,
+        other: int = None,
+        terms: typing.List["FacetResultTerm"] = None,
     ) -> None:
         self.data_type = data_type
         self.missing = missing
@@ -2728,7 +2706,7 @@ class TermFacetResult(FacetResult):
 class WhitespaceTokenizer(SuggestTokenizer):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.WhitespaceTokenizerSchema`."
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         super().__init__(type="whitespace")
 
     def __repr__(self) -> str:

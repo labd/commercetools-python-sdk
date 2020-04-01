@@ -11,11 +11,11 @@ __all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
 class ApiClient(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`str`
-    scope: typing.Optional[str]
+    scope: str
     #: Optional :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
     created_at: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.date` `(Named` ``lastUsedAt`` `in Commercetools)`
@@ -28,9 +28,9 @@ class ApiClient(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        scope: typing.Optional[str] = None,
+        id: str = None,
+        name: str = None,
+        scope: str = None,
         created_at: typing.Optional[datetime.datetime] = None,
         last_used_at: typing.Optional[datetime.date] = None,
         delete_at: typing.Optional[datetime.datetime] = None,
@@ -63,17 +63,17 @@ class ApiClient(_BaseType):
 class ApiClientDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientDraftSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`str`
-    scope: typing.Optional[str]
+    scope: str
     #: Optional :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
     delete_days_after_creation: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
-        scope: typing.Optional[str] = None,
+        name: str = None,
+        scope: str = None,
         delete_days_after_creation: typing.Optional[int] = None
     ) -> None:
         self.name = name
@@ -92,24 +92,24 @@ class ApiClientDraft(_BaseType):
 class ApiClientPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.ApiClient`
-    results: typing.Optional[typing.Sequence["ApiClient"]]
+    results: typing.Sequence["ApiClient"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ApiClient"]] = None
+        offset: int = None,
+        results: typing.Sequence["ApiClient"] = None
     ) -> None:
         self.limit = limit
         self.count = count

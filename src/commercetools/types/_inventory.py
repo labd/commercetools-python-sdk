@@ -42,13 +42,13 @@ __all__ = [
 class InventoryEntry(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySchema`."
     #: :class:`str`
-    sku: typing.Optional[str]
+    sku: str
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
-    quantity_on_stock: typing.Optional[int]
+    quantity_on_stock: int
     #: :class:`int` `(Named` ``availableQuantity`` `in Commercetools)`
-    available_quantity: typing.Optional[int]
+    available_quantity: int
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
@@ -59,16 +59,16 @@ class InventoryEntry(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sku: typing.Optional[str] = None,
+        sku: str = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        quantity_on_stock: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None,
+        quantity_on_stock: int = None,
+        available_quantity: int = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFields"] = None
@@ -113,11 +113,11 @@ class InventoryEntry(LoggedResource):
 class InventoryEntryDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDraftSchema`."
     #: :class:`str`
-    sku: typing.Optional[str]
+    sku: str
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: :class:`int` `(Named` ``quantityOnStock`` `in Commercetools)`
-    quantity_on_stock: typing.Optional[int]
+    quantity_on_stock: int
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
@@ -128,9 +128,9 @@ class InventoryEntryDraft(_BaseType):
     def __init__(
         self,
         *,
-        sku: typing.Optional[str] = None,
+        sku: str = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        quantity_on_stock: typing.Optional[int] = None,
+        quantity_on_stock: int = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
@@ -165,8 +165,8 @@ class InventoryEntryReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["InventoryEntry"] = None
     ) -> None:
         self.obj = obj
@@ -203,16 +203,11 @@ class InventoryEntryResourceIdentifier(ResourceIdentifier):
 class InventoryEntryUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -227,9 +222,9 @@ class InventoryEntryUpdate(_BaseType):
 class InventoryEntryUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -240,24 +235,24 @@ class InventoryEntryUpdateAction(_BaseType):
 class InventoryPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.InventoryEntry`
-    results: typing.Optional[typing.Sequence["InventoryEntry"]]
+    results: typing.Sequence["InventoryEntry"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["InventoryEntry"]] = None
+        offset: int = None,
+        results: typing.Sequence["InventoryEntry"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -276,14 +271,9 @@ class InventoryPagedQueryResponse(_BaseType):
 class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryAddQuantityActionSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, quantity: int = None) -> None:
         self.quantity = quantity
         super().__init__(action="addQuantity")
 
@@ -297,14 +287,9 @@ class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
 class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryChangeQuantityActionSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, quantity: int = None) -> None:
         self.quantity = quantity
         super().__init__(action="changeQuantity")
 
@@ -318,14 +303,9 @@ class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
 class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryRemoveQuantityActionSchema`."
     #: :class:`int`
-    quantity: typing.Optional[int]
+    quantity: int
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, quantity: int = None) -> None:
         self.quantity = quantity
         super().__init__(action="removeQuantity")
 
@@ -339,15 +319,15 @@ class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
 class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -372,7 +352,7 @@ class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -396,7 +376,7 @@ class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         expected_delivery: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.expected_delivery = expected_delivery
@@ -415,10 +395,7 @@ class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
     restockable_in_days: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        restockable_in_days: typing.Optional[int] = None
+        self, *, action: str = None, restockable_in_days: typing.Optional[int] = None
     ) -> None:
         self.restockable_in_days = restockable_in_days
         super().__init__(action="setRestockableInDays")
@@ -438,7 +415,7 @@ class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ) -> None:
         self.supply_channel = supply_channel

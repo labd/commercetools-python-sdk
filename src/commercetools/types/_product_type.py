@@ -81,33 +81,33 @@ class AttributeConstraintEnumDraft(enum.Enum):
 class AttributeDefinition(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionSchema`."
     #: :class:`commercetools.types.AttributeType`
-    type: typing.Optional["AttributeType"]
+    type: "AttributeType"
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
     #: :class:`bool` `(Named` ``isRequired`` `in Commercetools)`
-    is_required: typing.Optional[bool]
+    is_required: bool
     #: :class:`commercetools.types.AttributeConstraintEnum` `(Named` ``attributeConstraint`` `in Commercetools)`
-    attribute_constraint: typing.Optional["AttributeConstraintEnum"]
+    attribute_constraint: "AttributeConstraintEnum"
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
     input_tip: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.TextInputHint` `(Named` ``inputHint`` `in Commercetools)`
-    input_hint: typing.Optional["TextInputHint"]
+    input_hint: "TextInputHint"
     #: :class:`bool` `(Named` ``isSearchable`` `in Commercetools)`
-    is_searchable: typing.Optional[bool]
+    is_searchable: bool
 
     def __init__(
         self,
         *,
-        type: typing.Optional["AttributeType"] = None,
-        name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-        is_required: typing.Optional[bool] = None,
-        attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
+        type: "AttributeType" = None,
+        name: str = None,
+        label: "LocalizedString" = None,
+        is_required: bool = None,
+        attribute_constraint: "AttributeConstraintEnum" = None,
         input_tip: typing.Optional["LocalizedString"] = None,
-        input_hint: typing.Optional["TextInputHint"] = None,
-        is_searchable: typing.Optional[bool] = None
+        input_hint: "TextInputHint" = None,
+        is_searchable: bool = None
     ) -> None:
         self.type = type
         self.name = name
@@ -138,13 +138,13 @@ class AttributeDefinition(_BaseType):
 class AttributeDefinitionDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionDraftSchema`."
     #: :class:`commercetools.types.AttributeType`
-    type: typing.Optional["AttributeType"]
+    type: "AttributeType"
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
     #: :class:`bool` `(Named` ``isRequired`` `in Commercetools)`
-    is_required: typing.Optional[bool]
+    is_required: bool
     #: Optional :class:`commercetools.types.AttributeConstraintEnum` `(Named` ``attributeConstraint`` `in Commercetools)`
     attribute_constraint: typing.Optional["AttributeConstraintEnum"]
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
@@ -157,10 +157,10 @@ class AttributeDefinitionDraft(_BaseType):
     def __init__(
         self,
         *,
-        type: typing.Optional["AttributeType"] = None,
-        name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None,
-        is_required: typing.Optional[bool] = None,
+        type: "AttributeType" = None,
+        name: str = None,
+        label: "LocalizedString" = None,
+        is_required: bool = None,
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
@@ -195,16 +195,11 @@ class AttributeDefinitionDraft(_BaseType):
 class AttributeLocalizedEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, key: str = None, label: "LocalizedString" = None) -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -216,13 +211,11 @@ class AttributeLocalizedEnumValue(_BaseType):
 class AttributePlainEnumValue(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributePlainEnumValueSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str`
-    label: typing.Optional[str]
+    label: str
 
-    def __init__(
-        self, *, key: typing.Optional[str] = None, label: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, key: str = None, label: str = None) -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -234,9 +227,9 @@ class AttributePlainEnumValue(_BaseType):
 class AttributeType(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTypeSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         self.name = name
         super().__init__()
 
@@ -249,24 +242,24 @@ class ProductType(LoggedResource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`str`
-    description: typing.Optional[str]
+    description: str
     #: Optional list of :class:`commercetools.types.AttributeDefinition`
     attributes: typing.Optional[typing.List["AttributeDefinition"]]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        name: str = None,
+        description: str = None,
         attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
     ) -> None:
         self.key = key
@@ -305,9 +298,9 @@ class ProductTypeDraft(_BaseType):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: :class:`str`
-    description: typing.Optional[str]
+    description: str
     #: Optional list of :class:`commercetools.types.AttributeDefinitionDraft`
     attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
 
@@ -315,8 +308,8 @@ class ProductTypeDraft(_BaseType):
         self,
         *,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
-        description: typing.Optional[str] = None,
+        name: str = None,
+        description: str = None,
         attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None
     ) -> None:
         self.key = key
@@ -337,24 +330,24 @@ class ProductTypeDraft(_BaseType):
 class ProductTypePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypePagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.ProductType`
-    results: typing.Optional[typing.Sequence["ProductType"]]
+    results: typing.Sequence["ProductType"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["ProductType"]] = None
+        offset: int = None,
+        results: typing.Sequence["ProductType"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -378,8 +371,8 @@ class ProductTypeReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["ProductType"] = None
     ) -> None:
         self.obj = obj
@@ -416,16 +409,11 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
 class ProductTypeUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -440,9 +428,9 @@ class ProductTypeUpdate(_BaseType):
 class ProductTypeUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -458,7 +446,7 @@ class TextInputHint(enum.Enum):
 class AttributeBooleanType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeBooleanTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="boolean")
 
     def __repr__(self) -> str:
@@ -468,7 +456,7 @@ class AttributeBooleanType(AttributeType):
 class AttributeDateTimeType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="datetime")
 
     def __repr__(self) -> str:
@@ -478,7 +466,7 @@ class AttributeDateTimeType(AttributeType):
 class AttributeDateType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="date")
 
     def __repr__(self) -> str:
@@ -488,13 +476,10 @@ class AttributeDateType(AttributeType):
 class AttributeEnumType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeEnumTypeSchema`."
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
-    values: typing.Optional[typing.List["AttributePlainEnumValue"]]
+    values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None
+        self, *, name: str = None, values: typing.List["AttributePlainEnumValue"] = None
     ) -> None:
         self.values = values
         super().__init__(name="enum")
@@ -506,7 +491,7 @@ class AttributeEnumType(AttributeType):
 class AttributeLocalizableTextType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizableTextTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="ltext")
 
     def __repr__(self) -> str:
@@ -516,13 +501,13 @@ class AttributeLocalizableTextType(AttributeType):
 class AttributeLocalizedEnumType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumTypeSchema`."
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
-    values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]]
+    values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
         self,
         *,
-        name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None
+        name: str = None,
+        values: typing.List["AttributeLocalizedEnumValue"] = None
     ) -> None:
         self.values = values
         super().__init__(name="lenum")
@@ -537,7 +522,7 @@ class AttributeLocalizedEnumType(AttributeType):
 class AttributeMoneyType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeMoneyTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="money")
 
     def __repr__(self) -> str:
@@ -547,13 +532,10 @@ class AttributeMoneyType(AttributeType):
 class AttributeNestedType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNestedTypeSchema`."
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``typeReference`` `in Commercetools)`
-    type_reference: typing.Optional["ProductTypeReference"]
+    type_reference: "ProductTypeReference"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        type_reference: typing.Optional["ProductTypeReference"] = None
+        self, *, name: str = None, type_reference: "ProductTypeReference" = None
     ) -> None:
         self.type_reference = type_reference
         super().__init__(name="nested")
@@ -568,7 +550,7 @@ class AttributeNestedType(AttributeType):
 class AttributeNumberType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNumberTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="number")
 
     def __repr__(self) -> str:
@@ -578,13 +560,10 @@ class AttributeNumberType(AttributeType):
 class AttributeReferenceType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeReferenceTypeSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
-    reference_type_id: typing.Optional["ReferenceTypeId"]
+    reference_type_id: "ReferenceTypeId"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        reference_type_id: typing.Optional["ReferenceTypeId"] = None
+        self, *, name: str = None, reference_type_id: "ReferenceTypeId" = None
     ) -> None:
         self.reference_type_id = reference_type_id
         super().__init__(name="reference")
@@ -599,13 +578,10 @@ class AttributeReferenceType(AttributeType):
 class AttributeSetType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSetTypeSchema`."
     #: :class:`commercetools.types.AttributeType` `(Named` ``elementType`` `in Commercetools)`
-    element_type: typing.Optional["AttributeType"]
+    element_type: "AttributeType"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional[str] = None,
-        element_type: typing.Optional["AttributeType"] = None
+        self, *, name: str = None, element_type: "AttributeType" = None
     ) -> None:
         self.element_type = element_type
         super().__init__(name="set")
@@ -620,7 +596,7 @@ class AttributeSetType(AttributeType):
 class AttributeTextType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTextTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="text")
 
     def __repr__(self) -> str:
@@ -630,7 +606,7 @@ class AttributeTextType(AttributeType):
 class AttributeTimeType(AttributeType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTimeTypeSchema`."
 
-    def __init__(self, *, name: typing.Optional[str] = None) -> None:
+    def __init__(self, *, name: str = None) -> None:
         super().__init__(name="time")
 
     def __repr__(self) -> str:
@@ -640,13 +616,10 @@ class AttributeTimeType(AttributeType):
 class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddAttributeDefinitionActionSchema`."
     #: :class:`commercetools.types.AttributeDefinitionDraft`
-    attribute: typing.Optional["AttributeDefinitionDraft"]
+    attribute: "AttributeDefinitionDraft"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        attribute: typing.Optional["AttributeDefinitionDraft"] = None
+        self, *, action: str = None, attribute: "AttributeDefinitionDraft" = None
     ) -> None:
         self.attribute = attribute
         super().__init__(action="addAttributeDefinition")
@@ -661,16 +634,16 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddLocalizedEnumValueActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributeLocalizedEnumValue`
-    value: typing.Optional["AttributeLocalizedEnumValue"]
+    value: "AttributeLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        value: typing.Optional["AttributeLocalizedEnumValue"] = None
+        action: str = None,
+        attribute_name: str = None,
+        value: "AttributeLocalizedEnumValue" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.value = value
@@ -686,16 +659,16 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
 class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddPlainEnumValueActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributePlainEnumValue`
-    value: typing.Optional["AttributePlainEnumValue"]
+    value: "AttributePlainEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        value: typing.Optional["AttributePlainEnumValue"] = None
+        action: str = None,
+        attribute_name: str = None,
+        value: "AttributePlainEnumValue" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.value = value
@@ -711,16 +684,16 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeConstraintActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributeConstraintEnumDraft` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["AttributeConstraintEnumDraft"]
+    new_value: "AttributeConstraintEnumDraft"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["AttributeConstraintEnumDraft"] = None
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "AttributeConstraintEnumDraft" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -736,16 +709,16 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeNameActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`str` `(Named` ``newAttributeName`` `in Commercetools)`
-    new_attribute_name: typing.Optional[str]
+    new_attribute_name: str
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_attribute_name: typing.Optional[str] = None
+        action: str = None,
+        attribute_name: str = None,
+        new_attribute_name: str = None
     ) -> None:
         self.attribute_name = attribute_name
         self.new_attribute_name = new_attribute_name
@@ -761,13 +734,13 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderActionSchema`."
     #: List of :class:`commercetools.types.AttributeDefinition`
-    attributes: typing.Optional[typing.List["AttributeDefinition"]]
+    attributes: typing.List["AttributeDefinition"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
+        action: str = None,
+        attributes: typing.List["AttributeDefinition"] = None
     ) -> None:
         self.attributes = attributes
         super().__init__(action="changeAttributeOrder")
@@ -782,13 +755,10 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
 class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderByNameActionSchema`."
     #: List of :class:`str` `(Named` ``attributeNames`` `in Commercetools)`
-    attribute_names: typing.Optional[typing.List[str]]
+    attribute_names: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        attribute_names: typing.Optional[typing.List[str]] = None
+        self, *, action: str = None, attribute_names: typing.List[str] = None
     ) -> None:
         self.attribute_names = attribute_names
         super().__init__(action="changeAttributeOrderByName")
@@ -803,14 +773,9 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
 class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeDescriptionActionSchema`."
     #: :class:`str`
-    description: typing.Optional[str]
+    description: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        description: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, description: str = None) -> None:
         self.description = description
         super().__init__(action="changeDescription")
 
@@ -824,19 +789,19 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeEnumKeyActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`str` `(Named` ``newKey`` `in Commercetools)`
-    new_key: typing.Optional[str]
+    new_key: str
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        new_key: typing.Optional[str] = None
+        action: str = None,
+        attribute_name: str = None,
+        key: str = None,
+        new_key: str = None
     ) -> None:
         self.attribute_name = attribute_name
         self.key = key
@@ -853,16 +818,16 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
 class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeInputHintActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.TextInputHint` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["TextInputHint"]
+    new_value: "TextInputHint"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["TextInputHint"] = None
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "TextInputHint" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -878,16 +843,16 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
 class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeIsSearchableActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`bool` `(Named` ``isSearchable`` `in Commercetools)`
-    is_searchable: typing.Optional[bool]
+    is_searchable: bool
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        is_searchable: typing.Optional[bool] = None
+        action: str = None,
+        attribute_name: str = None,
+        is_searchable: bool = None
     ) -> None:
         self.attribute_name = attribute_name
         self.is_searchable = is_searchable
@@ -903,16 +868,16 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
 class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.LocalizedString`
-    label: typing.Optional["LocalizedString"]
+    label: "LocalizedString"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        label: typing.Optional["LocalizedString"] = None
+        action: str = None,
+        attribute_name: str = None,
+        label: "LocalizedString" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.label = label
@@ -928,16 +893,16 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
 class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributeLocalizedEnumValue` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["AttributeLocalizedEnumValue"]
+    new_value: "AttributeLocalizedEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["AttributeLocalizedEnumValue"] = None
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "AttributeLocalizedEnumValue" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -953,16 +918,16 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
 class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
-    values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]]
+    values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributeLocalizedEnumValue"]] = None
+        action: str = None,
+        attribute_name: str = None,
+        values: typing.List["AttributeLocalizedEnumValue"] = None
     ) -> None:
         self.attribute_name = attribute_name
         self.values = values
@@ -978,11 +943,9 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 class ProductTypeChangeNameAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -996,16 +959,16 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
 class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueLabelActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: :class:`commercetools.types.AttributePlainEnumValue` `(Named` ``newValue`` `in Commercetools)`
-    new_value: typing.Optional["AttributePlainEnumValue"]
+    new_value: "AttributePlainEnumValue"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        new_value: typing.Optional["AttributePlainEnumValue"] = None
+        action: str = None,
+        attribute_name: str = None,
+        new_value: "AttributePlainEnumValue" = None
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -1021,16 +984,16 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
 class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueOrderActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
-    values: typing.Optional[typing.List["AttributePlainEnumValue"]]
+    values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        values: typing.Optional[typing.List["AttributePlainEnumValue"]] = None
+        action: str = None,
+        attribute_name: str = None,
+        values: typing.List["AttributePlainEnumValue"] = None
     ) -> None:
         self.attribute_name = attribute_name
         self.values = values
@@ -1046,11 +1009,9 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
 class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveAttributeDefinitionActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="removeAttributeDefinition")
 
@@ -1064,16 +1025,16 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveEnumValuesActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: List of :class:`str`
-    keys: typing.Optional[typing.List[str]]
+    keys: typing.List[str]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
-        keys: typing.Optional[typing.List[str]] = None
+        action: str = None,
+        attribute_name: str = None,
+        keys: typing.List[str] = None
     ) -> None:
         self.attribute_name = attribute_name
         self.keys = keys
@@ -1089,15 +1050,15 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
 class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSetInputTipActionSchema`."
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
-    attribute_name: typing.Optional[str]
+    attribute_name: str
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
     input_tip: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        attribute_name: typing.Optional[str] = None,
+        action: str = None,
+        attribute_name: str = None,
         input_tip: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.attribute_name = attribute_name
@@ -1116,9 +1077,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 

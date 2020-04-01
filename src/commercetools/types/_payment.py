@@ -73,7 +73,7 @@ class Payment(LoggedResource):
     #: Optional :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
     interface_id: typing.Optional[str]
     #: :class:`commercetools.types.TypedMoney` `(Named` ``amountPlanned`` `in Commercetools)`
-    amount_planned: typing.Optional["TypedMoney"]
+    amount_planned: "TypedMoney"
     #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``amountAuthorized`` `in Commercetools)`
     amount_authorized: typing.Optional["TypedMoney"]
     #: Optional :class:`str` `(Named` ``authorizedUntil`` `in Commercetools)`
@@ -83,13 +83,13 @@ class Payment(LoggedResource):
     #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``amountRefunded`` `in Commercetools)`
     amount_refunded: typing.Optional["TypedMoney"]
     #: :class:`commercetools.types.PaymentMethodInfo` `(Named` ``paymentMethodInfo`` `in Commercetools)`
-    payment_method_info: typing.Optional["PaymentMethodInfo"]
+    payment_method_info: "PaymentMethodInfo"
     #: :class:`commercetools.types.PaymentStatus` `(Named` ``paymentStatus`` `in Commercetools)`
-    payment_status: typing.Optional["PaymentStatus"]
+    payment_status: "PaymentStatus"
     #: List of :class:`commercetools.types.Transaction`
-    transactions: typing.Optional[typing.List["Transaction"]]
+    transactions: typing.List["Transaction"]
     #: List of :class:`commercetools.types.CustomFields` `(Named` ``interfaceInteractions`` `in Commercetools)`
-    interface_interactions: typing.Optional[typing.List["CustomFields"]]
+    interface_interactions: typing.List["CustomFields"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`str`
@@ -98,25 +98,25 @@ class Payment(LoggedResource):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: typing.Optional["TypedMoney"] = None,
+        amount_planned: "TypedMoney" = None,
         amount_authorized: typing.Optional["TypedMoney"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["TypedMoney"] = None,
         amount_refunded: typing.Optional["TypedMoney"] = None,
-        payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
-        payment_status: typing.Optional["PaymentStatus"] = None,
-        transactions: typing.Optional[typing.List["Transaction"]] = None,
-        interface_interactions: typing.Optional[typing.List["CustomFields"]] = None,
+        payment_method_info: "PaymentMethodInfo" = None,
+        payment_status: "PaymentStatus" = None,
+        transactions: typing.List["Transaction"] = None,
+        interface_interactions: typing.List["CustomFields"] = None,
         custom: typing.Optional["CustomFields"] = None,
         key: typing.Optional[str] = None
     ) -> None:
@@ -184,7 +184,7 @@ class PaymentDraft(_BaseType):
     #: Optional :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
     interface_id: typing.Optional[str]
     #: :class:`commercetools.types.Money` `(Named` ``amountPlanned`` `in Commercetools)`
-    amount_planned: typing.Optional["Money"]
+    amount_planned: "Money"
     #: Optional :class:`commercetools.types.Money` `(Named` ``amountAuthorized`` `in Commercetools)`
     amount_authorized: typing.Optional["Money"]
     #: Optional :class:`str` `(Named` ``authorizedUntil`` `in Commercetools)`
@@ -213,7 +213,7 @@ class PaymentDraft(_BaseType):
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: typing.Optional["Money"] = None,
+        amount_planned: "Money" = None,
         amount_authorized: typing.Optional["Money"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["Money"] = None,
@@ -299,24 +299,24 @@ class PaymentMethodInfo(_BaseType):
 class PaymentPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Payment`
-    results: typing.Optional[typing.Sequence["Payment"]]
+    results: typing.Sequence["Payment"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Payment"]] = None
+        offset: int = None,
+        results: typing.Sequence["Payment"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -340,8 +340,8 @@ class PaymentReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Payment"] = None
     ) -> None:
         self.obj = obj
@@ -436,16 +436,11 @@ class PaymentStatusDraft(_BaseType):
 class PaymentUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -457,9 +452,9 @@ class PaymentUpdate(_BaseType):
 class PaymentUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -470,13 +465,13 @@ class PaymentUpdateAction(_BaseType):
 class Transaction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.TransactionSchema`."
     #: :class:`str`
-    id: typing.Optional[str]
+    id: str
     #: Optional :class:`datetime.datetime`
     timestamp: typing.Optional[datetime.datetime]
     #: :class:`commercetools.types.TransactionType`
-    type: typing.Optional["TransactionType"]
+    type: "TransactionType"
     #: :class:`commercetools.types.TypedMoney`
-    amount: typing.Optional["TypedMoney"]
+    amount: "TypedMoney"
     #: Optional :class:`str` `(Named` ``interactionId`` `in Commercetools)`
     interaction_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.TransactionState`
@@ -485,10 +480,10 @@ class Transaction(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
+        id: str = None,
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: typing.Optional["TransactionType"] = None,
-        amount: typing.Optional["TypedMoney"] = None,
+        type: "TransactionType" = None,
+        amount: "TypedMoney" = None,
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None
     ) -> None:
@@ -519,9 +514,9 @@ class TransactionDraft(_BaseType):
     #: Optional :class:`datetime.datetime`
     timestamp: typing.Optional[datetime.datetime]
     #: :class:`commercetools.types.TransactionType`
-    type: typing.Optional["TransactionType"]
+    type: "TransactionType"
     #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    amount: "Money"
     #: Optional :class:`str` `(Named` ``interactionId`` `in Commercetools)`
     interaction_id: typing.Optional[str]
     #: Optional :class:`commercetools.types.TransactionState`
@@ -531,8 +526,8 @@ class TransactionDraft(_BaseType):
         self,
         *,
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: typing.Optional["TransactionType"] = None,
-        amount: typing.Optional["Money"] = None,
+        type: "TransactionType" = None,
+        amount: "Money" = None,
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None
     ) -> None:
@@ -568,15 +563,15 @@ class TransactionType(enum.Enum):
 class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentAddInterfaceInteractionActionSchema`."
     #: :class:`commercetools.types.TypeResourceIdentifier`
-    type: typing.Optional["TypeResourceIdentifier"]
+    type: "TypeResourceIdentifier"
     #: Optional :class:`commercetools.types.FieldContainer`
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
+        action: str = None,
+        type: "TypeResourceIdentifier" = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type
@@ -594,13 +589,10 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
 class PaymentAddTransactionAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentAddTransactionActionSchema`."
     #: :class:`commercetools.types.TransactionDraft`
-    transaction: typing.Optional["TransactionDraft"]
+    transaction: "TransactionDraft"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        transaction: typing.Optional["TransactionDraft"] = None
+        self, *, action: str = None, transaction: "TransactionDraft" = None
     ) -> None:
         self.transaction = transaction
         super().__init__(action="addTransaction")
@@ -615,14 +607,9 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
 class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeAmountPlannedActionSchema`."
     #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    amount: "Money"
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        amount: typing.Optional["Money"] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, amount: "Money" = None) -> None:
         self.amount = amount
         super().__init__(action="changeAmountPlanned")
 
@@ -636,16 +623,16 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionInteractionIdActionSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`str` `(Named` ``interactionId`` `in Commercetools)`
-    interaction_id: typing.Optional[str]
+    interaction_id: str
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        interaction_id: typing.Optional[str] = None
+        action: str = None,
+        transaction_id: str = None,
+        interaction_id: str = None
     ) -> None:
         self.transaction_id = transaction_id
         self.interaction_id = interaction_id
@@ -661,16 +648,16 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
 class PaymentChangeTransactionStateAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionStateActionSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`commercetools.types.TransactionState`
-    state: typing.Optional["TransactionState"]
+    state: "TransactionState"
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None
+        action: str = None,
+        transaction_id: str = None,
+        state: "TransactionState" = None
     ) -> None:
         self.transaction_id = transaction_id
         self.state = state
@@ -686,16 +673,16 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
 class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionTimestampActionSchema`."
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
-    transaction_id: typing.Optional[str]
+    transaction_id: str
     #: :class:`datetime.datetime`
-    timestamp: typing.Optional[datetime.datetime]
+    timestamp: datetime.datetime
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        transaction_id: typing.Optional[str] = None,
-        timestamp: typing.Optional[datetime.datetime] = None
+        action: str = None,
+        transaction_id: str = None,
+        timestamp: datetime.datetime = None
     ) -> None:
         self.transaction_id = transaction_id
         self.timestamp = timestamp
@@ -714,10 +701,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
     amount: typing.Optional["Money"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        amount: typing.Optional["Money"] = None
+        self, *, action: str = None, amount: typing.Optional["Money"] = None
     ) -> None:
         self.amount = amount
         super().__init__(action="setAmountPaid")
@@ -735,10 +719,7 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
     amount: typing.Optional["Money"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        amount: typing.Optional["Money"] = None
+        self, *, action: str = None, amount: typing.Optional["Money"] = None
     ) -> None:
         self.amount = amount
         super().__init__(action="setAmountRefunded")
@@ -756,10 +737,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
     anonymous_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        anonymous_id: typing.Optional[str] = None
+        self, *, action: str = None, anonymous_id: typing.Optional[str] = None
     ) -> None:
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
@@ -781,7 +759,7 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         amount: typing.Optional["Money"] = None,
         until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -800,15 +778,15 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
 class PaymentSetCustomFieldAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -833,7 +811,7 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -857,7 +835,7 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
@@ -876,10 +854,7 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
     external_id: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None
+        self, *, action: str = None, external_id: typing.Optional[str] = None
     ) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
@@ -894,14 +869,9 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 class PaymentSetInterfaceIdAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetInterfaceIdActionSchema`."
     #: :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
-    interface_id: typing.Optional[str]
+    interface_id: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, interface_id: str = None) -> None:
         self.interface_id = interface_id
         super().__init__(action="setInterfaceId")
 
@@ -917,9 +887,7 @@ class PaymentSetKeyAction(PaymentUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -930,14 +898,9 @@ class PaymentSetKeyAction(PaymentUpdateAction):
 class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetMethodInfoInterfaceActionSchema`."
     #: :class:`str`
-    interface: typing.Optional[str]
+    interface: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, interface: str = None) -> None:
         self.interface = interface
         super().__init__(action="setMethodInfoInterface")
 
@@ -954,10 +917,7 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
     method: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        method: typing.Optional[str] = None
+        self, *, action: str = None, method: typing.Optional[str] = None
     ) -> None:
         self.method = method
         super().__init__(action="setMethodInfoMethod")
@@ -975,10 +935,7 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
     name: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
+        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.name = name
         super().__init__(action="setMethodInfoName")
@@ -996,10 +953,7 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
     interface_code: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface_code: typing.Optional[str] = None
+        self, *, action: str = None, interface_code: typing.Optional[str] = None
     ) -> None:
         self.interface_code = interface_code
         super().__init__(action="setStatusInterfaceCode")
@@ -1014,14 +968,9 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetStatusInterfaceTextActionSchema`."
     #: :class:`str` `(Named` ``interfaceText`` `in Commercetools)`
-    interface_text: typing.Optional[str]
+    interface_text: str
 
-    def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        interface_text: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, interface_text: str = None) -> None:
         self.interface_text = interface_text
         super().__init__(action="setStatusInterfaceText")
 
@@ -1035,15 +984,15 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 class PaymentTransitionStateAction(PaymentUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransitionStateActionSchema`."
     #: :class:`commercetools.types.StateResourceIdentifier`
-    state: typing.Optional["StateResourceIdentifier"]
+    state: "StateResourceIdentifier"
     #: Optional :class:`bool`
     force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        state: typing.Optional["StateResourceIdentifier"] = None,
+        action: str = None,
+        state: "StateResourceIdentifier" = None,
         force: typing.Optional[bool] = None
     ) -> None:
         self.state = state

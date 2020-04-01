@@ -37,24 +37,24 @@ class Extension(LoggedResource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ExtensionDestination`
-    destination: typing.Optional["ExtensionDestination"]
+    destination: "ExtensionDestination"
     #: List of :class:`commercetools.types.ExtensionTrigger`
-    triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    triggers: typing.List["ExtensionTrigger"]
     #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
     timeout_in_ms: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        destination: typing.Optional["ExtensionDestination"] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        destination: "ExtensionDestination" = None,
+        triggers: typing.List["ExtensionTrigger"] = None,
         timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.key = key
@@ -96,9 +96,9 @@ class ExtensionAction(enum.Enum):
 class ExtensionDestination(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionDestinationSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -111,9 +111,9 @@ class ExtensionDraft(_BaseType):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ExtensionDestination`
-    destination: typing.Optional["ExtensionDestination"]
+    destination: "ExtensionDestination"
     #: List of :class:`commercetools.types.ExtensionTrigger`
-    triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    triggers: typing.List["ExtensionTrigger"]
     #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
     timeout_in_ms: typing.Optional[int]
 
@@ -121,8 +121,8 @@ class ExtensionDraft(_BaseType):
         self,
         *,
         key: typing.Optional[str] = None,
-        destination: typing.Optional["ExtensionDestination"] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None,
+        destination: "ExtensionDestination" = None,
+        triggers: typing.List["ExtensionTrigger"] = None,
         timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.key = key
@@ -141,9 +141,9 @@ class ExtensionDraft(_BaseType):
 class ExtensionHttpDestinationAuthentication(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionHttpDestinationAuthenticationSchema`."
     #: :class:`str`
-    type: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, type: typing.Optional[str] = None) -> None:
+    def __init__(self, *, type: str = None) -> None:
         self.type = type
         super().__init__()
 
@@ -154,15 +154,12 @@ class ExtensionHttpDestinationAuthentication(_BaseType):
 class ExtensionInput(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionInputSchema`."
     #: :class:`commercetools.types.ExtensionAction`
-    action: typing.Optional["ExtensionAction"]
+    action: "ExtensionAction"
     #: :class:`commercetools.types.Reference`
-    resource: typing.Optional["Reference"]
+    resource: "Reference"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional["ExtensionAction"] = None,
-        resource: typing.Optional["Reference"] = None
+        self, *, action: "ExtensionAction" = None, resource: "Reference" = None
     ) -> None:
         self.action = action
         self.resource = resource
@@ -175,24 +172,24 @@ class ExtensionInput(_BaseType):
 class ExtensionPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Extension`
-    results: typing.Optional[typing.Sequence["Extension"]]
+    results: typing.Sequence["Extension"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Extension"]] = None
+        offset: int = None,
+        results: typing.Sequence["Extension"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -218,15 +215,15 @@ class ExtensionResourceTypeId(enum.Enum):
 class ExtensionTrigger(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionTriggerSchema`."
     #: :class:`commercetools.types.ExtensionResourceTypeId` `(Named` ``resourceTypeId`` `in Commercetools)`
-    resource_type_id: typing.Optional["ExtensionResourceTypeId"]
+    resource_type_id: "ExtensionResourceTypeId"
     #: List of :class:`commercetools.types.ExtensionAction`
-    actions: typing.Optional[typing.List["ExtensionAction"]]
+    actions: typing.List["ExtensionAction"]
 
     def __init__(
         self,
         *,
-        resource_type_id: typing.Optional["ExtensionResourceTypeId"] = None,
-        actions: typing.Optional[typing.List["ExtensionAction"]] = None
+        resource_type_id: "ExtensionResourceTypeId" = None,
+        actions: typing.List["ExtensionAction"] = None
     ) -> None:
         self.resource_type_id = resource_type_id
         self.actions = actions
@@ -242,16 +239,11 @@ class ExtensionTrigger(_BaseType):
 class ExtensionUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -263,9 +255,9 @@ class ExtensionUpdate(_BaseType):
 class ExtensionUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -276,19 +268,19 @@ class ExtensionUpdateAction(_BaseType):
 class ExtensionAWSLambdaDestination(ExtensionDestination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAWSLambdaDestinationSchema`."
     #: :class:`str`
-    arn: typing.Optional[str]
+    arn: str
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
-    access_key: typing.Optional[str]
+    access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
-    access_secret: typing.Optional[str]
+    access_secret: str
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        arn: typing.Optional[str] = None,
-        access_key: typing.Optional[str] = None,
-        access_secret: typing.Optional[str] = None
+        type: str = None,
+        arn: str = None,
+        access_key: str = None,
+        access_secret: str = None
     ) -> None:
         self.arn = arn
         self.access_key = access_key
@@ -307,14 +299,9 @@ class ExtensionAuthorizationHeaderAuthentication(
 ):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAuthorizationHeaderAuthenticationSchema`."
     #: :class:`str` `(Named` ``headerValue`` `in Commercetools)`
-    header_value: typing.Optional[str]
+    header_value: str
 
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        header_value: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, header_value: str = None) -> None:
         self.header_value = header_value
         super().__init__(type="AuthorizationHeader")
 
@@ -328,11 +315,9 @@ class ExtensionAuthorizationHeaderAuthentication(
 class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthentication):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAzureFunctionsAuthenticationSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
 
-    def __init__(
-        self, *, type: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type: str = None, key: str = None) -> None:
         self.key = key
         super().__init__(type="AzureFunctions")
 
@@ -346,13 +331,10 @@ class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthenticati
 class ExtensionChangeDestinationAction(ExtensionUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionChangeDestinationActionSchema`."
     #: :class:`commercetools.types.ExtensionDestination`
-    destination: typing.Optional["ExtensionDestination"]
+    destination: "ExtensionDestination"
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        destination: typing.Optional["ExtensionDestination"] = None
+        self, *, action: str = None, destination: "ExtensionDestination" = None
     ) -> None:
         self.destination = destination
         super().__init__(action="changeDestination")
@@ -367,13 +349,10 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
 class ExtensionChangeTriggersAction(ExtensionUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionChangeTriggersActionSchema`."
     #: List of :class:`commercetools.types.ExtensionTrigger`
-    triggers: typing.Optional[typing.List["ExtensionTrigger"]]
+    triggers: typing.List["ExtensionTrigger"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        triggers: typing.Optional[typing.List["ExtensionTrigger"]] = None
+        self, *, action: str = None, triggers: typing.List["ExtensionTrigger"] = None
     ) -> None:
         self.triggers = triggers
         super().__init__(action="changeTriggers")
@@ -388,15 +367,15 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
 class ExtensionHttpDestination(ExtensionDestination):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionHttpDestinationSchema`."
     #: :class:`str`
-    url: typing.Optional[str]
+    url: str
     #: Optional :class:`commercetools.types.ExtensionHttpDestinationAuthentication`
     authentication: typing.Optional["ExtensionHttpDestinationAuthentication"]
 
     def __init__(
         self,
         *,
-        type: typing.Optional[str] = None,
-        url: typing.Optional[str] = None,
+        type: str = None,
+        url: str = None,
         authentication: typing.Optional["ExtensionHttpDestinationAuthentication"] = None
     ) -> None:
         self.url = url
@@ -416,9 +395,7 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -432,10 +409,7 @@ class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
     timeout_in_ms: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        timeout_in_ms: typing.Optional[int] = None
+        self, *, action: str = None, timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.timeout_in_ms = timeout_in_ms
         super().__init__(action="setTimeoutInMs")

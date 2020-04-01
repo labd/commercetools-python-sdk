@@ -34,21 +34,21 @@ class CustomerGroup(LoggedResource):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        name: str = None,
         custom: typing.Optional["CustomFields"] = None
     ) -> None:
         self.key = key
@@ -85,7 +85,7 @@ class CustomerGroupDraft(_BaseType):
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str` `(Named` ``groupName`` `in Commercetools)`
-    group_name: typing.Optional[str]
+    group_name: str
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
 
@@ -93,7 +93,7 @@ class CustomerGroupDraft(_BaseType):
         self,
         *,
         key: typing.Optional[str] = None,
-        group_name: typing.Optional[str] = None,
+        group_name: str = None,
         custom: typing.Optional["CustomFields"] = None
     ) -> None:
         self.key = key
@@ -112,24 +112,24 @@ class CustomerGroupDraft(_BaseType):
 class CustomerGroupPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.CustomerGroup`
-    results: typing.Optional[typing.Sequence["CustomerGroup"]]
+    results: typing.Sequence["CustomerGroup"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["CustomerGroup"]] = None
+        offset: int = None,
+        results: typing.Sequence["CustomerGroup"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -153,8 +153,8 @@ class CustomerGroupReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["CustomerGroup"] = None
     ) -> None:
         self.obj = obj
@@ -191,16 +191,11 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
 class CustomerGroupUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -215,9 +210,9 @@ class CustomerGroupUpdate(_BaseType):
 class CustomerGroupUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -228,11 +223,9 @@ class CustomerGroupUpdateAction(_BaseType):
 class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupChangeNameActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, name: str = None) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -246,15 +239,15 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
 class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetCustomFieldActionSchema`."
     #: :class:`str`
-    name: typing.Optional[str]
+    name: str
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
+        action: str = None,
+        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.name = name
@@ -279,7 +272,7 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
     def __init__(
         self,
         *,
-        action: typing.Optional[str] = None,
+        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -300,9 +293,7 @@ class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(
-        self, *, action: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 

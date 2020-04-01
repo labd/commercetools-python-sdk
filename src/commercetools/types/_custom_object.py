@@ -19,24 +19,24 @@ __all__ = [
 class CustomObject(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."
     #: :class:`str`
-    container: typing.Optional[str]
+    container: str
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
+    value: typing.Any
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        container: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None
+        container: str = None,
+        key: str = None,
+        value: typing.Any = None
     ) -> None:
         self.container = container
         self.key = key
@@ -70,20 +70,20 @@ class CustomObject(LoggedResource):
 class CustomObjectDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectDraftSchema`."
     #: :class:`str`
-    container: typing.Optional[str]
+    container: str
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`typing.Any`
-    value: typing.Optional[typing.Any]
+    value: typing.Any
     #: Optional :class:`int`
     version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        container: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
-        value: typing.Optional[typing.Any] = None,
+        container: str = None,
+        key: str = None,
+        value: typing.Any = None,
         version: typing.Optional[int] = None
     ) -> None:
         self.container = container
@@ -104,24 +104,24 @@ class CustomObjectDraft(_BaseType):
 class CustomObjectPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectPagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.CustomObject`
-    results: typing.Optional[typing.Sequence["CustomObject"]]
+    results: typing.Sequence["CustomObject"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["CustomObject"]] = None
+        offset: int = None,
+        results: typing.Sequence["CustomObject"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -145,8 +145,8 @@ class CustomObjectReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["CustomObject"] = None
     ) -> None:
         self.obj = obj

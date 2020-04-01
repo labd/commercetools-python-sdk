@@ -30,20 +30,20 @@ __all__ = [
 class Store(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
+        id: str = None,
+        version: int = None,
+        created_at: datetime.datetime = None,
+        last_modified_at: datetime.datetime = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional[str] = None,
+        key: str = None,
         name: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.key = key
@@ -76,16 +76,11 @@ class Store(LoggedResource):
 class StoreDraft(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreDraftSchema`."
     #: :class:`str`
-    key: typing.Optional[str]
+    key: str
     #: :class:`commercetools.types.LocalizedString`
-    name: typing.Optional["LocalizedString"]
+    name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        key: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, key: str = None, name: "LocalizedString" = None) -> None:
         self.key = key
         self.name = name
         super().__init__()
@@ -97,12 +92,7 @@ class StoreDraft(_BaseType):
 class StoreKeyReference(KeyReference):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreKeyReferenceSchema`."
 
-    def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        key: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, type_id: "ReferenceTypeId" = None, key: str = None) -> None:
         super().__init__(type_id=ReferenceTypeId.STORE, key=key)
 
     def __repr__(self) -> str:
@@ -112,24 +102,24 @@ class StoreKeyReference(KeyReference):
 class StorePagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StorePagedQueryResponseSchema`."
     #: :class:`int`
-    limit: typing.Optional[int]
+    limit: int
     #: :class:`int`
-    count: typing.Optional[int]
+    count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
     #: :class:`int`
-    offset: typing.Optional[int]
+    offset: int
     #: List of :class:`commercetools.types.Store`
-    results: typing.Optional[typing.Sequence["Store"]]
+    results: typing.Sequence["Store"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        count: typing.Optional[int] = None,
+        limit: int = None,
+        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Optional[typing.Sequence["Store"]] = None
+        offset: int = None,
+        results: typing.Sequence["Store"] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -153,8 +143,8 @@ class StoreReference(Reference):
     def __init__(
         self,
         *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
+        type_id: "ReferenceTypeId" = None,
+        id: str = None,
         obj: typing.Optional["Store"] = None
     ) -> None:
         self.obj = obj
@@ -191,16 +181,11 @@ class StoreResourceIdentifier(ResourceIdentifier):
 class StoreUpdate(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreUpdateSchema`."
     #: :class:`int`
-    version: typing.Optional[int]
+    version: int
     #: :class:`list`
-    actions: typing.Optional[list]
+    actions: list
 
-    def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        actions: typing.Optional[list] = None
-    ) -> None:
+    def __init__(self, *, version: int = None, actions: list = None) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -212,9 +197,9 @@ class StoreUpdate(_BaseType):
 class StoreUpdateAction(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreUpdateActionSchema`."
     #: :class:`str`
-    action: typing.Optional[str]
+    action: str
 
-    def __init__(self, *, action: typing.Optional[str] = None) -> None:
+    def __init__(self, *, action: str = None) -> None:
         self.action = action
         super().__init__()
 
@@ -228,10 +213,7 @@ class StoreSetNameAction(StoreUpdateAction):
     name: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
+        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.name = name
         super().__init__(action="setName")

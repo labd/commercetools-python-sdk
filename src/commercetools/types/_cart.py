@@ -6,7 +6,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -150,20 +150,8 @@ __all__ = [
 ]
 
 
-class Cart(BaseResource):
+class Cart(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CartSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
     customer_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``customerEmail`` `in Commercetools)`
@@ -256,12 +244,6 @@ class Cart(BaseResource):
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.customer_id = customer_id
         self.customer_email = customer_email
         self.anonymous_id = anonymous_id
@@ -294,6 +276,8 @@ class Cart(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -1374,15 +1358,15 @@ class TaxPortionDraft(_BaseType):
     name: typing.Optional[str]
     #: :class:`float`
     rate: typing.Optional[float]
-    #: :class:`commercetools.types.Money`
-    amount: typing.Optional["Money"]
+    #: :class:`commercetools.types.TypedMoneyDraft`
+    amount: typing.Optional["TypedMoneyDraft"]
 
     def __init__(
         self,
         *,
         name: typing.Optional[str] = None,
         rate: typing.Optional[float] = None,
-        amount: typing.Optional["Money"] = None
+        amount: typing.Optional["TypedMoneyDraft"] = None
     ) -> None:
         self.name = name
         self.rate = rate

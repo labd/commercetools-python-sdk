@@ -4,7 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import BaseResourceSchema
+from commercetools.schemas._common import LoggedResourceSchema
 
 __all__ = [
     "ExtensionAWSLambdaDestinationSchema",
@@ -146,28 +146,8 @@ class ExtensionPagedQueryResponseSchema(marshmallow.Schema):
         return types.ExtensionPagedQueryResponse(**data)
 
 
-class ExtensionSchema(BaseResourceSchema):
+class ExtensionSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Extension`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
-    )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     destination = helpers.Discriminator(
         discriminator_field=("type", "type"),

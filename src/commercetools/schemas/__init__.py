@@ -12,7 +12,6 @@ from ._customer_group import *  # noqa
 from ._discount_code import *  # noqa
 from ._error import *  # noqa
 from ._extension import *  # noqa
-from ._graph_ql import *  # noqa
 from ._inventory import *  # noqa
 from ._me import *  # noqa
 from ._message import *  # noqa

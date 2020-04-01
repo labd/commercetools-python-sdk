@@ -3,7 +3,7 @@
 import marshmallow
 
 from commercetools import types
-from commercetools.schemas._common import BaseResourceSchema, ReferenceSchema
+from commercetools.schemas._common import LoggedResourceSchema, ReferenceSchema
 
 __all__ = [
     "CustomObjectDraftSchema",
@@ -67,28 +67,8 @@ class CustomObjectReferenceSchema(ReferenceSchema):
         return types.CustomObjectReference(**data)
 
 
-class CustomObjectSchema(BaseResourceSchema):
+class CustomObjectSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.CustomObject`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
-    )
     container = marshmallow.fields.String(allow_none=True)
     key = marshmallow.fields.String(allow_none=True)
     value = marshmallow.fields.Raw(allow_none=True)

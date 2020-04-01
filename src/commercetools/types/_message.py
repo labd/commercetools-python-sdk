@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import BaseResource
+from commercetools.types._common import LoggedResource
 
 if typing.TYPE_CHECKING:
     from ._cart import (
@@ -16,7 +16,7 @@ if typing.TYPE_CHECKING:
         ShippingRateInput,
         TaxedItemPrice,
     )
-    from ._category import Category, CategoryReference
+    from ._category import Category
     from ._channel import ChannelReference
     from ._common import (
         Address,
@@ -49,7 +49,6 @@ if typing.TYPE_CHECKING:
     from ._product import ProductProjection, ProductVariant
     from ._review import Review
     from ._state import StateReference
-    from ._store import StoreKeyReference
     from ._type import CustomFields
 __all__ = [
     "CategoryCreatedMessage",
@@ -101,8 +100,6 @@ __all__ = [
     "OrderCustomLineItemDiscountSetMessagePayload",
     "OrderCustomerEmailSetMessage",
     "OrderCustomerEmailSetMessagePayload",
-    "OrderCustomerGroupSetMessage",
-    "OrderCustomerGroupSetMessagePayload",
     "OrderCustomerSetMessage",
     "OrderCustomerSetMessagePayload",
     "OrderDeletedMessage",
@@ -139,8 +136,6 @@ __all__ = [
     "OrderStateChangedMessagePayload",
     "OrderStateTransitionMessage",
     "OrderStateTransitionMessagePayload",
-    "OrderStoreSetMessage",
-    "OrderStoreSetMessagePayload",
     "ParcelAddedToDeliveryMessage",
     "ParcelAddedToDeliveryMessagePayload",
     "ParcelItemsUpdatedMessage",
@@ -163,8 +158,6 @@ __all__ = [
     "PaymentTransactionAddedMessagePayload",
     "PaymentTransactionStateChangedMessage",
     "PaymentTransactionStateChangedMessagePayload",
-    "ProductAddedToCategoryMessage",
-    "ProductAddedToCategoryMessagePayload",
     "ProductCreatedMessage",
     "ProductCreatedMessagePayload",
     "ProductDeletedMessage",
@@ -178,8 +171,6 @@ __all__ = [
     "ProductPriceExternalDiscountSetMessagePayload",
     "ProductPublishedMessage",
     "ProductPublishedMessagePayload",
-    "ProductRemovedFromCategoryMessage",
-    "ProductRemovedFromCategoryMessagePayload",
     "ProductRevertedStagedChangesMessage",
     "ProductRevertedStagedChangesMessagePayload",
     "ProductSlugChangedMessage",
@@ -200,20 +191,8 @@ __all__ = [
 ]
 
 
-class Message(BaseResource):
+class Message(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: :class:`int` `(Named` ``sequenceNumber`` `in Commercetools)`
     sequence_number: typing.Optional[int]
     #: :class:`commercetools.types.Reference`
@@ -242,12 +221,6 @@ class Message(BaseResource):
             "UserProvidedIdentifiers"
         ] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.sequence_number = sequence_number
         self.resource = resource
         self.resource_version = resource_version
@@ -258,6 +231,8 @@ class Message(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -2366,94 +2341,6 @@ class OrderCustomerEmailSetMessagePayload(MessagePayload):
         )
 
 
-class OrderCustomerGroupSetMessage(Message):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerGroupSetMessageSchema`."
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``oldCustomerGroup`` `in Commercetools)`
-    old_customer_group: typing.Optional["CustomerGroupReference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
-    ) -> None:
-        self.customer_group = customer_group
-        self.old_customer_group = old_customer_group
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderCustomerGroupSet",
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomerGroupSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, customer_group=%r, old_customer_group=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.last_modified_by,
-                self.created_by,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.resource_user_provided_identifiers,
-                self.customer_group,
-                self.old_customer_group,
-            )
-        )
-
-
-class OrderCustomerGroupSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerGroupSetMessagePayloadSchema`."
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
-    customer_group: typing.Optional["CustomerGroupReference"]
-    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``oldCustomerGroup`` `in Commercetools)`
-    old_customer_group: typing.Optional["CustomerGroupReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
-    ) -> None:
-        self.customer_group = customer_group
-        self.old_customer_group = old_customer_group
-        super().__init__(type="OrderCustomerGroupSet")
-
-    def __repr__(self) -> str:
-        return (
-            "OrderCustomerGroupSetMessagePayload(type=%r, customer_group=%r, old_customer_group=%r)"
-            % (self.type, self.customer_group, self.old_customer_group)
-        )
-
-
 class OrderCustomerSetMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerSetMessageSchema`."
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -4057,85 +3944,6 @@ class OrderStateTransitionMessagePayload(MessagePayload):
         )
 
 
-class OrderStoreSetMessage(Message):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStoreSetMessageSchema`."
-    #: :class:`commercetools.types.StoreKeyReference`
-    store: typing.Optional["StoreKeyReference"]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        store: typing.Optional["StoreKeyReference"] = None
-    ) -> None:
-        self.store = store
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="OrderStoreSet",
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "OrderStoreSetMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, store=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.last_modified_by,
-                self.created_by,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.resource_user_provided_identifiers,
-                self.store,
-            )
-        )
-
-
-class OrderStoreSetMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStoreSetMessagePayloadSchema`."
-    #: :class:`commercetools.types.StoreKeyReference`
-    store: typing.Optional["StoreKeyReference"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        store: typing.Optional["StoreKeyReference"] = None
-    ) -> None:
-        self.store = store
-        super().__init__(type="OrderStoreSet")
-
-    def __repr__(self) -> str:
-        return "OrderStoreSetMessagePayload(type=%r, store=%r)" % (
-            self.type,
-            self.store,
-        )
-
-
 class ParcelAddedToDeliveryMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessageSchema`."
     #: :class:`commercetools.types.Delivery`
@@ -5113,94 +4921,6 @@ class PaymentTransactionStateChangedMessagePayload(MessagePayload):
         )
 
 
-class ProductAddedToCategoryMessage(Message):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddedToCategoryMessageSchema`."
-    #: :class:`commercetools.types.CategoryReference`
-    category: typing.Optional["CategoryReference"]
-    #: :class:`bool`
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        category: typing.Optional["CategoryReference"] = None,
-        staged: typing.Optional[bool] = None
-    ) -> None:
-        self.category = category
-        self.staged = staged
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductAddedToCategory",
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductAddedToCategoryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, category=%r, staged=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.last_modified_by,
-                self.created_by,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.resource_user_provided_identifiers,
-                self.category,
-                self.staged,
-            )
-        )
-
-
-class ProductAddedToCategoryMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddedToCategoryMessagePayloadSchema`."
-    #: :class:`commercetools.types.CategoryReference`
-    category: typing.Optional["CategoryReference"]
-    #: :class:`bool`
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        category: typing.Optional["CategoryReference"] = None,
-        staged: typing.Optional[bool] = None
-    ) -> None:
-        self.category = category
-        self.staged = staged
-        super().__init__(type="ProductAddedToCategory")
-
-    def __repr__(self) -> str:
-        return (
-            "ProductAddedToCategoryMessagePayload(type=%r, category=%r, staged=%r)"
-            % (self.type, self.category, self.staged)
-        )
-
-
 class ProductCreatedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessageSchema`."
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
@@ -5777,94 +5497,6 @@ class ProductPublishedMessagePayload(MessagePayload):
         )
 
 
-class ProductRemovedFromCategoryMessage(Message):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovedFromCategoryMessageSchema`."
-    #: :class:`commercetools.types.CategoryReference`
-    category: typing.Optional["CategoryReference"]
-    #: :class:`bool`
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None,
-        created_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: typing.Optional[int] = None,
-        resource: typing.Optional["Reference"] = None,
-        resource_version: typing.Optional[int] = None,
-        type: typing.Optional[str] = None,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        category: typing.Optional["CategoryReference"] = None,
-        staged: typing.Optional[bool] = None
-    ) -> None:
-        self.category = category
-        self.staged = staged
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            type="ProductRemovedFromCategory",
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "ProductRemovedFromCategoryMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, category=%r, staged=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.last_modified_by,
-                self.created_by,
-                self.sequence_number,
-                self.resource,
-                self.resource_version,
-                self.type,
-                self.resource_user_provided_identifiers,
-                self.category,
-                self.staged,
-            )
-        )
-
-
-class ProductRemovedFromCategoryMessagePayload(MessagePayload):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovedFromCategoryMessagePayloadSchema`."
-    #: :class:`commercetools.types.CategoryReference`
-    category: typing.Optional["CategoryReference"]
-    #: :class:`bool`
-    staged: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional[str] = None,
-        category: typing.Optional["CategoryReference"] = None,
-        staged: typing.Optional[bool] = None
-    ) -> None:
-        self.category = category
-        self.staged = staged
-        super().__init__(type="ProductRemovedFromCategory")
-
-    def __repr__(self) -> str:
-        return (
-            "ProductRemovedFromCategoryMessagePayload(type=%r, category=%r, staged=%r)"
-            % (self.type, self.category, self.staged)
-        )
-
-
 class ProductRevertedStagedChangesMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessageSchema`."
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -6177,10 +5809,10 @@ class ProductUnpublishedMessagePayload(MessagePayload):
 
 class ProductVariantDeletedMessage(Message):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessageSchema`."
-    #: :class:`commercetools.types.ProductVariant`
-    variant: typing.Optional["ProductVariant"]
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: typing.Optional[list]
+    #: :class:`commercetools.types.ProductVariant`
+    variant: typing.Optional["ProductVariant"]
 
     def __init__(
         self,
@@ -6198,11 +5830,11 @@ class ProductVariantDeletedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        variant: typing.Optional["ProductVariant"] = None,
-        removed_image_urls: typing.Optional[list] = None
+        removed_image_urls: typing.Optional[list] = None,
+        variant: typing.Optional["ProductVariant"] = None
     ) -> None:
-        self.variant = variant
         self.removed_image_urls = removed_image_urls
+        self.variant = variant
         super().__init__(
             id=id,
             version=version,
@@ -6219,7 +5851,7 @@ class ProductVariantDeletedMessage(Message):
 
     def __repr__(self) -> str:
         return (
-            "ProductVariantDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, variant=%r, removed_image_urls=%r)"
+            "ProductVariantDeletedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, removed_image_urls=%r, variant=%r)"
             % (
                 self.id,
                 self.version,
@@ -6232,34 +5864,34 @@ class ProductVariantDeletedMessage(Message):
                 self.resource_version,
                 self.type,
                 self.resource_user_provided_identifiers,
-                self.variant,
                 self.removed_image_urls,
+                self.variant,
             )
         )
 
 
 class ProductVariantDeletedMessagePayload(MessagePayload):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessagePayloadSchema`."
-    #: :class:`commercetools.types.ProductVariant`
-    variant: typing.Optional["ProductVariant"]
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: typing.Optional[list]
+    #: :class:`commercetools.types.ProductVariant`
+    variant: typing.Optional["ProductVariant"]
 
     def __init__(
         self,
         *,
         type: typing.Optional[str] = None,
-        variant: typing.Optional["ProductVariant"] = None,
-        removed_image_urls: typing.Optional[list] = None
+        removed_image_urls: typing.Optional[list] = None,
+        variant: typing.Optional["ProductVariant"] = None
     ) -> None:
-        self.variant = variant
         self.removed_image_urls = removed_image_urls
+        self.variant = variant
         super().__init__(type="ProductVariantDeleted")
 
     def __repr__(self) -> str:
         return (
-            "ProductVariantDeletedMessagePayload(type=%r, variant=%r, removed_image_urls=%r)"
-            % (self.type, self.variant, self.removed_image_urls)
+            "ProductVariantDeletedMessagePayload(type=%r, removed_image_urls=%r, variant=%r)"
+            % (self.type, self.removed_image_urls, self.variant)
         )
 
 

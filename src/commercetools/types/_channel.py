@@ -6,14 +6,20 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
-    from ._common import Address, CreatedBy, GeoJson, LastModifiedBy, LocalizedString
+    from ._common import (
+        Address,
+        CreatedBy,
+        GeoJsonPoint,
+        LastModifiedBy,
+        LocalizedString,
+    )
     from ._review import ReviewRatingStatistics
     from ._type import (
         CustomFields,
@@ -43,20 +49,8 @@ __all__ = [
 ]
 
 
-class Channel(BaseResource):
+class Channel(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: :class:`str`
     key: typing.Optional[str]
     #: List of :class:`commercetools.types.ChannelRoleEnum`
@@ -71,8 +65,8 @@ class Channel(BaseResource):
     review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
-    #: Optional :class:`commercetools.types.GeoJson` `(Named` ``geoLocation`` `in Commercetools)`
-    geo_location: typing.Optional["GeoJson"]
+    #: Optional :class:`commercetools.types.GeoJsonPoint` `(Named` ``geoLocation`` `in Commercetools)`
+    geo_location: typing.Optional["GeoJsonPoint"]
 
     def __init__(
         self,
@@ -90,14 +84,8 @@ class Channel(BaseResource):
         address: typing.Optional["Address"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
         custom: typing.Optional["CustomFields"] = None,
-        geo_location: typing.Optional["GeoJson"] = None
+        geo_location: typing.Optional["GeoJsonPoint"] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.key = key
         self.roles = roles
         self.name = name
@@ -111,6 +99,8 @@ class Channel(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -149,8 +139,8 @@ class ChannelDraft(_BaseType):
     address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
-    #: Optional :class:`commercetools.types.GeoJson` `(Named` ``geoLocation`` `in Commercetools)`
-    geo_location: typing.Optional["GeoJson"]
+    #: Optional :class:`commercetools.types.GeoJsonPoint` `(Named` ``geoLocation`` `in Commercetools)`
+    geo_location: typing.Optional["GeoJsonPoint"]
 
     def __init__(
         self,
@@ -161,7 +151,7 @@ class ChannelDraft(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         address: typing.Optional["Address"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        geo_location: typing.Optional["GeoJson"] = None
+        geo_location: typing.Optional["GeoJsonPoint"] = None
     ) -> None:
         self.key = key
         self.roles = roles
@@ -476,14 +466,14 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
 
 class ChannelSetGeoLocationAction(ChannelUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetGeoLocationActionSchema`."
-    #: Optional :class:`commercetools.types.GeoJson` `(Named` ``geoLocation`` `in Commercetools)`
-    geo_location: typing.Optional["GeoJson"]
+    #: Optional :class:`commercetools.types.GeoJsonPoint` `(Named` ``geoLocation`` `in Commercetools)`
+    geo_location: typing.Optional["GeoJsonPoint"]
 
     def __init__(
         self,
         *,
         action: typing.Optional[str] = None,
-        geo_location: typing.Optional["GeoJson"] = None
+        geo_location: typing.Optional["GeoJsonPoint"] = None
     ) -> None:
         self.geo_location = geo_location
         super().__init__(action="setGeoLocation")

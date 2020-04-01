@@ -5,7 +5,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    BaseResource,
+    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -61,20 +61,8 @@ __all__ = [
 ]
 
 
-class MyShoppingList(BaseResource):
+class MyShoppingList(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -116,12 +104,6 @@ class MyShoppingList(BaseResource):
         text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
         anonymous_id: typing.Optional[str] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.custom = custom
         self.customer = customer
         self.delete_days_after_last_modification = delete_days_after_last_modification
@@ -137,6 +119,8 @@ class MyShoppingList(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -163,20 +147,8 @@ class MyShoppingList(BaseResource):
         )
 
 
-class ShoppingList(BaseResource):
+class ShoppingList(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`commercetools.types.CustomFields`
     custom: typing.Optional["CustomFields"]
     #: Optional :class:`commercetools.types.CustomerReference`
@@ -218,12 +190,6 @@ class ShoppingList(BaseResource):
         text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
         anonymous_id: typing.Optional[str] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.custom = custom
         self.customer = customer
         self.delete_days_after_last_modification = delete_days_after_last_modification
@@ -239,6 +205,8 @@ class ShoppingList(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:

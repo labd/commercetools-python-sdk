@@ -5,8 +5,8 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    BaseResourceSchema,
     LocalizedStringField,
+    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -275,28 +275,8 @@ class CartResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.CartResourceIdentifier(**data)
 
 
-class CartSchema(BaseResourceSchema):
+class CartSchema(LoggedResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Cart`."
-    id = marshmallow.fields.String(allow_none=True)
-    version = marshmallow.fields.Integer(allow_none=True)
-    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
-    )
     customer_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customerId"
     )
@@ -1159,8 +1139,12 @@ class TaxPortionDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.TaxPortionDraft`."
     name = marshmallow.fields.String(allow_none=True, missing=None)
     rate = marshmallow.fields.Float(allow_none=True)
-    amount = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.MoneySchema",
+    amount = helpers.Discriminator(
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": "commercetools.schemas._common.CentPrecisionMoneyDraftSchema",
+            "highPrecision": "commercetools.schemas._common.HighPrecisionMoneyDraftSchema",
+        },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )

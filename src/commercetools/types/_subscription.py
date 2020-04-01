@@ -5,7 +5,7 @@ import enum
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import BaseResource
+from commercetools.types._common import LoggedResource
 
 if typing.TYPE_CHECKING:
     from ._common import CreatedBy, LastModifiedBy, Reference
@@ -129,20 +129,8 @@ class PayloadNotIncluded(_BaseType):
         )
 
 
-class Subscription(BaseResource):
+class Subscription(LoggedResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSchema`."
-    #: :class:`str`
-    id: typing.Optional[str]
-    #: :class:`int`
-    version: typing.Optional[int]
-    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
-    created_at: typing.Optional[datetime.datetime]
-    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
     #: List of :class:`commercetools.types.ChangeSubscription`
     changes: typing.Optional[typing.List["ChangeSubscription"]]
     #: :class:`commercetools.types.Destination`
@@ -172,12 +160,6 @@ class Subscription(BaseResource):
         format: typing.Optional["DeliveryFormat"] = None,
         status: typing.Optional["SubscriptionHealthStatus"] = None
     ) -> None:
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
         self.changes = changes
         self.destination = destination
         self.key = key
@@ -189,6 +171,8 @@ class Subscription(BaseResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
         )
 
     def __repr__(self) -> str:

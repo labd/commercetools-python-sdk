@@ -1,3 +1,12 @@
+x.x.x (unreleased)
+------------------
+- Re-generated schemas and types
+- Removed Optional type from get_by_id calls
+- Correctly use Optional typing according to RAML source file
+- Testing: Add addAttributeDefinition action to testing backend
+- Testing: Check for unique values in testing backend
+- Testing: Fixed Attribute return object in ProductTypes testing backend
+
 6.2.1 (2020-03-24)
 ------------------
 - Fix marshallow breaking on missing **kwargs argument (#76)

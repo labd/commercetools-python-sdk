@@ -17,7 +17,7 @@ class ExtensionQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ExtensionService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Extension]:
+    def get_by_id(self, id: str) -> types.Extension:
         return self._client._get(f"channels/{id}", {}, schemas.ExtensionSchema)
 
     def query(

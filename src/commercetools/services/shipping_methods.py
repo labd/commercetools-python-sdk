@@ -18,7 +18,7 @@ class ShippingMethodQuerySchema(abstract.AbstractQuerySchema):
 class ShippingMethodService(abstract.AbstractService):
     def get_by_id(
         self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.ShippingMethod]:
+    ) -> types.ShippingMethod:
         query_params = {}
         if expand:
             query_params["expand"] = expand

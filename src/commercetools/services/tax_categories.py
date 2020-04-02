@@ -17,9 +17,7 @@ class TaxCategoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class TaxCategoryService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.TaxCategory]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.TaxCategory:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -27,9 +25,7 @@ class TaxCategoryService(abstract.AbstractService):
             f"tax-categories/{id}", query_params, schemas.TaxCategorySchema
         )
 
-    def get_by_key(
-        self, key: str, expand: OptionalListStr = None
-    ) -> Optional[types.TaxCategory]:
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.TaxCategory:
         query_params = {}
         if expand:
             query_params["expand"] = expand

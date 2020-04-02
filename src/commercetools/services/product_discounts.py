@@ -20,7 +20,7 @@ class ProductDiscountQuerySchema(abstract.AbstractQuerySchema):
 class ProductDiscountService(abstract.AbstractService):
     def get_by_id(
         self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.ProductDiscount]:
+    ) -> types.ProductDiscount:
         query_params = {}
         if expand:
             query_params["expand"] = expand

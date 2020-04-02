@@ -17,9 +17,7 @@ class StateQuerySchema(abstract.AbstractQuerySchema):
 
 
 class StateService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.State]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.State:
         query_params = {}
         if expand:
             query_params["expand"] = expand

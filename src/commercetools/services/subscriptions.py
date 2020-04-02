@@ -17,7 +17,7 @@ class SubscriptionQuerySchema(abstract.AbstractQuerySchema):
 
 
 class SubscriptionService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Subscription]:
+    def get_by_id(self, id: str) -> types.Subscription:
         return self._client._get(f"subscriptions/{id}", {}, schemas.SubscriptionSchema)
 
     def query(

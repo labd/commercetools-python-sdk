@@ -16,9 +16,7 @@ class DiscountCodeQuerySchema(abstract.AbstractQuerySchema):
 
 
 class DiscountCodeService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.DiscountCode]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.DiscountCode:
         query_params = {}
         if expand:
             query_params["expand"] = expand

@@ -18,7 +18,7 @@ class InventoryQuerySchema(abstract.AbstractQuerySchema):
 class InventoryService(abstract.AbstractService):
     def get_by_id(
         self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.InventoryEntry]:
+    ) -> types.InventoryEntry:
         query_params = {}
         if expand:
             query_params["expand"] = expand

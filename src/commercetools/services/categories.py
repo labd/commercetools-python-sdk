@@ -16,9 +16,7 @@ class CategoryQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CategoryService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.Category]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.Category:
         query_params = {}
         if expand:
             query_params["expand"] = expand

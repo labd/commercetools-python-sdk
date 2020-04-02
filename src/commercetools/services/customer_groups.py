@@ -14,9 +14,7 @@ class CustomerGroupDeleteSchema(abstract.AbstractDeleteSchema):
 
 
 class CustomerGroupService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.CustomerGroup]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.CustomerGroup:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -26,7 +24,7 @@ class CustomerGroupService(abstract.AbstractService):
 
     def get_by_key(
         self, key: str, expand: OptionalListStr = None
-    ) -> Optional[types.CustomerGroup]:
+    ) -> types.CustomerGroup:
         query_params = {}
         if expand:
             query_params["expand"] = expand

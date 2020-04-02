@@ -17,12 +17,10 @@ class CustomObjectQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CustomObjectService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.CustomObject]:
+    def get_by_id(self, id: str) -> types.CustomObject:
         return self._client._get(f"custom-objects/{id}", {}, schemas.CustomObjectSchema)
 
-    def get_by_container_key(
-        self, container: str, key: str
-    ) -> Optional[types.CustomObject]:
+    def get_by_container_key(self, container: str, key: str) -> types.CustomObject:
         return self._client._get(
             f"custom-objects/{container}/{key}", {}, schemas.CustomObjectSchema
         )

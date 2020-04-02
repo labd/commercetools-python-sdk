@@ -57,7 +57,7 @@ class ProductProjectionService(abstract.AbstractService):
         price_customer_group: UUID = None,
         price_channel: UUID = None,
         expand: OptionalListStr = None,
-    ) -> Optional[types.ProductProjection]:
+    ) -> types.ProductProjection:
         params = {
             "staged": staged,
             "price_currency": price_currency,

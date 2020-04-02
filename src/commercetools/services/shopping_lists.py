@@ -16,10 +16,10 @@ class ShoppingListQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ShoppingListService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.ShoppingList]:
+    def get_by_id(self, id: str) -> types.ShoppingList:
         return self._client._get(f"shopping-lists/{id}", {}, schemas.ShoppingListSchema)
 
-    def get_by_key(self, key: str) -> Optional[types.ShoppingList]:
+    def get_by_key(self, key: str) -> types.ShoppingList:
         return self._client._get(
             f"shopping-lists/key={key}", {}, schemas.ShoppingListSchema
         )

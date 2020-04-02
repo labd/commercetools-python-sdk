@@ -17,7 +17,7 @@ class ApiClientQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ApiClientService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.ApiClient]:
+    def get_by_id(self, id: str) -> types.ApiClient:
         return self._client._get(f"api-clients/{id}", {}, schemas.ApiClientSchemaSchema)
 
     def query(

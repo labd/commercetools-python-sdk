@@ -16,9 +16,7 @@ class CustomerQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CustomerService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.Customer]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.Customer:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -26,9 +24,7 @@ class CustomerService(abstract.AbstractService):
             f"customers/{id}", query_params, schemas.CustomerSchema
         )
 
-    def get_by_key(
-        self, key: str, expand: OptionalListStr = None
-    ) -> Optional[types.Customer]:
+    def get_by_key(self, key: str, expand: OptionalListStr = None) -> types.Customer:
         query_params = {}
         if expand:
             query_params["expand"] = expand

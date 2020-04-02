@@ -18,9 +18,7 @@ class CartQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.Cart]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.Cart:
         query_params = {}
         if expand:
             query_params["expand"] = expand

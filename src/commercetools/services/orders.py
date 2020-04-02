@@ -18,9 +18,7 @@ class OrderQuerySchema(abstract.AbstractQuerySchema):
 
 
 class OrderService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.Order]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.Order:
         query_params = {}
         if expand:
             query_params["expand"] = expand

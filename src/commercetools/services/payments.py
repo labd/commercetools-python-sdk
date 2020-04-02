@@ -19,7 +19,7 @@ class PaymentQuerySchema(abstract.AbstractQuerySchema):
 
 
 class PaymentService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Payment]:
+    def get_by_id(self, id: str) -> types.Payment:
         return self._client._get(f"payments/{id}", {}, schemas.PaymentSchema)
 
     def get_by_key(self, key: str) -> types.Payment:

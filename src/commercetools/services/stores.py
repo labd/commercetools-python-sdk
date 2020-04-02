@@ -17,10 +17,10 @@ class StoreQuerySchema(abstract.AbstractQuerySchema):
 
 
 class StoreService(abstract.AbstractService):
-    def get_by_id(self, id: str) -> Optional[types.Store]:
+    def get_by_id(self, id: str) -> types.Store:
         return self._client._get(f"stores/{id}", {}, schemas.StoreSchema)
 
-    def get_by_key(self, key: str) -> Optional[types.Store]:
+    def get_by_key(self, key: str) -> types.Store:
         return self._client._get(f"stores/key={key}", {}, schemas.StoreSchema)
 
     def query(

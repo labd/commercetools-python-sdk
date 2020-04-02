@@ -16,9 +16,7 @@ class CartDiscountQuerySchema(abstract.AbstractQuerySchema):
 
 
 class CartDiscountService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.CartDiscount]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.CartDiscount:
         query_params = {}
         if expand:
             query_params["expand"] = expand
@@ -28,7 +26,7 @@ class CartDiscountService(abstract.AbstractService):
 
     def get_by_key(
         self, key: str, expand: OptionalListStr = None
-    ) -> Optional[types.CartDiscount]:
+    ) -> types.CartDiscount:
         query_params = {}
         if expand:
             query_params["expand"] = expand

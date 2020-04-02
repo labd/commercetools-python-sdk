@@ -16,9 +16,7 @@ class ChannelQuerySchema(abstract.AbstractQuerySchema):
 
 
 class ChannelService(abstract.AbstractService):
-    def get_by_id(
-        self, id: str, expand: OptionalListStr = None
-    ) -> Optional[types.Channel]:
+    def get_by_id(self, id: str, expand: OptionalListStr = None) -> types.Channel:
         query_params = {}
         if expand:
             query_params["expand"] = expand

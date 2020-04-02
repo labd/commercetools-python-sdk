@@ -34,7 +34,7 @@ class ProductService(abstract.AbstractService):
         price_customer_group: UUID = None,
         price_channel: UUID = None,
         expand: OptionalListStr = None,
-    ) -> Optional[types.Product]:
+    ) -> types.Product:
         params = ProductQuerySchema().dump(
             {
                 "expand": expand,
@@ -54,7 +54,7 @@ class ProductService(abstract.AbstractService):
         price_customer_group: UUID = None,
         price_channel: UUID = None,
         expand: OptionalListStr = None,
-    ) -> Optional[types.Product]:
+    ) -> types.Product:
         params = ProductQuerySchema().dump(
             {
                 "expand": expand,

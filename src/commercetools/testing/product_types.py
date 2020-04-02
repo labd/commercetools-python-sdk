@@ -17,6 +17,12 @@ class ProductTypesModel(BaseModel):
         self, draft: types.ProductTypeDraft, id: typing.Optional[str] = None
     ) -> types.ProductType:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
+        attributes = (
+            [_create_attribute_from_draft(attr) for attr in draft.attributes]
+            if draft.attributes
+            else []
+        )
+
         return types.ProductType(
             id=str(object_id),
             version=1,
@@ -25,31 +31,23 @@ class ProductTypesModel(BaseModel):
             key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            attributes=self._create_attributes_from_draft(draft.attributes),
+            attributes=attributes,
         )
 
-    def _create_attributes_from_draft(
-        self,
-        draft_attributes: typing.Optional[typing.List[types.AttributeDefinitionDraft]],
-    ) -> typing.List[types.AttributeDefinition]:
 
-        result: typing.List[types.AttributeDefinition] = []
-        if not draft_attributes:
-            return result
-
-        for draft in draft_attributes:
-            ad = types.AttributeDefinition(
-                type=draft.type,
-                name=draft.name,
-                label=draft.label,
-                is_required=draft.is_required,
-                attribute_constraint=draft.attribute_constraint,
-                input_tip=draft.input_tip,
-                input_hint=draft.input_hint or types.TextInputHint.SINGLE_LINE,
-                is_searchable=draft.is_searchable,
-            )
-            result.append(ad)
-        return result
+def _create_attribute_from_draft(
+    draft: types.AttributeDefinitionDraft
+) -> types.AttributeDefinition:
+    return types.AttributeDefinition(
+        type=draft.type,
+        name=draft.name,
+        label=draft.label,
+        is_required=draft.is_required,
+        attribute_constraint=draft.attribute_constraint,
+        input_tip=draft.input_tip,
+        input_hint=draft.input_hint or types.TextInputHint.SINGLE_LINE,
+        is_searchable=draft.is_searchable,
+    )
 
 
 def change_label_action():
@@ -90,6 +88,24 @@ def change_localized_enum_value_label():
     return updater
 
 
+def add_attribute_definition_action():
+    schema = schemas.AttributeDefinitionSchema()
+
+    def updater(self, obj: dict, action: types.ProductTypeAddAttributeDefinitionAction):
+        existing = [attr["name"] for attr in obj["attributes"]]
+
+        if action.attribute.name in existing:
+            raise InternalUpdateError(
+                f"Attribute with name {action.attribute.name} already exists"
+            )
+
+        attr_json = schema.dump(_create_attribute_from_draft(action.attribute))
+        obj["attributes"].append(attr_json)
+        return obj
+
+    return updater
+
+
 class ProductTypesBackend(ServiceBackend):
     service_path = "product-types"
     model_class = ProductTypesModel
@@ -114,4 +130,5 @@ class ProductTypesBackend(ServiceBackend):
         "changeDescription": update_attribute("description", "description"),
         "changeLabel": change_label_action(),
         "changeLocalizedEnumValueLabel": change_localized_enum_value_label(),
+        "addAttributeDefinition": add_attribute_definition_action(),
     }

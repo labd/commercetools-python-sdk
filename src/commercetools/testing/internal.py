@@ -7,9 +7,7 @@ class InternalBackend(BaseBackend):
     hostnames = ["auth.sphere.io", "localhost"]
 
     def urls(self):
-        return [
-            ("^health$", "GET", self.health),
-        ]
+        return [("^health$", "GET", self.health)]
 
     def health(self, request):
         response = create_commercetools_response(request, json={})

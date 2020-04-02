@@ -51,7 +51,7 @@ class BaseModel:
                 value = document[field]
                 if not value:
                     continue
-                
+
                 msg = f"A duplicate value '{value}' exists for field '{field}'."
                 raise CommercetoolsError(
                     msg,

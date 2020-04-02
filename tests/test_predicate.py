@@ -70,7 +70,7 @@ def test_qp_and():
 
 
 def test_qp_in():
-    obj = QueryPredicate(masterVariant__slug__nl__in=["test-nl", "test-en"],)
+    obj = QueryPredicate(masterVariant__slug__nl__in=["test-nl", "test-en"])
     assert str(obj) == 'masterVariant(slug(nl in ("test-nl", "test-en")))'
 
 
@@ -93,9 +93,9 @@ def test_qp_nested():
 def test_qp_chained():
     obj = (
         QueryPredicate(masterVariant__slug__nl="test-nl1")
-        & QueryPredicate(masterVariant__slug__nl="test-nl2",)
+        & QueryPredicate(masterVariant__slug__nl="test-nl2")
         & (
-            QueryPredicate(masterVariant__prices__is_defined=True,)
+            QueryPredicate(masterVariant__prices__is_defined=True)
             | QueryPredicate(masterVariant__prices__amount__gte=100)
         )
     )

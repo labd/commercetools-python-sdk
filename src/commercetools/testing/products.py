@@ -149,6 +149,80 @@ class ProductsModel(BaseModel):
             )
 
 
+def _get_target_obj(obj: dict, action: types.ProductUpdateAction):
+    staged = getattr(action, "staged", False)
+    if not staged and obj["masterData"]["current"]:
+        return obj["masterData"]["current"]
+    return obj["masterData"]["staged"]
+
+
+def _update_productdata_attr(dst: str, src: str):
+    def updater(self, obj: dict, action: types.ProductUpdateAction):
+        value = getattr(action, src)
+        target_obj = _get_target_obj(obj, action)
+
+        if target_obj[dst] != value:
+            new = copy.deepcopy(obj)
+            new[dst] = value
+            return new
+        return obj
+
+    return updater
+
+
+def _set_attribute_action():
+    def updater(self, obj: dict, action: types.ProductSetAttributeAction):
+        staged = getattr(action, "staged", False)
+        target_obj = _get_target_obj(obj, action)
+
+        variants = [target_obj["masterVariant"]]
+        if target_obj["variants"]:
+            variants += target_obj["variants"]
+
+        for variant in variants:
+            if action.variant_id != variant["id"]:
+                continue
+
+            for attr in variant["attributes"]:
+                if attr["name"] == action.name:
+                    attr["value"] = action.value
+                    return obj
+
+            # Attribute not found, will add it
+            attr_schema = schemas.AttributeSchema()
+            variant["attributes"].append(
+                attr_schema.dump(types.Attribute(name=action.name, value=action.value))
+            )
+            break
+
+        return obj
+
+    return updater
+
+
+def _add_variant_action():
+    def updater(self, obj: dict, action: types.ProductAddVariantAction):
+        variant = self.model._create_variant_from_draft(
+            types.ProductVariantDraft(
+                sku=action.sku,
+                key=action.key,
+                prices=action.prices,
+                attributes=action.attributes,
+                images=action.images,
+                assets=action.assets,
+            )
+        )
+        schema = schemas.ProductVariantSchema()
+        target_obj = _get_target_obj(obj, action)
+        if not target_obj["variants"]:
+            target_obj["variants"] = []
+        target_obj["variants"].append(schema.dump(variant))
+
+        return obj
+
+    return updater
+
+
 class ProductsBackend(ServiceBackend):
     service_path = "products"
     model_class = ProductsModel
@@ -168,24 +242,9 @@ class ProductsBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
 
-    def _update_productdata_attr(dst: str, src: str):
-        def updater(self, obj: dict, action: types.ProductUpdateAction):
-            value = getattr(action, src)
-            staged = getattr(action, "staged", False) or True
-
-            # Action.staged default is True
-            if staged:
-                target_obj = obj["masterData"]["staged"]
-            else:
-                target_obj = obj["masterData"]["current"]
-
-            if target_obj[dst] != value:
-                new = copy.deepcopy(obj)
-                new[dst] = value
-                return new
-            return obj
-
-        return updater
-
     # Fixme: use decorator for this
-    _actions = {"changeSlug": _update_productdata_attr("slug", "slug")}
+    _actions = {
+        "changeSlug": _update_productdata_attr("slug", "slug"),
+        "setAttribute": _set_attribute_action(),
+        "addVariant": _add_variant_action(),
+    }

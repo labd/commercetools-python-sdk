@@ -11,6 +11,7 @@ from commercetools.testing.utils import custom_fields_from_draft
 class ProductsModel(BaseModel):
     _primary_type_name = "product"
     _resource_schema = schemas.ProductSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ProductDraft, id: typing.Optional[str] = None

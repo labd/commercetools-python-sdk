@@ -44,6 +44,4 @@ class StoresBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
         ]
 
-    _actions = {
-        "setName": update_attribute("name", "name"),
-    }
+    _actions = {"setName": update_attribute("name", "name")}

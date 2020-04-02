@@ -11,6 +11,7 @@ from commercetools.testing.utils import InternalUpdateError, update_attribute
 class ProductTypesModel(BaseModel):
     _primary_type_name = "product-type"
     _resource_schema = schemas.ProductTypeSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ProductTypeDraft, id: typing.Optional[str] = None

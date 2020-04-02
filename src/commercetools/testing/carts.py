@@ -157,7 +157,4 @@ class CartsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
-    _actions = {
-        "addPayment": add_payment(),
-        "setCustomField": set_custom_field(),
-    }
+    _actions = {"addPayment": add_payment(), "setCustomField": set_custom_field()}

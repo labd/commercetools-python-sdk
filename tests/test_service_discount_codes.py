@@ -7,7 +7,7 @@ from commercetools import types
 def test_discount_code_get_by_id(client):
     discount_code = client.discount_codes.create(
         types.DiscountCodeDraft(
-            name=types.LocalizedString({"en": "test discount"}), code="1337",
+            name=types.LocalizedString({"en": "test discount"}), code="1337"
         )
     )
 

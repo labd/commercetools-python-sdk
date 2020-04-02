@@ -50,7 +50,7 @@ class ApiClientService(abstract.AbstractService):
             schemas.ApiClientSchema,
         )
 
-    def delete_by_id(self, id: str, *, force_delete: bool = False,) -> types.ApiClient:
+    def delete_by_id(self, id: str, *, force_delete: bool = False) -> types.ApiClient:
         return self._client._delete(
             endpoint=f"api-clients/{id}",
             params={},

@@ -6,7 +6,7 @@ import uuid
 import marshmallow
 from requests_mock.request import _RequestObjectProxy
 
-from commercetools import schemas, types
+from commercetools import CommercetoolsError, schemas, types
 from commercetools.schemas import BaseResourceSchema
 from commercetools.services import abstract
 from commercetools.testing import utils
@@ -16,24 +16,60 @@ from commercetools.testing.utils import create_commercetools_response
 
 class BaseModel:
     _resource_schema: typing.Type[BaseResourceSchema]
+    _unique_values: typing.List[str] = []
 
     def __init__(self, storage):
         self._storage = storage
         self.objects = storage.init_store(self._primary_type_name)
+
         assert (
             self._resource_schema
         ), f"{self.__class__.__name__} has no resource schema defined"
 
     def add_existing(self, obj):
+        """Add an 'existing' object to the storage.
+
+        This can be used to set a certain initial state in your test case.
+        """
         return self._store_obj(obj)
 
     def add(self, draft, id=None):
+        """Add a new object to the storage.
+        
+        This will take a draft and generate an unique ID.
+        """
         obj = self._create_from_draft(draft, id)
         return self._store_obj(obj)
 
     def _store_obj(self, obj):
         key = self._generate_key(obj)
         document = self._resource_schema().dump(obj)
+
+        for field in self._unique_values:
+            # Check if a document already exists with a duplicate unique value
+            if document[field] in [o[field] for o in self.objects.values()]:
+                value = document[field]
+                if not value:
+                    continue
+
+                msg = f"A duplicate value '{value}' exists for field '{field}'."
+                raise CommercetoolsError(
+                    msg,
+                    types.ErrorResponse(
+                        status_code=400,
+                        message=msg,
+                        errors=[
+                            types.DuplicateFieldError(
+                                code="DuplicateField",
+                                message=msg,
+                                field=field,
+                                duplicate_value=value,
+                                conflicting_resource=None,
+                            )
+                        ],
+                    ),
+                )
+
         self.objects[key] = document
         return document
 

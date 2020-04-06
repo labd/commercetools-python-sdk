@@ -173,7 +173,9 @@ def _update_productdata_attr(dst: str, src: str):
 def _set_attribute_action():
     def updater(self, obj: dict, action: types.ProductSetAttributeAction):
         staged = getattr(action, "staged", False)
-        target_obj = _get_target_obj(obj, action)
+        new = copy.deepcopy(obj)
+
+        target_obj = _get_target_obj(new, action)
 
         variants = [target_obj["masterVariant"]]
         if target_obj["variants"]:
@@ -186,7 +188,7 @@ def _set_attribute_action():
             for attr in variant["attributes"]:
                 if attr["name"] == action.name:
                     attr["value"] = action.value
-                    return obj
+                    return new
 
             # Attribute not found, will add it
             attr_schema = schemas.AttributeSchema()
@@ -195,7 +197,7 @@ def _set_attribute_action():
             )
             break
 
-        return obj
+        return new
 
     return updater
 
@@ -213,12 +215,14 @@ def _add_variant_action():
             )
         )
         schema = schemas.ProductVariantSchema()
-        target_obj = _get_target_obj(obj, action)
+
+        new = copy.deepcopy(obj)
+        target_obj = _get_target_obj(new, action)
         if not target_obj["variants"]:
             target_obj["variants"] = []
         target_obj["variants"].append(schema.dump(variant))
 
-        return obj
+        return new
 
     return updater
 

@@ -16,7 +16,7 @@ class CommercetoolsError(Exception):
     ) -> None:
         super().__init__(message)
         self.response = response
-        self.errors = errors or []
+        self.errors = errors
         self.correlation_id = correlation_id
 
     def __str__(self):

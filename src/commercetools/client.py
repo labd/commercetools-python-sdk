@@ -276,7 +276,7 @@ class Client:
         except ValueError:
             pass
         else:
-            errors_raw = response_json.get("errors")
+            errors_raw = response_json.get("errors", [])
 
         raise CommercetoolsError(obj.message, errors_raw, obj, correlation_id)
 

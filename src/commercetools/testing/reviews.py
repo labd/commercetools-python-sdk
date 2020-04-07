@@ -9,6 +9,7 @@ from commercetools.testing import abstract, utils
 class ReviewModel(abstract.BaseModel):
     _resource_schema = schemas.ReviewSchema
     _primary_type_name = "review"
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ReviewDraft, id: Optional[str] = None

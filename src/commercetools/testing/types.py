@@ -10,6 +10,7 @@ from commercetools.testing.utils import update_attribute, update_attribute_add_i
 class TypesModel(BaseModel):
     _primary_type_name = "type"
     _resource_schema = schemas.TypeSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.TypeDraft, id: typing.Optional[str] = None

@@ -14,6 +14,7 @@ from commercetools.testing.utils import (
 class ZonesModel(BaseModel):
     _primary_type_name = "zones"
     _resource_schema = schemas.ZoneSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ZoneDraft, id: typing.Optional[str] = None

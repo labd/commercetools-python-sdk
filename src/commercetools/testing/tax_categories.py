@@ -20,6 +20,7 @@ def generate_tax_rate_id():
 class TaxCategoryModel(BaseModel):
     _primary_type_name = "tax-category"
     _resource_schema = schemas.TaxCategorySchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.TaxCategoryDraft, id: typing.Optional[str] = None

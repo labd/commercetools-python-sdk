@@ -11,6 +11,7 @@ from commercetools.testing.utils import update_attribute
 class StateModel(BaseModel):
     _resource_schema = schemas.StateSchema
     _primary_type_name = "state"
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.StateDraft, id: typing.Optional[str] = None

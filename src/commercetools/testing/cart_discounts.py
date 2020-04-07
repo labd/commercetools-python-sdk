@@ -11,6 +11,7 @@ from commercetools.testing.utils import update_attribute, update_enum_attribute
 class CartDiscountsModel(BaseModel):
     _resource_schema = schemas.CartDiscountSchema
     _primary_type_name = "cart-discounts"
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.CartDiscountDraft, id: typing.Optional[str] = None

@@ -9,6 +9,7 @@ from commercetools.testing import abstract, utils
 class CustomerGroupModel(abstract.BaseModel):
     _resource_schema = schemas.CustomerGroupSchema
     _primary_type_name = "customer-group"
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.CustomerGroupDraft, id: Optional[str] = None

@@ -10,6 +10,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class CategoriesModel(BaseModel):
     _primary_type_name = "category"
     _resource_schema = schemas.CategorySchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.CategoryDraft, id: typing.Optional[str] = None

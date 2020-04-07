@@ -10,6 +10,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class ShoppingListModel(BaseModel):
     _resource_schema = schemas.ShoppingListSchema
     _primary_type_name = "shopping-list"
+    _unique_values = ["key"]
 
     def _create_line_item_from_draft(
         self, line_item_draft: types.ShoppingListLineItemDraft

@@ -13,6 +13,7 @@ class ShippingMethodsModel(BaseModel):
     _primary_type_name = "shipping-method"
     _resource_schema = schemas.ShippingMethodSchema
     _schema_update = schemas.ShippingMethodUpdateSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ShippingMethodDraft, id: typing.Optional[str] = None

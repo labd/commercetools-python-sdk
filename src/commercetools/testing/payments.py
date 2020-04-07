@@ -12,6 +12,7 @@ from commercetools.testing.utils import update_attribute_add_item
 class PaymentsModel(BaseModel):
     _primary_type_name = "payment"
     _resource_schema = schemas.PaymentSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.PaymentDraft, id: typing.Optional[str] = None

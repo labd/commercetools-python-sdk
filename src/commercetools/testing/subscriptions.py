@@ -10,6 +10,7 @@ from commercetools.testing.utils import create_commercetools_response
 class SubscriptionsModel(BaseModel):
     _primary_type_name = "subscription"
     _resource_schema = schemas.SubscriptionSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.SubscriptionDraft, id: typing.Optional[str] = None

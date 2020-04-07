@@ -9,6 +9,7 @@ from commercetools.testing import abstract, utils
 class CustomerModel(abstract.BaseModel):
     _resource_schema = schemas.CustomerSchema
     _primary_type_name = "customer"
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.CustomerDraft, id: Optional[str] = None

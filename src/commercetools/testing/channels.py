@@ -10,6 +10,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class ChannelsModel(BaseModel):
     _resource_schema = schemas.ChannelSchema
     _primary_type_name = "channel"
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ChannelDraft, id: typing.Optional[str] = None

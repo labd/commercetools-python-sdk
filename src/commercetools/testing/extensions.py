@@ -9,6 +9,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 class ExtensionsModel(BaseModel):
     _primary_type_name = "extension"
     _resource_schema = schemas.ExtensionSchema
+    _unique_values = ["key"]
 
     def _create_from_draft(
         self, draft: types.ExtensionDraft, id: typing.Optional[str] = None

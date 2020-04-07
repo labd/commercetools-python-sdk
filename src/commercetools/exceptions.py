@@ -32,3 +32,19 @@ class CommercetoolsError(Exception):
             for e in self.errors
             if "detailedErrorMessage" in e
         ]
+
+    @property
+    def codes(self) -> typing.List[str]:
+        try:
+            return [e.code for e in self.response.errors]
+        except AttributeError:
+            return ["Unkown"]
+
+    @property
+    def code(self) -> str:
+        """Convenience property to easily get the error code.
+        
+        Returns the code of the first error, just as
+        'message' is always the message of the first error.
+        """
+        return self.codes[0]

@@ -265,7 +265,20 @@ class Client:
         if not response.content:
             response.raise_for_status()
         obj = schemas.ErrorResponseSchema().loads(response.content)
-        raise CommercetoolsError(obj.message, obj, correlation_id)
+
+        # We'll fetch the 'raw' errors from the response because some of the
+        # attributes are not included in the schemas.
+        # With the raw errors in the CommercetoolsError object we can use that
+        # information later to render more detailed error messages
+        errors_raw = []
+        try:
+            response_json = response.json()
+        except ValueError:
+            pass
+        else:
+            errors_raw = response_json.get("errors")
+
+        raise CommercetoolsError(obj.message, errors_raw, obj, correlation_id)
 
     def _read_env_vars(self, config: dict) -> dict:
         if not config.get("project_key"):

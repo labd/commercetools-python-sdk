@@ -38,7 +38,7 @@ class CommercetoolsError(Exception):
         try:
             return [e.code for e in self.response.errors]
         except AttributeError:
-            return ["Unkown"]
+            return []
 
     @property
     def code(self) -> str:
@@ -47,4 +47,7 @@ class CommercetoolsError(Exception):
         Returns the code of the first error, just as
         'message' is always the message of the first error.
         """
-        return self.codes[0]
+        try:
+            return self.codes[0]
+        except KeyError:
+            return ""

@@ -75,6 +75,21 @@ def add_delivery():
     return updater
 
 
+def add_payment():
+    def updater(self, obj, action):
+        obj = copy.deepcopy(obj)
+        if "paymentInfo" in obj and obj["paymentInfo"]:
+            payments = obj["paymentInfo"]["payments"]
+        else:
+            payments = []
+
+        payments.append(schemas.PaymentReferenceSchema().dump(action.payment))
+        obj["paymentInfo"] = {"payments": payments}
+        return obj
+
+    return updater
+
+
 class OrdersBackend(ServiceBackend):
     service_path = "orders"
     model_class = OrdersModel
@@ -102,4 +117,5 @@ class OrdersBackend(ServiceBackend):
         "setBillingAddress": update_attribute("billingAddress", "address"),
         "setCustomerEmail": update_attribute("customerEmail", "email"),
         "setCustomField": set_custom_field(),
+        "addPayment": add_payment(),
     }

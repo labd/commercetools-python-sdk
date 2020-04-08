@@ -6,6 +6,7 @@ x.x.x (unreleased)
 - Improved error information in CommercetoolsError object
 - Testing: Add setAttribute and addVariant actions to product testing backend
 - Testing: Add addAttributeDefinition action to testing backend
+- Testing: Add addPayment action to order testing backend
 - Testing: Check for unique values in testing backend
 - Testing: Fixed Attribute return object in ProductTypes testing backend
 

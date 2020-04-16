@@ -68,8 +68,8 @@ class BaseModel:
                         status_code=400,
                         message=msg,
                         error=error.code,
-                        errors=serialized_errors
-                    )
+                        errors=serialized_errors,
+                    ),
                 )
 
         self.objects[key] = document

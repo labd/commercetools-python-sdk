@@ -1,5 +1,9 @@
-x.x.x (unreleased)
-------------------
+7.0.0 (20202-04-16)
+-------------------
+Note this release has some breaking changes regarding optional typing. If
+something is required by Commercetools it is now also required when creating an instance of
+a type.
+
 - Re-generated schemas and types
 - Removed Optional type from get_by_id calls
 - Correctly use Optional typing according to RAML source file

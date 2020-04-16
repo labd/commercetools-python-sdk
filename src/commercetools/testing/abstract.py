@@ -53,21 +53,23 @@ class BaseModel:
                     continue
 
                 msg = f"A duplicate value '{value}' exists for field '{field}'."
+                error = types.DuplicateFieldError(
+                    code="DuplicateField",
+                    message=msg,
+                    field=field,
+                    duplicate_value=value,
+                    conflicting_resource=None,
+                )
+                serialized_errors = [schemas.DuplicateFieldErrorSchema().dump(error)]
                 raise CommercetoolsError(
                     msg,
-                    types.ErrorResponse(
+                    errors=serialized_errors,
+                    response=types.ErrorResponse(
                         status_code=400,
                         message=msg,
-                        errors=[
-                            types.DuplicateFieldError(
-                                code="DuplicateField",
-                                message=msg,
-                                field=field,
-                                duplicate_value=value,
-                                conflicting_resource=None,
-                            )
-                        ],
-                    ),
+                        error=error.code,
+                        errors=serialized_errors
+                    )
                 )
 
         self.objects[key] = document

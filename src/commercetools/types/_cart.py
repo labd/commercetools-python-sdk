@@ -746,6 +746,7 @@ class DiscountCodeState(enum.Enum):
     DOES_NOT_MATCH_CART = "DoesNotMatchCart"
     MATCHES_CART = "MatchesCart"
     MAX_APPLICATION_REACHED = "MaxApplicationReached"
+    APPLICATION_STOPPED_BY_PREVIOUS_DISCOUNT = "ApplicationStoppedByPreviousDiscount"
 
 
 class DiscountedLineItemPortion(_BaseType):

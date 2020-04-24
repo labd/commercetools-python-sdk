@@ -72,12 +72,22 @@ def change_localized_enum_value_label():
     ):
         new = copy.deepcopy(obj)
 
+        def update_attribute_type(type_info: dict):
+            if type_info["name"] == "lenum":
+                for value in type_info["values"]:
+                    if value["key"] == action.new_value.key:
+                        value["label"] = action.new_value.label
+                        return new
+
+            if type_info["name"] == "set":
+                return update_attribute_type(type_info["elementType"])
+
+
         for attribute in new["attributes"]:
             if attribute["name"] == action.attribute_name:
-                for lenum_value in attribute["type"]["values"]:
-                    if lenum_value["key"] == action.new_value.key:
-                        lenum_value["label"] = action.new_value.label
-                        return new
+                result = update_attribute_type(attribute["type"])
+                if result is not None:
+                    return result
 
         raise InternalUpdateError(
             "No attribute found with name %r"

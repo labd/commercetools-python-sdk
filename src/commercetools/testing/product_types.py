@@ -82,7 +82,6 @@ def change_localized_enum_value_label():
             if type_info["name"] == "set":
                 return update_attribute_type(type_info["elementType"])
 
-
         for attribute in new["attributes"]:
             if attribute["name"] == action.attribute_name:
                 result = update_attribute_type(attribute["type"])

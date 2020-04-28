@@ -4,9 +4,9 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
+    BaseResourceSchema,
     KeyReferenceSchema,
     LocalizedStringField,
-    LoggedResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -18,6 +18,7 @@ __all__ = [
     "StoreReferenceSchema",
     "StoreResourceIdentifierSchema",
     "StoreSchema",
+    "StoreSetLanguagesActionSchema",
     "StoreSetNameActionSchema",
     "StoreUpdateActionSchema",
     "StoreUpdateSchema",
@@ -28,6 +29,9 @@ class StoreDraftSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.StoreDraft`."
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True)
+    languages = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -100,10 +104,33 @@ class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.StoreResourceIdentifier(**data)
 
 
-class StoreSchema(LoggedResourceSchema):
+class StoreSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Store`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     key = marshmallow.fields.String(allow_none=True)
     name = LocalizedStringField(allow_none=True, missing=None)
+    languages = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -133,7 +160,8 @@ class StoreUpdateSchema(marshmallow.Schema):
         helpers.Discriminator(
             discriminator_field=("action", "action"),
             discriminator_schemas={
-                "setName": "commercetools.schemas._store.StoreSetNameActionSchema"
+                "setLanguages": "commercetools.schemas._store.StoreSetLanguagesActionSchema",
+                "setName": "commercetools.schemas._store.StoreSetNameActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
@@ -147,6 +175,21 @@ class StoreUpdateSchema(marshmallow.Schema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         return types.StoreUpdate(**data)
+
+
+class StoreSetLanguagesActionSchema(StoreUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.StoreSetLanguagesAction`."
+    languages = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoreSetLanguagesAction(**data)
 
 
 class StoreSetNameActionSchema(StoreUpdateActionSchema):

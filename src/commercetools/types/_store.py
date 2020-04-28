@@ -5,8 +5,8 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
+    BaseResource,
     KeyReference,
-    LoggedResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -21,18 +21,33 @@ __all__ = [
     "StorePagedQueryResponse",
     "StoreReference",
     "StoreResourceIdentifier",
+    "StoreSetLanguagesAction",
     "StoreSetNameAction",
     "StoreUpdate",
     "StoreUpdateAction",
 ]
 
 
-class Store(LoggedResource):
+class Store(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`int`
+    version: int
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: datetime.datetime
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: datetime.datetime
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: :class:`str`
     key: str
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
+    #: Optional list of :class:`str`
+    languages: typing.Optional[typing.List[str]]
 
     def __init__(
         self,
@@ -44,22 +59,28 @@ class Store(LoggedResource):
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: str = None,
-        name: typing.Optional["LocalizedString"] = None
+        name: typing.Optional["LocalizedString"] = None,
+        languages: typing.Optional[typing.List[str]] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.key = key
         self.name = name
+        self.languages = languages
         super().__init__(
             id=id,
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r)"
+            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, languages=%r)"
             % (
                 self.id,
                 self.version,
@@ -69,6 +90,7 @@ class Store(LoggedResource):
                 self.created_by,
                 self.key,
                 self.name,
+                self.languages,
             )
         )
 
@@ -79,14 +101,27 @@ class StoreDraft(_BaseType):
     key: str
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
+    #: Optional list of :class:`str`
+    languages: typing.Optional[typing.List[str]]
 
-    def __init__(self, *, key: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(
+        self,
+        *,
+        key: str = None,
+        name: "LocalizedString" = None,
+        languages: typing.Optional[typing.List[str]] = None
+    ) -> None:
         self.key = key
         self.name = name
+        self.languages = languages
         super().__init__()
 
     def __repr__(self) -> str:
-        return "StoreDraft(key=%r, name=%r)" % (self.key, self.name)
+        return "StoreDraft(key=%r, name=%r, languages=%r)" % (
+            self.key,
+            self.name,
+            self.languages,
+        )
 
 
 class StoreKeyReference(KeyReference):
@@ -205,6 +240,24 @@ class StoreUpdateAction(_BaseType):
 
     def __repr__(self) -> str:
         return "StoreUpdateAction(action=%r)" % (self.action,)
+
+
+class StoreSetLanguagesAction(StoreUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSetLanguagesActionSchema`."
+    #: Optional list of :class:`str`
+    languages: typing.Optional[typing.List[str]]
+
+    def __init__(
+        self, *, action: str = None, languages: typing.Optional[typing.List[str]] = None
+    ) -> None:
+        self.languages = languages
+        super().__init__(action="setLanguages")
+
+    def __repr__(self) -> str:
+        return "StoreSetLanguagesAction(action=%r, languages=%r)" % (
+            self.action,
+            self.languages,
+        )
 
 
 class StoreSetNameAction(StoreUpdateAction):

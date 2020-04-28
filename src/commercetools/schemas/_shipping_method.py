@@ -5,7 +5,8 @@ import marshmallow_enum
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    LoggedResourceSchema,
+    BaseResourceSchema,
+    LocalizedStringField,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -29,6 +30,7 @@ __all__ = [
     "ShippingMethodSchema",
     "ShippingMethodSetDescriptionActionSchema",
     "ShippingMethodSetKeyActionSchema",
+    "ShippingMethodSetLocalizedDescriptionActionSchema",
     "ShippingMethodSetPredicateActionSchema",
     "ShippingMethodUpdateActionSchema",
     "ShippingMethodUpdateSchema",
@@ -58,6 +60,9 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
     description = marshmallow.fields.String(allow_none=True, missing=None)
+    localized_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="localizedDescription"
+    )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxCategoryResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -133,11 +138,34 @@ class ShippingMethodResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.ShippingMethodResourceIdentifier(**data)
 
 
-class ShippingMethodSchema(LoggedResourceSchema):
+class ShippingMethodSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethod`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True)
     description = marshmallow.fields.String(allow_none=True, missing=None)
+    localized_description = LocalizedStringField(
+        allow_none=True, missing=None, data_key="localizedDescription"
+    )
     tax_category = marshmallow.fields.Nested(
         nested="commercetools.schemas._tax_category.TaxCategoryReferenceSchema",
         unknown=marshmallow.EXCLUDE,
@@ -191,6 +219,7 @@ class ShippingMethodUpdateSchema(marshmallow.Schema):
                 "removeZone": "commercetools.schemas._shipping_method.ShippingMethodRemoveZoneActionSchema",
                 "setDescription": "commercetools.schemas._shipping_method.ShippingMethodSetDescriptionActionSchema",
                 "setKey": "commercetools.schemas._shipping_method.ShippingMethodSetKeyActionSchema",
+                "setLocalizedDescription": "commercetools.schemas._shipping_method.ShippingMethodSetLocalizedDescriptionActionSchema",
                 "setPredicate": "commercetools.schemas._shipping_method.ShippingMethodSetPredicateActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
@@ -569,6 +598,23 @@ class ShippingMethodSetKeyActionSchema(ShippingMethodUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.ShippingMethodSetKeyAction(**data)
+
+
+class ShippingMethodSetLocalizedDescriptionActionSchema(
+    ShippingMethodUpdateActionSchema
+):
+    "Marshmallow schema for :class:`commercetools.types.ShippingMethodSetLocalizedDescriptionAction`."
+    localized_description = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="localizedDescription"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.ShippingMethodSetLocalizedDescriptionAction(**data)
 
 
 class ShippingMethodSetPredicateActionSchema(ShippingMethodUpdateActionSchema):

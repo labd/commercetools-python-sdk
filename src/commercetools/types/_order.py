@@ -6,7 +6,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    LoggedResource,
+    BaseResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -106,6 +106,7 @@ __all__ = [
     "OrderSetReturnPaymentStateAction",
     "OrderSetReturnShipmentStateAction",
     "OrderSetShippingAddressAction",
+    "OrderSetStoreAction",
     "OrderState",
     "OrderTransitionCustomLineItemStateAction",
     "OrderTransitionLineItemStateAction",
@@ -301,8 +302,20 @@ class LineItemImportDraft(_BaseType):
         )
 
 
-class Order(LoggedResource):
+class Order(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`int`
+    version: int
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: datetime.datetime
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: datetime.datetime
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`datetime.datetime` `(Named` ``completedAt`` `in Commercetools)`
     completed_at: typing.Optional[datetime.datetime]
     #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
@@ -419,6 +432,12 @@ class Order(LoggedResource):
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         refused_gifts: typing.List["CartDiscountReference"] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.completed_at = completed_at
         self.order_number = order_number
         self.customer_id = customer_id
@@ -459,8 +478,6 @@ class Order(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -2188,6 +2205,24 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
             self.action,
             self.address,
         )
+
+
+class OrderSetStoreAction(OrderUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetStoreActionSchema`."
+    #: Optional :class:`commercetools.types.StoreResourceIdentifier`
+    store: typing.Optional["StoreResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        store: typing.Optional["StoreResourceIdentifier"] = None
+    ) -> None:
+        self.store = store
+        super().__init__(action="setStore")
+
+    def __repr__(self) -> str:
+        return "OrderSetStoreAction(action=%r, store=%r)" % (self.action, self.store)
 
 
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):

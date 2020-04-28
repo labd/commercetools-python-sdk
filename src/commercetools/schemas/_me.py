@@ -4,7 +4,7 @@ import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers, types
-from commercetools.schemas._common import LocalizedStringField, LoggedResourceSchema
+from commercetools.schemas._common import BaseResourceSchema, LocalizedStringField
 from commercetools.schemas._type import FieldContainerField
 
 __all__ = [
@@ -169,8 +169,28 @@ class MyCartDraftSchema(marshmallow.Schema):
         return types.MyCartDraft(**data)
 
 
-class MyCartSchema(LoggedResourceSchema):
+class MyCartSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.MyCart`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     customer_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customerId"
     )
@@ -392,8 +412,28 @@ class MyCustomerDraftSchema(marshmallow.Schema):
         return types.MyCustomerDraft(**data)
 
 
-class MyCustomerSchema(LoggedResourceSchema):
+class MyCustomerSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.MyCustomer`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     customer_number = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customerNumber"
     )
@@ -521,6 +561,7 @@ class MyLineItemDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="shippingDetails",
     )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -543,8 +584,28 @@ class MyOrderFromCartDraftSchema(marshmallow.Schema):
         return types.MyOrderFromCartDraft(**data)
 
 
-class MyOrderSchema(LoggedResourceSchema):
+class MyOrderSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.MyOrder`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     completed_at = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="completedAt"
     )

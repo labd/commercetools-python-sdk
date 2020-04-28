@@ -25,13 +25,13 @@ __all__ = [
     "ImageSchema",
     "KeyReferenceSchema",
     "LastModifiedBySchema",
-    "LoggedResourceSchema",
     "MoneySchema",
     "PagedQueryResponseSchema",
     "PriceDraftSchema",
     "PriceSchema",
     "PriceTierDraftSchema",
     "PriceTierSchema",
+    "QueryPriceSchema",
     "ReferenceSchema",
     "ResourceIdentifierSchema",
     "ScopedPriceSchema",
@@ -516,6 +516,62 @@ class PriceTierSchema(marshmallow.Schema):
         return types.PriceTier(**data)
 
 
+class QueryPriceSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.QueryPrice`."
+    id = marshmallow.fields.String(allow_none=True)
+    value = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.MoneySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    country = marshmallow.fields.String(missing=None)
+    customer_group = marshmallow.fields.Nested(
+        nested="commercetools.schemas._customer_group.CustomerGroupReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="customerGroup",
+    )
+    channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validFrom"
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validUntil"
+    )
+    discounted = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.DiscountedPriceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    custom = marshmallow.fields.Nested(
+        nested="commercetools.schemas._type.CustomFieldsSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    tiers = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.PriceTierDraftSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        return types.QueryPrice(**data)
+
+
 class ReferenceSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.Reference`."
     type_id = marshmallow_enum.EnumField(
@@ -729,31 +785,6 @@ class LastModifiedBySchema(ClientLoggingSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         return types.LastModifiedBy(**data)
-
-
-class LoggedResourceSchema(BaseResourceSchema):
-    "Marshmallow schema for :class:`commercetools.types.LoggedResource`."
-    last_modified_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.LastModifiedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = marshmallow.fields.Nested(
-        nested="commercetools.schemas._common.CreatedBySchema",
-        unknown=marshmallow.EXCLUDE,
-        allow_none=True,
-        missing=None,
-        data_key="createdBy",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        return types.LoggedResource(**data)
 
 
 class TypedMoneyDraftSchema(MoneySchema):

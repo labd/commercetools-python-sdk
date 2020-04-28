@@ -6,7 +6,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    LoggedResource,
+    BaseResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -28,6 +28,7 @@ __all__ = [
     "CustomerAddAddressAction",
     "CustomerAddBillingAddressIdAction",
     "CustomerAddShippingAddressIdAction",
+    "CustomerAddStoreAction",
     "CustomerChangeAddressAction",
     "CustomerChangeEmailAction",
     "CustomerChangePassword",
@@ -40,6 +41,7 @@ __all__ = [
     "CustomerRemoveAddressAction",
     "CustomerRemoveBillingAddressIdAction",
     "CustomerRemoveShippingAddressIdAction",
+    "CustomerRemoveStoreAction",
     "CustomerResetPassword",
     "CustomerResourceIdentifier",
     "CustomerSetCompanyNameAction",
@@ -57,6 +59,7 @@ __all__ = [
     "CustomerSetLocaleAction",
     "CustomerSetMiddleNameAction",
     "CustomerSetSalutationAction",
+    "CustomerSetStoresAction",
     "CustomerSetTitleAction",
     "CustomerSetVatIdAction",
     "CustomerSignInResult",
@@ -72,8 +75,20 @@ class AnonymousCartSignInMode(enum.Enum):
     USE_AS_NEW_ACTIVE_CUSTOMER_CART = "UseAsNewActiveCustomerCart"
 
 
-class Customer(LoggedResource):
+class Customer(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`int`
+    version: int
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: datetime.datetime
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: datetime.datetime
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
@@ -154,6 +169,12 @@ class Customer(LoggedResource):
         key: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreKeyReference"]] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.customer_number = customer_number
         self.email = email
         self.password = password
@@ -182,8 +203,6 @@ class Customer(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:
@@ -735,55 +754,95 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddBillingAddressIdActionSchema`."
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="addBillingAddressId")
 
     def __repr__(self) -> str:
-        return "CustomerAddBillingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "CustomerAddBillingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddShippingAddressIdActionSchema`."
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="addShippingAddressId")
 
     def __repr__(self) -> str:
-        return "CustomerAddShippingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "CustomerAddShippingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
+
+
+class CustomerAddStoreAction(CustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddStoreActionSchema`."
+    #: :class:`commercetools.types.StoreResourceIdentifier`
+    store: "StoreResourceIdentifier"
+
+    def __init__(
+        self, *, action: str = None, store: "StoreResourceIdentifier" = None
+    ) -> None:
+        self.store = store
+        super().__init__(action="addStore")
+
+    def __repr__(self) -> str:
+        return "CustomerAddStoreAction(action=%r, store=%r)" % (self.action, self.store)
 
 
 class CustomerChangeAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeAddressActionSchema`."
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
     #: :class:`commercetools.types.Address`
     address: "Address"
 
     def __init__(
-        self, *, action: str = None, address_id: str = None, address: "Address" = None
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None,
+        address: "Address" = None
     ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         self.address = address
         super().__init__(action="changeAddress")
 
     def __repr__(self) -> str:
-        return "CustomerChangeAddressAction(action=%r, address_id=%r, address=%r)" % (
-            self.action,
-            self.address_id,
-            self.address,
+        return (
+            "CustomerChangeAddressAction(action=%r, address_id=%r, address_key=%r, address=%r)"
+            % (self.action, self.address_id, self.address_key, self.address)
         )
 
 
@@ -805,49 +864,94 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 
 class CustomerRemoveAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveAddressActionSchema`."
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="removeAddress")
 
     def __repr__(self) -> str:
-        return "CustomerRemoveAddressAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "CustomerRemoveAddressAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveBillingAddressIdActionSchema`."
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="removeBillingAddressId")
 
     def __repr__(self) -> str:
-        return "CustomerRemoveBillingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "CustomerRemoveBillingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveShippingAddressIdActionSchema`."
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="removeShippingAddressId")
 
     def __repr__(self) -> str:
-        return "CustomerRemoveShippingAddressIdAction(action=%r, address_id=%r)" % (
+        return (
+            "CustomerRemoveShippingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
+        )
+
+
+class CustomerRemoveStoreAction(CustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveStoreActionSchema`."
+    #: :class:`commercetools.types.StoreResourceIdentifier`
+    store: "StoreResourceIdentifier"
+
+    def __init__(
+        self, *, action: str = None, store: "StoreResourceIdentifier" = None
+    ) -> None:
+        self.store = store
+        super().__init__(action="removeStore")
+
+    def __repr__(self) -> str:
+        return "CustomerRemoveStoreAction(action=%r, store=%r)" % (
             self.action,
-            self.address_id,
+            self.store,
         )
 
 
@@ -985,17 +1089,24 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDefaultBillingAddressActionSchema`."
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
     def __init__(
-        self, *, action: str = None, address_id: typing.Optional[str] = None
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="setDefaultBillingAddress")
 
     def __repr__(self) -> str:
-        return "CustomerSetDefaultBillingAddressAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "CustomerSetDefaultBillingAddressAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
@@ -1003,17 +1114,24 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDefaultShippingAddressActionSchema`."
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
     def __init__(
-        self, *, action: str = None, address_id: typing.Optional[str] = None
+        self,
+        *,
+        action: str = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="setDefaultShippingAddress")
 
     def __repr__(self) -> str:
-        return "CustomerSetDefaultShippingAddressAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "CustomerSetDefaultShippingAddressAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
@@ -1135,6 +1253,27 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
         return "CustomerSetSalutationAction(action=%r, salutation=%r)" % (
             self.action,
             self.salutation,
+        )
+
+
+class CustomerSetStoresAction(CustomerUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetStoresActionSchema`."
+    #: Optional list of :class:`commercetools.types.StoreResourceIdentifier`
+    stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
+
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
+    ) -> None:
+        self.stores = stores
+        super().__init__(action="setStores")
+
+    def __repr__(self) -> str:
+        return "CustomerSetStoresAction(action=%r, stores=%r)" % (
+            self.action,
+            self.stores,
         )
 
 

@@ -4,7 +4,7 @@ import marshmallow
 
 from commercetools import helpers, types
 from commercetools.schemas._common import (
-    LoggedResourceSchema,
+    BaseResourceSchema,
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
@@ -152,8 +152,28 @@ class ReviewResourceIdentifierSchema(ResourceIdentifierSchema):
         return types.ReviewResourceIdentifier(**data)
 
 
-class ReviewSchema(LoggedResourceSchema):
+class ReviewSchema(BaseResourceSchema):
     "Marshmallow schema for :class:`commercetools.types.Review`."
+    id = marshmallow.fields.String(allow_none=True)
+    version = marshmallow.fields.Integer(allow_none=True)
+    created_at = marshmallow.fields.DateTime(allow_none=True, data_key="createdAt")
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, data_key="lastModifiedAt"
+    )
+    last_modified_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.LastModifiedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="lastModifiedBy",
+    )
+    created_by = marshmallow.fields.Nested(
+        nested="commercetools.schemas._common.CreatedBySchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="createdBy",
+    )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     uniqueness_value = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="uniquenessValue"

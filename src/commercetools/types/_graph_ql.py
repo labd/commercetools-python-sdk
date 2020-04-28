@@ -17,18 +17,14 @@ __all__ = [
 class GraphQLError(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLErrorSchema`."
     #: :class:`str`
-    message: typing.Optional[str]
+    message: str
     #: :class:`list`
-    locations: typing.Optional[list]
+    locations: list
     #: :class:`list`
-    path: typing.Optional[list]
+    path: list
 
     def __init__(
-        self,
-        *,
-        message: typing.Optional[str] = None,
-        locations: typing.Optional[list] = None,
-        path: typing.Optional[list] = None,
+        self, *, message: str = None, locations: list = None, path: list = None
     ) -> None:
         self.message = message
         self.locations = locations
@@ -46,13 +42,11 @@ class GraphQLError(_BaseType):
 class GraphQLErrorLocation(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLErrorLocationSchema`."
     #: :class:`int`
-    line: typing.Optional[int]
+    line: int
     #: :class:`int`
-    column: typing.Optional[int]
+    column: int
 
-    def __init__(
-        self, *, line: typing.Optional[int] = None, column: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, line: int = None, column: int = None) -> None:
         self.line = line
         self.column = column
         super().__init__()
@@ -64,7 +58,7 @@ class GraphQLErrorLocation(_BaseType):
 class GraphQLRequest(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLRequestSchema`."
     #: :class:`str`
-    query: typing.Optional[str]
+    query: str
     #: Optional :class:`str` `(Named` ``operationName`` `in Commercetools)`
     operation_name: typing.Optional[str]
     #: Optional :class:`commercetools.types.GraphQLVariablesMap`
@@ -73,7 +67,7 @@ class GraphQLRequest(_BaseType):
     def __init__(
         self,
         *,
-        query: typing.Optional[str] = None,
+        query: str = None,
         operation_name: typing.Optional[str] = None,
         variables: typing.Optional["GraphQLVariablesMap"] = None,
     ) -> None:

@@ -6,14 +6,14 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    LoggedResource,
+    BaseResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
 )
 
 if typing.TYPE_CHECKING:
-    from ._common import CreatedBy, LastModifiedBy, Money, TypedMoney
+    from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money, TypedMoney
     from ._tax_category import TaxCategoryReference, TaxCategoryResourceIdentifier
     from ._zone import ZoneReference, ZoneResourceIdentifier
 __all__ = [
@@ -35,6 +35,7 @@ __all__ = [
     "ShippingMethodResourceIdentifier",
     "ShippingMethodSetDescriptionAction",
     "ShippingMethodSetKeyAction",
+    "ShippingMethodSetLocalizedDescriptionAction",
     "ShippingMethodSetPredicateAction",
     "ShippingMethodUpdate",
     "ShippingMethodUpdateAction",
@@ -66,14 +67,28 @@ class PriceFunction(_BaseType):
         )
 
 
-class ShippingMethod(LoggedResource):
+class ShippingMethod(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`int`
+    version: int
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: datetime.datetime
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: datetime.datetime
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
     name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedDescription`` `in Commercetools)`
+    localized_description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.TaxCategoryReference` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: "TaxCategoryReference"
     #: List of :class:`commercetools.types.ZoneRate` `(Named` ``zoneRates`` `in Commercetools)`
@@ -95,14 +110,22 @@ class ShippingMethod(LoggedResource):
         key: typing.Optional[str] = None,
         name: str = None,
         description: typing.Optional[str] = None,
+        localized_description: typing.Optional["LocalizedString"] = None,
         tax_category: "TaxCategoryReference" = None,
         zone_rates: typing.List["ZoneRate"] = None,
         is_default: bool = None,
         predicate: typing.Optional[str] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.key = key
         self.name = name
         self.description = description
+        self.localized_description = localized_description
         self.tax_category = tax_category
         self.zone_rates = zone_rates
         self.is_default = is_default
@@ -112,13 +135,11 @@ class ShippingMethod(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:
         return (
-            "ShippingMethod(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
+            "ShippingMethod(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, description=%r, localized_description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
             % (
                 self.id,
                 self.version,
@@ -129,6 +150,7 @@ class ShippingMethod(LoggedResource):
                 self.key,
                 self.name,
                 self.description,
+                self.localized_description,
                 self.tax_category,
                 self.zone_rates,
                 self.is_default,
@@ -145,6 +167,8 @@ class ShippingMethodDraft(_BaseType):
     name: str
     #: Optional :class:`str`
     description: typing.Optional[str]
+    #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedDescription`` `in Commercetools)`
+    localized_description: typing.Optional["LocalizedString"]
     #: :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: "TaxCategoryResourceIdentifier"
     #: List of :class:`commercetools.types.ZoneRateDraft` `(Named` ``zoneRates`` `in Commercetools)`
@@ -160,6 +184,7 @@ class ShippingMethodDraft(_BaseType):
         key: typing.Optional[str] = None,
         name: str = None,
         description: typing.Optional[str] = None,
+        localized_description: typing.Optional["LocalizedString"] = None,
         tax_category: "TaxCategoryResourceIdentifier" = None,
         zone_rates: typing.List["ZoneRateDraft"] = None,
         is_default: bool = None,
@@ -168,6 +193,7 @@ class ShippingMethodDraft(_BaseType):
         self.key = key
         self.name = name
         self.description = description
+        self.localized_description = localized_description
         self.tax_category = tax_category
         self.zone_rates = zone_rates
         self.is_default = is_default
@@ -176,11 +202,12 @@ class ShippingMethodDraft(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "ShippingMethodDraft(key=%r, name=%r, description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
+            "ShippingMethodDraft(key=%r, name=%r, description=%r, localized_description=%r, tax_category=%r, zone_rates=%r, is_default=%r, predicate=%r)"
             % (
                 self.key,
                 self.name,
                 self.description,
+                self.localized_description,
                 self.tax_category,
                 self.zone_rates,
                 self.is_default,
@@ -688,6 +715,24 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
 
     def __repr__(self) -> str:
         return "ShippingMethodSetKeyAction(action=%r, key=%r)" % (self.action, self.key)
+
+
+class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetLocalizedDescriptionActionSchema`."
+    #: Optional :class:`str` `(Named` ``localizedDescription`` `in Commercetools)`
+    localized_description: typing.Optional[str]
+
+    def __init__(
+        self, *, action: str = None, localized_description: typing.Optional[str] = None
+    ) -> None:
+        self.localized_description = localized_description
+        super().__init__(action="setLocalizedDescription")
+
+    def __repr__(self) -> str:
+        return (
+            "ShippingMethodSetLocalizedDescriptionAction(action=%r, localized_description=%r)"
+            % (self.action, self.localized_description)
+        )
 
 
 class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):

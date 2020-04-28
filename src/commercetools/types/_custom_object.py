@@ -4,7 +4,7 @@ import datetime
 import typing
 
 from commercetools.types._abstract import _BaseType
-from commercetools.types._common import LoggedResource, Reference, ReferenceTypeId
+from commercetools.types._common import BaseResource, Reference, ReferenceTypeId
 
 if typing.TYPE_CHECKING:
     from ._common import CreatedBy, LastModifiedBy
@@ -16,8 +16,20 @@ __all__ = [
 ]
 
 
-class CustomObject(LoggedResource):
+class CustomObject(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`int`
+    version: int
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: datetime.datetime
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: datetime.datetime
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: :class:`str`
     container: str
     #: :class:`str`
@@ -38,6 +50,12 @@ class CustomObject(LoggedResource):
         key: str = None,
         value: typing.Any = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.container = container
         self.key = key
         self.value = value
@@ -46,8 +64,6 @@ class CustomObject(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:

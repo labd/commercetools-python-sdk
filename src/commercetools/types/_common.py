@@ -34,7 +34,6 @@ __all__ = [
     "KeyReference",
     "LastModifiedBy",
     "LocalizedString",
-    "LoggedResource",
     "Money",
     "MoneyType",
     "PagedQueryResponse",
@@ -42,6 +41,7 @@ __all__ = [
     "PriceDraft",
     "PriceTier",
     "PriceTierDraft",
+    "QueryPrice",
     "Reference",
     "ReferenceTypeId",
     "ResourceIdentifier",
@@ -754,6 +754,73 @@ class PriceTierDraft(_BaseType):
         )
 
 
+class QueryPrice(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.QueryPriceSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`commercetools.types.Money`
+    value: "Money"
+    #: Optional :class:`str`
+    country: typing.Optional["str"]
+    #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Optional :class:`commercetools.types.ChannelReference`
+    channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
+    valid_from: typing.Optional[datetime.datetime]
+    #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
+    valid_until: typing.Optional[datetime.datetime]
+    #: Optional :class:`commercetools.types.DiscountedPrice`
+    discounted: typing.Optional["DiscountedPrice"]
+    #: Optional :class:`commercetools.types.CustomFields`
+    custom: typing.Optional["CustomFields"]
+    #: Optional list of :class:`commercetools.types.PriceTierDraft`
+    tiers: typing.Optional[typing.List["PriceTierDraft"]]
+
+    def __init__(
+        self,
+        *,
+        id: str = None,
+        value: "Money" = None,
+        country: typing.Optional["str"] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        channel: typing.Optional["ChannelReference"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        discounted: typing.Optional["DiscountedPrice"] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
+    ) -> None:
+        self.id = id
+        self.value = value
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        self.discounted = discounted
+        self.custom = custom
+        self.tiers = tiers
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return (
+            "QueryPrice(id=%r, value=%r, country=%r, customer_group=%r, channel=%r, valid_from=%r, valid_until=%r, discounted=%r, custom=%r, tiers=%r)"
+            % (
+                self.id,
+                self.value,
+                self.country,
+                self.customer_group,
+                self.channel,
+                self.valid_from,
+                self.valid_until,
+                self.discounted,
+                self.custom,
+                self.tiers,
+            )
+        )
+
+
 class Reference(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceSchema`."
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
@@ -1073,46 +1140,6 @@ class LastModifiedBy(ClientLogging):
         return (
             "LastModifiedBy(client_id=%r, external_user_id=%r, customer=%r, anonymous_id=%r)"
             % (self.client_id, self.external_user_id, self.customer, self.anonymous_id)
-        )
-
-
-class LoggedResource(BaseResource):
-    "Corresponding marshmallow schema is :class:`commercetools.schemas.LoggedResourceSchema`."
-    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
-    created_by: typing.Optional["CreatedBy"]
-
-    def __init__(
-        self,
-        *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-    ) -> None:
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-        )
-
-    def __repr__(self) -> str:
-        return (
-            "LoggedResource(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r)"
-            % (
-                self.id,
-                self.version,
-                self.created_at,
-                self.last_modified_at,
-                self.last_modified_by,
-                self.created_by,
-            )
         )
 
 

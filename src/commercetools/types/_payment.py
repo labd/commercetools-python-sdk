@@ -6,7 +6,7 @@ import typing
 
 from commercetools.types._abstract import _BaseType
 from commercetools.types._common import (
-    LoggedResource,
+    BaseResource,
     Reference,
     ReferenceTypeId,
     ResourceIdentifier,
@@ -62,8 +62,20 @@ __all__ = [
 ]
 
 
-class Payment(LoggedResource):
+class Payment(BaseResource):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSchema`."
+    #: :class:`str`
+    id: str
+    #: :class:`int`
+    version: int
+    #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
+    created_at: datetime.datetime
+    #: :class:`datetime.datetime` `(Named` ``lastModifiedAt`` `in Commercetools)`
+    last_modified_at: datetime.datetime
+    #: Optional :class:`commercetools.types.LastModifiedBy` `(Named` ``lastModifiedBy`` `in Commercetools)`
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Optional :class:`commercetools.types.CreatedBy` `(Named` ``createdBy`` `in Commercetools)`
+    created_by: typing.Optional["CreatedBy"]
     #: Optional :class:`commercetools.types.CustomerReference`
     customer: typing.Optional["CustomerReference"]
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
@@ -120,6 +132,12 @@ class Payment(LoggedResource):
         custom: typing.Optional["CustomFields"] = None,
         key: typing.Optional[str] = None
     ) -> None:
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
         self.customer = customer
         self.anonymous_id = anonymous_id
         self.external_id = external_id
@@ -140,8 +158,6 @@ class Payment(LoggedResource):
             version=version,
             created_at=created_at,
             last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
         )
 
     def __repr__(self) -> str:

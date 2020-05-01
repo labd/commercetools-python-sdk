@@ -233,7 +233,7 @@ def _publish_product_action():
         # not implemented scopes right now.
         if "staged" in new["masterData"]:
             new["masterData"]["current"] = new["masterData"]["staged"]
-            new["masterData"]["hasStagedChanges"] = False
+        new["masterData"]["hasStagedChanges"] = False
         new["published"] = True
         return new
 

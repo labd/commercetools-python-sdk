@@ -149,8 +149,8 @@ class ProductsModel(BaseModel):
             )
 
 
-def _get_target_obj(obj: dict, action: types.ProductUpdateAction):
-    staged = getattr(action, "staged", False)
+def _get_target_obj(obj: dict, action: types.ProductUpdateAction, default_staged=False):
+    staged = getattr(action, "staged", default_staged)
     if not staged and obj["masterData"]["current"]:
         return obj["masterData"]["current"]
     return obj["masterData"]["staged"]
@@ -227,6 +227,54 @@ def _add_variant_action():
     return updater
 
 
+def _publish_product_action():
+    def updater(self, obj: dict, action: types.ProductPublishAction):
+        new = copy.deepcopy(obj)
+        # not implemented scopes right now.
+        if "staged" in new["masterData"]:
+            new["masterData"]["current"] = new["masterData"]["staged"]
+            new["masterData"]["hasStagedChanges"] = False
+        new["published"] = True
+        return new
+
+    return updater
+
+
+def _set_product_prices():
+    def updater(self, obj: dict, action: types.ProductSetPricesAction):
+        new = copy.deepcopy(obj)
+        target_obj = _get_target_obj(new, action, default_staged=True)
+        prices = []
+        for price_draft in action.prices:
+            price = types.Price(
+                id=str(uuid.uuid4()),
+                country=price_draft.country,
+                channel=price_draft.channel,
+                value=types.TypedMoney(
+                    fraction_digits=2,
+                    cent_amount=price_draft.value.cent_amount,
+                    currency_code=price_draft.value.currency_code,
+                    type=types.MoneyType.CENT_PRECISION,
+                ),
+                valid_from=price_draft.valid_from,
+                valid_until=price_draft.valid_until,
+                discounted=price_draft.discounted,
+                custom=price_draft.custom,
+                tiers=price_draft.tiers,
+            )
+            prices.append(price)
+
+        schema = schemas.PriceSchema()
+        for variant in [target_obj["masterVariant"], *target_obj["variants"]]:
+            if variant["sku"] == action.sku:
+                variant["prices"] = schema.dump(prices, many=True)
+        if action.staged:
+            new["masterData"]["hasStagedChanges"] = True
+        return new
+
+    return updater
+
+
 class ProductsBackend(ServiceBackend):
     service_path = "products"
     model_class = ProductsModel
@@ -251,4 +299,6 @@ class ProductsBackend(ServiceBackend):
         "changeSlug": _update_productdata_attr("slug", "slug"),
         "setAttribute": _set_attribute_action(),
         "addVariant": _add_variant_action(),
+        "setPrices": _set_product_prices(),
+        "publish": _publish_product_action(),
     }

@@ -32,6 +32,15 @@ def flatten_multivaluedict(data: dict) -> dict:
     return result
 
 
+def get_product_variants(product_catalog_data: dict) -> typing.List[dict]:
+    variants = []
+    if product_catalog_data.get("masterVariant"):
+        variants.append(product_catalog_data["masterVariant"])
+    if product_catalog_data.get("variants"):
+        variants += product_catalog_data["variants"]
+    return variants
+
+
 def create_from_draft(draft):
     """Utility method to create normal objects out of draft objects.
 

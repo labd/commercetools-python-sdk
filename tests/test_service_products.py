@@ -145,7 +145,12 @@ def test_product_update(client):
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    product = client.products.create(types.ProductDraft(key="test-product"))
+    product = client.products.create(
+        types.ProductDraft(
+            key="test-product",
+            master_variant=types.ProductVariantDraft(sku="1", key="1"),
+        )
+    )
 
     assert uuid.UUID(product.id)
     assert product.key == "test-product"
@@ -158,6 +163,31 @@ def test_product_update(client):
         ],
     )
     assert product.key == "test-product"
+    assert product.master_data.published is False
+
+    product = client.products.update_by_id(
+        id=product.id, version=product.version, actions=[types.ProductPublishAction()]
+    )
+    assert product.master_data.published is True
+
+    assert not product.master_data.current.master_variant.prices
+    product = client.products.update_by_id(
+        id=product.id,
+        version=product.version,
+        actions=[
+            types.ProductSetPricesAction(
+                sku="1",
+                prices=[
+                    types.PriceDraft(
+                        value=types.Money(cent_amount=1000, currency_code="GBP")
+                    )
+                ],
+                staged=False,
+            )
+        ],
+    )
+
+    assert len(product.master_data.current.master_variant.prices) == 1
 
     product = client.products.update_by_key(
         key="test-product",

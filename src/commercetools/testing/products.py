@@ -5,7 +5,7 @@ import uuid
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import custom_fields_from_draft
+from commercetools.testing.utils import custom_fields_from_draft, get_product_variants
 
 
 class ProductsModel(BaseModel):
@@ -234,7 +234,7 @@ def _publish_product_action():
         if "staged" in new["masterData"]:
             new["masterData"]["current"] = new["masterData"]["staged"]
         new["masterData"]["hasStagedChanges"] = False
-        new["published"] = True
+        new["masterData"]["published"] = True
         return new
 
     return updater
@@ -265,7 +265,7 @@ def _set_product_prices():
             prices.append(price)
 
         schema = schemas.PriceSchema()
-        for variant in [target_obj["masterVariant"], *target_obj["variants"]]:
+        for variant in get_product_variants(target_obj):
             if variant["sku"] == action.sku:
                 variant["prices"] = schema.dump(prices, many=True)
         if action.staged:

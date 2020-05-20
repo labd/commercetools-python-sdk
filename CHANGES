@@ -1,11 +1,13 @@
 8.1.1 (unreleased)
 ------------------
-- Fix publish action on mock backend; already published products got overwritten
-- Automatically reset token cache when using commercetools pytest fixtures
+- Testing: Fix publish action on mock backend; already published products got overwritten
+- Testing: Automatically reset token cache when using commercetools pytest fixtures
+
 
 8.1.0 (2020-05-01)
 ------------------
-- Added product publish and set prices actions on mock backend.
+- Testing: Added product publish and set prices actions on mock backend.
+
 
 8.0.0 (2020-04-28)
 ------------------
@@ -15,6 +17,7 @@ but effectively still have the same attributes.
 For safety we're doing a major release.
 
 - Testing: add support for updating product type sets in mock server
+
 
 7.0.0 (20202-04-16)
 -------------------
@@ -32,9 +35,11 @@ a type.
 - Testing: Check for unique values in testing backend
 - Testing: Fixed Attribute return object in ProductTypes testing backend
 
+
 6.2.1 (2020-03-24)
 ------------------
 - Fix marshallow breaking on missing **kwargs argument (#76)
+
 
 6.2.0 (2020-03-08)
 ------------------
@@ -42,9 +47,11 @@ a type.
 - Update dependencies so that code generation works with Python 3.8
 - Update GitHub Actions integration
 
+
 6.1.0 (2020-01-13)
 ------------------
 - Added nested query predicate support (#72)
+
 
 6.0.0 (2020-01-13)
 ------------------
@@ -54,6 +61,7 @@ a type.
  - Fix mock backend not properly support '<>' operator
  - Add in operator in queries (#73)
  - Fix cart replicate function (#74)
+
 
 5.0.0 (2019-11-05)
 ------------------
@@ -74,64 +82,79 @@ replace references to `Money` with `CentPrecisionMoney`.
 - Mock ShippingMethod.setPredicate
 - Mock State.setTransitions
 
+
 4.0.0 (2019-07-04)
 ------------------
 - *Breaking* Generate with new API definitions, main difference is Reference -> ResourceIdentifier type.
+
 
 3.9.0 (2019-06-27)
 ------------------
 - Implement testing/introspect token endpoint, thanks to @mbarga!
 
+
 3.8.1 (2019-06-26)
 ------------------
 - Small fixes if data was not initialized for mock shipping methods actions
 
+
 3.8.0 (2019-06-26)
 ------------------
 - Implement AddZone and RemoveZone actions for shipping methods
+
 
 3.7.0 (2019-06-18)
 ------------------
 - Added discount codes
 - Added cart discounts
 
+
 3.6.1 (2019-06-18)
 ------------------
 - Fix small bug in reference expansion if value is None
+
 
 3.6.0 (2019-06-17)
 ------------------
 - Generate with new API definitions, biggest changes are Resource -> BaseResource and ResourceSchema -> BaseResourceSchema
 - Add resource expansion to all applicable objects, see https://docs.commercetools.com/http-api#reference-expansion for details.
 
+
 3.5.1 (2019-05-27)
 ------------------
 - Remove WIP code on carts get_by_id call
+
 
 3.5.0 (2019-05-23)
 ------------------
 - Generate with new API definitions
 - Add missing 'store' field to Order
 
+
 3.4.0 (2019-05-21)
 ------------------
 - Fix rating number type not being an integer for Review related types
+
 
 3.3.0 (2019-05-20)
 ------------------
 - Add State service
 
+
 3.2.0 (2019-05-08)
 ------------------
 - Add Store service
+
 
 3.1.1 (2019-04-26)
 ------------------
 - Fix test server not working inside docker by binding to 0.0.0.0 instead of localhost
 
+
 3.1.0 (2019-04-26)
 ------------------
 - Implement testing shipping method actions
+
 
 3.0.0 (2019-04-25)
 ------------------
@@ -141,14 +164,17 @@ replace references to `Money` with `CentPrecisionMoney`.
  - Add X-Correlation-ID to exception class
  - Mock X-Correlation-ID header in testing framework
 
+
 2.5.2 (2019-04-17)
 ------------------
  - Implement testing predicates gte and lte
  - Implement inventory testing actions
 
+
 2.5.1 (2019-04-15)
 ------------------
  - Implement testing actions 'changeLabel' and 'changeLocalizedEnumValueLabel' for product type
+
 
 2.5.0 (2019-04-08)
 ------------------

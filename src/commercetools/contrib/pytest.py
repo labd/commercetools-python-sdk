@@ -9,6 +9,12 @@ from commercetools.testing import backend_mocker
 from commercetools.testing.server import Server
 
 
+@pytest.fixture(autouse=True)
+def reset_token_cache():
+    from commercetools.utils import DefaultTokenSaver
+    DefaultTokenSaver.clear_cache()
+
+
 @pytest.fixture()
 def commercetools_api():
     with backend_mocker() as m:

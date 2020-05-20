@@ -231,7 +231,7 @@ def _publish_product_action():
     def updater(self, obj: dict, action: types.ProductPublishAction):
         new = copy.deepcopy(obj)
         # not implemented scopes right now.
-        if "staged" in new["masterData"]:
+        if new["masterData"].get("staged"):
             new["masterData"]["current"] = new["masterData"]["staged"]
         new["masterData"]["hasStagedChanges"] = False
         new["masterData"]["published"] = True

@@ -1,3 +1,7 @@
+8.1.1 (unreleased)
+------------------
+- Fix publish action on mock backend; already published products got overwritten
+
 8.1.0 (2020-05-01)
 ------------------
 - Added product publish and set prices actions on mock backend.

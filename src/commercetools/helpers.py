@@ -66,7 +66,7 @@ class Discriminator(Field):
         only=None,
         discriminator_field=None,
         discriminator_schemas=None,
-        **kwargs
+        **kwargs,
     ):
         # Raise error if only or exclude is passed as string, not list of strings
         if only is not None and not is_collection(only):
@@ -152,7 +152,9 @@ class Discriminator(Field):
         try:
             schema_name = self.discriminator_schemas[discriminator_value]
         except KeyError:
-            raise ValueError(f"Could not find discriminator schema {discriminator_value} for field '{self.name}' ({value})")
+            raise ValueError(
+                f"Could not find discriminator schema {discriminator_value} for field '{self.name}' ({value})"
+            )
 
         schema = self.get_schema(schema_name)
 

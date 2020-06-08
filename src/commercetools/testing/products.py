@@ -3,9 +3,17 @@ import datetime
 import typing
 import uuid
 
+from marshmallow import Schema
+from marshmallow import fields as schema_fields
+
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import custom_fields_from_draft, get_product_variants
+from commercetools.testing.utils import (
+    create_commercetools_response,
+    custom_fields_from_draft,
+    get_product_variants,
+    parse_request_params,
+)
 
 
 class ProductsModel(BaseModel):
@@ -149,17 +157,35 @@ class ProductsModel(BaseModel):
             )
 
 
-def _get_target_obj(obj: dict, action: types.ProductUpdateAction, default_staged=False):
-    staged = getattr(action, "staged", default_staged)
+def _get_target_obj(obj: dict, staged: bool):
     if not staged and obj["masterData"]["current"]:
         return obj["masterData"]["current"]
     return obj["masterData"]["staged"]
 
 
+def _get_variant(
+    data_object: dict, *, id: str = "", sku: str = ""
+) -> typing.Optional[dict]:
+    if not data_object:
+        return None
+
+    variants = [data_object["masterVariant"]]
+    if data_object["variants"]:
+        variants += data_object["variants"]
+
+    for variant in variants:
+        if id and id == variant["id"]:
+            return variant
+        if sku and sku == variant["sku"]:
+            return variant
+
+    return None
+
+
 def _update_productdata_attr(dst: str, src: str):
     def updater(self, obj: dict, action: types.ProductUpdateAction):
         value = getattr(action, src)
-        target_obj = _get_target_obj(obj, action)
+        target_obj = _get_target_obj(obj, getattr(action, "staged", False))
 
         if target_obj[dst] != value:
             new = copy.deepcopy(obj)
@@ -175,16 +201,9 @@ def _set_attribute_action():
         staged = getattr(action, "staged", False)
         new = copy.deepcopy(obj)
 
-        target_obj = _get_target_obj(new, action)
-
-        variants = [target_obj["masterVariant"]]
-        if target_obj["variants"]:
-            variants += target_obj["variants"]
-
-        for variant in variants:
-            if action.variant_id != variant["id"]:
-                continue
-
+        target_obj = _get_target_obj(new, staged)
+        variant = _get_variant(target_obj, id=action.variant_id)
+        if variant:
             for attr in variant["attributes"]:
                 if attr["name"] == action.name:
                     attr["value"] = action.value
@@ -195,7 +214,6 @@ def _set_attribute_action():
             variant["attributes"].append(
                 attr_schema.dump(types.Attribute(name=action.name, value=action.value))
             )
-            break
 
         return new
 
@@ -217,7 +235,7 @@ def _add_variant_action():
         schema = schemas.ProductVariantSchema()
 
         new = copy.deepcopy(obj)
-        target_obj = _get_target_obj(new, action)
+        target_obj = _get_target_obj(new, staged=getattr(action, "staged", True))
         if not target_obj["variants"]:
             target_obj["variants"] = []
         target_obj["variants"].append(schema.dump(variant))
@@ -243,7 +261,7 @@ def _publish_product_action():
 def _set_product_prices():
     def updater(self, obj: dict, action: types.ProductSetPricesAction):
         new = copy.deepcopy(obj)
-        target_obj = _get_target_obj(new, action, default_staged=True)
+        target_obj = _get_target_obj(new, getattr(action, "staged", True))
         prices = []
         for price_draft in action.prices:
             price = types.Price(
@@ -275,6 +293,12 @@ def _set_product_prices():
     return updater
 
 
+class UploadImageQuerySchema(Schema):
+    staged = schema_fields.Bool()
+    filename = schema_fields.Field()
+    sku = schema_fields.Field()
+
+
 class ProductsBackend(ServiceBackend):
     service_path = "products"
     model_class = ProductsModel
@@ -292,6 +316,7 @@ class ProductsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
+            ("^(?P<id>[^/]+)\/images$", "POST", self.upload_image),
         ]
 
     # Fixme: use decorator for this
@@ -302,3 +327,23 @@ class ProductsBackend(ServiceBackend):
         "setPrices": _set_product_prices(),
         "publish": _publish_product_action(),
     }
+
+    def upload_image(self, request, id):
+        obj = self.model.get_by_id(id)
+        if not obj:
+            return create_commercetools_response(request, status_code=404)
+
+        params = parse_request_params(UploadImageQuerySchema, request)
+        target = _get_target_obj(obj, staged=params["staged"])
+        filename = params["filename"]
+
+        variant = _get_variant(target, sku=params["sku"])
+        if not variant["images"]:
+            variant["images"] = []
+        image_schema = schemas.ImageSchema()
+        variant["images"].append(
+            image_schema.dump(
+                types.Image(url=f"cdn.commercetools.local/detail-{filename}")
+            )
+        )
+        return create_commercetools_response(request, json=obj)

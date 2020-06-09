@@ -1,6 +1,7 @@
-8.1.2 (xxxx-xx-xx)
+8.1.2 (2020-06-09)
 ------------------
 - Testing: Add upload_image handler for product testing service
+- Throw ValueError when discriminator cannot be found
 
 
 8.1.1 (2020-05-20)

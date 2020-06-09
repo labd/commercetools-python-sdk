@@ -333,6 +333,8 @@ class ProductsBackend(ServiceBackend):
         if not obj:
             return create_commercetools_response(request, status_code=404)
 
+        obj = copy.deepcopy(obj)
+
         params = parse_request_params(UploadImageQuerySchema, request)
         target = _get_target_obj(obj, staged=params["staged"])
         filename = params["filename"]
@@ -346,4 +348,5 @@ class ProductsBackend(ServiceBackend):
                 types.Image(url=f"cdn.commercetools.local/detail-{filename}")
             )
         )
+        self.model.save(obj)
         return create_commercetools_response(request, json=obj)

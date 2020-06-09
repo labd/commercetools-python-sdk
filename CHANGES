@@ -1,3 +1,8 @@
+8.1.2 (xxxx-xx-xx)
+------------------
+- Testing: Add upload_image handler for product testing service
+
+
 8.1.1 (2020-05-20)
 ------------------
 - Testing: Fix publish action on mock backend; already published products got overwritten

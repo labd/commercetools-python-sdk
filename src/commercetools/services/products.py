@@ -218,7 +218,7 @@ class ProductService(abstract.AbstractService):
         sku: str = None,
         filename: str = "img",
         staged: bool = True,
-    ):
+    ) -> types.Product:
         params = {"filename": filename, "staged": staged}
         if sku:
             params["sku"] = sku

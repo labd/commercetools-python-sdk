@@ -1,7 +1,7 @@
+import copy
 import datetime
 import typing
 import uuid
-import copy
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend

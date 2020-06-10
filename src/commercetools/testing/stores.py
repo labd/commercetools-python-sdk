@@ -1,6 +1,7 @@
 import datetime
 import typing
 import uuid
+import copy
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
@@ -25,6 +26,16 @@ class StoresModel(BaseModel):
         )
 
 
+def set_languages():
+    def updater(self, obj, action):
+        value = getattr(action, "languages")
+        new = copy.deepcopy(obj)
+        new["languages"] = value
+        return new
+
+    return updater
+
+
 class StoresBackend(ServiceBackend):
     service_path = "stores"
     model_class = StoresModel
@@ -45,4 +56,7 @@ class StoresBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
         ]
 
-    _actions = {"setName": update_attribute("name", "name")}
+    _actions = {
+        "setName": update_attribute("name", "name"),
+        "setLanguages": set_languages(),
+    }

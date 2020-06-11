@@ -23,6 +23,7 @@ class StoresModel(BaseModel):
             key=draft.key,
             name=draft.name,
             created_at=datetime.datetime.now(datetime.timezone.utc),
+            languages=draft.languages,
         )
 
 

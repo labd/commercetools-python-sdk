@@ -18,7 +18,7 @@ class ExtensionQuerySchema(abstract.AbstractQuerySchema):
 
 class ExtensionService(abstract.AbstractService):
     def get_by_id(self, id: str) -> types.Extension:
-        return self._client._get(f"channels/{id}", {}, schemas.ExtensionSchema)
+        return self._client._get(f"extensions/{id}", {}, schemas.ExtensionSchema)
 
     def query(
         self,
@@ -38,12 +38,12 @@ class ExtensionService(abstract.AbstractService):
             }
         )
         return self._client._get(
-            "channels", params, schemas.ExtensionPagedQueryResponseSchema
+            "extensions", params, schemas.ExtensionPagedQueryResponseSchema
         )
 
     def create(self, draft: types.ExtensionDraft) -> types.Extension:
         return self._client._post(
-            "channels", {}, draft, schemas.ExtensionDraftSchema, schemas.ExtensionSchema
+            "extensions", {}, draft, schemas.ExtensionDraftSchema, schemas.ExtensionSchema
         )
 
     def update_by_id(
@@ -56,7 +56,7 @@ class ExtensionService(abstract.AbstractService):
     ) -> types.Extension:
         update_action = types.ExtensionUpdate(version=version, actions=actions)
         return self._client._post(
-            endpoint=f"channels/{id}",
+            endpoint=f"extensions/{id}",
             params={},
             data_object=update_action,
             request_schema_cls=schemas.ExtensionUpdateSchema,
@@ -69,7 +69,7 @@ class ExtensionService(abstract.AbstractService):
     ) -> types.Extension:
         params = ExtensionDeleteSchema().dump({"version": version})
         return self._client._delete(
-            endpoint=f"channels/{id}",
+            endpoint=f"extensions/{id}",
             params=params,
             response_schema_cls=schemas.ExtensionSchema,
             force_delete=force_delete,

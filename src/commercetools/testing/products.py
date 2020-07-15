@@ -1,12 +1,13 @@
 import copy
 import datetime
-import typing
 import uuid
+from typing import List, Optional, Union
 
 from marshmallow import Schema
 from marshmallow import fields as schema_fields
 
 from commercetools import schemas, types
+from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     create_commercetools_response,
@@ -22,7 +23,7 @@ class ProductsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.ProductDraft, id: typing.Optional[str] = None
+        self, draft: types.ProductDraft, id: Optional[str] = None
     ) -> types.Product:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
 
@@ -63,11 +64,11 @@ class ProductsModel(BaseModel):
         self, draft: types.ProductVariantDraft
     ) -> types.ProductVariant:
 
-        assets: typing.Optional[typing.List[types.Asset]] = None
+        assets: Optional[List[types.Asset]] = None
         if draft.assets:
             assets = self._create_assets_from_draft(draft.assets)
 
-        prices: typing.Optional[typing.List[types.Price]] = None
+        prices: Optional[List[types.Price]] = None
         if draft.prices:
             prices = self._create_prices_from_draft(draft.prices)
 
@@ -87,11 +88,11 @@ class ProductsModel(BaseModel):
         )
 
     def _create_assets_from_draft(
-        self, drafts: typing.List[types.AssetDraft]
-    ) -> typing.List[types.Asset]:
-        assets: typing.List[types.Asset] = []
+        self, drafts: List[types.AssetDraft]
+    ) -> List[types.Asset]:
+        assets: List[types.Asset] = []
         for draft in drafts:
-            custom: typing.Optional[types.CustomFields] = None
+            custom: Optional[types.CustomFields] = None
             if draft.custom:
                 custom = custom_fields_from_draft(self._storage, draft.custom)
 
@@ -107,9 +108,9 @@ class ProductsModel(BaseModel):
         return assets
 
     def _create_prices_from_draft(
-        self, drafts: typing.List[types.PriceDraft]
-    ) -> typing.List[types.Price]:
-        prices: typing.List[types.Price] = []
+        self, drafts: List[types.PriceDraft]
+    ) -> List[types.Price]:
+        prices: List[types.Price] = []
         for draft in drafts:
             custom = None
             if draft.custom:
@@ -130,8 +131,8 @@ class ProductsModel(BaseModel):
         return prices
 
     def _create_price_from_draft(
-        self, draft: typing.Optional[types.TypedMoneyDraft]
-    ) -> typing.Optional[types.TypedMoney]:
+        self, draft: Union[types.Money, Optional[types.TypedMoneyDraft]]
+    ) -> Optional[types.TypedMoney]:
         if draft is None:
             return None
 
@@ -163,9 +164,7 @@ def _get_target_obj(obj: dict, staged: bool):
     return obj["masterData"]["staged"]
 
 
-def _get_variant(
-    data_object: dict, *, id: str = "", sku: str = ""
-) -> typing.Optional[dict]:
+def _get_variant(data_object: dict, *, id: int = "", sku: str = "") -> Optional[dict]:
     if not data_object:
         return None
 
@@ -251,11 +250,31 @@ def _publish_product_action():
         # not implemented scopes right now.
         if new["masterData"].get("staged"):
             new["masterData"]["current"] = new["masterData"]["staged"]
+            del new["masterData"]["staged"]
         new["masterData"]["hasStagedChanges"] = False
         new["masterData"]["published"] = True
         return new
 
     return updater
+
+
+def convert_draft_price(
+    price_draft: types.PriceDraft, price_id: str = None
+) -> types.Price:
+    tiers: Optional[List[types.PriceTier]] = None
+    if price_draft.tiers:
+        tiers = [utils.create_from_draft(tier) for tier in price_draft.tiers]
+    return types.Price(
+        id=price_id or str(uuid.uuid4()),
+        country=price_draft.country,
+        channel=price_draft.channel,
+        value=utils._money_to_typed(price_draft.value),
+        valid_from=price_draft.valid_from,
+        valid_until=price_draft.valid_until,
+        discounted=price_draft.discounted,
+        custom=utils.create_from_draft(price_draft.custom),
+        tiers=tiers,
+    )
 
 
 def _set_product_prices():
@@ -264,22 +283,7 @@ def _set_product_prices():
         target_obj = _get_target_obj(new, getattr(action, "staged", True))
         prices = []
         for price_draft in action.prices:
-            price = types.Price(
-                id=str(uuid.uuid4()),
-                country=price_draft.country,
-                channel=price_draft.channel,
-                value=types.TypedMoney(
-                    fraction_digits=2,
-                    cent_amount=price_draft.value.cent_amount,
-                    currency_code=price_draft.value.currency_code,
-                    type=types.MoneyType.CENT_PRECISION,
-                ),
-                valid_from=price_draft.valid_from,
-                valid_until=price_draft.valid_until,
-                discounted=price_draft.discounted,
-                custom=price_draft.custom,
-                tiers=price_draft.tiers,
-            )
+            price = convert_draft_price(price_draft)
             prices.append(price)
 
         schema = schemas.PriceSchema()
@@ -287,6 +291,61 @@ def _set_product_prices():
             if variant["sku"] == action.sku:
                 variant["prices"] = schema.dump(prices, many=True)
         if action.staged:
+            new["masterData"]["hasStagedChanges"] = True
+        return new
+
+    return updater
+
+
+def _change_price():
+    def updater(self, obj: dict, action: types.ProductChangePriceAction):
+        new = copy.deepcopy(obj)
+        staged = action.staged
+        if staged is None:
+            staged = True
+        target_obj = _get_target_obj(new, staged)
+        changed_price = convert_draft_price(action.price, action.price_id)
+        schema = schemas.PriceSchema()
+
+        found_price = True
+        for variant in get_product_variants(target_obj):
+            for index, price in enumerate(variant["prices"]):
+                if price["id"] == action.price_id:
+                    variant["prices"][index] = schema.dump(changed_price)
+                    found_price = True
+                    break
+        if not found_price:
+            raise ValueError("Could not find price with id %s" % action.price_id)
+        if staged:
+            new["masterData"]["hasStagedChanges"] = True
+        return new
+
+    return updater
+
+
+def _add_price():
+    def updater(self, obj: dict, action: types.ProductAddPriceAction):
+        new = copy.deepcopy(obj)
+        staged = action.staged
+        if staged is None:
+            staged = True
+        target_obj = _get_target_obj(new, staged)
+        new_price = convert_draft_price(action.price)
+        schema = schemas.PriceSchema()
+
+        found_sku = False
+        for variant in get_product_variants(target_obj):
+            if variant["sku"] == action.sku:
+                if "prices" not in variant:
+                    variant["prices"] = []
+                elif not variant["prices"]:
+                    variant["prices"] = []
+                variant["prices"].append(schema.dump(new_price))
+                found_sku = True
+                break
+        if not found_sku:
+            raise ValueError("Could not find sku %s" % action.sku)
+        if staged:
             new["masterData"]["hasStagedChanges"] = True
         return new
 
@@ -325,6 +384,8 @@ class ProductsBackend(ServiceBackend):
         "setAttribute": _set_attribute_action(),
         "addVariant": _add_variant_action(),
         "setPrices": _set_product_prices(),
+        "changePrice": _change_price(),
+        "addPrice": _add_price(),
         "publish": _publish_product_action(),
     }
 

@@ -51,7 +51,20 @@ def create_from_draft(draft):
         return None
 
     if isinstance(draft, types.CustomFieldsDraft):
-        return types.CustomFields(type=draft.type, fields=draft.fields)
+        return types.CustomFields(
+            type=types.TypeReference(type_id=draft.type.type_id, id=draft.type.id),
+            fields=draft.fields,
+        )
+    if isinstance(draft, types.PriceTierDraft):
+        return types.PriceTier(
+            minimum_quantity=draft.minimum_quantity,
+            value=_money_to_typed(
+                types.Money(
+                    cent_amount=draft.value.cent_amount,
+                    currency_code=draft.value.currency_code,
+                )
+            ),
+        )
 
     raise ValueError(f"Unsupported type {draft.__class__}")
 

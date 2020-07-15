@@ -3,8 +3,8 @@ import datetime
 import uuid
 from typing import List, Optional, Union
 
-from marshmallow import fields as schema_fields
 from marshmallow import Schema
+from marshmallow import fields as schema_fields
 
 from commercetools import schemas, types
 from commercetools.testing import utils

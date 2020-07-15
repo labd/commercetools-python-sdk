@@ -197,3 +197,77 @@ def test_product_update(client):
         ],
     )
     assert product.key == "test-product"
+
+
+def test_product_update_add_change_price_staged(client):
+    product = client.products.create(
+        types.ProductDraft(
+            key="test-product",
+            master_variant=types.ProductVariantDraft(sku="1", key="1"),
+        )
+    )
+
+    product = client.products.update_by_id(
+        id=product.id,
+        version=product.version,
+        actions=[
+            types.ProductAddPriceAction(
+                sku="1",
+                price=types.PriceDraft(
+                    value=types.Money(cent_amount=1000, currency_code="GBP")
+                ),
+            )
+        ],
+    )
+
+    assert product.master_data.current is None
+    assert len(product.master_data.staged.master_variant.prices) == 1
+    price = product.master_data.staged.master_variant.prices[0]
+    assert price.value.cent_amount == 1000
+    assert price.value.currency_code == "GBP"
+
+    product = client.products.update_by_id(
+        id=product.id,
+        version=product.version,
+        actions=[
+            types.ProductChangePriceAction(
+                price_id=price.id,
+                price=types.PriceDraft(
+                    value=types.Money(cent_amount=3000, currency_code="EUR")
+                ),
+            )
+        ],
+    )
+
+    assert product.master_data.current is None
+    assert len(product.master_data.staged.master_variant.prices) == 1
+    price = product.master_data.staged.master_variant.prices[0]
+    assert price.value.cent_amount == 3000
+    assert price.value.currency_code == "EUR"
+
+
+def test_product_update_add_price_current(client):
+    product = client.products.create(
+        types.ProductDraft(
+            key="test-product",
+            master_variant=types.ProductVariantDraft(sku="1", key="1"),
+            publish=True,
+        )
+    )
+
+    product = client.products.update_by_id(
+        id=product.id,
+        version=product.version,
+        actions=[
+            types.ProductAddPriceAction(
+                sku="1",
+                staged=False,
+                price=types.PriceDraft(
+                    value=types.Money(cent_amount=1000, currency_code="GBP")
+                ),
+            )
+        ],
+    )
+
+    assert product.master_data.staged is None
+    assert len(product.master_data.current.master_variant.prices) == 1

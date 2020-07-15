@@ -7,6 +7,7 @@ from marshmallow import Schema
 from marshmallow import fields as schema_fields
 
 from commercetools import schemas, types
+from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     create_commercetools_response,
@@ -258,34 +259,79 @@ def _publish_product_action():
     return updater
 
 
+def convert_draft_price(price_draft: types.PriceDraft, price_id: str=None) -> types.Price:
+    return types.Price(
+        id=price_id or str(uuid.uuid4()),
+        country=price_draft.country,
+        channel=price_draft.channel,
+        value=utils._money_to_typed(price_draft.value),
+        valid_from=price_draft.valid_from,
+        valid_until=price_draft.valid_until,
+        discounted=price_draft.discounted,
+        custom=utils.create_from_draft(price_draft.custom),
+        tiers=[utils.create_from_draft(tier) for tier in price_draft.tiers],
+    )
+
+
 def _set_product_prices():
     def updater(self, obj: dict, action: types.ProductSetPricesAction):
         new = copy.deepcopy(obj)
         target_obj = _get_target_obj(new, getattr(action, "staged", True))
         prices = []
         for price_draft in action.prices:
-            price = types.Price(
-                id=str(uuid.uuid4()),
-                country=price_draft.country,
-                channel=price_draft.channel,
-                value=types.TypedMoney(
-                    fraction_digits=2,
-                    cent_amount=price_draft.value.cent_amount,
-                    currency_code=price_draft.value.currency_code,
-                    type=types.MoneyType.CENT_PRECISION,
-                ),
-                valid_from=price_draft.valid_from,
-                valid_until=price_draft.valid_until,
-                discounted=price_draft.discounted,
-                custom=price_draft.custom,
-                tiers=price_draft.tiers,
-            )
+            price = convert_draft_price(price_draft)
             prices.append(price)
 
         schema = schemas.PriceSchema()
         for variant in get_product_variants(target_obj):
             if variant["sku"] == action.sku:
                 variant["prices"] = schema.dump(prices, many=True)
+        if action.staged:
+            new["masterData"]["hasStagedChanges"] = True
+        return new
+
+    return updater
+
+
+def _change_price():
+    def updater(self, obj: dict, action: types.ProductChangePriceAction):
+        new = copy.deepcopy(obj)
+        target_obj = _get_target_obj(new, getattr(action, "staged", True))
+        changed_price = convert_draft_price(action.price, action.price_id)
+        schema = schemas.PriceSchema()
+
+        found_price = True
+        for variant in get_product_variants(target_obj):
+            for index, price in enumerate(variant["prices"]):
+                if price["id"] == action.price_id:
+                    variant["prices"][index] = schema.dump(changed_price)
+                    found_price = True
+                    break
+        if not found_price:
+            raise ValueError("Could not find price with id %s" % action.price_id)
+        if action.staged:
+            new["masterData"]["hasStagedChanges"] = True
+        return new
+    return updater
+
+
+def _add_price():
+    def updater(self, obj: dict, action: types.ProductAddPriceAction):
+        new = copy.deepcopy(obj)
+        target_obj = _get_target_obj(new, getattr(action, "staged", True))
+        new_price = convert_draft_price(action.price)
+        schema = schemas.PriceSchema()
+
+        found_sku = False
+        for variant in get_product_variants(target_obj):
+            if variant["sku"] == action.sku:
+                if "prices" not in variant:
+                    variant["prices"] = []
+                variant["prices"] += schema.dump(new_price)
+                found_sku = True
+                break
+        if not found_sku:
+            raise ValueError("Could not find sku %s" % action.sku)
         if action.staged:
             new["masterData"]["hasStagedChanges"] = True
         return new
@@ -325,6 +371,8 @@ class ProductsBackend(ServiceBackend):
         "setAttribute": _set_attribute_action(),
         "addVariant": _add_variant_action(),
         "setPrices": _set_product_prices(),
+        "changePrice": _change_price(),
+        "addPrice": _add_price(),
         "publish": _publish_product_action(),
     }
 

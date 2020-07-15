@@ -18,7 +18,7 @@ codegen_requires = [
     "astunparse==1.6.3",
     "attrs>=18.2.0",
     "black==18.9b0",
-    "isort[pyproject]",
+    "isort[pyproject]==4.2.15",
     "PyYAML==3.13",
 ]
 

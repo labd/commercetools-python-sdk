@@ -43,7 +43,11 @@ class ExtensionService(abstract.AbstractService):
 
     def create(self, draft: types.ExtensionDraft) -> types.Extension:
         return self._client._post(
-            "extensions", {}, draft, schemas.ExtensionDraftSchema, schemas.ExtensionSchema
+            "extensions",
+            {},
+            draft,
+            schemas.ExtensionDraftSchema,
+            schemas.ExtensionSchema,
         )
 
     def update_by_id(

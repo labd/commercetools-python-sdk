@@ -75,3 +75,16 @@ def test_channel_errors(commercetools_api, client, store_draft):
                 )
             ],
         )
+
+
+def test_store_channel_create(commercetools_api, client, store_draft):
+    channel = client.channels.create(
+        types.ChannelDraft(
+            key="FOO", roles=[types.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+        )
+    )
+    store_draft.distribution_channels = [types.ChannelResourceIdentifier(key="FOO")]
+
+    store = client.stores.create(store_draft)
+
+    assert store.distribution_channels[0].id == channel.id

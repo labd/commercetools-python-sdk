@@ -20,7 +20,7 @@ class StoresModel(BaseModel):
         distribution_channels: List[types.ChannelReference] = []
         if draft.distribution_channels:
             distribution_channels = convert_identifiers_to_references(
-                self.objects, draft.distribution_channels
+                self._storage._stores["channel"], draft.distribution_channels
             )
 
         return types.Store(

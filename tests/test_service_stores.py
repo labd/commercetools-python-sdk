@@ -1,6 +1,6 @@
 import pytest
 
-from commercetools import types
+from commercetools import types, CommercetoolsError
 
 
 def test_store_flow(client, store_draft):
@@ -32,3 +32,46 @@ def test_update_actions(commercetools_api, client, store_draft):
     )
 
     assert store.languages == ["en-US"]
+
+
+def test_channels_are_set(commercetools_api, client, store_draft):
+    store = client.stores.create(store_draft)
+
+    assert store.distribution_channels == []
+
+    channel = client.channels.create(
+        types.ChannelDraft(
+            key="FOO", roles=[types.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+        )
+    )
+
+    store = client.stores.update_by_id(
+        store.id,
+        store.version,
+        actions=[
+            types.StoresSetDistributionChannelsAction(
+                distribution_channels=[types.ChannelResourceIdentifier(key="FOO")]
+            ),
+        ],
+    )
+
+    assert store.distribution_channels[0].id == channel.id
+
+
+def test_channel_errors(commercetools_api, client, store_draft):
+    store = client.stores.create(store_draft)
+
+    client.channels.create(
+        types.ChannelDraft(key="BAR", roles=[types.ChannelRoleEnum.INVENTORY_SUPPLY])
+    )
+
+    with pytest.raises(CommercetoolsError):
+        client.stores.update_by_id(
+            store.id,
+            store.version,
+            actions=[
+                types.StoresSetDistributionChannelsAction(
+                    distribution_channels=[types.ChannelResourceIdentifier(key="BAR")]
+                ),
+            ],
+        )

@@ -1,6 +1,6 @@
 import pytest
 
-from commercetools import types, CommercetoolsError
+from commercetools import CommercetoolsError, types
 
 
 def test_store_flow(client, store_draft):
@@ -51,7 +51,7 @@ def test_channels_are_set(commercetools_api, client, store_draft):
         actions=[
             types.StoresSetDistributionChannelsAction(
                 distribution_channels=[types.ChannelResourceIdentifier(key="FOO")]
-            ),
+            )
         ],
     )
 
@@ -72,6 +72,6 @@ def test_channel_errors(commercetools_api, client, store_draft):
             actions=[
                 types.StoresSetDistributionChannelsAction(
                     distribution_channels=[types.ChannelResourceIdentifier(key="BAR")]
-                ),
+                )
             ],
         )

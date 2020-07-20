@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 
 from commercetools import schemas, types
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, InternalUpdateError
+from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 
 class StoresModel(BaseModel):

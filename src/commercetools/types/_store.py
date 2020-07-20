@@ -13,6 +13,7 @@ from commercetools.types._common import (
 )
 
 if typing.TYPE_CHECKING:
+    from ._channel import ChannelReference, ChannelResourceIdentifier
     from ._common import CreatedBy, LastModifiedBy, LocalizedString
 __all__ = [
     "Store",
@@ -25,6 +26,9 @@ __all__ = [
     "StoreSetNameAction",
     "StoreUpdate",
     "StoreUpdateAction",
+    "StoresAddDistributionChannelsAction",
+    "StoresRemoveDistributionChannelsAction",
+    "StoresSetDistributionChannelsAction",
 ]
 
 
@@ -48,6 +52,8 @@ class Store(BaseResource):
     name: typing.Optional["LocalizedString"]
     #: Optional list of :class:`str`
     languages: typing.Optional[typing.List[str]]
+    #: List of :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannels`` `in Commercetools)`
+    distribution_channels: typing.List["ChannelReference"]
 
     def __init__(
         self,
@@ -60,7 +66,8 @@ class Store(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         key: str = None,
         name: typing.Optional["LocalizedString"] = None,
-        languages: typing.Optional[typing.List[str]] = None
+        languages: typing.Optional[typing.List[str]] = None,
+        distribution_channels: typing.List["ChannelReference"] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -71,6 +78,7 @@ class Store(BaseResource):
         self.key = key
         self.name = name
         self.languages = languages
+        self.distribution_channels = distribution_channels
         super().__init__(
             id=id,
             version=version,
@@ -80,7 +88,7 @@ class Store(BaseResource):
 
     def __repr__(self) -> str:
         return (
-            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, languages=%r)"
+            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, languages=%r, distribution_channels=%r)"
             % (
                 self.id,
                 self.version,
@@ -91,6 +99,7 @@ class Store(BaseResource):
                 self.key,
                 self.name,
                 self.languages,
+                self.distribution_channels,
             )
         )
 
@@ -103,24 +112,31 @@ class StoreDraft(_BaseType):
     name: "LocalizedString"
     #: Optional list of :class:`str`
     languages: typing.Optional[typing.List[str]]
+    #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannels`` `in Commercetools)`
+    distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(
         self,
         *,
         key: str = None,
         name: "LocalizedString" = None,
-        languages: typing.Optional[typing.List[str]] = None
+        languages: typing.Optional[typing.List[str]] = None,
+        distribution_channels: typing.Optional[
+            typing.List["ChannelResourceIdentifier"]
+        ] = None
     ) -> None:
         self.key = key
         self.name = name
         self.languages = languages
+        self.distribution_channels = distribution_channels
         super().__init__()
 
     def __repr__(self) -> str:
-        return "StoreDraft(key=%r, name=%r, languages=%r)" % (
+        return "StoreDraft(key=%r, name=%r, languages=%r, distribution_channels=%r)" % (
             self.key,
             self.name,
             self.languages,
+            self.distribution_channels,
         )
 
 
@@ -273,3 +289,68 @@ class StoreSetNameAction(StoreUpdateAction):
 
     def __repr__(self) -> str:
         return "StoreSetNameAction(action=%r, name=%r)" % (self.action, self.name)
+
+
+class StoresAddDistributionChannelsAction(StoreUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.StoresAddDistributionChannelsActionSchema`."
+    #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: "ChannelResourceIdentifier"
+
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        distribution_channel: "ChannelResourceIdentifier" = None
+    ) -> None:
+        self.distribution_channel = distribution_channel
+        super().__init__(action="addDistributionChannel")
+
+    def __repr__(self) -> str:
+        return (
+            "StoresAddDistributionChannelsAction(action=%r, distribution_channel=%r)"
+            % (self.action, self.distribution_channel)
+        )
+
+
+class StoresRemoveDistributionChannelsAction(StoreUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.StoresRemoveDistributionChannelsActionSchema`."
+    #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: "ChannelResourceIdentifier"
+
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        distribution_channel: "ChannelResourceIdentifier" = None
+    ) -> None:
+        self.distribution_channel = distribution_channel
+        super().__init__(action="removeDistributionChannel")
+
+    def __repr__(self) -> str:
+        return (
+            "StoresRemoveDistributionChannelsAction(action=%r, distribution_channel=%r)"
+            % (self.action, self.distribution_channel)
+        )
+
+
+class StoresSetDistributionChannelsAction(StoreUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.StoresSetDistributionChannelsActionSchema`."
+    #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannels`` `in Commercetools)`
+    distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+
+    def __init__(
+        self,
+        *,
+        action: str = None,
+        distribution_channels: typing.Optional[
+            typing.List["ChannelResourceIdentifier"]
+        ] = None
+    ) -> None:
+        self.distribution_channels = distribution_channels
+        super().__init__(action="setDistributionChannels")
+
+    def __repr__(self) -> str:
+        return (
+            "StoresSetDistributionChannelsAction(action=%r, distribution_channels=%r)"
+            % (self.action, self.distribution_channels)
+        )

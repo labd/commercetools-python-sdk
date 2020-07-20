@@ -33,6 +33,7 @@ __all__ = [
     "InvalidOperationErrorSchema",
     "InvalidSubjectErrorSchema",
     "InvalidTokenErrorSchema",
+    "LanguageUsedInStoresErrorSchema",
     "MatchingPriceNotFoundErrorSchema",
     "MissingTaxRateForCountryErrorSchema",
     "NoMatchingProductDiscountFoundErrorSchema",
@@ -106,6 +107,7 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "InvalidOperation": "commercetools.schemas._error.InvalidOperationErrorSchema",
                 "InvalidSubject": "commercetools.schemas._error.InvalidSubjectErrorSchema",
                 "invalid_token": "commercetools.schemas._error.InvalidTokenErrorSchema",
+                "LanguageUsedInStores": "commercetools.schemas._error.LanguageUsedInStoresErrorSchema",
                 "MatchingPriceNotFound": "commercetools.schemas._error.MatchingPriceNotFoundErrorSchema",
                 "MissingTaxRateForCountry": "commercetools.schemas._error.MissingTaxRateForCountryErrorSchema",
                 "NoMatchingProductDiscountFound": "commercetools.schemas._error.NoMatchingProductDiscountFoundErrorSchema",
@@ -591,6 +593,18 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
     def post_load(self, data, **kwargs):
         del data["code"]
         return types.InvalidTokenError(**data)
+
+
+class LanguageUsedInStoresErrorSchema(ErrorObjectSchema):
+    "Marshmallow schema for :class:`commercetools.types.LanguageUsedInStoresError`."
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["code"]
+        return types.LanguageUsedInStoresError(**data)
 
 
 class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):

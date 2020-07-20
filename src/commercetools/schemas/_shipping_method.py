@@ -89,10 +89,10 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
 
 class ShippingMethodPagedQueryResponseSchema(marshmallow.Schema):
     "Marshmallow schema for :class:`commercetools.types.ShippingMethodPagedQueryResponse`."
-    limit = marshmallow.fields.Integer(allow_none=True)
+    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = marshmallow.fields.Nested(
         nested="commercetools.schemas._shipping_method.ShippingMethodSchema",
         unknown=marshmallow.EXCLUDE,

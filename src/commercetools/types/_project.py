@@ -12,9 +12,11 @@ __all__ = [
     "CartClassificationType",
     "CartScoreType",
     "CartValueType",
+    "CartsConfiguration",
     "ExternalOAuth",
     "Project",
     "ProjectChangeCountriesAction",
+    "ProjectChangeCountryTaxRateFallbackEnabledAction",
     "ProjectChangeCurrenciesAction",
     "ProjectChangeLanguagesAction",
     "ProjectChangeMessagesConfigurationAction",
@@ -26,6 +28,23 @@ __all__ = [
     "ProjectUpdateAction",
     "ShippingRateInputType",
 ]
+
+
+class CartsConfiguration(_BaseType):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.CartsConfigurationSchema`."
+    #: Optional :class:`bool` `(Named` ``countryTaxRateFallbackEnabled`` `in Commercetools)`
+    country_tax_rate_fallback_enabled: typing.Optional[bool]
+
+    def __init__(
+        self, *, country_tax_rate_fallback_enabled: typing.Optional[bool] = None
+    ) -> None:
+        self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
+        super().__init__()
+
+    def __repr__(self) -> str:
+        return "CartsConfiguration(country_tax_rate_fallback_enabled=%r)" % (
+            self.country_tax_rate_fallback_enabled,
+        )
 
 
 class ExternalOAuth(_BaseType):
@@ -71,6 +90,8 @@ class Project(_BaseType):
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
     #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
     external_oauth: typing.Optional["ExternalOAuth"]
+    #: :class:`commercetools.types.CartsConfiguration`
+    carts: "CartsConfiguration"
 
     def __init__(
         self,
@@ -85,7 +106,8 @@ class Project(_BaseType):
         trial_until: typing.Optional[str] = None,
         messages: "MessageConfiguration" = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
-        external_oauth: typing.Optional["ExternalOAuth"] = None
+        external_oauth: typing.Optional["ExternalOAuth"] = None,
+        carts: "CartsConfiguration" = None
     ) -> None:
         self.version = version
         self.key = key
@@ -98,11 +120,12 @@ class Project(_BaseType):
         self.messages = messages
         self.shipping_rate_input_type = shipping_rate_input_type
         self.external_oauth = external_oauth
+        self.carts = carts
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "Project(version=%r, key=%r, name=%r, countries=%r, currencies=%r, languages=%r, created_at=%r, trial_until=%r, messages=%r, shipping_rate_input_type=%r, external_oauth=%r)"
+            "Project(version=%r, key=%r, name=%r, countries=%r, currencies=%r, languages=%r, created_at=%r, trial_until=%r, messages=%r, shipping_rate_input_type=%r, external_oauth=%r, carts=%r)"
             % (
                 self.version,
                 self.key,
@@ -115,6 +138,7 @@ class Project(_BaseType):
                 self.messages,
                 self.shipping_rate_input_type,
                 self.external_oauth,
+                self.carts,
             )
         )
 
@@ -211,6 +235,24 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
         return "ProjectChangeCountriesAction(action=%r, countries=%r)" % (
             self.action,
             self.countries,
+        )
+
+
+class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCountryTaxRateFallbackEnabledActionSchema`."
+    #: :class:`bool` `(Named` ``countryTaxRateFallbackEnabled`` `in Commercetools)`
+    country_tax_rate_fallback_enabled: bool
+
+    def __init__(
+        self, *, action: str = None, country_tax_rate_fallback_enabled: bool = None
+    ) -> None:
+        self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
+        super().__init__(action="changeCountryTaxRateFallbackEnabled")
+
+    def __repr__(self) -> str:
+        return (
+            "ProjectChangeCountryTaxRateFallbackEnabledAction(action=%r, country_tax_rate_fallback_enabled=%r)"
+            % (self.action, self.country_tax_rate_fallback_enabled)
         )
 
 

@@ -2129,6 +2129,7 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "InvalidOperation": "commercetools.schemas._error.InvalidOperationErrorSchema",
                 "InvalidSubject": "commercetools.schemas._error.InvalidSubjectErrorSchema",
                 "invalid_token": "commercetools.schemas._error.InvalidTokenErrorSchema",
+                "LanguageUsedInStores": "commercetools.schemas._error.LanguageUsedInStoresErrorSchema",
                 "MatchingPriceNotFound": "commercetools.schemas._error.MatchingPriceNotFoundErrorSchema",
                 "MissingTaxRateForCountry": "commercetools.schemas._error.MissingTaxRateForCountryErrorSchema",
                 "NoMatchingProductDiscountFound": "commercetools.schemas._error.NoMatchingProductDiscountFoundErrorSchema",

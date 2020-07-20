@@ -218,24 +218,24 @@ class ShippingMethodDraft(_BaseType):
 
 class ShippingMethodPagedQueryResponse(_BaseType):
     "Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodPagedQueryResponseSchema`."
-    #: :class:`int`
-    limit: int
+    #: Optional :class:`int`
+    limit: typing.Optional[int]
     #: :class:`int`
     count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
-    #: :class:`int`
-    offset: int
+    #: Optional :class:`int`
+    offset: typing.Optional[int]
     #: List of :class:`commercetools.types.ShippingMethod`
     results: typing.Sequence["ShippingMethod"]
 
     def __init__(
         self,
         *,
-        limit: int = None,
+        limit: typing.Optional[int] = None,
         count: int = None,
         total: typing.Optional[int] = None,
-        offset: int = None,
+        offset: typing.Optional[int] = None,
         results: typing.Sequence["ShippingMethod"] = None
     ) -> None:
         self.limit = limit

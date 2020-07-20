@@ -37,6 +37,7 @@ __all__ = [
     "InvalidOperationError",
     "InvalidSubjectError",
     "InvalidTokenError",
+    "LanguageUsedInStoresError",
     "MatchingPriceNotFoundError",
     "MissingTaxRateForCountryError",
     "NoMatchingProductDiscountFoundError",
@@ -659,6 +660,19 @@ class InvalidTokenError(ErrorObject):
 
     def __repr__(self) -> str:
         return "InvalidTokenError(code=%r, message=%r)" % (self.code, self.message)
+
+
+class LanguageUsedInStoresError(ErrorObject):
+    "Corresponding marshmallow schema is :class:`commercetools.schemas.LanguageUsedInStoresErrorSchema`."
+
+    def __init__(self, *, code: str = None, message: str = None) -> None:
+        super().__init__(code="LanguageUsedInStores", message=message)
+
+    def __repr__(self) -> str:
+        return "LanguageUsedInStoresError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
 
 
 class MatchingPriceNotFoundError(ErrorObject):

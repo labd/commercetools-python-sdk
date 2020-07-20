@@ -22,6 +22,9 @@ __all__ = [
     "StoreSetNameActionSchema",
     "StoreUpdateActionSchema",
     "StoreUpdateSchema",
+    "StoresAddDistributionChannelsActionSchema",
+    "StoresRemoveDistributionChannelsActionSchema",
+    "StoresSetDistributionChannelsActionSchema",
 ]
 
 
@@ -31,6 +34,14 @@ class StoreDraftSchema(marshmallow.Schema):
     name = LocalizedStringField(allow_none=True)
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True), missing=None
+    )
+    distribution_channels = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="distributionChannels",
     )
 
     class Meta:
@@ -131,6 +142,13 @@ class StoreSchema(BaseResourceSchema):
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True), missing=None
     )
+    distribution_channels = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        data_key="distributionChannels",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -162,6 +180,9 @@ class StoreUpdateSchema(marshmallow.Schema):
             discriminator_schemas={
                 "setLanguages": "commercetools.schemas._store.StoreSetLanguagesActionSchema",
                 "setName": "commercetools.schemas._store.StoreSetNameActionSchema",
+                "addDistributionChannel": "commercetools.schemas._store.StoresAddDistributionChannelsActionSchema",
+                "removeDistributionChannel": "commercetools.schemas._store.StoresRemoveDistributionChannelsActionSchema",
+                "setDistributionChannels": "commercetools.schemas._store.StoresSetDistributionChannelsActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
@@ -203,3 +224,59 @@ class StoreSetNameActionSchema(StoreUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.StoreSetNameAction(**data)
+
+
+class StoresAddDistributionChannelsActionSchema(StoreUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.StoresAddDistributionChannelsAction`."
+    distribution_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoresAddDistributionChannelsAction(**data)
+
+
+class StoresRemoveDistributionChannelsActionSchema(StoreUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.StoresRemoveDistributionChannelsAction`."
+    distribution_channel = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoresRemoveDistributionChannelsAction(**data)
+
+
+class StoresSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.StoresSetDistributionChannelsAction`."
+    distribution_channels = marshmallow.fields.Nested(
+        nested="commercetools.schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="distributionChannels",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoresSetDistributionChannelsAction(**data)

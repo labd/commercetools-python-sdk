@@ -1,3 +1,8 @@
+8.2.0 (2020-07-20)
+------------------
+- Regenerate types (mainly Store distribution channels functionality)
+- Store: distribution channel functionality including testing actions added
+
 8.1.5 (2020-07-15)
 ------------------
 - Fixed API extensions endpoints

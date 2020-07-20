@@ -9,8 +9,10 @@ __all__ = [
     "CartClassificationTypeSchema",
     "CartScoreTypeSchema",
     "CartValueTypeSchema",
+    "CartsConfigurationSchema",
     "ExternalOAuthSchema",
     "ProjectChangeCountriesActionSchema",
+    "ProjectChangeCountryTaxRateFallbackEnabledActionSchema",
     "ProjectChangeCurrenciesActionSchema",
     "ProjectChangeLanguagesActionSchema",
     "ProjectChangeMessagesConfigurationActionSchema",
@@ -23,6 +25,20 @@ __all__ = [
     "ProjectUpdateSchema",
     "ShippingRateInputTypeSchema",
 ]
+
+
+class CartsConfigurationSchema(marshmallow.Schema):
+    "Marshmallow schema for :class:`commercetools.types.CartsConfiguration`."
+    country_tax_rate_fallback_enabled = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="countryTaxRateFallbackEnabled"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        return types.CartsConfiguration(**data)
 
 
 class ExternalOAuthSchema(marshmallow.Schema):
@@ -76,6 +92,11 @@ class ProjectSchema(marshmallow.Schema):
         missing=None,
         data_key="externalOAuth",
     )
+    carts = marshmallow.fields.Nested(
+        nested="commercetools.schemas._project.CartsConfigurationSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -106,6 +127,7 @@ class ProjectUpdateSchema(marshmallow.Schema):
             discriminator_field=("action", "action"),
             discriminator_schemas={
                 "changeCountries": "commercetools.schemas._project.ProjectChangeCountriesActionSchema",
+                "changeCountryTaxRateFallbackEnabled": "commercetools.schemas._project.ProjectChangeCountryTaxRateFallbackEnabledActionSchema",
                 "changeCurrencies": "commercetools.schemas._project.ProjectChangeCurrenciesActionSchema",
                 "changeLanguages": "commercetools.schemas._project.ProjectChangeLanguagesActionSchema",
                 "changeMessagesConfiguration": "commercetools.schemas._project.ProjectChangeMessagesConfigurationActionSchema",
@@ -196,6 +218,21 @@ class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.ProjectChangeCountriesAction(**data)
+
+
+class ProjectChangeCountryTaxRateFallbackEnabledActionSchema(ProjectUpdateActionSchema):
+    "Marshmallow schema for :class:`commercetools.types.ProjectChangeCountryTaxRateFallbackEnabledAction`."
+    country_tax_rate_fallback_enabled = marshmallow.fields.Bool(
+        allow_none=True, data_key="countryTaxRateFallbackEnabled"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.ProjectChangeCountryTaxRateFallbackEnabledAction(**data)
 
 
 class ProjectChangeCurrenciesActionSchema(ProjectUpdateActionSchema):

@@ -3,8 +3,14 @@ import os
 import requests
 
 from commercetools import Client
-from commercetools.types import LocalizedString, ProductDraft, ChannelDraft, ChannelRoleEnum, ChannelResourceIdentifier, \
-    StoreDraft
+from commercetools.types import (
+    ChannelDraft,
+    ChannelResourceIdentifier,
+    ChannelRoleEnum,
+    LocalizedString,
+    ProductDraft,
+    StoreDraft,
+)
 
 
 def test_http_server(commercetools_client, commercetools_http_server):
@@ -45,15 +51,21 @@ def test_http_server_expanding(commercetools_client, commercetools_http_server):
     )
 
     client.channels.create(
-        ChannelDraft(
-            key="FOO", roles=[ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+        ChannelDraft(key="FOO", roles=[ChannelRoleEnum.PRODUCT_DISTRIBUTION])
+    )
+
+    store = client.stores.create(
+        StoreDraft(
+            key="FOO", distribution_channels=[ChannelResourceIdentifier(key="FOO")]
         )
     )
 
-    store = client.stores.create(StoreDraft(key="FOO", distribution_channels=[ChannelResourceIdentifier(key="FOO")]))
-
     url = commercetools_http_server.api_url + f"/unittest/stores/{store.id}"
-    response = requests.get(url, params={"expand": "distributionChannels[*]"}, headers={"Authorization": "Bearer token"})
+    response = requests.get(
+        url,
+        params={"expand": "distributionChannels[*]"},
+        headers={"Authorization": "Bearer token"},
+    )
 
     assert response.status_code == 200, response.text
     data = response.json()

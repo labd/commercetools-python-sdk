@@ -1,3 +1,7 @@
+8.3.0 (2020-07-21)
+------------------
+- Testing backend request mock parameters were case insensitive, causing expanding to fail in some cases
+
 8.2.0 (2020-07-20)
 ------------------
 - Regenerate types (mainly Store distribution channels functionality)

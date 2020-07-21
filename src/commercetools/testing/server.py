@@ -39,7 +39,7 @@ class Server:
 
     def __call__(self, environ, start_response):
         request = self._create_request(environ)
-        request_mock = _RequestObjectProxy(request.prepare())
+        request_mock = _RequestObjectProxy(request.prepare(), case_sensitive=True)
 
         if request_mock.body is None:
             request_mock.body = ""

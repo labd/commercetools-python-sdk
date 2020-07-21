@@ -113,7 +113,7 @@ class BackendRepository:
 
 @contextmanager
 def backend_mocker(*args, **kwargs):
-    with requests_mock.Mocker(real_http=True) as m:
+    with requests_mock.Mocker(real_http=True, case_sensitive=True) as m:
         repo = BackendRepository()
         repo.register(m)
         yield repo

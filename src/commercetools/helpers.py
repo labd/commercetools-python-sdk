@@ -23,6 +23,15 @@ class OptionalList(fields.List):
         return super()._deserialize(value, attr, data, **kwargs)
 
 
+class MappingField(Field):
+    def _serialize(self, nested_obj, attr, obj):
+        result = {}
+        values = obj.get(attr) or {}
+        for key, value in values.items():
+            result["var.%s" % key] = value
+        return result
+
+
 class RegexField(Field):
     def _serialize(self, nested_obj, attr, obj):
         result = {}

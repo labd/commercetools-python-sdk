@@ -1,7 +1,7 @@
 import typing
 
 from commercetools import schemas, types
-from commercetools.services.product_projections import ProductProjectionsQuerySchema
+from commercetools.services.product_projections import _ProductProjectionQuerySchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
@@ -9,7 +9,7 @@ from commercetools.testing.utils import create_commercetools_response
 
 class ProductProjectionsBackend(ServiceBackend):
     service_path = "product-projections"
-    _schema_query_params = ProductProjectionsQuerySchema
+    _schema_query_params = _ProductProjectionQuerySchema
 
     def urls(self):
         return [
@@ -20,7 +20,7 @@ class ProductProjectionsBackend(ServiceBackend):
         ]
 
     def query(self, request):
-        params = utils.parse_request_params(ProductProjectionsQuerySchema, request)
+        params = utils.parse_request_params(_ProductProjectionQuerySchema, request)
         results = [
             self._convert_product_projection(product, params["staged"])
             for product in self.model.objects.values()

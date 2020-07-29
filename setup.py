@@ -16,6 +16,7 @@ install_requires = [
 
 codegen_requires = [
     "astunparse==1.6.3",
+    "astor==0.8.1",
     "attrs>=18.2.0",
     "black==18.9b0",
     "isort[pyproject]==4.3.21",

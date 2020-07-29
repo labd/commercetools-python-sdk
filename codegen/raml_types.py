@@ -9,7 +9,7 @@ from codegen.utils import snakeit
 class DataType:
     name: str
     type: Optional[str]
-    properties: List['Property'] = attr.Factory(lambda: [])
+    properties: List["Property"] = attr.Factory(lambda: [])
 
     base: "DataType" = attr.ib(repr=False, default=None)
     children: List["DataType"] = attr.ib(repr=False, default=attr.Factory(lambda: []))
@@ -44,7 +44,7 @@ class DataType:
             cur = cur.base
         return bases
 
-    def get_all_properties(self) -> List['Property']:
+    def get_all_properties(self) -> List["Property"]:
         """Return all the properties for this datatype including parent types.
 
         Note that we need to remove duplicate properties in case a sub resoruce

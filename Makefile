@@ -20,8 +20,8 @@ runserver:
 	python -mcommercetools.testing.server
 
 format:
-	isort --recursive src tests
-	black src/ tests/
+	isort --recursive src tests codegen
+	black src/ tests/ codegen/
 
 release:
 	pip install twine wheel

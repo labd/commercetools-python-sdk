@@ -264,7 +264,9 @@ class SchemaClassGenerator:
                     targets=[
                         ast.Subscript(
                             value=ast.Name(id="data"),
-                            slice=ast.Index(value=ast.Str(s=d_field.attribute_name, kind="str")),
+                            slice=ast.Index(
+                                value=ast.Str(s=d_field.attribute_name, kind="str")
+                            ),
                         )
                     ]
                 ),
@@ -277,7 +279,9 @@ class SchemaClassGenerator:
         if prop.many:
             if node.func.id == "marshmallow.fields.Nested":
                 node.keywords.append(
-                    ast.keyword(arg="many", value=ast.NameConstant(value=True, kind=None))
+                    ast.keyword(
+                        arg="many", value=ast.NameConstant(value=True, kind=None)
+                    )
                 )
             else:
                 node = ast.Call(
@@ -288,7 +292,9 @@ class SchemaClassGenerator:
 
         if prop.optional:
             node.keywords.append(
-                ast.keyword(arg="missing", value=ast.NameConstant(value=None, kind=None))
+                ast.keyword(
+                    arg="missing", value=ast.NameConstant(value=None, kind=None)
+                )
             )
 
         if prop.attribute_name != prop.name and not prop.name.startswith("/"):
@@ -331,7 +337,11 @@ class SchemaClassGenerator:
             return ast.Call(
                 func=ast.Name(id=FIELD_TYPES["object"]),
                 args=[],
-                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None))],
+                keywords=[
+                    ast.keyword(
+                        arg="allow_none", value=ast.NameConstant(True, kind=None)
+                    )
+                ],
             )
         elif prop.type.enum:
             self.generator.add_import_statement(
@@ -340,7 +350,9 @@ class SchemaClassGenerator:
             return ast.Call(
                 func=ast.Name(id="marshmallow_enum.EnumField"),
                 args=[ast.Attribute(value=ast.Name(id="types"), attr=prop.type.name)],
-                keywords=[ast.keyword(arg="by_value", value=ast.NameConstant(True, kind=None))],
+                keywords=[
+                    ast.keyword(arg="by_value", value=ast.NameConstant(True, kind=None))
+                ],
             )
 
         elif prop.type.discriminator:
@@ -355,7 +367,11 @@ class SchemaClassGenerator:
             node = ast.Call(
                 func=ast.Name(id=FIELD_TYPES[prop.type.name]),
                 args=[],
-                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None))],
+                keywords=[
+                    ast.keyword(
+                        arg="allow_none", value=ast.NameConstant(True, kind=None)
+                    )
+                ],
             )
             if prop.type.name == "array":
                 assert prop.items, f"The array property {prop.name} has no items"
@@ -382,7 +398,11 @@ class SchemaClassGenerator:
             return ast.Call(
                 func=ast.Name(id=prop.type.name + "Field"),
                 args=[],
-                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None))],
+                keywords=[
+                    ast.keyword(
+                        arg="allow_none", value=ast.NameConstant(True, kind=None)
+                    )
+                ],
             )
 
         elif prop.type.base and prop.type.base.name == "string":
@@ -412,7 +432,10 @@ class SchemaClassGenerator:
                 ast.keyword(
                     arg="discriminator_field",
                     value=ast.Tuple(
-                        elts=[ast.Str(s=field.name, kind="str"), ast.Str(s=field.attribute_name, kind="str")]
+                        elts=[
+                            ast.Str(s=field.name, kind="str"),
+                            ast.Str(s=field.attribute_name, kind="str"),
+                        ]
                     ),
                 ),
                 ast.keyword(
@@ -447,7 +470,7 @@ class SchemaClassGenerator:
                     arg="nested",
                     value=ast.Str(
                         s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema",
-                        kind="str"
+                        kind="str",
                     ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),

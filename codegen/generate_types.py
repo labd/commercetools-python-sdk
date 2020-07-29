@@ -1,6 +1,6 @@
-import textwrap
-import operator
 import ast
+import operator
+import textwrap
 import typing
 from collections import defaultdict
 
@@ -73,11 +73,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
     def generate_init_module(self, modules):
         nodes = [
             ast.ImportFrom(
-                module=module,
-                names=[
-                    ast.alias(name='*  # noqa', asname=None)
-                ],
-                level=1,
+                module=module, names=[ast.alias(name="*  # noqa", asname=None)], level=1
             )
             for module in sorted(modules)
         ]
@@ -233,7 +229,10 @@ class TypesModuleGenerator(AbstractModuleGenerator):
             keywords=[],
             decorator_list=[],
             body=[
-                ast.Assign(targets=[ast.Name(id=enum_attr(val))], value=ast.Str(s=val, kind="str"))
+                ast.Assign(
+                    targets=[ast.Name(id=enum_attr(val))],
+                    value=ast.Str(s=val, kind="str"),
+                )
                 for val in resource.enum
             ],
         )
@@ -331,9 +330,8 @@ class _ResourceClassGenerator:
         if not bases:
             bases.append(ast.Name(id="_BaseType"))
             self.generator.import_resource(
-                self.resource.package_name,
-                "_abstract",
-                "_BaseType")
+                self.resource.package_name, "_abstract", "_BaseType"
+            )
 
         # Create the class node
         class_node = ast.ClassDef(
@@ -475,7 +473,8 @@ class _ResourceClassGenerator:
                 vararg=None,
                 kwonlyargs=init_args,
                 kw_defaults=[
-                    ast.NameConstant(value=None, kind=None) for _ in range(0, len(init_args))
+                    ast.NameConstant(value=None, kind=None)
+                    for _ in range(0, len(init_args))
                 ],
                 kwarg=None,
                 defaults=[],
@@ -539,7 +538,10 @@ class _ResourceClassGenerator:
                 else:
                     init_values.append(
                         ast.keyword(
-                            arg=name, value=ast.Str(s=self.resource.discriminator_value, kind="str")
+                            arg=name,
+                            value=ast.Str(
+                                s=self.resource.discriminator_value, kind="str"
+                            ),
                         )
                     )
             elif name in super_attributes:
@@ -594,7 +596,7 @@ class _ResourceClassGenerator:
                             self.resource.name,
                             ", ".join(f"{attr}=%r" for attr in self.attribute_names),
                         ),
-                        kind="str"
+                        kind="str",
                     ),
                     op=ast.Mod(),
                     right=ast.Tuple(

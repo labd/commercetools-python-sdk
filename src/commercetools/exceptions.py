@@ -43,7 +43,7 @@ class CommercetoolsError(Exception):
     @property
     def code(self) -> str:
         """Convenience property to easily get the error code.
-        
+
         Returns the code of the first error, just as
         'message' is always the message of the first error.
         """

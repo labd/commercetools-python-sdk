@@ -1,6 +1,7 @@
 import ast
 import keyword
 import re
+import textwrap
 import typing
 from collections import defaultdict
 
@@ -11,14 +12,45 @@ def snakeit(name) -> typing.Optional[str]:
     if not name:
         return None
 
-    name = name.replace('OAuth', 'OAUTH')
+    name = name.replace("OAuth", "OAUTH")
+    name = name.replace(".", "_")
 
     # https://stackoverflow.com/questions/1175208/
     s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
     val = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
     if keyword.iskeyword(val):
         val = val + "_"
+
+    val = val.replace("-", "_")
+    val = val.replace("__", "_")
     return val
+
+
+def create_codename(value):
+    if value.startswith("/"):
+        values = re.findall("/([^\/]+)", value)
+        value = values[0]
+    return snakeit(value)
+
+
+def create_method_name(value):
+    if value.startswith("/"):
+        values = re.findall("/([^\/]+)", value)
+        value = "_".join(values)
+    return snakeit(value)
+
+
+def extract_name(value):
+    if not value:
+        return None
+    if "|" in value:
+        found = value.split("|")[0]
+        return found.strip()
+    return value
+
+
+def class_name(val) -> str:
+    return val[0].upper() + val[1:]
 
 
 def enum_attr(val) -> str:
@@ -84,3 +116,30 @@ def reorder_class_definitions(definitions):
             elif not name.startswith(("enum.", "typing.", "marshmallow.")):
                 pass
     return result
+
+
+def format_docstring(val, indent=1):
+    lines = [l.strip() for l in val.split("\n")]
+    newlines = []
+    indent_str = " " * (4 * indent)
+    width = 79 - len(indent_str)
+
+    initial_line = lines.pop(0)
+    if "." in initial_line:
+        first, second = initial_line.split(".", 1)
+        initial_line = first + "."
+        if second.strip():
+            lines.insert(0, second.strip())
+
+    short = textwrap.wrap(initial_line, width=width, subsequent_indent=indent_str)
+    if not lines:
+        return "\n".join(short)
+
+    extra = textwrap.wrap(
+        "\n".join(lines).strip(),
+        width=width + 10,
+        initial_indent=indent_str,
+        subsequent_indent=indent_str,
+    )
+    docstring = "\n".join(short) + "\n\n" + "\n".join(extra)
+    return docstring.strip() + ("\n" + indent_str)

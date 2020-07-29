@@ -13,32 +13,7 @@ from commercetools import schemas
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
-from commercetools.services.api_clients import ApiClientService
-from commercetools.services.cart_discounts import CartDiscountService
-from commercetools.services.carts import CartService
-from commercetools.services.categories import CategoryService
-from commercetools.services.channels import ChannelService
-from commercetools.services.custom_objects import CustomObjectService
-from commercetools.services.customer_groups import CustomerGroupService
-from commercetools.services.customers import CustomerService
-from commercetools.services.discount_codes import DiscountCodeService
-from commercetools.services.extensions import ExtensionService
-from commercetools.services.inventory import InventoryService
-from commercetools.services.orders import OrderService
-from commercetools.services.payments import PaymentService
-from commercetools.services.product_discounts import ProductDiscountService
-from commercetools.services.product_projections import ProductProjectionService
-from commercetools.services.product_types import ProductTypeService
-from commercetools.services.products import ProductService
-from commercetools.services.project import ProjectService
-from commercetools.services.reviews import ReviewService
-from commercetools.services.shipping_methods import ShippingMethodService
-from commercetools.services.shopping_lists import ShoppingListService
-from commercetools.services.states import StateService
-from commercetools.services.stores import StoreService
-from commercetools.services.subscriptions import SubscriptionService
-from commercetools.services.tax_categories import TaxCategoryService
-from commercetools.services.types import TypeService
+from commercetools.services import ServicesMixin
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver, fix_token_url
 
 
@@ -49,7 +24,7 @@ class RefreshingOAuth2Session(OAuth2Session):
         return self.fetch_token(token_url, **kwargs)
 
 
-class Client:
+class Client(ServicesMixin):
     """The Commercetools Client, used to interact with the Commercetools API.
 
     :param project_key: the key for the project with which you want to interact
@@ -63,30 +38,6 @@ class Client:
      oauth2 tokens.
 
     """
-
-    api_clients: ApiClientService
-    categories: CategoryService
-    custom_objects: CustomObjectService
-    cart_discounts: CartDiscountService
-    carts: CartService
-    channels: ChannelService
-    customer_groups: CustomerGroupService
-    discount_codes: DiscountCodeService
-    extensions: ExtensionService
-    orders: OrderService
-    products: ProductService
-    product_discounts: ProductDiscountService
-    project: ProjectService
-    payments: PaymentService
-    product_projections: ProductProjectionService
-    product_types: ProductTypeService
-    reviews: ReviewService
-    shipping_methods: ShippingMethodService
-    shopping_lists: ShoppingListService
-    stores: StoreService
-    subscriptions: SubscriptionService
-    tax_categories: TaxCategoryService
-    types: TypeService
 
     def __init__(
         self,
@@ -152,33 +103,7 @@ class Client:
                 client_secret=self._config["client_secret"],
             )
             self._save_token(token)
-
-        self.api_clients = ApiClientService(self)
-        self.categories = CategoryService(self)
-        self.custom_objects = CustomObjectService(self)
-        self.cart_discounts = CartDiscountService(self)
-        self.carts = CartService(self)
-        self.channels = ChannelService(self)
-        self.customer_groups = CustomerGroupService(self)
-        self.customers = CustomerService(self)
-        self.discount_codes = DiscountCodeService(self)
-        self.extensions = ExtensionService(self)
-        self.inventory = InventoryService(self)
-        self.orders = OrderService(self)
-        self.products = ProductService(self)
-        self.product_discounts = ProductDiscountService(self)
-        self.project = ProjectService(self)
-        self.payments = PaymentService(self)
-        self.product_projections = ProductProjectionService(self)
-        self.product_types = ProductTypeService(self)
-        self.reviews = ReviewService(self)
-        self.shipping_methods = ShippingMethodService(self)
-        self.shopping_lists = ShoppingListService(self)
-        self.states = StateService(self)
-        self.stores = StoreService(self)
-        self.subscriptions = SubscriptionService(self)
-        self.tax_categories = TaxCategoryService(self)
-        self.types = TypeService(self)
+        self.register_services()
 
     def _save_token(self, token):
         self._token_saver.add_token(

@@ -48,7 +48,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
                     targets=[ast.Name(id="__all__")],
                     value=ast.List(
                         elts=[
-                            ast.Str(s=node.name)
+                            ast.Str(s=node.name, kind="str")
                             for node in sorted(
                                 type_nodes, key=operator.attrgetter("name")
                             )
@@ -174,7 +174,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         if value_type.name in BUILTIN_TYPES:
             value_node = BUILTIN_TYPES[value_type.name]
         else:
-            value_node = ast.Str(s=value_type.name)
+            value_node = ast.Str(s=value_type.name, kind="str")
         bases = [
             ast.Subscript(
                 value=ast.Name(id="typing.Dict"),
@@ -233,7 +233,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
             keywords=[],
             decorator_list=[],
             body=[
-                ast.Assign(targets=[ast.Name(id=enum_attr(val))], value=ast.Str(s=val))
+                ast.Assign(targets=[ast.Name(id=enum_attr(val))], value=ast.Str(s=val, kind="str"))
                 for val in resource.enum
             ],
         )
@@ -345,7 +345,7 @@ class _ResourceClassGenerator:
         )
         # Docstring
         doc_string = f"Corresponding marshmallow schema is :class:`commercetools.schemas.{self.resource.name}Schema`."
-        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string)))
+        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind="str")))
 
         # Add the properties for the attr class
         for prop in self.resource.properties:
@@ -416,13 +416,13 @@ class _ResourceClassGenerator:
         elif prop.type.name in BUILTIN_TYPES:
             annotation_type = BUILTIN_TYPES[prop.type.name]
         elif prop.type.base and prop.type.base.name == "string" and not prop.type.enum:
-            annotation_type = ast.Str(s="str")
+            annotation_type = ast.Str(s="str", kind="str")
         else:
             if self.resource.package_name != prop.type.package_name:
                 self.generator.import_resource_typing(
                     self.resource.package_name, prop.type.package_name, prop.type.name
                 )
-            annotation_type = ast.Str(s=prop.type.name)
+            annotation_type = ast.Str(s=prop.type.name, kind="str")
 
         # use typing.List[]. We make an hardcoded exception for
         # resources ending on PagedQueryResponse and mark that as Sequence. The
@@ -475,14 +475,14 @@ class _ResourceClassGenerator:
                 vararg=None,
                 kwonlyargs=init_args,
                 kw_defaults=[
-                    ast.NameConstant(value=None) for _ in range(0, len(init_args))
+                    ast.NameConstant(value=None, kind=None) for _ in range(0, len(init_args))
                 ],
                 kwarg=None,
                 defaults=[],
             ),
             body=[],
             decorator_list=[],
-            returns=ast.NameConstant(value=None),
+            returns=ast.NameConstant(value=None, kind=None),
         )
 
         # Create assignments (self.x = x)
@@ -539,7 +539,7 @@ class _ResourceClassGenerator:
                 else:
                     init_values.append(
                         ast.keyword(
-                            arg=name, value=ast.Str(s=self.resource.discriminator_value)
+                            arg=name, value=ast.Str(s=self.resource.discriminator_value, kind="str")
                         )
                     )
             elif name in super_attributes:
@@ -593,7 +593,8 @@ class _ResourceClassGenerator:
                         % (
                             self.resource.name,
                             ", ".join(f"{attr}=%r" for attr in self.attribute_names),
-                        )
+                        ),
+                        kind="str"
                     ),
                     op=ast.Mod(),
                     right=ast.Tuple(

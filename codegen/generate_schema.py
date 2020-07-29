@@ -44,7 +44,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
                     targets=[ast.Name(id="__all__")],
                     value=ast.List(
                         elts=[
-                            ast.Str(s=node.name)
+                            ast.Str(s=node.name, kind="str")
                             for node in sorted(
                                 type_nodes, key=operator.attrgetter("name")
                             )
@@ -200,7 +200,7 @@ class SchemaClassGenerator:
         doc_string = (
             f"Marshmallow schema for :class:`commercetools.types.{self.resource.name}`."
         )
-        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string)))
+        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind="str")))
 
         # Add the field definitions
         for prop in self.resource.properties:
@@ -264,7 +264,7 @@ class SchemaClassGenerator:
                     targets=[
                         ast.Subscript(
                             value=ast.Name(id="data"),
-                            slice=ast.Index(value=ast.Str(s=d_field.attribute_name)),
+                            slice=ast.Index(value=ast.Str(s=d_field.attribute_name, kind="str")),
                         )
                     ]
                 ),
@@ -277,7 +277,7 @@ class SchemaClassGenerator:
         if prop.many:
             if node.func.id == "marshmallow.fields.Nested":
                 node.keywords.append(
-                    ast.keyword(arg="many", value=ast.NameConstant(value=True))
+                    ast.keyword(arg="many", value=ast.NameConstant(value=True, kind=None))
                 )
             else:
                 node = ast.Call(
@@ -288,12 +288,12 @@ class SchemaClassGenerator:
 
         if prop.optional:
             node.keywords.append(
-                ast.keyword(arg="missing", value=ast.NameConstant(value=None))
+                ast.keyword(arg="missing", value=ast.NameConstant(value=None, kind=None))
             )
 
         if prop.attribute_name != prop.name and not prop.name.startswith("/"):
             node.keywords.append(
-                ast.keyword(arg="data_key", value=ast.Str(s=prop.name))
+                ast.keyword(arg="data_key", value=ast.Str(s=prop.name, kind="str"))
             )
 
         if prop.name.startswith("/"):
@@ -313,7 +313,7 @@ class SchemaClassGenerator:
                         arg="pattern",
                         value=ast.Call(
                             func=ast.Name(id="re.compile"),
-                            args=[ast.Str(s=prop.name[1:-1])],
+                            args=[ast.Str(s=prop.name[1:-1], kind="str")],
                             keywords=[],
                         ),
                     ),
@@ -331,7 +331,7 @@ class SchemaClassGenerator:
             return ast.Call(
                 func=ast.Name(id=FIELD_TYPES["object"]),
                 args=[],
-                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
+                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None))],
             )
         elif prop.type.enum:
             self.generator.add_import_statement(
@@ -340,7 +340,7 @@ class SchemaClassGenerator:
             return ast.Call(
                 func=ast.Name(id="marshmallow_enum.EnumField"),
                 args=[ast.Attribute(value=ast.Name(id="types"), attr=prop.type.name)],
-                keywords=[ast.keyword(arg="by_value", value=ast.NameConstant(True))],
+                keywords=[ast.keyword(arg="by_value", value=ast.NameConstant(True, kind=None))],
             )
 
         elif prop.type.discriminator:
@@ -355,7 +355,7 @@ class SchemaClassGenerator:
             node = ast.Call(
                 func=ast.Name(id=FIELD_TYPES[prop.type.name]),
                 args=[],
-                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
+                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None))],
             )
             if prop.type.name == "array":
                 assert prop.items, f"The array property {prop.name} has no items"
@@ -382,7 +382,7 @@ class SchemaClassGenerator:
             return ast.Call(
                 func=ast.Name(id=prop.type.name + "Field"),
                 args=[],
-                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True))],
+                keywords=[ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None))],
             )
 
         elif prop.type.base and prop.type.base.name == "string":
@@ -412,18 +412,18 @@ class SchemaClassGenerator:
                 ast.keyword(
                     arg="discriminator_field",
                     value=ast.Tuple(
-                        elts=[ast.Str(s=field.name), ast.Str(s=field.attribute_name)]
+                        elts=[ast.Str(s=field.name, kind="str"), ast.Str(s=field.attribute_name, kind="str")]
                     ),
                 ),
                 ast.keyword(
                     arg="discriminator_schemas",
                     value=ast.Dict(
-                        keys=[ast.Str(s=v) for v in items.keys()],
-                        values=[ast.Str(s=v) for v in items.values()],
+                        keys=[ast.Str(s=v, kind="str") for v in items.keys()],
+                        values=[ast.Str(s=v, kind="str") for v in items.values()],
                     ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
-                ast.keyword(arg="allow_none", value=ast.NameConstant(True)),
+                ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None)),
             ],
         )
 
@@ -446,11 +446,12 @@ class SchemaClassGenerator:
                 ast.keyword(
                     arg="nested",
                     value=ast.Str(
-                        s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema"
+                        s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema",
+                        kind="str"
                     ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
-                ast.keyword(arg="allow_none", value=ast.NameConstant(True)),
+                ast.keyword(arg="allow_none", value=ast.NameConstant(True, kind=None)),
             ],
         )
 
@@ -462,7 +463,7 @@ class SchemaClassGenerator:
                 func=ast.Attribute(
                     value=ast.Subscript(
                         value=ast.Attribute(value=ast.Name(id="self"), attr="fields"),
-                        slice=ast.Index(value=ast.Str(s=field_name)),
+                        slice=ast.Index(value=ast.Str(s=field_name, kind="str")),
                     ),
                     attr=method_name,
                 ),

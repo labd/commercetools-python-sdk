@@ -8,7 +8,7 @@ def test_store_flow(client, store_draft):
 
     assert store.id
 
-    deleted_store = client.stores.delete_by_id(store.id)
+    deleted_store = client.stores.delete_by_id(store.id, version=store.version)
 
     assert store.id == deleted_store.id
 

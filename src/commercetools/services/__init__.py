@@ -4,14 +4,14 @@ from commercetools.services.cart_discounts import CartDiscountService
 from commercetools.services.carts import CartService
 from commercetools.services.categories import CategoryService
 from commercetools.services.channels import ChannelService
-from commercetools.services.custom_object import CustomObjectService
+from commercetools.services.custom_objects import CustomObjectService
 from commercetools.services.customer_groups import CustomerGroupService
 from commercetools.services.customers import CustomerService
 from commercetools.services.discount_codes import DiscountCodeService
 from commercetools.services.extensions import ExtensionService
 from commercetools.services.graphqls import GraphqlService
 from commercetools.services.in_stores import In_StoreService
-from commercetools.services.inventory_entries import InventoryEntryService
+from commercetools.services.inventory import InventoryEntryService
 from commercetools.services.login import LoginService
 from commercetools.services.me import MeService
 from commercetools.services.messages import MessageService
@@ -21,6 +21,7 @@ from commercetools.services.product_discounts import ProductDiscountService
 from commercetools.services.product_projections import ProductProjectionService
 from commercetools.services.product_types import ProductTypeService
 from commercetools.services.products import ProductService
+from commercetools.services.project import ProjectService
 from commercetools.services.reviews import ReviewService
 from commercetools.services.shipping_methods import ShippingMethodService
 from commercetools.services.shopping_lists import ShoppingListService
@@ -32,18 +33,22 @@ from commercetools.services.types import TypeService
 from commercetools.services.zones import ZoneService
 
 
-class ServiceMixin:
-    category: CategoryService
+class ServicesMixin:
+    api_client: ApiClientService
     cart: CartService
     cart_discount: CartDiscountService
+    category: CategoryService
     channel: ChannelService
+    custom_object: CustomObjectService
     customer: CustomerService
     customer_group: CustomerGroupService
-    custom_object: CustomObjectService
     discount_code: DiscountCodeService
+    extension: ExtensionService
     graphql: GraphqlService
+    in_store: In_StoreService
     inventory_entry: InventoryEntryService
     login: LoginService
+    me: MeService
     message: MessageService
     order: OrderService
     payment: PaymentService
@@ -51,49 +56,47 @@ class ServiceMixin:
     product_discount: ProductDiscountService
     product_projection: ProductProjectionService
     product_type: ProductTypeService
+    project: ProjectService
     review: ReviewService
     shipping_method: ShippingMethodService
     shopping_list: ShoppingListService
     state: StateService
+    store: StoreService
     subscription: SubscriptionService
     tax_category: TaxCategoryService
     type: TypeService
     zone: ZoneService
-    me: MeService
-    extension: ExtensionService
-    api_client: ApiClientService
-    store: StoreService
-    in_store: In_StoreService
 
     def register_services(self):
-        self.category = CategoryService(self)
-        self.cart = CartService(self)
-        self.cart_discount = CartDiscountService(self)
-        self.channel = ChannelService(self)
-        self.customer = CustomerService(self)
-        self.customer_group = CustomerGroupService(self)
-        self.custom_object = CustomObjectService(self)
-        self.discount_code = DiscountCodeService(self)
-        self.graphql = GraphqlService(self)
-        self.inventory_entry = InventoryEntryService(self)
+        self.api_clients = ApiClientService(self)
+        self.carts = CartService(self)
+        self.cart_discounts = CartDiscountService(self)
+        self.categories = CategoryService(self)
+        self.channels = ChannelService(self)
+        self.custom_objects = CustomObjectService(self)
+        self.customers = CustomerService(self)
+        self.customer_groups = CustomerGroupService(self)
+        self.discount_codes = DiscountCodeService(self)
+        self.extensions = ExtensionService(self)
+        self.graphqls = GraphqlService(self)
+        self.in_stores = In_StoreService(self)
+        self.inventory = InventoryEntryService(self)
         self.login = LoginService(self)
-        self.message = MessageService(self)
-        self.order = OrderService(self)
-        self.payment = PaymentService(self)
-        self.product = ProductService(self)
-        self.product_discount = ProductDiscountService(self)
-        self.product_projection = ProductProjectionService(self)
-        self.product_type = ProductTypeService(self)
-        self.review = ReviewService(self)
-        self.shipping_method = ShippingMethodService(self)
-        self.shopping_list = ShoppingListService(self)
-        self.state = StateService(self)
-        self.subscription = SubscriptionService(self)
-        self.tax_category = TaxCategoryService(self)
-        self.type = TypeService(self)
-        self.zone = ZoneService(self)
         self.me = MeService(self)
-        self.extension = ExtensionService(self)
-        self.api_client = ApiClientService(self)
-        self.store = StoreService(self)
-        self.in_store = In_StoreService(self)
+        self.messages = MessageService(self)
+        self.orders = OrderService(self)
+        self.payments = PaymentService(self)
+        self.products = ProductService(self)
+        self.product_discounts = ProductDiscountService(self)
+        self.product_projections = ProductProjectionService(self)
+        self.product_types = ProductTypeService(self)
+        self.project = ProjectService(self)
+        self.reviews = ReviewService(self)
+        self.shipping_methods = ShippingMethodService(self)
+        self.shopping_lists = ShoppingListService(self)
+        self.states = StateService(self)
+        self.stores = StoreService(self)
+        self.subscriptions = SubscriptionService(self)
+        self.tax_categories = TaxCategoryService(self)
+        self.types = TypeService(self)
+        self.zones = ZoneService(self)

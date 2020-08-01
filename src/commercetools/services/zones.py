@@ -6,7 +6,7 @@ from commercetools.services import abstract, traits
 from commercetools.typing import OptionalListStr
 
 
-class _TypeQuerySchema(
+class _ZoneQuerySchema(
     traits.ExpandableSchema,
     traits.SortableSchema,
     traits.PagingSchema,
@@ -15,27 +15,27 @@ class _TypeQuerySchema(
     pass
 
 
-class _TypeUpdateSchema(traits.ExpandableSchema, traits.VersionedSchema):
+class _ZoneUpdateSchema(traits.ExpandableSchema, traits.VersionedSchema):
     pass
 
 
-class _TypeDeleteSchema(traits.VersionedSchema, traits.ExpandableSchema):
+class _ZoneDeleteSchema(traits.VersionedSchema, traits.ExpandableSchema):
     pass
 
 
-class TypeService(abstract.AbstractService):
-    """Types define custom fields that are used to enhance resources as you need."""
+class ZoneService(abstract.AbstractService):
+    """Zones allow defining ShippingRates for specific Locations."""
 
-    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> types.Type:
+    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> types.Zone:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"types/{id}", params=params, schema_cls=schemas.TypeSchema
+            endpoint=f"zones/{id}", params=params, schema_cls=schemas.ZoneSchema
         )
 
-    def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> types.Type:
+    def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> types.Zone:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"types/key={key}", params=params, schema_cls=schemas.TypeSchema
+            endpoint=f"zones/key={key}", params=params, schema_cls=schemas.ZoneSchema
         )
 
     def query(
@@ -48,9 +48,8 @@ class TypeService(abstract.AbstractService):
         with_total: bool = None,
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
-    ) -> types.TypePagedQueryResponse:
-        """Types define custom fields that are used to enhance resources as you
-        need.
+    ) -> types.ZonePagedQueryResponse:
+        """Zones allow defining ShippingRates for specific Locations.
         """
         params = self._serialize_params(
             {
@@ -62,46 +61,45 @@ class TypeService(abstract.AbstractService):
                 "where": where,
                 "predicate_var": predicate_var,
             },
-            _TypeQuerySchema,
+            _ZoneQuerySchema,
         )
         return self._client._get(
-            endpoint="types",
+            endpoint="zones",
             params=params,
-            schema_cls=schemas.TypePagedQueryResponseSchema,
+            schema_cls=schemas.ZonePagedQueryResponseSchema,
         )
 
     def create(
-        self, draft: types.TypeDraft, *, expand: OptionalListStr = None
-    ) -> types.Type:
-        """Types define custom fields that are used to enhance resources as you
-        need.
+        self, draft: types.ZoneDraft, *, expand: OptionalListStr = None
+    ) -> types.Zone:
+        """Zones allow defining ShippingRates for specific Locations.
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="types",
+            endpoint="zones",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.TypeDraftSchema,
-            response_schema_cls=schemas.TypeSchema,
+            request_schema_cls=schemas.ZoneDraftSchema,
+            response_schema_cls=schemas.ZoneSchema,
         )
 
     def update_by_id(
         self,
         id: str,
         version: int,
-        actions: typing.List[types.TypeUpdateAction],
+        actions: typing.List[types.ZoneUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Type:
-        params = self._serialize_params({"expand": expand}, _TypeUpdateSchema)
-        update_action = types.TypeUpdate(version=version, actions=actions)
+    ) -> types.Zone:
+        params = self._serialize_params({"expand": expand}, _ZoneUpdateSchema)
+        update_action = types.ZoneUpdate(version=version, actions=actions)
         return self._client._post(
-            endpoint=f"types/{id}",
+            endpoint=f"zones/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.TypeUpdateSchema,
-            response_schema_cls=schemas.TypeSchema,
+            request_schema_cls=schemas.ZoneUpdateSchema,
+            response_schema_cls=schemas.ZoneSchema,
             force_update=force_update,
         )
 
@@ -109,19 +107,19 @@ class TypeService(abstract.AbstractService):
         self,
         key: str,
         version: int,
-        actions: typing.List[types.TypeUpdateAction],
+        actions: typing.List[types.ZoneUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Type:
-        params = self._serialize_params({"expand": expand}, _TypeUpdateSchema)
-        update_action = types.TypeUpdate(version=version, actions=actions)
+    ) -> types.Zone:
+        params = self._serialize_params({"expand": expand}, _ZoneUpdateSchema)
+        update_action = types.ZoneUpdate(version=version, actions=actions)
         return self._client._post(
-            endpoint=f"types/key={key}",
+            endpoint=f"zones/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.TypeUpdateSchema,
-            response_schema_cls=schemas.TypeSchema,
+            request_schema_cls=schemas.ZoneUpdateSchema,
+            response_schema_cls=schemas.ZoneSchema,
             force_update=force_update,
         )
 
@@ -132,14 +130,14 @@ class TypeService(abstract.AbstractService):
         *,
         expand: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.Type:
+    ) -> types.Zone:
         params = self._serialize_params(
-            {"version": version, "expand": expand}, _TypeDeleteSchema
+            {"version": version, "expand": expand}, _ZoneDeleteSchema
         )
         return self._client._delete(
-            endpoint=f"types/{id}",
+            endpoint=f"zones/{id}",
             params=params,
-            response_schema_cls=schemas.TypeSchema,
+            response_schema_cls=schemas.ZoneSchema,
             force_delete=force_delete,
         )
 
@@ -150,13 +148,13 @@ class TypeService(abstract.AbstractService):
         *,
         expand: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.Type:
+    ) -> types.Zone:
         params = self._serialize_params(
-            {"version": version, "expand": expand}, _TypeDeleteSchema
+            {"version": version, "expand": expand}, _ZoneDeleteSchema
         )
         return self._client._delete(
-            endpoint=f"types/key={key}",
+            endpoint=f"zones/key={key}",
             params=params,
-            response_schema_cls=schemas.TypeSchema,
+            response_schema_cls=schemas.ZoneSchema,
             force_delete=force_delete,
         )

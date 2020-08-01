@@ -35,7 +35,7 @@ class BaseModel:
 
     def add(self, draft, id=None):
         """Add a new object to the storage.
-        
+
         This will take a draft and generate an unique ID.
         """
         obj = self._create_from_draft(draft, id)

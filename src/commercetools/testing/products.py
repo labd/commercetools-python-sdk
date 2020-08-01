@@ -7,6 +7,7 @@ from marshmallow import Schema
 from marshmallow import fields as schema_fields
 
 from commercetools import schemas, types
+from commercetools.services.products import _ProductQuerySchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
@@ -363,6 +364,7 @@ class ProductsBackend(ServiceBackend):
     model_class = ProductsModel
     _schema_draft = schemas.ProductDraftSchema
     _schema_update = schemas.ProductUpdateSchema
+    _schema_query_params = _ProductQuerySchema
     _schema_query_response = schemas.ProductPagedQueryResponseSchema
 
     def urls(self):

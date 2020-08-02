@@ -15,18 +15,19 @@ def _get_draft_object(**kwargs):
 
 
 def test_get_by_id(client):
-    customer = client.customers.create(draft=_get_draft_object())
-    assert customer.id
+    result = client.customers.create(draft=_get_draft_object())
+    assert result.customer.id
 
-    customer = client.customers.get_by_id(customer.id)
+    customer = client.customers.get_by_id(result.customer.id)
     assert customer
 
 
 def test_get_by_key(client):
-    customer = client.customers.create(draft=_get_draft_object(key="test-customer"))
-    assert customer.key
+    result = client.customers.create(draft=_get_draft_object(key="test-customer"))
+    assert result.customer.key
+    assert result.cart is None
 
-    customer = client.customers.get_by_key(customer.key)
+    customer = client.customers.get_by_key(result.customer.key)
     assert customer
 
 
@@ -44,12 +45,16 @@ def test_query(client):
 
 
 def test_delete_by_id(client):
-    customer = client.customers.create(draft=_get_draft_object())
-    assert customer.id
-    assert client.customers.delete_by_id(customer.id, version=customer.version)
+    result = client.customers.create(draft=_get_draft_object())
+    assert result.customer.id
+    assert client.customers.delete_by_id(
+        result.customer.id, version=result.customer.version
+    )
 
 
 def test_delete_by_key(client):
-    customer = client.customers.create(draft=_get_draft_object(key="test-customer"))
-    assert customer.key
-    assert client.customers.delete_by_key(customer.key, version=customer.version)
+    result = client.customers.create(draft=_get_draft_object(key="test-customer"))
+    assert result.customer.key
+    assert client.customers.delete_by_key(
+        result.customer.key, version=result.customer.version
+    )

@@ -4,6 +4,7 @@ from typing import Optional
 
 from commercetools import schemas, types
 from commercetools.testing import abstract, utils
+from commercetools.testing.utils import create_commercetools_response
 
 
 class CustomerModel(abstract.BaseModel):
@@ -80,3 +81,13 @@ class CustomerBackend(abstract.ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
+
+    def create(self, request):
+        obj = self._schema_draft().loads(request.body)
+        data = self.model.add(obj)
+
+        # Convert to CustomerSignInResult
+        data = {"customer": data, "cart": None}
+
+        expanded_data = self._expand(request, data)
+        return create_commercetools_response(request, json=expanded_data)

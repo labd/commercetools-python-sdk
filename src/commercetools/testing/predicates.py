@@ -350,7 +350,7 @@ class Constant(Symbol):
         return self
 
     def ast(self, context=None):
-        return ast.Name(id="None", ctx=ast.Load())
+        return ast.Constant(value=None, ctx=ast.Load())
 
 
 class FunctionCall(Symbol):

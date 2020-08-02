@@ -1,6 +1,7 @@
 import uuid
 
 import pytest
+import requests_mock
 from requests.exceptions import HTTPError
 
 from commercetools import types
@@ -271,3 +272,14 @@ def test_product_update_add_price_current(client):
 
     assert product.master_data.staged is None
     assert len(product.master_data.current.master_variant.prices) == 1
+
+
+def test_predicate_var(client):
+    with requests_mock.Mocker(real_http=True, case_sensitive=True) as m:
+
+        result = client.products.query(
+            where="masterData(staged(masterVariant(prices(country='NL'))))",
+            predicate_var={"foo": "bar"},
+        )
+
+        assert "var.foo" in m.request_history[0].qs

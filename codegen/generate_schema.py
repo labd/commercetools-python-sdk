@@ -44,7 +44,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
                     targets=[ast.Name(id="__all__")],
                     value=ast.List(
                         elts=[
-                            ast.Str(s=node.name, kind="str")
+                            ast.Str(s=node.name, kind=None)
                             for node in sorted(
                                 type_nodes, key=operator.attrgetter("name")
                             )
@@ -200,7 +200,7 @@ class SchemaClassGenerator:
         doc_string = (
             f"Marshmallow schema for :class:`commercetools.types.{self.resource.name}`."
         )
-        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind="str")))
+        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind=None)))
 
         # Add the field definitions
         for prop in self.resource.properties:
@@ -265,7 +265,7 @@ class SchemaClassGenerator:
                         ast.Subscript(
                             value=ast.Name(id="data"),
                             slice=ast.Index(
-                                value=ast.Str(s=d_field.attribute_name, kind="str")
+                                value=ast.Str(s=d_field.attribute_name, kind=None)
                             ),
                         )
                     ]
@@ -299,7 +299,7 @@ class SchemaClassGenerator:
 
         if prop.attribute_name != prop.name and not prop.name.startswith("/"):
             node.keywords.append(
-                ast.keyword(arg="data_key", value=ast.Str(s=prop.name, kind="str"))
+                ast.keyword(arg="data_key", value=ast.Str(s=prop.name, kind=None))
             )
 
         if prop.name.startswith("/"):
@@ -319,7 +319,7 @@ class SchemaClassGenerator:
                         arg="pattern",
                         value=ast.Call(
                             func=ast.Name(id="re.compile"),
-                            args=[ast.Str(s=prop.name[1:-1], kind="str")],
+                            args=[ast.Str(s=prop.name[1:-1], kind=None)],
                             keywords=[],
                         ),
                     ),
@@ -433,16 +433,16 @@ class SchemaClassGenerator:
                     arg="discriminator_field",
                     value=ast.Tuple(
                         elts=[
-                            ast.Str(s=field.name, kind="str"),
-                            ast.Str(s=field.attribute_name, kind="str"),
+                            ast.Str(s=field.name, kind=None),
+                            ast.Str(s=field.attribute_name, kind=None),
                         ]
                     ),
                 ),
                 ast.keyword(
                     arg="discriminator_schemas",
                     value=ast.Dict(
-                        keys=[ast.Str(s=v, kind="str") for v in items.keys()],
-                        values=[ast.Str(s=v, kind="str") for v in items.values()],
+                        keys=[ast.Str(s=v, kind=None) for v in items.keys()],
+                        values=[ast.Str(s=v, kind=None) for v in items.values()],
                     ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
@@ -470,7 +470,7 @@ class SchemaClassGenerator:
                     arg="nested",
                     value=ast.Str(
                         s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema",
-                        kind="str",
+                        kind=None,
                     ),
                 ),
                 ast.keyword(arg="unknown", value=ast.Name(id="marshmallow.EXCLUDE")),
@@ -486,7 +486,7 @@ class SchemaClassGenerator:
                 func=ast.Attribute(
                     value=ast.Subscript(
                         value=ast.Attribute(value=ast.Name(id="self"), attr="fields"),
-                        slice=ast.Index(value=ast.Str(s=field_name, kind="str")),
+                        slice=ast.Index(value=ast.Str(s=field_name, kind=None)),
                     ),
                     attr=method_name,
                 ),

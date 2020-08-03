@@ -48,7 +48,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
                     targets=[ast.Name(id="__all__")],
                     value=ast.List(
                         elts=[
-                            ast.Str(s=node.name, kind="str")
+                            ast.Str(s=node.name, kind=None)
                             for node in sorted(
                                 type_nodes, key=operator.attrgetter("name")
                             )
@@ -170,7 +170,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
         if value_type.name in BUILTIN_TYPES:
             value_node = BUILTIN_TYPES[value_type.name]
         else:
-            value_node = ast.Str(s=value_type.name, kind="str")
+            value_node = ast.Str(s=value_type.name, kind=None)
         bases = [
             ast.Subscript(
                 value=ast.Name(id="typing.Dict"),
@@ -231,7 +231,7 @@ class TypesModuleGenerator(AbstractModuleGenerator):
             body=[
                 ast.Assign(
                     targets=[ast.Name(id=enum_attr(val))],
-                    value=ast.Str(s=val, kind="str"),
+                    value=ast.Str(s=val, kind=None),
                 )
                 for val in resource.enum
             ],
@@ -343,7 +343,7 @@ class _ResourceClassGenerator:
         )
         # Docstring
         doc_string = f"Corresponding marshmallow schema is :class:`commercetools.schemas.{self.resource.name}Schema`."
-        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind="str")))
+        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind=None)))
 
         # Add the properties for the attr class
         for prop in self.resource.properties:
@@ -414,13 +414,13 @@ class _ResourceClassGenerator:
         elif prop.type.name in BUILTIN_TYPES:
             annotation_type = BUILTIN_TYPES[prop.type.name]
         elif prop.type.base and prop.type.base.name == "string" and not prop.type.enum:
-            annotation_type = ast.Str(s="str", kind="str")
+            annotation_type = ast.Str(s="str", kind=None)
         else:
             if self.resource.package_name != prop.type.package_name:
                 self.generator.import_resource_typing(
                     self.resource.package_name, prop.type.package_name, prop.type.name
                 )
-            annotation_type = ast.Str(s=prop.type.name, kind="str")
+            annotation_type = ast.Str(s=prop.type.name, kind=None)
 
         # use typing.List[]. We make an hardcoded exception for
         # resources ending on PagedQueryResponse and mark that as Sequence. The
@@ -540,7 +540,7 @@ class _ResourceClassGenerator:
                         ast.keyword(
                             arg=name,
                             value=ast.Str(
-                                s=self.resource.discriminator_value, kind="str"
+                                s=self.resource.discriminator_value, kind=None,
                             ),
                         )
                     )
@@ -596,7 +596,7 @@ class _ResourceClassGenerator:
                             self.resource.name,
                             ", ".join(f"{attr}=%r" for attr in self.attribute_names),
                         ),
-                        kind="str",
+                        kind=None,
                     ),
                     op=ast.Mod(),
                     right=ast.Tuple(

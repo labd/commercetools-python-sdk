@@ -70,11 +70,6 @@ def generate():
         filename = os.path.join(target_path, metadata["name"] + ".py")
         write_module(filename, metadata["ast"], new=True)
 
-    print("[WARNING] Not generating types/schemas")
-    import sys
-
-    sys.exit(0)
-
     # Generate types.py
     ast_nodes = generate_types_module(types)
     target_path = os.path.join(path, "types")

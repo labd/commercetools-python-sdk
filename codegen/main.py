@@ -48,6 +48,16 @@ def generate_services_modules(services: ServiceProcessor, types):
     return generator.get_module_nodes()
 
 
+def generate_services_async_modules(services: ServiceProcessor, types):
+    generator = ServiceModuleGenerator(types, with_async=True)
+    for trait in services.traits.values():
+        generator.add_trait(trait)
+
+    for service in services:
+        generator.add_service(service)
+    return generator.get_module_nodes()
+
+
 def generate():
     raml = parse_raml_file("../commercetools-api-reference/api.raml")
 
@@ -60,9 +70,19 @@ def generate():
     except FileExistsError:
         pass
 
-    # Generate services.py
+    # Generate services/*.py
     ast_nodes = generate_services_modules(services, types)
     target_path = os.path.join(path, "services")
+    if not os.path.exists(target_path):
+        os.mkdir(target_path)
+
+    for name, metadata in ast_nodes.items():
+        filename = os.path.join(target_path, metadata["name"] + ".py")
+        write_module(filename, metadata["ast"])
+
+    # Generate services_async/*.py
+    ast_nodes = generate_services_async_modules(services, types)
+    target_path = os.path.join(path, "services_async")
     if not os.path.exists(target_path):
         os.mkdir(target_path)
 

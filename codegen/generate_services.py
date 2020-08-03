@@ -23,7 +23,8 @@ from codegen.utils import format_docstring, snakeit
 class ServiceModuleGenerator(AbstractModuleGenerator):
     """Generate the service files"""
 
-    def __init__(self, types):
+    def __init__(self, types, with_async=False):
+        self._async = with_async
         self._types = {t.name: t for t in types}
         self._services: typing.Dict[str, ServiceDomain] = {}
         self._trait_nodes: typing.List[typing.List[ast.AST]] = []
@@ -151,7 +152,9 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         self, class_node: ast.ClassDef, method: ServiceMethod, module_name: str
     ):
         """Add the method to the service class"""
-        node = ast.FunctionDef(
+        ast_cls =  ast.AsyncFunctionDef if self._async else ast.FunctionDef
+
+        node = ast_cls(
             name=method.name,
             args=ast.arguments(
                 args=[ast.arg(arg="self", annotation=None)],
@@ -528,7 +531,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             if value is not None:
                 keywords.append(ast.keyword(arg=key, value=value))
 
-        return ast.Call(
+        node = ast.Call(
             func=ast.Attribute(
                 value=ast.Attribute(value=ast.Name(id="self"), attr="_client"),
                 attr=method,
@@ -536,6 +539,9 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             args=[],
             keywords=keywords,
         )
+        if self._async:
+            node = ast.Await(value=node)
+        return node
 
     def make_serialize_query_params(
         self, method: ServiceMethod, node, module_name: str
@@ -726,8 +732,9 @@ def _generate_init_file(services, modules):
     module_varnames = sorted(submodules.values(), key=operator.itemgetter("var_name"))
 
     # Return the class + properties
+    name = "ServicesMixin" if not self._async else "AsyncServicesMixin"
     class_node = ast.ClassDef(
-        name="ServicesMixin", bases=[], keywords=[], decorator_list=[], body=[]
+        name=name, bases=[], keywords=[], decorator_list=[], body=[]
     )
     for name, service in submodules.items():
         node = ast.FunctionDef(

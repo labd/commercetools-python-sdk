@@ -1,4 +1,4 @@
-from .client import Client
+from .client import AsyncClient, Client
 from .exceptions import CommercetoolsError
 
-__all__ = ["Client", "CommercetoolsError"]
+__all__ = ["AsyncClient", "Client", "CommercetoolsError"]

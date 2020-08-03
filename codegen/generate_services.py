@@ -152,9 +152,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         self, class_node: ast.ClassDef, method: ServiceMethod, module_name: str
     ):
         """Add the method to the service class"""
-        ast_cls =  ast.AsyncFunctionDef if self._async else ast.FunctionDef
-
-        node = ast_cls(
+        node = ast.FunctionDef(
             name=method.name,
             args=ast.arguments(
                 args=[ast.arg(arg="self", annotation=None)],
@@ -187,6 +185,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                 return_obj.name,
             )
             node.returns = ast.Name(id=return_obj.name)
+            if self._async:
+                node.returns = ast.Subscript(
+                    value=ast.Attribute(value=ast.Name(id="typing"), attr="Awaitable"),
+                    slice=ast.Index(value=node.returns)
+                )
 
         # Add docstring
         if method.description:
@@ -539,8 +542,6 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             args=[],
             keywords=keywords,
         )
-        if self._async:
-            node = ast.Await(value=node)
         return node
 
     def make_serialize_query_params(

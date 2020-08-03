@@ -40,10 +40,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         for module in modules:
             self.add_import_statement(module, "typing")
 
+            self.add_import_statement(module, ".", "abstract")
+            self.add_import_statement(module, ".", "traits")
             self.add_import_statement(module, "commercetools", "schemas")
             self.add_import_statement(module, "commercetools", "types")
-            self.add_import_statement(module, "commercetools.services", "abstract")
-            self.add_import_statement(module, "commercetools.services", "traits")
+            self.add_import_statement(module, "commercetools.helpers", "RemoveEmptyValuesMixin")
             self.add_import_statement(module, "commercetools.typing", "OptionalListStr")
 
             all_nodes = (
@@ -508,7 +509,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
                 bases = [
                     ast.Name(id="marshmallow.Schema"),
-                    ast.Name(id="abstract.RemoveEmptyValuesMixin"),
+                    ast.Name(id="RemoveEmptyValuesMixin"),
                 ]
 
             schema_node = ast.ClassDef(
@@ -577,14 +578,14 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             service_name = service.context_name + "Service"
             info = modules[module_name]
 
-            key = "commercetools.services.%s" % info["name"]
+            key = ".%s" % info["name"]
             submodules[key] = {
                 "class_name": service.context_name + "Service",
                 "var_name": snakeit(service.context_name),
             }
 
         # Add manual generated files (TODO)
-        submodules["commercetools.services.project"] = {
+        submodules[".project"] = {
             "class_name": "ProjectService",
             "var_name": "project",
         }
@@ -668,8 +669,8 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                 level=0,
             ),
             ast.ImportFrom(
-                module="commercetools.services",
-                names=[ast.alias(name="abstract", asname=None)],
+                module="commercetools.helpers",
+                names=[ast.alias(name="RemoveEmptyValuesMixin", asname=None)],
                 level=0,
             ),
             ast.ImportFrom(
@@ -696,7 +697,7 @@ def _create_trait_schema(trait: TraitInfo) -> ast.ClassDef:
         name=schema_name,
         bases=[
             ast.Name(id="marshmallow.Schema"),
-            ast.Name(id="abstract.RemoveEmptyValuesMixin"),
+            ast.Name(id="RemoveEmptyValuesMixin"),
         ],
         keywords=[],
         decorator_list=[],

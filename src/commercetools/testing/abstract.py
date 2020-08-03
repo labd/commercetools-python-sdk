@@ -4,11 +4,13 @@ import typing
 import uuid
 
 import marshmallow
+from marshmallow import fields
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import CommercetoolsError, schemas, types
+from commercetools.helpers import OptionalList
 from commercetools.schemas import BaseResourceSchema
-from commercetools.services import abstract
+from commercetools.services import traits
 from commercetools.testing import utils
 from commercetools.testing.predicates import PredicateFilter
 from commercetools.testing.utils import create_commercetools_response
@@ -164,13 +166,21 @@ class BaseBackend:
             return create_commercetools_response(request, status_code=404)
 
 
+class GenericSchema(traits.QuerySchema, traits.SortableSchema, traits.PagingSchema):
+    where = OptionalList(fields.String())
+    sort = OptionalList(fields.String())
+    expand = OptionalList(fields.String())
+    limit = fields.Int()
+    offset = fields.Int()
+
+
 class ServiceBackend(BaseBackend):
     hostnames = ["api.sphere.io", "localhost"]
     model_class: typing.Any = None
     _schema_draft: typing.Optional[marshmallow.Schema] = None
     _schema_update: typing.Optional[marshmallow.Schema] = None
     _schema_query_response: typing.Optional[marshmallow.Schema] = None
-    _schema_query_params: marshmallow.Schema = abstract.AbstractQuerySchema
+    _schema_query_params: marshmallow.Schema = GenericSchema
 
     _verify_version: bool = True
 

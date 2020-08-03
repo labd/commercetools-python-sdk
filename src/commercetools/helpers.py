@@ -1,6 +1,6 @@
 import typing
 
-from marshmallow import class_registry, fields, missing
+from marshmallow import class_registry, fields, missing, post_dump
 from marshmallow.exceptions import StringNotCollectionError, ValidationError
 from marshmallow.fields import Field
 from marshmallow.utils import RAISE, is_collection
@@ -30,6 +30,27 @@ class MappingField(Field):
         for key, value in values.items():
             result["var.%s" % key] = value
         return result
+
+
+
+class RemoveEmptyValuesMixin:
+    @post_dump
+    def remove_empty_values(self, data, **kwargs):
+        """Remove the key, value pairs for which the value is None.
+
+        This doesn't work if allow_none is set. And in the future we might also
+        want to remove values which are already the default to minimise the
+        params.
+
+        """
+        result = {}
+        for k, v in data.items():
+            if isinstance(v, list):
+                result[k] = [x for x in v if x is not None]
+            elif v is not None:
+                result[k] = v
+        return result
+
 
 
 class RegexField(Field):

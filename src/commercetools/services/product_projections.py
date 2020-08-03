@@ -5,9 +5,10 @@ import marshmallow
 from marshmallow import fields
 
 from commercetools import schemas, types
-from commercetools.helpers import OptionalList
-from commercetools.services import abstract, traits
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
 from commercetools.typing import OptionalListStr
+
+from . import abstract, traits
 
 
 class _ProductProjectionGetSchema(traits.ExpandableSchema, traits.PriceSelectingSchema):

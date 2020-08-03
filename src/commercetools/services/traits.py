@@ -2,15 +2,14 @@
 import marshmallow
 from marshmallow import fields
 
-from commercetools.helpers import OptionalList
-from commercetools.services import abstract
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
 
 
-class ExpandableSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class ExpandableSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     expand = OptionalList(fields.String(), required=False)
 
 
-class QuerySchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class QuerySchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     where = OptionalList(fields.String(), required=False)
     predicate_var = fields.Dict()
 
@@ -34,21 +33,21 @@ class QuerySchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
         return data
 
 
-class SortableSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class SortableSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     sort = OptionalList(fields.String(), required=False)
 
 
-class PagingSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class PagingSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     limit = fields.Int(required=False)
     offset = fields.Int(required=False)
     with_total = fields.Bool(data_key="withTotal", required=False, missing=False)
 
 
-class VersionedSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class VersionedSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     version = fields.Int()
 
 
-class PriceSelectingSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class PriceSelectingSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     price_currency = OptionalList(
         fields.String(), data_key="priceCurrency", required=False
     )
@@ -69,5 +68,5 @@ class PriceSelectingSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
     )
 
 
-class DataErasureSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class DataErasureSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     data_erasure = fields.Bool(data_key="dataErasure", required=False, missing=False)

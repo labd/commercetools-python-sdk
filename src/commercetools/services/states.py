@@ -2,8 +2,10 @@
 import typing
 
 from commercetools import schemas, types
-from commercetools.services import abstract, traits
+from commercetools.helpers import RemoveEmptyValuesMixin
 from commercetools.typing import OptionalListStr
+
+from . import abstract, traits
 
 
 class _StateQuerySchema(

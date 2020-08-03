@@ -5,9 +5,10 @@ import marshmallow
 from marshmallow import fields
 
 from commercetools import schemas, types
-from commercetools.helpers import OptionalList
-from commercetools.services import abstract, traits
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
 from commercetools.typing import OptionalListStr
+
+from . import abstract, traits
 
 
 class _ProductGetSchema(traits.ExpandableSchema, traits.PriceSelectingSchema):
@@ -40,7 +41,7 @@ class _ProductDeleteSchema(
     pass
 
 
-class _ProductImagesSchema(marshmallow.Schema, abstract.RemoveEmptyValuesMixin):
+class _ProductImagesSchema(marshmallow.Schema, RemoveEmptyValuesMixin):
     filename = OptionalList(fields.String(), required=False)
     variant = fields.Int(required=False)
     sku = OptionalList(fields.String(), required=False)

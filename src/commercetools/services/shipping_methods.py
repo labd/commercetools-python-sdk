@@ -5,9 +5,10 @@ import marshmallow
 from marshmallow import fields
 
 from commercetools import schemas, types
-from commercetools.helpers import OptionalList
-from commercetools.services import abstract, traits
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
 from commercetools.typing import OptionalListStr
+
+from . import abstract, traits
 
 
 class _ShippingMethodQuerySchema(
@@ -38,7 +39,7 @@ class _ShippingMethodMatching_LocationSchema(traits.ExpandableSchema):
 
 
 class _ShippingMethodMatching_OrdereditSchema(
-    marshmallow.Schema, abstract.RemoveEmptyValuesMixin
+    marshmallow.Schema, RemoveEmptyValuesMixin
 ):
     order_edit_id = OptionalList(fields.String(), data_key="orderEditId")
     country = OptionalList(fields.String())

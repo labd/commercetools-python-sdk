@@ -42,8 +42,6 @@ __all__ = [
 
 
 class ChangeSubscription(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChangeSubscriptionSchema`."""
-
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
     resource_type_id: str
 
@@ -56,8 +54,6 @@ class ChangeSubscription(_BaseType):
 
 
 class DeliveryFormat(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryFormatSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -70,8 +66,6 @@ class DeliveryFormat(_BaseType):
 
 
 class Destination(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DestinationSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -84,8 +78,6 @@ class Destination(_BaseType):
 
 
 class MessageSubscription(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSubscriptionSchema`."""
-
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
     resource_type_id: str
     #: Optional list of :class:`str`
@@ -109,8 +101,6 @@ class MessageSubscription(_BaseType):
 
 
 class PayloadNotIncluded(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PayloadNotIncludedSchema`."""
-
     #: :class:`str`
     reason: str
     #: :class:`str` `(Named` ``payloadType`` `in Commercetools)`
@@ -129,8 +119,6 @@ class PayloadNotIncluded(_BaseType):
 
 
 class Subscription(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -212,8 +200,6 @@ class Subscription(BaseResource):
 
 
 class SubscriptionDelivery(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionDeliverySchema`."""
-
     #: :class:`str` `(Named` ``projectKey`` `in Commercetools)`
     project_key: str
     #: :class:`str` `(Named` ``notificationType`` `in Commercetools)`
@@ -252,8 +238,6 @@ class SubscriptionDelivery(_BaseType):
 
 
 class SubscriptionDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionDraftSchema`."""
-
     #: Optional list of :class:`commercetools.types.ChangeSubscription`
     changes: typing.Optional[typing.List["ChangeSubscription"]]
     #: :class:`commercetools.types.Destination`
@@ -296,8 +280,6 @@ class SubscriptionHealthStatus(enum.Enum):
 
 
 class SubscriptionPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -333,8 +315,6 @@ class SubscriptionPagedQueryResponse(_BaseType):
 
 
 class SubscriptionUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -353,8 +333,6 @@ class SubscriptionUpdate(_BaseType):
 
 
 class SubscriptionUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -367,8 +345,6 @@ class SubscriptionUpdateAction(_BaseType):
 
 
 class AzureEventGridDestination(Destination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AzureEventGridDestinationSchema`."""
-
     #: :class:`str`
     uri: str
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
@@ -390,8 +366,6 @@ class AzureEventGridDestination(Destination):
 
 
 class AzureServiceBusDestination(Destination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AzureServiceBusDestinationSchema`."""
-
     #: :class:`str` `(Named` ``connectionString`` `in Commercetools)`
     connection_string: str
 
@@ -407,8 +381,6 @@ class AzureServiceBusDestination(Destination):
 
 
 class DeliveryCloudEventsFormat(DeliveryFormat):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryCloudEventsFormatSchema`."""
-
     #: :class:`str` `(Named` ``cloudEventsVersion`` `in Commercetools)`
     cloud_events_version: str
 
@@ -424,8 +396,6 @@ class DeliveryCloudEventsFormat(DeliveryFormat):
 
 
 class DeliveryPlatformFormat(DeliveryFormat):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryPlatformFormatSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="Platform")
 
@@ -434,8 +404,6 @@ class DeliveryPlatformFormat(DeliveryFormat):
 
 
 class GoogleCloudPubSubDestination(Destination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GoogleCloudPubSubDestinationSchema`."""
-
     #: :class:`str` `(Named` ``projectId`` `in Commercetools)`
     project_id: str
     #: :class:`str`
@@ -457,8 +425,6 @@ class GoogleCloudPubSubDestination(Destination):
 
 
 class IronMqDestination(Destination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.IronMqDestinationSchema`."""
-
     #: :class:`str`
     uri: str
 
@@ -471,8 +437,6 @@ class IronMqDestination(Destination):
 
 
 class MessageDelivery(SubscriptionDelivery):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessageDeliverySchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -539,8 +503,6 @@ class MessageDelivery(SubscriptionDelivery):
 
 
 class ResourceCreatedDelivery(SubscriptionDelivery):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceCreatedDeliverySchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
@@ -582,8 +544,6 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
 
 
 class ResourceDeletedDelivery(SubscriptionDelivery):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceDeletedDeliverySchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
@@ -625,8 +585,6 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 
 
 class ResourceUpdatedDelivery(SubscriptionDelivery):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceUpdatedDeliverySchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`int` `(Named` ``oldVersion`` `in Commercetools)`
@@ -673,8 +631,6 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
 
 
 class SnsDestination(Destination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SnsDestinationSchema`."""
-
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
     access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
@@ -703,8 +659,6 @@ class SnsDestination(Destination):
 
 
 class SqsDestination(Destination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SqsDestinationSchema`."""
-
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
     access_key: str
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
@@ -743,8 +697,6 @@ class SqsDestination(Destination):
 
 
 class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionChangeDestinationActionSchema`."""
-
     #: :class:`commercetools.types.Destination`
     destination: "Destination"
 
@@ -762,8 +714,6 @@ class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
 
 
 class SubscriptionSetChangesAction(SubscriptionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSetChangesActionSchema`."""
-
     #: Optional list of :class:`commercetools.types.ChangeSubscription`
     changes: typing.Optional[typing.List["ChangeSubscription"]]
 
@@ -784,8 +734,6 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
 
 
 class SubscriptionSetKeyAction(SubscriptionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -798,8 +746,6 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
 
 
 class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubscriptionSetMessagesActionSchema`."""
-
     #: Optional list of :class:`commercetools.types.MessageSubscription`
     messages: typing.Optional[typing.List["MessageSubscription"]]
 

@@ -75,8 +75,6 @@ class AnonymousCartSignInMode(enum.Enum):
 
 
 class Customer(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -243,8 +241,6 @@ class Customer(BaseResource):
 
 
 class CustomerChangePassword(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangePasswordSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -276,8 +272,6 @@ class CustomerChangePassword(_BaseType):
 
 
 class CustomerCreateEmailToken(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreateEmailTokenSchema`."""
-
     #: :class:`str`
     id: str
     #: Optional :class:`int`
@@ -306,8 +300,6 @@ class CustomerCreateEmailToken(_BaseType):
 
 
 class CustomerCreatePasswordResetToken(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatePasswordResetTokenSchema`."""
-
     #: :class:`str`
     email: str
     #: Optional :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
@@ -328,8 +320,6 @@ class CustomerCreatePasswordResetToken(_BaseType):
 
 
 class CustomerDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDraftSchema`."""
-
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
     #: :class:`str`
@@ -471,8 +461,6 @@ class CustomerDraft(_BaseType):
 
 
 class CustomerEmailVerify(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifySchema`."""
-
     #: Optional :class:`int`
     version: typing.Optional[int]
     #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
@@ -493,8 +481,6 @@ class CustomerEmailVerify(_BaseType):
 
 
 class CustomerPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -530,8 +516,6 @@ class CustomerPagedQueryResponse(_BaseType):
 
 
 class CustomerReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Customer`
     obj: typing.Optional["Customer"]
 
@@ -554,8 +538,6 @@ class CustomerReference(Reference):
 
 
 class CustomerResetPassword(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerResetPasswordSchema`."""
-
     #: :class:`str` `(Named` ``tokenValue`` `in Commercetools)`
     token_value: str
     #: :class:`str` `(Named` ``newPassword`` `in Commercetools)`
@@ -584,8 +566,6 @@ class CustomerResetPassword(_BaseType):
 
 
 class CustomerResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -604,8 +584,6 @@ class CustomerResourceIdentifier(ResourceIdentifier):
 
 
 class CustomerSignInResult(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSignInResultSchema`."""
-
     #: :class:`commercetools.types.Customer`
     customer: "Customer"
     #: Optional :class:`object`
@@ -623,8 +601,6 @@ class CustomerSignInResult(_BaseType):
 
 
 class CustomerSignin(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSigninSchema`."""
-
     #: :class:`str`
     email: str
     #: :class:`str`
@@ -671,8 +647,6 @@ class CustomerSignin(_BaseType):
 
 
 class CustomerToken(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerTokenSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
@@ -719,8 +693,6 @@ class CustomerToken(_BaseType):
 
 
 class CustomerUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -736,8 +708,6 @@ class CustomerUpdate(_BaseType):
 
 
 class CustomerUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -750,8 +720,6 @@ class CustomerUpdateAction(_BaseType):
 
 
 class CustomerAddAddressAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddAddressActionSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -767,8 +735,6 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 
 
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddBillingAddressIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -793,8 +759,6 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddShippingAddressIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -819,8 +783,6 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerAddStoreAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddStoreActionSchema`."""
-
     #: :class:`commercetools.types.StoreResourceIdentifier`
     store: "StoreResourceIdentifier"
 
@@ -835,8 +797,6 @@ class CustomerAddStoreAction(CustomerUpdateAction):
 
 
 class CustomerChangeAddressAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeAddressActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -865,8 +825,6 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 
 
 class CustomerChangeEmailAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerChangeEmailActionSchema`."""
-
     #: :class:`str`
     email: str
 
@@ -882,8 +840,6 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 
 
 class CustomerRemoveAddressAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveAddressActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -908,8 +864,6 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
 
 
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveBillingAddressIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -934,8 +888,6 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveShippingAddressIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -960,8 +912,6 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerRemoveStoreAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerRemoveStoreActionSchema`."""
-
     #: :class:`commercetools.types.StoreResourceIdentifier`
     store: "StoreResourceIdentifier"
 
@@ -979,8 +929,6 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
 
 
 class CustomerSetCompanyNameAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCompanyNameActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
     company_name: typing.Optional[str]
 
@@ -998,8 +946,6 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -1025,8 +971,6 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomTypeAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -1052,8 +996,6 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomerGroupAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomerGroupActionSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerGroupResourceIdentifier` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
@@ -1074,8 +1016,6 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomerNumberAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetCustomerNumberActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
 
@@ -1093,8 +1033,6 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
 
 
 class CustomerSetDateOfBirthAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDateOfBirthActionSchema`."""
-
     #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
     date_of_birth: typing.Optional[datetime.date]
 
@@ -1115,8 +1053,6 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
 
 
 class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDefaultBillingAddressActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -1141,8 +1077,6 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
 
 
 class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetDefaultShippingAddressActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
@@ -1167,8 +1101,6 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
 
 
 class CustomerSetExternalIdAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetExternalIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
 
@@ -1186,8 +1118,6 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
 
 
 class CustomerSetFirstNameAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetFirstNameActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
 
@@ -1205,8 +1135,6 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
 
 
 class CustomerSetKeyAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -1219,8 +1147,6 @@ class CustomerSetKeyAction(CustomerUpdateAction):
 
 
 class CustomerSetLastNameAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetLastNameActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
     last_name: typing.Optional[str]
 
@@ -1238,8 +1164,6 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
 
 
 class CustomerSetLocaleAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetLocaleActionSchema`."""
-
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
@@ -1257,8 +1181,6 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
 
 
 class CustomerSetMiddleNameAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetMiddleNameActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
     middle_name: typing.Optional[str]
 
@@ -1276,8 +1198,6 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
 
 
 class CustomerSetSalutationAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetSalutationActionSchema`."""
-
     #: Optional :class:`str`
     salutation: typing.Optional[str]
 
@@ -1295,8 +1215,6 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
 
 
 class CustomerSetStoresAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetStoresActionSchema`."""
-
     #: Optional list of :class:`commercetools.types.StoreResourceIdentifier`
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
@@ -1317,8 +1235,6 @@ class CustomerSetStoresAction(CustomerUpdateAction):
 
 
 class CustomerSetTitleAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetTitleActionSchema`."""
-
     #: Optional :class:`str`
     title: typing.Optional[str]
 
@@ -1333,8 +1249,6 @@ class CustomerSetTitleAction(CustomerUpdateAction):
 
 
 class CustomerSetVatIdAction(CustomerUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerSetVatIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
     vat_id: typing.Optional[str]
 

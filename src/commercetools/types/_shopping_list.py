@@ -61,8 +61,6 @@ __all__ = [
 
 
 class MyShoppingList(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MyShoppingListSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -164,8 +162,6 @@ class MyShoppingList(BaseResource):
 
 
 class ShoppingList(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -267,8 +263,6 @@ class ShoppingList(BaseResource):
 
 
 class ShoppingListDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListDraftSchema`."""
-
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
     custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
@@ -335,8 +329,6 @@ class ShoppingListDraft(_BaseType):
 
 
 class ShoppingListLineItem(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemSchema`."""
-
     #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
     added_at: datetime.datetime
     #: Optional :class:`commercetools.types.CustomFields`
@@ -408,8 +400,6 @@ class ShoppingListLineItem(_BaseType):
 
 
 class ShoppingListLineItemDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListLineItemDraftSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
     added_at: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -456,8 +446,6 @@ class ShoppingListLineItemDraft(_BaseType):
 
 
 class ShoppingListPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -493,8 +481,6 @@ class ShoppingListPagedQueryResponse(_BaseType):
 
 
 class ShoppingListReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.ShoppingList`
     obj: typing.Optional["ShoppingList"]
 
@@ -517,8 +503,6 @@ class ShoppingListReference(Reference):
 
 
 class ShoppingListResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -537,8 +521,6 @@ class ShoppingListResourceIdentifier(ResourceIdentifier):
 
 
 class ShoppingListUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -557,8 +539,6 @@ class ShoppingListUpdate(_BaseType):
 
 
 class ShoppingListUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -571,8 +551,6 @@ class ShoppingListUpdateAction(_BaseType):
 
 
 class TextLineItem(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemSchema`."""
-
     #: :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
     added_at: datetime.datetime
     #: Optional :class:`commercetools.types.CustomFields`
@@ -619,8 +597,6 @@ class TextLineItem(_BaseType):
 
 
 class TextLineItemDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TextLineItemDraftSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
     added_at: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.CustomFieldsDraft`
@@ -656,8 +632,6 @@ class TextLineItemDraft(_BaseType):
 
 
 class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListAddLineItemActionSchema`."""
-
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
@@ -706,8 +680,6 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListAddTextLineItemActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -751,8 +723,6 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeLineItemQuantityActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: :class:`int`
@@ -773,8 +743,6 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeLineItemsOrderActionSchema`."""
-
     #: List of :class:`str` `(Named` ``lineItemOrder`` `in Commercetools)`
     line_item_order: typing.List[str]
 
@@ -792,8 +760,6 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeNameAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -809,8 +775,6 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemNameActionSchema`."""
-
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: str
     #: :class:`commercetools.types.LocalizedString`
@@ -835,8 +799,6 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemQuantityActionSchema`."""
-
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: str
     #: :class:`int`
@@ -857,8 +819,6 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListChangeTextLineItemsOrderActionSchema`."""
-
     #: List of :class:`str` `(Named` ``textLineItemOrder`` `in Commercetools)`
     text_line_item_order: typing.List[str]
 
@@ -876,8 +836,6 @@ class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
 
 
 class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListRemoveLineItemActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: Optional :class:`int`
@@ -902,8 +860,6 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListRemoveTextLineItemActionSchema`."""
-
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: str
     #: Optional :class:`int`
@@ -928,8 +884,6 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetAnonymousIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
 
@@ -947,8 +901,6 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -974,8 +926,6 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -1001,8 +951,6 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetCustomerActionSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
     customer: typing.Optional["CustomerResourceIdentifier"]
 
@@ -1023,8 +971,6 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetDeleteDaysAfterLastModificationActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``deleteDaysAfterLastModification`` `in Commercetools)`
     delete_days_after_last_modification: typing.Optional[int]
 
@@ -1045,8 +991,6 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
 
 
 class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 
@@ -1067,8 +1011,6 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetKeyAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -1081,8 +1023,6 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomFieldActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: :class:`str`
@@ -1111,8 +1051,6 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetLineItemCustomTypeActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
@@ -1141,8 +1079,6 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetSlugAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetSlugActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     slug: typing.Optional["LocalizedString"]
 
@@ -1160,8 +1096,6 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomFieldActionSchema`."""
-
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: str
     #: :class:`str`
@@ -1190,8 +1124,6 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemCustomTypeActionSchema`."""
-
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: str
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
@@ -1220,8 +1152,6 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShoppingListSetTextLineItemDescriptionActionSchema`."""
-
     #: :class:`str` `(Named` ``textLineItemId`` `in Commercetools)`
     text_line_item_id: str
     #: Optional :class:`commercetools.types.LocalizedString`

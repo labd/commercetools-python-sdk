@@ -8,8 +8,6 @@ __all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
 
 
 class ApiClient(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`str`
@@ -61,8 +59,6 @@ class ApiClient(_BaseType):
 
 
 class ApiClientDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientDraftSchema`."""
-
     #: :class:`str`
     name: str
     #: :class:`str`
@@ -91,8 +87,6 @@ class ApiClientDraft(_BaseType):
 
 
 class ApiClientPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ApiClientPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`

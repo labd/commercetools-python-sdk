@@ -45,8 +45,6 @@ __all__ = [
 
 
 class Review(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -158,8 +156,6 @@ class Review(BaseResource):
 
 
 class ReviewDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewDraftSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``uniquenessValue`` `in Commercetools)`
@@ -231,8 +227,6 @@ class ReviewDraft(_BaseType):
 
 
 class ReviewPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -268,8 +262,6 @@ class ReviewPagedQueryResponse(_BaseType):
 
 
 class ReviewRatingStatistics(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingStatisticsSchema`."""
-
     #: :class:`int` `(Named` ``averageRating`` `in Commercetools)`
     average_rating: int
     #: :class:`int` `(Named` ``highestRating`` `in Commercetools)`
@@ -311,8 +303,6 @@ class ReviewRatingStatistics(_BaseType):
 
 
 class ReviewReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Review`
     obj: typing.Optional["Review"]
 
@@ -335,8 +325,6 @@ class ReviewReference(Reference):
 
 
 class ReviewResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -355,8 +343,6 @@ class ReviewResourceIdentifier(ResourceIdentifier):
 
 
 class ReviewUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -372,8 +358,6 @@ class ReviewUpdate(_BaseType):
 
 
 class ReviewUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -386,8 +370,6 @@ class ReviewUpdateAction(_BaseType):
 
 
 class ReviewSetAuthorNameAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetAuthorNameActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``authorName`` `in Commercetools)`
     author_name: typing.Optional[str]
 
@@ -405,8 +387,6 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomFieldAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -432,8 +412,6 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomTypeAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -459,8 +437,6 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomerAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetCustomerActionSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
     customer: typing.Optional["CustomerResourceIdentifier"]
 
@@ -481,8 +457,6 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
 
 
 class ReviewSetKeyAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -495,8 +469,6 @@ class ReviewSetKeyAction(ReviewUpdateAction):
 
 
 class ReviewSetLocaleAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetLocaleActionSchema`."""
-
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
@@ -514,8 +486,6 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
 
 
 class ReviewSetRatingAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetRatingActionSchema`."""
-
     #: Optional :class:`int`
     rating: typing.Optional[int]
 
@@ -533,8 +503,6 @@ class ReviewSetRatingAction(ReviewUpdateAction):
 
 
 class ReviewSetTargetAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTargetActionSchema`."""
-
     #: :class:`commercetools.types.ProductResourceIdentifier`
     target: "ProductResourceIdentifier"
 
@@ -552,8 +520,6 @@ class ReviewSetTargetAction(ReviewUpdateAction):
 
 
 class ReviewSetTextAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTextActionSchema`."""
-
     #: Optional :class:`str`
     text: typing.Optional[str]
 
@@ -568,8 +534,6 @@ class ReviewSetTextAction(ReviewUpdateAction):
 
 
 class ReviewSetTitleAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewSetTitleActionSchema`."""
-
     #: Optional :class:`str`
     title: typing.Optional[str]
 
@@ -584,8 +548,6 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
 
 class ReviewTransitionStateAction(ReviewUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewTransitionStateActionSchema`."""
-
     #: :class:`commercetools.types.StateResourceIdentifier`
     state: "StateResourceIdentifier"
     #: Optional :class:`bool`

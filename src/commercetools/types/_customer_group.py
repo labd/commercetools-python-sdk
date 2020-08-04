@@ -29,8 +29,6 @@ __all__ = [
 
 
 class CustomerGroup(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -97,8 +95,6 @@ class CustomerGroup(BaseResource):
 
 
 class CustomerGroupDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupDraftSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str` `(Named` ``groupName`` `in Commercetools)`
@@ -127,8 +123,6 @@ class CustomerGroupDraft(_BaseType):
 
 
 class CustomerGroupPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -164,8 +158,6 @@ class CustomerGroupPagedQueryResponse(_BaseType):
 
 
 class CustomerGroupReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerGroup`
     obj: typing.Optional["CustomerGroup"]
 
@@ -188,8 +180,6 @@ class CustomerGroupReference(Reference):
 
 
 class CustomerGroupResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -208,8 +198,6 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
 
 
 class CustomerGroupUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -228,8 +216,6 @@ class CustomerGroupUpdate(_BaseType):
 
 
 class CustomerGroupUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -242,8 +228,6 @@ class CustomerGroupUpdateAction(_BaseType):
 
 
 class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupChangeNameActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -259,8 +243,6 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
 
 
 class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -286,8 +268,6 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
 
 
 class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -313,8 +293,6 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
 
 
 class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 

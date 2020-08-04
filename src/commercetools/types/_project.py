@@ -30,8 +30,6 @@ __all__ = [
 
 
 class CartsConfiguration(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartsConfigurationSchema`."""
-
     #: Optional :class:`bool` `(Named` ``countryTaxRateFallbackEnabled`` `in Commercetools)`
     country_tax_rate_fallback_enabled: typing.Optional[bool]
 
@@ -48,8 +46,6 @@ class CartsConfiguration(_BaseType):
 
 
 class ExternalOAuth(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExternalOAuthSchema`."""
-
     #: :class:`str`
     url: str
     #: :class:`str` `(Named` ``authorizationHeader`` `in Commercetools)`
@@ -68,8 +64,6 @@ class ExternalOAuth(_BaseType):
 
 
 class Project(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`str`
@@ -146,8 +140,6 @@ class Project(_BaseType):
 
 
 class ProjectUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -163,8 +155,6 @@ class ProjectUpdate(_BaseType):
 
 
 class ProjectUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -177,8 +167,6 @@ class ProjectUpdateAction(_BaseType):
 
 
 class ShippingRateInputType(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateInputTypeSchema`."""
-
     #: :class:`commercetools.types.ShippingRateTierType`
     type: "ShippingRateTierType"
 
@@ -191,8 +179,6 @@ class ShippingRateInputType(_BaseType):
 
 
 class CartClassificationType(ShippingRateInputType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTypeSchema`."""
-
     #: :class:`list`
     values: list
 
@@ -207,8 +193,6 @@ class CartClassificationType(ShippingRateInputType):
 
 
 class CartScoreType(ShippingRateInputType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTypeSchema`."""
-
     def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
@@ -217,8 +201,6 @@ class CartScoreType(ShippingRateInputType):
 
 
 class CartValueType(ShippingRateInputType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTypeSchema`."""
-
     def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
@@ -227,8 +209,6 @@ class CartValueType(ShippingRateInputType):
 
 
 class ProjectChangeCountriesAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCountriesActionSchema`."""
-
     #: List of :class:`str`
     countries: typing.List["str"]
 
@@ -246,8 +226,6 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 
 
 class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCountryTaxRateFallbackEnabledActionSchema`."""
-
     #: :class:`bool` `(Named` ``countryTaxRateFallbackEnabled`` `in Commercetools)`
     country_tax_rate_fallback_enabled: bool
 
@@ -265,8 +243,6 @@ class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
 
 
 class ProjectChangeCurrenciesAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeCurrenciesActionSchema`."""
-
     #: List of :class:`str`
     currencies: typing.List["str"]
 
@@ -284,8 +260,6 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 
 
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeLanguagesActionSchema`."""
-
     #: List of :class:`str`
     languages: typing.List["str"]
 
@@ -303,8 +277,6 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
 
 
 class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesConfigurationActionSchema`."""
-
     #: :class:`commercetools.types.MessageConfigurationDraft` `(Named` ``messagesConfiguration`` `in Commercetools)`
     messages_configuration: "MessageConfigurationDraft"
 
@@ -325,8 +297,6 @@ class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
 
 
 class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeMessagesEnabledActionSchema`."""
-
     #: :class:`bool` `(Named` ``messagesEnabled`` `in Commercetools)`
     messages_enabled: bool
 
@@ -342,8 +312,6 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 
 
 class ProjectChangeNameAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectChangeNameActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -356,8 +324,6 @@ class ProjectChangeNameAction(ProjectUpdateAction):
 
 
 class ProjectSetExternalOAuthAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSetExternalOAuthActionSchema`."""
-
     #: Optional :class:`commercetools.types.ExternalOAuth` `(Named` ``externalOAuth`` `in Commercetools)`
     external_oauth: typing.Optional["ExternalOAuth"]
 
@@ -378,8 +344,6 @@ class ProjectSetExternalOAuthAction(ProjectUpdateAction):
 
 
 class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProjectSetShippingRateInputTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.ShippingRateInputType` `(Named` ``shippingRateInputType`` `in Commercetools)`
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
 

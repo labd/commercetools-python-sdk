@@ -59,8 +59,6 @@ __all__ = [
 
 
 class CartDiscount(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -182,8 +180,6 @@ class CartDiscount(BaseResource):
 
 
 class CartDiscountDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountDraftSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
     #: Optional :class:`str`
@@ -265,8 +261,6 @@ class CartDiscountDraft(_BaseType):
 
 
 class CartDiscountPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -302,8 +296,6 @@ class CartDiscountPagedQueryResponse(_BaseType):
 
 
 class CartDiscountReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.CartDiscount`
     obj: typing.Optional["CartDiscount"]
 
@@ -326,8 +318,6 @@ class CartDiscountReference(Reference):
 
 
 class CartDiscountResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -346,8 +336,6 @@ class CartDiscountResourceIdentifier(ResourceIdentifier):
 
 
 class CartDiscountTarget(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountTargetSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -360,8 +348,6 @@ class CartDiscountTarget(_BaseType):
 
 
 class CartDiscountUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -380,8 +366,6 @@ class CartDiscountUpdate(_BaseType):
 
 
 class CartDiscountUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -394,8 +378,6 @@ class CartDiscountUpdateAction(_BaseType):
 
 
 class CartDiscountValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -408,8 +390,6 @@ class CartDiscountValue(_BaseType):
 
 
 class CartDiscountValueDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueDraftSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -432,8 +412,6 @@ class StackingMode(enum.Enum):
 
 
 class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeCartPredicateActionSchema`."""
-
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: str
 
@@ -449,8 +427,6 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeIsActiveActionSchema`."""
-
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: bool
 
@@ -466,8 +442,6 @@ class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeNameAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -483,8 +457,6 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeRequiresDiscountCodeActionSchema`."""
-
     #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
     requires_discount_code: bool
 
@@ -502,8 +474,6 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeSortOrderActionSchema`."""
-
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
     sort_order: str
 
@@ -519,8 +489,6 @@ class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeStackingModeActionSchema`."""
-
     #: :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
     stacking_mode: "StackingMode"
 
@@ -538,8 +506,6 @@ class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeTargetActionSchema`."""
-
     #: :class:`commercetools.types.CartDiscountTarget`
     target: "CartDiscountTarget"
 
@@ -557,8 +523,6 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeValueAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountChangeValueActionSchema`."""
-
     #: :class:`commercetools.types.CartDiscountValueDraft`
     value: "CartDiscountValueDraft"
 
@@ -576,8 +540,6 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
 
 
 class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountCustomLineItemsTargetSchema`."""
-
     #: :class:`str`
     predicate: str
 
@@ -593,8 +555,6 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
 
 
 class CartDiscountLineItemsTarget(CartDiscountTarget):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountLineItemsTargetSchema`."""
-
     #: :class:`str`
     predicate: str
 
@@ -610,8 +570,6 @@ class CartDiscountLineItemsTarget(CartDiscountTarget):
 
 
 class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -637,8 +595,6 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`object`
@@ -664,8 +620,6 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 
@@ -686,8 +640,6 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetKeyAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -700,8 +652,6 @@ class CartDiscountSetKeyAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidFromActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
 
@@ -722,8 +672,6 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidFromAndUntilActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -748,8 +696,6 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountSetValidUntilActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
     valid_until: typing.Optional[datetime.datetime]
 
@@ -770,8 +716,6 @@ class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
 
 
 class CartDiscountShippingCostTarget(CartDiscountTarget):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountShippingCostTargetSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="shipping")
 
@@ -780,8 +724,6 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
 
 
 class CartDiscountValueAbsolute(CartDiscountValue):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueAbsoluteSchema`."""
-
     #: List of :class:`commercetools.types.TypedMoney`
     money: typing.List["TypedMoney"]
 
@@ -796,8 +738,6 @@ class CartDiscountValueAbsolute(CartDiscountValue):
 
 
 class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueAbsoluteDraftSchema`."""
-
     #: List of :class:`commercetools.types.Money`
     money: typing.List["Money"]
 
@@ -813,8 +753,6 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
 
 
 class CartDiscountValueGiftLineItem(CartDiscountValue):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueGiftLineItemSchema`."""
-
     #: :class:`commercetools.types.ProductReference`
     product: "ProductReference"
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -853,8 +791,6 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 
 
 class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueGiftLineItemDraftSchema`."""
-
     #: :class:`commercetools.types.ProductReference`
     product: "ProductReference"
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -893,8 +829,6 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
 
 
 class CartDiscountValueRelative(CartDiscountValue):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueRelativeSchema`."""
-
     #: :class:`int`
     permyriad: int
 
@@ -910,8 +844,6 @@ class CartDiscountValueRelative(CartDiscountValue):
 
 
 class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartDiscountValueRelativeDraftSchema`."""
-
     #: :class:`int`
     permyriad: int
 
@@ -927,8 +859,6 @@ class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
 
 
 class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MultiBuyCustomLineItemsTargetSchema`."""
-
     #: :class:`str`
     predicate: str
     #: :class:`int` `(Named` ``triggerQuantity`` `in Commercetools)`
@@ -972,8 +902,6 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
 
 
 class MultiBuyLineItemsTarget(CartDiscountTarget):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MultiBuyLineItemsTargetSchema`."""
-
     #: :class:`str`
     predicate: str
     #: :class:`int` `(Named` ``triggerQuantity`` `in Commercetools)`

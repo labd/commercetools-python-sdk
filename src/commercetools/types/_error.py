@@ -51,8 +51,6 @@ __all__ = [
 
 
 class ErrorByExtension(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorByExtensionSchema`."""
-
     #: :class:`str`
     id: str
     #: Optional :class:`str`
@@ -68,8 +66,6 @@ class ErrorByExtension(_BaseType):
 
 
 class ErrorObject(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorObjectSchema`."""
-
     #: :class:`str`
     code: str
     #: :class:`str`
@@ -85,8 +81,6 @@ class ErrorObject(_BaseType):
 
 
 class ErrorResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ErrorResponseSchema`."""
-
     #: :class:`int` `(Named` ``statusCode`` `in Commercetools)`
     status_code: int
     #: :class:`str`
@@ -128,8 +122,6 @@ class ErrorResponse(_BaseType):
 
 
 class VariantValues(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.VariantValuesSchema`."""
-
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: List of :class:`commercetools.types.PriceDraft`
@@ -158,8 +150,6 @@ class VariantValues(_BaseType):
 
 
 class AccessDeniedError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AccessDeniedErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="access_denied", message=message)
 
@@ -168,8 +158,6 @@ class AccessDeniedError(ErrorObject):
 
 
 class ConcurrentModificationError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ConcurrentModificationErrorSchema`."""
-
     #: Optional :class:`int` `(Named` ``currentVersion`` `in Commercetools)`
     current_version: typing.Optional[int]
 
@@ -191,8 +179,6 @@ class ConcurrentModificationError(ErrorObject):
 
 
 class DiscountCodeNonApplicableError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeNonApplicableErrorSchema`."""
-
     #: Optional :class:`str` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: typing.Optional[str]
     #: Optional :class:`str`
@@ -243,8 +229,6 @@ class DiscountCodeNonApplicableError(ErrorObject):
 
 
 class DuplicateAttributeValueError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateAttributeValueErrorSchema`."""
-
     #: :class:`commercetools.types.Attribute`
     attribute: "Attribute"
 
@@ -263,8 +247,6 @@ class DuplicateAttributeValueError(ErrorObject):
 
 
 class DuplicateAttributeValuesError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateAttributeValuesErrorSchema`."""
-
     #: List of :class:`commercetools.types.Attribute`
     attributes: typing.List["Attribute"]
 
@@ -287,8 +269,6 @@ class DuplicateAttributeValuesError(ErrorObject):
 
 
 class DuplicateFieldError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldErrorSchema`."""
-
     #: Optional :class:`str`
     field: typing.Optional[str]
     #: Optional :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
@@ -324,8 +304,6 @@ class DuplicateFieldError(ErrorObject):
 
 
 class DuplicateFieldWithConflictingResourceError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateFieldWithConflictingResourceErrorSchema`."""
-
     #: :class:`str`
     field: str
     #: :class:`typing.Any` `(Named` ``duplicateValue`` `in Commercetools)`
@@ -361,8 +339,6 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
 
 
 class DuplicatePriceScopeError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicatePriceScopeErrorSchema`."""
-
     #: List of :class:`commercetools.types.Price` `(Named` ``conflictingPrices`` `in Commercetools)`
     conflicting_prices: typing.List["Price"]
 
@@ -384,8 +360,6 @@ class DuplicatePriceScopeError(ErrorObject):
 
 
 class DuplicateVariantValuesError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DuplicateVariantValuesErrorSchema`."""
-
     #: :class:`commercetools.types.VariantValues` `(Named` ``variantValues`` `in Commercetools)`
     variant_values: "VariantValues"
 
@@ -408,8 +382,6 @@ class DuplicateVariantValuesError(ErrorObject):
 
 
 class EnumValueIsUsedError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.EnumValueIsUsedErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="EnumValueIsUsed", message=message)
 
@@ -418,8 +390,6 @@ class EnumValueIsUsedError(ErrorObject):
 
 
 class ExtensionBadResponseError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionBadResponseErrorSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
     localized_message: typing.Optional["LocalizedString"]
     #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
@@ -455,8 +425,6 @@ class ExtensionBadResponseError(ErrorObject):
 
 
 class ExtensionNoResponseError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionNoResponseErrorSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
     localized_message: typing.Optional["LocalizedString"]
     #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
@@ -492,8 +460,6 @@ class ExtensionNoResponseError(ErrorObject):
 
 
 class ExtensionUpdateActionsFailedError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionsFailedErrorSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
     localized_message: typing.Optional["LocalizedString"]
     #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
@@ -529,8 +495,6 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
 
 
 class InsufficientScopeError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InsufficientScopeErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="insufficient_scope", message=message)
 
@@ -539,8 +503,6 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidCredentialsErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidCredentials", message=message)
 
@@ -552,8 +514,6 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidCurrentPasswordError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidCurrentPasswordErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidCurrentPassword", message=message)
 
@@ -565,8 +525,6 @@ class InvalidCurrentPasswordError(ErrorObject):
 
 
 class InvalidFieldError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidFieldErrorSchema`."""
-
     #: :class:`str`
     field: str
     #: :class:`typing.Any` `(Named` ``invalidValue`` `in Commercetools)`
@@ -602,8 +560,6 @@ class InvalidFieldError(ErrorObject):
 
 
 class InvalidInputError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidInputErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidInput", message=message)
 
@@ -612,8 +568,6 @@ class InvalidInputError(ErrorObject):
 
 
 class InvalidItemShippingDetailsError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidItemShippingDetailsErrorSchema`."""
-
     #: :class:`str`
     subject: str
     #: :class:`str` `(Named` ``itemId`` `in Commercetools)`
@@ -639,8 +593,6 @@ class InvalidItemShippingDetailsError(ErrorObject):
 
 
 class InvalidJsonInputError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidJsonInputErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidJsonInput", message=message)
 
@@ -649,8 +601,6 @@ class InvalidJsonInputError(ErrorObject):
 
 
 class InvalidOperationError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidOperationErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidOperation", message=message)
 
@@ -659,8 +609,6 @@ class InvalidOperationError(ErrorObject):
 
 
 class InvalidSubjectError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidSubjectErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="InvalidSubject", message=message)
 
@@ -669,8 +617,6 @@ class InvalidSubjectError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InvalidTokenErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="invalid_token", message=message)
 
@@ -679,8 +625,6 @@ class InvalidTokenError(ErrorObject):
 
 
 class LanguageUsedInStoresError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LanguageUsedInStoresErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="LanguageUsedInStores", message=message)
 
@@ -692,8 +636,6 @@ class LanguageUsedInStoresError(ErrorObject):
 
 
 class MatchingPriceNotFoundError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MatchingPriceNotFoundErrorSchema`."""
-
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
     product_id: str
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -744,8 +686,6 @@ class MatchingPriceNotFoundError(ErrorObject):
 
 
 class MissingTaxRateForCountryError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MissingTaxRateForCountryErrorSchema`."""
-
     #: :class:`str` `(Named` ``taxCategoryId`` `in Commercetools)`
     tax_category_id: str
     #: Optional :class:`str`
@@ -775,8 +715,6 @@ class MissingTaxRateForCountryError(ErrorObject):
 
 
 class NoMatchingProductDiscountFoundError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.NoMatchingProductDiscountFoundErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="NoMatchingProductDiscountFound", message=message)
 
@@ -788,8 +726,6 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
 
 
 class OutOfStockError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OutOfStockErrorSchema`."""
-
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.List[str]
     #: List of :class:`str`
@@ -817,8 +753,6 @@ class OutOfStockError(ErrorObject):
 
 
 class PriceChangedError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PriceChangedErrorSchema`."""
-
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.List[str]
     #: :class:`bool`
@@ -846,8 +780,6 @@ class PriceChangedError(ErrorObject):
 
 
 class ReferenceExistsError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceExistsErrorSchema`."""
-
     #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``referencedBy`` `in Commercetools)`
     referenced_by: typing.Optional["ReferenceTypeId"]
 
@@ -870,8 +802,6 @@ class ReferenceExistsError(ErrorObject):
 
 
 class RequiredFieldError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.RequiredFieldErrorSchema`."""
-
     #: :class:`str`
     field: str
 
@@ -890,8 +820,6 @@ class RequiredFieldError(ErrorObject):
 
 
 class ResourceNotFoundError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceNotFoundErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="ResourceNotFound", message=message)
 
@@ -900,8 +828,6 @@ class ResourceNotFoundError(ErrorObject):
 
 
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodDoesNotMatchCartErrorSchema`."""
-
     def __init__(self, *, code: str = None, message: str = None) -> None:
         super().__init__(code="ShippingMethodDoesNotMatchCart", message=message)
 

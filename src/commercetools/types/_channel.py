@@ -43,8 +43,6 @@ __all__ = [
 
 
 class Channel(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -136,8 +134,6 @@ class Channel(BaseResource):
 
 
 class ChannelDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelDraftSchema`."""
-
     #: :class:`str`
     key: str
     #: Optional list of :class:`commercetools.types.ChannelRoleEnum`
@@ -189,8 +185,6 @@ class ChannelDraft(_BaseType):
 
 
 class ChannelPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -226,8 +220,6 @@ class ChannelPagedQueryResponse(_BaseType):
 
 
 class ChannelReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Channel`
     obj: typing.Optional["Channel"]
 
@@ -250,8 +242,6 @@ class ChannelReference(Reference):
 
 
 class ChannelResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -278,8 +268,6 @@ class ChannelRoleEnum(enum.Enum):
 
 
 class ChannelUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -295,8 +283,6 @@ class ChannelUpdate(_BaseType):
 
 
 class ChannelUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -309,8 +295,6 @@ class ChannelUpdateAction(_BaseType):
 
 
 class ChannelAddRolesAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelAddRolesActionSchema`."""
-
     #: List of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.List["ChannelRoleEnum"]
 
@@ -325,8 +309,6 @@ class ChannelAddRolesAction(ChannelUpdateAction):
 
 
 class ChannelChangeDescriptionAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeDescriptionActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     description: "LocalizedString"
 
@@ -344,8 +326,6 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 
 
 class ChannelChangeKeyAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeKeyActionSchema`."""
-
     #: :class:`str`
     key: str
 
@@ -358,8 +338,6 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
 
 
 class ChannelChangeNameAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -372,8 +350,6 @@ class ChannelChangeNameAction(ChannelUpdateAction):
 
 
 class ChannelRemoveRolesAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelRemoveRolesActionSchema`."""
-
     #: List of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.List["ChannelRoleEnum"]
 
@@ -391,8 +367,6 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
 
 
 class ChannelSetAddressAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetAddressActionSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
@@ -410,8 +384,6 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 
 
 class ChannelSetCustomFieldAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -437,8 +409,6 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
 
 
 class ChannelSetCustomTypeAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -464,8 +434,6 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
 
 
 class ChannelSetGeoLocationAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetGeoLocationActionSchema`."""
-
     #: Optional :class:`commercetools.types.GeoJson` `(Named` ``geoLocation`` `in Commercetools)`
     geo_location: typing.Optional["GeoJson"]
 
@@ -483,8 +451,6 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
 
 
 class ChannelSetRolesAction(ChannelUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ChannelSetRolesActionSchema`."""
-
     #: List of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.List["ChannelRoleEnum"]
 

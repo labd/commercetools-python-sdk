@@ -33,8 +33,6 @@ __all__ = [
 
 
 class SubRate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SubRateSchema`."""
-
     #: :class:`str`
     name: str
     #: :class:`float`
@@ -50,8 +48,6 @@ class SubRate(_BaseType):
 
 
 class TaxCategory(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -123,8 +119,6 @@ class TaxCategory(BaseResource):
 
 
 class TaxCategoryDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryDraftSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`str`
@@ -158,8 +152,6 @@ class TaxCategoryDraft(_BaseType):
 
 
 class TaxCategoryPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -195,8 +187,6 @@ class TaxCategoryPagedQueryResponse(_BaseType):
 
 
 class TaxCategoryReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.TaxCategory`
     obj: typing.Optional["TaxCategory"]
 
@@ -219,8 +209,6 @@ class TaxCategoryReference(Reference):
 
 
 class TaxCategoryResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -239,8 +227,6 @@ class TaxCategoryResourceIdentifier(ResourceIdentifier):
 
 
 class TaxCategoryUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -259,8 +245,6 @@ class TaxCategoryUpdate(_BaseType):
 
 
 class TaxCategoryUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -273,8 +257,6 @@ class TaxCategoryUpdateAction(_BaseType):
 
 
 class TaxRate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateSchema`."""
-
     #: Optional :class:`str`
     id: typing.Optional[str]
     #: :class:`str`
@@ -326,8 +308,6 @@ class TaxRate(_BaseType):
 
 
 class TaxRateDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxRateDraftSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`float`
@@ -374,8 +354,6 @@ class TaxRateDraft(_BaseType):
 
 
 class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryAddTaxRateActionSchema`."""
-
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: "TaxRateDraft"
 
@@ -391,8 +369,6 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryChangeNameActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -408,8 +384,6 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryRemoveTaxRateActionSchema`."""
-
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
     tax_rate_id: str
 
@@ -425,8 +399,6 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategoryReplaceTaxRateActionSchema`."""
-
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
     tax_rate_id: str
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
@@ -451,8 +423,6 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySetDescriptionActionSchema`."""
-
     #: Optional :class:`str`
     description: typing.Optional[str]
 
@@ -470,8 +440,6 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
 
 
 class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxCategorySetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 

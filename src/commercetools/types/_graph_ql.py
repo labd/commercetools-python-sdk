@@ -14,8 +14,6 @@ __all__ = [
 
 
 class GraphQLError(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLErrorSchema`."""
-
     #: :class:`str`
     message: str
     #: :class:`list`
@@ -40,8 +38,6 @@ class GraphQLError(_BaseType):
 
 
 class GraphQLErrorLocation(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLErrorLocationSchema`."""
-
     #: :class:`int`
     line: int
     #: :class:`int`
@@ -57,8 +53,6 @@ class GraphQLErrorLocation(_BaseType):
 
 
 class GraphQLRequest(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLRequestSchema`."""
-
     #: :class:`str`
     query: str
     #: Optional :class:`str` `(Named` ``operationName`` `in Commercetools)`
@@ -87,8 +81,6 @@ class GraphQLRequest(_BaseType):
 
 
 class GraphQLResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GraphQLResponseSchema`."""
-
     #: Optional :class:`typing.Any`
     data: typing.Optional[typing.Any]
     #: Optional :class:`list`

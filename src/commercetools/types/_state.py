@@ -36,8 +36,6 @@ __all__ = [
 
 
 class State(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -129,8 +127,6 @@ class State(BaseResource):
 
 
 class StateDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateDraftSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`commercetools.types.StateTypeEnum`
@@ -182,8 +178,6 @@ class StateDraft(_BaseType):
 
 
 class StatePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StatePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -219,8 +213,6 @@ class StatePagedQueryResponse(_BaseType):
 
 
 class StateReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.State`
     obj: typing.Optional["State"]
 
@@ -243,8 +235,6 @@ class StateReference(Reference):
 
 
 class StateResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -276,8 +266,6 @@ class StateTypeEnum(enum.Enum):
 
 
 class StateUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -293,8 +281,6 @@ class StateUpdate(_BaseType):
 
 
 class StateUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -307,8 +293,6 @@ class StateUpdateAction(_BaseType):
 
 
 class StateAddRolesAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateAddRolesActionSchema`."""
-
     #: List of :class:`commercetools.types.StateRoleEnum`
     roles: typing.List["StateRoleEnum"]
 
@@ -323,8 +307,6 @@ class StateAddRolesAction(StateUpdateAction):
 
 
 class StateChangeInitialAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeInitialActionSchema`."""
-
     #: :class:`bool`
     initial: bool
 
@@ -340,8 +322,6 @@ class StateChangeInitialAction(StateUpdateAction):
 
 
 class StateChangeKeyAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeKeyActionSchema`."""
-
     #: :class:`str`
     key: str
 
@@ -354,8 +334,6 @@ class StateChangeKeyAction(StateUpdateAction):
 
 
 class StateChangeTypeAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateChangeTypeActionSchema`."""
-
     #: :class:`commercetools.types.StateTypeEnum`
     type: "StateTypeEnum"
 
@@ -368,8 +346,6 @@ class StateChangeTypeAction(StateUpdateAction):
 
 
 class StateRemoveRolesAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateRemoveRolesActionSchema`."""
-
     #: List of :class:`commercetools.types.StateRoleEnum`
     roles: typing.List["StateRoleEnum"]
 
@@ -384,8 +360,6 @@ class StateRemoveRolesAction(StateUpdateAction):
 
 
 class StateSetDescriptionAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetDescriptionActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     description: "LocalizedString"
 
@@ -403,8 +377,6 @@ class StateSetDescriptionAction(StateUpdateAction):
 
 
 class StateSetNameAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -417,8 +389,6 @@ class StateSetNameAction(StateUpdateAction):
 
 
 class StateSetRolesAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetRolesActionSchema`."""
-
     #: List of :class:`commercetools.types.StateRoleEnum`
     roles: typing.List["StateRoleEnum"]
 
@@ -433,8 +403,6 @@ class StateSetRolesAction(StateUpdateAction):
 
 
 class StateSetTransitionsAction(StateUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StateSetTransitionsActionSchema`."""
-
     #: Optional list of :class:`commercetools.types.StateResourceIdentifier`
     transitions: typing.Optional[typing.List["StateResourceIdentifier"]]
 

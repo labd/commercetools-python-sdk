@@ -16,8 +16,6 @@ __all__ = [
 
 
 class CustomObject(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -84,8 +82,6 @@ class CustomObject(BaseResource):
 
 
 class CustomObjectDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectDraftSchema`."""
-
     #: :class:`str`
     container: str
     #: :class:`str`
@@ -119,8 +115,6 @@ class CustomObjectDraft(_BaseType):
 
 
 class CustomObjectPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -156,8 +150,6 @@ class CustomObjectPagedQueryResponse(_BaseType):
 
 
 class CustomObjectReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomObjectReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.CustomObject`
     obj: typing.Optional["CustomObject"]
 

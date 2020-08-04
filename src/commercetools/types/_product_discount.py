@@ -50,8 +50,6 @@ __all__ = [
 
 
 class ProductDiscount(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -153,8 +151,6 @@ class ProductDiscount(BaseResource):
 
 
 class ProductDiscountDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountDraftSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
     #: Optional :class:`str`
@@ -216,8 +212,6 @@ class ProductDiscountDraft(_BaseType):
 
 
 class ProductDiscountMatchQuery(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountMatchQuerySchema`."""
-
     #: :class:`str` `(Named` ``productId`` `in Commercetools)`
     product_id: str
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -249,8 +243,6 @@ class ProductDiscountMatchQuery(_BaseType):
 
 
 class ProductDiscountPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -286,8 +278,6 @@ class ProductDiscountPagedQueryResponse(_BaseType):
 
 
 class ProductDiscountReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.ProductDiscount`
     obj: typing.Optional["ProductDiscount"]
 
@@ -310,8 +300,6 @@ class ProductDiscountReference(Reference):
 
 
 class ProductDiscountResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -330,8 +318,6 @@ class ProductDiscountResourceIdentifier(ResourceIdentifier):
 
 
 class ProductDiscountUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -350,8 +336,6 @@ class ProductDiscountUpdate(_BaseType):
 
 
 class ProductDiscountUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -364,8 +348,6 @@ class ProductDiscountUpdateAction(_BaseType):
 
 
 class ProductDiscountValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -378,8 +360,6 @@ class ProductDiscountValue(_BaseType):
 
 
 class ProductDiscountValueDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueDraftSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -392,8 +372,6 @@ class ProductDiscountValueDraft(_BaseType):
 
 
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeIsActiveActionSchema`."""
-
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: bool
 
@@ -409,8 +387,6 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -426,8 +402,6 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangePredicateActionSchema`."""
-
     #: :class:`str`
     predicate: str
 
@@ -443,8 +417,6 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeSortOrderActionSchema`."""
-
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
     sort_order: str
 
@@ -460,8 +432,6 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountChangeValueActionSchema`."""
-
     #: :class:`commercetools.types.ProductDiscountValueDraft`
     value: "ProductDiscountValueDraft"
 
@@ -479,8 +449,6 @@ class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 
@@ -501,8 +469,6 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -518,8 +484,6 @@ class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSetValidFromActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
 
@@ -540,8 +504,6 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSetValidFromAndUntilActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -566,8 +528,6 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountSetValidUntilActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
     valid_until: typing.Optional[datetime.datetime]
 
@@ -588,8 +548,6 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountValueAbsolute(ProductDiscountValue):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteSchema`."""
-
     #: List of :class:`commercetools.types.TypedMoney`
     money: typing.List["TypedMoney"]
 
@@ -607,8 +565,6 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 
 
 class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueAbsoluteDraftSchema`."""
-
     #: List of :class:`commercetools.types.Money`
     money: typing.List["Money"]
 
@@ -624,8 +580,6 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueExternal(ProductDiscountValue):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueExternalSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="external")
 
@@ -634,8 +588,6 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 
 
 class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueExternalDraftSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="external")
 
@@ -644,8 +596,6 @@ class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueRelative(ProductDiscountValue):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueRelativeSchema`."""
-
     #: :class:`int`
     permyriad: int
 
@@ -661,8 +611,6 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 
 
 class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDiscountValueRelativeDraftSchema`."""
-
     #: :class:`int`
     permyriad: int
 

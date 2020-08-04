@@ -3,7 +3,15 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._payment import (
+    PaymentDraftSchema,
+    PaymentPagedQueryResponseSchema,
+    PaymentSchema,
+    PaymentUpdateSchema,
+    TransactionSchema,
+)
+from commercetools._schemas._type import CustomFieldsSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute_add_item
@@ -11,7 +19,7 @@ from commercetools.testing.utils import update_attribute_add_item
 
 class PaymentsModel(BaseModel):
     _primary_type_name = "payment"
-    _resource_schema = schemas.PaymentSchema
+    _resource_schema = PaymentSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -64,7 +72,7 @@ def add_transaction():
             interaction_id=draft.interaction_id,
             state=draft.state,
         )
-        transaction = schemas.TransactionSchema().dump(transaction)
+        transaction = TransactionSchema().dump(transaction)
         if not obj["transactions"]:
             obj["transactions"] = []
         new = copy.deepcopy(obj)
@@ -105,7 +113,7 @@ def change_transaction_interaction_id():
 def add_interface_interaction():
     def updater(self, obj, action):
         value = types.CustomFields(fields=getattr(action, "fields"))
-        value = schemas.CustomFieldsSchema().dump(value)
+        value = CustomFieldsSchema().dump(value)
         if not obj["interfaceInteractions"]:
             obj["interfaceInteractions"] = []
         if value not in obj["interfaceInteractions"]:
@@ -120,9 +128,9 @@ def add_interface_interaction():
 class PaymentsBackend(ServiceBackend):
     service_path = "payments"
     model_class = PaymentsModel
-    _schema_draft = schemas.PaymentDraftSchema
-    _schema_update = schemas.PaymentUpdateSchema
-    _schema_query_response = schemas.PaymentPagedQueryResponseSchema
+    _schema_draft = PaymentDraftSchema
+    _schema_update = PaymentUpdateSchema
+    _schema_query_response = PaymentPagedQueryResponseSchema
 
     def urls(self):
         return [

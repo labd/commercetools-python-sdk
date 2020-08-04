@@ -3,14 +3,22 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._cart import (
+    CartDraftSchema,
+    CartPagedQueryResponseSchema,
+    CartSchema,
+    CartUpdateSchema,
+)
+from commercetools._schemas._order import PaymentInfoSchema
+from commercetools._schemas._payment import PaymentResourceIdentifierSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import set_custom_field
 
 
 class CartsModel(BaseModel):
-    _resource_schema = schemas.CartSchema
+    _resource_schema = CartSchema
     _primary_type_name = "cart"
 
     def _create_line_item_from_draft(
@@ -127,9 +135,9 @@ class CartsModel(BaseModel):
 def add_payment():
     def updater(self, obj, action):
         value = getattr(action, "payment")
-        value = schemas.PaymentResourceIdentifierSchema().dump(value)
+        value = PaymentResourceIdentifierSchema().dump(value)
         if not obj["paymentInfo"]:
-            obj["paymentInfo"] = schemas.PaymentInfoSchema().dump(
+            obj["paymentInfo"] = PaymentInfoSchema().dump(
                 types.PaymentInfo(payments=[])
             )
         if value not in obj["paymentInfo"]["payments"]:
@@ -144,9 +152,9 @@ def add_payment():
 class CartsBackend(ServiceBackend):
     service_path = "carts"
     model_class = CartsModel
-    _schema_draft = schemas.CartDraftSchema
-    _schema_update = schemas.CartUpdateSchema
-    _schema_query_response = schemas.CartPagedQueryResponseSchema
+    _schema_draft = CartDraftSchema
+    _schema_update = CartUpdateSchema
+    _schema_query_response = CartPagedQueryResponseSchema
 
     def urls(self):
         return [

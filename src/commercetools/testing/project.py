@@ -1,19 +1,19 @@
 import uuid
 
-from commercetools import schemas
+from commercetools._schemas._project import ProjectSchema, ProjectUpdateSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute
 
 
 class ProjectsModel(BaseModel):
-    _resource_schema = schemas.ProjectSchema
+    _resource_schema = ProjectSchema
     _primary_type_name = "project"
 
 
 class ProjectBackend(ServiceBackend):
     model_class = ProjectsModel
-    _resource_schema = schemas.ProjectSchema
-    _schema_update = schemas.ProjectUpdateSchema
+    _resource_schema = ProjectSchema
+    _schema_update = ProjectUpdateSchema
 
     def __init__(self, storage):
         super().__init__(storage)

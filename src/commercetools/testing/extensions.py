@@ -2,13 +2,19 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._extension import (
+    ExtensionDraftSchema,
+    ExtensionPagedQueryResponseSchema,
+    ExtensionSchema,
+    ExtensionUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ExtensionsModel(BaseModel):
     _primary_type_name = "extension"
-    _resource_schema = schemas.ExtensionSchema
+    _resource_schema = ExtensionSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -30,9 +36,9 @@ class ExtensionsModel(BaseModel):
 class ExtensionsBackend(ServiceBackend):
     service_path = "extensions"
     model_class = ExtensionsModel
-    _schema_draft = schemas.ExtensionDraftSchema
-    _schema_update = schemas.ExtensionUpdateSchema
-    _schema_query_response = schemas.ExtensionPagedQueryResponseSchema
+    _schema_draft = ExtensionDraftSchema
+    _schema_update = ExtensionUpdateSchema
+    _schema_query_response = ExtensionPagedQueryResponseSchema
 
     def urls(self):
         return [

@@ -1,4 +1,5 @@
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._type import CustomFieldsDraftSchema
 
 
 def test_serialize_field_container():
@@ -8,12 +9,12 @@ def test_serialize_field_container():
         fields=types.FieldContainer(foobar=10),
     )
 
-    result = schemas.CustomFieldsDraftSchema().dump(draft)
+    result = CustomFieldsDraftSchema().dump(draft)
     expected = {
         "fields": {"foobar": 10},
         "type": {"typeId": "type", "id": "foobar", "key": None},
     }
     assert expected == result
 
-    roundtrip = schemas.CustomFieldsDraftSchema().load(expected)
+    roundtrip = CustomFieldsDraftSchema().load(expected)
     assert draft == roundtrip

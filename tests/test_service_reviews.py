@@ -1,4 +1,5 @@
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._review import ReviewDraftSchema
 
 
 def test_create_review(client):
@@ -9,7 +10,7 @@ def test_create_review(client):
 
 
 def test_get_by_id(client):
-    review = client.reviews.create(draft=schemas.ReviewDraftSchema().dump({}))
+    review = client.reviews.create(draft=ReviewDraftSchema().dump({}))
     assert review.id
 
     review = client.reviews.get_by_id(review.id)
@@ -18,7 +19,7 @@ def test_get_by_id(client):
 
 def test_get_by_key(client):
     review = client.reviews.create(
-        draft=schemas.ReviewDraftSchema().dump({"key": "test-review"})
+        draft=ReviewDraftSchema().dump({"key": "test-review"})
     )
     assert review.key
 
@@ -47,7 +48,7 @@ def test_delete_by_id(client):
 
 def test_delete_by_key(client):
     review = client.reviews.create(
-        draft=schemas.ReviewDraftSchema().dump({"key": "test-review"})
+        draft=ReviewDraftSchema().dump({"key": "test-review"})
     )
     assert review.key
     assert client.reviews.delete_by_key(review.key, version=review.version)

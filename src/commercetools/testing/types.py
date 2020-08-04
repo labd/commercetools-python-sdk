@@ -2,14 +2,21 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._type import (
+    FieldDefinitionSchema,
+    TypeDraftSchema,
+    TypePagedQueryResponseSchema,
+    TypeSchema,
+    TypeUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute, update_attribute_add_item
 
 
 class TypesModel(BaseModel):
     _primary_type_name = "type"
-    _resource_schema = schemas.TypeSchema
+    _resource_schema = TypeSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -32,9 +39,9 @@ class TypesModel(BaseModel):
 class TypesBackend(ServiceBackend):
     service_path = "types"
     model_class = TypesModel
-    _schema_draft = schemas.TypeDraftSchema
-    _schema_update = schemas.TypeUpdateSchema
-    _schema_query_response = schemas.TypePagedQueryResponseSchema
+    _schema_draft = TypeDraftSchema
+    _schema_update = TypeUpdateSchema
+    _schema_query_response = TypePagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -51,7 +58,7 @@ class TypesBackend(ServiceBackend):
     # Fixme: use decorator for this
     _actions = {
         "addFieldDefinition": update_attribute_add_item(
-            "fieldDefinitions", "field_definition", schemas.FieldDefinitionSchema
+            "fieldDefinitions", "field_definition", FieldDefinitionSchema
         ),
         "setDescription": update_attribute("description", "description"),
     }

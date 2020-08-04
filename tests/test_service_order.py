@@ -72,6 +72,7 @@ def test_update_order_add_delivery(commercetools_api, client):
         order.id,
         order.version,
         actions=[
+            types.OrderSetBillingAddressAction(address=types.Address(country="NL")),
             types.OrderAddDeliveryAction(
                 parcels=[
                     types.ParcelDraft(
@@ -80,7 +81,7 @@ def test_update_order_add_delivery(commercetools_api, client):
                         )
                     )
                 ]
-            )
+            ),
         ],
     )
 

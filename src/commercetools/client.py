@@ -9,7 +9,7 @@ from requests.adapters import HTTPAdapter
 from requests_oauthlib import OAuth2Session
 from urllib3.util.retry import Retry
 
-from commercetools.schemas._error import ErrorResponseSchema
+from commercetools._schemas._error import ErrorResponseSchema
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry

@@ -3,14 +3,24 @@ import datetime
 import uuid
 from typing import Dict, List, Optional
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._channel import (
+    ChannelResourceIdentifierSchema,
+    ChannelSchema,
+)
+from commercetools._schemas._store import (
+    StoreDraftSchema,
+    StorePagedQueryResponseSchema,
+    StoreSchema,
+    StoreUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 
 class StoresModel(BaseModel):
     _primary_type_name = "store"
-    _resource_schema = schemas.StoreSchema
+    _resource_schema = StoreSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -49,7 +59,7 @@ def convert_identifiers_to_references(
                 break
         if not channel_data:
             raise InternalUpdateError("Channel not found.")
-        channel: types.Channel = schemas.ChannelSchema().load(data=channel_data)
+        channel: types.Channel = ChannelSchema().load(data=channel_data)
         if types.ChannelRoleEnum.PRODUCT_DISTRIBUTION not in channel.roles:
             raise InternalUpdateError(
                 "Channel does not have product distribution role."
@@ -79,7 +89,7 @@ def set_distribution_channels(
             backend.model._storage._stores["channel"], action.distribution_channels
         )
     new = copy.deepcopy(obj)
-    new["distributionChannels"] = schemas.ChannelResourceIdentifierSchema().dump(
+    new["distributionChannels"] = ChannelResourceIdentifierSchema().dump(
         channel_references, many=True
     )
     return new
@@ -88,9 +98,9 @@ def set_distribution_channels(
 class StoresBackend(ServiceBackend):
     service_path = "stores"
     model_class = StoresModel
-    _schema_draft = schemas.StoreDraftSchema
-    _schema_query_response = schemas.StorePagedQueryResponseSchema
-    _schema_update = schemas.StoreUpdateSchema
+    _schema_draft = StoreDraftSchema
+    _schema_query_response = StorePagedQueryResponseSchema
+    _schema_update = StoreUpdateSchema
     _verify_version = False
 
     def urls(self):

@@ -2,13 +2,19 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._customer import (
+    CustomerDraftSchema,
+    CustomerPagedQueryResponseSchema,
+    CustomerSchema,
+    CustomerUpdateSchema,
+)
 from commercetools.testing import abstract, utils
 from commercetools.testing.utils import create_commercetools_response
 
 
 class CustomerModel(abstract.BaseModel):
-    _resource_schema = schemas.CustomerSchema
+    _resource_schema = CustomerSchema
     _primary_type_name = "customer"
     _unique_values = ["key"]
 
@@ -66,9 +72,9 @@ class CustomerModel(abstract.BaseModel):
 class CustomerBackend(abstract.ServiceBackend):
     service_path = "customers"
     model_class = CustomerModel
-    _schema_draft = schemas.CustomerDraftSchema
-    _schema_update = schemas.CustomerUpdateSchema
-    _schema_query_response = schemas.CustomerPagedQueryResponseSchema
+    _schema_draft = CustomerDraftSchema
+    _schema_update = CustomerUpdateSchema
+    _schema_query_response = CustomerPagedQueryResponseSchema
 
     def urls(self):
         return [

@@ -1,6 +1,10 @@
 import typing
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._product import (
+    ProductProjectionPagedQueryResponseSchema,
+    ProductProjectionSchema,
+)
 from commercetools.services.product_projections import _ProductProjectionQuerySchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import ServiceBackend
@@ -41,7 +45,7 @@ class ProductProjectionsBackend(ServiceBackend):
             "offset": 0,
             "results": results,
         }
-        content = schemas.ProductProjectionPagedQueryResponseSchema().dumps(data)
+        content = ProductProjectionPagedQueryResponseSchema().dumps(data)
         return create_commercetools_response(request, text=content)
 
     def search(self, request):
@@ -66,14 +70,14 @@ class ProductProjectionsBackend(ServiceBackend):
             "offset": 0,
             "results": results,
         }
-        content = schemas.ProductProjectionPagedQueryResponseSchema().dumps(data)
+        content = ProductProjectionPagedQueryResponseSchema().dumps(data)
         return create_commercetools_response(request, text=content)
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
         if obj:
             expanded_obj = self._expand(request, obj)
-            content = schemas.ProductProjectionSchema().dumps(expanded_obj)
+            content = ProductProjectionSchema().dumps(expanded_obj)
             return create_commercetools_response(request, text=content)
         return create_commercetools_response(request, status_code=404)
 
@@ -81,7 +85,7 @@ class ProductProjectionsBackend(ServiceBackend):
         obj = self.model.get_by_key(key)
         if obj:
             expanded_obj = self._expand(request, obj)
-            content = schemas.ProductProjectionSchema().dumps(expanded_obj)
+            content = ProductProjectionSchema().dumps(expanded_obj)
             return create_commercetools_response(request, text=content)
         return create_commercetools_response(request, status_code=404)
 

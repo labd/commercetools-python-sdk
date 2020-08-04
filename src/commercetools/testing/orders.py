@@ -3,7 +3,15 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._order import (
+    DeliverySchema,
+    OrderFromCartDraftSchema,
+    OrderPagedQueryResponseSchema,
+    OrderSchema,
+    OrderUpdateSchema,
+)
+from commercetools._schemas._payment import PaymentReferenceSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     set_custom_field,
@@ -15,7 +23,7 @@ from commercetools.types import CartOrigin, OrderState
 
 class OrdersModel(BaseModel):
     _primary_type_name = "order"
-    _resource_schema = schemas.OrderSchema
+    _resource_schema = OrderSchema
 
     def _create_from_draft(
         self, draft: types.OrderFromCartDraft, id: typing.Optional[str] = None
@@ -59,13 +67,13 @@ def add_delivery():
         )
 
         if not obj["shippingInfo"]:
-            obj["shippingInfo"] = schemas.ShippingInfoSchema().dump(
+            obj["shippingInfo"] = ShippingInfoSchema().dump(
                 types.ShippingInfo(deliveries=[])
             )
         elif not obj["shippingInfo"]["deliveries"]:
             obj["shippingInfo"]["deliveries"] = []
 
-        value = schemas.DeliverySchema().dump(delivery)
+        value = DeliverySchema().dump(delivery)
         if value not in obj["shippingInfo"]["deliveries"]:
             new = copy.deepcopy(obj)
             new["shippingInfo"]["deliveries"].append(value)
@@ -83,7 +91,7 @@ def add_payment():
         else:
             payments = []
 
-        payments.append(schemas.PaymentReferenceSchema().dump(action.payment))
+        payments.append(PaymentReferenceSchema().dump(action.payment))
         obj["paymentInfo"] = {"payments": payments}
         return obj
 
@@ -93,9 +101,9 @@ def add_payment():
 class OrdersBackend(ServiceBackend):
     service_path = "orders"
     model_class = OrdersModel
-    _schema_draft = schemas.OrderFromCartDraftSchema
-    _schema_update = schemas.OrderUpdateSchema
-    _schema_query_response = schemas.OrderPagedQueryResponseSchema
+    _schema_draft = OrderFromCartDraftSchema
+    _schema_update = OrderUpdateSchema
+    _schema_query_response = OrderPagedQueryResponseSchema
 
     def urls(self):
         return [

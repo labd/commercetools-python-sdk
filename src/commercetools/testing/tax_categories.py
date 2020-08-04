@@ -4,7 +4,14 @@ import string
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._tax_category import (
+    TaxCategoryDraftSchema,
+    TaxCategoryPagedQueryResponseSchema,
+    TaxCategorySchema,
+    TaxCategoryUpdateSchema,
+    TaxRateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     update_attribute,
@@ -19,7 +26,7 @@ def generate_tax_rate_id():
 
 class TaxCategoryModel(BaseModel):
     _primary_type_name = "tax-category"
-    _resource_schema = schemas.TaxCategorySchema
+    _resource_schema = TaxCategorySchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -59,7 +66,7 @@ class TaxCategoryModel(BaseModel):
 
 def add_tax_rate_action():
     return update_attribute_add_item(
-        "rates", "tax_rate", schemas.TaxRateSchema, generate_tax_rate_id
+        "rates", "tax_rate", TaxRateSchema, generate_tax_rate_id
     )
 
 
@@ -77,9 +84,9 @@ def replace_tax_rate_action():
 class TaxCategoryBackend(ServiceBackend):
     service_path = "tax-categories"
     model_class = TaxCategoryModel
-    _schema_draft = schemas.TaxCategorySchema
-    _schema_update = schemas.TaxCategoryUpdateSchema
-    _schema_query_response = schemas.TaxCategoryPagedQueryResponseSchema
+    _schema_draft = TaxCategorySchema
+    _schema_update = TaxCategoryUpdateSchema
+    _schema_query_response = TaxCategoryPagedQueryResponseSchema
 
     def urls(self):
         return [

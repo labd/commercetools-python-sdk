@@ -3,7 +3,13 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._shipping_method import (
+    ShippingMethodDraftSchema,
+    ShippingMethodPagedQueryResponseSchema,
+    ShippingMethodSchema,
+    ShippingMethodUpdateSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import InternalUpdateError, update_attribute
@@ -11,8 +17,8 @@ from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 class ShippingMethodsModel(BaseModel):
     _primary_type_name = "shipping-method"
-    _resource_schema = schemas.ShippingMethodSchema
-    _schema_update = schemas.ShippingMethodUpdateSchema
+    _resource_schema = ShippingMethodSchema
+    _schema_update = ShippingMethodUpdateSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -104,9 +110,7 @@ def change_tax_category(
     else:
         raise InternalUpdateError("Tax Category does not exist")
     new = copy.deepcopy(obj)
-    new["taxCategory"] = schemas.TaxCategoryResourceIdentifierSchema().dump(
-        action.tax_category
-    )
+    new["taxCategory"] = TaxCategoryResourceIdentifierSchema().dump(action.tax_category)
     return new
 
 
@@ -121,9 +125,7 @@ def add_shipping_zone(
     for zone_rate in new["zoneRates"]:
         if zone_rate["zone"]["id"] == action.zone.id:
             raise InternalUpdateError("Zone already exists")
-    new["zoneRates"].append(
-        schemas.ZoneRateSchema().dump(types.ZoneRate(zone=action.zone))
-    )
+    new["zoneRates"].append(ZoneRateSchema().dump(types.ZoneRate(zone=action.zone)))
     return new
 
 
@@ -158,7 +160,7 @@ def add_shipping_rate(
             break
     if not target_zone_rate:
         new["zoneRates"].append(
-            schemas.ZoneRateSchema().dump(
+            ZoneRateSchema().dump(
                 types.ZoneRate(zone=action.zone, shipping_rates=[shipping_rate])
             )
         )
@@ -166,7 +168,7 @@ def add_shipping_rate(
         if not target_zone_rate.get("shippingRates"):
             target_zone_rate["shippingRates"] = []
         target_zone_rate["shippingRates"].append(
-            schemas.ShippingRateSchema().dump(shipping_rate)
+            ShippingRateSchema().dump(shipping_rate)
         )
 
     return new
@@ -188,7 +190,7 @@ def remove_shipping_rate(
 
     rate_to_delete = create_shipping_rate_from_draft(action.shipping_rate)
     for shipping_rate in target_zone_rate["shippingRates"]:
-        existing_rate = schemas.ShippingRateSchema().load(shipping_rate)
+        existing_rate = ShippingRateSchema().load(shipping_rate)
         if existing_rate == rate_to_delete:
             target_zone_rate["shippingRates"].remove(shipping_rate)
             return copy.deepcopy(obj)
@@ -199,9 +201,9 @@ def remove_shipping_rate(
 class ShippingMethodsBackend(ServiceBackend):
     service_path = "shipping-methods"
     model_class = ShippingMethodsModel
-    _schema_draft = schemas.ShippingMethodDraftSchema
-    _schema_update = schemas.ShippingMethodUpdateSchema
-    _schema_query_response = schemas.ShippingMethodPagedQueryResponseSchema
+    _schema_draft = ShippingMethodDraftSchema
+    _schema_update = ShippingMethodUpdateSchema
+    _schema_query_response = ShippingMethodPagedQueryResponseSchema
 
     def urls(self):
         return [

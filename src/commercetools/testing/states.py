@@ -3,13 +3,21 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._state import (
+    StateDraftSchema,
+    StatePagedQueryResponseSchema,
+    StateReferenceSchema,
+    StateSchema,
+    StateSetRolesActionSchema,
+    StateUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute
 
 
 class StateModel(BaseModel):
-    _resource_schema = schemas.StateSchema
+    _resource_schema = StateSchema
     _primary_type_name = "state"
     _unique_values = ["key"]
 
@@ -55,7 +63,7 @@ def set_roles():
         roles = getattr(action, "roles")
 
         if roles:
-            roles = schemas.StateSetRolesActionSchema().dump(action)["roles"]
+            roles = StateSetRolesActionSchema().dump(action)["roles"]
 
         if obj["roles"] != roles:
             new = copy.deepcopy(obj)
@@ -72,7 +80,7 @@ def set_transitions():
         references = []
         if action.transitions:
             for reference in create_references_from_resources(self.model, transitions):
-                references.append(schemas.StateReferenceSchema().dump(reference))
+                references.append(StateReferenceSchema().dump(reference))
 
         if obj["transitions"] != references:
             new = copy.deepcopy(obj)
@@ -86,9 +94,9 @@ def set_transitions():
 class StatesBackend(ServiceBackend):
     service_path = "states"
     model_class = StateModel
-    _schema_draft = schemas.StateDraftSchema
-    _schema_update = schemas.StateUpdateSchema
-    _schema_query_response = schemas.StatePagedQueryResponseSchema
+    _schema_draft = StateDraftSchema
+    _schema_update = StateUpdateSchema
+    _schema_query_response = StatePagedQueryResponseSchema
 
     def urls(self):
         return [

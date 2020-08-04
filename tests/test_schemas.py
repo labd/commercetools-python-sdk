@@ -1,4 +1,6 @@
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._extension import ExtensionInputSchema
+from commercetools._schemas._project import ProjectSchema
 
 
 def test_extension_input_schema():
@@ -190,11 +192,11 @@ def test_extension_input_schema():
             },
         },
     }
-    result = schemas.ExtensionInputSchema().load(data)
+    result = ExtensionInputSchema().load(data)
     assert result.action == types.ExtensionAction.CREATE
     assert result.resource.type_id == types.ReferenceTypeId.ORDER
 
-    data = schemas.ExtensionInputSchema().dump(result)
+    data = ExtensionInputSchema().dump(result)
 
 
 def test_project_schema():
@@ -220,5 +222,5 @@ def test_project_schema():
         "version": 9,
     }
 
-    result = schemas.ProjectSchema().load(data)
-    data = schemas.ProjectSchema().dump(result)
+    result = ProjectSchema().load(data)
+    data = ProjectSchema().dump(result)

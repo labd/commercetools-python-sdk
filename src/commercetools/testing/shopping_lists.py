@@ -2,13 +2,19 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._shopping_list import (
+    ShoppingListDraftSchema,
+    ShoppingListPagedQueryResponseSchema,
+    ShoppingListSchema,
+    ShoppingListUpdateSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ShoppingListModel(BaseModel):
-    _resource_schema = schemas.ShoppingListSchema
+    _resource_schema = ShoppingListSchema
     _primary_type_name = "shopping-list"
     _unique_values = ["key"]
 
@@ -96,9 +102,9 @@ class ShoppingListModel(BaseModel):
 class ShoppingListsBackend(ServiceBackend):
     service_path = "shopping-lists"
     model_class = ShoppingListModel
-    _schema_draft = schemas.ShoppingListDraftSchema
-    _schema_update = schemas.ShoppingListUpdateSchema
-    _schema_query_response = schemas.ShoppingListPagedQueryResponseSchema
+    _schema_draft = ShoppingListDraftSchema
+    _schema_update = ShoppingListUpdateSchema
+    _schema_query_response = ShoppingListPagedQueryResponseSchema
 
     def urls(self) -> list:
         return [

@@ -2,13 +2,18 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._api_client import (
+    ApiClientDraftSchema,
+    ApiClientPagedQueryResponseSchema,
+    ApiClientSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ApiClientsModel(BaseModel):
     _primary_type_name = "api-client"
-    _resource_schema = schemas.ApiClientSchema
+    _resource_schema = ApiClientSchema
 
     def _create_from_draft(
         self, draft: types.ApiClientDraft, id: typing.Optional[str] = None
@@ -26,8 +31,8 @@ class ApiClientsModel(BaseModel):
 class ApiClientsBackend(ServiceBackend):
     service_path = "api-clients"
     model_class = ApiClientsModel
-    _schema_draft = schemas.ApiClientDraftSchema
-    _schema_query_response = schemas.ApiClientPagedQueryResponseSchema
+    _schema_draft = ApiClientDraftSchema
+    _schema_query_response = ApiClientPagedQueryResponseSchema
     _verify_version = False
 
     def urls(self):

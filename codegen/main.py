@@ -82,7 +82,7 @@ def generate():
 
     # Generate schemas.py
     ast_nodes = generate_schemas_modules(types)
-    target_path = os.path.join(path, "schemas")
+    target_path = os.path.join(path, "_schemas")
     if not os.path.exists(target_path):
         os.mkdir(target_path)
 

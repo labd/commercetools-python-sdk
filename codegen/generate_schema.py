@@ -148,7 +148,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         self._field_nodes[module_name].append(class_node)
 
     def import_resource(self, source, module, cls):
-        self.add_import_statement(source, f"commercetools.schemas.{module}", cls)
+        self.add_import_statement(source, f"commercetools._schemas.{module}", cls)
 
 
 class SchemaClassGenerator:
@@ -412,7 +412,7 @@ class SchemaClassGenerator:
         for child in type_obj.get_all_children():
             items[
                 child.discriminator_value
-            ] = f"commercetools.schemas.{child.package_name}.{child.name}Schema"
+            ] = f"commercetools._schemas.{child.package_name}.{child.name}Schema"
 
         field = type_obj.get_discriminator_field()
         self.generator.add_import_statement(
@@ -450,7 +450,7 @@ class SchemaClassGenerator:
         Generated code::
 
             marshmallow.fields.Nested(
-                nested="commercetools.schemas.{package}.{object}Schema",
+                nested="commercetools._schemas.{package}.{object}Schema",
                 unknown=marshmallow.EXCLUDE,
                 allow_none=True
             )
@@ -466,7 +466,7 @@ class SchemaClassGenerator:
                 ast.keyword(
                     arg="nested",
                     value=ast.Str(
-                        s=f"commercetools.schemas.{type_obj.package_name}.{type_obj.name}Schema",
+                        s=f"commercetools._schemas.{type_obj.package_name}.{type_obj.name}Schema",
                         kind=None,
                     ),
                 ),

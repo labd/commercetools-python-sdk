@@ -6,7 +6,14 @@ from typing import List, Optional, Union
 from marshmallow import Schema
 from marshmallow import fields as schema_fields
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._common import ImageSchema, PriceSchema
+from commercetools._schemas._product import (
+    ProductDraftSchema,
+    ProductPagedQueryResponseSchema,
+    ProductSchema,
+    ProductUpdateSchema,
+)
 from commercetools.services.products import _ProductQuerySchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
@@ -20,7 +27,7 @@ from commercetools.testing.utils import (
 
 class ProductsModel(BaseModel):
     _primary_type_name = "product"
-    _resource_schema = schemas.ProductSchema
+    _resource_schema = ProductSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -210,7 +217,7 @@ def _set_attribute_action():
                     return new
 
             # Attribute not found, will add it
-            attr_schema = schemas.AttributeSchema()
+            attr_schema = AttributeSchema()
             variant["attributes"].append(
                 attr_schema.dump(types.Attribute(name=action.name, value=action.value))
             )
@@ -232,7 +239,7 @@ def _add_variant_action():
                 assets=action.assets,
             )
         )
-        schema = schemas.ProductVariantSchema()
+        schema = ProductVariantSchema()
 
         new = copy.deepcopy(obj)
         target_obj = _get_target_obj(new, staged=getattr(action, "staged", True))
@@ -287,7 +294,7 @@ def _set_product_prices():
             price = convert_draft_price(price_draft)
             prices.append(price)
 
-        schema = schemas.PriceSchema()
+        schema = PriceSchema()
         for variant in get_product_variants(target_obj):
             if variant["sku"] == action.sku:
                 variant["prices"] = schema.dump(prices, many=True)
@@ -306,7 +313,7 @@ def _change_price():
             staged = True
         target_obj = _get_target_obj(new, staged)
         changed_price = convert_draft_price(action.price, action.price_id)
-        schema = schemas.PriceSchema()
+        schema = PriceSchema()
 
         found_price = True
         for variant in get_product_variants(target_obj):
@@ -332,7 +339,7 @@ def _add_price():
             staged = True
         target_obj = _get_target_obj(new, staged)
         new_price = convert_draft_price(action.price)
-        schema = schemas.PriceSchema()
+        schema = PriceSchema()
 
         found_sku = False
         for variant in get_product_variants(target_obj):
@@ -362,10 +369,10 @@ class UploadImageQuerySchema(Schema):
 class ProductsBackend(ServiceBackend):
     service_path = "products"
     model_class = ProductsModel
-    _schema_draft = schemas.ProductDraftSchema
-    _schema_update = schemas.ProductUpdateSchema
+    _schema_draft = ProductDraftSchema
+    _schema_update = ProductUpdateSchema
     _schema_query_params = _ProductQuerySchema
-    _schema_query_response = schemas.ProductPagedQueryResponseSchema
+    _schema_query_response = ProductPagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -405,7 +412,7 @@ class ProductsBackend(ServiceBackend):
         variant = _get_variant(target, sku=params["sku"])
         if not variant["images"]:
             variant["images"] = []
-        image_schema = schemas.ImageSchema()
+        image_schema = ImageSchema()
         variant["images"].append(
             image_schema.dump(
                 types.Image(url=f"cdn.commercetools.local/detail-{filename}")

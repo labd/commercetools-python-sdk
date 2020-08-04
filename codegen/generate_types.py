@@ -341,10 +341,6 @@ class _ResourceClassGenerator:
             decorator_list=[],
             body=[],
         )
-        # Docstring
-        doc_string = f"Corresponding marshmallow schema is :class:`commercetools.schemas.{self.resource.name}Schema`."
-        class_node.body.append(ast.Expr(value=ast.Str(s=doc_string, kind=None)))
-
         # Add the properties for the attr class
         for prop in self.resource.properties:
             node = self._create_property(prop)
@@ -540,7 +536,7 @@ class _ResourceClassGenerator:
                         ast.keyword(
                             arg=name,
                             value=ast.Str(
-                                s=self.resource.discriminator_value, kind=None,
+                                s=self.resource.discriminator_value, kind=None
                             ),
                         )
                     )

@@ -2,14 +2,20 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._cart_discount import (
+    CartDiscountDraftSchema,
+    CartDiscountPagedQueryResponseSchema,
+    CartDiscountSchema,
+    CartDiscountUpdateSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute, update_enum_attribute
 
 
 class CartDiscountsModel(BaseModel):
-    _resource_schema = schemas.CartDiscountSchema
+    _resource_schema = CartDiscountSchema
     _primary_type_name = "cart-discounts"
     _unique_values = ["key"]
 
@@ -42,9 +48,9 @@ class CartDiscountsModel(BaseModel):
 class CartDiscountsBackend(ServiceBackend):
     service_path = "cart-discounts"
     model_class = CartDiscountsModel
-    _schema_draft = schemas.CartDiscountDraftSchema
-    _schema_update = schemas.CartDiscountUpdateSchema
-    _schema_query_response = schemas.CartDiscountPagedQueryResponseSchema
+    _schema_draft = CartDiscountDraftSchema
+    _schema_update = CartDiscountUpdateSchema
+    _schema_query_response = CartDiscountPagedQueryResponseSchema
 
     def urls(self):
         return [

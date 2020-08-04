@@ -20,7 +20,7 @@ codegen_requires = [
     "astor==0.8.1",
     "attrs>=18.2.0",
     "black==18.9b0",
-    "isort[pyproject]==4.3.21",
+    "isort[pyproject]==5.2.2",
     "PyYAML==3.13",
 ]
 

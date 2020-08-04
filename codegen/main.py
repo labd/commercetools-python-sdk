@@ -5,7 +5,7 @@ from pathlib import Path
 import astor
 import astunparse
 import black
-from isort import SortImports
+import isort.api
 
 from codegen.generate_schema import SchemaModuleGenerator
 from codegen.generate_services import ServiceModuleGenerator
@@ -100,7 +100,9 @@ def write_module(filename, ast):
 
 
 def reformat_code(filename):
-    SortImports(filename)
+
+    config = isort.api.Config()
+    isort.api.sort_file(filename, config=config)
 
     src = Path(filename)
     report = black.Report()

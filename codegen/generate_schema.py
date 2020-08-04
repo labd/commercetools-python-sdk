@@ -65,13 +65,7 @@ class SchemaModuleGenerator(AbstractModuleGenerator):
         return result
 
     def generate_init_module(self, modules):
-        nodes = [
-            ast.ImportFrom(
-                module=module, names=[ast.alias(name="*  # noqa", asname=None)], level=1
-            )
-            for module in sorted(modules)
-        ]
-        return ast.Module(body=nodes)
+        return ast.Module(body=[])
 
     def add_type_definition(self, resource):
         """Create a class definition"""
@@ -277,7 +271,7 @@ class SchemaClassGenerator:
         node = self._get_property_field(prop)
 
         if prop.many:
-            if node.func.id == "marshmallow.fields.Nested":
+            if node.func.id == "helpers.LazyNestedField":
                 node.keywords.append(
                     ast.keyword(
                         arg="many", value=ast.NameConstant(value=True, kind=None)
@@ -462,8 +456,11 @@ class SchemaClassGenerator:
             )
 
         """
+        self.generator.add_import_statement(
+            self.resource.package_name, "commercetools", "helpers"
+        )
         return ast.Call(
-            func=ast.Name(id="marshmallow.fields.Nested"),
+            func=ast.Name(id="helpers.LazyNestedField"),
             args=[],
             keywords=[
                 ast.keyword(

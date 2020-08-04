@@ -1,8 +1,9 @@
+import importlib
 import typing
 
 from marshmallow import class_registry, fields, missing, post_dump
-from marshmallow.exceptions import StringNotCollectionError, ValidationError
-from marshmallow.fields import Field
+from marshmallow.exceptions import StringNotCollectionError, ValidationError, RegistryError
+from marshmallow.fields import Field, Nested
 from marshmallow.utils import RAISE, is_collection
 from marshmallow.utils import missing as missing_
 
@@ -30,7 +31,6 @@ class MappingField(Field):
         for key, value in values.items():
             result["var.%s" % key] = value
         return result
-
 
 
 class RemoveEmptyValuesMixin:
@@ -84,6 +84,18 @@ class RegexField(Field):
             else:
                 new[k] = v
         return new
+
+
+class LazyNestedField(Nested):
+
+    @property
+    def schema(self):
+        try:
+            return super().schema
+        except RegistryError:
+            names = self.nested.rsplit(".", 1)
+            importlib.import_module(names[0])
+            return super().schema
 
 
 class Discriminator(Field):

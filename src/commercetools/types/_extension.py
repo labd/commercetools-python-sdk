@@ -32,8 +32,6 @@ __all__ = [
 
 
 class Extension(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -110,8 +108,6 @@ class ExtensionAction(enum.Enum):
 
 
 class ExtensionDestination(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionDestinationSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -124,8 +120,6 @@ class ExtensionDestination(_BaseType):
 
 
 class ExtensionDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionDraftSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`commercetools.types.ExtensionDestination`
@@ -157,8 +151,6 @@ class ExtensionDraft(_BaseType):
 
 
 class ExtensionHttpDestinationAuthentication(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionHttpDestinationAuthenticationSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -171,8 +163,6 @@ class ExtensionHttpDestinationAuthentication(_BaseType):
 
 
 class ExtensionInput(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionInputSchema`."""
-
     #: :class:`commercetools.types.ExtensionAction`
     action: "ExtensionAction"
     #: :class:`commercetools.types.Reference`
@@ -190,8 +180,6 @@ class ExtensionInput(_BaseType):
 
 
 class ExtensionPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -234,8 +222,6 @@ class ExtensionResourceTypeId(enum.Enum):
 
 
 class ExtensionTrigger(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionTriggerSchema`."""
-
     #: :class:`commercetools.types.ExtensionResourceTypeId` `(Named` ``resourceTypeId`` `in Commercetools)`
     resource_type_id: "ExtensionResourceTypeId"
     #: List of :class:`commercetools.types.ExtensionAction`
@@ -259,8 +245,6 @@ class ExtensionTrigger(_BaseType):
 
 
 class ExtensionUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -276,8 +260,6 @@ class ExtensionUpdate(_BaseType):
 
 
 class ExtensionUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -290,8 +272,6 @@ class ExtensionUpdateAction(_BaseType):
 
 
 class ExtensionAWSLambdaDestination(ExtensionDestination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAWSLambdaDestinationSchema`."""
-
     #: :class:`str`
     arn: str
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
@@ -322,8 +302,6 @@ class ExtensionAWSLambdaDestination(ExtensionDestination):
 class ExtensionAuthorizationHeaderAuthentication(
     ExtensionHttpDestinationAuthentication
 ):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAuthorizationHeaderAuthenticationSchema`."""
-
     #: :class:`str` `(Named` ``headerValue`` `in Commercetools)`
     header_value: str
 
@@ -339,8 +317,6 @@ class ExtensionAuthorizationHeaderAuthentication(
 
 
 class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthentication):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionAzureFunctionsAuthenticationSchema`."""
-
     #: :class:`str`
     key: str
 
@@ -356,8 +332,6 @@ class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthenticati
 
 
 class ExtensionChangeDestinationAction(ExtensionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionChangeDestinationActionSchema`."""
-
     #: :class:`commercetools.types.ExtensionDestination`
     destination: "ExtensionDestination"
 
@@ -375,8 +349,6 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
 
 
 class ExtensionChangeTriggersAction(ExtensionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionChangeTriggersActionSchema`."""
-
     #: List of :class:`commercetools.types.ExtensionTrigger`
     triggers: typing.List["ExtensionTrigger"]
 
@@ -394,8 +366,6 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
 
 
 class ExtensionHttpDestination(ExtensionDestination):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionHttpDestinationSchema`."""
-
     #: :class:`str`
     url: str
     #: Optional :class:`commercetools.types.ExtensionHttpDestinationAuthentication`
@@ -421,8 +391,6 @@ class ExtensionHttpDestination(ExtensionDestination):
 
 
 class ExtensionSetKeyAction(ExtensionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -435,8 +403,6 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
 
 
 class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ExtensionSetTimeoutInMsActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
     timeout_in_ms: typing.Optional[int]
 

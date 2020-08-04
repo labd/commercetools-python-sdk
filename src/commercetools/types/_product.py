@@ -119,8 +119,6 @@ __all__ = [
 
 
 class Attribute(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSchema`."""
-
     #: :class:`str`
     name: str
     #: :class:`typing.Any`
@@ -136,8 +134,6 @@ class Attribute(_BaseType):
 
 
 class AttributeValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeValueSchema`."""
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -153,8 +149,6 @@ class CategoryOrderHints(typing.Dict[str, str]):
 
 
 class FacetResult(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultSchema`."""
-
     #: :class:`commercetools.types.FacetTypes`
     type: "FacetTypes"
 
@@ -167,8 +161,6 @@ class FacetResult(_BaseType):
 
 
 class FacetResultRange(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultRangeSchema`."""
-
     #: :class:`int` `(Named` ``from`` `in Commercetools)`
     from_: int
     #: :class:`str` `(Named` ``fromStr`` `in Commercetools)`
@@ -235,8 +227,6 @@ class FacetResultRange(_BaseType):
 
 
 class FacetResultTerm(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.FacetResultTermSchema`."""
-
     #: :class:`typing.Any`
     term: typing.Any
     #: :class:`int`
@@ -276,8 +266,6 @@ class FacetTypes(enum.Enum):
 
 
 class Product(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -359,8 +347,6 @@ class Product(BaseResource):
 
 
 class ProductCatalogData(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCatalogDataSchema`."""
-
     #: :class:`bool`
     published: bool
     #: :class:`commercetools.types.ProductData`
@@ -392,8 +378,6 @@ class ProductCatalogData(_BaseType):
 
 
 class ProductData(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDataSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
     #: List of :class:`commercetools.types.CategoryReference`
@@ -465,8 +449,6 @@ class ProductData(_BaseType):
 
 
 class ProductDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDraftSchema`."""
-
     #: :class:`commercetools.types.ProductTypeResourceIdentifier` `(Named` ``productType`` `in Commercetools)`
     product_type: "ProductTypeResourceIdentifier"
     #: :class:`commercetools.types.LocalizedString`
@@ -563,8 +545,6 @@ class ProductDraft(_BaseType):
 
 
 class ProductPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -600,8 +580,6 @@ class ProductPagedQueryResponse(_BaseType):
 
 
 class ProductProjection(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -727,8 +705,6 @@ class ProductProjection(BaseResource):
 
 
 class ProductProjectionPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -764,8 +740,6 @@ class ProductProjectionPagedQueryResponse(_BaseType):
 
 
 class ProductProjectionPagedSearchResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductProjectionPagedSearchResponseSchema`."""
-
     #: :class:`int`
     count: int
     #: Optional :class:`int`
@@ -801,8 +775,6 @@ class ProductProjectionPagedSearchResponse(_BaseType):
 
 
 class ProductReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Product`
     obj: typing.Optional["Product"]
 
@@ -825,8 +797,6 @@ class ProductReference(Reference):
 
 
 class ProductResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -845,8 +815,6 @@ class ProductResourceIdentifier(ResourceIdentifier):
 
 
 class ProductUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -862,8 +830,6 @@ class ProductUpdate(_BaseType):
 
 
 class ProductUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -876,8 +842,6 @@ class ProductUpdateAction(_BaseType):
 
 
 class ProductVariant(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantSchema`."""
-
     #: :class:`int`
     id: int
     #: Optional :class:`str`
@@ -954,8 +918,6 @@ class ProductVariant(_BaseType):
 
 
 class ProductVariantAvailability(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantAvailabilitySchema`."""
-
     #: Optional :class:`bool` `(Named` ``isOnStock`` `in Commercetools)`
     is_on_stock: typing.Optional[bool]
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
@@ -992,8 +954,6 @@ class ProductVariantAvailability(_BaseType):
 
 
 class ProductVariantChannelAvailability(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantChannelAvailabilitySchema`."""
-
     #: Optional :class:`bool` `(Named` ``isOnStock`` `in Commercetools)`
     is_on_stock: typing.Optional[bool]
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
@@ -1030,8 +990,6 @@ class ProductVariantChannelAvailabilityMap(
 
 
 class ProductVariantDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDraftSchema`."""
-
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`str`
@@ -1078,8 +1036,6 @@ class ProductVariantDraft(_BaseType):
 
 
 class SearchKeyword(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SearchKeywordSchema`."""
-
     #: :class:`str`
     text: str
     #: Optional :class:`commercetools.types.SuggestTokenizer` `(Named` ``suggestTokenizer`` `in Commercetools)`
@@ -1108,8 +1064,6 @@ class SearchKeywords(typing.Dict[str, "SearchKeyword"]):
 
 
 class SuggestTokenizer(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestTokenizerSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -1122,8 +1076,6 @@ class SuggestTokenizer(_BaseType):
 
 
 class Suggestion(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SuggestionSchema`."""
-
     #: :class:`str`
     text: str
 
@@ -1152,8 +1104,6 @@ class TermFacetResultType(enum.Enum):
 
 
 class CustomTokenizer(SuggestTokenizer):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomTokenizerSchema`."""
-
     #: List of :class:`str`
     inputs: typing.List[str]
 
@@ -1166,8 +1116,6 @@ class CustomTokenizer(SuggestTokenizer):
 
 
 class FilteredFacetResult(FacetResult):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.FilteredFacetResultSchema`."""
-
     #: :class:`int`
     count: int
     #: Optional :class:`int` `(Named` ``productCount`` `in Commercetools)`
@@ -1193,8 +1141,6 @@ class FilteredFacetResult(FacetResult):
 
 
 class ProductAddAssetAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddAssetActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1238,8 +1184,6 @@ class ProductAddAssetAction(ProductUpdateAction):
 
 
 class ProductAddExternalImageAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddExternalImageActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1272,8 +1216,6 @@ class ProductAddExternalImageAction(ProductUpdateAction):
 
 
 class ProductAddPriceAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddPriceActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1306,8 +1248,6 @@ class ProductAddPriceAction(ProductUpdateAction):
 
 
 class ProductAddToCategoryAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddToCategoryActionSchema`."""
-
     #: :class:`commercetools.types.CategoryResourceIdentifier`
     category: "CategoryResourceIdentifier"
     #: Optional :class:`str` `(Named` ``orderHint`` `in Commercetools)`
@@ -1336,8 +1276,6 @@ class ProductAddToCategoryAction(ProductUpdateAction):
 
 
 class ProductAddVariantAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddVariantActionSchema`."""
-
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`str`
@@ -1391,8 +1329,6 @@ class ProductAddVariantAction(ProductUpdateAction):
 
 
 class ProductChangeAssetNameAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeAssetNameActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1441,8 +1377,6 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
 
 
 class ProductChangeAssetOrderAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeAssetOrderActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1475,8 +1409,6 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
 
 
 class ProductChangeMasterVariantAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeMasterVariantActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1505,8 +1437,6 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
 
 
 class ProductChangeNameAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
     #: Optional :class:`bool`
@@ -1532,8 +1462,6 @@ class ProductChangeNameAction(ProductUpdateAction):
 
 
 class ProductChangePriceAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangePriceActionSchema`."""
-
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
     price_id: str
     #: :class:`commercetools.types.PriceDraft`
@@ -1562,8 +1490,6 @@ class ProductChangePriceAction(ProductUpdateAction):
 
 
 class ProductChangeSlugAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductChangeSlugActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
     #: Optional :class:`bool`
@@ -1589,8 +1515,6 @@ class ProductChangeSlugAction(ProductUpdateAction):
 
 
 class ProductLegacySetSkuAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductLegacySetSkuActionSchema`."""
-
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -1616,8 +1540,6 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
 
 
 class ProductMoveImageToPositionAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductMoveImageToPositionActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1661,8 +1583,6 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
 
 
 class ProductPublishAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishActionSchema`."""
-
     #: Optional :class:`commercetools.types.ProductPublishScope`
     scope: typing.Optional["ProductPublishScope"]
 
@@ -1680,8 +1600,6 @@ class ProductPublishAction(ProductUpdateAction):
 
 
 class ProductRemoveAssetAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveAssetActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1725,8 +1643,6 @@ class ProductRemoveAssetAction(ProductUpdateAction):
 
 
 class ProductRemoveFromCategoryAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveFromCategoryActionSchema`."""
-
     #: :class:`commercetools.types.CategoryResourceIdentifier`
     category: "CategoryResourceIdentifier"
     #: Optional :class:`bool`
@@ -1752,8 +1668,6 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
 
 
 class ProductRemoveImageAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveImageActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1786,8 +1700,6 @@ class ProductRemoveImageAction(ProductUpdateAction):
 
 
 class ProductRemovePriceAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovePriceActionSchema`."""
-
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
     price_id: str
     #: Optional :class:`bool`
@@ -1813,8 +1725,6 @@ class ProductRemovePriceAction(ProductUpdateAction):
 
 
 class ProductRemoveVariantAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemoveVariantActionSchema`."""
-
     #: Optional :class:`int`
     id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1845,8 +1755,6 @@ class ProductRemoveVariantAction(ProductUpdateAction):
 
 
 class ProductRevertStagedChangesAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedChangesActionSchema`."""
-
     def __init__(self, *, action: str = None) -> None:
         super().__init__(action="revertStagedChanges")
 
@@ -1855,8 +1763,6 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
 
 
 class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertStagedVariantChangesActionSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
 
@@ -1872,8 +1778,6 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
 
 
 class ProductSetAssetCustomFieldAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetCustomFieldActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1927,8 +1831,6 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
 
 
 class ProductSetAssetCustomTypeAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetCustomTypeActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1982,8 +1884,6 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
 
 
 class ProductSetAssetDescriptionAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetDescriptionActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2032,8 +1932,6 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetAssetKeyAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetKeyActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2077,8 +1975,6 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
 
 
 class ProductSetAssetSourcesAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetSourcesActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2127,8 +2023,6 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
 
 
 class ProductSetAssetTagsAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAssetTagsActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2177,8 +2071,6 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
 
 
 class ProductSetAttributeAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAttributeActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2222,8 +2114,6 @@ class ProductSetAttributeAction(ProductUpdateAction):
 
 
 class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetAttributeInAllVariantsActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -2252,8 +2142,6 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
 
 
 class ProductSetCategoryOrderHintAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetCategoryOrderHintActionSchema`."""
-
     #: :class:`str` `(Named` ``categoryId`` `in Commercetools)`
     category_id: str
     #: Optional :class:`str` `(Named` ``orderHint`` `in Commercetools)`
@@ -2282,8 +2170,6 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
 
 
 class ProductSetDescriptionAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
     #: Optional :class:`bool`
@@ -2309,8 +2195,6 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetDiscountedPriceActionSchema`."""
-
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
     price_id: str
     #: Optional :class:`bool`
@@ -2339,8 +2223,6 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
 
 
 class ProductSetImageLabelAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetImageLabelActionSchema`."""
-
     #: Optional :class:`str`
     sku: typing.Optional[str]
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
@@ -2384,8 +2266,6 @@ class ProductSetImageLabelAction(ProductUpdateAction):
 
 
 class ProductSetKeyAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -2398,8 +2278,6 @@ class ProductSetKeyAction(ProductUpdateAction):
 
 
 class ProductSetMetaDescriptionAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetMetaDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaDescription`` `in Commercetools)`
     meta_description: typing.Optional["LocalizedString"]
     #: Optional :class:`bool`
@@ -2424,8 +2302,6 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetMetaKeywordsAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetMetaKeywordsActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaKeywords`` `in Commercetools)`
     meta_keywords: typing.Optional["LocalizedString"]
     #: Optional :class:`bool`
@@ -2450,8 +2326,6 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
 
 
 class ProductSetMetaTitleAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetMetaTitleActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
     meta_title: typing.Optional["LocalizedString"]
     #: Optional :class:`bool`
@@ -2477,8 +2351,6 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
 
 
 class ProductSetPricesAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetPricesActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2511,8 +2383,6 @@ class ProductSetPricesAction(ProductUpdateAction):
 
 
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomFieldActionSchema`."""
-
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
     price_id: str
     #: Optional :class:`bool`
@@ -2545,8 +2415,6 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 
 
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductPriceCustomTypeActionSchema`."""
-
     #: :class:`str` `(Named` ``priceId`` `in Commercetools)`
     price_id: str
     #: Optional :class:`bool`
@@ -2579,8 +2447,6 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
 
 
 class ProductSetProductVariantKeyAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetProductVariantKeyActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: typing.Optional[int]
     #: Optional :class:`str`
@@ -2613,8 +2479,6 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
 
 
 class ProductSetSearchKeywordsAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSearchKeywordsActionSchema`."""
-
     #: :class:`commercetools.types.SearchKeywords` `(Named` ``searchKeywords`` `in Commercetools)`
     search_keywords: "SearchKeywords"
     #: Optional :class:`bool`
@@ -2639,8 +2503,6 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 
 
 class ProductSetSkuAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetSkuActionSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
     #: Optional :class:`str`
@@ -2671,8 +2533,6 @@ class ProductSetSkuAction(ProductUpdateAction):
 
 
 class ProductSetTaxCategoryAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSetTaxCategoryActionSchema`."""
-
     #: Optional :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
 
@@ -2693,8 +2553,6 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
 
 
 class ProductTransitionStateAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTransitionStateActionSchema`."""
-
     #: Optional :class:`commercetools.types.StateResourceIdentifier`
     state: typing.Optional["StateResourceIdentifier"]
     #: Optional :class:`bool`
@@ -2720,8 +2578,6 @@ class ProductTransitionStateAction(ProductUpdateAction):
 
 
 class ProductUnpublishAction(ProductUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishActionSchema`."""
-
     def __init__(self, *, action: str = None) -> None:
         super().__init__(action="unpublish")
 
@@ -2730,8 +2586,6 @@ class ProductUnpublishAction(ProductUpdateAction):
 
 
 class RangeFacetResult(FacetResult):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.RangeFacetResultSchema`."""
-
     #: List of :class:`commercetools.types.FacetResultRange`
     ranges: typing.List["FacetResultRange"]
 
@@ -2749,8 +2603,6 @@ class RangeFacetResult(FacetResult):
 
 
 class TermFacetResult(FacetResult):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TermFacetResultSchema`."""
-
     #: :class:`commercetools.types.TermFacetResultType` `(Named` ``dataType`` `in Commercetools)`
     data_type: "TermFacetResultType"
     #: :class:`int`
@@ -2794,8 +2646,6 @@ class TermFacetResult(FacetResult):
 
 
 class WhitespaceTokenizer(SuggestTokenizer):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.WhitespaceTokenizerSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="whitespace")
 

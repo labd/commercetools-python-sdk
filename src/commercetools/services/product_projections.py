@@ -4,8 +4,17 @@ import typing
 import marshmallow
 from marshmallow import fields
 
-from commercetools import schemas, types
+from commercetools._schemas._product import (
+    ProductProjectionPagedQueryResponseSchema,
+    ProductProjectionPagedSearchResponseSchema,
+    ProductProjectionSchema,
+)
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.types._product import (
+    ProductProjection,
+    ProductProjectionPagedQueryResponse,
+    ProductProjectionPagedSearchResponse,
+)
 from commercetools.typing import OptionalListStr
 
 from . import abstract, traits
@@ -110,7 +119,7 @@ class ProductProjectionService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         staged: bool = None,
-    ) -> types.ProductProjection:
+    ) -> ProductProjection:
         """Gets the current or staged representation of a product in a catalog by
         ID.
 
@@ -134,7 +143,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-projections/{id}",
             params=params,
-            schema_cls=schemas.ProductProjectionSchema,
+            schema_cls=ProductProjectionSchema,
         )
 
     def get_by_key(
@@ -149,7 +158,7 @@ class ProductProjectionService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         staged: bool = None,
-    ) -> types.ProductProjection:
+    ) -> ProductProjection:
         """Gets the current or staged representation of a product found by Key.
 
         When used with an API client that has the
@@ -172,7 +181,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-projections/key={key}",
             params=params,
-            schema_cls=schemas.ProductProjectionSchema,
+            schema_cls=ProductProjectionSchema,
         )
 
     def query(
@@ -192,7 +201,7 @@ class ProductProjectionService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         staged: bool = None,
-    ) -> types.ProductProjectionPagedQueryResponse:
+    ) -> ProductProjectionPagedQueryResponse:
         """You can use the product projections query endpoint to get the current
         or staged representations of Products.
 
@@ -225,7 +234,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-projections",
             params=params,
-            schema_cls=schemas.ProductProjectionPagedQueryResponseSchema,
+            schema_cls=ProductProjectionPagedQueryResponseSchema,
         )
 
     def search(
@@ -251,7 +260,7 @@ class ProductProjectionService(abstract.AbstractService):
         filter_query: str = None,
         facet: str = None,
         text: typing.Dict[str, str] = None,
-    ) -> types.ProductProjectionPagedSearchResponse:
+    ) -> ProductProjectionPagedSearchResponse:
         """Search Product Projection
 
         This endpoint provides high performance search queries over
@@ -290,7 +299,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-projections/search",
             params=params,
-            schema_cls=schemas.ProductProjectionPagedSearchResponseSchema,
+            schema_cls=ProductProjectionPagedSearchResponseSchema,
         )
 
     def suggest(
@@ -303,7 +312,7 @@ class ProductProjectionService(abstract.AbstractService):
         fuzzy: bool = None,
         staged: bool = None,
         search_keywords: typing.Dict[str, str] = None,
-    ) -> types.ProductProjection:
+    ) -> ProductProjection:
         """The source of data for suggestions is the searchKeyword field in a
         product
         """
@@ -322,5 +331,5 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-projections/suggest",
             params=params,
-            schema_cls=schemas.ProductProjectionSchema,
+            schema_cls=ProductProjectionSchema,
         )

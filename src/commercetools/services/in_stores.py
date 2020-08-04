@@ -3,8 +3,62 @@ import typing
 
 from marshmallow import fields
 
-from commercetools import schemas, types
+from commercetools._schemas._cart import (
+    CartDraftSchema,
+    CartPagedQueryResponseSchema,
+    CartSchema,
+    CartUpdateSchema,
+)
+from commercetools._schemas._customer import (
+    CustomerChangePasswordSchema,
+    CustomerCreateEmailTokenSchema,
+    CustomerCreatePasswordResetTokenSchema,
+    CustomerDraftSchema,
+    CustomerEmailVerifySchema,
+    CustomerPagedQueryResponseSchema,
+    CustomerResetPasswordSchema,
+    CustomerSchema,
+    CustomerSignInResultSchema,
+    CustomerSigninSchema,
+    CustomerTokenSchema,
+    CustomerUpdateSchema,
+)
+from commercetools._schemas._order import (
+    OrderFromCartDraftSchema,
+    OrderPagedQueryResponseSchema,
+    OrderSchema,
+    OrderUpdateSchema,
+)
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.types._cart import (
+    Cart,
+    CartDraft,
+    CartPagedQueryResponse,
+    CartUpdate,
+    CartUpdateAction,
+)
+from commercetools.types._customer import (
+    Customer,
+    CustomerChangePassword,
+    CustomerCreateEmailToken,
+    CustomerCreatePasswordResetToken,
+    CustomerDraft,
+    CustomerEmailVerify,
+    CustomerPagedQueryResponse,
+    CustomerResetPassword,
+    CustomerSignin,
+    CustomerSignInResult,
+    CustomerToken,
+    CustomerUpdate,
+    CustomerUpdateAction,
+)
+from commercetools.types._order import (
+    Order,
+    OrderFromCartDraft,
+    OrderPagedQueryResponse,
+    OrderUpdate,
+    OrderUpdateAction,
+)
 from commercetools.typing import OptionalListStr
 
 from . import abstract, traits
@@ -32,7 +86,7 @@ class _In_StoreDeleteSchema(
 class In_StoreService(abstract.AbstractService):
     def cart_get_by_customer_id(
         self, store_key, customer_id: str, *, expand: OptionalListStr = None
-    ) -> types.Cart:
+    ) -> Cart:
         """Retrieves the active cart of the customer that has been modified most
         recently in a specific Store.
 
@@ -47,12 +101,12 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/carts/customer-id={customer_id}",
             params=params,
-            schema_cls=schemas.CartSchema,
+            schema_cls=CartSchema,
         )
 
     def cart_get_by_id(
         self, store_key, id: str, *, expand: OptionalListStr = None
-    ) -> types.Cart:
+    ) -> Cart:
         """Returns a cart by its ID from a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. If the cart exists
@@ -66,22 +120,22 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/carts/{id}",
             params=params,
-            schema_cls=schemas.CartSchema,
+            schema_cls=CartSchema,
         )
 
     def customer_get_by_email_token(
         self, store_key, email_token: str, *, expand: OptionalListStr = None
-    ) -> types.Customer:
+    ) -> Customer:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/email-token={email_token}",
             params=params,
-            schema_cls=schemas.CustomerSchema,
+            schema_cls=CustomerSchema,
         )
 
     def customer_get_by_id(
         self, store_key, id: str, *, expand: OptionalListStr = None
-    ) -> types.Customer:
+    ) -> Customer:
         """Returns a customer by its ID from a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. It also considers
@@ -93,12 +147,12 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/{id}",
             params=params,
-            schema_cls=schemas.CustomerSchema,
+            schema_cls=CustomerSchema,
         )
 
     def customer_get_by_key(
         self, store_key, key: str, *, expand: OptionalListStr = None
-    ) -> types.Customer:
+    ) -> Customer:
         """Returns a customer by its Key from a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. It also considers
@@ -110,22 +164,22 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/key={key}",
             params=params,
-            schema_cls=schemas.CustomerSchema,
+            schema_cls=CustomerSchema,
         )
 
     def customer_get_by_password_token(
         self, store_key, password_token: str, *, expand: OptionalListStr = None
-    ) -> types.Customer:
+    ) -> Customer:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/password-token={password_token}",
             params=params,
-            schema_cls=schemas.CustomerSchema,
+            schema_cls=CustomerSchema,
         )
 
     def order_get_by_id(
         self, store_key, id: str, *, expand: OptionalListStr = None
-    ) -> types.Order:
+    ) -> Order:
         """Returns an order by its ID from a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. If the order exists
@@ -137,12 +191,12 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/orders/{id}",
             params=params,
-            schema_cls=schemas.OrderSchema,
+            schema_cls=OrderSchema,
         )
 
     def order_get_by_order_number(
         self, store_key, order_number: str, *, expand: OptionalListStr = None
-    ) -> types.Order:
+    ) -> Order:
         """Returns an order by its order number from a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. If the order exists
@@ -156,7 +210,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/orders/order-number={order_number}",
             params=params,
-            schema_cls=schemas.OrderSchema,
+            schema_cls=OrderSchema,
         )
 
     def cart_query(
@@ -171,7 +225,7 @@ class In_StoreService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
         customer_id: str = None,
-    ) -> types.CartPagedQueryResponse:
+    ) -> CartPagedQueryResponse:
         """Queries carts in a specific Store.
 
         The {storeKey} path parameter maps to a Store's key.  A shopping cart
@@ -193,7 +247,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/carts",
             params=params,
-            schema_cls=schemas.CartPagedQueryResponseSchema,
+            schema_cls=CartPagedQueryResponseSchema,
         )
 
     def customer_query(
@@ -207,7 +261,7 @@ class In_StoreService(abstract.AbstractService):
         with_total: bool = None,
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
-    ) -> types.CustomerPagedQueryResponse:
+    ) -> CustomerPagedQueryResponse:
         """A customer is a person purchasing products. customers, Orders, Comments
         and Reviews can be associated to a customer.
         """
@@ -226,7 +280,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers",
             params=params,
-            schema_cls=schemas.CustomerPagedQueryResponseSchema,
+            schema_cls=CustomerPagedQueryResponseSchema,
         )
 
     def order_query(
@@ -240,7 +294,7 @@ class In_StoreService(abstract.AbstractService):
         with_total: bool = None,
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
-    ) -> types.OrderPagedQueryResponse:
+    ) -> OrderPagedQueryResponse:
         """Queries orders in a specific Store.
 
         The {storeKey} path parameter maps to a Store's key.  An order can be
@@ -261,12 +315,12 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/orders",
             params=params,
-            schema_cls=schemas.OrderPagedQueryResponseSchema,
+            schema_cls=OrderPagedQueryResponseSchema,
         )
 
     def cart_create(
-        self, store_key, draft: types.CartDraft, *, expand: OptionalListStr = None
-    ) -> types.Cart:
+        self, store_key, draft: CartDraft, *, expand: OptionalListStr = None
+    ) -> Cart:
         """Creates a cart in the store specified by {storeKey}.
 
         The {storeKey} path parameter maps to a Store's key. When using this
@@ -281,13 +335,13 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/carts",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.CartDraftSchema,
-            response_schema_cls=schemas.CartSchema,
+            request_schema_cls=CartDraftSchema,
+            response_schema_cls=CartSchema,
         )
 
     def customer_create(
-        self, store_key, draft: types.CustomerDraft, *, expand: OptionalListStr = None
-    ) -> types.CustomerSignInResult:
+        self, store_key, draft: CustomerDraft, *, expand: OptionalListStr = None
+    ) -> CustomerSignInResult:
         """Creates a customer in a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. When using this
@@ -307,17 +361,13 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.CustomerDraftSchema,
-            response_schema_cls=schemas.CustomerSignInResultSchema,
+            request_schema_cls=CustomerDraftSchema,
+            response_schema_cls=CustomerSignInResultSchema,
         )
 
     def order_create(
-        self,
-        store_key,
-        draft: types.OrderFromCartDraft,
-        *,
-        expand: OptionalListStr = None,
-    ) -> types.Order:
+        self, store_key, draft: OrderFromCartDraft, *, expand: OptionalListStr = None
+    ) -> Order:
         """Creates an order from a Cart from a specific Store.
 
         The {storeKey} path parameter maps to a Store's key. When using this
@@ -332,8 +382,8 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/orders",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.OrderFromCartDraftSchema,
-            response_schema_cls=schemas.OrderSchema,
+            request_schema_cls=OrderFromCartDraftSchema,
+            response_schema_cls=OrderSchema,
         )
 
     def cart_update_by_id(
@@ -341,11 +391,11 @@ class In_StoreService(abstract.AbstractService):
         store_key,
         id: str,
         version: int,
-        actions: typing.List[types.CartUpdateAction],
+        actions: typing.List[CartUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Cart:
+    ) -> Cart:
         """Updates a cart in the store specified by {storeKey}.
 
         The {storeKey} path parameter maps to a Store's key. If the cart exists
@@ -354,13 +404,13 @@ class In_StoreService(abstract.AbstractService):
         ResourceNotFound error.
         """
         params = self._serialize_params({"expand": expand}, _In_StoreUpdateSchema)
-        update_action = types.CartUpdate(version=version, actions=actions)
+        update_action = CartUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"in-store/key={store_key}/carts/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.CartUpdateSchema,
-            response_schema_cls=schemas.CartSchema,
+            request_schema_cls=CartUpdateSchema,
+            response_schema_cls=CartSchema,
             force_update=force_update,
         )
 
@@ -369,11 +419,11 @@ class In_StoreService(abstract.AbstractService):
         store_key,
         id: str,
         version: int,
-        actions: typing.List[types.CustomerUpdateAction],
+        actions: typing.List[CustomerUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Customer:
+    ) -> Customer:
         """Updates a customer in the store specified by {storeKey}.
 
         The {storeKey} path parameter maps to a Store's key. If the customer
@@ -381,13 +431,13 @@ class In_StoreService(abstract.AbstractService):
         different store, this method returns a ResourceNotFound error.
         """
         params = self._serialize_params({"expand": expand}, _In_StoreUpdateSchema)
-        update_action = types.CustomerUpdate(version=version, actions=actions)
+        update_action = CustomerUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.CustomerUpdateSchema,
-            response_schema_cls=schemas.CustomerSchema,
+            request_schema_cls=CustomerUpdateSchema,
+            response_schema_cls=CustomerSchema,
             force_update=force_update,
         )
 
@@ -396,24 +446,24 @@ class In_StoreService(abstract.AbstractService):
         store_key,
         key: str,
         version: int,
-        actions: typing.List[types.CustomerUpdateAction],
+        actions: typing.List[CustomerUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Customer:
+    ) -> Customer:
         """If the customer exists in the commercetools project but the stores
         field references a different store,
 
         this method returns a ResourceNotFound error.
         """
         params = self._serialize_params({"expand": expand}, _In_StoreUpdateSchema)
-        update_action = types.CustomerUpdate(version=version, actions=actions)
+        update_action = CustomerUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.CustomerUpdateSchema,
-            response_schema_cls=schemas.CustomerSchema,
+            request_schema_cls=CustomerUpdateSchema,
+            response_schema_cls=CustomerSchema,
             force_update=force_update,
         )
 
@@ -422,11 +472,11 @@ class In_StoreService(abstract.AbstractService):
         store_key,
         id: str,
         version: int,
-        actions: typing.List[types.OrderUpdateAction],
+        actions: typing.List[OrderUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Order:
+    ) -> Order:
         """Updates an order in the store specified by {storeKey}.
 
         The {storeKey} path parameter maps to a Store's key. If the order exists
@@ -435,13 +485,13 @@ class In_StoreService(abstract.AbstractService):
         ResourceNotFound error.
         """
         params = self._serialize_params({"expand": expand}, _In_StoreUpdateSchema)
-        update_action = types.OrderUpdate(version=version, actions=actions)
+        update_action = OrderUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"in-store/key={store_key}/orders/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.OrderUpdateSchema,
-            response_schema_cls=schemas.OrderSchema,
+            request_schema_cls=OrderUpdateSchema,
+            response_schema_cls=OrderSchema,
             force_update=force_update,
         )
 
@@ -450,11 +500,11 @@ class In_StoreService(abstract.AbstractService):
         store_key,
         order_number: str,
         version: int,
-        actions: typing.List[types.OrderUpdateAction],
+        actions: typing.List[OrderUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Order:
+    ) -> Order:
         """Updates an order in the store specified by {storeKey}.
 
         The {storeKey} path parameter maps to a Store's key. If the order exists
@@ -465,13 +515,13 @@ class In_StoreService(abstract.AbstractService):
         format.
         """
         params = self._serialize_params({"expand": expand}, _In_StoreUpdateSchema)
-        update_action = types.OrderUpdate(version=version, actions=actions)
+        update_action = OrderUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"in-store/key={store_key}/orders/order-number={order_number}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.OrderUpdateSchema,
-            response_schema_cls=schemas.OrderSchema,
+            request_schema_cls=OrderUpdateSchema,
+            response_schema_cls=OrderSchema,
             force_update=force_update,
         )
 
@@ -484,7 +534,7 @@ class In_StoreService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.Cart:
+    ) -> Cart:
         params = self._serialize_params(
             {"version": version, "expand": expand, "dataErasure": data_erasure},
             _In_StoreDeleteSchema,
@@ -492,7 +542,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/carts/{id}",
             params=params,
-            response_schema_cls=schemas.CartSchema,
+            response_schema_cls=CartSchema,
             force_delete=force_delete,
         )
 
@@ -505,7 +555,7 @@ class In_StoreService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.Customer:
+    ) -> Customer:
         params = self._serialize_params(
             {"version": version, "expand": expand, "dataErasure": data_erasure},
             _In_StoreDeleteSchema,
@@ -513,7 +563,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/customers/{id}",
             params=params,
-            response_schema_cls=schemas.CustomerSchema,
+            response_schema_cls=CustomerSchema,
             force_delete=force_delete,
         )
 
@@ -526,7 +576,7 @@ class In_StoreService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.Customer:
+    ) -> Customer:
         params = self._serialize_params(
             {"version": version, "expand": expand, "dataErasure": data_erasure},
             _In_StoreDeleteSchema,
@@ -534,7 +584,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/customers/key={key}",
             params=params,
-            response_schema_cls=schemas.CustomerSchema,
+            response_schema_cls=CustomerSchema,
             force_delete=force_delete,
         )
 
@@ -547,7 +597,7 @@ class In_StoreService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.Order:
+    ) -> Order:
         params = self._serialize_params(
             {"version": version, "expand": expand, "dataErasure": data_erasure},
             _In_StoreDeleteSchema,
@@ -555,7 +605,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/orders/{id}",
             params=params,
-            response_schema_cls=schemas.OrderSchema,
+            response_schema_cls=OrderSchema,
             force_delete=force_delete,
         )
 
@@ -568,7 +618,7 @@ class In_StoreService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.Order:
+    ) -> Order:
         params = self._serialize_params(
             {"version": version, "expand": expand, "dataErasure": data_erasure},
             _In_StoreDeleteSchema,
@@ -576,26 +626,22 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/orders/order-number={order_number}",
             params=params,
-            response_schema_cls=schemas.OrderSchema,
+            response_schema_cls=OrderSchema,
             force_delete=force_delete,
         )
 
-    def customer_email_confirm(
-        self, action: types.CustomerEmailVerify
-    ) -> types.Customer:
+    def customer_email_confirm(self, action: CustomerEmailVerify) -> Customer:
         """Verifies customer's email using a token."""
         params = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/email/confirm",
             params=params,
             data_object=action,
-            request_schema_cls=schemas.CustomerEmailVerifySchema,
-            response_schema_cls=schemas.CustomerSchema,
+            request_schema_cls=CustomerEmailVerifySchema,
+            response_schema_cls=CustomerSchema,
         )
 
-    def customer_email_token(
-        self, action: types.CustomerCreateEmailToken
-    ) -> types.CustomerToken:
+    def customer_email_token(self, action: CustomerCreateEmailToken) -> CustomerToken:
         """Create a Token for verifying the Customer's Email
 
         To verify a customer's email, an email token can be created. This should
@@ -608,37 +654,35 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/email-token",
             params=params,
             data_object=action,
-            request_schema_cls=schemas.CustomerCreateEmailTokenSchema,
-            response_schema_cls=schemas.CustomerTokenSchema,
+            request_schema_cls=CustomerCreateEmailTokenSchema,
+            response_schema_cls=CustomerTokenSchema,
         )
 
-    def customer_password(self, action: types.CustomerChangePassword) -> types.Customer:
+    def customer_password(self, action: CustomerChangePassword) -> Customer:
         """Change a customers password"""
         params = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/password",
             params=params,
             data_object=action,
-            request_schema_cls=schemas.CustomerChangePasswordSchema,
-            response_schema_cls=schemas.CustomerSchema,
+            request_schema_cls=CustomerChangePasswordSchema,
+            response_schema_cls=CustomerSchema,
         )
 
-    def customer_password_reset(
-        self, action: types.CustomerResetPassword
-    ) -> types.Customer:
+    def customer_password_reset(self, action: CustomerResetPassword) -> Customer:
         """Set a new password using a token."""
         params = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/password/reset",
             params=params,
             data_object=action,
-            request_schema_cls=schemas.CustomerResetPasswordSchema,
-            response_schema_cls=schemas.CustomerSchema,
+            request_schema_cls=CustomerResetPasswordSchema,
+            response_schema_cls=CustomerSchema,
         )
 
     def customer_password_token(
-        self, action: types.CustomerCreatePasswordResetToken
-    ) -> types.CustomerToken:
+        self, action: CustomerCreatePasswordResetToken
+    ) -> CustomerToken:
         """The token value is used to reset the password of the customer with the
         given email.
 
@@ -654,11 +698,11 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/password-token",
             params=params,
             data_object=action,
-            request_schema_cls=schemas.CustomerCreatePasswordResetTokenSchema,
-            response_schema_cls=schemas.CustomerTokenSchema,
+            request_schema_cls=CustomerCreatePasswordResetTokenSchema,
+            response_schema_cls=CustomerTokenSchema,
         )
 
-    def login(self, action: types.CustomerSignin) -> types.CustomerSignInResult:
+    def login(self, action: CustomerSignin) -> CustomerSignInResult:
         """Authenticate Customer (Sign In)
 
         Retrieves the authenticated customer.
@@ -668,6 +712,6 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/login",
             params=params,
             data_object=action,
-            request_schema_cls=schemas.CustomerSigninSchema,
-            response_schema_cls=schemas.CustomerSignInResultSchema,
+            request_schema_cls=CustomerSigninSchema,
+            response_schema_cls=CustomerSignInResultSchema,
         )

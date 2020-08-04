@@ -39,8 +39,6 @@ __all__ = [
 
 
 class InventoryEntry(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -127,8 +125,6 @@ class InventoryEntry(BaseResource):
 
 
 class InventoryEntryDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDraftSchema`."""
-
     #: :class:`str`
     sku: str
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
@@ -175,8 +171,6 @@ class InventoryEntryDraft(_BaseType):
 
 
 class InventoryEntryReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.InventoryEntry`
     obj: typing.Optional["InventoryEntry"]
 
@@ -199,8 +193,6 @@ class InventoryEntryReference(Reference):
 
 
 class InventoryEntryResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -219,8 +211,6 @@ class InventoryEntryResourceIdentifier(ResourceIdentifier):
 
 
 class InventoryEntryUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -239,8 +229,6 @@ class InventoryEntryUpdate(_BaseType):
 
 
 class InventoryEntryUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -253,8 +241,6 @@ class InventoryEntryUpdateAction(_BaseType):
 
 
 class InventoryPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -290,8 +276,6 @@ class InventoryPagedQueryResponse(_BaseType):
 
 
 class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryAddQuantityActionSchema`."""
-
     #: :class:`int`
     quantity: int
 
@@ -307,8 +291,6 @@ class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryChangeQuantityActionSchema`."""
-
     #: :class:`int`
     quantity: int
 
@@ -324,8 +306,6 @@ class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryRemoveQuantityActionSchema`."""
-
     #: :class:`int`
     quantity: int
 
@@ -341,8 +321,6 @@ class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -368,8 +346,6 @@ class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -395,8 +371,6 @@ class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetExpectedDeliveryActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``expectedDelivery`` `in Commercetools)`
     expected_delivery: typing.Optional[datetime.datetime]
 
@@ -417,8 +391,6 @@ class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetRestockableInDaysActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
 
@@ -436,8 +408,6 @@ class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntrySetSupplyChannelActionSchema`."""
-
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 

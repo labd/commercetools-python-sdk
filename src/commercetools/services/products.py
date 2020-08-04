@@ -4,8 +4,20 @@ import typing
 import marshmallow
 from marshmallow import fields
 
-from commercetools import schemas, types
+from commercetools._schemas._product import (
+    ProductDraftSchema,
+    ProductPagedQueryResponseSchema,
+    ProductSchema,
+    ProductUpdateSchema,
+)
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.types._product import (
+    Product,
+    ProductDraft,
+    ProductPagedQueryResponse,
+    ProductUpdate,
+    ProductUpdateAction,
+)
 from commercetools.typing import OptionalListStr
 
 from . import abstract, traits
@@ -66,7 +78,7 @@ class ProductService(abstract.AbstractService):
         price_channel: OptionalListStr = None,
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
-    ) -> types.Product:
+    ) -> Product:
         """Gets the full representation of a product by ID."""
         params = self._serialize_params(
             {
@@ -81,7 +93,7 @@ class ProductService(abstract.AbstractService):
             _ProductGetSchema,
         )
         return self._client._get(
-            endpoint=f"products/{id}", params=params, schema_cls=schemas.ProductSchema
+            endpoint=f"products/{id}", params=params, schema_cls=ProductSchema
         )
 
     def get_by_key(
@@ -95,7 +107,7 @@ class ProductService(abstract.AbstractService):
         price_channel: OptionalListStr = None,
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
-    ) -> types.Product:
+    ) -> Product:
         """Gets the full representation of a product by Key."""
         params = self._serialize_params(
             {
@@ -110,9 +122,7 @@ class ProductService(abstract.AbstractService):
             _ProductGetSchema,
         )
         return self._client._get(
-            endpoint=f"products/key={key}",
-            params=params,
-            schema_cls=schemas.ProductSchema,
+            endpoint=f"products/key={key}", params=params, schema_cls=ProductSchema
         )
 
     def query(
@@ -131,7 +141,7 @@ class ProductService(abstract.AbstractService):
         price_channel: OptionalListStr = None,
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
-    ) -> types.ProductPagedQueryResponse:
+    ) -> ProductPagedQueryResponse:
         """You can use the query endpoint to get the full representations of
         products.
 
@@ -162,12 +172,12 @@ class ProductService(abstract.AbstractService):
         return self._client._get(
             endpoint="products",
             params=params,
-            schema_cls=schemas.ProductPagedQueryResponseSchema,
+            schema_cls=ProductPagedQueryResponseSchema,
         )
 
     def create(
         self,
-        draft: types.ProductDraft,
+        draft: ProductDraft,
         *,
         expand: OptionalListStr = None,
         price_currency: OptionalListStr = None,
@@ -176,7 +186,7 @@ class ProductService(abstract.AbstractService):
         price_channel: OptionalListStr = None,
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
-    ) -> types.Product:
+    ) -> Product:
         """To create a new product, send a representation that is going to become
         the initial staged representation
 
@@ -202,15 +212,15 @@ class ProductService(abstract.AbstractService):
             endpoint="products",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.ProductDraftSchema,
-            response_schema_cls=schemas.ProductSchema,
+            request_schema_cls=ProductDraftSchema,
+            response_schema_cls=ProductSchema,
         )
 
     def update_by_id(
         self,
         id: str,
         version: int,
-        actions: typing.List[types.ProductUpdateAction],
+        actions: typing.List[ProductUpdateAction],
         *,
         expand: OptionalListStr = None,
         price_currency: OptionalListStr = None,
@@ -220,7 +230,7 @@ class ProductService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Product:
+    ) -> Product:
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -233,13 +243,13 @@ class ProductService(abstract.AbstractService):
             },
             _ProductUpdateSchema,
         )
-        update_action = types.ProductUpdate(version=version, actions=actions)
+        update_action = ProductUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"products/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.ProductUpdateSchema,
-            response_schema_cls=schemas.ProductSchema,
+            request_schema_cls=ProductUpdateSchema,
+            response_schema_cls=ProductSchema,
             force_update=force_update,
         )
 
@@ -247,7 +257,7 @@ class ProductService(abstract.AbstractService):
         self,
         key: str,
         version: int,
-        actions: typing.List[types.ProductUpdateAction],
+        actions: typing.List[ProductUpdateAction],
         *,
         expand: OptionalListStr = None,
         price_currency: OptionalListStr = None,
@@ -257,7 +267,7 @@ class ProductService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Product:
+    ) -> Product:
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -270,13 +280,13 @@ class ProductService(abstract.AbstractService):
             },
             _ProductUpdateSchema,
         )
-        update_action = types.ProductUpdate(version=version, actions=actions)
+        update_action = ProductUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"products/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.ProductUpdateSchema,
-            response_schema_cls=schemas.ProductSchema,
+            request_schema_cls=ProductUpdateSchema,
+            response_schema_cls=ProductSchema,
             force_update=force_update,
         )
 
@@ -293,7 +303,7 @@ class ProductService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.Product:
+    ) -> Product:
         params = self._serialize_params(
             {
                 "version": version,
@@ -310,7 +320,7 @@ class ProductService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"products/{id}",
             params=params,
-            response_schema_cls=schemas.ProductSchema,
+            response_schema_cls=ProductSchema,
             force_delete=force_delete,
         )
 
@@ -327,7 +337,7 @@ class ProductService(abstract.AbstractService):
         locale_projection: OptionalListStr = None,
         store_projection: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.Product:
+    ) -> Product:
         params = self._serialize_params(
             {
                 "version": version,
@@ -344,7 +354,7 @@ class ProductService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"products/key={key}",
             params=params,
-            response_schema_cls=schemas.ProductSchema,
+            response_schema_cls=ProductSchema,
             force_delete=force_delete,
         )
 
@@ -356,7 +366,7 @@ class ProductService(abstract.AbstractService):
         variant: int = None,
         sku: str = None,
         staged: bool = None,
-    ) -> types.Product:
+    ) -> Product:
         """Uploads a binary image file to a given product variant.
 
         The supported image formats are JPEG, PNG and GIF.
@@ -374,7 +384,7 @@ class ProductService(abstract.AbstractService):
         variant: int = None,
         sku: str = None,
         staged: bool = None,
-    ) -> types.Product:
+    ) -> Product:
         """Uploads a binary image file to a given product variant.
 
         The supported image formats are JPEG, PNG and GIF.
@@ -386,6 +396,6 @@ class ProductService(abstract.AbstractService):
         return self._client._post(
             endpoint="products/images",
             params=params,
-            response_schema_cls=schemas.ProductSchema,
+            response_schema_cls=ProductSchema,
             file=fh,
         )

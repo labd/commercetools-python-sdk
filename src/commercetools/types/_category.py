@@ -59,8 +59,6 @@ __all__ = [
 
 
 class Category(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -177,8 +175,6 @@ class Category(BaseResource):
 
 
 class CategoryDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryDraftSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
     #: :class:`commercetools.types.LocalizedString`
@@ -255,8 +251,6 @@ class CategoryDraft(_BaseType):
 
 
 class CategoryPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -292,8 +286,6 @@ class CategoryPagedQueryResponse(_BaseType):
 
 
 class CategoryReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Category`
     obj: typing.Optional["Category"]
 
@@ -316,8 +308,6 @@ class CategoryReference(Reference):
 
 
 class CategoryResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -336,8 +326,6 @@ class CategoryResourceIdentifier(ResourceIdentifier):
 
 
 class CategoryUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -353,8 +341,6 @@ class CategoryUpdate(_BaseType):
 
 
 class CategoryUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -367,8 +353,6 @@ class CategoryUpdateAction(_BaseType):
 
 
 class CategoryAddAssetAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryAddAssetActionSchema`."""
-
     #: :class:`commercetools.types.AssetDraft`
     asset: "AssetDraft"
     #: Optional :class:`int`
@@ -394,8 +378,6 @@ class CategoryAddAssetAction(CategoryUpdateAction):
 
 
 class CategoryChangeAssetNameAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeAssetNameActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -424,8 +406,6 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
 
 
 class CategoryChangeAssetOrderAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeAssetOrderActionSchema`."""
-
     #: List of :class:`str` `(Named` ``assetOrder`` `in Commercetools)`
     asset_order: typing.List[str]
 
@@ -443,8 +423,6 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
 
 
 class CategoryChangeNameAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -457,8 +435,6 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 
 
 class CategoryChangeOrderHintAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeOrderHintActionSchema`."""
-
     #: :class:`str` `(Named` ``orderHint`` `in Commercetools)`
     order_hint: str
 
@@ -474,8 +450,6 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
 
 
 class CategoryChangeParentAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeParentActionSchema`."""
-
     #: :class:`commercetools.types.CategoryResourceIdentifier`
     parent: "CategoryResourceIdentifier"
 
@@ -493,8 +467,6 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 
 
 class CategoryChangeSlugAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryChangeSlugActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
@@ -507,8 +479,6 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
 
 
 class CategoryRemoveAssetAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryRemoveAssetActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -534,8 +504,6 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
 
 
 class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetCustomFieldActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -568,8 +536,6 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
 
 
 class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetCustomTypeActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -602,8 +568,6 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
 
 
 class CategorySetAssetDescriptionAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetDescriptionActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -632,8 +596,6 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetAssetKeyAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetKeyActionSchema`."""
-
     #: :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: str
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -659,8 +621,6 @@ class CategorySetAssetKeyAction(CategoryUpdateAction):
 
 
 class CategorySetAssetSourcesAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetSourcesActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -689,8 +649,6 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
 
 
 class CategorySetAssetTagsAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetAssetTagsActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``assetId`` `in Commercetools)`
     asset_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``assetKey`` `in Commercetools)`
@@ -719,8 +677,6 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
 
 
 class CategorySetCustomFieldAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -746,8 +702,6 @@ class CategorySetCustomFieldAction(CategoryUpdateAction):
 
 
 class CategorySetCustomTypeAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -773,8 +727,6 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
 
 
 class CategorySetDescriptionAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 
@@ -795,8 +747,6 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetExternalIdAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetExternalIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
 
@@ -814,8 +764,6 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
 
 
 class CategorySetKeyAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -828,8 +776,6 @@ class CategorySetKeyAction(CategoryUpdateAction):
 
 
 class CategorySetMetaDescriptionAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetMetaDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaDescription`` `in Commercetools)`
     meta_description: typing.Optional["LocalizedString"]
 
@@ -850,8 +796,6 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetMetaKeywordsAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetMetaKeywordsActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaKeywords`` `in Commercetools)`
     meta_keywords: typing.Optional["LocalizedString"]
 
@@ -872,8 +816,6 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
 
 
 class CategorySetMetaTitleAction(CategoryUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySetMetaTitleActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``metaTitle`` `in Commercetools)`
     meta_title: typing.Optional["LocalizedString"]
 

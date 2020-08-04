@@ -53,8 +53,6 @@ __all__ = [
 
 
 class Address(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AddressSchema`."""
-
     #: Optional :class:`str`
     id: typing.Optional[str]
     #: Optional :class:`str`
@@ -196,8 +194,6 @@ class Address(_BaseType):
 
 
 class Asset(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSchema`."""
-
     #: :class:`str`
     id: str
     #: List of :class:`commercetools.types.AssetSource`
@@ -249,8 +245,6 @@ class Asset(_BaseType):
 
 
 class AssetDimensions(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDimensionsSchema`."""
-
     #: :class:`int`
     w: int
     #: :class:`int`
@@ -266,8 +260,6 @@ class AssetDimensions(_BaseType):
 
 
 class AssetDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AssetDraftSchema`."""
-
     #: List of :class:`commercetools.types.AssetSource`
     sources: typing.List["AssetSource"]
     #: :class:`commercetools.types.LocalizedString`
@@ -314,8 +306,6 @@ class AssetDraft(_BaseType):
 
 
 class AssetSource(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AssetSourceSchema`."""
-
     #: :class:`str`
     uri: str
     #: Optional :class:`str`
@@ -349,8 +339,6 @@ class AssetSource(_BaseType):
 
 
 class BaseResource(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.BaseResourceSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -384,8 +372,6 @@ class BaseResource(_BaseType):
 
 
 class ClientLogging(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ClientLoggingSchema`."""
-
     #: Optional :class:`str` `(Named` ``clientId`` `in Commercetools)`
     client_id: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``externalUserId`` `in Commercetools)`
@@ -417,8 +403,6 @@ class ClientLogging(_BaseType):
 
 
 class DiscountedPrice(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedPriceSchema`."""
-
     #: :class:`commercetools.types.Money`
     value: "Money"
     #: :class:`commercetools.types.ProductDiscountReference`
@@ -436,8 +420,6 @@ class DiscountedPrice(_BaseType):
 
 
 class GeoJson(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -450,8 +432,6 @@ class GeoJson(_BaseType):
 
 
 class Image(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ImageSchema`."""
-
     #: :class:`str`
     url: str
     #: :class:`commercetools.types.ImageDimensions`
@@ -480,8 +460,6 @@ class Image(_BaseType):
 
 
 class ImageDimensions(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ImageDimensionsSchema`."""
-
     #: :class:`int`
     w: int
     #: :class:`int`
@@ -497,8 +475,6 @@ class ImageDimensions(_BaseType):
 
 
 class KeyReference(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.KeyReferenceSchema`."""
-
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
     type_id: "ReferenceTypeId"
     #: :class:`str`
@@ -521,8 +497,6 @@ class LocalizedString(typing.Dict[str, str]):
 
 
 class Money(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MoneySchema`."""
-
     #: :class:`int` `(Named` ``centAmount`` `in Commercetools)`
     cent_amount: int
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
@@ -546,8 +520,6 @@ class MoneyType(enum.Enum):
 
 
 class PagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -599,8 +571,6 @@ class PagedQueryResponse(_BaseType):
 
 
 class Price(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PriceSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`commercetools.types.TypedMoney`
@@ -667,8 +637,6 @@ class Price(_BaseType):
 
 
 class PriceDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PriceDraftSchema`."""
-
     #: :class:`commercetools.types.Money`
     value: "Money"
     #: Optional :class:`str`
@@ -730,8 +698,6 @@ class PriceDraft(_BaseType):
 
 
 class PriceTier(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierSchema`."""
-
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
     minimum_quantity: int
     #: :class:`commercetools.types.TypedMoney`
@@ -752,8 +718,6 @@ class PriceTier(_BaseType):
 
 
 class PriceTierDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PriceTierDraftSchema`."""
-
     #: :class:`int` `(Named` ``minimumQuantity`` `in Commercetools)`
     minimum_quantity: int
     #: :class:`commercetools.types.Money`
@@ -772,8 +736,6 @@ class PriceTierDraft(_BaseType):
 
 
 class QueryPrice(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.QueryPriceSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`commercetools.types.Money`
@@ -840,8 +802,6 @@ class QueryPrice(_BaseType):
 
 
 class Reference(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReferenceSchema`."""
-
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
     type_id: "ReferenceTypeId"
     #: :class:`str`
@@ -883,8 +843,6 @@ class ReferenceTypeId(enum.Enum):
 
 
 class ResourceIdentifier(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ResourceIdentifierSchema`."""
-
     #: Optional :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
     type_id: typing.Optional["ReferenceTypeId"]
     #: Optional :class:`str`
@@ -913,8 +871,6 @@ class ResourceIdentifier(_BaseType):
 
 
 class ScopedPrice(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ScopedPriceSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`commercetools.types.TypedMoney`
@@ -981,8 +937,6 @@ class ScopedPrice(_BaseType):
 
 
 class TypedMoney(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneySchema`."""
-
     #: :class:`commercetools.types.MoneyType`
     type: "MoneyType"
     #: :class:`int` `(Named` ``fractionDigits`` `in Commercetools)`
@@ -1014,8 +968,6 @@ class TypedMoney(_BaseType):
 
 
 class Update(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -1031,8 +983,6 @@ class Update(_BaseType):
 
 
 class UpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.UpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -1045,8 +995,6 @@ class UpdateAction(_BaseType):
 
 
 class CentPrecisionMoney(TypedMoney):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CentPrecisionMoneySchema`."""
-
     def __init__(
         self,
         *,
@@ -1070,8 +1018,6 @@ class CentPrecisionMoney(TypedMoney):
 
 
 class CreatedBy(ClientLogging):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CreatedBySchema`."""
-
     def __init__(
         self,
         *,
@@ -1095,8 +1041,6 @@ class CreatedBy(ClientLogging):
 
 
 class GeoJsonPoint(GeoJson):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.GeoJsonPointSchema`."""
-
     #: :class:`list`
     coordinates: list
 
@@ -1109,8 +1053,6 @@ class GeoJsonPoint(GeoJson):
 
 
 class HighPrecisionMoney(TypedMoney):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneySchema`."""
-
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
     precise_amount: int
 
@@ -1145,8 +1087,6 @@ class HighPrecisionMoney(TypedMoney):
 
 
 class LastModifiedBy(ClientLogging):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LastModifiedBySchema`."""
-
     def __init__(
         self,
         *,
@@ -1170,8 +1110,6 @@ class LastModifiedBy(ClientLogging):
 
 
 class TypedMoneyDraft(Money):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypedMoneyDraftSchema`."""
-
     #: :class:`commercetools.types.MoneyType`
     type: "MoneyType"
 
@@ -1194,8 +1132,6 @@ class TypedMoneyDraft(Money):
 
 
 class CentPrecisionMoneyDraft(TypedMoneyDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CentPrecisionMoneyDraftSchema`."""
-
     def __init__(
         self,
         *,
@@ -1218,8 +1154,6 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
 
 
 class HighPrecisionMoneyDraft(TypedMoneyDraft):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.HighPrecisionMoneyDraftSchema`."""
-
     #: :class:`int` `(Named` ``preciseAmount`` `in Commercetools)`
     precise_amount: int
 

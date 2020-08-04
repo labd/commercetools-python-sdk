@@ -78,8 +78,6 @@ class AttributeConstraintEnumDraft(enum.Enum):
 
 
 class AttributeDefinition(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionSchema`."""
-
     #: :class:`commercetools.types.AttributeType`
     type: "AttributeType"
     #: :class:`str`
@@ -136,8 +134,6 @@ class AttributeDefinition(_BaseType):
 
 
 class AttributeDefinitionDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDefinitionDraftSchema`."""
-
     #: :class:`commercetools.types.AttributeType`
     type: "AttributeType"
     #: :class:`str`
@@ -194,8 +190,6 @@ class AttributeDefinitionDraft(_BaseType):
 
 
 class AttributeLocalizedEnumValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumValueSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`commercetools.types.LocalizedString`
@@ -211,8 +205,6 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributePlainEnumValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributePlainEnumValueSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`str`
@@ -228,8 +220,6 @@ class AttributePlainEnumValue(_BaseType):
 
 
 class AttributeType(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTypeSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -242,8 +232,6 @@ class AttributeType(_BaseType):
 
 
 class ProductType(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -315,8 +303,6 @@ class ProductType(BaseResource):
 
 
 class ProductTypeDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeDraftSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
@@ -350,8 +336,6 @@ class ProductTypeDraft(_BaseType):
 
 
 class ProductTypePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -387,8 +371,6 @@ class ProductTypePagedQueryResponse(_BaseType):
 
 
 class ProductTypeReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.ProductType`
     obj: typing.Optional["ProductType"]
 
@@ -411,8 +393,6 @@ class ProductTypeReference(Reference):
 
 
 class ProductTypeResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -431,8 +411,6 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
 
 
 class ProductTypeUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -451,8 +429,6 @@ class ProductTypeUpdate(_BaseType):
 
 
 class ProductTypeUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -470,8 +446,6 @@ class TextInputHint(enum.Enum):
 
 
 class AttributeBooleanType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeBooleanTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="boolean")
 
@@ -480,8 +454,6 @@ class AttributeBooleanType(AttributeType):
 
 
 class AttributeDateTimeType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTimeTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="datetime")
 
@@ -490,8 +462,6 @@ class AttributeDateTimeType(AttributeType):
 
 
 class AttributeDateType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeDateTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="date")
 
@@ -500,8 +470,6 @@ class AttributeDateType(AttributeType):
 
 
 class AttributeEnumType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeEnumTypeSchema`."""
-
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
     values: typing.List["AttributePlainEnumValue"]
 
@@ -516,8 +484,6 @@ class AttributeEnumType(AttributeType):
 
 
 class AttributeLocalizableTextType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizableTextTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="ltext")
 
@@ -526,8 +492,6 @@ class AttributeLocalizableTextType(AttributeType):
 
 
 class AttributeLocalizedEnumType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeLocalizedEnumTypeSchema`."""
-
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
     values: typing.List["AttributeLocalizedEnumValue"]
 
@@ -548,8 +512,6 @@ class AttributeLocalizedEnumType(AttributeType):
 
 
 class AttributeMoneyType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeMoneyTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="money")
 
@@ -558,8 +520,6 @@ class AttributeMoneyType(AttributeType):
 
 
 class AttributeNestedType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNestedTypeSchema`."""
-
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``typeReference`` `in Commercetools)`
     type_reference: "ProductTypeReference"
 
@@ -577,8 +537,6 @@ class AttributeNestedType(AttributeType):
 
 
 class AttributeNumberType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeNumberTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="number")
 
@@ -587,8 +545,6 @@ class AttributeNumberType(AttributeType):
 
 
 class AttributeReferenceType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeReferenceTypeSchema`."""
-
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
     reference_type_id: "ReferenceTypeId"
 
@@ -606,8 +562,6 @@ class AttributeReferenceType(AttributeType):
 
 
 class AttributeSetType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeSetTypeSchema`."""
-
     #: :class:`commercetools.types.AttributeType` `(Named` ``elementType`` `in Commercetools)`
     element_type: "AttributeType"
 
@@ -625,8 +579,6 @@ class AttributeSetType(AttributeType):
 
 
 class AttributeTextType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTextTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="text")
 
@@ -635,8 +587,6 @@ class AttributeTextType(AttributeType):
 
 
 class AttributeTimeType(AttributeType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.AttributeTimeTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="time")
 
@@ -645,8 +595,6 @@ class AttributeTimeType(AttributeType):
 
 
 class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddAttributeDefinitionActionSchema`."""
-
     #: :class:`commercetools.types.AttributeDefinitionDraft`
     attribute: "AttributeDefinitionDraft"
 
@@ -664,8 +612,6 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddLocalizedEnumValueActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.AttributeLocalizedEnumValue`
@@ -690,8 +636,6 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
 
 
 class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeAddPlainEnumValueActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.AttributePlainEnumValue`
@@ -716,8 +660,6 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeConstraintActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.AttributeConstraintEnumDraft` `(Named` ``newValue`` `in Commercetools)`
@@ -742,8 +684,6 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeNameActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`str` `(Named` ``newAttributeName`` `in Commercetools)`
@@ -768,8 +708,6 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderActionSchema`."""
-
     #: List of :class:`commercetools.types.AttributeDefinition`
     attributes: typing.List["AttributeDefinition"]
 
@@ -790,8 +728,6 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeAttributeOrderByNameActionSchema`."""
-
     #: List of :class:`str` `(Named` ``attributeNames`` `in Commercetools)`
     attribute_names: typing.List[str]
 
@@ -809,8 +745,6 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeDescriptionActionSchema`."""
-
     #: :class:`str`
     description: str
 
@@ -826,8 +760,6 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeEnumKeyActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`str`
@@ -856,8 +788,6 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeInputHintActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.TextInputHint` `(Named` ``newValue`` `in Commercetools)`
@@ -882,8 +812,6 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeIsSearchableActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`bool` `(Named` ``isSearchable`` `in Commercetools)`
@@ -908,8 +836,6 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.LocalizedString`
@@ -934,8 +860,6 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.AttributeLocalizedEnumValue` `(Named` ``newValue`` `in Commercetools)`
@@ -960,8 +884,6 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeLocalizedEnumValueOrderActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
@@ -986,8 +908,6 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeNameAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangeNameActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -1003,8 +923,6 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: :class:`commercetools.types.AttributePlainEnumValue` `(Named` ``newValue`` `in Commercetools)`
@@ -1029,8 +947,6 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeChangePlainEnumValueOrderActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
@@ -1055,8 +971,6 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveAttributeDefinitionActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -1072,8 +986,6 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeRemoveEnumValuesActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: List of :class:`str`
@@ -1098,8 +1010,6 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
 
 
 class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSetInputTipActionSchema`."""
-
     #: :class:`str` `(Named` ``attributeName`` `in Commercetools)`
     attribute_name: str
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``inputTip`` `in Commercetools)`
@@ -1124,8 +1034,6 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
 
 
 class ProductTypeSetKeyAction(ProductTypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductTypeSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 

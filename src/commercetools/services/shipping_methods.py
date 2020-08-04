@@ -4,8 +4,20 @@ import typing
 import marshmallow
 from marshmallow import fields
 
-from commercetools import schemas, types
+from commercetools._schemas._shipping_method import (
+    ShippingMethodDraftSchema,
+    ShippingMethodPagedQueryResponseSchema,
+    ShippingMethodSchema,
+    ShippingMethodUpdateSchema,
+)
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.types._shipping_method import (
+    ShippingMethod,
+    ShippingMethodDraft,
+    ShippingMethodPagedQueryResponse,
+    ShippingMethodUpdate,
+    ShippingMethodUpdateAction,
+)
 from commercetools.typing import OptionalListStr
 
 from . import abstract, traits
@@ -49,24 +61,20 @@ class _ShippingMethodMatching_OrdereditSchema(
 class ShippingMethodService(abstract.AbstractService):
     """Shipping Methods define where orders can be shipped and what the costs are."""
 
-    def get_by_id(
-        self, id: str, *, expand: OptionalListStr = None
-    ) -> types.ShippingMethod:
+    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> ShippingMethod:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"shipping-methods/{id}",
             params=params,
-            schema_cls=schemas.ShippingMethodSchema,
+            schema_cls=ShippingMethodSchema,
         )
 
-    def get_by_key(
-        self, key: str, *, expand: OptionalListStr = None
-    ) -> types.ShippingMethod:
+    def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> ShippingMethod:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"shipping-methods/key={key}",
             params=params,
-            schema_cls=schemas.ShippingMethodSchema,
+            schema_cls=ShippingMethodSchema,
         )
 
     def query(
@@ -79,7 +87,7 @@ class ShippingMethodService(abstract.AbstractService):
         with_total: bool = None,
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
-    ) -> types.ShippingMethodPagedQueryResponse:
+    ) -> ShippingMethodPagedQueryResponse:
         """Shipping Methods define where orders can be shipped and what the costs
         are.
         """
@@ -98,12 +106,12 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods",
             params=params,
-            schema_cls=schemas.ShippingMethodPagedQueryResponseSchema,
+            schema_cls=ShippingMethodPagedQueryResponseSchema,
         )
 
     def create(
-        self, draft: types.ShippingMethodDraft, *, expand: OptionalListStr = None
-    ) -> types.ShippingMethod:
+        self, draft: ShippingMethodDraft, *, expand: OptionalListStr = None
+    ) -> ShippingMethod:
         """Shipping Methods define where orders can be shipped and what the costs
         are.
         """
@@ -112,27 +120,27 @@ class ShippingMethodService(abstract.AbstractService):
             endpoint="shipping-methods",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.ShippingMethodDraftSchema,
-            response_schema_cls=schemas.ShippingMethodSchema,
+            request_schema_cls=ShippingMethodDraftSchema,
+            response_schema_cls=ShippingMethodSchema,
         )
 
     def update_by_id(
         self,
         id: str,
         version: int,
-        actions: typing.List[types.ShippingMethodUpdateAction],
+        actions: typing.List[ShippingMethodUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.ShippingMethod:
+    ) -> ShippingMethod:
         params = self._serialize_params({"expand": expand}, _ShippingMethodUpdateSchema)
-        update_action = types.ShippingMethodUpdate(version=version, actions=actions)
+        update_action = ShippingMethodUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"shipping-methods/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.ShippingMethodUpdateSchema,
-            response_schema_cls=schemas.ShippingMethodSchema,
+            request_schema_cls=ShippingMethodUpdateSchema,
+            response_schema_cls=ShippingMethodSchema,
             force_update=force_update,
         )
 
@@ -140,19 +148,19 @@ class ShippingMethodService(abstract.AbstractService):
         self,
         key: str,
         version: int,
-        actions: typing.List[types.ShippingMethodUpdateAction],
+        actions: typing.List[ShippingMethodUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.ShippingMethod:
+    ) -> ShippingMethod:
         params = self._serialize_params({"expand": expand}, _ShippingMethodUpdateSchema)
-        update_action = types.ShippingMethodUpdate(version=version, actions=actions)
+        update_action = ShippingMethodUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"shipping-methods/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.ShippingMethodUpdateSchema,
-            response_schema_cls=schemas.ShippingMethodSchema,
+            request_schema_cls=ShippingMethodUpdateSchema,
+            response_schema_cls=ShippingMethodSchema,
             force_update=force_update,
         )
 
@@ -163,14 +171,14 @@ class ShippingMethodService(abstract.AbstractService):
         *,
         expand: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.ShippingMethod:
+    ) -> ShippingMethod:
         params = self._serialize_params(
             {"version": version, "expand": expand}, _ShippingMethodDeleteSchema
         )
         return self._client._delete(
             endpoint=f"shipping-methods/{id}",
             params=params,
-            response_schema_cls=schemas.ShippingMethodSchema,
+            response_schema_cls=ShippingMethodSchema,
             force_delete=force_delete,
         )
 
@@ -181,20 +189,20 @@ class ShippingMethodService(abstract.AbstractService):
         *,
         expand: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.ShippingMethod:
+    ) -> ShippingMethod:
         params = self._serialize_params(
             {"version": version, "expand": expand}, _ShippingMethodDeleteSchema
         )
         return self._client._delete(
             endpoint=f"shipping-methods/key={key}",
             params=params,
-            response_schema_cls=schemas.ShippingMethodSchema,
+            response_schema_cls=ShippingMethodSchema,
             force_delete=force_delete,
         )
 
     def matching_cart(
         self, cart_id: str, *, expand: OptionalListStr = None
-    ) -> types.ShippingMethodPagedQueryResponse:
+    ) -> ShippingMethodPagedQueryResponse:
         """Get ShippingMethods for a cart
         """
         params = self._serialize_params(
@@ -203,7 +211,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods/matching-cart",
             params=params,
-            schema_cls=schemas.ShippingMethodPagedQueryResponseSchema,
+            schema_cls=ShippingMethodPagedQueryResponseSchema,
         )
 
     def matching_location(
@@ -213,7 +221,7 @@ class ShippingMethodService(abstract.AbstractService):
         expand: OptionalListStr = None,
         state: str = None,
         currency: str = None,
-    ) -> types.ShippingMethodPagedQueryResponse:
+    ) -> ShippingMethodPagedQueryResponse:
         """Get ShippingMethods for a location
         """
         params = self._serialize_params(
@@ -228,12 +236,12 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods/matching-location",
             params=params,
-            schema_cls=schemas.ShippingMethodPagedQueryResponseSchema,
+            schema_cls=ShippingMethodPagedQueryResponseSchema,
         )
 
     def matching_orderedit(
         self, order_edit_id: str, country: str, *, state: str = None
-    ) -> types.ShippingMethodPagedQueryResponse:
+    ) -> ShippingMethodPagedQueryResponse:
         """Get ShippingMethods for an order edit
         """
         params = self._serialize_params(
@@ -243,5 +251,5 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods/matching-orderedit",
             params=params,
-            schema_cls=schemas.ShippingMethodPagedQueryResponseSchema,
+            schema_cls=ShippingMethodPagedQueryResponseSchema,
         )

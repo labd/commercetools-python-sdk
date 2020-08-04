@@ -61,8 +61,6 @@ __all__ = [
 
 
 class CustomFieldEnumValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumValueSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`str`
@@ -78,8 +76,6 @@ class CustomFieldEnumValue(_BaseType):
 
 
 class CustomFieldLocalizedEnumValue(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumValueSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`commercetools.types.LocalizedString`
@@ -98,8 +94,6 @@ class CustomFieldLocalizedEnumValue(_BaseType):
 
 
 class CustomFields(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsSchema`."""
-
     #: :class:`commercetools.types.TypeReference`
     type: "TypeReference"
     #: :class:`commercetools.types.FieldContainer`
@@ -117,8 +111,6 @@ class CustomFields(_BaseType):
 
 
 class CustomFieldsDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldsDraftSchema`."""
-
     #: :class:`commercetools.types.TypeResourceIdentifier`
     type: "TypeResourceIdentifier"
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -144,8 +136,6 @@ class FieldContainer(typing.Dict[str, typing.Any]):
 
 
 class FieldDefinition(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.FieldDefinitionSchema`."""
-
     #: :class:`commercetools.types.FieldType`
     type: "FieldType"
     #: :class:`str`
@@ -181,8 +171,6 @@ class FieldDefinition(_BaseType):
 
 
 class FieldType(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.FieldTypeSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -216,8 +204,6 @@ class ResourceTypeId(enum.Enum):
 
 
 class Type(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -294,8 +280,6 @@ class Type(BaseResource):
 
 
 class TypeDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeDraftSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`commercetools.types.LocalizedString`
@@ -337,8 +321,6 @@ class TypeDraft(_BaseType):
 
 
 class TypePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -374,8 +356,6 @@ class TypePagedQueryResponse(_BaseType):
 
 
 class TypeReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Type`
     obj: typing.Optional["Type"]
 
@@ -398,8 +378,6 @@ class TypeReference(Reference):
 
 
 class TypeResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -423,8 +401,6 @@ class TypeTextInputHint(enum.Enum):
 
 
 class TypeUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -440,8 +416,6 @@ class TypeUpdate(_BaseType):
 
 
 class TypeUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -454,8 +428,6 @@ class TypeUpdateAction(_BaseType):
 
 
 class CustomFieldBooleanType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldBooleanTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Boolean")
 
@@ -464,8 +436,6 @@ class CustomFieldBooleanType(FieldType):
 
 
 class CustomFieldDateTimeType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTimeTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="DateTime")
 
@@ -474,8 +444,6 @@ class CustomFieldDateTimeType(FieldType):
 
 
 class CustomFieldDateType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldDateTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Date")
 
@@ -484,8 +452,6 @@ class CustomFieldDateType(FieldType):
 
 
 class CustomFieldEnumType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldEnumTypeSchema`."""
-
     #: List of :class:`commercetools.types.CustomFieldEnumValue`
     values: typing.List["CustomFieldEnumValue"]
 
@@ -500,8 +466,6 @@ class CustomFieldEnumType(FieldType):
 
 
 class CustomFieldLocalizedEnumType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedEnumTypeSchema`."""
-
     #: List of :class:`commercetools.types.CustomFieldLocalizedEnumValue`
     values: typing.List["CustomFieldLocalizedEnumValue"]
 
@@ -522,8 +486,6 @@ class CustomFieldLocalizedEnumType(FieldType):
 
 
 class CustomFieldLocalizedStringType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldLocalizedStringTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="LocalizedString")
 
@@ -532,8 +494,6 @@ class CustomFieldLocalizedStringType(FieldType):
 
 
 class CustomFieldMoneyType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldMoneyTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Money")
 
@@ -542,8 +502,6 @@ class CustomFieldMoneyType(FieldType):
 
 
 class CustomFieldNumberType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldNumberTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Number")
 
@@ -552,8 +510,6 @@ class CustomFieldNumberType(FieldType):
 
 
 class CustomFieldReferenceType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldReferenceTypeSchema`."""
-
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
     reference_type_id: "ReferenceTypeId"
 
@@ -571,8 +527,6 @@ class CustomFieldReferenceType(FieldType):
 
 
 class CustomFieldSetType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldSetTypeSchema`."""
-
     #: :class:`commercetools.types.FieldType` `(Named` ``elementType`` `in Commercetools)`
     element_type: "FieldType"
 
@@ -588,8 +542,6 @@ class CustomFieldSetType(FieldType):
 
 
 class CustomFieldStringType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldStringTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="String")
 
@@ -598,8 +550,6 @@ class CustomFieldStringType(FieldType):
 
 
 class CustomFieldTimeType(FieldType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomFieldTimeTypeSchema`."""
-
     def __init__(self, *, name: str = None) -> None:
         super().__init__(name="Time")
 
@@ -608,8 +558,6 @@ class CustomFieldTimeType(FieldType):
 
 
 class TypeAddEnumValueAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddEnumValueActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.CustomFieldEnumValue`
@@ -635,8 +583,6 @@ class TypeAddEnumValueAction(TypeUpdateAction):
 
 
 class TypeAddFieldDefinitionAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddFieldDefinitionActionSchema`."""
-
     #: :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinition`` `in Commercetools)`
     field_definition: "FieldDefinition"
 
@@ -654,8 +600,6 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 
 
 class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeAddLocalizedEnumValueActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.CustomFieldLocalizedEnumValue`
@@ -681,8 +625,6 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
 
 
 class TypeChangeEnumValueLabelAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.CustomFieldEnumValue`
@@ -708,8 +650,6 @@ class TypeChangeEnumValueLabelAction(TypeUpdateAction):
 
 
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeEnumValueOrderActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: List of :class:`str`
@@ -735,8 +675,6 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
 
 
 class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.LocalizedString`
@@ -761,8 +699,6 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
 
 
 class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeFieldDefinitionOrderActionSchema`."""
-
     #: List of :class:`str` `(Named` ``fieldNames`` `in Commercetools)`
     field_names: typing.List[str]
 
@@ -780,8 +716,6 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 
 
 class TypeChangeInputHintAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeInputHintActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.TypeTextInputHint` `(Named` ``inputHint`` `in Commercetools)`
@@ -807,8 +741,6 @@ class TypeChangeInputHintAction(TypeUpdateAction):
 
 
 class TypeChangeKeyAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeKeyActionSchema`."""
-
     #: :class:`str`
     key: str
 
@@ -821,8 +753,6 @@ class TypeChangeKeyAction(TypeUpdateAction):
 
 
 class TypeChangeLabelAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.LocalizedString`
@@ -848,8 +778,6 @@ class TypeChangeLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueLabelActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: :class:`commercetools.types.CustomFieldLocalizedEnumValue`
@@ -874,8 +802,6 @@ class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeLocalizedEnumValueOrderActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
     #: List of :class:`str`
@@ -900,8 +826,6 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
 
 
 class TypeChangeNameAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeChangeNameActionSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
@@ -914,8 +838,6 @@ class TypeChangeNameAction(TypeUpdateAction):
 
 
 class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeRemoveFieldDefinitionActionSchema`."""
-
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
 
@@ -931,8 +853,6 @@ class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
 
 
 class TypeSetDescriptionAction(TypeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TypeSetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 

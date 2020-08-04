@@ -44,8 +44,6 @@ __all__ = [
 
 
 class DiscountCode(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -162,8 +160,6 @@ class DiscountCode(BaseResource):
 
 
 class DiscountCodeDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeDraftSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
     #: Optional :class:`commercetools.types.LocalizedString`
@@ -240,8 +236,6 @@ class DiscountCodeDraft(_BaseType):
 
 
 class DiscountCodePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -277,8 +271,6 @@ class DiscountCodePagedQueryResponse(_BaseType):
 
 
 class DiscountCodeReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.DiscountCode`
     obj: typing.Optional["DiscountCode"]
 
@@ -301,8 +293,6 @@ class DiscountCodeReference(Reference):
 
 
 class DiscountCodeResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -321,8 +311,6 @@ class DiscountCodeResourceIdentifier(ResourceIdentifier):
 
 
 class DiscountCodeUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -341,8 +329,6 @@ class DiscountCodeUpdate(_BaseType):
 
 
 class DiscountCodeUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -355,8 +341,6 @@ class DiscountCodeUpdateAction(_BaseType):
 
 
 class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeCartDiscountsActionSchema`."""
-
     #: List of :class:`commercetools.types.CartDiscountResourceIdentifier` `(Named` ``cartDiscounts`` `in Commercetools)`
     cart_discounts: typing.List["CartDiscountResourceIdentifier"]
 
@@ -377,8 +361,6 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeGroupsActionSchema`."""
-
     #: List of :class:`str`
     groups: typing.List[str]
 
@@ -394,8 +376,6 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeChangeIsActiveActionSchema`."""
-
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: bool
 
@@ -411,8 +391,6 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCartPredicateActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: typing.Optional[str]
 
@@ -430,8 +408,6 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -457,8 +433,6 @@ class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -484,8 +458,6 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetDescriptionActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
 
@@ -506,8 +478,6 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetMaxApplicationsActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``maxApplications`` `in Commercetools)`
     max_applications: typing.Optional[int]
 
@@ -525,8 +495,6 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetMaxApplicationsPerCustomerActionSchema`."""
-
     #: Optional :class:`int` `(Named` ``maxApplicationsPerCustomer`` `in Commercetools)`
     max_applications_per_customer: typing.Optional[int]
 
@@ -547,8 +515,6 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetNameActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
@@ -566,8 +532,6 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetValidFromActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
 
@@ -588,8 +552,6 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetValidFromAndUntilActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validFrom`` `in Commercetools)`
     valid_from: typing.Optional[datetime.datetime]
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
@@ -614,8 +576,6 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountCodeSetValidUntilActionSchema`."""
-
     #: Optional :class:`datetime.datetime` `(Named` ``validUntil`` `in Commercetools)`
     valid_until: typing.Optional[datetime.datetime]
 

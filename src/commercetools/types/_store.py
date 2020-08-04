@@ -32,8 +32,6 @@ __all__ = [
 
 
 class Store(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -105,8 +103,6 @@ class Store(BaseResource):
 
 
 class StoreDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreDraftSchema`."""
-
     #: :class:`str`
     key: str
     #: :class:`commercetools.types.LocalizedString`
@@ -142,8 +138,6 @@ class StoreDraft(_BaseType):
 
 
 class StoreKeyReference(KeyReference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreKeyReferenceSchema`."""
-
     def __init__(self, *, type_id: "ReferenceTypeId" = None, key: str = None) -> None:
         super().__init__(type_id=ReferenceTypeId.STORE, key=key)
 
@@ -152,8 +146,6 @@ class StoreKeyReference(KeyReference):
 
 
 class StorePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StorePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -189,8 +181,6 @@ class StorePagedQueryResponse(_BaseType):
 
 
 class StoreReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Store`
     obj: typing.Optional["Store"]
 
@@ -213,8 +203,6 @@ class StoreReference(Reference):
 
 
 class StoreResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -233,8 +221,6 @@ class StoreResourceIdentifier(ResourceIdentifier):
 
 
 class StoreUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -250,8 +236,6 @@ class StoreUpdate(_BaseType):
 
 
 class StoreUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -264,8 +248,6 @@ class StoreUpdateAction(_BaseType):
 
 
 class StoreSetLanguagesAction(StoreUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSetLanguagesActionSchema`."""
-
     #: Optional list of :class:`str`
     languages: typing.Optional[typing.List[str]]
 
@@ -283,8 +265,6 @@ class StoreSetLanguagesAction(StoreUpdateAction):
 
 
 class StoreSetNameAction(StoreUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoreSetNameActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
@@ -299,8 +279,6 @@ class StoreSetNameAction(StoreUpdateAction):
 
 
 class StoresAddDistributionChannelsAction(StoreUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoresAddDistributionChannelsActionSchema`."""
-
     #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
     distribution_channel: "ChannelResourceIdentifier"
 
@@ -321,8 +299,6 @@ class StoresAddDistributionChannelsAction(StoreUpdateAction):
 
 
 class StoresRemoveDistributionChannelsAction(StoreUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoresRemoveDistributionChannelsActionSchema`."""
-
     #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
     distribution_channel: "ChannelResourceIdentifier"
 
@@ -343,8 +319,6 @@ class StoresRemoveDistributionChannelsAction(StoreUpdateAction):
 
 
 class StoresSetDistributionChannelsAction(StoreUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StoresSetDistributionChannelsActionSchema`."""
-
     #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannels`` `in Commercetools)`
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 

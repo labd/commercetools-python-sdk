@@ -3,8 +3,17 @@ import typing
 
 from marshmallow import fields
 
-from commercetools import schemas, types
+from commercetools._schemas._custom_object import (
+    CustomObjectDraftSchema,
+    CustomObjectPagedQueryResponseSchema,
+    CustomObjectSchema,
+)
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.types._custom_object import (
+    CustomObject,
+    CustomObjectDraft,
+    CustomObjectPagedQueryResponse,
+)
 from commercetools.typing import OptionalListStr
 
 from . import abstract, traits
@@ -30,23 +39,21 @@ class CustomObjectService(abstract.AbstractService):
 
     def get_by_container_and_key(
         self, container, key, *, expand: OptionalListStr = None
-    ) -> types.CustomObject:
+    ) -> CustomObject:
         """Get CustomObject by container and key"""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"custom-objects/{container}/{key}",
             params=params,
-            schema_cls=schemas.CustomObjectSchema,
+            schema_cls=CustomObjectSchema,
         )
 
-    def get_by_id(
-        self, id: str, *, expand: OptionalListStr = None
-    ) -> types.CustomObject:
+    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> CustomObject:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"custom-objects/{id}",
             params=params,
-            schema_cls=schemas.CustomObjectSchema,
+            schema_cls=CustomObjectSchema,
         )
 
     def query(
@@ -59,7 +66,7 @@ class CustomObjectService(abstract.AbstractService):
         with_total: bool = None,
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
-    ) -> types.CustomObjectPagedQueryResponse:
+    ) -> CustomObjectPagedQueryResponse:
         """The query endpoint allows to retrieve custom objects in a specific
         container or all custom objects.
 
@@ -82,12 +89,12 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._get(
             endpoint="custom-objects",
             params=params,
-            schema_cls=schemas.CustomObjectPagedQueryResponseSchema,
+            schema_cls=CustomObjectPagedQueryResponseSchema,
         )
 
     def create_or_update(
-        self, draft: types.CustomObjectDraft, *, expand: OptionalListStr = None
-    ) -> types.CustomObject:
+        self, draft: CustomObjectDraft, *, expand: OptionalListStr = None
+    ) -> CustomObject:
         """Creates a new custom object or updates an existing custom object.
 
         If an object with the given container/key exists, the object will be
@@ -103,13 +110,13 @@ class CustomObjectService(abstract.AbstractService):
             endpoint="custom-objects",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.CustomObjectDraftSchema,
-            response_schema_cls=schemas.CustomObjectSchema,
+            request_schema_cls=CustomObjectDraftSchema,
+            response_schema_cls=CustomObjectSchema,
         )
 
     def create(
-        self, draft: types.CustomObjectDraft, *, expand: OptionalListStr = None
-    ) -> types.CustomObject:
+        self, draft: CustomObjectDraft, *, expand: OptionalListStr = None
+    ) -> CustomObject:
         """Creates a new custom object or updates an existing custom object.
 
         If an object with the given container/key exists, the object will be
@@ -125,8 +132,8 @@ class CustomObjectService(abstract.AbstractService):
             endpoint="custom-objects",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.CustomObjectDraftSchema,
-            response_schema_cls=schemas.CustomObjectSchema,
+            request_schema_cls=CustomObjectDraftSchema,
+            response_schema_cls=CustomObjectSchema,
         )
 
     def delete_by_container_and_key(
@@ -138,7 +145,7 @@ class CustomObjectService(abstract.AbstractService):
         version: str = None,
         expand: OptionalListStr = None,
         force_delete: bool = False,
-    ) -> types.CustomObject:
+    ) -> CustomObject:
         """Delete CustomObject by container and key"""
         params = self._serialize_params(
             {"dataErasure": data_erasure, "version": version, "expand": expand},
@@ -147,7 +154,7 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"custom-objects/{container}/{key}",
             params=params,
-            response_schema_cls=schemas.CustomObjectSchema,
+            response_schema_cls=CustomObjectSchema,
             force_delete=force_delete,
         )
 
@@ -159,7 +166,7 @@ class CustomObjectService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.CustomObject:
+    ) -> CustomObject:
         """The version control is optional.
 
         If the query contains a version, then it must match the version of the
@@ -172,6 +179,6 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"custom-objects/{id}",
             params=params,
-            response_schema_cls=schemas.CustomObjectSchema,
+            response_schema_cls=CustomObjectSchema,
             force_delete=force_delete,
         )

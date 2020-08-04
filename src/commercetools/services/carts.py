@@ -3,8 +3,22 @@ import typing
 
 from marshmallow import fields
 
-from commercetools import schemas, types
+from commercetools._schemas._cart import (
+    CartDraftSchema,
+    CartPagedQueryResponseSchema,
+    CartSchema,
+    CartUpdateSchema,
+    ReplicaCartDraftSchema,
+)
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.types._cart import (
+    Cart,
+    CartDraft,
+    CartPagedQueryResponse,
+    CartUpdate,
+    CartUpdateAction,
+    ReplicaCartDraft,
+)
 from commercetools.typing import OptionalListStr
 
 from . import abstract, traits
@@ -34,7 +48,7 @@ class CartService(abstract.AbstractService):
 
     def get_by_customer_id(
         self, customer_id: str, *, expand: OptionalListStr = None
-    ) -> types.Cart:
+    ) -> Cart:
         """Retrieves the active cart of the customer that has been modified most
         recently.
 
@@ -47,10 +61,10 @@ class CartService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"carts/customer-id={customer_id}",
             params=params,
-            schema_cls=schemas.CartSchema,
+            schema_cls=CartSchema,
         )
 
-    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> types.Cart:
+    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Cart:
         """The cart may not contain up-to-date prices, discounts etc.
 
         If you want to ensure they're up-to-date, send an Update request with the
@@ -58,7 +72,7 @@ class CartService(abstract.AbstractService):
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"carts/{id}", params=params, schema_cls=schemas.CartSchema
+            endpoint=f"carts/{id}", params=params, schema_cls=CartSchema
         )
 
     def query(
@@ -72,7 +86,7 @@ class CartService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
         customer_id: str = None,
-    ) -> types.CartPagedQueryResponse:
+    ) -> CartPagedQueryResponse:
         """A shopping cart holds product variants and can be ordered.
         """
         params = self._serialize_params(
@@ -89,14 +103,10 @@ class CartService(abstract.AbstractService):
             _CartQuerySchema,
         )
         return self._client._get(
-            endpoint="carts",
-            params=params,
-            schema_cls=schemas.CartPagedQueryResponseSchema,
+            endpoint="carts", params=params, schema_cls=CartPagedQueryResponseSchema
         )
 
-    def create(
-        self, draft: types.CartDraft, *, expand: OptionalListStr = None
-    ) -> types.Cart:
+    def create(self, draft: CartDraft, *, expand: OptionalListStr = None) -> Cart:
         """Creating a cart can fail with an InvalidOperation if the referenced
         shipping method in the
 
@@ -108,27 +118,27 @@ class CartService(abstract.AbstractService):
             endpoint="carts",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.CartDraftSchema,
-            response_schema_cls=schemas.CartSchema,
+            request_schema_cls=CartDraftSchema,
+            response_schema_cls=CartSchema,
         )
 
     def update_by_id(
         self,
         id: str,
         version: int,
-        actions: typing.List[types.CartUpdateAction],
+        actions: typing.List[CartUpdateAction],
         *,
         expand: OptionalListStr = None,
         force_update: bool = False,
-    ) -> types.Cart:
+    ) -> Cart:
         params = self._serialize_params({"expand": expand}, _CartUpdateSchema)
-        update_action = types.CartUpdate(version=version, actions=actions)
+        update_action = CartUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint=f"carts/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=schemas.CartUpdateSchema,
-            response_schema_cls=schemas.CartSchema,
+            request_schema_cls=CartUpdateSchema,
+            response_schema_cls=CartSchema,
             force_update=force_update,
         )
 
@@ -140,7 +150,7 @@ class CartService(abstract.AbstractService):
         expand: OptionalListStr = None,
         data_erasure: bool = None,
         force_delete: bool = False,
-    ) -> types.Cart:
+    ) -> Cart:
         params = self._serialize_params(
             {"version": version, "expand": expand, "dataErasure": data_erasure},
             _CartDeleteSchema,
@@ -148,16 +158,16 @@ class CartService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"carts/{id}",
             params=params,
-            response_schema_cls=schemas.CartSchema,
+            response_schema_cls=CartSchema,
             force_delete=force_delete,
         )
 
-    def replicate(self, draft: types.ReplicaCartDraft) -> types.Cart:
+    def replicate(self, draft: ReplicaCartDraft) -> Cart:
         params = {}
         return self._client._post(
             endpoint="carts/replicate",
             params=params,
             data_object=draft,
-            request_schema_cls=schemas.ReplicaCartDraftSchema,
-            response_schema_cls=schemas.CartSchema,
+            request_schema_cls=ReplicaCartDraftSchema,
+            response_schema_cls=CartSchema,
         )

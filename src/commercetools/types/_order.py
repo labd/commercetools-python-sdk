@@ -27,9 +27,9 @@ if typing.TYPE_CHECKING:
         ShippingMethodState,
         ShippingRateInput,
         TaxCalculationMode,
-        TaxMode,
         TaxedPrice,
         TaxedPriceDraft,
+        TaxMode,
     )
     from ._cart_discount import CartDiscountReference
     from ._channel import ChannelReference, ChannelResourceIdentifier
@@ -135,8 +135,6 @@ __all__ = [
 
 
 class Delivery(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliverySchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
@@ -175,8 +173,6 @@ class Delivery(_BaseType):
 
 
 class DeliveryItem(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -192,8 +188,6 @@ class DeliveryItem(_BaseType):
 
 
 class DiscountedLineItemPriceDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DiscountedLineItemPriceDraftSchema`."""
-
     #: :class:`commercetools.types.Money`
     value: "Money"
     #: List of :class:`commercetools.types.DiscountedLineItemPortion` `(Named` ``includedDiscounts`` `in Commercetools)`
@@ -217,8 +211,6 @@ class DiscountedLineItemPriceDraft(_BaseType):
 
 
 class ItemState(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ItemStateSchema`."""
-
     #: :class:`int`
     quantity: int
     #: :class:`commercetools.types.StateReference`
@@ -234,8 +226,6 @@ class ItemState(_BaseType):
 
 
 class LineItemImportDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemImportDraftSchema`."""
-
     #: Optional :class:`str` `(Named` ``productId`` `in Commercetools)`
     product_id: typing.Optional[str]
     #: :class:`commercetools.types.LocalizedString`
@@ -307,8 +297,6 @@ class LineItemImportDraft(_BaseType):
 
 
 class Order(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -535,8 +523,6 @@ class Order(BaseResource):
 
 
 class OrderFromCartDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderFromCartDraftSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -588,8 +574,6 @@ class OrderFromCartDraft(_BaseType):
 
 
 class OrderImportDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportDraftSchema`."""
-
     #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
     order_number: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
@@ -716,8 +700,6 @@ class OrderImportDraft(_BaseType):
 
 
 class OrderPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -753,8 +735,6 @@ class OrderPagedQueryResponse(_BaseType):
 
 
 class OrderReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Order`
     obj: typing.Optional["Order"]
 
@@ -777,8 +757,6 @@ class OrderReference(Reference):
 
 
 class OrderResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -804,8 +782,6 @@ class OrderState(enum.Enum):
 
 
 class OrderUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -821,8 +797,6 @@ class OrderUpdate(_BaseType):
 
 
 class OrderUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -835,8 +809,6 @@ class OrderUpdateAction(_BaseType):
 
 
 class Parcel(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`datetime.datetime` `(Named` ``createdAt`` `in Commercetools)`
@@ -878,8 +850,6 @@ class Parcel(_BaseType):
 
 
 class ParcelDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelDraftSchema`."""
-
     #: Optional :class:`commercetools.types.ParcelMeasurements`
     measurements: typing.Optional["ParcelMeasurements"]
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
@@ -908,8 +878,6 @@ class ParcelDraft(_BaseType):
 
 
 class ParcelMeasurements(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsSchema`."""
-
     #: Optional :class:`int` `(Named` ``heightInMillimeter`` `in Commercetools)`
     height_in_millimeter: typing.Optional[int]
     #: Optional :class:`int` `(Named` ``lengthInMillimeter`` `in Commercetools)`
@@ -946,8 +914,6 @@ class ParcelMeasurements(_BaseType):
 
 
 class PaymentInfo(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInfoSchema`."""
-
     #: List of :class:`commercetools.types.PaymentReference`
     payments: typing.List["PaymentReference"]
 
@@ -968,8 +934,6 @@ class PaymentState(enum.Enum):
 
 
 class ProductVariantImportDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantImportDraftSchema`."""
-
     #: Optional :class:`int`
     id: typing.Optional[int]
     #: Optional :class:`str`
@@ -1005,8 +969,6 @@ class ProductVariantImportDraft(_BaseType):
 
 
 class ReturnInfo(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnInfoSchema`."""
-
     #: List of :class:`commercetools.types.ReturnItem`
     items: typing.List["ReturnItem"]
     #: Optional :class:`str` `(Named` ``returnTrackingId`` `in Commercetools)`
@@ -1035,8 +997,6 @@ class ReturnInfo(_BaseType):
 
 
 class ReturnItem(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnItemSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -1093,8 +1053,6 @@ class ReturnItem(_BaseType):
 
 
 class ReturnItemDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReturnItemDraftSchema`."""
-
     #: :class:`int`
     quantity: int
     #: Optional :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
@@ -1159,8 +1117,6 @@ class ShipmentState(enum.Enum):
 
 
 class ShippingInfoImportDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingInfoImportDraftSchema`."""
-
     #: :class:`str` `(Named` ``shippingMethodName`` `in Commercetools)`
     shipping_method_name: str
     #: :class:`commercetools.types.Money`
@@ -1222,8 +1178,6 @@ class ShippingInfoImportDraft(_BaseType):
 
 
 class StagedOrderUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.StagedOrderUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -1236,8 +1190,6 @@ class StagedOrderUpdateAction(_BaseType):
 
 
 class SyncInfo(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.SyncInfoSchema`."""
-
     #: :class:`commercetools.types.ChannelReference`
     channel: "ChannelReference"
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
@@ -1266,8 +1218,6 @@ class SyncInfo(_BaseType):
 
 
 class TaxedItemPriceDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TaxedItemPriceDraftSchema`."""
-
     #: :class:`commercetools.types.Money` `(Named` ``totalNet`` `in Commercetools)`
     total_net: "Money"
     #: :class:`commercetools.types.Money` `(Named` ``totalGross`` `in Commercetools)`
@@ -1288,8 +1238,6 @@ class TaxedItemPriceDraft(_BaseType):
 
 
 class TrackingData(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TrackingDataSchema`."""
-
     #: Optional :class:`str` `(Named` ``trackingId`` `in Commercetools)`
     tracking_id: typing.Optional[str]
     #: Optional :class:`str`
@@ -1331,8 +1279,6 @@ class TrackingData(_BaseType):
 
 
 class CustomLineItemReturnItem(ReturnItem):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemReturnItemSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
 
@@ -1379,8 +1325,6 @@ class CustomLineItemReturnItem(ReturnItem):
 
 
 class LineItemReturnItem(ReturnItem):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemReturnItemSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
 
@@ -1427,8 +1371,6 @@ class LineItemReturnItem(ReturnItem):
 
 
 class OrderAddDeliveryAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddDeliveryActionSchema`."""
-
     #: Optional list of :class:`commercetools.types.DeliveryItem`
     items: typing.Optional[typing.List["DeliveryItem"]]
     #: Optional :class:`commercetools.types.Address`
@@ -1459,8 +1401,6 @@ class OrderAddDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddItemShippingAddressAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddItemShippingAddressActionSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -1476,8 +1416,6 @@ class OrderAddItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderAddParcelToDeliveryAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddParcelToDeliveryActionSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
@@ -1516,8 +1454,6 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddPaymentAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddPaymentActionSchema`."""
-
     #: :class:`commercetools.types.PaymentResourceIdentifier`
     payment: "PaymentResourceIdentifier"
 
@@ -1535,8 +1471,6 @@ class OrderAddPaymentAction(OrderUpdateAction):
 
 
 class OrderAddReturnInfoAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderAddReturnInfoActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``returnTrackingId`` `in Commercetools)`
     return_tracking_id: typing.Optional[str]
     #: List of :class:`commercetools.types.ReturnItemDraft`
@@ -1565,8 +1499,6 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
 
 
 class OrderChangeOrderStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderChangeOrderStateActionSchema`."""
-
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
     order_state: "OrderState"
 
@@ -1582,8 +1514,6 @@ class OrderChangeOrderStateAction(OrderUpdateAction):
 
 
 class OrderChangePaymentStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderChangePaymentStateActionSchema`."""
-
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: typing.Optional["PaymentState"]
 
@@ -1604,8 +1534,6 @@ class OrderChangePaymentStateAction(OrderUpdateAction):
 
 
 class OrderChangeShipmentStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderChangeShipmentStateActionSchema`."""
-
     #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: typing.Optional["ShipmentState"]
 
@@ -1626,8 +1554,6 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
 
 
 class OrderImportCustomLineItemStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportCustomLineItemStateActionSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: List of :class:`commercetools.types.ItemState`
@@ -1652,8 +1578,6 @@ class OrderImportCustomLineItemStateAction(OrderUpdateAction):
 
 
 class OrderImportLineItemStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportLineItemStateActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: List of :class:`commercetools.types.ItemState`
@@ -1678,8 +1602,6 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
 
 
 class OrderRemoveDeliveryAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemoveDeliveryActionSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
 
@@ -1695,8 +1617,6 @@ class OrderRemoveDeliveryAction(OrderUpdateAction):
 
 
 class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemoveItemShippingAddressActionSchema`."""
-
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
     address_key: str
 
@@ -1712,8 +1632,6 @@ class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemoveParcelFromDeliveryActionSchema`."""
-
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
     parcel_id: str
 
@@ -1729,8 +1647,6 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 
 
 class OrderRemovePaymentAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderRemovePaymentActionSchema`."""
-
     #: :class:`commercetools.types.PaymentResourceIdentifier`
     payment: "PaymentResourceIdentifier"
 
@@ -1748,8 +1664,6 @@ class OrderRemovePaymentAction(OrderUpdateAction):
 
 
 class OrderSetBillingAddressAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetBillingAddressActionSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
@@ -1767,8 +1681,6 @@ class OrderSetBillingAddressAction(OrderUpdateAction):
 
 
 class OrderSetCustomFieldAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -1794,8 +1706,6 @@ class OrderSetCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomLineItemCustomFieldActionSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: :class:`str`
@@ -1824,8 +1734,6 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomLineItemCustomTypeActionSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
@@ -1854,8 +1762,6 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomLineItemShippingDetailsActionSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
@@ -1880,8 +1786,6 @@ class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
 
 
 class OrderSetCustomTypeAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -1907,8 +1811,6 @@ class OrderSetCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetCustomerEmailAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomerEmailActionSchema`."""
-
     #: Optional :class:`str`
     email: typing.Optional[str]
 
@@ -1926,8 +1828,6 @@ class OrderSetCustomerEmailAction(OrderUpdateAction):
 
 
 class OrderSetCustomerIdAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetCustomerIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``customerId`` `in Commercetools)`
     customer_id: typing.Optional[str]
 
@@ -1945,8 +1845,6 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetDeliveryAddressActionSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: Optional :class:`commercetools.types.Address`
@@ -1971,8 +1869,6 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryItemsAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetDeliveryItemsActionSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
@@ -1998,8 +1894,6 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
 
 
 class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLineItemCustomFieldActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: :class:`str`
@@ -2028,8 +1922,6 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLineItemCustomTypeActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
@@ -2058,8 +1950,6 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLineItemShippingDetailsActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
@@ -2084,8 +1974,6 @@ class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
 
 
 class OrderSetLocaleAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetLocaleActionSchema`."""
-
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
@@ -2100,8 +1988,6 @@ class OrderSetLocaleAction(OrderUpdateAction):
 
 
 class OrderSetOrderNumberAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetOrderNumberActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``orderNumber`` `in Commercetools)`
     order_number: typing.Optional[str]
 
@@ -2119,8 +2005,6 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
 
 
 class OrderSetParcelItemsAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetParcelItemsActionSchema`."""
-
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
     parcel_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
@@ -2146,8 +2030,6 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
 
 
 class OrderSetParcelMeasurementsAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetParcelMeasurementsActionSchema`."""
-
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
     parcel_id: str
     #: Optional :class:`commercetools.types.ParcelMeasurements`
@@ -2172,8 +2054,6 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
 
 
 class OrderSetParcelTrackingDataAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetParcelTrackingDataActionSchema`."""
-
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
     parcel_id: str
     #: Optional :class:`commercetools.types.TrackingData` `(Named` ``trackingData`` `in Commercetools)`
@@ -2198,8 +2078,6 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
 
 
 class OrderSetReturnPaymentStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetReturnPaymentStateActionSchema`."""
-
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
     return_item_id: str
     #: :class:`commercetools.types.ReturnPaymentState` `(Named` ``paymentState`` `in Commercetools)`
@@ -2224,8 +2102,6 @@ class OrderSetReturnPaymentStateAction(OrderUpdateAction):
 
 
 class OrderSetReturnShipmentStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetReturnShipmentStateActionSchema`."""
-
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
     return_item_id: str
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
@@ -2250,8 +2126,6 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
 
 
 class OrderSetShippingAddressAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetShippingAddressActionSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
@@ -2269,8 +2143,6 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
 
 
 class OrderSetStoreAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderSetStoreActionSchema`."""
-
     #: Optional :class:`commercetools.types.StoreResourceIdentifier`
     store: typing.Optional["StoreResourceIdentifier"]
 
@@ -2288,8 +2160,6 @@ class OrderSetStoreAction(OrderUpdateAction):
 
 
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderTransitionCustomLineItemStateActionSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: :class:`int`
@@ -2333,8 +2203,6 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
 
 
 class OrderTransitionLineItemStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderTransitionLineItemStateActionSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: :class:`int`
@@ -2378,8 +2246,6 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
 
 
 class OrderTransitionStateAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderTransitionStateActionSchema`."""
-
     #: :class:`commercetools.types.StateResourceIdentifier`
     state: "StateResourceIdentifier"
     #: Optional :class:`bool`
@@ -2405,8 +2271,6 @@ class OrderTransitionStateAction(OrderUpdateAction):
 
 
 class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateItemShippingAddressActionSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -2422,8 +2286,6 @@ class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderUpdateSyncInfoAction(OrderUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderUpdateSyncInfoActionSchema`."""
-
     #: :class:`commercetools.types.ChannelResourceIdentifier`
     channel: "ChannelResourceIdentifier"
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`

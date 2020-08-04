@@ -205,8 +205,6 @@ __all__ = [
 
 
 class Message(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessageSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -285,8 +283,6 @@ class Message(BaseResource):
 
 
 class MessageConfiguration(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationSchema`."""
-
     #: :class:`bool`
     enabled: bool
     #: Optional :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
@@ -310,8 +306,6 @@ class MessageConfiguration(_BaseType):
 
 
 class MessageConfigurationDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessageConfigurationDraftSchema`."""
-
     #: :class:`bool`
     enabled: bool
     #: :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
@@ -332,8 +326,6 @@ class MessageConfigurationDraft(_BaseType):
 
 
 class MessagePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -369,8 +361,6 @@ class MessagePagedQueryResponse(_BaseType):
 
 
 class MessagePayload(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.MessagePayloadSchema`."""
-
     #: :class:`str`
     type: str
 
@@ -383,8 +373,6 @@ class MessagePayload(_BaseType):
 
 
 class ProductPriceDiscountsSetUpdatedPrice(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetUpdatedPriceSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
     #: Optional :class:`str` `(Named` ``variantKey`` `in Commercetools)`
@@ -431,8 +419,6 @@ class ProductPriceDiscountsSetUpdatedPrice(_BaseType):
 
 
 class UserProvidedIdentifiers(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.UserProvidedIdentifiersSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
@@ -479,8 +465,6 @@ class UserProvidedIdentifiers(_BaseType):
 
 
 class CategoryCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.Category`
     category: "Category"
 
@@ -538,8 +522,6 @@ class CategoryCreatedMessage(Message):
 
 
 class CategoryCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategoryCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Category`
     category: "Category"
 
@@ -555,8 +537,6 @@ class CategoryCreatedMessagePayload(MessagePayload):
 
 
 class CategorySlugChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySlugChangedMessageSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
@@ -614,8 +594,6 @@ class CategorySlugChangedMessage(Message):
 
 
 class CategorySlugChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CategorySlugChangedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
@@ -631,8 +609,6 @@ class CategorySlugChangedMessagePayload(MessagePayload):
 
 
 class CustomLineItemStateTransitionMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemStateTransitionMessageSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
@@ -710,8 +686,6 @@ class CustomLineItemStateTransitionMessage(Message):
 
 
 class CustomLineItemStateTransitionMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomLineItemStateTransitionMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
@@ -755,8 +729,6 @@ class CustomLineItemStateTransitionMessagePayload(MessagePayload):
 
 
 class CustomerAddressAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressAddedMessageSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -814,8 +786,6 @@ class CustomerAddressAddedMessage(Message):
 
 
 class CustomerAddressAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -831,8 +801,6 @@ class CustomerAddressAddedMessagePayload(MessagePayload):
 
 
 class CustomerAddressChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressChangedMessageSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -890,8 +858,6 @@ class CustomerAddressChangedMessage(Message):
 
 
 class CustomerAddressChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressChangedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -907,8 +873,6 @@ class CustomerAddressChangedMessagePayload(MessagePayload):
 
 
 class CustomerAddressRemovedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressRemovedMessageSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -966,8 +930,6 @@ class CustomerAddressRemovedMessage(Message):
 
 
 class CustomerAddressRemovedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerAddressRemovedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Address`
     address: "Address"
 
@@ -983,8 +945,6 @@ class CustomerAddressRemovedMessagePayload(MessagePayload):
 
 
 class CustomerCompanyNameSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCompanyNameSetMessageSchema`."""
-
     #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
     company_name: str
 
@@ -1042,8 +1002,6 @@ class CustomerCompanyNameSetMessage(Message):
 
 
 class CustomerCompanyNameSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCompanyNameSetMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
     company_name: str
 
@@ -1059,8 +1017,6 @@ class CustomerCompanyNameSetMessagePayload(MessagePayload):
 
 
 class CustomerCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.Customer`
     customer: "Customer"
 
@@ -1118,8 +1074,6 @@ class CustomerCreatedMessage(Message):
 
 
 class CustomerCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Customer`
     customer: "Customer"
 
@@ -1135,8 +1089,6 @@ class CustomerCreatedMessagePayload(MessagePayload):
 
 
 class CustomerDateOfBirthSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDateOfBirthSetMessageSchema`."""
-
     #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
     date_of_birth: datetime.date
 
@@ -1194,8 +1146,6 @@ class CustomerDateOfBirthSetMessage(Message):
 
 
 class CustomerDateOfBirthSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerDateOfBirthSetMessagePayloadSchema`."""
-
     #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
     date_of_birth: datetime.date
 
@@ -1213,8 +1163,6 @@ class CustomerDateOfBirthSetMessagePayload(MessagePayload):
 
 
 class CustomerEmailChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailChangedMessageSchema`."""
-
     #: :class:`str`
     email: str
 
@@ -1272,8 +1220,6 @@ class CustomerEmailChangedMessage(Message):
 
 
 class CustomerEmailChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailChangedMessagePayloadSchema`."""
-
     #: :class:`str`
     email: str
 
@@ -1289,8 +1235,6 @@ class CustomerEmailChangedMessagePayload(MessagePayload):
 
 
 class CustomerEmailVerifiedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifiedMessageSchema`."""
-
     def __init__(
         self,
         *,
@@ -1342,8 +1286,6 @@ class CustomerEmailVerifiedMessage(Message):
 
 
 class CustomerEmailVerifiedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerEmailVerifiedMessagePayloadSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="CustomerEmailVerified")
 
@@ -1352,8 +1294,6 @@ class CustomerEmailVerifiedMessagePayload(MessagePayload):
 
 
 class CustomerGroupSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetMessageSchema`."""
-
     #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: "CustomerGroupReference"
 
@@ -1411,8 +1351,6 @@ class CustomerGroupSetMessage(Message):
 
 
 class CustomerGroupSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CustomerGroupSetMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: "CustomerGroupReference"
 
@@ -1430,8 +1368,6 @@ class CustomerGroupSetMessagePayload(MessagePayload):
 
 
 class DeliveryAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddedMessageSchema`."""
-
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
 
@@ -1489,8 +1425,6 @@ class DeliveryAddedMessage(Message):
 
 
 class DeliveryAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
 
@@ -1506,8 +1440,6 @@ class DeliveryAddedMessagePayload(MessagePayload):
 
 
 class DeliveryAddressSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddressSetMessageSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: Optional :class:`commercetools.types.Address`
@@ -1575,8 +1507,6 @@ class DeliveryAddressSetMessage(Message):
 
 
 class DeliveryAddressSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryAddressSetMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: Optional :class:`commercetools.types.Address`
@@ -1605,8 +1535,6 @@ class DeliveryAddressSetMessagePayload(MessagePayload):
 
 
 class DeliveryItemsUpdatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessageSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
@@ -1674,8 +1602,6 @@ class DeliveryItemsUpdatedMessage(Message):
 
 
 class DeliveryItemsUpdatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryItemsUpdatedMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: List of :class:`commercetools.types.DeliveryItem`
@@ -1704,8 +1630,6 @@ class DeliveryItemsUpdatedMessagePayload(MessagePayload):
 
 
 class DeliveryRemovedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryRemovedMessageSchema`."""
-
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
 
@@ -1763,8 +1687,6 @@ class DeliveryRemovedMessage(Message):
 
 
 class DeliveryRemovedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.DeliveryRemovedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
 
@@ -1780,8 +1702,6 @@ class DeliveryRemovedMessagePayload(MessagePayload):
 
 
 class InventoryEntryCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.InventoryEntry` `(Named` ``inventoryEntry`` `in Commercetools)`
     inventory_entry: "InventoryEntry"
 
@@ -1839,8 +1759,6 @@ class InventoryEntryCreatedMessage(Message):
 
 
 class InventoryEntryCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.InventoryEntry` `(Named` ``inventoryEntry`` `in Commercetools)`
     inventory_entry: "InventoryEntry"
 
@@ -1858,8 +1776,6 @@ class InventoryEntryCreatedMessagePayload(MessagePayload):
 
 
 class InventoryEntryDeletedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDeletedMessageSchema`."""
-
     #: :class:`str`
     sku: str
     #: :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
@@ -1922,8 +1838,6 @@ class InventoryEntryDeletedMessage(Message):
 
 
 class InventoryEntryDeletedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryDeletedMessagePayloadSchema`."""
-
     #: :class:`str`
     sku: str
     #: :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
@@ -1948,8 +1862,6 @@ class InventoryEntryDeletedMessagePayload(MessagePayload):
 
 
 class InventoryEntryQuantitySetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryQuantitySetMessageSchema`."""
-
     #: :class:`int` `(Named` ``oldQuantityOnStock`` `in Commercetools)`
     old_quantity_on_stock: int
     #: :class:`int` `(Named` ``newQuantityOnStock`` `in Commercetools)`
@@ -2022,8 +1934,6 @@ class InventoryEntryQuantitySetMessage(Message):
 
 
 class InventoryEntryQuantitySetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.InventoryEntryQuantitySetMessagePayloadSchema`."""
-
     #: :class:`int` `(Named` ``oldQuantityOnStock`` `in Commercetools)`
     old_quantity_on_stock: int
     #: :class:`int` `(Named` ``newQuantityOnStock`` `in Commercetools)`
@@ -2062,8 +1972,6 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
 
 
 class LineItemStateTransitionMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessageSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
@@ -2141,8 +2049,6 @@ class LineItemStateTransitionMessage(Message):
 
 
 class LineItemStateTransitionMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LineItemStateTransitionMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: :class:`datetime.datetime` `(Named` ``transitionDate`` `in Commercetools)`
@@ -2186,8 +2092,6 @@ class LineItemStateTransitionMessagePayload(MessagePayload):
 
 
 class OrderBillingAddressSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessageSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
@@ -2250,8 +2154,6 @@ class OrderBillingAddressSetMessage(Message):
 
 
 class OrderBillingAddressSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderBillingAddressSetMessagePayloadSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
@@ -2276,8 +2178,6 @@ class OrderBillingAddressSetMessagePayload(MessagePayload):
 
 
 class OrderCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.Order`
     order: "Order"
 
@@ -2335,8 +2235,6 @@ class OrderCreatedMessage(Message):
 
 
 class OrderCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Order`
     order: "Order"
 
@@ -2349,8 +2247,6 @@ class OrderCreatedMessagePayload(MessagePayload):
 
 
 class OrderCustomLineItemDiscountSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessageSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
@@ -2420,8 +2316,6 @@ class OrderCustomLineItemDiscountSetMessage(Message):
 
 
 class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomLineItemDiscountSetMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``customLineItemId`` `in Commercetools)`
     custom_line_item_id: str
     #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
@@ -2457,8 +2351,6 @@ class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
 
 
 class OrderCustomerEmailSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessageSchema`."""
-
     #: Optional :class:`str`
     email: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``oldEmail`` `in Commercetools)`
@@ -2521,8 +2413,6 @@ class OrderCustomerEmailSetMessage(Message):
 
 
 class OrderCustomerEmailSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerEmailSetMessagePayloadSchema`."""
-
     #: Optional :class:`str`
     email: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``oldEmail`` `in Commercetools)`
@@ -2547,8 +2437,6 @@ class OrderCustomerEmailSetMessagePayload(MessagePayload):
 
 
 class OrderCustomerGroupSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerGroupSetMessageSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: typing.Optional["CustomerGroupReference"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``oldCustomerGroup`` `in Commercetools)`
@@ -2611,8 +2499,6 @@ class OrderCustomerGroupSetMessage(Message):
 
 
 class OrderCustomerGroupSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerGroupSetMessagePayloadSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: typing.Optional["CustomerGroupReference"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``oldCustomerGroup`` `in Commercetools)`
@@ -2637,8 +2523,6 @@ class OrderCustomerGroupSetMessagePayload(MessagePayload):
 
 
 class OrderCustomerSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerSetMessageSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerReference`
     customer: typing.Optional["CustomerReference"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -2711,8 +2595,6 @@ class OrderCustomerSetMessage(Message):
 
 
 class OrderCustomerSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderCustomerSetMessagePayloadSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerReference`
     customer: typing.Optional["CustomerReference"]
     #: Optional :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
@@ -2751,8 +2633,6 @@ class OrderCustomerSetMessagePayload(MessagePayload):
 
 
 class OrderDeletedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDeletedMessageSchema`."""
-
     #: :class:`commercetools.types.Order`
     order: "Order"
 
@@ -2810,8 +2690,6 @@ class OrderDeletedMessage(Message):
 
 
 class OrderDeletedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDeletedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Order`
     order: "Order"
 
@@ -2824,8 +2702,6 @@ class OrderDeletedMessagePayload(MessagePayload):
 
 
 class OrderDiscountCodeAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessageSchema`."""
-
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
@@ -2883,8 +2759,6 @@ class OrderDiscountCodeAddedMessage(Message):
 
 
 class OrderDiscountCodeAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
@@ -2902,8 +2776,6 @@ class OrderDiscountCodeAddedMessagePayload(MessagePayload):
 
 
 class OrderDiscountCodeRemovedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessageSchema`."""
-
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
@@ -2961,8 +2833,6 @@ class OrderDiscountCodeRemovedMessage(Message):
 
 
 class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeRemovedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
@@ -2980,8 +2850,6 @@ class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
 
 
 class OrderDiscountCodeStateSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessageSchema`."""
-
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
     #: :class:`commercetools.types.DiscountCodeState`
@@ -3049,8 +2917,6 @@ class OrderDiscountCodeStateSetMessage(Message):
 
 
 class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderDiscountCodeStateSetMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
     #: :class:`commercetools.types.DiscountCodeState`
@@ -3079,8 +2945,6 @@ class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
 
 
 class OrderEditAppliedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedMessageSchema`."""
-
     #: :class:`commercetools.types.OrderEditReference`
     edit: "OrderEditReference"
     #: :class:`commercetools.types.OrderEditApplied`
@@ -3143,8 +3007,6 @@ class OrderEditAppliedMessage(Message):
 
 
 class OrderEditAppliedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderEditAppliedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.OrderEditReference`
     edit: "OrderEditReference"
     #: :class:`commercetools.types.OrderEditApplied`
@@ -3170,8 +3032,6 @@ class OrderEditAppliedMessagePayload(MessagePayload):
 
 
 class OrderImportedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportedMessageSchema`."""
-
     #: :class:`commercetools.types.Order`
     order: "Order"
 
@@ -3229,8 +3089,6 @@ class OrderImportedMessage(Message):
 
 
 class OrderImportedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderImportedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Order`
     order: "Order"
 
@@ -3246,8 +3104,6 @@ class OrderImportedMessagePayload(MessagePayload):
 
 
 class OrderLineItemAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemAddedMessageSchema`."""
-
     #: :class:`commercetools.types.LineItem` `(Named` ``lineItem`` `in Commercetools)`
     line_item: "LineItem"
     #: :class:`int` `(Named` ``addedQuantity`` `in Commercetools)`
@@ -3310,8 +3166,6 @@ class OrderLineItemAddedMessage(Message):
 
 
 class OrderLineItemAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.LineItem` `(Named` ``lineItem`` `in Commercetools)`
     line_item: "LineItem"
     #: :class:`int` `(Named` ``addedQuantity`` `in Commercetools)`
@@ -3336,8 +3190,6 @@ class OrderLineItemAddedMessagePayload(MessagePayload):
 
 
 class OrderLineItemDiscountSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessageSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
@@ -3412,8 +3264,6 @@ class OrderLineItemDiscountSetMessage(Message):
 
 
 class OrderLineItemDiscountSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderLineItemDiscountSetMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
     line_item_id: str
     #: List of :class:`commercetools.types.DiscountedLineItemPriceForQuantity` `(Named` ``discountedPricePerQuantity`` `in Commercetools)`
@@ -3454,8 +3304,6 @@ class OrderLineItemDiscountSetMessagePayload(MessagePayload):
 
 
 class OrderPaymentStateChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessageSchema`."""
-
     #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: "PaymentState"
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
@@ -3518,8 +3366,6 @@ class OrderPaymentStateChangedMessage(Message):
 
 
 class OrderPaymentStateChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderPaymentStateChangedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.PaymentState` `(Named` ``paymentState`` `in Commercetools)`
     payment_state: "PaymentState"
     #: Optional :class:`commercetools.types.PaymentState` `(Named` ``oldPaymentState`` `in Commercetools)`
@@ -3544,8 +3390,6 @@ class OrderPaymentStateChangedMessagePayload(MessagePayload):
 
 
 class OrderReturnInfoAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnInfoAddedMessageSchema`."""
-
     #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
     return_info: "ReturnInfo"
 
@@ -3603,8 +3447,6 @@ class OrderReturnInfoAddedMessage(Message):
 
 
 class OrderReturnInfoAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnInfoAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
     return_info: "ReturnInfo"
 
@@ -3620,8 +3462,6 @@ class OrderReturnInfoAddedMessagePayload(MessagePayload):
 
 
 class OrderReturnShipmentStateChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnShipmentStateChangedMessageSchema`."""
-
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
     return_item_id: str
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``returnShipmentState`` `in Commercetools)`
@@ -3684,8 +3524,6 @@ class OrderReturnShipmentStateChangedMessage(Message):
 
 
 class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderReturnShipmentStateChangedMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``returnItemId`` `in Commercetools)`
     return_item_id: str
     #: :class:`commercetools.types.ReturnShipmentState` `(Named` ``returnShipmentState`` `in Commercetools)`
@@ -3710,8 +3548,6 @@ class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
 
 
 class OrderShipmentStateChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessageSchema`."""
-
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: "ShipmentState"
     #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
@@ -3774,8 +3610,6 @@ class OrderShipmentStateChangedMessage(Message):
 
 
 class OrderShipmentStateChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShipmentStateChangedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.ShipmentState` `(Named` ``shipmentState`` `in Commercetools)`
     shipment_state: "ShipmentState"
     #: Optional :class:`commercetools.types.ShipmentState` `(Named` ``oldShipmentState`` `in Commercetools)`
@@ -3800,8 +3634,6 @@ class OrderShipmentStateChangedMessagePayload(MessagePayload):
 
 
 class OrderShippingAddressSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessageSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
@@ -3864,8 +3696,6 @@ class OrderShippingAddressSetMessage(Message):
 
 
 class OrderShippingAddressSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingAddressSetMessagePayloadSchema`."""
-
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
     #: Optional :class:`commercetools.types.Address` `(Named` ``oldAddress`` `in Commercetools)`
@@ -3890,8 +3720,6 @@ class OrderShippingAddressSetMessagePayload(MessagePayload):
 
 
 class OrderShippingInfoSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessageSchema`."""
-
     #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
     shipping_info: typing.Optional["ShippingInfo"]
     #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``oldShippingInfo`` `in Commercetools)`
@@ -3954,8 +3782,6 @@ class OrderShippingInfoSetMessage(Message):
 
 
 class OrderShippingInfoSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingInfoSetMessagePayloadSchema`."""
-
     #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``shippingInfo`` `in Commercetools)`
     shipping_info: typing.Optional["ShippingInfo"]
     #: Optional :class:`commercetools.types.ShippingInfo` `(Named` ``oldShippingInfo`` `in Commercetools)`
@@ -3980,8 +3806,6 @@ class OrderShippingInfoSetMessagePayload(MessagePayload):
 
 
 class OrderShippingRateInputSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessageSchema`."""
-
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``oldShippingRateInput`` `in Commercetools)`
@@ -4044,8 +3868,6 @@ class OrderShippingRateInputSetMessage(Message):
 
 
 class OrderShippingRateInputSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderShippingRateInputSetMessagePayloadSchema`."""
-
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``shippingRateInput`` `in Commercetools)`
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     #: Optional :class:`commercetools.types.ShippingRateInput` `(Named` ``oldShippingRateInput`` `in Commercetools)`
@@ -4070,8 +3892,6 @@ class OrderShippingRateInputSetMessagePayload(MessagePayload):
 
 
 class OrderStateChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessageSchema`."""
-
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
     order_state: "OrderState"
     #: :class:`commercetools.types.OrderState` `(Named` ``oldOrderState`` `in Commercetools)`
@@ -4134,8 +3954,6 @@ class OrderStateChangedMessage(Message):
 
 
 class OrderStateChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateChangedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.OrderState` `(Named` ``orderState`` `in Commercetools)`
     order_state: "OrderState"
     #: :class:`commercetools.types.OrderState` `(Named` ``oldOrderState`` `in Commercetools)`
@@ -4160,8 +3978,6 @@ class OrderStateChangedMessagePayload(MessagePayload):
 
 
 class OrderStateTransitionMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateTransitionMessageSchema`."""
-
     #: :class:`commercetools.types.StateReference`
     state: "StateReference"
     #: :class:`bool`
@@ -4224,8 +4040,6 @@ class OrderStateTransitionMessage(Message):
 
 
 class OrderStateTransitionMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStateTransitionMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.StateReference`
     state: "StateReference"
     #: :class:`bool`
@@ -4247,8 +4061,6 @@ class OrderStateTransitionMessagePayload(MessagePayload):
 
 
 class OrderStoreSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStoreSetMessageSchema`."""
-
     #: :class:`commercetools.types.StoreKeyReference`
     store: "StoreKeyReference"
 
@@ -4306,8 +4118,6 @@ class OrderStoreSetMessage(Message):
 
 
 class OrderStoreSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.OrderStoreSetMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.StoreKeyReference`
     store: "StoreKeyReference"
 
@@ -4323,8 +4133,6 @@ class OrderStoreSetMessagePayload(MessagePayload):
 
 
 class ParcelAddedToDeliveryMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessageSchema`."""
-
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
     #: :class:`commercetools.types.Parcel`
@@ -4387,8 +4195,6 @@ class ParcelAddedToDeliveryMessage(Message):
 
 
 class ParcelAddedToDeliveryMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelAddedToDeliveryMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
     #: :class:`commercetools.types.Parcel`
@@ -4409,8 +4215,6 @@ class ParcelAddedToDeliveryMessagePayload(MessagePayload):
 
 
 class ParcelItemsUpdatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelItemsUpdatedMessageSchema`."""
-
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
     parcel_id: str
     #: Optional :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -4483,8 +4287,6 @@ class ParcelItemsUpdatedMessage(Message):
 
 
 class ParcelItemsUpdatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelItemsUpdatedMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
     parcel_id: str
     #: Optional :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
@@ -4517,8 +4319,6 @@ class ParcelItemsUpdatedMessagePayload(MessagePayload):
 
 
 class ParcelMeasurementsUpdatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsUpdatedMessageSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -4586,8 +4386,6 @@ class ParcelMeasurementsUpdatedMessage(Message):
 
 
 class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelMeasurementsUpdatedMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -4616,8 +4414,6 @@ class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
 
 
 class ParcelRemovedFromDeliveryMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelRemovedFromDeliveryMessageSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: :class:`commercetools.types.Parcel`
@@ -4680,8 +4476,6 @@ class ParcelRemovedFromDeliveryMessage(Message):
 
 
 class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelRemovedFromDeliveryMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: :class:`commercetools.types.Parcel`
@@ -4702,8 +4496,6 @@ class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
 
 
 class ParcelTrackingDataUpdatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelTrackingDataUpdatedMessageSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -4771,8 +4563,6 @@ class ParcelTrackingDataUpdatedMessage(Message):
 
 
 class ParcelTrackingDataUpdatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ParcelTrackingDataUpdatedMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``deliveryId`` `in Commercetools)`
     delivery_id: str
     #: :class:`str` `(Named` ``parcelId`` `in Commercetools)`
@@ -4801,8 +4591,6 @@ class ParcelTrackingDataUpdatedMessagePayload(MessagePayload):
 
 
 class PaymentCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.Payment`
     payment: "Payment"
 
@@ -4860,8 +4648,6 @@ class PaymentCreatedMessage(Message):
 
 
 class PaymentCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Payment`
     payment: "Payment"
 
@@ -4877,8 +4663,6 @@ class PaymentCreatedMessagePayload(MessagePayload):
 
 
 class PaymentInteractionAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInteractionAddedMessageSchema`."""
-
     #: :class:`commercetools.types.CustomFields`
     interaction: "CustomFields"
 
@@ -4936,8 +4720,6 @@ class PaymentInteractionAddedMessage(Message):
 
 
 class PaymentInteractionAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentInteractionAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.CustomFields`
     interaction: "CustomFields"
 
@@ -4953,8 +4735,6 @@ class PaymentInteractionAddedMessagePayload(MessagePayload):
 
 
 class PaymentStatusInterfaceCodeSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusInterfaceCodeSetMessageSchema`."""
-
     #: :class:`str` `(Named` ``paymentId`` `in Commercetools)`
     payment_id: str
     #: :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
@@ -5017,8 +4797,6 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
 
 
 class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusInterfaceCodeSetMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``paymentId`` `in Commercetools)`
     payment_id: str
     #: :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
@@ -5039,8 +4817,6 @@ class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
 
 
 class PaymentStatusStateTransitionMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusStateTransitionMessageSchema`."""
-
     #: :class:`commercetools.types.StateReference`
     state: "StateReference"
     #: :class:`bool`
@@ -5103,8 +4879,6 @@ class PaymentStatusStateTransitionMessage(Message):
 
 
 class PaymentStatusStateTransitionMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusStateTransitionMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.StateReference`
     state: "StateReference"
     #: :class:`bool`
@@ -5125,8 +4899,6 @@ class PaymentStatusStateTransitionMessagePayload(MessagePayload):
 
 
 class PaymentTransactionAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionAddedMessageSchema`."""
-
     #: :class:`commercetools.types.Transaction`
     transaction: "Transaction"
 
@@ -5184,8 +4956,6 @@ class PaymentTransactionAddedMessage(Message):
 
 
 class PaymentTransactionAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionAddedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Transaction`
     transaction: "Transaction"
 
@@ -5201,8 +4971,6 @@ class PaymentTransactionAddedMessagePayload(MessagePayload):
 
 
 class PaymentTransactionStateChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionStateChangedMessageSchema`."""
-
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
     transaction_id: str
     #: :class:`commercetools.types.TransactionState`
@@ -5265,8 +5033,6 @@ class PaymentTransactionStateChangedMessage(Message):
 
 
 class PaymentTransactionStateChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransactionStateChangedMessagePayloadSchema`."""
-
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
     transaction_id: str
     #: :class:`commercetools.types.TransactionState`
@@ -5291,8 +5057,6 @@ class PaymentTransactionStateChangedMessagePayload(MessagePayload):
 
 
 class ProductAddedToCategoryMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddedToCategoryMessageSchema`."""
-
     #: :class:`commercetools.types.CategoryReference`
     category: "CategoryReference"
     #: :class:`bool`
@@ -5355,8 +5119,6 @@ class ProductAddedToCategoryMessage(Message):
 
 
 class ProductAddedToCategoryMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductAddedToCategoryMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.CategoryReference`
     category: "CategoryReference"
     #: :class:`bool`
@@ -5381,8 +5143,6 @@ class ProductAddedToCategoryMessagePayload(MessagePayload):
 
 
 class ProductCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
     product_projection: "ProductProjection"
 
@@ -5440,8 +5200,6 @@ class ProductCreatedMessage(Message):
 
 
 class ProductCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
     product_projection: "ProductProjection"
 
@@ -5459,8 +5217,6 @@ class ProductCreatedMessagePayload(MessagePayload):
 
 
 class ProductDeletedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDeletedMessageSchema`."""
-
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
     #: :class:`commercetools.types.ProductProjection` `(Named` ``currentProjection`` `in Commercetools)`
@@ -5523,8 +5279,6 @@ class ProductDeletedMessage(Message):
 
 
 class ProductDeletedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductDeletedMessagePayloadSchema`."""
-
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
     #: :class:`commercetools.types.ProductProjection` `(Named` ``currentProjection`` `in Commercetools)`
@@ -5549,8 +5303,6 @@ class ProductDeletedMessagePayload(MessagePayload):
 
 
 class ProductImageAddedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductImageAddedMessageSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
     #: :class:`commercetools.types.Image`
@@ -5618,8 +5370,6 @@ class ProductImageAddedMessage(Message):
 
 
 class ProductImageAddedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductImageAddedMessagePayloadSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
     #: :class:`commercetools.types.Image`
@@ -5648,8 +5398,6 @@ class ProductImageAddedMessagePayload(MessagePayload):
 
 
 class ProductPriceDiscountsSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetMessageSchema`."""
-
     #: List of :class:`commercetools.types.ProductPriceDiscountsSetUpdatedPrice` `(Named` ``updatedPrices`` `in Commercetools)`
     updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
 
@@ -5707,8 +5455,6 @@ class ProductPriceDiscountsSetMessage(Message):
 
 
 class ProductPriceDiscountsSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceDiscountsSetMessagePayloadSchema`."""
-
     #: List of :class:`commercetools.types.ProductPriceDiscountsSetUpdatedPrice` `(Named` ``updatedPrices`` `in Commercetools)`
     updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
 
@@ -5729,8 +5475,6 @@ class ProductPriceDiscountsSetMessagePayload(MessagePayload):
 
 
 class ProductPriceExternalDiscountSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceExternalDiscountSetMessageSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
     #: Optional :class:`str` `(Named` ``variantKey`` `in Commercetools)`
@@ -5813,8 +5557,6 @@ class ProductPriceExternalDiscountSetMessage(Message):
 
 
 class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPriceExternalDiscountSetMessagePayloadSchema`."""
-
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
     #: Optional :class:`str` `(Named` ``variantKey`` `in Commercetools)`
@@ -5863,8 +5605,6 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
 
 
 class ProductPublishedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishedMessageSchema`."""
-
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
@@ -5932,8 +5672,6 @@ class ProductPublishedMessage(Message):
 
 
 class ProductPublishedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductPublishedMessagePayloadSchema`."""
-
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
@@ -5962,8 +5700,6 @@ class ProductPublishedMessagePayload(MessagePayload):
 
 
 class ProductRemovedFromCategoryMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovedFromCategoryMessageSchema`."""
-
     #: :class:`commercetools.types.CategoryReference`
     category: "CategoryReference"
     #: :class:`bool`
@@ -6026,8 +5762,6 @@ class ProductRemovedFromCategoryMessage(Message):
 
 
 class ProductRemovedFromCategoryMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRemovedFromCategoryMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.CategoryReference`
     category: "CategoryReference"
     #: :class:`bool`
@@ -6052,8 +5786,6 @@ class ProductRemovedFromCategoryMessagePayload(MessagePayload):
 
 
 class ProductRevertedStagedChangesMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessageSchema`."""
-
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
 
@@ -6111,8 +5843,6 @@ class ProductRevertedStagedChangesMessage(Message):
 
 
 class ProductRevertedStagedChangesMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductRevertedStagedChangesMessagePayloadSchema`."""
-
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
 
@@ -6128,8 +5858,6 @@ class ProductRevertedStagedChangesMessagePayload(MessagePayload):
 
 
 class ProductSlugChangedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSlugChangedMessageSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
@@ -6187,8 +5915,6 @@ class ProductSlugChangedMessage(Message):
 
 
 class ProductSlugChangedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductSlugChangedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
@@ -6204,8 +5930,6 @@ class ProductSlugChangedMessagePayload(MessagePayload):
 
 
 class ProductStateTransitionMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductStateTransitionMessageSchema`."""
-
     #: :class:`commercetools.types.StateReference`
     state: "StateReference"
     #: :class:`bool`
@@ -6268,8 +5992,6 @@ class ProductStateTransitionMessage(Message):
 
 
 class ProductStateTransitionMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductStateTransitionMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.StateReference`
     state: "StateReference"
     #: :class:`bool`
@@ -6291,8 +6013,6 @@ class ProductStateTransitionMessagePayload(MessagePayload):
 
 
 class ProductUnpublishedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishedMessageSchema`."""
-
     def __init__(
         self,
         *,
@@ -6344,8 +6064,6 @@ class ProductUnpublishedMessage(Message):
 
 
 class ProductUnpublishedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductUnpublishedMessagePayloadSchema`."""
-
     def __init__(self, *, type: str = None) -> None:
         super().__init__(type="ProductUnpublished")
 
@@ -6354,8 +6072,6 @@ class ProductUnpublishedMessagePayload(MessagePayload):
 
 
 class ProductVariantDeletedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessageSchema`."""
-
     #: :class:`commercetools.types.ProductVariant`
     variant: "ProductVariant"
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -6418,8 +6134,6 @@ class ProductVariantDeletedMessage(Message):
 
 
 class ProductVariantDeletedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ProductVariantDeletedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.ProductVariant`
     variant: "ProductVariant"
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
@@ -6444,8 +6158,6 @@ class ProductVariantDeletedMessagePayload(MessagePayload):
 
 
 class ReviewCreatedMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewCreatedMessageSchema`."""
-
     #: :class:`commercetools.types.Review`
     review: "Review"
 
@@ -6503,8 +6215,6 @@ class ReviewCreatedMessage(Message):
 
 
 class ReviewCreatedMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewCreatedMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.Review`
     review: "Review"
 
@@ -6520,8 +6230,6 @@ class ReviewCreatedMessagePayload(MessagePayload):
 
 
 class ReviewRatingSetMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessageSchema`."""
-
     #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
     old_rating: typing.Optional[int]
     #: Optional :class:`int` `(Named` ``newRating`` `in Commercetools)`
@@ -6594,8 +6302,6 @@ class ReviewRatingSetMessage(Message):
 
 
 class ReviewRatingSetMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewRatingSetMessagePayloadSchema`."""
-
     #: Optional :class:`int` `(Named` ``oldRating`` `in Commercetools)`
     old_rating: typing.Optional[int]
     #: Optional :class:`int` `(Named` ``newRating`` `in Commercetools)`
@@ -6634,8 +6340,6 @@ class ReviewRatingSetMessagePayload(MessagePayload):
 
 
 class ReviewStateTransitionMessage(Message):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewStateTransitionMessageSchema`."""
-
     #: :class:`commercetools.types.StateReference` `(Named` ``oldState`` `in Commercetools)`
     old_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``newState`` `in Commercetools)`
@@ -6718,8 +6422,6 @@ class ReviewStateTransitionMessage(Message):
 
 
 class ReviewStateTransitionMessagePayload(MessagePayload):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ReviewStateTransitionMessagePayloadSchema`."""
-
     #: :class:`commercetools.types.StateReference` `(Named` ``oldState`` `in Commercetools)`
     old_state: "StateReference"
     #: :class:`commercetools.types.StateReference` `(Named` ``newState`` `in Commercetools)`

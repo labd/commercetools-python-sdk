@@ -48,8 +48,6 @@ __all__ = [
 
 
 class PriceFunction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PriceFunctionSchema`."""
-
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
     currency_code: "str"
     #: :class:`str`
@@ -68,8 +66,6 @@ class PriceFunction(_BaseType):
 
 
 class ShippingMethod(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -161,8 +157,6 @@ class ShippingMethod(BaseResource):
 
 
 class ShippingMethodDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodDraftSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
@@ -219,8 +213,6 @@ class ShippingMethodDraft(_BaseType):
 
 
 class ShippingMethodPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodPagedQueryResponseSchema`."""
-
     #: Optional :class:`int`
     limit: typing.Optional[int]
     #: :class:`int`
@@ -256,8 +248,6 @@ class ShippingMethodPagedQueryResponse(_BaseType):
 
 
 class ShippingMethodReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.ShippingMethod`
     obj: typing.Optional["ShippingMethod"]
 
@@ -280,8 +270,6 @@ class ShippingMethodReference(Reference):
 
 
 class ShippingMethodResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -300,8 +288,6 @@ class ShippingMethodResourceIdentifier(ResourceIdentifier):
 
 
 class ShippingMethodUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -320,8 +306,6 @@ class ShippingMethodUpdate(_BaseType):
 
 
 class ShippingMethodUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -334,8 +318,6 @@ class ShippingMethodUpdateAction(_BaseType):
 
 
 class ShippingRate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateSchema`."""
-
     #: :class:`commercetools.types.TypedMoney`
     price: "TypedMoney"
     #: Optional :class:`commercetools.types.TypedMoney` `(Named` ``freeAbove`` `in Commercetools)`
@@ -369,8 +351,6 @@ class ShippingRate(_BaseType):
 
 
 class ShippingRateDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRateDraftSchema`."""
-
     #: :class:`commercetools.types.Money`
     price: "Money"
     #: Optional :class:`commercetools.types.Money` `(Named` ``freeAbove`` `in Commercetools)`
@@ -399,8 +379,6 @@ class ShippingRateDraft(_BaseType):
 
 
 class ShippingRatePriceTier(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingRatePriceTierSchema`."""
-
     #: :class:`commercetools.types.ShippingRateTierType`
     type: "ShippingRateTierType"
 
@@ -419,8 +397,6 @@ class ShippingRateTierType(enum.Enum):
 
 
 class ZoneRate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateSchema`."""
-
     #: :class:`commercetools.types.ZoneReference`
     zone: "ZoneReference"
     #: List of :class:`commercetools.types.ShippingRate` `(Named` ``shippingRates`` `in Commercetools)`
@@ -441,8 +417,6 @@ class ZoneRate(_BaseType):
 
 
 class ZoneRateDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRateDraftSchema`."""
-
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
     #: List of :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRates`` `in Commercetools)`
@@ -466,8 +440,6 @@ class ZoneRateDraft(_BaseType):
 
 
 class CartClassificationTier(ShippingRatePriceTier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartClassificationTierSchema`."""
-
     #: :class:`str`
     value: str
     #: :class:`commercetools.types.Money`
@@ -498,8 +470,6 @@ class CartClassificationTier(ShippingRatePriceTier):
 
 
 class CartScoreTier(ShippingRatePriceTier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartScoreTierSchema`."""
-
     #: :class:`int`
     score: int
     #: Optional :class:`commercetools.types.Money`
@@ -532,8 +502,6 @@ class CartScoreTier(ShippingRatePriceTier):
 
 
 class CartValueTier(ShippingRatePriceTier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.CartValueTierSchema`."""
-
     #: :class:`int` `(Named` ``minimumCentAmount`` `in Commercetools)`
     minimum_cent_amount: int
     #: :class:`commercetools.types.Money`
@@ -562,8 +530,6 @@ class CartValueTier(ShippingRatePriceTier):
 
 
 class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddShippingRateActionSchema`."""
-
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
@@ -588,8 +554,6 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodAddZoneActionSchema`."""
-
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
 
@@ -607,8 +571,6 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeIsDefaultActionSchema`."""
-
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
     is_default: bool
 
@@ -624,8 +586,6 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeNameActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -641,8 +601,6 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodChangeTaxCategoryActionSchema`."""
-
     #: :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: "TaxCategoryResourceIdentifier"
 
@@ -663,8 +621,6 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveShippingRateActionSchema`."""
-
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
     #: :class:`commercetools.types.ShippingRateDraft` `(Named` ``shippingRate`` `in Commercetools)`
@@ -689,8 +645,6 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodRemoveZoneActionSchema`."""
-
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
 
@@ -708,8 +662,6 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetDescriptionActionSchema`."""
-
     #: Optional :class:`str`
     description: typing.Optional[str]
 
@@ -727,8 +679,6 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -741,8 +691,6 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetLocalizedDescriptionActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``localizedDescription`` `in Commercetools)`
     localized_description: typing.Optional[str]
 
@@ -760,8 +708,6 @@ class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ShippingMethodSetPredicateActionSchema`."""
-
     #: Optional :class:`str`
     predicate: typing.Optional[str]
 

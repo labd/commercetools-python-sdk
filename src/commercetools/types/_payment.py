@@ -62,8 +62,6 @@ __all__ = [
 
 
 class Payment(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -190,8 +188,6 @@ class Payment(BaseResource):
 
 
 class PaymentDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentDraftSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
     customer: typing.Optional["CustomerResourceIdentifier"]
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
@@ -285,8 +281,6 @@ class PaymentDraft(_BaseType):
 
 
 class PaymentMethodInfo(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentMethodInfoSchema`."""
-
     #: Optional :class:`str` `(Named` ``paymentInterface`` `in Commercetools)`
     payment_interface: typing.Optional[str]
     #: Optional :class:`str`
@@ -315,8 +309,6 @@ class PaymentMethodInfo(_BaseType):
 
 
 class PaymentPagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentPagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -352,8 +344,6 @@ class PaymentPagedQueryResponse(_BaseType):
 
 
 class PaymentReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Payment`
     obj: typing.Optional["Payment"]
 
@@ -376,8 +366,6 @@ class PaymentReference(Reference):
 
 
 class PaymentResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -396,8 +384,6 @@ class PaymentResourceIdentifier(ResourceIdentifier):
 
 
 class PaymentStatus(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusSchema`."""
-
     #: Optional :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
     interface_code: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``interfaceText`` `in Commercetools)`
@@ -426,8 +412,6 @@ class PaymentStatus(_BaseType):
 
 
 class PaymentStatusDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentStatusDraftSchema`."""
-
     #: Optional :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
     interface_code: typing.Optional[str]
     #: Optional :class:`str` `(Named` ``interfaceText`` `in Commercetools)`
@@ -456,8 +440,6 @@ class PaymentStatusDraft(_BaseType):
 
 
 class PaymentUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -473,8 +455,6 @@ class PaymentUpdate(_BaseType):
 
 
 class PaymentUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -487,8 +467,6 @@ class PaymentUpdateAction(_BaseType):
 
 
 class Transaction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TransactionSchema`."""
-
     #: :class:`str`
     id: str
     #: Optional :class:`datetime.datetime`
@@ -535,8 +513,6 @@ class Transaction(_BaseType):
 
 
 class TransactionDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.TransactionDraftSchema`."""
-
     #: Optional :class:`datetime.datetime`
     timestamp: typing.Optional[datetime.datetime]
     #: :class:`commercetools.types.TransactionType`
@@ -587,8 +563,6 @@ class TransactionType(enum.Enum):
 
 
 class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentAddInterfaceInteractionActionSchema`."""
-
     #: :class:`commercetools.types.TypeResourceIdentifier`
     type: "TypeResourceIdentifier"
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -614,8 +588,6 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
 
 
 class PaymentAddTransactionAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentAddTransactionActionSchema`."""
-
     #: :class:`commercetools.types.TransactionDraft`
     transaction: "TransactionDraft"
 
@@ -633,8 +605,6 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
 
 
 class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeAmountPlannedActionSchema`."""
-
     #: :class:`commercetools.types.Money`
     amount: "Money"
 
@@ -650,8 +620,6 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionInteractionIdActionSchema`."""
-
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
     transaction_id: str
     #: :class:`str` `(Named` ``interactionId`` `in Commercetools)`
@@ -676,8 +644,6 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionStateAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionStateActionSchema`."""
-
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
     transaction_id: str
     #: :class:`commercetools.types.TransactionState`
@@ -702,8 +668,6 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentChangeTransactionTimestampActionSchema`."""
-
     #: :class:`str` `(Named` ``transactionId`` `in Commercetools)`
     transaction_id: str
     #: :class:`datetime.datetime`
@@ -728,8 +692,6 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
 
 
 class PaymentSetAmountPaidAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetAmountPaidActionSchema`."""
-
     #: Optional :class:`commercetools.types.Money`
     amount: typing.Optional["Money"]
 
@@ -747,8 +709,6 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
 
 
 class PaymentSetAmountRefundedAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetAmountRefundedActionSchema`."""
-
     #: Optional :class:`commercetools.types.Money`
     amount: typing.Optional["Money"]
 
@@ -766,8 +726,6 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
 
 
 class PaymentSetAnonymousIdAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetAnonymousIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
 
@@ -785,8 +743,6 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
 
 class PaymentSetAuthorizationAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetAuthorizationActionSchema`."""
-
     #: Optional :class:`commercetools.types.Money`
     amount: typing.Optional["Money"]
     #: Optional :class:`datetime.datetime`
@@ -812,8 +768,6 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomFieldAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetCustomFieldActionSchema`."""
-
     #: :class:`str`
     name: str
     #: Optional :class:`typing.Any`
@@ -839,8 +793,6 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomTypeAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetCustomTypeActionSchema`."""
-
     #: Optional :class:`commercetools.types.TypeResourceIdentifier`
     type: typing.Optional["TypeResourceIdentifier"]
     #: Optional :class:`commercetools.types.FieldContainer`
@@ -866,8 +818,6 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomerAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetCustomerActionSchema`."""
-
     #: Optional :class:`commercetools.types.CustomerResourceIdentifier`
     customer: typing.Optional["CustomerResourceIdentifier"]
 
@@ -888,8 +838,6 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
 
 
 class PaymentSetExternalIdAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetExternalIdActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
 
@@ -907,8 +855,6 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 
 
 class PaymentSetInterfaceIdAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetInterfaceIdActionSchema`."""
-
     #: :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
     interface_id: str
 
@@ -924,8 +870,6 @@ class PaymentSetInterfaceIdAction(PaymentUpdateAction):
 
 
 class PaymentSetKeyAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 
@@ -938,8 +882,6 @@ class PaymentSetKeyAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetMethodInfoInterfaceActionSchema`."""
-
     #: :class:`str`
     interface: str
 
@@ -955,8 +897,6 @@ class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetMethodInfoMethodActionSchema`."""
-
     #: Optional :class:`str`
     method: typing.Optional[str]
 
@@ -974,8 +914,6 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetMethodInfoNameActionSchema`."""
-
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
@@ -993,8 +931,6 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
 
 
 class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetStatusInterfaceCodeActionSchema`."""
-
     #: Optional :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
     interface_code: typing.Optional[str]
 
@@ -1012,8 +948,6 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 
 
 class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentSetStatusInterfaceTextActionSchema`."""
-
     #: :class:`str` `(Named` ``interfaceText`` `in Commercetools)`
     interface_text: str
 
@@ -1029,8 +963,6 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 
 
 class PaymentTransitionStateAction(PaymentUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.PaymentTransitionStateActionSchema`."""
-
     #: :class:`commercetools.types.StateResourceIdentifier`
     state: "StateResourceIdentifier"
     #: Optional :class:`bool`

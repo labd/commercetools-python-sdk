@@ -30,8 +30,6 @@ __all__ = [
 
 
 class Location(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.LocationSchema`."""
-
     #: :class:`str`
     country: "str"
     #: Optional :class:`str`
@@ -49,8 +47,6 @@ class Location(_BaseType):
 
 
 class Zone(BaseResource):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSchema`."""
-
     #: :class:`str`
     id: str
     #: :class:`int`
@@ -122,8 +118,6 @@ class Zone(BaseResource):
 
 
 class ZoneDraft(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneDraftSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
     #: :class:`str`
@@ -157,8 +151,6 @@ class ZoneDraft(_BaseType):
 
 
 class ZonePagedQueryResponse(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZonePagedQueryResponseSchema`."""
-
     #: :class:`int`
     limit: int
     #: :class:`int`
@@ -194,8 +186,6 @@ class ZonePagedQueryResponse(_BaseType):
 
 
 class ZoneReference(Reference):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneReferenceSchema`."""
-
     #: Optional :class:`commercetools.types.Zone`
     obj: typing.Optional["Zone"]
 
@@ -218,8 +208,6 @@ class ZoneReference(Reference):
 
 
 class ZoneResourceIdentifier(ResourceIdentifier):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneResourceIdentifierSchema`."""
-
     def __init__(
         self,
         *,
@@ -238,8 +226,6 @@ class ZoneResourceIdentifier(ResourceIdentifier):
 
 
 class ZoneUpdate(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateSchema`."""
-
     #: :class:`int`
     version: int
     #: :class:`list`
@@ -255,8 +241,6 @@ class ZoneUpdate(_BaseType):
 
 
 class ZoneUpdateAction(_BaseType):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneUpdateActionSchema`."""
-
     #: :class:`str`
     action: str
 
@@ -269,8 +253,6 @@ class ZoneUpdateAction(_BaseType):
 
 
 class ZoneAddLocationAction(ZoneUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneAddLocationActionSchema`."""
-
     #: :class:`commercetools.types.Location`
     location: "Location"
 
@@ -286,8 +268,6 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 
 
 class ZoneChangeNameAction(ZoneUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneChangeNameActionSchema`."""
-
     #: :class:`str`
     name: str
 
@@ -300,8 +280,6 @@ class ZoneChangeNameAction(ZoneUpdateAction):
 
 
 class ZoneRemoveLocationAction(ZoneUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneRemoveLocationActionSchema`."""
-
     #: :class:`commercetools.types.Location`
     location: "Location"
 
@@ -317,8 +295,6 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
 
 
 class ZoneSetDescriptionAction(ZoneUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSetDescriptionActionSchema`."""
-
     #: Optional :class:`str`
     description: typing.Optional[str]
 
@@ -336,8 +312,6 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
 
 
 class ZoneSetKeyAction(ZoneUpdateAction):
-    """Corresponding marshmallow schema is :class:`commercetools.schemas.ZoneSetKeyActionSchema`."""
-
     #: Optional :class:`str`
     key: typing.Optional[str]
 

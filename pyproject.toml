@@ -14,6 +14,3 @@ balanced_wrapping = true
 default_section = "THIRDPARTY"
 known_first_party = ["commercetools", "tests", "codegen"]
 use_parentheses = true
-indent_style = "space"
-indent_size = 4
-tab_width = 4

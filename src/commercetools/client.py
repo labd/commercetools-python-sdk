@@ -9,7 +9,7 @@ from requests.adapters import HTTPAdapter
 from requests_oauthlib import OAuth2Session
 from urllib3.util.retry import Retry
 
-from commercetools import schemas
+from commercetools.schemas._error import ErrorResponseSchema
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
@@ -103,7 +103,6 @@ class Client(ServicesMixin):
                 client_secret=self._config["client_secret"],
             )
             self._save_token(token)
-        self.register_services()
 
     def _save_token(self, token):
         self._token_saver.add_token(
@@ -189,7 +188,7 @@ class Client(ServicesMixin):
         correlation_id = response.headers.get(HEADER_CORRELATION_ID)
         if not response.content:
             response.raise_for_status()
-        obj = schemas.ErrorResponseSchema().loads(response.content)
+        obj = ErrorResponseSchema().loads(response.content)
 
         # We'll fetch the 'raw' errors from the response because some of the
         # attributes are not included in the schemas.

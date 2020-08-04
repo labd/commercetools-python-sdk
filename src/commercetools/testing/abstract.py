@@ -7,9 +7,10 @@ import marshmallow
 from marshmallow import fields
 from requests_mock.request import _RequestObjectProxy
 
-from commercetools import CommercetoolsError, schemas, types
+from commercetools import CommercetoolsError, types
+from commercetools._schemas._common import BaseResourceSchema
+from commercetools._schemas._error import DuplicateFieldErrorSchema, ErrorResponseSchema
 from commercetools.helpers import OptionalList
-from commercetools.schemas import BaseResourceSchema
 from commercetools.services import traits
 from commercetools.testing import utils
 from commercetools.testing.predicates import PredicateFilter
@@ -62,7 +63,7 @@ class BaseModel:
                     duplicate_value=value,
                     conflicting_resource=None,
                 )
-                serialized_errors = [schemas.DuplicateFieldErrorSchema().dump(error)]
+                serialized_errors = [DuplicateFieldErrorSchema().dump(error)]
                 raise CommercetoolsError(
                     msg,
                     errors=serialized_errors,
@@ -387,7 +388,7 @@ class ServiceBackend(BaseBackend):
         return obj, None
 
     def _create_data_error_response(self, message, obj):
-        return schemas.ErrorResponseSchema().dump(
+        return ErrorResponseSchema().dump(
             types.ErrorResponse(
                 status_code=400,
                 message=message,
@@ -400,7 +401,7 @@ class ServiceBackend(BaseBackend):
         )
 
     def _create_version_error_response(self, version):
-        return schemas.ErrorResponseSchema().dump(
+        return ErrorResponseSchema().dump(
             types.ErrorResponse(
                 status_code=409,
                 message="Version mismatch. Concurrent modification.",

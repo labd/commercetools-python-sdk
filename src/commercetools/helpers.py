@@ -2,7 +2,11 @@ import importlib
 import typing
 
 from marshmallow import class_registry, fields, missing, post_dump
-from marshmallow.exceptions import StringNotCollectionError, ValidationError, RegistryError
+from marshmallow.exceptions import (
+    RegistryError,
+    StringNotCollectionError,
+    ValidationError,
+)
 from marshmallow.fields import Field, Nested
 from marshmallow.utils import RAISE, is_collection
 from marshmallow.utils import missing as missing_
@@ -52,7 +56,6 @@ class RemoveEmptyValuesMixin:
         return result
 
 
-
 class RegexField(Field):
     def _serialize(self, nested_obj, attr, obj):
         result = {}
@@ -87,7 +90,6 @@ class RegexField(Field):
 
 
 class LazyNestedField(Nested):
-
     @property
     def schema(self):
         try:

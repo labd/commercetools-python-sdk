@@ -3,14 +3,21 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._product_type import (
+    AttributeDefinitionSchema,
+    ProductTypeDraftSchema,
+    ProductTypePagedQueryResponseSchema,
+    ProductTypeSchema,
+    ProductTypeUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 
 class ProductTypesModel(BaseModel):
     _primary_type_name = "product-type"
-    _resource_schema = schemas.ProductTypeSchema
+    _resource_schema = ProductTypeSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -98,7 +105,7 @@ def change_localized_enum_value_label():
 
 
 def add_attribute_definition_action():
-    schema = schemas.AttributeDefinitionSchema()
+    schema = AttributeDefinitionSchema()
 
     def updater(self, obj: dict, action: types.ProductTypeAddAttributeDefinitionAction):
         existing = [attr["name"] for attr in obj["attributes"]]
@@ -119,9 +126,9 @@ class ProductTypesBackend(ServiceBackend):
     service_path = "product-types"
     model_class = ProductTypesModel
 
-    _schema_draft = schemas.ProductTypeDraftSchema
-    _schema_update = schemas.ProductTypeUpdateSchema
-    _schema_query_response = schemas.ProductTypePagedQueryResponseSchema
+    _schema_draft = ProductTypeDraftSchema
+    _schema_update = ProductTypeUpdateSchema
+    _schema_query_response = ProductTypePagedQueryResponseSchema
 
     def urls(self):
         return [

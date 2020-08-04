@@ -2,12 +2,18 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._review import (
+    ReviewDraftSchema,
+    ReviewPagedQueryResponseSchema,
+    ReviewSchema,
+    ReviewUpdateSchema,
+)
 from commercetools.testing import abstract, utils
 
 
 class ReviewModel(abstract.BaseModel):
-    _resource_schema = schemas.ReviewSchema
+    _resource_schema = ReviewSchema
     _primary_type_name = "review"
     _unique_values = ["key"]
 
@@ -38,9 +44,9 @@ class ReviewModel(abstract.BaseModel):
 class ReviewsBackend(abstract.ServiceBackend):
     service_path = "reviews"
     model_class = ReviewModel
-    _schema_draft = schemas.ReviewDraftSchema
-    _schema_update = schemas.ReviewUpdateSchema
-    _schema_query_response = schemas.ReviewPagedQueryResponseSchema
+    _schema_draft = ReviewDraftSchema
+    _schema_update = ReviewUpdateSchema
+    _schema_query_response = ReviewPagedQueryResponseSchema
 
     def urls(self):
         return [

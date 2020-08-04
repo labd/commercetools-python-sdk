@@ -2,14 +2,20 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._discount_code import (
+    DiscountCodeDraftSchema,
+    DiscountCodePagedQueryResponseSchema,
+    DiscountCodeSchema,
+    DiscountCodeUpdateSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute
 
 
 class DiscountCodesModel(BaseModel):
-    _resource_schema = schemas.DiscountCodeSchema
+    _resource_schema = DiscountCodeSchema
     _primary_type_name = "discount-code"
 
     def _create_from_draft(
@@ -40,9 +46,9 @@ class DiscountCodesModel(BaseModel):
 class DiscountCodesBackend(ServiceBackend):
     service_path = "discount-codes"
     model_class = DiscountCodesModel
-    _schema_draft = schemas.DiscountCodeDraftSchema
-    _schema_update = schemas.DiscountCodeUpdateSchema
-    _schema_query_response = schemas.DiscountCodePagedQueryResponseSchema
+    _schema_draft = DiscountCodeDraftSchema
+    _schema_update = DiscountCodeUpdateSchema
+    _schema_query_response = DiscountCodePagedQueryResponseSchema
 
     def urls(self):
         return [

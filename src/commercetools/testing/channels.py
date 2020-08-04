@@ -2,13 +2,19 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._channel import (
+    ChannelDraftSchema,
+    ChannelPagedQueryResponseSchema,
+    ChannelSchema,
+    ChannelUpdateSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ChannelsModel(BaseModel):
-    _resource_schema = schemas.ChannelSchema
+    _resource_schema = ChannelSchema
     _primary_type_name = "channel"
     _unique_values = ["key"]
 
@@ -32,9 +38,9 @@ class ChannelsModel(BaseModel):
 class ChannelsBackend(ServiceBackend):
     service_path = "channels"
     model_class = ChannelsModel
-    _schema_draft = schemas.ChannelDraftSchema
-    _schema_update = schemas.ChannelUpdateSchema
-    _schema_query_response = schemas.ChannelPagedQueryResponseSchema
+    _schema_draft = ChannelDraftSchema
+    _schema_update = ChannelUpdateSchema
+    _schema_query_response = ChannelPagedQueryResponseSchema
 
     def urls(self):
         return [

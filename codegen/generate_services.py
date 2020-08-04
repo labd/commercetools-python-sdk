@@ -42,7 +42,9 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
             self.add_import_statement(module, ".", "abstract")
             self.add_import_statement(module, ".", "traits")
-            self.add_import_statement(module, "commercetools.helpers", "RemoveEmptyValuesMixin")
+            self.add_import_statement(
+                module, "commercetools.helpers", "RemoveEmptyValuesMixin"
+            )
             self.add_import_statement(module, "commercetools.typing", "OptionalListStr")
 
             all_nodes = (
@@ -57,7 +59,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
         result["__init__"] = {
             "name": "__init__",
-            "ast": self._generate_init_file(result),
+            "ast": _generate_init_file(self._services, result),
         }
         return result
 
@@ -176,7 +178,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
         return_obj = self._types.get(method.returns)
         if return_obj:
-            self.add_import_statement(module_name, f"commercetools.types.{return_obj.package_name}", return_obj.name)
+            self.add_import_statement(
+                module_name,
+                f"commercetools.types.{return_obj.package_name}",
+                return_obj.name,
+            )
             node.returns = ast.Name(id=return_obj.name)
 
         # Add docstring
@@ -228,13 +234,18 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
             class_node.body.append(node)
         else:
-            print(f"Skipping method {method.context_name}.{method.name} since we couldn't generate it")
-
+            print(
+                f"Skipping method {method.context_name}.{method.name} since we couldn't generate it"
+            )
 
     def make_get_method(self, method, node, return_obj, module_name):
         """Create the `.get_*()` method"""
         schema_name = return_obj.name + "Schema"
-        self.add_import_statement(module_name, f"commercetools.schemas.{return_obj.package_name}", schema_name)
+        self.add_import_statement(
+            module_name,
+            f"commercetools._schemas.{return_obj.package_name}",
+            schema_name,
+        )
         node.body.append(
             ast.Return(
                 self._call_client(
@@ -255,19 +266,28 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
         # Import response schema
         response_schema_name = return_obj.name + "Schema"
-        self.add_import_statement(module_name, f"commercetools.schemas.{return_obj.package_name}", response_schema_name)
+        self.add_import_statement(
+            module_name,
+            f"commercetools._schemas.{return_obj.package_name}",
+            response_schema_name,
+        )
 
         if input_obj:
             input_schema_name = input_obj.name + "Schema"
 
-            self.add_import_statement(module_name, f"commercetools.types.{input_obj.package_name}", input_obj.name)
-            self.add_import_statement(module_name, f"commercetools.schemas.{input_obj.package_name}", input_schema_name)
+            self.add_import_statement(
+                module_name,
+                f"commercetools.types.{input_obj.package_name}",
+                input_obj.name,
+            )
+            self.add_import_statement(
+                module_name,
+                f"commercetools._schemas.{input_obj.package_name}",
+                input_schema_name,
+            )
             node.args.args.insert(
                 len(method.path_params) + 1,
-                ast.arg(
-                    arg="draft",
-                    annotation=ast.Name(id=input_obj.name)
-                ),
+                ast.arg(arg="draft", annotation=ast.Name(id=input_obj.name)),
             )
 
         node.body.append(
@@ -277,8 +297,12 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
                     data_object=ast.Name("draft") if input_obj else None,
-                    request_schema_cls=ast.Name(id=input_schema_name) if input_schema_name else None,
-                    response_schema_cls=ast.Name(id=response_schema_name) if response_schema_name else None,
+                    request_schema_cls=ast.Name(id=input_schema_name)
+                    if input_schema_name
+                    else None,
+                    response_schema_cls=ast.Name(id=response_schema_name)
+                    if response_schema_name
+                    else None,
                 )
             )
         )
@@ -288,7 +312,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         """Create the `.query(self, input, ...)` method"""
         # Import response schema
         response_schema_name = return_obj.name + "Schema"
-        self.add_import_statement(module_name, f"commercetools.schemas.{return_obj.package_name}", response_schema_name)
+        self.add_import_statement(
+            module_name,
+            f"commercetools._schemas.{return_obj.package_name}",
+            response_schema_name,
+        )
 
         node.body.append(
             ast.Return(
@@ -296,7 +324,9 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     method="_get",
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
-                    response_schema_cls=ast.Name(id=response_schema_name) if response_schema_name else None,
+                    response_schema_cls=ast.Name(id=response_schema_name)
+                    if response_schema_name
+                    else None,
                 )
             )
         )
@@ -305,7 +335,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
     def make_update_method(self, method, node, return_obj, module_name):
         """Create the `.update_by_*(self, id, actions, ...)` method"""
         response_schema_name = return_obj.name + "Schema"
-        self.add_import_statement(module_name, f"commercetools.schemas.{return_obj.package_name}", response_schema_name)
+        self.add_import_statement(
+            module_name,
+            f"commercetools._schemas.{return_obj.package_name}",
+            response_schema_name,
+        )
 
         input_obj = self._types.get(method.input_type)
         if not input_obj:
@@ -313,9 +347,19 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         action_obj = self._types.get(method.input_type + "Action")
         input_schema_name = input_obj.name + "Schema"
 
-        self.add_import_statement(module_name, f"commercetools.types.{input_obj.package_name}", input_obj.name)
-        self.add_import_statement(module_name, f"commercetools.types.{action_obj.package_name}", action_obj.name)
-        self.add_import_statement(module_name, f"commercetools.schemas.{input_obj.package_name}", input_schema_name)
+        self.add_import_statement(
+            module_name, f"commercetools.types.{input_obj.package_name}", input_obj.name
+        )
+        self.add_import_statement(
+            module_name,
+            f"commercetools.types.{action_obj.package_name}",
+            action_obj.name,
+        )
+        self.add_import_statement(
+            module_name,
+            f"commercetools._schemas.{input_obj.package_name}",
+            input_schema_name,
+        )
 
         node.args.args.append(
             ast.arg(
@@ -371,7 +415,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         response_schema_name = None
         if return_obj:
             response_schema_name = return_obj.name + "Schema"
-            self.add_import_statement(module_name, f"commercetools.schemas.{return_obj.package_name}", response_schema_name)
+            self.add_import_statement(
+                module_name,
+                f"commercetools._schemas.{return_obj.package_name}",
+                response_schema_name,
+            )
 
         node.body.append(
             ast.Return(
@@ -392,7 +440,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         response_schema_name = None
         if return_obj:
             response_schema_name = return_obj.name + "Schema"
-            self.add_import_statement(module_name, f"commercetools.schemas.{return_obj.package_name}", response_schema_name)
+            self.add_import_statement(
+                module_name,
+                f"commercetools._schemas.{return_obj.package_name}",
+                response_schema_name,
+            )
 
         input_obj = self._types.get(method.input_type)
         input_name = None
@@ -403,16 +455,20 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
             input_schema_name = input_obj.name + "Schema"
 
-            self.add_import_statement(module_name, f"commercetools.types.{input_obj.package_name}", input_obj.name)
-            self.add_import_statement(module_name, f"commercetools.schemas.{input_obj.package_name}", input_schema_name)
-
+            self.add_import_statement(
+                module_name,
+                f"commercetools.types.{input_obj.package_name}",
+                input_obj.name,
+            )
+            self.add_import_statement(
+                module_name,
+                f"commercetools._schemas.{input_obj.package_name}",
+                input_schema_name,
+            )
 
             node.args.args.insert(
                 len(method.path_params) + 1,
-                ast.arg(
-                    arg=input_name,
-                    annotation=ast.Name(id=input_obj.name)
-                ),
+                ast.arg(arg=input_name, annotation=ast.Name(id=input_obj.name)),
             )
 
         node.body.append(
@@ -422,8 +478,12 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
                     data_object=ast.Name(input_name) if input_name else None,
-                    request_schema_cls=ast.Name(id=input_schema_name) if input_schema_name else None,
-                    response_schema_cls=ast.Name(id=response_schema_name) if response_schema_name else None,
+                    request_schema_cls=ast.Name(id=input_schema_name)
+                    if input_schema_name
+                    else None,
+                    response_schema_cls=ast.Name(id=response_schema_name)
+                    if response_schema_name
+                    else None,
                     file=ast.Name("fh") if method.is_fileupload else None,
                 )
             )
@@ -577,103 +637,6 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         )
         node.body.append(line)
 
-    def _generate_init_file(self, modules):
-        """Generate the __init__.py file which contains the ServicsMixin for
-        the client.
-
-        This is mostly to automate the addition of new services.
-
-        """
-        nodes = []
-
-        nodes.append(
-            ast.Import(names=[ast.alias(name="typing", asname=None)], level=0)
-        )
-        nodes.append(ast.ImportFrom(
-            module="cached_property",
-            names=[ast.alias(name="cached_property", asname=None)],
-            level=0,
-        ))
-
-        # Collect all submodules
-        submodules = {}
-        for service in self._services.values():
-            module_name = snakeit(service.context_name)
-            service_name = service.context_name + "Service"
-            info = modules[module_name]
-
-            key = ".%s" % info["name"]
-            submodules[key] = {
-                "class_name": service.context_name + "Service",
-                "var_name": snakeit(service.context_name),
-            }
-
-        # Add manual generated files (TODO)
-        submodules[".project"] = {
-            "class_name": "ProjectService",
-            "var_name": "project",
-        }
-
-        # Generate import statements (these will be sorted by isort)
-        if_node = ast.If(
-            test=ast.Attribute(value=ast.Name(id='typing'), attr='TYPE_CHECKING'),
-            body=[],
-            orelse=[],
-        )
-        nodes.append(if_node)
-        for name, service in submodules.items():
-            node = ast.ImportFrom(
-                module=name,
-                names=[ast.alias(name=service["class_name"], asname=None)],
-                level=0,
-            )
-            if_node.body.append(node)
-
-        module_varnames = sorted(
-            submodules.values(), key=operator.itemgetter("var_name")
-        )
-
-        class_node = ast.ClassDef(
-            name="ServicesMixin", bases=[], keywords=[], decorator_list=[], body=[]
-        )
-        for name, service in submodules.items():
-            node = ast.FunctionDef(
-                name=service["var_name"],
-                args=ast.arguments(
-                    args=[ast.arg(arg="self", annotation=None)],
-                    vararg=None,
-                    kwonlyargs=[],
-                    kw_defaults=[],
-                    kwarg=None,
-                    defaults=[],
-                ),
-                body=[],
-                decorator_list=[ast.Name(id="cached_property")],
-                returns=ast.Str(s=service["class_name"], kind=None),
-            )
-            node.body.append(
-                ast.ImportFrom(
-                    module=name,
-                    names=[ast.alias(name=service["class_name"], asname=None)],
-                    level=0,
-                ))
-            node.body.append(
-                ast.Return(
-                    ast.Call(
-                        func=ast.Name(id=service["class_name"]),
-                        args=[
-                            ast.Name(id="self")
-                        ],
-                        keywords=[]
-                    )
-                )
-            )
-            class_node.body.append(node)
-
-        nodes.append(class_node)
-
-        return ast.Module(body=nodes)
-
     def _generate_trait_file(self):
         """Generate the traits.py file which contains marshmallow schema's for
         the various traits.
@@ -704,6 +667,104 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         ]
         nodes.extend(self._trait_nodes)
         return ast.Module(body=nodes)
+
+
+def _generate_init_file(services, modules):
+    """Generate the __init__.py file which contains the ServicsMixin for
+    the client.
+
+    This is mostly to automate the addition of new services.
+
+    """
+    nodes = []
+
+    nodes.append(ast.Import(names=[ast.alias(name="typing", asname=None)], level=0))
+    nodes.append(
+        ast.ImportFrom(
+            module="cached_property",
+            names=[ast.alias(name="cached_property", asname=None)],
+            level=0,
+        )
+    )
+
+    # Collect all submodules
+    submodules = {}
+    for service in services.values():
+        module_name = snakeit(service.context_name)
+        service_name = service.context_name + "Service"
+        info = modules[module_name]
+
+        key = ".%s" % info["name"]
+        submodules[key] = {
+            "module_name": info["name"],
+            "class_name": service.context_name + "Service",
+            "var_name": snakeit(service.context_name),
+        }
+
+    # Add manual generated files (TODO)
+    submodules[".project"] = {
+        "module_name": "project",
+        "class_name": "ProjectService",
+        "var_name": "project",
+    }
+
+    # Generate TYPE_CHECKING import statements (these will be sorted by isort).
+    if_node = ast.If(
+        test=ast.Attribute(value=ast.Name(id="typing"), attr="TYPE_CHECKING"),
+        body=[],
+        orelse=[],
+    )
+    nodes.append(if_node)
+    for name, service in submodules.items():
+        node = ast.ImportFrom(
+            module=name,
+            names=[ast.alias(name=service["class_name"], asname=None)],
+            level=0,
+        )
+        if_node.body.append(node)
+
+    module_varnames = sorted(submodules.values(), key=operator.itemgetter("var_name"))
+
+    # Return the class + properties
+    class_node = ast.ClassDef(
+        name="ServicesMixin", bases=[], keywords=[], decorator_list=[], body=[]
+    )
+    for name, service in submodules.items():
+        node = ast.FunctionDef(
+            name=service["module_name"],
+            args=ast.arguments(
+                args=[ast.arg(arg="self", annotation=None)],
+                vararg=None,
+                kwonlyargs=[],
+                kw_defaults=[],
+                kwarg=None,
+                defaults=[],
+            ),
+            body=[],
+            decorator_list=[ast.Name(id="cached_property")],
+            returns=ast.Str(s=service["class_name"], kind=None),
+        )
+        node.body.append(
+            ast.ImportFrom(
+                module=name,
+                names=[ast.alias(name=service["class_name"], asname=None)],
+                level=0,
+            )
+        )
+        node.body.append(
+            ast.Return(
+                ast.Call(
+                    func=ast.Name(id=service["class_name"]),
+                    args=[ast.Name(id="self")],
+                    keywords=[],
+                )
+            )
+        )
+        class_node.body.append(node)
+
+    nodes.append(class_node)
+
+    return ast.Module(body=nodes)
 
 
 def _create_trait_schema(trait: TraitInfo) -> ast.ClassDef:

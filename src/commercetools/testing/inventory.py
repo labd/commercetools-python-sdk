@@ -3,7 +3,13 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._inventory import (
+    InventoryEntryDraftSchema,
+    InventoryEntrySchema,
+    InventoryEntryUpdateSchema,
+    InventoryPagedQueryResponseSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import InternalUpdateError, update_attribute
@@ -11,7 +17,7 @@ from commercetools.testing.utils import InternalUpdateError, update_attribute
 
 class InventoryEntryModel(BaseModel):
     _primary_type_name = "inventory-entry"
-    _resource_schema = schemas.InventoryEntrySchema
+    _resource_schema = InventoryEntrySchema
 
     def _create_from_draft(
         self, draft: types.InventoryEntryDraft, id: typing.Optional[str] = None
@@ -57,9 +63,9 @@ def change_stock():
 class InventoryEntryBackend(ServiceBackend):
     service_path = "inventory"
     model_class = InventoryEntryModel
-    _schema_draft = schemas.InventoryEntryDraftSchema
-    _schema_update = schemas.InventoryEntryUpdateSchema
-    _schema_query_response = schemas.InventoryPagedQueryResponseSchema
+    _schema_draft = InventoryEntryDraftSchema
+    _schema_update = InventoryEntryUpdateSchema
+    _schema_query_response = InventoryPagedQueryResponseSchema
 
     def urls(self):
         return [

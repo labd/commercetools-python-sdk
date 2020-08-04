@@ -2,14 +2,20 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._custom_object import (
+    CustomObjectDraftSchema,
+    CustomObjectPagedQueryResponseSchema,
+    CustomObjectSchema,
+)
+from commercetools._schemas._error import ErrorResponseSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
 
 
 class CustomObjectsModel(BaseModel):
     _primary_type_name = "custom-object"
-    _resource_schema = schemas.CustomObjectSchema
+    _resource_schema = CustomObjectSchema
 
     def _generate_key(self, obj):
         return obj.container, obj.key
@@ -32,8 +38,8 @@ class CustomObjectsModel(BaseModel):
 class CustomObjectsBackend(ServiceBackend):
     service_path = "custom-objects"
     model_class = CustomObjectsModel
-    _schema_draft = schemas.CustomObjectDraftSchema
-    _schema_query_response = schemas.CustomObjectPagedQueryResponseSchema
+    _schema_draft = CustomObjectDraftSchema
+    _schema_query_response = CustomObjectPagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -57,7 +63,7 @@ class CustomObjectsBackend(ServiceBackend):
         if item:
             return create_commercetools_response(request, json=item)
         else:
-            content = schemas.ErrorResponseSchema().dumps(
+            content = ErrorResponseSchema().dumps(
                 types.ErrorResponse(
                     status_code=404,
                     message=f"The CustomObject with ID '({container},{key})'",

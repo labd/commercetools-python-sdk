@@ -2,14 +2,21 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._error import ErrorResponseSchema
+from commercetools._schemas._subscription import (
+    SubscriptionDraftSchema,
+    SubscriptionPagedQueryResponseSchema,
+    SubscriptionSchema,
+    SubscriptionUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
 
 
 class SubscriptionsModel(BaseModel):
     _primary_type_name = "subscription"
-    _resource_schema = schemas.SubscriptionSchema
+    _resource_schema = SubscriptionSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -31,9 +38,9 @@ class SubscriptionsModel(BaseModel):
 class SubscriptionsBackend(ServiceBackend):
     service_path = "subscriptions"
     model_class = SubscriptionsModel
-    _schema_draft = schemas.SubscriptionDraftSchema
-    _schema_update = schemas.SubscriptionUpdateSchema
-    _schema_query_response = schemas.SubscriptionPagedQueryResponseSchema
+    _schema_draft = SubscriptionDraftSchema
+    _schema_update = SubscriptionUpdateSchema
+    _schema_query_response = SubscriptionPagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -60,7 +67,7 @@ class SubscriptionsBackend(ServiceBackend):
                 message=message,
                 errors=[types.InvalidInputError(message=message)],
             )
-            error_data = schemas.ErrorResponseSchema().dumps(error).encode("utf-8")
+            error_data = ErrorResponseSchema().dumps(error).encode("utf-8")
             return create_commercetools_response(
                 request, content=error_data, status_code=400
             )

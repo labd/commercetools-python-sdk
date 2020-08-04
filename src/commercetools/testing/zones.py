@@ -2,7 +2,14 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._zone import (
+    LocationSchema,
+    ZoneDraftSchema,
+    ZonePagedQueryResponseSchema,
+    ZoneSchema,
+    ZoneUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     update_attribute,
@@ -13,7 +20,7 @@ from commercetools.testing.utils import (
 
 class ZonesModel(BaseModel):
     _primary_type_name = "zones"
-    _resource_schema = schemas.ZoneSchema
+    _resource_schema = ZoneSchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -35,9 +42,9 @@ class ZonesModel(BaseModel):
 class ZonesBackend(ServiceBackend):
     service_path = "zones"
     model_class = ZonesModel
-    _schema_draft = schemas.ZoneDraftSchema
-    _schema_update = schemas.ZoneUpdateSchema
-    _schema_query_response = schemas.ZonePagedQueryResponseSchema
+    _schema_draft = ZoneDraftSchema
+    _schema_update = ZoneUpdateSchema
+    _schema_query_response = ZonePagedQueryResponseSchema
 
     def urls(self):
         return [
@@ -54,9 +61,9 @@ class ZonesBackend(ServiceBackend):
         "setKey": update_attribute("key", "key"),
         "setDescription": update_attribute("description", "description"),
         "addLocation": update_attribute_add_item(
-            "locations", "location", schemas.LocationSchema
+            "locations", "location", LocationSchema
         ),
         "removeLocation": update_attribute_delete_item(
-            "locations", "location", schemas.LocationSchema
+            "locations", "location", LocationSchema
         ),
     }

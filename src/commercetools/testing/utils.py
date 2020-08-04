@@ -1,4 +1,5 @@
 import copy
+import importlib
 import json
 import typing
 import uuid
@@ -7,7 +8,8 @@ from marshmallow import Schema
 from requests_mock import create_response
 from requests_mock.request import _RequestObjectProxy
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._product import ProductSchema
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.types import CartSetCustomFieldAction, OrderSetCustomFieldAction
 from commercetools.types._abstract import _BaseType
@@ -98,7 +100,12 @@ def update_attribute(dst: str, src: str):
         value = getattr(action, src)
 
         if isinstance(value, _BaseType):
-            schema = getattr(schemas, value.__class__.__name__ + "Schema", None)
+            # FIXME: this stupidly assumes the types and schemas module names
+            # are in sync. which might be the case since we auto-generate both,
+            # but still...
+            pkg_name = value.__class__.__module__.replace(".types.", "._schemas.")
+            module = importlib.import_module(pkg_name)
+            schema = getattr(module, value.__class__.__name__ + "Schema", None)
             if schema:
                 value = schema().dump(value)
         if obj[dst] != value:
@@ -207,7 +214,7 @@ def get_product_from_storage(
     product_store = storage._stores["product"]
 
     if product_id:
-        product = schemas.ProductSchema().load(product_store[product_id])
+        product = ProductSchema().load(product_store[product_id])
     elif sku:
         for product_data in product_store.values():
             try:
@@ -216,7 +223,7 @@ def get_product_from_storage(
                 continue
 
             if master_data and master_data["masterVariant"]["sku"] == sku:
-                product = schemas.ProductSchema().load(product_data)
+                product = ProductSchema().load(product_data)
     else:
         raise ValueError("SKU or productId is required")
 

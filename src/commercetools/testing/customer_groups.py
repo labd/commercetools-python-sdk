@@ -2,12 +2,18 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._customer_group import (
+    CustomerGroupDraftSchema,
+    CustomerGroupPagedQueryResponseSchema,
+    CustomerGroupSchema,
+)
+from commercetools._schemas._review import ReviewUpdateSchema
 from commercetools.testing import abstract, utils
 
 
 class CustomerGroupModel(abstract.BaseModel):
-    _resource_schema = schemas.CustomerGroupSchema
+    _resource_schema = CustomerGroupSchema
     _primary_type_name = "customer-group"
     _unique_values = ["key"]
 
@@ -29,9 +35,9 @@ class CustomerGroupBackend(abstract.ServiceBackend):
     service_path = "customer-groups"
     model_class = CustomerGroupModel
 
-    _schema_draft = schemas.CustomerGroupDraftSchema
-    _schema_update = schemas.ReviewUpdateSchema
-    _schema_query_response = schemas.CustomerGroupPagedQueryResponseSchema
+    _schema_draft = CustomerGroupDraftSchema
+    _schema_update = ReviewUpdateSchema
+    _schema_query_response = CustomerGroupPagedQueryResponseSchema
 
     def urls(self):
         return [

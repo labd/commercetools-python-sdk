@@ -2,14 +2,20 @@ import datetime
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._category import (
+    CategoryDraftSchema,
+    CategoryPagedQueryResponseSchema,
+    CategorySchema,
+    CategoryUpdateSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class CategoriesModel(BaseModel):
     _primary_type_name = "category"
-    _resource_schema = schemas.CategorySchema
+    _resource_schema = CategorySchema
     _unique_values = ["key"]
 
     def _create_from_draft(
@@ -32,9 +38,9 @@ class CategoriesModel(BaseModel):
 class CategoriesBackend(ServiceBackend):
     service_path = "categories"
     model_class = CategoriesModel
-    _schema_draft = schemas.CategoryDraftSchema
-    _schema_update = schemas.CategoryUpdateSchema
-    _schema_query_response = schemas.CategoryPagedQueryResponseSchema
+    _schema_draft = CategoryDraftSchema
+    _schema_update = CategoryUpdateSchema
+    _schema_query_response = CategoryPagedQueryResponseSchema
 
     def urls(self):
         return [

@@ -3,7 +3,7 @@ import re
 
 import pytest
 
-from commercetools import schemas
+from commercetools._schemas._product import ProductDataSchema
 from commercetools.testing import predicates
 
 
@@ -45,7 +45,7 @@ def test_tokenize(predicate):
     ],
 )
 def test_filter(predicate, paths):
-    pf = predicates.PredicateFilter(predicate, schema=schemas.ProductDataSchema)
+    pf = predicates.PredicateFilter(predicate, schema=ProductDataSchema)
 
     found_paths = []
 

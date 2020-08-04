@@ -1,13 +1,19 @@
 import typing
 import uuid
 
-from commercetools import schemas, types
+from commercetools import types
+from commercetools._schemas._product_discount import (
+    ProductDiscountDraftSchema,
+    ProductDiscountPagedQueryResponseSchema,
+    ProductDiscountSchema,
+    ProductDiscountUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
 
 class ProductDiscountsModel(BaseModel):
     _primary_type_name = "product-discount"
-    _resource_schema = schemas.ProductDiscountSchema
+    _resource_schema = ProductDiscountSchema
 
     def _create_from_draft(
         self, draft: types.ProductDiscountDraft, id: typing.Optional[str] = None
@@ -32,9 +38,9 @@ class ProductDiscountsBackend(ServiceBackend):
     service_path = "product-discounts"
     model_class = ProductDiscountsModel
 
-    _schema_draft = schemas.ProductDiscountDraftSchema
-    _schema_update = schemas.ProductDiscountUpdateSchema
-    _schema_query_response = schemas.ProductDiscountPagedQueryResponseSchema
+    _schema_draft = ProductDiscountDraftSchema
+    _schema_update = ProductDiscountUpdateSchema
+    _schema_query_response = ProductDiscountPagedQueryResponseSchema
 
     def urls(self):
         return [

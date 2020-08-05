@@ -20,7 +20,7 @@ runserver:
 	python -mcommercetools.testing.server
 
 format:
-	isort --recursive src tests codegen
+	isort src tests codegen
 	black src/ tests/ codegen/
 
 release:

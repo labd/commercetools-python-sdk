@@ -2840,11 +2840,7 @@ class ProductDeletedMessagePayloadSchema(MessagePayloadSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductDeletedMessagePayload`."""
 
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -2868,11 +2864,7 @@ class ProductDeletedMessageSchema(MessageSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductDeletedMessage`."""
 
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3028,11 +3020,7 @@ class ProductPublishedMessagePayloadSchema(MessagePayloadSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductPublishedMessagePayload`."""
 
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.Raw(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3057,11 +3045,7 @@ class ProductPublishedMessageSchema(MessageSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductPublishedMessage`."""
 
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.Raw(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3124,11 +3108,7 @@ class ProductRevertedStagedChangesMessagePayloadSchema(MessagePayloadSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductRevertedStagedChangesMessagePayload`."""
 
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3146,11 +3126,7 @@ class ProductRevertedStagedChangesMessageSchema(MessageSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductRevertedStagedChangesMessage`."""
 
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3263,11 +3239,7 @@ class ProductVariantDeletedMessagePayloadSchema(MessagePayloadSchema):
         allow_none=True,
     )
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3290,11 +3262,7 @@ class ProductVariantDeletedMessageSchema(MessageSchema):
         allow_none=True,
     )
     removed_image_urls = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )

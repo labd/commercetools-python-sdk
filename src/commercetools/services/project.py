@@ -1,7 +1,7 @@
 from typing import List
 
 from commercetools import types
-from commercetools._schemas._project import ProjectUpdateSchema, ProjectSchema
+from commercetools._schemas._project import ProjectSchema, ProjectUpdateSchema
 from commercetools.services import abstract
 
 __all__ = ["ProjectService"]

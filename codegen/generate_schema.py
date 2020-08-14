@@ -370,15 +370,25 @@ class SchemaClassGenerator:
             if prop.type.name == "array":
                 assert prop.items, f"The array property {prop.name} has no items"
                 assert prop.items_types
+                item_type = prop.items_types[0]
 
                 # TODO: We for now assume that the items are all subclasses of
                 # the first item. We shouldn't do that :-)
-                if prop.items_types[0].discriminator:
-                    node.args.append(
-                        self._create_discriminator_field(prop.items_types[0])
+                if item_type.discriminator:
+                    field = self._create_discriminator_field(item_type)
+                elif item_type.name in FIELD_TYPES:
+                    field = ast.Call(
+                        func=ast.Name(id=FIELD_TYPES[item_type.name]),
+                        args=[],
+                        keywords=[
+                            ast.keyword(
+                                arg="allow_none", value=ast.NameConstant(True, kind=None)
+                            )
+                        ],
                     )
                 else:
-                    node.args.append(self._create_nested_field(prop.items_types[0]))
+                    field = self._create_nested_field(item_type)
+                node.args.append(field)
             return node
 
         # Dict Field

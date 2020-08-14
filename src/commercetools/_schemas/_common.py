@@ -769,12 +769,7 @@ class GeoJsonPointSchema(GeoJsonSchema):
     """Marshmallow schema for :class:`commercetools.types.GeoJsonPoint`."""
 
     coordinates = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.numberSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
+        marshmallow.fields.Integer(allow_none=True), allow_none=True
     )
 
     class Meta:

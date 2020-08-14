@@ -517,11 +517,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
     field = marshmallow.fields.String(allow_none=True)
     invalid_value = marshmallow.fields.Raw(allow_none=True, data_key="invalidValue")
     allowed_values = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
+        marshmallow.fields.Raw(allow_none=True),
         allow_none=True,
         missing=None,
         data_key="allowedValues",

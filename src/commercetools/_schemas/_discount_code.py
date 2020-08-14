@@ -66,13 +66,7 @@ class DiscountCodeDraftSchema(marshmallow.Schema):
         missing=None,
     )
     groups = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.stringSchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
-        missing=None,
+        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="validFrom"

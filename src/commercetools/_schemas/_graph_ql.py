@@ -41,12 +41,7 @@ class GraphQLErrorSchema(marshmallow.Schema):
         allow_none=True,
     )
     path = marshmallow.fields.List(
-        helpers.LazyNestedField(
-            nested="commercetools._schemas.None.anySchema",
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-        ),
-        allow_none=True,
+        marshmallow.fields.Raw(allow_none=True), allow_none=True
     )
 
     class Meta:

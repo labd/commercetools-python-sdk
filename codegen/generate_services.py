@@ -739,6 +739,14 @@ def _generate_init_file(services, modules):
         )
         if_node.body.append(node)
 
+    # Import ClientProtocol
+    node = ast.ImportFrom(
+        module="commercetools.protocols",
+        names=[ast.alias(name="ClientProtocol", asname=None)],
+        level=0,
+    )
+    if_node.body.append(node)
+
     module_varnames = sorted(submodules.values(), key=operator.itemgetter("var_name"))
 
     # Return the class + properties
@@ -749,7 +757,11 @@ def _generate_init_file(services, modules):
         node = ast.FunctionDef(
             name=service["module_name"],
             args=ast.arguments(
-                args=[ast.arg(arg="self", annotation=None)],
+                args=[
+                    ast.arg(
+                        arg="self", annotation=ast.Str(s="ClientProtocol", kind=None)
+                    )
+                ],
                 vararg=None,
                 kwonlyargs=[],
                 kw_defaults=[],

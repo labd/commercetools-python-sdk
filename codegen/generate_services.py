@@ -471,6 +471,9 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                 ast.arg(arg=input_name, annotation=ast.Name(id=input_obj.name)),
             )
 
+        if method.is_fileupload:
+            method.method = "upload"
+
         node.body.append(
             ast.Return(
                 self._call_client(

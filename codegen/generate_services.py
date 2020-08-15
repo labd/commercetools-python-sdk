@@ -217,14 +217,14 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             node = self.make_delete_method(method, node, return_obj, module_name)
         elif method.type == "action":
 
+            node = self.make_action_method(method, node, return_obj, module_name)
+
             # TODO: Add deprecation warning
             if method.context_name == "Product" and method.name == "images":
                 node.name = "upload_image"
                 extra_method = copy.deepcopy(node)
                 extra_method.name = "file_upload"
                 class_node.body.append(extra_method)
-
-            node = self.make_action_method(method, node, return_obj, module_name)
         else:
             raise NotImplementedError(method.type)
 

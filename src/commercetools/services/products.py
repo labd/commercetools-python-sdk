@@ -375,6 +375,12 @@ class ProductService(abstract.AbstractService):
             {"filename": filename, "variant": variant, "sku": sku, "staged": staged},
             _ProductImagesSchema,
         )
+        return self._client._upload(
+            endpoint="products/images",
+            params=params,
+            response_schema_cls=ProductSchema,
+            file=fh,
+        )
 
     def upload_image(
         self,
@@ -393,7 +399,7 @@ class ProductService(abstract.AbstractService):
             {"filename": filename, "variant": variant, "sku": sku, "staged": staged},
             _ProductImagesSchema,
         )
-        return self._client._post(
+        return self._client._upload(
             endpoint="products/images",
             params=params,
             response_schema_cls=ProductSchema,

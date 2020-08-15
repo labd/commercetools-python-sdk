@@ -186,7 +186,7 @@ class ProductDiscountService(abstract.AbstractService):
         )
 
     def matching(self, action: ProductDiscountMatchQuery) -> ProductDiscount:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="product-discounts/matching",
             params=params,

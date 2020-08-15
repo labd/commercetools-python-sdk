@@ -23,9 +23,11 @@ class LoginService(abstract.AbstractService):
         to-date prices, taxes and discounts, and invalid line items have been
         removed.).   Retrieves the authenticated customer.
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="login",
             params=params,
+            data_object=None,
+            request_schema_cls=None,
             response_schema_cls=CustomerSignInResultSchema,
         )

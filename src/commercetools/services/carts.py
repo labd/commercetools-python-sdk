@@ -163,7 +163,7 @@ class CartService(abstract.AbstractService):
         )
 
     def replicate(self, draft: ReplicaCartDraft) -> Cart:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="carts/replicate",
             params=params,

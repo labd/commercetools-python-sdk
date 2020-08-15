@@ -4,6 +4,8 @@ import typing
 from cached_property import cached_property
 
 if typing.TYPE_CHECKING:
+    from commercetools.protocols import ClientProtocol
+
     from .api_clients import ApiClientService
     from .cart_discounts import CartDiscountService
     from .carts import CartService
@@ -40,193 +42,193 @@ if typing.TYPE_CHECKING:
 
 class ServicesMixin:
     @cached_property
-    def categories(self) -> "CategoryService":
+    def categories(self: "ClientProtocol") -> "CategoryService":
         from .categories import CategoryService
 
         return CategoryService(self)
 
     @cached_property
-    def carts(self) -> "CartService":
+    def carts(self: "ClientProtocol") -> "CartService":
         from .carts import CartService
 
         return CartService(self)
 
     @cached_property
-    def cart_discounts(self) -> "CartDiscountService":
+    def cart_discounts(self: "ClientProtocol") -> "CartDiscountService":
         from .cart_discounts import CartDiscountService
 
         return CartDiscountService(self)
 
     @cached_property
-    def channels(self) -> "ChannelService":
+    def channels(self: "ClientProtocol") -> "ChannelService":
         from .channels import ChannelService
 
         return ChannelService(self)
 
     @cached_property
-    def customers(self) -> "CustomerService":
+    def customers(self: "ClientProtocol") -> "CustomerService":
         from .customers import CustomerService
 
         return CustomerService(self)
 
     @cached_property
-    def customer_groups(self) -> "CustomerGroupService":
+    def customer_groups(self: "ClientProtocol") -> "CustomerGroupService":
         from .customer_groups import CustomerGroupService
 
         return CustomerGroupService(self)
 
     @cached_property
-    def custom_objects(self) -> "CustomObjectService":
+    def custom_objects(self: "ClientProtocol") -> "CustomObjectService":
         from .custom_objects import CustomObjectService
 
         return CustomObjectService(self)
 
     @cached_property
-    def discount_codes(self) -> "DiscountCodeService":
+    def discount_codes(self: "ClientProtocol") -> "DiscountCodeService":
         from .discount_codes import DiscountCodeService
 
         return DiscountCodeService(self)
 
     @cached_property
-    def graphqls(self) -> "GraphqlService":
+    def graphqls(self: "ClientProtocol") -> "GraphqlService":
         from .graphqls import GraphqlService
 
         return GraphqlService(self)
 
     @cached_property
-    def inventory(self) -> "InventoryEntryService":
+    def inventory(self: "ClientProtocol") -> "InventoryEntryService":
         from .inventory import InventoryEntryService
 
         return InventoryEntryService(self)
 
     @cached_property
-    def login(self) -> "LoginService":
+    def login(self: "ClientProtocol") -> "LoginService":
         from .login import LoginService
 
         return LoginService(self)
 
     @cached_property
-    def messages(self) -> "MessageService":
+    def messages(self: "ClientProtocol") -> "MessageService":
         from .messages import MessageService
 
         return MessageService(self)
 
     @cached_property
-    def orders(self) -> "OrderService":
+    def orders(self: "ClientProtocol") -> "OrderService":
         from .orders import OrderService
 
         return OrderService(self)
 
     @cached_property
-    def payments(self) -> "PaymentService":
+    def payments(self: "ClientProtocol") -> "PaymentService":
         from .payments import PaymentService
 
         return PaymentService(self)
 
     @cached_property
-    def products(self) -> "ProductService":
+    def products(self: "ClientProtocol") -> "ProductService":
         from .products import ProductService
 
         return ProductService(self)
 
     @cached_property
-    def product_discounts(self) -> "ProductDiscountService":
+    def product_discounts(self: "ClientProtocol") -> "ProductDiscountService":
         from .product_discounts import ProductDiscountService
 
         return ProductDiscountService(self)
 
     @cached_property
-    def product_projections(self) -> "ProductProjectionService":
+    def product_projections(self: "ClientProtocol") -> "ProductProjectionService":
         from .product_projections import ProductProjectionService
 
         return ProductProjectionService(self)
 
     @cached_property
-    def product_types(self) -> "ProductTypeService":
+    def product_types(self: "ClientProtocol") -> "ProductTypeService":
         from .product_types import ProductTypeService
 
         return ProductTypeService(self)
 
     @cached_property
-    def reviews(self) -> "ReviewService":
+    def reviews(self: "ClientProtocol") -> "ReviewService":
         from .reviews import ReviewService
 
         return ReviewService(self)
 
     @cached_property
-    def shipping_methods(self) -> "ShippingMethodService":
+    def shipping_methods(self: "ClientProtocol") -> "ShippingMethodService":
         from .shipping_methods import ShippingMethodService
 
         return ShippingMethodService(self)
 
     @cached_property
-    def shopping_lists(self) -> "ShoppingListService":
+    def shopping_lists(self: "ClientProtocol") -> "ShoppingListService":
         from .shopping_lists import ShoppingListService
 
         return ShoppingListService(self)
 
     @cached_property
-    def states(self) -> "StateService":
+    def states(self: "ClientProtocol") -> "StateService":
         from .states import StateService
 
         return StateService(self)
 
     @cached_property
-    def subscriptions(self) -> "SubscriptionService":
+    def subscriptions(self: "ClientProtocol") -> "SubscriptionService":
         from .subscriptions import SubscriptionService
 
         return SubscriptionService(self)
 
     @cached_property
-    def tax_categories(self) -> "TaxCategoryService":
+    def tax_categories(self: "ClientProtocol") -> "TaxCategoryService":
         from .tax_categories import TaxCategoryService
 
         return TaxCategoryService(self)
 
     @cached_property
-    def types(self) -> "TypeService":
+    def types(self: "ClientProtocol") -> "TypeService":
         from .types import TypeService
 
         return TypeService(self)
 
     @cached_property
-    def zones(self) -> "ZoneService":
+    def zones(self: "ClientProtocol") -> "ZoneService":
         from .zones import ZoneService
 
         return ZoneService(self)
 
     @cached_property
-    def me(self) -> "MeService":
+    def me(self: "ClientProtocol") -> "MeService":
         from .me import MeService
 
         return MeService(self)
 
     @cached_property
-    def extensions(self) -> "ExtensionService":
+    def extensions(self: "ClientProtocol") -> "ExtensionService":
         from .extensions import ExtensionService
 
         return ExtensionService(self)
 
     @cached_property
-    def api_clients(self) -> "ApiClientService":
+    def api_clients(self: "ClientProtocol") -> "ApiClientService":
         from .api_clients import ApiClientService
 
         return ApiClientService(self)
 
     @cached_property
-    def stores(self) -> "StoreService":
+    def stores(self: "ClientProtocol") -> "StoreService":
         from .stores import StoreService
 
         return StoreService(self)
 
     @cached_property
-    def in_stores(self) -> "In_StoreService":
+    def in_stores(self: "ClientProtocol") -> "In_StoreService":
         from .in_stores import In_StoreService
 
         return In_StoreService(self)
 
     @cached_property
-    def project(self) -> "ProjectService":
+    def project(self: "ClientProtocol") -> "ProjectService":
         from .project import ProjectService
 
         return ProjectService(self)

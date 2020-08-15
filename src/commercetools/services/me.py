@@ -271,9 +271,13 @@ class MeService(abstract.AbstractService):
 
     def create(self) -> MyCustomer:
         """Create a customer"""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
-            endpoint="me", params=params, response_schema_cls=MyCustomerSchema
+            endpoint="me",
+            params=params,
+            data_object=None,
+            request_schema_cls=None,
+            response_schema_cls=MyCustomerSchema,
         )
 
     def my_cart_create(
@@ -506,31 +510,42 @@ class MeService(abstract.AbstractService):
         )
 
     def active_cart(self) -> MyCart:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._get(
             endpoint="me/active-cart", params=params, schema_cls=MyCartSchema
         )
 
     def email_confirm(self):
-        params = {}
-        return self._client._post(endpoint="me/email/confirm", params=params)
+        params: typing.Dict[str, str] = {}
+        return self._client._post(
+            endpoint="me/email/confirm",
+            params=params,
+            data_object=None,
+            request_schema_cls=None,
+        )
 
     def login(self) -> CustomerSignInResult:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="me/login",
             params=params,
+            data_object=None,
+            request_schema_cls=None,
             response_schema_cls=CustomerSignInResultSchema,
         )
 
     def password(self) -> MyCustomer:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
-            endpoint="me/password", params=params, response_schema_cls=MyCustomerSchema
+            endpoint="me/password",
+            params=params,
+            data_object=None,
+            request_schema_cls=None,
+            response_schema_cls=MyCustomerSchema,
         )
 
     def signup(self, draft: MyCustomerDraft) -> CustomerSignInResult:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="me/signup",
             params=params,

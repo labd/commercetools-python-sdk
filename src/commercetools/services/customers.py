@@ -226,7 +226,7 @@ class CustomerService(abstract.AbstractService):
 
     def email_confirm(self, action: CustomerEmailVerify) -> Customer:
         """Verifies customer's email using a token."""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="customers/email/confirm",
             params=params,
@@ -243,7 +243,7 @@ class CustomerService(abstract.AbstractService):
         customer clicks on the link, the "verify customer's email" endpoint
         should be called, which sets customer's isVerifiedEmail field to true.
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="customers/email-token",
             params=params,
@@ -254,7 +254,7 @@ class CustomerService(abstract.AbstractService):
 
     def password(self, action: CustomerChangePassword) -> Customer:
         """Change a customers password"""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="customers/password",
             params=params,
@@ -265,7 +265,7 @@ class CustomerService(abstract.AbstractService):
 
     def password_reset(self, action: CustomerResetPassword) -> Customer:
         """Set a new password using a token."""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="customers/password/reset",
             params=params,
@@ -285,7 +285,7 @@ class CustomerService(abstract.AbstractService):
         customer enters a new password and the "reset customer's password"
         endpoint is called.
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="customers/password-token",
             params=params,

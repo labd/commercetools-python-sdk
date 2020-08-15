@@ -632,7 +632,7 @@ class In_StoreService(abstract.AbstractService):
 
     def customer_email_confirm(self, action: CustomerEmailVerify) -> Customer:
         """Verifies customer's email using a token."""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/email/confirm",
             params=params,
@@ -649,7 +649,7 @@ class In_StoreService(abstract.AbstractService):
         customer clicks on the link, the "verify customer's email" endpoint
         should be called, which sets customer's isVerifiedEmail field to true.
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/email-token",
             params=params,
@@ -660,7 +660,7 @@ class In_StoreService(abstract.AbstractService):
 
     def customer_password(self, action: CustomerChangePassword) -> Customer:
         """Change a customers password"""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/password",
             params=params,
@@ -671,7 +671,7 @@ class In_StoreService(abstract.AbstractService):
 
     def customer_password_reset(self, action: CustomerResetPassword) -> Customer:
         """Set a new password using a token."""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/password/reset",
             params=params,
@@ -693,7 +693,7 @@ class In_StoreService(abstract.AbstractService):
         customer enters a new password and the "reset customer's password"
         endpoint is called.
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/customers/password-token",
             params=params,
@@ -707,7 +707,7 @@ class In_StoreService(abstract.AbstractService):
 
         Retrieves the authenticated customer.
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint=f"in-store/key={store_key}/login",
             params=params,

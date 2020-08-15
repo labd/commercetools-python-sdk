@@ -17,7 +17,11 @@ class GraphqlService(abstract.AbstractService):
 
         The commercetools™ platform provides a GraphQL API
         """
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
-            endpoint="graphql", params=params, response_schema_cls=GraphQLResponseSchema
+            endpoint="graphql",
+            params=params,
+            data_object=None,
+            request_schema_cls=None,
+            response_schema_cls=GraphQLResponseSchema,
         )

@@ -351,7 +351,7 @@ class OrderService(abstract.AbstractService):
 
     def import_(self, draft: OrderImportDraft) -> Order:
         """Create an Order by Import"""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="orders/import",
             params=params,
@@ -361,7 +361,7 @@ class OrderService(abstract.AbstractService):
         )
 
     def order_edit_apply(self, action: OrderEditApply) -> OrderEdit:
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="orders/edits/apply",
             params=params,

@@ -34,7 +34,7 @@ class ApiClientService(abstract.AbstractService):
 
     def get_by_id(self, id) -> ApiClient:
         """Get ApiClient by ID"""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._get(
             endpoint=f"api-clients/{id}", params=params, schema_cls=ApiClientSchema
         )
@@ -88,7 +88,7 @@ class ApiClientService(abstract.AbstractService):
 
     def delete_by_id(self, id, *, force_delete: bool = False) -> ApiClient:
         """Delete ApiClient by ID"""
-        params = {}
+        params: typing.Dict[str, str] = {}
         return self._client._delete(
             endpoint=f"api-clients/{id}",
             params=params,

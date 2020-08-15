@@ -567,8 +567,16 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         # If this method doesn't accept parameters we just exit early with a
         # `params = {}` line.
         if not query_params:
-            line = ast.Assign(
-                targets=[ast.Name(id="params")], value=ast.Dict(keys=[], values=[])
+            line = ast.AnnAssign(
+                target=ast.Name(id="params"),
+                annotation=ast.Subscript(
+                    value=ast.Attribute(value=ast.Name(id="typing"), attr="Dict"),
+                    slice=ast.Index(
+                        value=ast.Tuple(elts=[ast.Name(id="str"), ast.Name(id="str")])
+                    ),
+                ),
+                value=ast.Dict(keys=[], values=[]),
+                simple=True,
             )
             node.body.append(line)
             return

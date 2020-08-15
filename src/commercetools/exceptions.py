@@ -36,7 +36,10 @@ class CommercetoolsError(Exception):
     @property
     def codes(self) -> typing.List[str]:
         try:
-            return [e.code for e in self.response.errors]
+            if self.response.errors is not None:
+                return [e.code for e in self.response.errors]
+            else:
+                return []
         except AttributeError:
             return []
 

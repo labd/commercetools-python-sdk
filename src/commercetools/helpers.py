@@ -57,6 +57,7 @@ class RemoveEmptyValuesMixin:
 
 
 class RegexField(Field):
+
     def _serialize(self, nested_obj, attr, obj):
         result = {}
         data = obj[attr]
@@ -80,10 +81,11 @@ class RegexField(Field):
         return data
 
     def preprocess(self, data):
-        new: typing.Dict[str, typing.Any] = {self.name: {}}
+        name = str(self.name)
+        new: typing.Dict[str, typing.Any] = {name: {}}
         for k, v in data.items():
             if self.metadata["pattern"].match(k):
-                new[self.name][k] = v
+                new[name][k] = v
             else:
                 new[k] = v
         return new
@@ -95,9 +97,11 @@ class LazyNestedField(Nested):
         try:
             return super().schema
         except RegistryError:
-            names = self.nested.rsplit(".", 1)
-            importlib.import_module(names[0])
-            return super().schema
+            if isinstance(self.nested, str):
+                names = self.nested.rsplit(".", 1)
+                importlib.import_module(names[0])
+                return super().schema
+            raise
 
 
 class Discriminator(Field):
@@ -129,6 +133,12 @@ class Discriminator(Field):
     def get_schema(self, name):
         context = getattr(self.parent, "context", {})
         schema_class = class_registry.get_class(name)
+
+        # Class registry can return a list if multiple classes with the same
+        # name are registered. We shouldn't do that so lets assert it.
+        # and make mypy happy :-)
+        assert not isinstance(schema_class, list)
+
         schema = schema_class(
             many=self.many,
             only=self.only,
@@ -243,7 +253,8 @@ def _concurrent_retry(num):
                         raise
 
                     if exc.response.status_code == 409:
-                        data["version"] = exc.response.errors[0].current_version
+                        if exc.response.errors:
+                            data["version"] = exc.response.errors[0].current_version
                     else:
                         raise
                     num -= 1

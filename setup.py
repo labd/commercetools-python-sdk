@@ -3,7 +3,6 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "cached-property>=1.5.1",
     "requests>=2.7.0",
     "pytz",
     "requests-oauthlib>=1.0.0",

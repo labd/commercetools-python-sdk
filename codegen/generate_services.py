@@ -695,13 +695,6 @@ def _generate_init_file(services, modules):
     nodes = []
 
     nodes.append(ast.Import(names=[ast.alias(name="typing", asname=None)], level=0))
-    nodes.append(
-        ast.ImportFrom(
-            module="cached_property",
-            names=[ast.alias(name="cached_property", asname=None)],
-            level=0,
-        )
-    )
 
     # Collect all submodules
     submodules = {}
@@ -754,8 +747,9 @@ def _generate_init_file(services, modules):
         name="ServicesMixin", bases=[], keywords=[], decorator_list=[], body=[]
     )
     for name, service in submodules.items():
+        fname = service["module_name"]
         node = ast.FunctionDef(
-            name=service["module_name"],
+            name=fname,
             args=ast.arguments(
                 args=[
                     ast.arg(
@@ -769,22 +763,48 @@ def _generate_init_file(services, modules):
                 defaults=[],
             ),
             body=[],
-            decorator_list=[ast.Name(id="cached_property")],
+            decorator_list=[ast.Name(id="property")],
             returns=ast.Str(s=service["class_name"], kind=None),
         )
-        node.body.append(
+        if_stmt = ast.If(
+            test=ast.Compare(
+                left=ast.Constant(value=fname, kind=None),
+                ops=[ast.NotIn()],
+                comparators=[ast.Attribute(value=ast.Name(id="self"), attr="__dict__")],
+            ),
+            body=[],
+            orelse=[],
+        )
+
+        if_stmt.body.append(
             ast.ImportFrom(
                 module=name,
                 names=[ast.alias(name=service["class_name"], asname=None)],
                 level=0,
             )
         )
-        node.body.append(
-            ast.Return(
-                ast.Call(
+        if_stmt.body.append(
+            ast.Assign(
+                targets=[
+                    ast.Subscript(
+                        value=ast.Attribute(value=ast.Name(id="self"), attr="__dict__"),
+                        slice=ast.Index(value=ast.Constant(value=fname, kind=None)),
+                    )
+                ],
+                value=ast.Call(
                     func=ast.Name(id=service["class_name"]),
                     args=[ast.Name(id="self")],
                     keywords=[],
+                ),
+            )
+        )
+
+        node.body.append(if_stmt)
+        node.body.append(
+            ast.Return(
+                value=ast.Subscript(
+                    value=ast.Attribute(value=ast.Name(id="self"), attr="__dict__"),
+                    slice=ast.Index(value=ast.Constant(value=fname, kind=None)),
                 )
             )
         )

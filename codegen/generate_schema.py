@@ -487,13 +487,23 @@ class SchemaClassGenerator:
 
     def _create_regex_call(self, field_name, method_name):
         """Generate `data = self.fields[{ field_name }].{ method_name }(data)`"""
+        self.generator.add_import_statement(
+            self.resource.package_name, "typing"
+        )
         return ast.Assign(
             targets=[ast.Name(id="data")],
             value=ast.Call(
                 func=ast.Attribute(
-                    value=ast.Subscript(
-                        value=ast.Attribute(value=ast.Name(id="self"), attr="fields"),
-                        slice=ast.Index(value=ast.Str(s=field_name, kind=None)),
+                    value=ast.Call(
+                        func=ast.Attribute(value=ast.Name(id='typing'), attr='cast'),
+                        args=[
+                            ast.Attribute(value=ast.Name(id='helpers'), attr='RegexField'),
+                            ast.Subscript(
+                                value=ast.Attribute(value=ast.Name(id="self"), attr="fields"),
+                                slice=ast.Index(value=ast.Str(s=field_name, kind=None)),
+                            ),
+                        ],
+                        keywords=[],
                     ),
                     attr=method_name,
                 ),

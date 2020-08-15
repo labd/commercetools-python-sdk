@@ -506,13 +506,18 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             keywords.append(ast.keyword(arg="endpoint", value=endpoint))
         if params:
             keywords.append(ast.keyword(arg="params", value=params))
-        if data_object:
-            keywords.append(ast.keyword(arg="data_object", value=data_object))
 
-        if request_schema_cls:
-            keywords.append(
-                ast.keyword(arg="request_schema_cls", value=request_schema_cls)
+        if method == "_post":
+            val = data_object if data_object is not None else ast.Constant(value=None)
+            keywords.append(ast.keyword(arg="data_object", value=val))
+
+        if method == "_post":
+            val = (
+                request_schema_cls
+                if request_schema_cls is not None
+                else ast.Constant(value=None)
             )
+            keywords.append(ast.keyword(arg="request_schema_cls", value=val))
 
         if response_schema_cls:
             if method == "_get":

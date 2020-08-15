@@ -110,7 +110,10 @@ class Client(ServicesMixin):
         )
 
     def _get(
-        self, endpoint: str, params: typing.Dict[str, typing.Any], schema_cls: SchemaABC
+        self,
+        endpoint: str,
+        params: typing.Dict[str, typing.Any],
+        schema_cls: typing.Type[SchemaABC],
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
         response = self._http_client.get(self._base_url + endpoint, params=params)
@@ -124,8 +127,8 @@ class Client(ServicesMixin):
         endpoint: str,
         params: typing.Dict[str, str],
         data_object: typing.Any,
-        request_schema_cls: SchemaABC,
-        response_schema_cls: SchemaABC,
+        request_schema_cls: typing.Optional[typing.Type[SchemaABC]],
+        response_schema_cls: typing.Type[SchemaABC],
         form_encoded: bool = False,
         force_update: bool = False,
     ) -> typing.Any:
@@ -133,7 +136,7 @@ class Client(ServicesMixin):
 
         @_concurrent_retry(3 if force_update else 0)
         def remote_http_call(data):
-            if form_encoded:
+            if form_encoded and data is not None:
                 kwargs = {"data": data}
             else:
                 kwargs = {"json": data}
@@ -145,7 +148,10 @@ class Client(ServicesMixin):
                 return response_schema_cls().load(response.json())
             return self._process_error(response)
 
-        data = request_schema_cls().dump(data_object)
+        if request_schema_cls is not None:
+            data = request_schema_cls().dump(data_object)
+        else:
+            data = None
         return remote_http_call(data)
 
     def _upload(
@@ -153,7 +159,7 @@ class Client(ServicesMixin):
         endpoint: str,
         params: typing.Dict[str, str],
         file: typing.IO,
-        response_schema_cls: SchemaABC,
+        response_schema_cls: typing.Type[SchemaABC],
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
         response = self._http_client.post(
@@ -168,7 +174,7 @@ class Client(ServicesMixin):
         self,
         endpoint: str,
         params: typing.Dict[str, str],
-        response_schema_cls: SchemaABC,
+        response_schema_cls: typing.Type[SchemaABC],
         force_delete: bool = False,
     ) -> typing.Any:
         """Delete an object from the commercetools platform"""

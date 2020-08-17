@@ -4,6 +4,7 @@ import typing
 import uuid
 
 from commercetools import types
+from commercetools._schemas._cart import CartSchema
 from commercetools._schemas._order import (
     DeliverySchema,
     OrderFromCartDraftSchema,
@@ -11,7 +12,6 @@ from commercetools._schemas._order import (
     OrderSchema,
     OrderUpdateSchema,
 )
-from commercetools._schemas._cart import CartSchema
 from commercetools._schemas._payment import PaymentReferenceSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (

@@ -10,9 +10,9 @@ from commercetools._schemas._cart import (
     CartSchema,
     CartUpdateSchema,
 )
-from commercetools._schemas._product import ProductSchema
 from commercetools._schemas._order import PaymentInfoSchema
 from commercetools._schemas._payment import PaymentResourceIdentifierSchema
+from commercetools._schemas._product import ProductSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
@@ -226,4 +226,3 @@ class CartsBackend(ServiceBackend):
         "setCustomField": set_custom_field,
         "setCustomType": set_custom_type,
     }
-

@@ -57,7 +57,6 @@ class RemoveEmptyValuesMixin:
 
 
 class RegexField(Field):
-
     def _serialize(self, nested_obj, attr, obj):
         result = {}
         data = obj[attr]

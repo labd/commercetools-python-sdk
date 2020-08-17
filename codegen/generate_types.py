@@ -460,8 +460,7 @@ class _ResourceClassGenerator:
                 continue
 
             arg = ast.arg(
-                arg=attribute_name,
-                annotation=self._get_annotation_for_property(prop),
+                arg=attribute_name, annotation=self._get_annotation_for_property(prop)
             )
 
             if prop.optional:

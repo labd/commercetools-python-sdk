@@ -11,7 +11,8 @@ def create_products(client):
                 product_type=types.ProductTypeResourceIdentifier(key="dummy"),
                 name=types.LocalizedString(en=f"my-product-{i}"),
                 slug=types.LocalizedString(en=f"my-product-{i}"),
-            ))
+            )
+        )
 
 
 def test_page_paginator(client):

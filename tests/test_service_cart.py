@@ -20,7 +20,8 @@ def cart_draft(client):
             name=types.LocalizedString(en=f"my-product-1"),
             slug=types.LocalizedString(en=f"my-product-1"),
             publish=True,
-        ))
+        )
+    )
     product_2 = client.products.create(
         types.ProductDraft(
             key=f"product-2",
@@ -28,7 +29,8 @@ def cart_draft(client):
             name=types.LocalizedString(en=f"my-product-2"),
             slug=types.LocalizedString(en=f"my-product-2"),
             publish=True,
-        ))
+        )
+    )
 
     return types.CartDraft(
         customer_id=str(uuid.uuid4()),
@@ -61,35 +63,27 @@ def test_update_actions(commercetools_api, client, cart_draft):
     type_draft = types.TypeDraft(
         key="foobar",
         resource_type_ids=[types.ResourceTypeId.ORDER],
-        name={
-            "en-US": "test",
-        },
+        name={"en-US": "test"},
         field_definitions=[
             types.FieldDefinition(
                 type=types.CustomFieldStringType(),
                 name="foo1",
-                label={
-                    "en-US": "foo-1",
-                },
+                label={"en-US": "foo-1"},
                 required=False,
             ),
             types.FieldDefinition(
                 type=types.CustomFieldSetType(element_type=None),
                 name="foo2",
-                label={
-                    "en-US": "foo-2",
-                },
+                label={"en-US": "foo-2"},
                 required=False,
             ),
             types.FieldDefinition(
                 type=types.CustomFieldBooleanType(),
                 name="foo3",
-                label={
-                    "en-US": "foo-3",
-                },
+                label={"en-US": "foo-3"},
                 required=False,
-            )
-        ]
+            ),
+        ],
     )
     custom_type = client.types.create(type_draft)
     assert custom_type.id

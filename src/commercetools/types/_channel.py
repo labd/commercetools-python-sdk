@@ -75,14 +75,14 @@ class Channel(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        key: str,
+        roles: typing.List["ChannelRoleEnum"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: str = None,
-        roles: typing.List["ChannelRoleEnum"] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         address: typing.Optional["Address"] = None,
@@ -152,7 +152,7 @@ class ChannelDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: str = None,
+        key: str,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -199,11 +199,11 @@ class ChannelPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Channel"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Channel"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -223,13 +223,7 @@ class ChannelReference(Reference):
     #: Optional :class:`commercetools.types.Channel`
     obj: typing.Optional["Channel"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Channel"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Channel"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.CHANNEL, id=id)
 
@@ -243,11 +237,7 @@ class ChannelReference(Reference):
 
 class ChannelResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.CHANNEL, id=id, key=key)
 
@@ -273,7 +263,7 @@ class ChannelUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -286,7 +276,7 @@ class ChannelUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -298,9 +288,7 @@ class ChannelAddRolesAction(ChannelUpdateAction):
     #: List of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.List["ChannelRoleEnum"]
 
-    def __init__(
-        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
-    ) -> None:
+    def __init__(self, *, roles: typing.List["ChannelRoleEnum"]) -> None:
         self.roles = roles
         super().__init__(action="addRoles")
 
@@ -312,9 +300,7 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     description: "LocalizedString"
 
-    def __init__(
-        self, *, action: str = None, description: "LocalizedString" = None
-    ) -> None:
+    def __init__(self, *, description: "LocalizedString") -> None:
         self.description = description
         super().__init__(action="changeDescription")
 
@@ -329,7 +315,7 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
     #: :class:`str`
     key: str
 
-    def __init__(self, *, action: str = None, key: str = None) -> None:
+    def __init__(self, *, key: str) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -341,7 +327,7 @@ class ChannelChangeNameAction(ChannelUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -353,9 +339,7 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
     #: List of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.List["ChannelRoleEnum"]
 
-    def __init__(
-        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
-    ) -> None:
+    def __init__(self, *, roles: typing.List["ChannelRoleEnum"]) -> None:
         self.roles = roles
         super().__init__(action="removeRoles")
 
@@ -370,9 +354,7 @@ class ChannelSetAddressAction(ChannelUpdateAction):
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
-    def __init__(
-        self, *, action: str = None, address: typing.Optional["Address"] = None
-    ) -> None:
+    def __init__(self, *, address: typing.Optional["Address"] = None) -> None:
         self.address = address
         super().__init__(action="setAddress")
 
@@ -389,13 +371,7 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -417,7 +393,6 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -437,9 +412,7 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
     #: Optional :class:`commercetools.types.GeoJson` `(Named` ``geoLocation`` `in Commercetools)`
     geo_location: typing.Optional["GeoJson"]
 
-    def __init__(
-        self, *, action: str = None, geo_location: typing.Optional["GeoJson"] = None
-    ) -> None:
+    def __init__(self, *, geo_location: typing.Optional["GeoJson"] = None) -> None:
         self.geo_location = geo_location
         super().__init__(action="setGeoLocation")
 
@@ -454,9 +427,7 @@ class ChannelSetRolesAction(ChannelUpdateAction):
     #: List of :class:`commercetools.types.ChannelRoleEnum`
     roles: typing.List["ChannelRoleEnum"]
 
-    def __init__(
-        self, *, action: str = None, roles: typing.List["ChannelRoleEnum"] = None
-    ) -> None:
+    def __init__(self, *, roles: typing.List["ChannelRoleEnum"]) -> None:
         self.roles = roles
         super().__init__(action="setRoles")
 

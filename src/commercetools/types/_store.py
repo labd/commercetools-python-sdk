@@ -26,8 +26,11 @@ __all__ = [
     "StoreUpdate",
     "StoreUpdateAction",
     "StoresAddDistributionChannelsAction",
+    "StoresAddSupplyChannelsAction",
     "StoresRemoveDistributionChannelsAction",
+    "StoresRemoveSupplyChannelsAction",
     "StoresSetDistributionChannelsAction",
+    "StoresSetSupplyChannelsAction",
 ]
 
 
@@ -52,20 +55,25 @@ class Store(BaseResource):
     languages: typing.Optional[typing.List[str]]
     #: List of :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannels`` `in Commercetools)`
     distribution_channels: typing.List["ChannelReference"]
+    #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannels`` `in Commercetools)`
+    supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        key: str,
+        distribution_channels: typing.List["ChannelReference"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: str = None,
         name: typing.Optional["LocalizedString"] = None,
         languages: typing.Optional[typing.List[str]] = None,
-        distribution_channels: typing.List["ChannelReference"] = None
+        supply_channels: typing.Optional[
+            typing.List["ChannelResourceIdentifier"]
+        ] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -77,6 +85,7 @@ class Store(BaseResource):
         self.name = name
         self.languages = languages
         self.distribution_channels = distribution_channels
+        self.supply_channels = supply_channels
         super().__init__(
             id=id,
             version=version,
@@ -86,7 +95,7 @@ class Store(BaseResource):
 
     def __repr__(self) -> str:
         return (
-            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, languages=%r, distribution_channels=%r)"
+            "Store(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, key=%r, name=%r, languages=%r, distribution_channels=%r, supply_channels=%r)"
             % (
                 self.id,
                 self.version,
@@ -98,6 +107,7 @@ class Store(BaseResource):
                 self.name,
                 self.languages,
                 self.distribution_channels,
+                self.supply_channels,
             )
         )
 
@@ -111,14 +121,19 @@ class StoreDraft(_BaseType):
     languages: typing.Optional[typing.List[str]]
     #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannels`` `in Commercetools)`
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+    #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannels`` `in Commercetools)`
+    supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(
         self,
         *,
-        key: str = None,
-        name: "LocalizedString" = None,
+        key: str,
+        name: "LocalizedString",
         languages: typing.Optional[typing.List[str]] = None,
         distribution_channels: typing.Optional[
+            typing.List["ChannelResourceIdentifier"]
+        ] = None,
+        supply_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
         ] = None
     ) -> None:
@@ -126,19 +141,24 @@ class StoreDraft(_BaseType):
         self.name = name
         self.languages = languages
         self.distribution_channels = distribution_channels
+        self.supply_channels = supply_channels
         super().__init__()
 
     def __repr__(self) -> str:
-        return "StoreDraft(key=%r, name=%r, languages=%r, distribution_channels=%r)" % (
-            self.key,
-            self.name,
-            self.languages,
-            self.distribution_channels,
+        return (
+            "StoreDraft(key=%r, name=%r, languages=%r, distribution_channels=%r, supply_channels=%r)"
+            % (
+                self.key,
+                self.name,
+                self.languages,
+                self.distribution_channels,
+                self.supply_channels,
+            )
         )
 
 
 class StoreKeyReference(KeyReference):
-    def __init__(self, *, type_id: "ReferenceTypeId" = None, key: str = None) -> None:
+    def __init__(self, *, key: str) -> None:
         super().__init__(type_id=ReferenceTypeId.STORE, key=key)
 
     def __repr__(self) -> str:
@@ -160,11 +180,11 @@ class StorePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Store"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Store"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -184,13 +204,7 @@ class StoreReference(Reference):
     #: Optional :class:`commercetools.types.Store`
     obj: typing.Optional["Store"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Store"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Store"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.STORE, id=id)
 
@@ -204,11 +218,7 @@ class StoreReference(Reference):
 
 class StoreResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.STORE, id=id, key=key)
 
@@ -226,7 +236,7 @@ class StoreUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -239,7 +249,7 @@ class StoreUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -251,9 +261,7 @@ class StoreSetLanguagesAction(StoreUpdateAction):
     #: Optional list of :class:`str`
     languages: typing.Optional[typing.List[str]]
 
-    def __init__(
-        self, *, action: str = None, languages: typing.Optional[typing.List[str]] = None
-    ) -> None:
+    def __init__(self, *, languages: typing.Optional[typing.List[str]] = None) -> None:
         self.languages = languages
         super().__init__(action="setLanguages")
 
@@ -268,9 +276,7 @@ class StoreSetNameAction(StoreUpdateAction):
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
-    def __init__(
-        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, name: typing.Optional["LocalizedString"] = None) -> None:
         self.name = name
         super().__init__(action="setName")
 
@@ -282,12 +288,7 @@ class StoresAddDistributionChannelsAction(StoreUpdateAction):
     #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
     distribution_channel: "ChannelResourceIdentifier"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        distribution_channel: "ChannelResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, distribution_channel: "ChannelResourceIdentifier") -> None:
         self.distribution_channel = distribution_channel
         super().__init__(action="addDistributionChannel")
 
@@ -298,16 +299,26 @@ class StoresAddDistributionChannelsAction(StoreUpdateAction):
         )
 
 
+class StoresAddSupplyChannelsAction(StoreUpdateAction):
+    #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, supply_channel: "ChannelResourceIdentifier") -> None:
+        self.supply_channel = supply_channel
+        super().__init__(action="addSupplyChannel")
+
+    def __repr__(self) -> str:
+        return "StoresAddSupplyChannelsAction(action=%r, supply_channel=%r)" % (
+            self.action,
+            self.supply_channel,
+        )
+
+
 class StoresRemoveDistributionChannelsAction(StoreUpdateAction):
     #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
     distribution_channel: "ChannelResourceIdentifier"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        distribution_channel: "ChannelResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, distribution_channel: "ChannelResourceIdentifier") -> None:
         self.distribution_channel = distribution_channel
         super().__init__(action="removeDistributionChannel")
 
@@ -318,6 +329,21 @@ class StoresRemoveDistributionChannelsAction(StoreUpdateAction):
         )
 
 
+class StoresRemoveSupplyChannelsAction(StoreUpdateAction):
+    #: :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, supply_channel: "ChannelResourceIdentifier") -> None:
+        self.supply_channel = supply_channel
+        super().__init__(action="removeSupplyChannel")
+
+    def __repr__(self) -> str:
+        return "StoresRemoveSupplyChannelsAction(action=%r, supply_channel=%r)" % (
+            self.action,
+            self.supply_channel,
+        )
+
+
 class StoresSetDistributionChannelsAction(StoreUpdateAction):
     #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannels`` `in Commercetools)`
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
@@ -325,7 +351,6 @@ class StoresSetDistributionChannelsAction(StoreUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         distribution_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
         ] = None
@@ -337,4 +362,25 @@ class StoresSetDistributionChannelsAction(StoreUpdateAction):
         return (
             "StoresSetDistributionChannelsAction(action=%r, distribution_channels=%r)"
             % (self.action, self.distribution_channels)
+        )
+
+
+class StoresSetSupplyChannelsAction(StoreUpdateAction):
+    #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannels`` `in Commercetools)`
+    supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+
+    def __init__(
+        self,
+        *,
+        supply_channels: typing.Optional[
+            typing.List["ChannelResourceIdentifier"]
+        ] = None
+    ) -> None:
+        self.supply_channels = supply_channels
+        super().__init__(action="setSupplyChannels")
+
+    def __repr__(self) -> str:
+        return "StoresSetSupplyChannelsAction(action=%r, supply_channels=%r)" % (
+            self.action,
+            self.supply_channels,
         )

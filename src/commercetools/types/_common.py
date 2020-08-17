@@ -107,6 +107,7 @@ class Address(_BaseType):
     def __init__(
         self,
         *,
+        country: "str",
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
@@ -120,7 +121,6 @@ class Address(_BaseType):
         city: typing.Optional[str] = None,
         region: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        country: "str" = None,
         company: typing.Optional[str] = None,
         department: typing.Optional[str] = None,
         building: typing.Optional[str] = None,
@@ -212,9 +212,9 @@ class Asset(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        sources: typing.List["AssetSource"] = None,
-        name: "LocalizedString" = None,
+        id: str,
+        sources: typing.List["AssetSource"],
+        name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List[str]] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -250,7 +250,7 @@ class AssetDimensions(_BaseType):
     #: :class:`int`
     h: int
 
-    def __init__(self, *, w: int = None, h: int = None) -> None:
+    def __init__(self, *, w: int, h: int) -> None:
         self.w = w
         self.h = h
         super().__init__()
@@ -276,8 +276,8 @@ class AssetDraft(_BaseType):
     def __init__(
         self,
         *,
-        sources: typing.List["AssetSource"] = None,
-        name: "LocalizedString" = None,
+        sources: typing.List["AssetSource"],
+        name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List[str]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -318,7 +318,7 @@ class AssetSource(_BaseType):
     def __init__(
         self,
         *,
-        uri: str = None,
+        uri: str,
         key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
         content_type: typing.Optional[str] = None,
@@ -351,10 +351,10 @@ class BaseResource(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
     ) -> None:
         self.id = id
         self.version = version
@@ -408,9 +408,7 @@ class DiscountedPrice(_BaseType):
     #: :class:`commercetools.types.ProductDiscountReference`
     discount: "ProductDiscountReference"
 
-    def __init__(
-        self, *, value: "Money" = None, discount: "ProductDiscountReference" = None
-    ) -> None:
+    def __init__(self, *, value: "Money", discount: "ProductDiscountReference") -> None:
         self.value = value
         self.discount = discount
         super().__init__()
@@ -423,7 +421,7 @@ class GeoJson(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -442,8 +440,8 @@ class Image(_BaseType):
     def __init__(
         self,
         *,
-        url: str = None,
-        dimensions: "ImageDimensions" = None,
+        url: str,
+        dimensions: "ImageDimensions",
         label: typing.Optional[str] = None,
     ) -> None:
         self.url = url
@@ -465,7 +463,7 @@ class ImageDimensions(_BaseType):
     #: :class:`int`
     h: int
 
-    def __init__(self, *, w: int = None, h: int = None) -> None:
+    def __init__(self, *, w: int, h: int) -> None:
         self.w = w
         self.h = h
         super().__init__()
@@ -480,7 +478,7 @@ class KeyReference(_BaseType):
     #: :class:`str`
     key: str
 
-    def __init__(self, *, type_id: "ReferenceTypeId" = None, key: str = None) -> None:
+    def __init__(self, *, type_id: "ReferenceTypeId", key: str) -> None:
         self.type_id = type_id
         self.key = key
         super().__init__()
@@ -502,7 +500,7 @@ class Money(_BaseType):
     #: :class:`str` `(Named` ``currencyCode`` `in Commercetools)`
     currency_code: "str"
 
-    def __init__(self, *, cent_amount: int = None, currency_code: "str" = None) -> None:
+    def __init__(self, *, cent_amount: int, currency_code: "str") -> None:
         self.cent_amount = cent_amount
         self.currency_code = currency_code
         super().__init__()
@@ -538,11 +536,11 @@ class PagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["BaseResource"],
         total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["BaseResource"] = None,
         facets: typing.Optional["FacetResults"] = None,
         meta: typing.Optional[object] = None,
     ) -> None:
@@ -595,8 +593,8 @@ class Price(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        value: "TypedMoney" = None,
+        id: str,
+        value: "TypedMoney",
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -659,7 +657,7 @@ class PriceDraft(_BaseType):
     def __init__(
         self,
         *,
-        value: "Money" = None,
+        value: "Money",
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
@@ -703,9 +701,7 @@ class PriceTier(_BaseType):
     #: :class:`commercetools.types.TypedMoney`
     value: "TypedMoney"
 
-    def __init__(
-        self, *, minimum_quantity: int = None, value: "TypedMoney" = None
-    ) -> None:
+    def __init__(self, *, minimum_quantity: int, value: "TypedMoney") -> None:
         self.minimum_quantity = minimum_quantity
         self.value = value
         super().__init__()
@@ -723,7 +719,7 @@ class PriceTierDraft(_BaseType):
     #: :class:`commercetools.types.Money`
     value: "Money"
 
-    def __init__(self, *, minimum_quantity: int = None, value: "Money" = None) -> None:
+    def __init__(self, *, minimum_quantity: int, value: "Money") -> None:
         self.minimum_quantity = minimum_quantity
         self.value = value
         super().__init__()
@@ -760,8 +756,8 @@ class QueryPrice(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        value: "Money" = None,
+        id: str,
+        value: "Money",
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -807,7 +803,7 @@ class Reference(_BaseType):
     #: :class:`str`
     id: str
 
-    def __init__(self, *, type_id: "ReferenceTypeId" = None, id: str = None) -> None:
+    def __init__(self, *, type_id: "ReferenceTypeId", id: str) -> None:
         self.type_id = type_id
         self.id = id
         super().__init__()
@@ -895,9 +891,9 @@ class ScopedPrice(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        value: "TypedMoney" = None,
-        current_value: "TypedMoney" = None,
+        id: str,
+        value: "TypedMoney",
+        current_value: "TypedMoney",
         country: typing.Optional["str"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
@@ -949,10 +945,10 @@ class TypedMoney(_BaseType):
     def __init__(
         self,
         *,
-        type: "MoneyType" = None,
-        fraction_digits: int = None,
-        cent_amount: int = None,
-        currency_code: "str" = None,
+        type: "MoneyType",
+        fraction_digits: int,
+        cent_amount: int,
+        currency_code: "str",
     ) -> None:
         self.type = type
         self.fraction_digits = fraction_digits
@@ -973,7 +969,7 @@ class Update(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -986,7 +982,7 @@ class UpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -996,12 +992,7 @@ class UpdateAction(_BaseType):
 
 class CentPrecisionMoney(TypedMoney):
     def __init__(
-        self,
-        *,
-        type: "MoneyType" = None,
-        fraction_digits: int = None,
-        cent_amount: int = None,
-        currency_code: "str" = None,
+        self, *, fraction_digits: int, cent_amount: int, currency_code: "str"
     ) -> None:
         super().__init__(
             type=MoneyType.CENT_PRECISION,
@@ -1044,7 +1035,7 @@ class GeoJsonPoint(GeoJson):
     #: :class:`list`
     coordinates: list
 
-    def __init__(self, *, type: str = None, coordinates: list = None) -> None:
+    def __init__(self, *, coordinates: list) -> None:
         self.coordinates = coordinates
         super().__init__(type="Point")
 
@@ -1059,11 +1050,10 @@ class HighPrecisionMoney(TypedMoney):
     def __init__(
         self,
         *,
-        type: "MoneyType" = None,
-        fraction_digits: int = None,
-        cent_amount: int = None,
-        currency_code: "str" = None,
-        precise_amount: int = None,
+        fraction_digits: int,
+        cent_amount: int,
+        currency_code: "str",
+        precise_amount: int,
     ) -> None:
         self.precise_amount = precise_amount
         super().__init__(
@@ -1114,11 +1104,7 @@ class TypedMoneyDraft(Money):
     type: "MoneyType"
 
     def __init__(
-        self,
-        *,
-        cent_amount: int = None,
-        currency_code: "str" = None,
-        type: "MoneyType" = None,
+        self, *, cent_amount: int, currency_code: "str", type: "MoneyType"
     ) -> None:
         self.type = type
         super().__init__(cent_amount=cent_amount, currency_code=currency_code)
@@ -1132,13 +1118,7 @@ class TypedMoneyDraft(Money):
 
 
 class CentPrecisionMoneyDraft(TypedMoneyDraft):
-    def __init__(
-        self,
-        *,
-        cent_amount: int = None,
-        currency_code: "str" = None,
-        type: "MoneyType" = None,
-    ) -> None:
+    def __init__(self, *, cent_amount: int, currency_code: "str") -> None:
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,
@@ -1158,12 +1138,7 @@ class HighPrecisionMoneyDraft(TypedMoneyDraft):
     precise_amount: int
 
     def __init__(
-        self,
-        *,
-        cent_amount: int = None,
-        currency_code: "str" = None,
-        type: "MoneyType" = None,
-        precise_amount: int = None,
+        self, *, cent_amount: int, currency_code: "str", precise_amount: int
     ) -> None:
         self.precise_amount = precise_amount
         super().__init__(

@@ -1460,7 +1460,7 @@ class MyCartSetCustomTypeActionSchema(MyCartUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1513,7 +1513,7 @@ class MyCartSetLineItemCustomTypeActionSchema(MyCartUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1784,7 +1784,7 @@ class MyCustomerSetCustomTypeActionSchema(MyCustomerUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2254,7 +2254,7 @@ class MyShoppingListSetCustomTypeActionSchema(MyShoppingListUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2325,7 +2325,7 @@ class MyShoppingListSetLineItemCustomTypeActionSchema(MyShoppingListUpdateAction
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2370,7 +2370,7 @@ class MyShoppingListSetTextLineItemCustomTypeActionSchema(
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE

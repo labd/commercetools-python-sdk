@@ -22,8 +22,11 @@ __all__ = [
     "StoreUpdateActionSchema",
     "StoreUpdateSchema",
     "StoresAddDistributionChannelsActionSchema",
+    "StoresAddSupplyChannelsActionSchema",
     "StoresRemoveDistributionChannelsActionSchema",
+    "StoresRemoveSupplyChannelsActionSchema",
     "StoresSetDistributionChannelsActionSchema",
+    "StoresSetSupplyChannelsActionSchema",
 ]
 
 
@@ -42,6 +45,14 @@ class StoreDraftSchema(marshmallow.Schema):
         many=True,
         missing=None,
         data_key="distributionChannels",
+    )
+    supply_channels = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="supplyChannels",
     )
 
     class Meta:
@@ -152,6 +163,14 @@ class StoreSchema(BaseResourceSchema):
         many=True,
         data_key="distributionChannels",
     )
+    supply_channels = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="supplyChannels",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -186,8 +205,11 @@ class StoreUpdateSchema(marshmallow.Schema):
                 "setLanguages": "commercetools._schemas._store.StoreSetLanguagesActionSchema",
                 "setName": "commercetools._schemas._store.StoreSetNameActionSchema",
                 "addDistributionChannel": "commercetools._schemas._store.StoresAddDistributionChannelsActionSchema",
+                "addSupplyChannel": "commercetools._schemas._store.StoresAddSupplyChannelsActionSchema",
                 "removeDistributionChannel": "commercetools._schemas._store.StoresRemoveDistributionChannelsActionSchema",
+                "removeSupplyChannel": "commercetools._schemas._store.StoresRemoveSupplyChannelsActionSchema",
                 "setDistributionChannels": "commercetools._schemas._store.StoresSetDistributionChannelsActionSchema",
+                "setSupplyChannels": "commercetools._schemas._store.StoresSetSupplyChannelsActionSchema",
             },
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
@@ -252,6 +274,25 @@ class StoresAddDistributionChannelsActionSchema(StoreUpdateActionSchema):
         return types.StoresAddDistributionChannelsAction(**data)
 
 
+class StoresAddSupplyChannelsActionSchema(StoreUpdateActionSchema):
+    """Marshmallow schema for :class:`commercetools.types.StoresAddSupplyChannelsAction`."""
+
+    supply_channel = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="supplyChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoresAddSupplyChannelsAction(**data)
+
+
 class StoresRemoveDistributionChannelsActionSchema(StoreUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.StoresRemoveDistributionChannelsAction`."""
 
@@ -269,6 +310,25 @@ class StoresRemoveDistributionChannelsActionSchema(StoreUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.StoresRemoveDistributionChannelsAction(**data)
+
+
+class StoresRemoveSupplyChannelsActionSchema(StoreUpdateActionSchema):
+    """Marshmallow schema for :class:`commercetools.types.StoresRemoveSupplyChannelsAction`."""
+
+    supply_channel = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        data_key="supplyChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoresRemoveSupplyChannelsAction(**data)
 
 
 class StoresSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
@@ -290,3 +350,24 @@ class StoresSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.StoresSetDistributionChannelsAction(**data)
+
+
+class StoresSetSupplyChannelsActionSchema(StoreUpdateActionSchema):
+    """Marshmallow schema for :class:`commercetools.types.StoresSetSupplyChannelsAction`."""
+
+    supply_channels = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="supplyChannels",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StoresSetSupplyChannelsAction(**data)

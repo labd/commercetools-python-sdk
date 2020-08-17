@@ -137,15 +137,17 @@ class Customer(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        email: str,
+        password: str,
+        addresses: typing.List["Address"],
+        is_email_verified: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_number: typing.Optional[str] = None,
-        email: str = None,
-        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -153,12 +155,10 @@ class Customer(BaseResource):
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
         vat_id: typing.Optional[str] = None,
-        addresses: typing.List["Address"] = None,
         default_shipping_address_id: typing.Optional[str] = None,
         shipping_address_ids: typing.Optional[typing.List[str]] = None,
         default_billing_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List[str]] = None,
-        is_email_verified: bool = None,
         external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -251,12 +251,7 @@ class CustomerChangePassword(_BaseType):
     new_password: str
 
     def __init__(
-        self,
-        *,
-        id: str = None,
-        version: int = None,
-        current_password: str = None,
-        new_password: str = None
+        self, *, id: str, version: int, current_password: str, new_password: str
     ) -> None:
         self.id = id
         self.version = version
@@ -280,11 +275,7 @@ class CustomerCreateEmailToken(_BaseType):
     ttl_minutes: int
 
     def __init__(
-        self,
-        *,
-        id: str = None,
-        version: typing.Optional[int] = None,
-        ttl_minutes: int = None
+        self, *, id: str, ttl_minutes: int, version: typing.Optional[int] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -305,9 +296,7 @@ class CustomerCreatePasswordResetToken(_BaseType):
     #: Optional :class:`int` `(Named` ``ttlMinutes`` `in Commercetools)`
     ttl_minutes: typing.Optional[int]
 
-    def __init__(
-        self, *, email: str = None, ttl_minutes: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, email: str, ttl_minutes: typing.Optional[int] = None) -> None:
         self.email = email
         self.ttl_minutes = ttl_minutes
         super().__init__()
@@ -374,9 +363,9 @@ class CustomerDraft(_BaseType):
     def __init__(
         self,
         *,
+        email: str,
+        password: str,
         customer_number: typing.Optional[str] = None,
-        email: str = None,
-        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -467,7 +456,7 @@ class CustomerEmailVerify(_BaseType):
     token_value: str
 
     def __init__(
-        self, *, version: typing.Optional[int] = None, token_value: str = None
+        self, *, token_value: str, version: typing.Optional[int] = None
     ) -> None:
         self.version = version
         self.token_value = token_value
@@ -495,11 +484,11 @@ class CustomerPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Customer"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Customer"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -519,13 +508,7 @@ class CustomerReference(Reference):
     #: Optional :class:`commercetools.types.Customer`
     obj: typing.Optional["Customer"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Customer"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Customer"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.CUSTOMER, id=id)
 
@@ -548,8 +531,8 @@ class CustomerResetPassword(_BaseType):
     def __init__(
         self,
         *,
-        token_value: str = None,
-        new_password: str = None,
+        token_value: str,
+        new_password: str,
         version: typing.Optional[int] = None
     ) -> None:
         self.token_value = token_value
@@ -567,11 +550,7 @@ class CustomerResetPassword(_BaseType):
 
 class CustomerResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.CUSTOMER, id=id, key=key)
 
@@ -590,7 +569,7 @@ class CustomerSignInResult(_BaseType):
     cart: typing.Optional[object]
 
     def __init__(
-        self, *, customer: "Customer" = None, cart: typing.Optional[object] = None
+        self, *, customer: "Customer", cart: typing.Optional[object] = None
     ) -> None:
         self.customer = customer
         self.cart = cart
@@ -617,8 +596,8 @@ class CustomerSignin(_BaseType):
     def __init__(
         self,
         *,
-        email: str = None,
-        password: str = None,
+        email: str,
+        password: str,
         anonymous_cart_id: typing.Optional[str] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
         anonymous_id: typing.Optional[str] = None,
@@ -663,12 +642,12 @@ class CustomerToken(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        customer_id: str = None,
-        expires_at: datetime.datetime = None,
-        value: str = None
+        id: str,
+        created_at: datetime.datetime,
+        customer_id: str,
+        expires_at: datetime.datetime,
+        value: str,
+        last_modified_at: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.id = id
         self.created_at = created_at
@@ -698,7 +677,7 @@ class CustomerUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -711,7 +690,7 @@ class CustomerUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -723,7 +702,7 @@ class CustomerAddAddressAction(CustomerUpdateAction):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(action="addAddress")
 
@@ -743,7 +722,6 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -767,7 +745,6 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -786,9 +763,7 @@ class CustomerAddStoreAction(CustomerUpdateAction):
     #: :class:`commercetools.types.StoreResourceIdentifier`
     store: "StoreResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, store: "StoreResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, store: "StoreResourceIdentifier") -> None:
         self.store = store
         super().__init__(action="addStore")
 
@@ -807,10 +782,9 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
+        address: "Address",
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None,
-        address: "Address" = None
+        address_key: typing.Optional[str] = None
     ) -> None:
         self.address_id = address_id
         self.address_key = address_key
@@ -828,7 +802,7 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
     #: :class:`str`
     email: str
 
-    def __init__(self, *, action: str = None, email: str = None) -> None:
+    def __init__(self, *, email: str) -> None:
         self.email = email
         super().__init__(action="changeEmail")
 
@@ -848,7 +822,6 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -872,7 +845,6 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -896,7 +868,6 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -915,9 +886,7 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
     #: :class:`commercetools.types.StoreResourceIdentifier`
     store: "StoreResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, store: "StoreResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, store: "StoreResourceIdentifier") -> None:
         self.store = store
         super().__init__(action="removeStore")
 
@@ -932,9 +901,7 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
     company_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, company_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, company_name: typing.Optional[str] = None) -> None:
         self.company_name = company_name
         super().__init__(action="setCompanyName")
 
@@ -951,13 +918,7 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -979,7 +940,6 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -1002,7 +962,6 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
     ) -> None:
         self.customer_group = customer_group
@@ -1019,9 +978,7 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``customerNumber`` `in Commercetools)`
     customer_number: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, customer_number: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, customer_number: typing.Optional[str] = None) -> None:
         self.customer_number = customer_number
         super().__init__(action="setCustomerNumber")
 
@@ -1036,12 +993,7 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
     #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
     date_of_birth: typing.Optional[datetime.date]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        date_of_birth: typing.Optional[datetime.date] = None
-    ) -> None:
+    def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None) -> None:
         self.date_of_birth = date_of_birth
         super().__init__(action="setDateOfBirth")
 
@@ -1061,7 +1013,6 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -1085,7 +1036,6 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None
     ) -> None:
@@ -1104,9 +1054,7 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, external_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, external_id: typing.Optional[str] = None) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
 
@@ -1121,9 +1069,7 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, first_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, first_name: typing.Optional[str] = None) -> None:
         self.first_name = first_name
         super().__init__(action="setFirstName")
 
@@ -1138,7 +1084,7 @@ class CustomerSetKeyAction(CustomerUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -1150,9 +1096,7 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
     last_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, last_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, last_name: typing.Optional[str] = None) -> None:
         self.last_name = last_name
         super().__init__(action="setLastName")
 
@@ -1167,9 +1111,7 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, locale: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, locale: typing.Optional[str] = None) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -1184,9 +1126,7 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
     middle_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, middle_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, middle_name: typing.Optional[str] = None) -> None:
         self.middle_name = middle_name
         super().__init__(action="setMiddleName")
 
@@ -1201,9 +1141,7 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
     #: Optional :class:`str`
     salutation: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, salutation: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, salutation: typing.Optional[str] = None) -> None:
         self.salutation = salutation
         super().__init__(action="setSalutation")
 
@@ -1219,10 +1157,7 @@ class CustomerSetStoresAction(CustomerUpdateAction):
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
+        self, *, stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
     ) -> None:
         self.stores = stores
         super().__init__(action="setStores")
@@ -1238,9 +1173,7 @@ class CustomerSetTitleAction(CustomerUpdateAction):
     #: Optional :class:`str`
     title: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, title: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, title: typing.Optional[str] = None) -> None:
         self.title = title
         super().__init__(action="setTitle")
 
@@ -1252,9 +1185,7 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
     vat_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, vat_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, vat_id: typing.Optional[str] = None) -> None:
         self.vat_id = vat_id
         super().__init__(action="setVatId")
 

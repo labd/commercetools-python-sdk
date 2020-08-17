@@ -449,7 +449,7 @@ class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -568,7 +568,7 @@ class CategorySetCustomTypeActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE

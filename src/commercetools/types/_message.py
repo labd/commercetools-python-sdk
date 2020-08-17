@@ -231,16 +231,16 @@ class Message(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        type: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None
@@ -289,10 +289,7 @@ class MessageConfiguration(_BaseType):
     delete_days_after_creation: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        enabled: bool = None,
-        delete_days_after_creation: typing.Optional[int] = None
+        self, *, enabled: bool, delete_days_after_creation: typing.Optional[int] = None
     ) -> None:
         self.enabled = enabled
         self.delete_days_after_creation = delete_days_after_creation
@@ -311,9 +308,7 @@ class MessageConfigurationDraft(_BaseType):
     #: :class:`int` `(Named` ``deleteDaysAfterCreation`` `in Commercetools)`
     delete_days_after_creation: int
 
-    def __init__(
-        self, *, enabled: bool = None, delete_days_after_creation: int = None
-    ) -> None:
+    def __init__(self, *, enabled: bool, delete_days_after_creation: int) -> None:
         self.enabled = enabled
         self.delete_days_after_creation = delete_days_after_creation
         super().__init__()
@@ -340,11 +335,11 @@ class MessagePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Message"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Message"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -364,7 +359,7 @@ class MessagePayload(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -389,12 +384,12 @@ class ProductPriceDiscountsSetUpdatedPrice(_BaseType):
     def __init__(
         self,
         *,
-        variant_id: int = None,
+        variant_id: int,
+        price_id: str,
+        staged: bool,
         variant_key: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
-        price_id: str = None,
-        discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: bool = None
+        discounted: typing.Optional["DiscountedPrice"] = None
     ) -> None:
         self.variant_id = variant_id
         self.variant_key = variant_key
@@ -471,20 +466,19 @@ class CategoryCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        category: "Category",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        category: "Category" = None
+        ] = None
     ) -> None:
         self.category = category
         super().__init__(
@@ -525,7 +519,7 @@ class CategoryCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Category`
     category: "Category"
 
-    def __init__(self, *, type: str = None, category: "Category" = None) -> None:
+    def __init__(self, *, category: "Category") -> None:
         self.category = category
         super().__init__(type="CategoryCreated")
 
@@ -543,20 +537,19 @@ class CategorySlugChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        slug: "LocalizedString",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        slug: "LocalizedString" = None
+        ] = None
     ) -> None:
         self.slug = slug
         super().__init__(
@@ -597,7 +590,7 @@ class CategorySlugChangedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
-    def __init__(self, *, type: str = None, slug: "LocalizedString" = None) -> None:
+    def __init__(self, *, slug: "LocalizedString") -> None:
         self.slug = slug
         super().__init__(type="CategorySlugChanged")
 
@@ -623,24 +616,23 @@ class CustomLineItemStateTransitionMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        custom_line_item_id: str,
+        transition_date: datetime.datetime,
+        quantity: int,
+        from_state: "StateReference",
+        to_state: "StateReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        custom_line_item_id: str = None,
-        transition_date: datetime.datetime = None,
-        quantity: int = None,
-        from_state: "StateReference" = None,
-        to_state: "StateReference" = None
+        ] = None
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.transition_date = transition_date
@@ -700,12 +692,11 @@ class CustomLineItemStateTransitionMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        custom_line_item_id: str = None,
-        transition_date: datetime.datetime = None,
-        quantity: int = None,
-        from_state: "StateReference" = None,
-        to_state: "StateReference" = None
+        custom_line_item_id: str,
+        transition_date: datetime.datetime,
+        quantity: int,
+        from_state: "StateReference",
+        to_state: "StateReference"
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
         self.transition_date = transition_date
@@ -735,20 +726,19 @@ class CustomerAddressAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        address: "Address",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        address: "Address" = None
+        ] = None
     ) -> None:
         self.address = address
         super().__init__(
@@ -789,7 +779,7 @@ class CustomerAddressAddedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(type="CustomerAddressAdded")
 
@@ -807,20 +797,19 @@ class CustomerAddressChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        address: "Address",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        address: "Address" = None
+        ] = None
     ) -> None:
         self.address = address
         super().__init__(
@@ -861,7 +850,7 @@ class CustomerAddressChangedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(type="CustomerAddressChanged")
 
@@ -879,20 +868,19 @@ class CustomerAddressRemovedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        address: "Address",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        address: "Address" = None
+        ] = None
     ) -> None:
         self.address = address
         super().__init__(
@@ -933,7 +921,7 @@ class CustomerAddressRemovedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, type: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(type="CustomerAddressRemoved")
 
@@ -951,20 +939,19 @@ class CustomerCompanyNameSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        company_name: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        company_name: str = None
+        ] = None
     ) -> None:
         self.company_name = company_name
         super().__init__(
@@ -1005,7 +992,7 @@ class CustomerCompanyNameSetMessagePayload(MessagePayload):
     #: :class:`str` `(Named` ``companyName`` `in Commercetools)`
     company_name: str
 
-    def __init__(self, *, type: str = None, company_name: str = None) -> None:
+    def __init__(self, *, company_name: str) -> None:
         self.company_name = company_name
         super().__init__(type="CustomerCompanyNameSet")
 
@@ -1023,20 +1010,19 @@ class CustomerCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        customer: "Customer",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        customer: "Customer" = None
+        ] = None
     ) -> None:
         self.customer = customer
         super().__init__(
@@ -1077,7 +1063,7 @@ class CustomerCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Customer`
     customer: "Customer"
 
-    def __init__(self, *, type: str = None, customer: "Customer" = None) -> None:
+    def __init__(self, *, customer: "Customer") -> None:
         self.customer = customer
         super().__init__(type="CustomerCreated")
 
@@ -1095,20 +1081,19 @@ class CustomerDateOfBirthSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        date_of_birth: datetime.date,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        date_of_birth: datetime.date = None
+        ] = None
     ) -> None:
         self.date_of_birth = date_of_birth
         super().__init__(
@@ -1149,9 +1134,7 @@ class CustomerDateOfBirthSetMessagePayload(MessagePayload):
     #: :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
     date_of_birth: datetime.date
 
-    def __init__(
-        self, *, type: str = None, date_of_birth: datetime.date = None
-    ) -> None:
+    def __init__(self, *, date_of_birth: datetime.date) -> None:
         self.date_of_birth = date_of_birth
         super().__init__(type="CustomerDateOfBirthSet")
 
@@ -1169,20 +1152,19 @@ class CustomerEmailChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        email: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        email: str = None
+        ] = None
     ) -> None:
         self.email = email
         super().__init__(
@@ -1223,7 +1205,7 @@ class CustomerEmailChangedMessagePayload(MessagePayload):
     #: :class:`str`
     email: str
 
-    def __init__(self, *, type: str = None, email: str = None) -> None:
+    def __init__(self, *, email: str) -> None:
         self.email = email
         super().__init__(type="CustomerEmailChanged")
 
@@ -1238,16 +1220,15 @@ class CustomerEmailVerifiedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None
@@ -1286,7 +1267,7 @@ class CustomerEmailVerifiedMessage(Message):
 
 
 class CustomerEmailVerifiedMessagePayload(MessagePayload):
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type="CustomerEmailVerified")
 
     def __repr__(self) -> str:
@@ -1300,20 +1281,19 @@ class CustomerGroupSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        customer_group: "CustomerGroupReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        customer_group: "CustomerGroupReference" = None
+        ] = None
     ) -> None:
         self.customer_group = customer_group
         super().__init__(
@@ -1354,9 +1334,7 @@ class CustomerGroupSetMessagePayload(MessagePayload):
     #: :class:`commercetools.types.CustomerGroupReference` `(Named` ``customerGroup`` `in Commercetools)`
     customer_group: "CustomerGroupReference"
 
-    def __init__(
-        self, *, type: str = None, customer_group: "CustomerGroupReference" = None
-    ) -> None:
+    def __init__(self, *, customer_group: "CustomerGroupReference") -> None:
         self.customer_group = customer_group
         super().__init__(type="CustomerGroupSet")
 
@@ -1374,20 +1352,19 @@ class DeliveryAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery: "Delivery",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        delivery: "Delivery" = None
+        ] = None
     ) -> None:
         self.delivery = delivery
         super().__init__(
@@ -1428,7 +1405,7 @@ class DeliveryAddedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
 
-    def __init__(self, *, type: str = None, delivery: "Delivery" = None) -> None:
+    def __init__(self, *, delivery: "Delivery") -> None:
         self.delivery = delivery
         super().__init__(type="DeliveryAdded")
 
@@ -1450,20 +1427,19 @@ class DeliveryAddressSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery_id: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        delivery_id: str = None,
         address: typing.Optional["Address"] = None,
         old_address: typing.Optional["Address"] = None
     ) -> None:
@@ -1517,8 +1493,7 @@ class DeliveryAddressSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        delivery_id: str = None,
+        delivery_id: str,
         address: typing.Optional["Address"] = None,
         old_address: typing.Optional["Address"] = None
     ) -> None:
@@ -1545,22 +1520,21 @@ class DeliveryItemsUpdatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery_id: str,
+        items: typing.List["DeliveryItem"],
+        old_items: typing.List["DeliveryItem"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        delivery_id: str = None,
-        items: typing.List["DeliveryItem"] = None,
-        old_items: typing.List["DeliveryItem"] = None
+        ] = None
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
@@ -1612,10 +1586,9 @@ class DeliveryItemsUpdatedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        delivery_id: str = None,
-        items: typing.List["DeliveryItem"] = None,
-        old_items: typing.List["DeliveryItem"] = None
+        delivery_id: str,
+        items: typing.List["DeliveryItem"],
+        old_items: typing.List["DeliveryItem"]
     ) -> None:
         self.delivery_id = delivery_id
         self.items = items
@@ -1636,20 +1609,19 @@ class DeliveryRemovedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery: "Delivery",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        delivery: "Delivery" = None
+        ] = None
     ) -> None:
         self.delivery = delivery
         super().__init__(
@@ -1690,7 +1662,7 @@ class DeliveryRemovedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Delivery`
     delivery: "Delivery"
 
-    def __init__(self, *, type: str = None, delivery: "Delivery" = None) -> None:
+    def __init__(self, *, delivery: "Delivery") -> None:
         self.delivery = delivery
         super().__init__(type="DeliveryRemoved")
 
@@ -1708,20 +1680,19 @@ class InventoryEntryCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        inventory_entry: "InventoryEntry",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        inventory_entry: "InventoryEntry" = None
+        ] = None
     ) -> None:
         self.inventory_entry = inventory_entry
         super().__init__(
@@ -1762,9 +1733,7 @@ class InventoryEntryCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.InventoryEntry` `(Named` ``inventoryEntry`` `in Commercetools)`
     inventory_entry: "InventoryEntry"
 
-    def __init__(
-        self, *, type: str = None, inventory_entry: "InventoryEntry" = None
-    ) -> None:
+    def __init__(self, *, inventory_entry: "InventoryEntry") -> None:
         self.inventory_entry = inventory_entry
         super().__init__(type="InventoryEntryCreated")
 
@@ -1784,21 +1753,20 @@ class InventoryEntryDeletedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        sku: str,
+        supply_channel: "ChannelReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        sku: str = None,
-        supply_channel: "ChannelReference" = None
+        ] = None
     ) -> None:
         self.sku = sku
         self.supply_channel = supply_channel
@@ -1843,13 +1811,7 @@ class InventoryEntryDeletedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: "ChannelReference"
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        sku: str = None,
-        supply_channel: "ChannelReference" = None
-    ) -> None:
+    def __init__(self, *, sku: str, supply_channel: "ChannelReference") -> None:
         self.sku = sku
         self.supply_channel = supply_channel
         super().__init__(type="InventoryEntryDeleted")
@@ -1874,23 +1836,22 @@ class InventoryEntryQuantitySetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        old_quantity_on_stock: int,
+        new_quantity_on_stock: int,
+        old_available_quantity: int,
+        new_available_quantity: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        old_quantity_on_stock: int = None,
-        new_quantity_on_stock: int = None,
-        old_available_quantity: int = None,
-        new_available_quantity: int = None
+        ] = None
     ) -> None:
         self.old_quantity_on_stock = old_quantity_on_stock
         self.new_quantity_on_stock = new_quantity_on_stock
@@ -1946,11 +1907,10 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        old_quantity_on_stock: int = None,
-        new_quantity_on_stock: int = None,
-        old_available_quantity: int = None,
-        new_available_quantity: int = None
+        old_quantity_on_stock: int,
+        new_quantity_on_stock: int,
+        old_available_quantity: int,
+        new_available_quantity: int
     ) -> None:
         self.old_quantity_on_stock = old_quantity_on_stock
         self.new_quantity_on_stock = new_quantity_on_stock
@@ -1986,24 +1946,23 @@ class LineItemStateTransitionMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        line_item_id: str,
+        transition_date: datetime.datetime,
+        quantity: int,
+        from_state: "StateReference",
+        to_state: "StateReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        line_item_id: str = None,
-        transition_date: datetime.datetime = None,
-        quantity: int = None,
-        from_state: "StateReference" = None,
-        to_state: "StateReference" = None
+        ] = None
     ) -> None:
         self.line_item_id = line_item_id
         self.transition_date = transition_date
@@ -2063,12 +2022,11 @@ class LineItemStateTransitionMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        line_item_id: str = None,
-        transition_date: datetime.datetime = None,
-        quantity: int = None,
-        from_state: "StateReference" = None,
-        to_state: "StateReference" = None
+        line_item_id: str,
+        transition_date: datetime.datetime,
+        quantity: int,
+        from_state: "StateReference",
+        to_state: "StateReference"
     ) -> None:
         self.line_item_id = line_item_id
         self.transition_date = transition_date
@@ -2100,16 +2058,15 @@ class OrderBillingAddressSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -2162,7 +2119,6 @@ class OrderBillingAddressSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         address: typing.Optional["Address"] = None,
         old_address: typing.Optional["Address"] = None
     ) -> None:
@@ -2184,20 +2140,19 @@ class OrderCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        order: "Order",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        order: "Order" = None
+        ] = None
     ) -> None:
         self.order = order
         super().__init__(
@@ -2238,7 +2193,7 @@ class OrderCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Order`
     order: "Order"
 
-    def __init__(self, *, type: str = None, order: "Order" = None) -> None:
+    def __init__(self, *, order: "Order") -> None:
         self.order = order
         super().__init__(type="OrderCreated")
 
@@ -2257,22 +2212,21 @@ class OrderCustomLineItemDiscountSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        custom_line_item_id: str = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        custom_line_item_id: str,
         discounted_price_per_quantity: typing.List[
             "DiscountedLineItemPriceForQuantity"
+        ],
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
         ] = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None
     ) -> None:
@@ -2326,11 +2280,10 @@ class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        custom_line_item_id: str = None,
+        custom_line_item_id: str,
         discounted_price_per_quantity: typing.List[
             "DiscountedLineItemPriceForQuantity"
-        ] = None,
+        ],
         taxed_price: typing.Optional["TaxedItemPrice"] = None
     ) -> None:
         self.custom_line_item_id = custom_line_item_id
@@ -2359,16 +2312,15 @@ class OrderCustomerEmailSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -2421,7 +2373,6 @@ class OrderCustomerEmailSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         email: typing.Optional[str] = None,
         old_email: typing.Optional[str] = None
     ) -> None:
@@ -2445,16 +2396,15 @@ class OrderCustomerGroupSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -2507,7 +2457,6 @@ class OrderCustomerGroupSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         old_customer_group: typing.Optional["CustomerGroupReference"] = None
     ) -> None:
@@ -2535,16 +2484,15 @@ class OrderCustomerSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -2607,7 +2555,6 @@ class OrderCustomerSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         customer: typing.Optional["CustomerReference"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         old_customer: typing.Optional["CustomerReference"] = None,
@@ -2639,20 +2586,19 @@ class OrderDeletedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        order: "Order",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        order: "Order" = None
+        ] = None
     ) -> None:
         self.order = order
         super().__init__(
@@ -2693,7 +2639,7 @@ class OrderDeletedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Order`
     order: "Order"
 
-    def __init__(self, *, type: str = None, order: "Order" = None) -> None:
+    def __init__(self, *, order: "Order") -> None:
         self.order = order
         super().__init__(type="OrderDeleted")
 
@@ -2708,20 +2654,19 @@ class OrderDiscountCodeAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        discount_code: "DiscountCodeReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        discount_code: "DiscountCodeReference" = None
+        ] = None
     ) -> None:
         self.discount_code = discount_code
         super().__init__(
@@ -2762,9 +2707,7 @@ class OrderDiscountCodeAddedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
-    def __init__(
-        self, *, type: str = None, discount_code: "DiscountCodeReference" = None
-    ) -> None:
+    def __init__(self, *, discount_code: "DiscountCodeReference") -> None:
         self.discount_code = discount_code
         super().__init__(type="OrderDiscountCodeAdded")
 
@@ -2782,20 +2725,19 @@ class OrderDiscountCodeRemovedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        discount_code: "DiscountCodeReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        discount_code: "DiscountCodeReference" = None
+        ] = None
     ) -> None:
         self.discount_code = discount_code
         super().__init__(
@@ -2836,9 +2778,7 @@ class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
-    def __init__(
-        self, *, type: str = None, discount_code: "DiscountCodeReference" = None
-    ) -> None:
+    def __init__(self, *, discount_code: "DiscountCodeReference") -> None:
         self.discount_code = discount_code
         super().__init__(type="OrderDiscountCodeRemoved")
 
@@ -2860,21 +2800,20 @@ class OrderDiscountCodeStateSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        discount_code: "DiscountCodeReference",
+        state: "DiscountCodeState",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        discount_code: "DiscountCodeReference" = None,
-        state: "DiscountCodeState" = None,
         old_state: typing.Optional["DiscountCodeState"] = None
     ) -> None:
         self.discount_code = discount_code
@@ -2927,9 +2866,8 @@ class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        discount_code: "DiscountCodeReference" = None,
-        state: "DiscountCodeState" = None,
+        discount_code: "DiscountCodeReference",
+        state: "DiscountCodeState",
         old_state: typing.Optional["DiscountCodeState"] = None
     ) -> None:
         self.discount_code = discount_code
@@ -2953,21 +2891,20 @@ class OrderEditAppliedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        edit: "OrderEditReference",
+        result: "OrderEditApplied",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        edit: "OrderEditReference" = None,
-        result: "OrderEditApplied" = None
+        ] = None
     ) -> None:
         self.edit = edit
         self.result = result
@@ -3013,11 +2950,7 @@ class OrderEditAppliedMessagePayload(MessagePayload):
     result: "OrderEditApplied"
 
     def __init__(
-        self,
-        *,
-        type: str = None,
-        edit: "OrderEditReference" = None,
-        result: "OrderEditApplied" = None
+        self, *, edit: "OrderEditReference", result: "OrderEditApplied"
     ) -> None:
         self.edit = edit
         self.result = result
@@ -3038,20 +2971,19 @@ class OrderImportedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        order: "Order",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        order: "Order" = None
+        ] = None
     ) -> None:
         self.order = order
         super().__init__(
@@ -3092,7 +3024,7 @@ class OrderImportedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Order`
     order: "Order"
 
-    def __init__(self, *, type: str = None, order: "Order" = None) -> None:
+    def __init__(self, *, order: "Order") -> None:
         self.order = order
         super().__init__(type="OrderImported")
 
@@ -3112,21 +3044,20 @@ class OrderLineItemAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        line_item: "LineItem",
+        added_quantity: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        line_item: "LineItem" = None,
-        added_quantity: int = None
+        ] = None
     ) -> None:
         self.line_item = line_item
         self.added_quantity = added_quantity
@@ -3171,13 +3102,7 @@ class OrderLineItemAddedMessagePayload(MessagePayload):
     #: :class:`int` `(Named` ``addedQuantity`` `in Commercetools)`
     added_quantity: int
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        line_item: "LineItem" = None,
-        added_quantity: int = None
-    ) -> None:
+    def __init__(self, *, line_item: "LineItem", added_quantity: int) -> None:
         self.line_item = line_item
         self.added_quantity = added_quantity
         super().__init__(type="OrderLineItemAdded")
@@ -3202,24 +3127,23 @@ class OrderLineItemDiscountSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        line_item_id: str,
+        discounted_price_per_quantity: typing.List[
+            "DiscountedLineItemPriceForQuantity"
+        ],
+        total_price: "Money",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        line_item_id: str = None,
-        discounted_price_per_quantity: typing.List[
-            "DiscountedLineItemPriceForQuantity"
-        ] = None,
-        total_price: "Money" = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None
     ) -> None:
         self.line_item_id = line_item_id
@@ -3276,12 +3200,11 @@ class OrderLineItemDiscountSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        line_item_id: str = None,
+        line_item_id: str,
         discounted_price_per_quantity: typing.List[
             "DiscountedLineItemPriceForQuantity"
-        ] = None,
-        total_price: "Money" = None,
+        ],
+        total_price: "Money",
         taxed_price: typing.Optional["TaxedItemPrice"] = None
     ) -> None:
         self.line_item_id = line_item_id
@@ -3312,20 +3235,19 @@ class OrderPaymentStateChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        payment_state: "PaymentState",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        payment_state: "PaymentState" = None,
         old_payment_state: typing.Optional["PaymentState"] = None
     ) -> None:
         self.payment_state = payment_state
@@ -3374,8 +3296,7 @@ class OrderPaymentStateChangedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        payment_state: "PaymentState" = None,
+        payment_state: "PaymentState",
         old_payment_state: typing.Optional["PaymentState"] = None
     ) -> None:
         self.payment_state = payment_state
@@ -3396,20 +3317,19 @@ class OrderReturnInfoAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        return_info: "ReturnInfo",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        return_info: "ReturnInfo" = None
+        ] = None
     ) -> None:
         self.return_info = return_info
         super().__init__(
@@ -3450,7 +3370,7 @@ class OrderReturnInfoAddedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.ReturnInfo` `(Named` ``returnInfo`` `in Commercetools)`
     return_info: "ReturnInfo"
 
-    def __init__(self, *, type: str = None, return_info: "ReturnInfo" = None) -> None:
+    def __init__(self, *, return_info: "ReturnInfo") -> None:
         self.return_info = return_info
         super().__init__(type="ReturnInfoAdded")
 
@@ -3470,21 +3390,20 @@ class OrderReturnShipmentStateChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        return_item_id: str,
+        return_shipment_state: "ReturnShipmentState",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        return_item_id: str = None,
-        return_shipment_state: "ReturnShipmentState" = None
+        ] = None
     ) -> None:
         self.return_item_id = return_item_id
         self.return_shipment_state = return_shipment_state
@@ -3530,11 +3449,7 @@ class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
     return_shipment_state: "ReturnShipmentState"
 
     def __init__(
-        self,
-        *,
-        type: str = None,
-        return_item_id: str = None,
-        return_shipment_state: "ReturnShipmentState" = None
+        self, *, return_item_id: str, return_shipment_state: "ReturnShipmentState"
     ) -> None:
         self.return_item_id = return_item_id
         self.return_shipment_state = return_shipment_state
@@ -3556,20 +3471,19 @@ class OrderShipmentStateChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        shipment_state: "ShipmentState",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        shipment_state: "ShipmentState" = None,
         old_shipment_state: typing.Optional["ShipmentState"] = None
     ) -> None:
         self.shipment_state = shipment_state
@@ -3618,8 +3532,7 @@ class OrderShipmentStateChangedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        shipment_state: "ShipmentState" = None,
+        shipment_state: "ShipmentState",
         old_shipment_state: typing.Optional["ShipmentState"] = None
     ) -> None:
         self.shipment_state = shipment_state
@@ -3642,16 +3555,15 @@ class OrderShippingAddressSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -3704,7 +3616,6 @@ class OrderShippingAddressSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         address: typing.Optional["Address"] = None,
         old_address: typing.Optional["Address"] = None
     ) -> None:
@@ -3728,16 +3639,15 @@ class OrderShippingInfoSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -3790,7 +3700,6 @@ class OrderShippingInfoSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
         old_shipping_info: typing.Optional["ShippingInfo"] = None
     ) -> None:
@@ -3814,16 +3723,15 @@ class OrderShippingRateInputSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
@@ -3876,7 +3784,6 @@ class OrderShippingRateInputSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None
     ) -> None:
@@ -3900,21 +3807,20 @@ class OrderStateChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        order_state: "OrderState",
+        old_order_state: "OrderState",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        order_state: "OrderState" = None,
-        old_order_state: "OrderState" = None
+        ] = None
     ) -> None:
         self.order_state = order_state
         self.old_order_state = old_order_state
@@ -3960,11 +3866,7 @@ class OrderStateChangedMessagePayload(MessagePayload):
     old_order_state: "OrderState"
 
     def __init__(
-        self,
-        *,
-        type: str = None,
-        order_state: "OrderState" = None,
-        old_order_state: "OrderState" = None
+        self, *, order_state: "OrderState", old_order_state: "OrderState"
     ) -> None:
         self.order_state = order_state
         self.old_order_state = old_order_state
@@ -3986,21 +3888,20 @@ class OrderStateTransitionMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        state: "StateReference",
+        force: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        state: "StateReference" = None,
-        force: bool = None
+        ] = None
     ) -> None:
         self.state = state
         self.force = force
@@ -4045,9 +3946,7 @@ class OrderStateTransitionMessagePayload(MessagePayload):
     #: :class:`bool`
     force: bool
 
-    def __init__(
-        self, *, type: str = None, state: "StateReference" = None, force: bool = None
-    ) -> None:
+    def __init__(self, *, state: "StateReference", force: bool) -> None:
         self.state = state
         self.force = force
         super().__init__(type="OrderStateTransition")
@@ -4067,20 +3966,19 @@ class OrderStoreSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        store: "StoreKeyReference",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        store: "StoreKeyReference" = None
+        ] = None
     ) -> None:
         self.store = store
         super().__init__(
@@ -4121,7 +4019,7 @@ class OrderStoreSetMessagePayload(MessagePayload):
     #: :class:`commercetools.types.StoreKeyReference`
     store: "StoreKeyReference"
 
-    def __init__(self, *, type: str = None, store: "StoreKeyReference" = None) -> None:
+    def __init__(self, *, store: "StoreKeyReference") -> None:
         self.store = store
         super().__init__(type="OrderStoreSet")
 
@@ -4141,21 +4039,20 @@ class ParcelAddedToDeliveryMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery: "Delivery",
+        parcel: "Parcel",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        delivery: "Delivery" = None,
-        parcel: "Parcel" = None
+        ] = None
     ) -> None:
         self.delivery = delivery
         self.parcel = parcel
@@ -4200,9 +4097,7 @@ class ParcelAddedToDeliveryMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Parcel`
     parcel: "Parcel"
 
-    def __init__(
-        self, *, type: str = None, delivery: "Delivery" = None, parcel: "Parcel" = None
-    ) -> None:
+    def __init__(self, *, delivery: "Delivery", parcel: "Parcel") -> None:
         self.delivery = delivery
         self.parcel = parcel
         super().__init__(type="ParcelAddedToDelivery")
@@ -4227,23 +4122,22 @@ class ParcelItemsUpdatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        parcel_id: str,
+        items: typing.List["DeliveryItem"],
+        old_items: typing.List["DeliveryItem"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        parcel_id: str = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.List["DeliveryItem"] = None,
-        old_items: typing.List["DeliveryItem"] = None
+        delivery_id: typing.Optional[str] = None
     ) -> None:
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
@@ -4299,11 +4193,10 @@ class ParcelItemsUpdatedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        parcel_id: str = None,
-        delivery_id: typing.Optional[str] = None,
-        items: typing.List["DeliveryItem"] = None,
-        old_items: typing.List["DeliveryItem"] = None
+        parcel_id: str,
+        items: typing.List["DeliveryItem"],
+        old_items: typing.List["DeliveryItem"],
+        delivery_id: typing.Optional[str] = None
     ) -> None:
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
@@ -4329,21 +4222,20 @@ class ParcelMeasurementsUpdatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery_id: str,
+        parcel_id: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        delivery_id: str = None,
-        parcel_id: str = None,
         measurements: typing.Optional["ParcelMeasurements"] = None
     ) -> None:
         self.delivery_id = delivery_id
@@ -4396,9 +4288,8 @@ class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        delivery_id: str = None,
-        parcel_id: str = None,
+        delivery_id: str,
+        parcel_id: str,
         measurements: typing.Optional["ParcelMeasurements"] = None
     ) -> None:
         self.delivery_id = delivery_id
@@ -4422,21 +4313,20 @@ class ParcelRemovedFromDeliveryMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery_id: str,
+        parcel: "Parcel",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        delivery_id: str = None,
-        parcel: "Parcel" = None
+        ] = None
     ) -> None:
         self.delivery_id = delivery_id
         self.parcel = parcel
@@ -4481,9 +4371,7 @@ class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Parcel`
     parcel: "Parcel"
 
-    def __init__(
-        self, *, type: str = None, delivery_id: str = None, parcel: "Parcel" = None
-    ) -> None:
+    def __init__(self, *, delivery_id: str, parcel: "Parcel") -> None:
         self.delivery_id = delivery_id
         self.parcel = parcel
         super().__init__(type="ParcelRemovedFromDelivery")
@@ -4506,21 +4394,20 @@ class ParcelTrackingDataUpdatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        delivery_id: str,
+        parcel_id: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        delivery_id: str = None,
-        parcel_id: str = None,
         tracking_data: typing.Optional["TrackingData"] = None
     ) -> None:
         self.delivery_id = delivery_id
@@ -4573,9 +4460,8 @@ class ParcelTrackingDataUpdatedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        delivery_id: str = None,
-        parcel_id: str = None,
+        delivery_id: str,
+        parcel_id: str,
         tracking_data: typing.Optional["TrackingData"] = None
     ) -> None:
         self.delivery_id = delivery_id
@@ -4597,20 +4483,19 @@ class PaymentCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        payment: "Payment",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        payment: "Payment" = None
+        ] = None
     ) -> None:
         self.payment = payment
         super().__init__(
@@ -4651,7 +4536,7 @@ class PaymentCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Payment`
     payment: "Payment"
 
-    def __init__(self, *, type: str = None, payment: "Payment" = None) -> None:
+    def __init__(self, *, payment: "Payment") -> None:
         self.payment = payment
         super().__init__(type="PaymentCreated")
 
@@ -4669,20 +4554,19 @@ class PaymentInteractionAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        interaction: "CustomFields",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        interaction: "CustomFields" = None
+        ] = None
     ) -> None:
         self.interaction = interaction
         super().__init__(
@@ -4723,7 +4607,7 @@ class PaymentInteractionAddedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.CustomFields`
     interaction: "CustomFields"
 
-    def __init__(self, *, type: str = None, interaction: "CustomFields" = None) -> None:
+    def __init__(self, *, interaction: "CustomFields") -> None:
         self.interaction = interaction
         super().__init__(type="PaymentInteractionAdded")
 
@@ -4743,21 +4627,20 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        payment_id: str,
+        interface_code: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        payment_id: str = None,
-        interface_code: str = None
+        ] = None
     ) -> None:
         self.payment_id = payment_id
         self.interface_code = interface_code
@@ -4802,9 +4685,7 @@ class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
     #: :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
     interface_code: str
 
-    def __init__(
-        self, *, type: str = None, payment_id: str = None, interface_code: str = None
-    ) -> None:
+    def __init__(self, *, payment_id: str, interface_code: str) -> None:
         self.payment_id = payment_id
         self.interface_code = interface_code
         super().__init__(type="PaymentStatusInterfaceCodeSet")
@@ -4825,21 +4706,20 @@ class PaymentStatusStateTransitionMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        state: "StateReference",
+        force: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        state: "StateReference" = None,
-        force: bool = None
+        ] = None
     ) -> None:
         self.state = state
         self.force = force
@@ -4884,9 +4764,7 @@ class PaymentStatusStateTransitionMessagePayload(MessagePayload):
     #: :class:`bool`
     force: bool
 
-    def __init__(
-        self, *, type: str = None, state: "StateReference" = None, force: bool = None
-    ) -> None:
+    def __init__(self, *, state: "StateReference", force: bool) -> None:
         self.state = state
         self.force = force
         super().__init__(type="PaymentStatusStateTransition")
@@ -4905,20 +4783,19 @@ class PaymentTransactionAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        transaction: "Transaction",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        transaction: "Transaction" = None
+        ] = None
     ) -> None:
         self.transaction = transaction
         super().__init__(
@@ -4959,7 +4836,7 @@ class PaymentTransactionAddedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Transaction`
     transaction: "Transaction"
 
-    def __init__(self, *, type: str = None, transaction: "Transaction" = None) -> None:
+    def __init__(self, *, transaction: "Transaction") -> None:
         self.transaction = transaction
         super().__init__(type="PaymentTransactionAdded")
 
@@ -4979,21 +4856,20 @@ class PaymentTransactionStateChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        transaction_id: str,
+        state: "TransactionState",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        transaction_id: str = None,
-        state: "TransactionState" = None
+        ] = None
     ) -> None:
         self.transaction_id = transaction_id
         self.state = state
@@ -5038,13 +4914,7 @@ class PaymentTransactionStateChangedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.TransactionState`
     state: "TransactionState"
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        transaction_id: str = None,
-        state: "TransactionState" = None
-    ) -> None:
+    def __init__(self, *, transaction_id: str, state: "TransactionState") -> None:
         self.transaction_id = transaction_id
         self.state = state
         super().__init__(type="PaymentTransactionStateChanged")
@@ -5065,21 +4935,20 @@ class ProductAddedToCategoryMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        category: "CategoryReference",
+        staged: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        category: "CategoryReference" = None,
-        staged: bool = None
+        ] = None
     ) -> None:
         self.category = category
         self.staged = staged
@@ -5124,13 +4993,7 @@ class ProductAddedToCategoryMessagePayload(MessagePayload):
     #: :class:`bool`
     staged: bool
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        category: "CategoryReference" = None,
-        staged: bool = None
-    ) -> None:
+    def __init__(self, *, category: "CategoryReference", staged: bool) -> None:
         self.category = category
         self.staged = staged
         super().__init__(type="ProductAddedToCategory")
@@ -5149,20 +5012,19 @@ class ProductCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        product_projection: "ProductProjection",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        product_projection: "ProductProjection" = None
+        ] = None
     ) -> None:
         self.product_projection = product_projection
         super().__init__(
@@ -5203,9 +5065,7 @@ class ProductCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.ProductProjection` `(Named` ``productProjection`` `in Commercetools)`
     product_projection: "ProductProjection"
 
-    def __init__(
-        self, *, type: str = None, product_projection: "ProductProjection" = None
-    ) -> None:
+    def __init__(self, *, product_projection: "ProductProjection") -> None:
         self.product_projection = product_projection
         super().__init__(type="ProductCreated")
 
@@ -5225,21 +5085,20 @@ class ProductDeletedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        removed_image_urls: list,
+        current_projection: "ProductProjection",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        removed_image_urls: list = None,
-        current_projection: "ProductProjection" = None
+        ] = None
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
@@ -5285,11 +5144,7 @@ class ProductDeletedMessagePayload(MessagePayload):
     current_projection: "ProductProjection"
 
     def __init__(
-        self,
-        *,
-        type: str = None,
-        removed_image_urls: list = None,
-        current_projection: "ProductProjection" = None
+        self, *, removed_image_urls: list, current_projection: "ProductProjection"
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
@@ -5313,22 +5168,21 @@ class ProductImageAddedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        variant_id: int,
+        image: "Image",
+        staged: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        variant_id: int = None,
-        image: "Image" = None,
-        staged: bool = None
+        ] = None
     ) -> None:
         self.variant_id = variant_id
         self.image = image
@@ -5377,14 +5231,7 @@ class ProductImageAddedMessagePayload(MessagePayload):
     #: :class:`bool`
     staged: bool
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        variant_id: int = None,
-        image: "Image" = None,
-        staged: bool = None
-    ) -> None:
+    def __init__(self, *, variant_id: int, image: "Image", staged: bool) -> None:
         self.variant_id = variant_id
         self.image = image
         self.staged = staged
@@ -5404,20 +5251,19 @@ class ProductPriceDiscountsSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"] = None
+        ] = None
     ) -> None:
         self.updated_prices = updated_prices
         super().__init__(
@@ -5459,10 +5305,7 @@ class ProductPriceDiscountsSetMessagePayload(MessagePayload):
     updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
 
     def __init__(
-        self,
-        *,
-        type: str = None,
-        updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"] = None
+        self, *, updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
     ) -> None:
         self.updated_prices = updated_prices
         super().__init__(type="ProductPriceDiscountsSet")
@@ -5491,25 +5334,24 @@ class ProductPriceExternalDiscountSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        variant_id: int,
+        price_id: str,
+        staged: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        variant_id: int = None,
         variant_key: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
-        price_id: str = None,
-        discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: bool = None
+        discounted: typing.Optional["DiscountedPrice"] = None
     ) -> None:
         self.variant_id = variant_id
         self.variant_key = variant_key
@@ -5573,13 +5415,12 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        variant_id: int = None,
+        variant_id: int,
+        price_id: str,
+        staged: bool,
         variant_key: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
-        price_id: str = None,
-        discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: bool = None
+        discounted: typing.Optional["DiscountedPrice"] = None
     ) -> None:
         self.variant_id = variant_id
         self.variant_key = variant_key
@@ -5615,22 +5456,21 @@ class ProductPublishedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        removed_image_urls: list,
+        product_projection: "ProductProjection",
+        scope: "ProductPublishScope",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        removed_image_urls: list = None,
-        product_projection: "ProductProjection" = None,
-        scope: "ProductPublishScope" = None
+        ] = None
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
@@ -5682,10 +5522,9 @@ class ProductPublishedMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        removed_image_urls: list = None,
-        product_projection: "ProductProjection" = None,
-        scope: "ProductPublishScope" = None
+        removed_image_urls: list,
+        product_projection: "ProductProjection",
+        scope: "ProductPublishScope"
     ) -> None:
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
@@ -5708,21 +5547,20 @@ class ProductRemovedFromCategoryMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        category: "CategoryReference",
+        staged: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        category: "CategoryReference" = None,
-        staged: bool = None
+        ] = None
     ) -> None:
         self.category = category
         self.staged = staged
@@ -5767,13 +5605,7 @@ class ProductRemovedFromCategoryMessagePayload(MessagePayload):
     #: :class:`bool`
     staged: bool
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        category: "CategoryReference" = None,
-        staged: bool = None
-    ) -> None:
+    def __init__(self, *, category: "CategoryReference", staged: bool) -> None:
         self.category = category
         self.staged = staged
         super().__init__(type="ProductRemovedFromCategory")
@@ -5792,20 +5624,19 @@ class ProductRevertedStagedChangesMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        removed_image_urls: list,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        removed_image_urls: list = None
+        ] = None
     ) -> None:
         self.removed_image_urls = removed_image_urls
         super().__init__(
@@ -5846,7 +5677,7 @@ class ProductRevertedStagedChangesMessagePayload(MessagePayload):
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
 
-    def __init__(self, *, type: str = None, removed_image_urls: list = None) -> None:
+    def __init__(self, *, removed_image_urls: list) -> None:
         self.removed_image_urls = removed_image_urls
         super().__init__(type="ProductRevertedStagedChanges")
 
@@ -5864,20 +5695,19 @@ class ProductSlugChangedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        slug: "LocalizedString",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        slug: "LocalizedString" = None
+        ] = None
     ) -> None:
         self.slug = slug
         super().__init__(
@@ -5918,7 +5748,7 @@ class ProductSlugChangedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
-    def __init__(self, *, type: str = None, slug: "LocalizedString" = None) -> None:
+    def __init__(self, *, slug: "LocalizedString") -> None:
         self.slug = slug
         super().__init__(type="ProductSlugChanged")
 
@@ -5938,21 +5768,20 @@ class ProductStateTransitionMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        state: "StateReference",
+        force: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        state: "StateReference" = None,
-        force: bool = None
+        ] = None
     ) -> None:
         self.state = state
         self.force = force
@@ -5997,9 +5826,7 @@ class ProductStateTransitionMessagePayload(MessagePayload):
     #: :class:`bool`
     force: bool
 
-    def __init__(
-        self, *, type: str = None, state: "StateReference" = None, force: bool = None
-    ) -> None:
+    def __init__(self, *, state: "StateReference", force: bool) -> None:
         self.state = state
         self.force = force
         super().__init__(type="ProductStateTransition")
@@ -6016,16 +5843,15 @@ class ProductUnpublishedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None
@@ -6064,7 +5890,7 @@ class ProductUnpublishedMessage(Message):
 
 
 class ProductUnpublishedMessagePayload(MessagePayload):
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type="ProductUnpublished")
 
     def __repr__(self) -> str:
@@ -6080,21 +5906,20 @@ class ProductVariantDeletedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        variant: "ProductVariant",
+        removed_image_urls: list,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        variant: "ProductVariant" = None,
-        removed_image_urls: list = None
+        ] = None
     ) -> None:
         self.variant = variant
         self.removed_image_urls = removed_image_urls
@@ -6139,13 +5964,7 @@ class ProductVariantDeletedMessagePayload(MessagePayload):
     #: :class:`list` `(Named` ``removedImageUrls`` `in Commercetools)`
     removed_image_urls: list
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        variant: "ProductVariant" = None,
-        removed_image_urls: list = None
-    ) -> None:
+    def __init__(self, *, variant: "ProductVariant", removed_image_urls: list) -> None:
         self.variant = variant
         self.removed_image_urls = removed_image_urls
         super().__init__(type="ProductVariantDeleted")
@@ -6164,20 +5983,19 @@ class ReviewCreatedMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        review: "Review",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        review: "Review" = None
+        ] = None
     ) -> None:
         self.review = review
         super().__init__(
@@ -6218,7 +6036,7 @@ class ReviewCreatedMessagePayload(MessagePayload):
     #: :class:`commercetools.types.Review`
     review: "Review"
 
-    def __init__(self, *, type: str = None, review: "Review" = None) -> None:
+    def __init__(self, *, review: "Review") -> None:
         self.review = review
         super().__init__(type="ReviewCreated")
 
@@ -6242,22 +6060,21 @@ class ReviewRatingSetMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        included_in_statistics: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
         old_rating: typing.Optional[int] = None,
         new_rating: typing.Optional[int] = None,
-        included_in_statistics: bool = None,
         target: typing.Optional["Reference"] = None
     ) -> None:
         self.old_rating = old_rating
@@ -6314,10 +6131,9 @@ class ReviewRatingSetMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
+        included_in_statistics: bool,
         old_rating: typing.Optional[int] = None,
         new_rating: typing.Optional[int] = None,
-        included_in_statistics: bool = None,
         target: typing.Optional["Reference"] = None
     ) -> None:
         self.old_rating = old_rating
@@ -6356,25 +6172,24 @@ class ReviewStateTransitionMessage(Message):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        old_state: "StateReference",
+        new_state: "StateReference",
+        old_included_in_statistics: bool,
+        new_included_in_statistics: bool,
+        target: "Reference",
+        force: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int = None,
-        resource: "Reference" = None,
-        resource_version: int = None,
-        type: str = None,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        old_state: "StateReference" = None,
-        new_state: "StateReference" = None,
-        old_included_in_statistics: bool = None,
-        new_included_in_statistics: bool = None,
-        target: "Reference" = None,
-        force: bool = None
+        ] = None
     ) -> None:
         self.old_state = old_state
         self.new_state = new_state
@@ -6438,13 +6253,12 @@ class ReviewStateTransitionMessagePayload(MessagePayload):
     def __init__(
         self,
         *,
-        type: str = None,
-        old_state: "StateReference" = None,
-        new_state: "StateReference" = None,
-        old_included_in_statistics: bool = None,
-        new_included_in_statistics: bool = None,
-        target: "Reference" = None,
-        force: bool = None
+        old_state: "StateReference",
+        new_state: "StateReference",
+        old_included_in_statistics: bool,
+        new_included_in_statistics: bool,
+        target: "Reference",
+        force: bool
     ) -> None:
         self.old_state = old_state
         self.new_state = new_state

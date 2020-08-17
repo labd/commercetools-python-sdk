@@ -69,16 +69,16 @@ class InventoryEntry(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sku: str,
+        quantity_on_stock: int,
+        available_quantity: int,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        sku: str = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        quantity_on_stock: int = None,
-        available_quantity: int = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFields"] = None
@@ -141,9 +141,9 @@ class InventoryEntryDraft(_BaseType):
     def __init__(
         self,
         *,
-        sku: str = None,
+        sku: str,
+        quantity_on_stock: int,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        quantity_on_stock: int = None,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
@@ -175,11 +175,7 @@ class InventoryEntryReference(Reference):
     obj: typing.Optional["InventoryEntry"]
 
     def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["InventoryEntry"] = None
+        self, *, id: str, obj: typing.Optional["InventoryEntry"] = None
     ) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.INVENTORY_ENTRY, id=id)
@@ -194,11 +190,7 @@ class InventoryEntryReference(Reference):
 
 class InventoryEntryResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.INVENTORY_ENTRY, id=id, key=key)
 
@@ -216,7 +208,7 @@ class InventoryEntryUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -232,7 +224,7 @@ class InventoryEntryUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -255,11 +247,11 @@ class InventoryPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["InventoryEntry"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["InventoryEntry"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -279,7 +271,7 @@ class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
     #: :class:`int`
     quantity: int
 
-    def __init__(self, *, action: str = None, quantity: int = None) -> None:
+    def __init__(self, *, quantity: int) -> None:
         self.quantity = quantity
         super().__init__(action="addQuantity")
 
@@ -294,7 +286,7 @@ class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
     #: :class:`int`
     quantity: int
 
-    def __init__(self, *, action: str = None, quantity: int = None) -> None:
+    def __init__(self, *, quantity: int) -> None:
         self.quantity = quantity
         super().__init__(action="changeQuantity")
 
@@ -309,7 +301,7 @@ class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
     #: :class:`int`
     quantity: int
 
-    def __init__(self, *, action: str = None, quantity: int = None) -> None:
+    def __init__(self, *, quantity: int) -> None:
         self.quantity = quantity
         super().__init__(action="removeQuantity")
 
@@ -326,13 +318,7 @@ class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -354,7 +340,6 @@ class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -375,10 +360,7 @@ class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
     expected_delivery: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        expected_delivery: typing.Optional[datetime.datetime] = None
+        self, *, expected_delivery: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.expected_delivery = expected_delivery
         super().__init__(action="setExpectedDelivery")
@@ -394,9 +376,7 @@ class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
     #: Optional :class:`int` `(Named` ``restockableInDays`` `in Commercetools)`
     restockable_in_days: typing.Optional[int]
 
-    def __init__(
-        self, *, action: str = None, restockable_in_days: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, restockable_in_days: typing.Optional[int] = None) -> None:
         self.restockable_in_days = restockable_in_days
         super().__init__(action="setRestockableInDays")
 
@@ -412,10 +392,7 @@ class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ) -> None:
         self.supply_channel = supply_channel
         super().__init__(action="setSupplyChannel")

@@ -26,9 +26,9 @@ class ApiClient(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        name: str = None,
-        scope: str = None,
+        id: str,
+        name: str,
+        scope: str,
         created_at: typing.Optional[datetime.datetime] = None,
         last_used_at: typing.Optional[datetime.date] = None,
         delete_at: typing.Optional[datetime.datetime] = None,
@@ -69,8 +69,8 @@ class ApiClientDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: str = None,
-        scope: str = None,
+        name: str,
+        scope: str,
         delete_days_after_creation: typing.Optional[int] = None
     ) -> None:
         self.name = name
@@ -101,11 +101,11 @@ class ApiClientPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["ApiClient"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["ApiClient"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count

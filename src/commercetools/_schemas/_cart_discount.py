@@ -565,7 +565,7 @@ class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -664,7 +664,7 @@ class CartDiscountShippingCostTargetSchema(CartDiscountTargetSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.CartDiscountShippingCostTarget(**data)
+        return types.CartDiscountShippingCostTarget()
 
 
 class CartDiscountValueAbsoluteDraftSchema(CartDiscountValueDraftSchema):

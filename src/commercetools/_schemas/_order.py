@@ -1480,7 +1480,7 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1523,7 +1523,7 @@ class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1630,7 +1630,7 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE

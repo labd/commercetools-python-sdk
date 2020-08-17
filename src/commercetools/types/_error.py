@@ -56,7 +56,7 @@ class ErrorByExtension(_BaseType):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, id: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, id: str, key: typing.Optional[str] = None) -> None:
         self.id = id
         self.key = key
         super().__init__()
@@ -71,7 +71,7 @@ class ErrorObject(_BaseType):
     #: :class:`str`
     message: str
 
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, code: str, message: str) -> None:
         self.code = code
         self.message = message
         super().__init__()
@@ -95,8 +95,8 @@ class ErrorResponse(_BaseType):
     def __init__(
         self,
         *,
-        status_code: int = None,
-        message: str = None,
+        status_code: int,
+        message: str,
         error: typing.Optional[str] = None,
         error_description: typing.Optional[str] = None,
         errors: typing.Optional[list] = None
@@ -132,9 +132,9 @@ class VariantValues(_BaseType):
     def __init__(
         self,
         *,
-        sku: typing.Optional[str] = None,
-        prices: typing.List["PriceDraft"] = None,
-        attributes: typing.List["Attribute"] = None
+        prices: typing.List["PriceDraft"],
+        attributes: typing.List["Attribute"],
+        sku: typing.Optional[str] = None
     ) -> None:
         self.sku = sku
         self.prices = prices
@@ -150,7 +150,7 @@ class VariantValues(_BaseType):
 
 
 class AccessDeniedError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="access_denied", message=message)
 
     def __repr__(self) -> str:
@@ -162,11 +162,7 @@ class ConcurrentModificationError(ErrorObject):
     current_version: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        current_version: typing.Optional[int] = None
+        self, *, message: str, current_version: typing.Optional[int] = None
     ) -> None:
         self.current_version = current_version
         super().__init__(code="ConcurrentModification", message=message)
@@ -195,8 +191,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
+        message: str,
         discount_code: typing.Optional[str] = None,
         reason: typing.Optional[str] = None,
         dicount_code_id: typing.Optional[str] = None,
@@ -232,9 +227,7 @@ class DuplicateAttributeValueError(ErrorObject):
     #: :class:`commercetools.types.Attribute`
     attribute: "Attribute"
 
-    def __init__(
-        self, *, code: str = None, message: str = None, attribute: "Attribute" = None
-    ) -> None:
+    def __init__(self, *, message: str, attribute: "Attribute") -> None:
         self.attribute = attribute
         super().__init__(code="DuplicateAttributeValue", message=message)
 
@@ -250,13 +243,7 @@ class DuplicateAttributeValuesError(ErrorObject):
     #: List of :class:`commercetools.types.Attribute`
     attributes: typing.List["Attribute"]
 
-    def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        attributes: typing.List["Attribute"] = None
-    ) -> None:
+    def __init__(self, *, message: str, attributes: typing.List["Attribute"]) -> None:
         self.attributes = attributes
         super().__init__(code="DuplicateAttributeValues", message=message)
 
@@ -279,8 +266,7 @@ class DuplicateFieldError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
+        message: str,
         field: typing.Optional[str] = None,
         duplicate_value: typing.Optional[typing.Any] = None,
         conflicting_resource: typing.Optional["Reference"] = None
@@ -314,11 +300,10 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
-        field: str = None,
-        duplicate_value: typing.Any = None,
-        conflicting_resource: "Reference" = None
+        message: str,
+        field: str,
+        duplicate_value: typing.Any,
+        conflicting_resource: "Reference"
     ) -> None:
         self.field = field
         self.duplicate_value = duplicate_value
@@ -343,11 +328,7 @@ class DuplicatePriceScopeError(ErrorObject):
     conflicting_prices: typing.List["Price"]
 
     def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        conflicting_prices: typing.List["Price"] = None
+        self, *, message: str, conflicting_prices: typing.List["Price"]
     ) -> None:
         self.conflicting_prices = conflicting_prices
         super().__init__(code="DuplicatePriceScope", message=message)
@@ -363,13 +344,7 @@ class DuplicateVariantValuesError(ErrorObject):
     #: :class:`commercetools.types.VariantValues` `(Named` ``variantValues`` `in Commercetools)`
     variant_values: "VariantValues"
 
-    def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        variant_values: "VariantValues" = None
-    ) -> None:
+    def __init__(self, *, message: str, variant_values: "VariantValues") -> None:
         self.variant_values = variant_values
         super().__init__(code="DuplicateVariantValues", message=message)
 
@@ -382,7 +357,7 @@ class DuplicateVariantValuesError(ErrorObject):
 
 
 class EnumValueIsUsedError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="EnumValueIsUsed", message=message)
 
     def __repr__(self) -> str:
@@ -400,11 +375,10 @@ class ExtensionBadResponseError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
+        message: str,
+        error_by_extension: "ErrorByExtension",
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension" = None
+        extension_extra_info: typing.Optional[object] = None
     ) -> None:
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -435,11 +409,10 @@ class ExtensionNoResponseError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
+        message: str,
+        error_by_extension: "ErrorByExtension",
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension" = None
+        extension_extra_info: typing.Optional[object] = None
     ) -> None:
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -470,11 +443,10 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
+        message: str,
+        error_by_extension: "ErrorByExtension",
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension" = None
+        extension_extra_info: typing.Optional[object] = None
     ) -> None:
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -495,7 +467,7 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
 
 
 class InsufficientScopeError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="insufficient_scope", message=message)
 
     def __repr__(self) -> str:
@@ -503,7 +475,7 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="InvalidCredentials", message=message)
 
     def __repr__(self) -> str:
@@ -514,7 +486,7 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidCurrentPasswordError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="InvalidCurrentPassword", message=message)
 
     def __repr__(self) -> str:
@@ -535,10 +507,9 @@ class InvalidFieldError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
-        field: str = None,
-        invalid_value: typing.Any = None,
+        message: str,
+        field: str,
+        invalid_value: typing.Any,
         allowed_values: typing.Optional[list] = None
     ) -> None:
         self.field = field
@@ -560,7 +531,7 @@ class InvalidFieldError(ErrorObject):
 
 
 class InvalidInputError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="InvalidInput", message=message)
 
     def __repr__(self) -> str:
@@ -573,14 +544,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
     #: :class:`str` `(Named` ``itemId`` `in Commercetools)`
     item_id: str
 
-    def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        subject: str = None,
-        item_id: str = None
-    ) -> None:
+    def __init__(self, *, message: str, subject: str, item_id: str) -> None:
         self.subject = subject
         self.item_id = item_id
         super().__init__(code="InvalidItemShippingDetails", message=message)
@@ -593,7 +557,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
 
 
 class InvalidJsonInputError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="InvalidJsonInput", message=message)
 
     def __repr__(self) -> str:
@@ -601,7 +565,7 @@ class InvalidJsonInputError(ErrorObject):
 
 
 class InvalidOperationError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="InvalidOperation", message=message)
 
     def __repr__(self) -> str:
@@ -609,7 +573,7 @@ class InvalidOperationError(ErrorObject):
 
 
 class InvalidSubjectError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="InvalidSubject", message=message)
 
     def __repr__(self) -> str:
@@ -617,7 +581,7 @@ class InvalidSubjectError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="invalid_token", message=message)
 
     def __repr__(self) -> str:
@@ -625,7 +589,7 @@ class InvalidTokenError(ErrorObject):
 
 
 class LanguageUsedInStoresError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="LanguageUsedInStores", message=message)
 
     def __repr__(self) -> str:
@@ -652,10 +616,9 @@ class MatchingPriceNotFoundError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
-        product_id: str = None,
-        variant_id: int = None,
+        message: str,
+        product_id: str,
+        variant_id: int,
         currency: typing.Optional[str] = None,
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -696,9 +659,8 @@ class MissingTaxRateForCountryError(ErrorObject):
     def __init__(
         self,
         *,
-        code: str = None,
-        message: str = None,
-        tax_category_id: str = None,
+        message: str,
+        tax_category_id: str,
         country: typing.Optional[str] = None,
         state: typing.Optional[str] = None
     ) -> None:
@@ -715,7 +677,7 @@ class MissingTaxRateForCountryError(ErrorObject):
 
 
 class NoMatchingProductDiscountFoundError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="NoMatchingProductDiscountFound", message=message)
 
     def __repr__(self) -> str:
@@ -732,12 +694,7 @@ class OutOfStockError(ErrorObject):
     skus: typing.List[str]
 
     def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        line_items: typing.List[str] = None,
-        skus: typing.List[str] = None
+        self, *, message: str, line_items: typing.List[str], skus: typing.List[str]
     ) -> None:
         self.line_items = line_items
         self.skus = skus
@@ -759,12 +716,7 @@ class PriceChangedError(ErrorObject):
     shipping: bool
 
     def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        line_items: typing.List[str] = None,
-        shipping: bool = None
+        self, *, message: str, line_items: typing.List[str], shipping: bool
     ) -> None:
         self.line_items = line_items
         self.shipping = shipping
@@ -784,11 +736,7 @@ class ReferenceExistsError(ErrorObject):
     referenced_by: typing.Optional["ReferenceTypeId"]
 
     def __init__(
-        self,
-        *,
-        code: str = None,
-        message: str = None,
-        referenced_by: typing.Optional["ReferenceTypeId"] = None
+        self, *, message: str, referenced_by: typing.Optional["ReferenceTypeId"] = None
     ) -> None:
         self.referenced_by = referenced_by
         super().__init__(code="ReferenceExists", message=message)
@@ -805,9 +753,7 @@ class RequiredFieldError(ErrorObject):
     #: :class:`str`
     field: str
 
-    def __init__(
-        self, *, code: str = None, message: str = None, field: str = None
-    ) -> None:
+    def __init__(self, *, message: str, field: str) -> None:
         self.field = field
         super().__init__(code="RequiredField", message=message)
 
@@ -820,7 +766,7 @@ class RequiredFieldError(ErrorObject):
 
 
 class ResourceNotFoundError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="ResourceNotFound", message=message)
 
     def __repr__(self) -> str:
@@ -828,7 +774,7 @@ class ResourceNotFoundError(ErrorObject):
 
 
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
-    def __init__(self, *, code: str = None, message: str = None) -> None:
+    def __init__(self, *, message: str) -> None:
         super().__init__(code="ShippingMethodDoesNotMatchCart", message=message)
 
     def __repr__(self) -> str:

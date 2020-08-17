@@ -1217,7 +1217,7 @@ class StagedOrderSetCustomLineItemCustomTypeActionSchema(StagedOrderUpdateAction
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1344,7 +1344,7 @@ class StagedOrderSetCustomTypeActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1471,7 +1471,7 @@ class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2176,7 +2176,7 @@ class OrderEditNotProcessedSchema(OrderEditResultSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.OrderEditNotProcessed(**data)
+        return types.OrderEditNotProcessed()
 
 
 class OrderEditPreviewFailureSchema(OrderEditResultSchema):
@@ -2371,7 +2371,7 @@ class OrderEditSetCustomTypeActionSchema(OrderEditUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE

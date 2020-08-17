@@ -519,7 +519,7 @@ class ProductDiscountValueExternalDraftSchema(ProductDiscountValueDraftSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.ProductDiscountValueExternalDraft(**data)
+        return types.ProductDiscountValueExternalDraft()
 
 
 class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
@@ -531,7 +531,7 @@ class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.ProductDiscountValueExternal(**data)
+        return types.ProductDiscountValueExternal()
 
 
 class ProductDiscountValueRelativeDraftSchema(ProductDiscountValueDraftSchema):

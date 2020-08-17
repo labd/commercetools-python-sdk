@@ -66,7 +66,7 @@ class CustomFieldEnumValue(_BaseType):
     #: :class:`str`
     label: str
 
-    def __init__(self, *, key: str = None, label: str = None) -> None:
+    def __init__(self, *, key: str, label: str) -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -81,7 +81,7 @@ class CustomFieldLocalizedEnumValue(_BaseType):
     #: :class:`commercetools.types.LocalizedString`
     label: "LocalizedString"
 
-    def __init__(self, *, key: str = None, label: "LocalizedString" = None) -> None:
+    def __init__(self, *, key: str, label: "LocalizedString") -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -99,9 +99,7 @@ class CustomFields(_BaseType):
     #: :class:`commercetools.types.FieldContainer`
     fields: "FieldContainer"
 
-    def __init__(
-        self, *, type: "TypeReference" = None, fields: "FieldContainer" = None
-    ) -> None:
+    def __init__(self, *, type: "TypeReference", fields: "FieldContainer") -> None:
         self.type = type
         self.fields = fields
         super().__init__()
@@ -119,7 +117,7 @@ class CustomFieldsDraft(_BaseType):
     def __init__(
         self,
         *,
-        type: "TypeResourceIdentifier" = None,
+        type: "TypeResourceIdentifier",
         fields: typing.Optional["FieldContainer"] = None,
     ) -> None:
         self.type = type
@@ -150,10 +148,10 @@ class FieldDefinition(_BaseType):
     def __init__(
         self,
         *,
-        type: "FieldType" = None,
-        name: str = None,
-        label: "LocalizedString" = None,
-        required: bool = None,
+        type: "FieldType",
+        name: str,
+        label: "LocalizedString",
+        required: bool,
         input_hint: typing.Optional["TypeTextInputHint"] = None,
     ) -> None:
         self.type = type
@@ -174,7 +172,7 @@ class FieldType(_BaseType):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__()
 
@@ -230,17 +228,17 @@ class Type(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        key: str,
+        name: "LocalizedString",
+        resource_type_ids: typing.List["ResourceTypeId"],
+        field_definitions: typing.List["FieldDefinition"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: str = None,
-        name: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.List["ResourceTypeId"] = None,
-        field_definitions: typing.List["FieldDefinition"] = None,
     ) -> None:
         self.id = id
         self.version = version
@@ -294,10 +292,10 @@ class TypeDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: str = None,
-        name: "LocalizedString" = None,
+        key: str,
+        name: "LocalizedString",
+        resource_type_ids: typing.List["ResourceTypeId"],
         description: typing.Optional["LocalizedString"] = None,
-        resource_type_ids: typing.List["ResourceTypeId"] = None,
         field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
     ) -> None:
         self.key = key
@@ -335,11 +333,11 @@ class TypePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Type"],
         total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Type"] = None,
     ) -> None:
         self.limit = limit
         self.count = count
@@ -359,13 +357,7 @@ class TypeReference(Reference):
     #: Optional :class:`commercetools.types.Type`
     obj: typing.Optional["Type"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Type"] = None,
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Type"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.TYPE, id=id)
 
@@ -379,11 +371,7 @@ class TypeReference(Reference):
 
 class TypeResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.TYPE, id=id, key=key)
 
@@ -406,7 +394,7 @@ class TypeUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -419,7 +407,7 @@ class TypeUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -428,7 +416,7 @@ class TypeUpdateAction(_BaseType):
 
 
 class CustomFieldBooleanType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="Boolean")
 
     def __repr__(self) -> str:
@@ -436,7 +424,7 @@ class CustomFieldBooleanType(FieldType):
 
 
 class CustomFieldDateTimeType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="DateTime")
 
     def __repr__(self) -> str:
@@ -444,7 +432,7 @@ class CustomFieldDateTimeType(FieldType):
 
 
 class CustomFieldDateType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="Date")
 
     def __repr__(self) -> str:
@@ -455,9 +443,7 @@ class CustomFieldEnumType(FieldType):
     #: List of :class:`commercetools.types.CustomFieldEnumValue`
     values: typing.List["CustomFieldEnumValue"]
 
-    def __init__(
-        self, *, name: str = None, values: typing.List["CustomFieldEnumValue"] = None
-    ) -> None:
+    def __init__(self, *, values: typing.List["CustomFieldEnumValue"]) -> None:
         self.values = values
         super().__init__(name="Enum")
 
@@ -469,12 +455,7 @@ class CustomFieldLocalizedEnumType(FieldType):
     #: List of :class:`commercetools.types.CustomFieldLocalizedEnumValue`
     values: typing.List["CustomFieldLocalizedEnumValue"]
 
-    def __init__(
-        self,
-        *,
-        name: str = None,
-        values: typing.List["CustomFieldLocalizedEnumValue"] = None,
-    ) -> None:
+    def __init__(self, *, values: typing.List["CustomFieldLocalizedEnumValue"]) -> None:
         self.values = values
         super().__init__(name="LocalizedEnum")
 
@@ -486,7 +467,7 @@ class CustomFieldLocalizedEnumType(FieldType):
 
 
 class CustomFieldLocalizedStringType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="LocalizedString")
 
     def __repr__(self) -> str:
@@ -494,7 +475,7 @@ class CustomFieldLocalizedStringType(FieldType):
 
 
 class CustomFieldMoneyType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="Money")
 
     def __repr__(self) -> str:
@@ -502,7 +483,7 @@ class CustomFieldMoneyType(FieldType):
 
 
 class CustomFieldNumberType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="Number")
 
     def __repr__(self) -> str:
@@ -513,9 +494,7 @@ class CustomFieldReferenceType(FieldType):
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
     reference_type_id: "ReferenceTypeId"
 
-    def __init__(
-        self, *, name: str = None, reference_type_id: "ReferenceTypeId" = None
-    ) -> None:
+    def __init__(self, *, reference_type_id: "ReferenceTypeId") -> None:
         self.reference_type_id = reference_type_id
         super().__init__(name="Reference")
 
@@ -530,7 +509,7 @@ class CustomFieldSetType(FieldType):
     #: :class:`commercetools.types.FieldType` `(Named` ``elementType`` `in Commercetools)`
     element_type: "FieldType"
 
-    def __init__(self, *, name: str = None, element_type: "FieldType" = None) -> None:
+    def __init__(self, *, element_type: "FieldType") -> None:
         self.element_type = element_type
         super().__init__(name="Set")
 
@@ -542,7 +521,7 @@ class CustomFieldSetType(FieldType):
 
 
 class CustomFieldStringType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="String")
 
     def __repr__(self) -> str:
@@ -550,7 +529,7 @@ class CustomFieldStringType(FieldType):
 
 
 class CustomFieldTimeType(FieldType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="Time")
 
     def __repr__(self) -> str:
@@ -563,13 +542,7 @@ class TypeAddEnumValueAction(TypeUpdateAction):
     #: :class:`commercetools.types.CustomFieldEnumValue`
     value: "CustomFieldEnumValue"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        value: "CustomFieldEnumValue" = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, value: "CustomFieldEnumValue") -> None:
         self.field_name = field_name
         self.value = value
         super().__init__(action="addEnumValue")
@@ -586,9 +559,7 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
     #: :class:`commercetools.types.FieldDefinition` `(Named` ``fieldDefinition`` `in Commercetools)`
     field_definition: "FieldDefinition"
 
-    def __init__(
-        self, *, action: str = None, field_definition: "FieldDefinition" = None
-    ) -> None:
+    def __init__(self, *, field_definition: "FieldDefinition") -> None:
         self.field_definition = field_definition
         super().__init__(action="addFieldDefinition")
 
@@ -606,11 +577,7 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
     value: "CustomFieldLocalizedEnumValue"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        value: "CustomFieldLocalizedEnumValue" = None,
+        self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -630,13 +597,7 @@ class TypeChangeEnumValueLabelAction(TypeUpdateAction):
     #: :class:`commercetools.types.CustomFieldEnumValue`
     value: "CustomFieldEnumValue"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        value: "CustomFieldEnumValue" = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, value: "CustomFieldEnumValue") -> None:
         self.field_name = field_name
         self.value = value
         super().__init__(action="changeEnumValueLabel")
@@ -655,13 +616,7 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
     #: List of :class:`str`
     keys: typing.List[str]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        keys: typing.List[str] = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, keys: typing.List[str]) -> None:
         self.field_name = field_name
         self.keys = keys
         super().__init__(action="changeEnumValueOrder")
@@ -680,13 +635,7 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        label: "LocalizedString" = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, label: "LocalizedString") -> None:
         self.field_name = field_name
         self.label = label
         super().__init__(action="changeFieldDefinitionLabel")
@@ -702,9 +651,7 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
     #: List of :class:`str` `(Named` ``fieldNames`` `in Commercetools)`
     field_names: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, field_names: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, field_names: typing.List[str]) -> None:
         self.field_names = field_names
         super().__init__(action="changeFieldDefinitionOrder")
 
@@ -721,13 +668,7 @@ class TypeChangeInputHintAction(TypeUpdateAction):
     #: :class:`commercetools.types.TypeTextInputHint` `(Named` ``inputHint`` `in Commercetools)`
     input_hint: "TypeTextInputHint"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        input_hint: "TypeTextInputHint" = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, input_hint: "TypeTextInputHint") -> None:
         self.field_name = field_name
         self.input_hint = input_hint
         super().__init__(action="changeInputHint")
@@ -744,7 +685,7 @@ class TypeChangeKeyAction(TypeUpdateAction):
     #: :class:`str`
     key: str
 
-    def __init__(self, *, action: str = None, key: str = None) -> None:
+    def __init__(self, *, key: str) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -758,13 +699,7 @@ class TypeChangeLabelAction(TypeUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        label: "LocalizedString" = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, label: "LocalizedString") -> None:
         self.field_name = field_name
         self.label = label
         super().__init__(action="changeLabel")
@@ -784,11 +719,7 @@ class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
     value: "CustomFieldLocalizedEnumValue"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        value: "CustomFieldLocalizedEnumValue" = None,
+        self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"
     ) -> None:
         self.field_name = field_name
         self.value = value
@@ -807,13 +738,7 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
     #: List of :class:`str`
     keys: typing.List[str]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        field_name: str = None,
-        keys: typing.List[str] = None,
-    ) -> None:
+    def __init__(self, *, field_name: str, keys: typing.List[str]) -> None:
         self.field_name = field_name
         self.keys = keys
         super().__init__(action="changeLocalizedEnumValueOrder")
@@ -829,7 +754,7 @@ class TypeChangeNameAction(TypeUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -841,7 +766,7 @@ class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
     #: :class:`str` `(Named` ``fieldName`` `in Commercetools)`
     field_name: str
 
-    def __init__(self, *, action: str = None, field_name: str = None) -> None:
+    def __init__(self, *, field_name: str) -> None:
         self.field_name = field_name
         super().__init__(action="removeFieldDefinition")
 
@@ -857,10 +782,7 @@ class TypeSetDescriptionAction(TypeUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None,
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")

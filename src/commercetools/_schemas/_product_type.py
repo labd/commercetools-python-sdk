@@ -377,7 +377,7 @@ class AttributeBooleanTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeBooleanType(**data)
+        return types.AttributeBooleanType()
 
 
 class AttributeDateTimeTypeSchema(AttributeTypeSchema):
@@ -389,7 +389,7 @@ class AttributeDateTimeTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeDateTimeType(**data)
+        return types.AttributeDateTimeType()
 
 
 class AttributeDateTypeSchema(AttributeTypeSchema):
@@ -401,7 +401,7 @@ class AttributeDateTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeDateType(**data)
+        return types.AttributeDateType()
 
 
 class AttributeEnumTypeSchema(AttributeTypeSchema):
@@ -432,7 +432,7 @@ class AttributeLocalizableTextTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeLocalizableTextType(**data)
+        return types.AttributeLocalizableTextType()
 
 
 class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
@@ -463,7 +463,7 @@ class AttributeMoneyTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeMoneyType(**data)
+        return types.AttributeMoneyType()
 
 
 class AttributeNestedTypeSchema(AttributeTypeSchema):
@@ -494,7 +494,7 @@ class AttributeNumberTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeNumberType(**data)
+        return types.AttributeNumberType()
 
 
 class AttributeReferenceTypeSchema(AttributeTypeSchema):
@@ -556,7 +556,7 @@ class AttributeTextTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeTextType(**data)
+        return types.AttributeTextType()
 
 
 class AttributeTimeTypeSchema(AttributeTypeSchema):
@@ -568,7 +568,7 @@ class AttributeTimeTypeSchema(AttributeTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.AttributeTimeType(**data)
+        return types.AttributeTimeType()
 
 
 class ProductTypeAddAttributeDefinitionActionSchema(ProductTypeUpdateActionSchema):

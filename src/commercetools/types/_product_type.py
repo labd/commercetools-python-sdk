@@ -98,14 +98,14 @@ class AttributeDefinition(_BaseType):
     def __init__(
         self,
         *,
-        type: "AttributeType" = None,
-        name: str = None,
-        label: "LocalizedString" = None,
-        is_required: bool = None,
-        attribute_constraint: "AttributeConstraintEnum" = None,
-        input_tip: typing.Optional["LocalizedString"] = None,
-        input_hint: "TextInputHint" = None,
-        is_searchable: bool = None
+        type: "AttributeType",
+        name: str,
+        label: "LocalizedString",
+        is_required: bool,
+        attribute_constraint: "AttributeConstraintEnum",
+        input_hint: "TextInputHint",
+        is_searchable: bool,
+        input_tip: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.type = type
         self.name = name
@@ -154,10 +154,10 @@ class AttributeDefinitionDraft(_BaseType):
     def __init__(
         self,
         *,
-        type: "AttributeType" = None,
-        name: str = None,
-        label: "LocalizedString" = None,
-        is_required: bool = None,
+        type: "AttributeType",
+        name: str,
+        label: "LocalizedString",
+        is_required: bool,
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
@@ -195,7 +195,7 @@ class AttributeLocalizedEnumValue(_BaseType):
     #: :class:`commercetools.types.LocalizedString`
     label: "LocalizedString"
 
-    def __init__(self, *, key: str = None, label: "LocalizedString" = None) -> None:
+    def __init__(self, *, key: str, label: "LocalizedString") -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -210,7 +210,7 @@ class AttributePlainEnumValue(_BaseType):
     #: :class:`str`
     label: str
 
-    def __init__(self, *, key: str = None, label: str = None) -> None:
+    def __init__(self, *, key: str, label: str) -> None:
         self.key = key
         self.label = label
         super().__init__()
@@ -223,7 +223,7 @@ class AttributeType(_BaseType):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__()
 
@@ -256,15 +256,15 @@ class ProductType(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: str,
+        description: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        name: str = None,
-        description: str = None,
         attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
     ) -> None:
         self.id = id
@@ -315,9 +315,9 @@ class ProductTypeDraft(_BaseType):
     def __init__(
         self,
         *,
+        name: str,
+        description: str,
         key: typing.Optional[str] = None,
-        name: str = None,
-        description: str = None,
         attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None
     ) -> None:
         self.key = key
@@ -350,11 +350,11 @@ class ProductTypePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["ProductType"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["ProductType"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -374,13 +374,7 @@ class ProductTypeReference(Reference):
     #: Optional :class:`commercetools.types.ProductType`
     obj: typing.Optional["ProductType"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["ProductType"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["ProductType"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.PRODUCT_TYPE, id=id)
 
@@ -394,11 +388,7 @@ class ProductTypeReference(Reference):
 
 class ProductTypeResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.PRODUCT_TYPE, id=id, key=key)
 
@@ -416,7 +406,7 @@ class ProductTypeUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -432,7 +422,7 @@ class ProductTypeUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -446,7 +436,7 @@ class TextInputHint(enum.Enum):
 
 
 class AttributeBooleanType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="boolean")
 
     def __repr__(self) -> str:
@@ -454,7 +444,7 @@ class AttributeBooleanType(AttributeType):
 
 
 class AttributeDateTimeType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="datetime")
 
     def __repr__(self) -> str:
@@ -462,7 +452,7 @@ class AttributeDateTimeType(AttributeType):
 
 
 class AttributeDateType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="date")
 
     def __repr__(self) -> str:
@@ -473,9 +463,7 @@ class AttributeEnumType(AttributeType):
     #: List of :class:`commercetools.types.AttributePlainEnumValue`
     values: typing.List["AttributePlainEnumValue"]
 
-    def __init__(
-        self, *, name: str = None, values: typing.List["AttributePlainEnumValue"] = None
-    ) -> None:
+    def __init__(self, *, values: typing.List["AttributePlainEnumValue"]) -> None:
         self.values = values
         super().__init__(name="enum")
 
@@ -484,7 +472,7 @@ class AttributeEnumType(AttributeType):
 
 
 class AttributeLocalizableTextType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="ltext")
 
     def __repr__(self) -> str:
@@ -495,12 +483,7 @@ class AttributeLocalizedEnumType(AttributeType):
     #: List of :class:`commercetools.types.AttributeLocalizedEnumValue`
     values: typing.List["AttributeLocalizedEnumValue"]
 
-    def __init__(
-        self,
-        *,
-        name: str = None,
-        values: typing.List["AttributeLocalizedEnumValue"] = None
-    ) -> None:
+    def __init__(self, *, values: typing.List["AttributeLocalizedEnumValue"]) -> None:
         self.values = values
         super().__init__(name="lenum")
 
@@ -512,7 +495,7 @@ class AttributeLocalizedEnumType(AttributeType):
 
 
 class AttributeMoneyType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="money")
 
     def __repr__(self) -> str:
@@ -523,9 +506,7 @@ class AttributeNestedType(AttributeType):
     #: :class:`commercetools.types.ProductTypeReference` `(Named` ``typeReference`` `in Commercetools)`
     type_reference: "ProductTypeReference"
 
-    def __init__(
-        self, *, name: str = None, type_reference: "ProductTypeReference" = None
-    ) -> None:
+    def __init__(self, *, type_reference: "ProductTypeReference") -> None:
         self.type_reference = type_reference
         super().__init__(name="nested")
 
@@ -537,7 +518,7 @@ class AttributeNestedType(AttributeType):
 
 
 class AttributeNumberType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="number")
 
     def __repr__(self) -> str:
@@ -548,9 +529,7 @@ class AttributeReferenceType(AttributeType):
     #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``referenceTypeId`` `in Commercetools)`
     reference_type_id: "ReferenceTypeId"
 
-    def __init__(
-        self, *, name: str = None, reference_type_id: "ReferenceTypeId" = None
-    ) -> None:
+    def __init__(self, *, reference_type_id: "ReferenceTypeId") -> None:
         self.reference_type_id = reference_type_id
         super().__init__(name="reference")
 
@@ -565,9 +544,7 @@ class AttributeSetType(AttributeType):
     #: :class:`commercetools.types.AttributeType` `(Named` ``elementType`` `in Commercetools)`
     element_type: "AttributeType"
 
-    def __init__(
-        self, *, name: str = None, element_type: "AttributeType" = None
-    ) -> None:
+    def __init__(self, *, element_type: "AttributeType") -> None:
         self.element_type = element_type
         super().__init__(name="set")
 
@@ -579,7 +556,7 @@ class AttributeSetType(AttributeType):
 
 
 class AttributeTextType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="text")
 
     def __repr__(self) -> str:
@@ -587,7 +564,7 @@ class AttributeTextType(AttributeType):
 
 
 class AttributeTimeType(AttributeType):
-    def __init__(self, *, name: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(name="time")
 
     def __repr__(self) -> str:
@@ -598,9 +575,7 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
     #: :class:`commercetools.types.AttributeDefinitionDraft`
     attribute: "AttributeDefinitionDraft"
 
-    def __init__(
-        self, *, action: str = None, attribute: "AttributeDefinitionDraft" = None
-    ) -> None:
+    def __init__(self, *, attribute: "AttributeDefinitionDraft") -> None:
         self.attribute = attribute
         super().__init__(action="addAttributeDefinition")
 
@@ -618,11 +593,7 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
     value: "AttributeLocalizedEnumValue"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        value: "AttributeLocalizedEnumValue" = None
+        self, *, attribute_name: str, value: "AttributeLocalizedEnumValue"
     ) -> None:
         self.attribute_name = attribute_name
         self.value = value
@@ -642,11 +613,7 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
     value: "AttributePlainEnumValue"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        value: "AttributePlainEnumValue" = None
+        self, *, attribute_name: str, value: "AttributePlainEnumValue"
     ) -> None:
         self.attribute_name = attribute_name
         self.value = value
@@ -666,11 +633,7 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
     new_value: "AttributeConstraintEnumDraft"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        new_value: "AttributeConstraintEnumDraft" = None
+        self, *, attribute_name: str, new_value: "AttributeConstraintEnumDraft"
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -689,13 +652,7 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
     #: :class:`str` `(Named` ``newAttributeName`` `in Commercetools)`
     new_attribute_name: str
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        new_attribute_name: str = None
-    ) -> None:
+    def __init__(self, *, attribute_name: str, new_attribute_name: str) -> None:
         self.attribute_name = attribute_name
         self.new_attribute_name = new_attribute_name
         super().__init__(action="changeAttributeName")
@@ -711,12 +668,7 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
     #: List of :class:`commercetools.types.AttributeDefinition`
     attributes: typing.List["AttributeDefinition"]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attributes: typing.List["AttributeDefinition"] = None
-    ) -> None:
+    def __init__(self, *, attributes: typing.List["AttributeDefinition"]) -> None:
         self.attributes = attributes
         super().__init__(action="changeAttributeOrder")
 
@@ -731,9 +683,7 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
     #: List of :class:`str` `(Named` ``attributeNames`` `in Commercetools)`
     attribute_names: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, attribute_names: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, attribute_names: typing.List[str]) -> None:
         self.attribute_names = attribute_names
         super().__init__(action="changeAttributeOrderByName")
 
@@ -748,7 +698,7 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
     #: :class:`str`
     description: str
 
-    def __init__(self, *, action: str = None, description: str = None) -> None:
+    def __init__(self, *, description: str) -> None:
         self.description = description
         super().__init__(action="changeDescription")
 
@@ -767,14 +717,7 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
     #: :class:`str` `(Named` ``newKey`` `in Commercetools)`
     new_key: str
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        key: str = None,
-        new_key: str = None
-    ) -> None:
+    def __init__(self, *, attribute_name: str, key: str, new_key: str) -> None:
         self.attribute_name = attribute_name
         self.key = key
         self.new_key = new_key
@@ -793,13 +736,7 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
     #: :class:`commercetools.types.TextInputHint` `(Named` ``newValue`` `in Commercetools)`
     new_value: "TextInputHint"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        new_value: "TextInputHint" = None
-    ) -> None:
+    def __init__(self, *, attribute_name: str, new_value: "TextInputHint") -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
         super().__init__(action="changeInputHint")
@@ -817,13 +754,7 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
     #: :class:`bool` `(Named` ``isSearchable`` `in Commercetools)`
     is_searchable: bool
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        is_searchable: bool = None
-    ) -> None:
+    def __init__(self, *, attribute_name: str, is_searchable: bool) -> None:
         self.attribute_name = attribute_name
         self.is_searchable = is_searchable
         super().__init__(action="changeIsSearchable")
@@ -841,13 +772,7 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     label: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        label: "LocalizedString" = None
-    ) -> None:
+    def __init__(self, *, attribute_name: str, label: "LocalizedString") -> None:
         self.attribute_name = attribute_name
         self.label = label
         super().__init__(action="changeLabel")
@@ -866,11 +791,7 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
     new_value: "AttributeLocalizedEnumValue"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        new_value: "AttributeLocalizedEnumValue" = None
+        self, *, attribute_name: str, new_value: "AttributeLocalizedEnumValue"
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -890,11 +811,7 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
     values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        values: typing.List["AttributeLocalizedEnumValue"] = None
+        self, *, attribute_name: str, values: typing.List["AttributeLocalizedEnumValue"]
     ) -> None:
         self.attribute_name = attribute_name
         self.values = values
@@ -911,7 +828,7 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, action: str = None, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -929,11 +846,7 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
     new_value: "AttributePlainEnumValue"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        new_value: "AttributePlainEnumValue" = None
+        self, *, attribute_name: str, new_value: "AttributePlainEnumValue"
     ) -> None:
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -953,11 +866,7 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
     values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        values: typing.List["AttributePlainEnumValue"] = None
+        self, *, attribute_name: str, values: typing.List["AttributePlainEnumValue"]
     ) -> None:
         self.attribute_name = attribute_name
         self.values = values
@@ -974,7 +883,7 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, action: str = None, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__(action="removeAttributeDefinition")
 
@@ -991,13 +900,7 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
     #: List of :class:`str`
     keys: typing.List[str]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        attribute_name: str = None,
-        keys: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, attribute_name: str, keys: typing.List[str]) -> None:
         self.attribute_name = attribute_name
         self.keys = keys
         super().__init__(action="removeEnumValues")
@@ -1018,8 +921,7 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        attribute_name: str = None,
+        attribute_name: str,
         input_tip: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.attribute_name = attribute_name
@@ -1037,7 +939,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 

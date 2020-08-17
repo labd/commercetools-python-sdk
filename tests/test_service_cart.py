@@ -34,16 +34,59 @@ def cart_draft():
 
 def test_update_actions(commercetools_api, client, cart_draft):
     cart = client.carts.create(cart_draft)
-    payment_reference = types.PaymentReference(
-        type_id=types.ReferenceTypeId.PAYMENT, id=str(uuid.uuid4())
-    )
+    payment_reference = types.PaymentReference(id=str(uuid.uuid4()))
     cart = client.carts.update_by_id(
         cart.id,
         cart.version,
         actions=[types.CartAddPaymentAction(payment=payment_reference)],
     )
 
+    type_draft = types.TypeDraft(
+        key="foobar",
+        resource_type_ids=[types.ResourceTypeId.ORDER],
+        name={
+            "en-US": "test",
+        },
+        field_definitions=[
+            types.FieldDefinition(
+                type=types.CustomFieldStringType(),
+                name="foo1",
+                label={
+                    "en-US": "foo-1",
+                },
+                required=False,
+            ),
+            types.FieldDefinition(
+                type=types.CustomFieldSetType(element_type=None),
+                name="foo2",
+                label={
+                    "en-US": "foo-2",
+                },
+                required=False,
+            ),
+            types.FieldDefinition(
+                type=types.CustomFieldBooleanType(),
+                name="foo3",
+                label={
+                    "en-US": "foo-3",
+                },
+                required=False,
+            )
+        ]
+    )
+    custom_type = client.types.create(type_draft)
+    assert custom_type.id
+
     assert cart.payment_info.payments[0] == payment_reference
+    cart = client.carts.update_by_id(
+        cart.id,
+        cart.version,
+        actions=[
+            types.CartSetCustomTypeAction(
+                type=types.TypeResourceIdentifier(id=custom_type.id)
+            )
+        ],
+    )
 
     client.carts.update_by_id(
         cart.id,

@@ -26,6 +26,7 @@ class CustomerGroupModel(abstract.BaseModel):
             key=draft.key,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             name=draft.group_name,
             custom=utils.create_from_draft(draft.custom),
         )

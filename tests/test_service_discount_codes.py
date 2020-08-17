@@ -7,7 +7,9 @@ from commercetools import types
 def test_discount_code_get_by_id(client):
     discount_code = client.discount_codes.create(
         types.DiscountCodeDraft(
-            name=types.LocalizedString({"en": "test discount"}), code="1337"
+            name=types.LocalizedString({"en": "test discount"}),
+            code="1337",
+            cart_discounts=[],
         )
     )
 
@@ -25,12 +27,16 @@ def test_discount_code_get_by_id(client):
 def test_discount_code_query(client):
     client.discount_codes.create(
         types.DiscountCodeDraft(
-            name=types.LocalizedString({"en:": "test discount"}), code="1337"
+            name=types.LocalizedString({"en:": "test discount"}),
+            code="1337",
+            cart_discounts=[],
         )
     )
     client.discount_codes.create(
         types.DiscountCodeDraft(
-            name=types.LocalizedString({"en:": "test discount"}), code="1338"
+            name=types.LocalizedString({"en:": "test discount"}),
+            code="1338",
+            cart_discounts=[],
         )
     )
 
@@ -51,6 +57,7 @@ def test_discount_code_update(client):
             name=types.LocalizedString(en="en-discount_code"),
             code="1337",
             is_active=True,
+            cart_discounts=[],
         )
     )
     assert discount_code.code == "1337"

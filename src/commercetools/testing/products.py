@@ -114,6 +114,7 @@ class ProductsModel(BaseModel):
                 custom = custom_fields_from_draft(self._storage, draft.custom)
 
             asset = types.Asset(
+                id=str(uuid.uuid4()),
                 sources=draft.sources,
                 name=draft.name,
                 description=draft.description,
@@ -134,6 +135,7 @@ class ProductsModel(BaseModel):
                 custom = custom_fields_from_draft(self._storage, draft.custom)
 
             price = types.Price(
+                id=str(uuid.uuid4()),
                 value=self._create_price_from_draft(draft.value),
                 country=draft.country,
                 customer_group=draft.customer_group,
@@ -165,7 +167,8 @@ class ProductsModel(BaseModel):
             )
         elif isinstance(draft, types.Money):
             return types.CentPrecisionMoney(
-                cent_amount=draft.cent_amount, currency_code=draft.currency_code
+                cent_amount=draft.cent_amount, currency_code=draft.currency_code,
+                fraction_digits=2,
             )
         else:
             return types.TypedMoney(
@@ -267,7 +270,7 @@ def _publish_product_action():
         # not implemented scopes right now.
         if new["masterData"].get("staged"):
             new["masterData"]["current"] = new["masterData"]["staged"]
-            del new["masterData"]["staged"]
+            new["masterData"]["staged"] = None
         new["masterData"]["hasStagedChanges"] = False
         new["masterData"]["published"] = True
         return new
@@ -326,6 +329,8 @@ def _change_price():
 
         found_price = True
         for variant in get_product_variants(target_obj):
+            if not variant["prices"]:
+                continue
             for index, price in enumerate(variant["prices"]):
                 if price["id"] == action.price_id:
                     variant["prices"][index] = schema.dump(changed_price)

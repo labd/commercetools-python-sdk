@@ -84,7 +84,7 @@ def replace_tax_rate_action():
 class TaxCategoryBackend(ServiceBackend):
     service_path = "tax-categories"
     model_class = TaxCategoryModel
-    _schema_draft = TaxCategorySchema
+    _schema_draft = TaxCategoryDraftSchema
     _schema_update = TaxCategoryUpdateSchema
     _schema_query_response = TaxCategoryPagedQueryResponseSchema
 

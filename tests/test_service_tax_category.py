@@ -2,14 +2,18 @@ from commercetools import types
 
 
 def test_tax_category_create(client):
-    tax_category = client.tax_categories.create(types.TaxCategoryDraft(name="Hoog"))
+    tax_category = client.tax_categories.create(
+        types.TaxCategoryDraft(name="Hoog", rates=[])
+    )
 
     assert tax_category.id
     assert tax_category.name == "Hoog"
 
 
 def test_tax_category_get_by_id(client):
-    tax_category = client.tax_categories.create(types.TaxCategoryDraft(name="Hoog"))
+    tax_category = client.tax_categories.create(
+        types.TaxCategoryDraft(name="Hoog", rates=[])
+    )
 
     assert tax_category.id
     assert tax_category.name == "Hoog"
@@ -20,7 +24,9 @@ def test_tax_category_get_by_id(client):
 
 
 def test_tax_category_update_by_id(client):
-    tax_category = client.tax_categories.create(types.TaxCategoryDraft(name="Hoog"))
+    tax_category = client.tax_categories.create(
+        types.TaxCategoryDraft(name="Hoog", rates=[])
+    )
 
     assert tax_category.id
     assert tax_category.name == "Hoog"

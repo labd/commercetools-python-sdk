@@ -27,6 +27,7 @@ class ReviewModel(abstract.BaseModel):
             version=1,
             key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             uniqueness_value=draft.uniqueness_value,
             locale=draft.locale,
             author_name=draft.author_name,

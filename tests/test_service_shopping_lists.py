@@ -7,6 +7,8 @@ def test_get_by_id(client):
             master_variant=types.ProductVariantDraft(sku="123"),
             publish=True,
             name=types.LocalizedString(nl="Test product"),
+            slug=types.LocalizedString(en=f"my-product"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
         )
     )
 
@@ -34,6 +36,8 @@ def test_get_by_key(client):
             master_variant=types.ProductVariantDraft(sku="123"),
             publish=True,
             name=types.LocalizedString(nl="Test product"),
+            slug=types.LocalizedString(en="my-product"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
         )
     )
 

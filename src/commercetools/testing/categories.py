@@ -31,6 +31,8 @@ class CategoriesModel(BaseModel):
             key=draft.key,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
+            ancestors=[],
+            order_hint="",
             custom=utils.create_from_draft(draft.custom),
         )
 

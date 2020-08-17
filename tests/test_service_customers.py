@@ -9,6 +9,8 @@ def _get_draft_object(**kwargs):
         "last_name": "Doe",
         "title": "mr",
         "date_of_birth": datetime.date(year=1985, month=8, day=4),
+        "email": "info@example.org",
+        "password": "notsosecret",
     }
     customer.update(kwargs)
     return types.CustomerDraft(**customer)

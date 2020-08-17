@@ -1,3 +1,4 @@
+import datetime
 import typing
 import uuid
 
@@ -22,6 +23,8 @@ class ProductDiscountsModel(BaseModel):
         return types.ProductDiscount(
             id=str(object_id),
             version=1,
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             name=draft.name,
             description=draft.description,
             value=draft.value,

@@ -11,8 +11,16 @@ def test_products_create(client):
     custom_type = client.types.create(
         types.TypeDraft(
             name=types.LocalizedString(en="myType"),
+            key="my-type",
             resource_type_ids=[types.ResourceTypeId.ASSET],
-            field_definitions=[types.FieldDefinition(name="foo")],
+            field_definitions=[
+                types.FieldDefinition(
+                    name="foo",
+                    type=types.CustomFieldStringType(),
+                    label=types.LocalizedString(en="foo"),
+                    required=False,
+                )
+            ],
         )
     )
     assert custom_type.id
@@ -20,13 +28,18 @@ def test_products_create(client):
     draft = types.ProductDraft(
         key="test-product",
         publish=True,
+        name=types.LocalizedString(en=f"my-product"),
+        slug=types.LocalizedString(en=f"my-product"),
+        product_type=types.ProductTypeResourceIdentifier(key="dummy"),
         master_variant=types.ProductVariantDraft(
             assets=[
                 types.AssetDraft(
+                    sources=[],
+                    name=types.LocalizedString(en="something"),
                     custom=types.CustomFieldsDraft(
                         type=types.TypeResourceIdentifier(id=custom_type.id),
                         fields=types.FieldContainer(foo="bar"),
-                    )
+                    ),
                 )
             ],
             prices=[
@@ -46,7 +59,15 @@ def test_products_create(client):
 
 
 def test_products_get_by_id(client):
-    product = client.products.create(types.ProductDraft(key="test-product"))
+    product = client.products.create(
+        types.ProductDraft(
+            key="test-product",
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+            name=types.LocalizedString(en="my-product"),
+            slug=types.LocalizedString(en="my-product"),
+            publish=True,
+        )
+    )
 
     assert product.id
     assert product.key == "test-product"
@@ -60,7 +81,15 @@ def test_products_get_by_id(client):
 
 
 def test_products_get_by_key(client):
-    product = client.products.create(types.ProductDraft(key="test-product"))
+    product = client.products.create(
+        types.ProductDraft(
+            key="test-product",
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+            name=types.LocalizedString(en="my-product"),
+            slug=types.LocalizedString(en="my-product"),
+            publish=True,
+        )
+    )
 
     assert product.id
     assert product.key == "test-product"
@@ -74,8 +103,24 @@ def test_products_get_by_key(client):
 
 
 def test_product_query(client):
-    client.products.create(types.ProductDraft(key="test-product1"))
-    client.products.create(types.ProductDraft(key="test-product2"))
+    client.products.create(
+        types.ProductDraft(
+            key=f"product-1",
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            publish=True,
+        )
+    )
+    client.products.create(
+        types.ProductDraft(
+            key=f"product-2",
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+            name=types.LocalizedString(en=f"my-product-2"),
+            slug=types.LocalizedString(en=f"my-product-2"),
+            publish=True,
+        )
+    )
 
     # single sort query
     result = client.products.query(sort="id asc", limit=2)
@@ -92,6 +137,9 @@ def test_product_query_where(client):
     client.products.create(
         types.ProductDraft(
             key="test-product1",
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=types.ProductVariantDraft(
                 prices=[
                     types.PriceDraft(
@@ -107,6 +155,9 @@ def test_product_query_where(client):
     client.products.create(
         types.ProductDraft(
             key="test-product-2",
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=types.ProductVariantDraft(
                 prices=[
                     types.PriceDraft(
@@ -119,7 +170,14 @@ def test_product_query_where(client):
             ),
         )
     )
-    client.products.create(types.ProductDraft(key="test-product2"))
+    client.products.create(
+        types.ProductDraft(
+            key="test-product2",
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+        )
+    )
 
     result = client.products.query(
         where="masterData(staged(masterVariant(prices(country='NL'))))"
@@ -149,6 +207,9 @@ def test_product_update(client):
     product = client.products.create(
         types.ProductDraft(
             key="test-product",
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=types.ProductVariantDraft(sku="1", key="1"),
         )
     )
@@ -204,6 +265,9 @@ def test_product_update_add_change_price_staged(client):
     product = client.products.create(
         types.ProductDraft(
             key="test-product",
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=types.ProductVariantDraft(sku="1", key="1"),
         )
     )
@@ -251,6 +315,9 @@ def test_product_update_add_price_current(client):
     product = client.products.create(
         types.ProductDraft(
             key="test-product",
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=types.ProductVariantDraft(sku="1", key="1"),
             publish=True,
         )

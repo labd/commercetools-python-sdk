@@ -5,7 +5,13 @@ from commercetools import types
 
 
 def test_category_get_by_id(client):
-    category = client.categories.create(types.CategoryDraft(key="test-category"))
+    category = client.categories.create(
+        types.CategoryDraft(
+            key="test-category",
+            name=types.LocalizedString(en="category"),
+            slug=types.LocalizedString(en="something"),
+        )
+    )
 
     assert category.id
     assert category.key == "test-category"
@@ -19,7 +25,13 @@ def test_category_get_by_id(client):
 
 
 def test_category_get_by_key(client):
-    category = client.categories.create(types.CategoryDraft(key="test-category"))
+    category = client.categories.create(
+        types.CategoryDraft(
+            key="test-category",
+            name=types.LocalizedString(en="category"),
+            slug=types.LocalizedString(en="something"),
+        )
+    )
 
     assert category.id
     assert category.key == "test-category"
@@ -33,8 +45,20 @@ def test_category_get_by_key(client):
 
 
 def test_category_query(client):
-    client.categories.create(types.CategoryDraft(key="test-category1"))
-    client.categories.create(types.CategoryDraft(key="test-category2"))
+    category = client.categories.create(
+        types.CategoryDraft(
+            key="test-category1",
+            name=types.LocalizedString(en="category"),
+            slug=types.LocalizedString(en="something"),
+        )
+    )
+    category = client.categories.create(
+        types.CategoryDraft(
+            key="test-category2",
+            name=types.LocalizedString(en="category"),
+            slug=types.LocalizedString(en="something"),
+        )
+    )
 
     # single sort query
     result = client.categories.query(sort="id asc", limit=10)
@@ -55,7 +79,8 @@ def test_category_update(client):
     """
     category = client.categories.create(
         types.CategoryDraft(
-            key="test-category", slug=types.LocalizedString(nl="nl-slug")
+            key="test-category", slug=types.LocalizedString(nl="nl-slug"),
+            name=types.LocalizedString(nl="category"),
         )
     )
     assert category.key == "test-category"

@@ -7,7 +7,11 @@ from commercetools import types
 def test_shipping_method_get_by_id(client):
     shipping_method = client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping-method", name="test shipping method"
+            key="test-shipping-method",
+            name="test shipping method",
+            tax_category=types.TaxCategoryResourceIdentifier(id="dummy"),
+            zone_rates=[],
+            is_default=False,
         )
     )
 
@@ -26,12 +30,20 @@ def test_shipping_method_get_by_id(client):
 def test_shipping_method_query(client):
     client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping_method1", name="test shipping method1"
+            key="test-shipping_method1",
+            name="test shipping method1",
+            tax_category=types.TaxCategoryResourceIdentifier(id="dummy"),
+            zone_rates=[],
+            is_default=False,
         )
     )
     client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping_method2", name="test shipping method2"
+            key="test-shipping_method2",
+            name="test shipping method2",
+            tax_category=types.TaxCategoryResourceIdentifier(id="dummy"),
+            zone_rates=[],
+            is_default=False,
         )
     )
 
@@ -54,7 +66,11 @@ def test_shipping_method_update(client):
     """
     shipping_method = client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping-method", name="test shipping method"
+            key="test-shipping-method",
+            name="test shipping method",
+            tax_category=types.TaxCategoryResourceIdentifier(id="dummy"),
+            zone_rates=[],
+            is_default=False,
         )
     )
     assert shipping_method.key == "test-shipping-method"

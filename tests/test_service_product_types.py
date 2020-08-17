@@ -7,7 +7,9 @@ from commercetools import types
 
 def test_product_types_get_by_id(client):
     product_type = client.product_types.create(
-        types.ProductTypeDraft(key="test-product-type")
+        types.ProductTypeDraft(
+            key="test-product-type", name="test", description="something"
+        )
     )
 
     assert product_type.id
@@ -23,7 +25,9 @@ def test_product_types_get_by_id(client):
 
 def test_product_types_get_by_key(client):
     product_type = client.product_types.create(
-        types.ProductTypeDraft(key="test-product-type")
+        types.ProductTypeDraft(
+            key="test-product-type", name="test", description="something"
+        )
     )
 
     assert product_type.id
@@ -38,8 +42,16 @@ def test_product_types_get_by_key(client):
 
 
 def test_product_type_query(client):
-    client.product_types.create(types.ProductTypeDraft(key="test-product-type1"))
-    client.product_types.create(types.ProductTypeDraft(key="test-product-type2"))
+    product_type = client.product_types.create(
+        types.ProductTypeDraft(
+            key="test-product-type1", name="test-1", description="something"
+        )
+    )
+    product_type = client.product_types.create(
+        types.ProductTypeDraft(
+            key="test-product-type2", name="test-2", description="something"
+        )
+    )
 
     # single sort query
     result = client.product_types.query(sort="id asc")
@@ -59,7 +71,9 @@ def test_product_update(client):
     TODO: See if this is worth testing since we're using a mocking backend
     """
     product_type = client.product_types.create(
-        types.ProductTypeDraft(key="test-product-type", name="Test Product Type")
+        types.ProductTypeDraft(
+            key="test-product-type", name="test", description="something"
+        )
     )
 
     assert product_type.id

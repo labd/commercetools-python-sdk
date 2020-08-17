@@ -2,6 +2,22 @@ from commercetools import types
 
 
 def test_payments_get_by_id(client):
+    custom_type = client.types.create(
+        types.TypeDraft(
+            name=types.LocalizedString(en="myType"),
+            key="payment-info",
+            resource_type_ids=[types.ResourceTypeId.PAYMENT_INTERFACE_INTERACTION],
+            field_definitions=[
+                types.FieldDefinition(
+                    type=types.CustomFieldStringType(),
+                    name="operations",
+                    label=types.LocalizedString(en="Operation"),
+                    required=False,
+                )
+            ],
+        )
+    )
+
     payment = client.payments.create(
         types.PaymentDraft(
             key="test-payment",
@@ -19,6 +35,7 @@ def test_payments_get_by_id(client):
             ],
             interface_interactions=[
                 types.CustomFieldsDraft(
+                    type=types.TypeResourceIdentifier(id=custom_type.id),
                     fields=types.FieldContainer(
                         {
                             "operations": "CANCEL,CAPTURE,REFUND",
@@ -33,7 +50,7 @@ def test_payments_get_by_id(client):
                             "event_code": "AUTHORISATION",
                             "merchant_account_code": "TestMerchant",
                         }
-                    )
+                    ),
                 )
             ],
         )
@@ -44,6 +61,22 @@ def test_payments_get_by_id(client):
 
 
 def test_update_actions(client):
+    custom_type = client.types.create(
+        types.TypeDraft(
+            name=types.LocalizedString(en="myType"),
+            key="payment-info",
+            resource_type_ids=[types.ResourceTypeId.PAYMENT_INTERFACE_INTERACTION],
+            field_definitions=[
+                types.FieldDefinition(
+                    type=types.CustomFieldStringType(),
+                    name="operations",
+                    label=types.LocalizedString(en="Operation"),
+                    required=False,
+                )
+            ],
+        )
+    )
+
     payment = client.payments.create(
         types.PaymentDraft(
             key="test-payment",
@@ -68,6 +101,7 @@ def test_update_actions(client):
         payment.version,
         actions=[
             types.PaymentAddInterfaceInteractionAction(
+                type=types.TypeResourceIdentifier(id=custom_type.id),
                 fields=types.FieldContainer({"pspRef": "1337"})
             ),
             types.PaymentChangeTransactionInteractionIdAction(

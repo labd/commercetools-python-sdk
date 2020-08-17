@@ -68,6 +68,7 @@ def add_delivery():
         delivery = types.Delivery(
             id=str(uuid.uuid4()),
             created_at=datetime.datetime.now(datetime.timezone.utc),
+            items=[],
             parcels=[
                 types.Parcel(
                     id=str(uuid.uuid4()),

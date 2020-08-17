@@ -28,6 +28,7 @@ class ProjectBackend(ServiceBackend):
             "languages": ["en", "nl", "de", "nl-BE"],
             "createdAt": "2018-10-04T11:32:12.603Z",
             "trialUntil": "2018-12",
+            "carts": {},
             "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
             "externalOAuth": None,
             "version": 4,

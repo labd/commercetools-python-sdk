@@ -145,6 +145,7 @@ class Client(ServicesMixin):
 
             response = self._http_client.post(self._base_url + endpoint, **kwargs)
             if response.status_code in (200, 201):
+                print(response.json())
                 return response_schema_cls().load(response.json())
             return self._process_error(response)
 

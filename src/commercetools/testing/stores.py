@@ -35,10 +35,11 @@ class StoresModel(BaseModel):
 
         return types.Store(
             id=str(object_id),
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             version=1,
             key=draft.key,
             name=draft.name,
-            created_at=datetime.datetime.now(datetime.timezone.utc),
             languages=draft.languages,
             distribution_channels=distribution_channels,
         )

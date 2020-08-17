@@ -217,9 +217,7 @@ def test_project_schema():
             "pt-PT",
         ],
         "createdAt": "2018-10-24T08:58:22.935Z",
-        "carts": {
-            "countryTaxRateFallbackEnabled": True,
-        },
+        "carts": {"countryTaxRateFallbackEnabled": True},
         "trialUntil": "2018-12",
         "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
         "version": 9,

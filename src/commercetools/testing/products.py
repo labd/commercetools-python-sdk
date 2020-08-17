@@ -47,7 +47,7 @@ class ProductsModel(BaseModel):
             master_variant=master_variant,
             variants=[master_variant] if master_variant else [],
             slug=draft.slug or types.LocalizedString(),
-            search_keywords=types.SearchKeywords()
+            search_keywords=types.SearchKeywords(),
         )
 
         if draft.publish:
@@ -167,7 +167,8 @@ class ProductsModel(BaseModel):
             )
         elif isinstance(draft, types.Money):
             return types.CentPrecisionMoney(
-                cent_amount=draft.cent_amount, currency_code=draft.currency_code,
+                cent_amount=draft.cent_amount,
+                currency_code=draft.currency_code,
                 fraction_digits=2,
             )
         else:

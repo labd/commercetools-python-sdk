@@ -78,13 +78,10 @@ def test_resource_update_conflict(client):
         types.ProductDraft(
             key="test-product",
             product_type=types.ProductTypeResourceIdentifier(key="dummy"),
-            name={
-                "en": "my-product",
-            },
-            slug={
-                "en": "foo-bar"
-            }
-        ))
+            name={"en": "my-product"},
+            slug={"en": "foo-bar"},
+        )
+    )
 
     assert product.version == 1
     assert uuid.UUID(product.id)
@@ -133,13 +130,10 @@ def test_resource_delete_conflict(client):
         types.ProductDraft(
             key="test-product",
             product_type=types.ProductTypeResourceIdentifier(key="dummy"),
-            name={
-                "en": "my-product",
-            },
-            slug={
-                "en": "foo-bar"
-            }
-        ))
+            name={"en": "my-product"},
+            slug={"en": "foo-bar"},
+        )
+    )
 
     product = client.products.update_by_id(
         id=product.id,

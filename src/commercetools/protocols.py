@@ -1,4 +1,5 @@
 import typing
+
 from marshmallow.base import SchemaABC
 
 

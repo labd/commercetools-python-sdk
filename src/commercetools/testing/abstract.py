@@ -218,7 +218,7 @@ class ServiceBackend(BaseBackend):
         total_count = len(results)
         limit = params.get("limit", self._query_default_limit)
         if limit:
-            results = results[: limit]
+            results = results[:limit]
 
         if params.get("expand"):
             expanded_results = []

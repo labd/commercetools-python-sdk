@@ -27,4 +27,3 @@ def test_equality():
         product_type=types.ProductTypeResourceIdentifier(key="dummy"),
     )
     assert obj_1 == obj_2
-

@@ -102,7 +102,7 @@ def test_update_actions(client):
         actions=[
             types.PaymentAddInterfaceInteractionAction(
                 type=types.TypeResourceIdentifier(id=custom_type.id),
-                fields=types.FieldContainer({"pspRef": "1337"})
+                fields=types.FieldContainer({"pspRef": "1337"}),
             ),
             types.PaymentChangeTransactionInteractionIdAction(
                 transaction_id=existing_transaction.id, interaction_id="1337"

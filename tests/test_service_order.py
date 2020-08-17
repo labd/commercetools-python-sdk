@@ -6,9 +6,7 @@ from commercetools import types
 def test_orders_get_by_id(client):
     cart = client.carts.create(types.CartDraft(currency="EUR"))
     order = client.orders.create(
-        types.OrderFromCartDraft(
-            id=cart.id, version=1, order_number="test-order"
-        ),
+        types.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order")
     )
 
     assert order.id
@@ -21,9 +19,7 @@ def test_orders_query(client):
 
     cart = client.carts.create(types.CartDraft(currency="EUR"))
     order = client.orders.create(
-        types.OrderFromCartDraft(
-            id=cart.id, version=1, order_number="test-order"
-        ),
+        types.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order")
     )
 
     results = client.orders.query()

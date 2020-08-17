@@ -79,7 +79,8 @@ def test_category_update(client):
     """
     category = client.categories.create(
         types.CategoryDraft(
-            key="test-category", slug=types.LocalizedString(nl="nl-slug"),
+            key="test-category",
+            slug=types.LocalizedString(nl="nl-slug"),
             name=types.LocalizedString(nl="category"),
         )
     )

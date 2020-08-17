@@ -1,5 +1,5 @@
-from commercetools import types
 import commercetools
+from commercetools import types
 from tests.test_service_order import get_test_order
 
 
@@ -7,9 +7,7 @@ def test_unknown_expand_terms(client: commercetools.Client):
     cart = client.carts.create(types.CartDraft(currency="EUR"))
 
     order = client.orders.create(
-        types.OrderFromCartDraft(
-            id=cart.id, version=1, order_number="test-order"
-        ),
+        types.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order"),
         expand="nonExisting",
     )
 
@@ -43,12 +41,12 @@ def test_unknown_reference_expand_terms(client, commercetools_api):
 def test_multiple_expand(client, commercetools_api):
     shipping_method = client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping-method", name="test shipping method",
+            key="test-shipping-method",
+            name="test shipping method",
             tax_category=types.TaxCategoryResourceIdentifier(id="dummy"),
             zone_rates=[],
             is_default=False,
         )
-
     )
 
     payment = client.payments.create(

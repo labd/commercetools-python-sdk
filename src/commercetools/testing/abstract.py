@@ -57,7 +57,6 @@ class BaseModel:
 
                 msg = f"A duplicate value '{value}' exists for field '{field}'."
                 error = types.DuplicateFieldError(
-                    code="DuplicateField",
                     message=msg,
                     field=field,
                     duplicate_value=value,

@@ -171,4 +171,41 @@ class CartsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
-    _actions = {"addPayment": add_payment(), "setCustomField": set_custom_field()}
+    def set_custom_field(
+        self,
+        obj,
+        action: types.CartSetCustomFieldAction,
+    ):
+        if not obj['custom']:
+            raise ValueError(
+                "This resource has no custom type set - please use "
+                "setCustomType first to set the type of the custom fields"
+            )
+
+        name = action.name
+        value = action.value
+
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["custom"]["fields"][name] = value
+        return new
+
+    def set_custom_type(
+        self,
+        obj,
+        action: types.CartSetCustomTypeAction,
+    ):
+        custom_type = self.model._storage.get_by_resource_identifier(action.type)
+
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["custom"] = {
+            "type": {
+                "id": custom_type["id"],
+                "typeId": "type",
+            },
+            "fields": {}
+        }
+        return new
+
+    _actions = {"addPayment": add_payment(), "setCustomField": set_custom_field, "setCustomType": set_custom_type}

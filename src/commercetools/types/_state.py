@@ -68,18 +68,18 @@ class State(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        key: str,
+        type: "StateTypeEnum",
+        initial: bool,
+        built_in: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: str = None,
-        type: "StateTypeEnum" = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        initial: bool = None,
-        built_in: bool = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
         transitions: typing.Optional[typing.List["StateReference"]] = None
     ) -> None:
@@ -145,8 +145,8 @@ class StateDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: str = None,
-        type: "StateTypeEnum" = None,
+        key: str,
+        type: "StateTypeEnum",
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         initial: typing.Optional[bool] = None,
@@ -192,11 +192,11 @@ class StatePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["State"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["State"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -216,13 +216,7 @@ class StateReference(Reference):
     #: Optional :class:`commercetools.types.State`
     obj: typing.Optional["State"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["State"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["State"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.STATE, id=id)
 
@@ -236,11 +230,7 @@ class StateReference(Reference):
 
 class StateResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.STATE, id=id, key=key)
 
@@ -271,7 +261,7 @@ class StateUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -284,7 +274,7 @@ class StateUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -296,9 +286,7 @@ class StateAddRolesAction(StateUpdateAction):
     #: List of :class:`commercetools.types.StateRoleEnum`
     roles: typing.List["StateRoleEnum"]
 
-    def __init__(
-        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
-    ) -> None:
+    def __init__(self, *, roles: typing.List["StateRoleEnum"]) -> None:
         self.roles = roles
         super().__init__(action="addRoles")
 
@@ -310,7 +298,7 @@ class StateChangeInitialAction(StateUpdateAction):
     #: :class:`bool`
     initial: bool
 
-    def __init__(self, *, action: str = None, initial: bool = None) -> None:
+    def __init__(self, *, initial: bool) -> None:
         self.initial = initial
         super().__init__(action="changeInitial")
 
@@ -325,7 +313,7 @@ class StateChangeKeyAction(StateUpdateAction):
     #: :class:`str`
     key: str
 
-    def __init__(self, *, action: str = None, key: str = None) -> None:
+    def __init__(self, *, key: str) -> None:
         self.key = key
         super().__init__(action="changeKey")
 
@@ -337,7 +325,7 @@ class StateChangeTypeAction(StateUpdateAction):
     #: :class:`commercetools.types.StateTypeEnum`
     type: "StateTypeEnum"
 
-    def __init__(self, *, action: str = None, type: "StateTypeEnum" = None) -> None:
+    def __init__(self, *, type: "StateTypeEnum") -> None:
         self.type = type
         super().__init__(action="changeType")
 
@@ -349,9 +337,7 @@ class StateRemoveRolesAction(StateUpdateAction):
     #: List of :class:`commercetools.types.StateRoleEnum`
     roles: typing.List["StateRoleEnum"]
 
-    def __init__(
-        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
-    ) -> None:
+    def __init__(self, *, roles: typing.List["StateRoleEnum"]) -> None:
         self.roles = roles
         super().__init__(action="removeRoles")
 
@@ -363,9 +349,7 @@ class StateSetDescriptionAction(StateUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     description: "LocalizedString"
 
-    def __init__(
-        self, *, action: str = None, description: "LocalizedString" = None
-    ) -> None:
+    def __init__(self, *, description: "LocalizedString") -> None:
         self.description = description
         super().__init__(action="setDescription")
 
@@ -380,7 +364,7 @@ class StateSetNameAction(StateUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="setName")
 
@@ -392,9 +376,7 @@ class StateSetRolesAction(StateUpdateAction):
     #: List of :class:`commercetools.types.StateRoleEnum`
     roles: typing.List["StateRoleEnum"]
 
-    def __init__(
-        self, *, action: str = None, roles: typing.List["StateRoleEnum"] = None
-    ) -> None:
+    def __init__(self, *, roles: typing.List["StateRoleEnum"]) -> None:
         self.roles = roles
         super().__init__(action="setRoles")
 
@@ -409,7 +391,6 @@ class StateSetTransitionsAction(StateUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
     ) -> None:
         self.transitions = transitions

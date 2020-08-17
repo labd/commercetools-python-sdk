@@ -45,7 +45,7 @@ class ChangeSubscription(_BaseType):
     #: :class:`str` `(Named` ``resourceTypeId`` `in Commercetools)`
     resource_type_id: str
 
-    def __init__(self, *, resource_type_id: str = None) -> None:
+    def __init__(self, *, resource_type_id: str) -> None:
         self.resource_type_id = resource_type_id
         super().__init__()
 
@@ -57,7 +57,7 @@ class DeliveryFormat(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -69,7 +69,7 @@ class Destination(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -84,10 +84,7 @@ class MessageSubscription(_BaseType):
     types: typing.Optional[typing.List[str]]
 
     def __init__(
-        self,
-        *,
-        resource_type_id: str = None,
-        types: typing.Optional[typing.List[str]] = None
+        self, *, resource_type_id: str, types: typing.Optional[typing.List[str]] = None
     ) -> None:
         self.resource_type_id = resource_type_id
         self.types = types
@@ -106,7 +103,7 @@ class PayloadNotIncluded(_BaseType):
     #: :class:`str` `(Named` ``payloadType`` `in Commercetools)`
     payload_type: str
 
-    def __init__(self, *, reason: str = None, payload_type: str = None) -> None:
+    def __init__(self, *, reason: str, payload_type: str) -> None:
         self.reason = reason
         self.payload_type = payload_type
         super().__init__()
@@ -147,18 +144,18 @@ class Subscription(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        changes: typing.List["ChangeSubscription"],
+        destination: "Destination",
+        messages: typing.List["MessageSubscription"],
+        format: "DeliveryFormat",
+        status: "SubscriptionHealthStatus",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        changes: typing.List["ChangeSubscription"] = None,
-        destination: "Destination" = None,
-        key: typing.Optional[str] = None,
-        messages: typing.List["MessageSubscription"] = None,
-        format: "DeliveryFormat" = None,
-        status: "SubscriptionHealthStatus" = None
+        key: typing.Optional[str] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -212,9 +209,9 @@ class SubscriptionDelivery(_BaseType):
     def __init__(
         self,
         *,
-        project_key: str = None,
-        notification_type: str = None,
-        resource: "Reference" = None,
+        project_key: str,
+        notification_type: str,
+        resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None
@@ -252,8 +249,8 @@ class SubscriptionDraft(_BaseType):
     def __init__(
         self,
         *,
+        destination: "Destination",
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
-        destination: "Destination" = None,
         key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
         format: typing.Optional["DeliveryFormat"] = None
@@ -294,11 +291,11 @@ class SubscriptionPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Subscription"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Subscription"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -320,7 +317,7 @@ class SubscriptionUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -336,7 +333,7 @@ class SubscriptionUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -350,9 +347,7 @@ class AzureEventGridDestination(Destination):
     #: :class:`str` `(Named` ``accessKey`` `in Commercetools)`
     access_key: str
 
-    def __init__(
-        self, *, type: str = None, uri: str = None, access_key: str = None
-    ) -> None:
+    def __init__(self, *, uri: str, access_key: str) -> None:
         self.uri = uri
         self.access_key = access_key
         super().__init__(type="EventGrid")
@@ -369,7 +364,7 @@ class AzureServiceBusDestination(Destination):
     #: :class:`str` `(Named` ``connectionString`` `in Commercetools)`
     connection_string: str
 
-    def __init__(self, *, type: str = None, connection_string: str = None) -> None:
+    def __init__(self, *, connection_string: str) -> None:
         self.connection_string = connection_string
         super().__init__(type="AzureServiceBus")
 
@@ -384,7 +379,7 @@ class DeliveryCloudEventsFormat(DeliveryFormat):
     #: :class:`str` `(Named` ``cloudEventsVersion`` `in Commercetools)`
     cloud_events_version: str
 
-    def __init__(self, *, type: str = None, cloud_events_version: str = None) -> None:
+    def __init__(self, *, cloud_events_version: str) -> None:
         self.cloud_events_version = cloud_events_version
         super().__init__(type="CloudEvents")
 
@@ -396,7 +391,7 @@ class DeliveryCloudEventsFormat(DeliveryFormat):
 
 
 class DeliveryPlatformFormat(DeliveryFormat):
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type="Platform")
 
     def __repr__(self) -> str:
@@ -409,9 +404,7 @@ class GoogleCloudPubSubDestination(Destination):
     #: :class:`str`
     topic: str
 
-    def __init__(
-        self, *, type: str = None, project_id: str = None, topic: str = None
-    ) -> None:
+    def __init__(self, *, project_id: str, topic: str) -> None:
         self.project_id = project_id
         self.topic = topic
         super().__init__(type="GoogleCloudPubSub")
@@ -428,7 +421,7 @@ class IronMqDestination(Destination):
     #: :class:`str`
     uri: str
 
-    def __init__(self, *, type: str = None, uri: str = None) -> None:
+    def __init__(self, *, uri: str) -> None:
         self.uri = uri
         super().__init__(type="IronMQ")
 
@@ -455,19 +448,18 @@ class MessageDelivery(SubscriptionDelivery):
     def __init__(
         self,
         *,
-        project_key: str = None,
-        notification_type: str = None,
-        resource: "Reference" = None,
+        project_key: str,
+        resource: "Reference",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource_version: int,
+        payload_not_included: "PayloadNotIncluded",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
-        sequence_number: int = None,
-        resource_version: int = None,
-        payload_not_included: "PayloadNotIncluded" = None
+        ] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -511,14 +503,13 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
     def __init__(
         self,
         *,
-        project_key: str = None,
-        notification_type: str = None,
-        resource: "Reference" = None,
+        project_key: str,
+        resource: "Reference",
+        version: int,
+        modified_at: datetime.datetime,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        version: int = None,
-        modified_at: datetime.datetime = None
+        ] = None
     ) -> None:
         self.version = version
         self.modified_at = modified_at
@@ -552,14 +543,13 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
     def __init__(
         self,
         *,
-        project_key: str = None,
-        notification_type: str = None,
-        resource: "Reference" = None,
+        project_key: str,
+        resource: "Reference",
+        version: int,
+        modified_at: datetime.datetime,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        version: int = None,
-        modified_at: datetime.datetime = None
+        ] = None
     ) -> None:
         self.version = version
         self.modified_at = modified_at
@@ -595,15 +585,14 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
     def __init__(
         self,
         *,
-        project_key: str = None,
-        notification_type: str = None,
-        resource: "Reference" = None,
+        project_key: str,
+        resource: "Reference",
+        version: int,
+        old_version: int,
+        modified_at: datetime.datetime,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None,
-        version: int = None,
-        old_version: int = None,
-        modified_at: datetime.datetime = None
+        ] = None
     ) -> None:
         self.version = version
         self.old_version = old_version
@@ -638,14 +627,7 @@ class SnsDestination(Destination):
     #: :class:`str` `(Named` ``topicArn`` `in Commercetools)`
     topic_arn: str
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        access_key: str = None,
-        access_secret: str = None,
-        topic_arn: str = None
-    ) -> None:
+    def __init__(self, *, access_key: str, access_secret: str, topic_arn: str) -> None:
         self.access_key = access_key
         self.access_secret = access_secret
         self.topic_arn = topic_arn
@@ -669,13 +651,7 @@ class SqsDestination(Destination):
     region: str
 
     def __init__(
-        self,
-        *,
-        type: str = None,
-        access_key: str = None,
-        access_secret: str = None,
-        queue_url: str = None,
-        region: str = None
+        self, *, access_key: str, access_secret: str, queue_url: str, region: str
     ) -> None:
         self.access_key = access_key
         self.access_secret = access_secret
@@ -700,9 +676,7 @@ class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
     #: :class:`commercetools.types.Destination`
     destination: "Destination"
 
-    def __init__(
-        self, *, action: str = None, destination: "Destination" = None
-    ) -> None:
+    def __init__(self, *, destination: "Destination") -> None:
         self.destination = destination
         super().__init__(action="changeDestination")
 
@@ -718,10 +692,7 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
     changes: typing.Optional[typing.List["ChangeSubscription"]]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        changes: typing.Optional[typing.List["ChangeSubscription"]] = None
+        self, *, changes: typing.Optional[typing.List["ChangeSubscription"]] = None
     ) -> None:
         self.changes = changes
         super().__init__(action="setChanges")
@@ -737,7 +708,7 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -750,10 +721,7 @@ class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
     messages: typing.Optional[typing.List["MessageSubscription"]]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        messages: typing.Optional[typing.List["MessageSubscription"]] = None
+        self, *, messages: typing.Optional[typing.List["MessageSubscription"]] = None
     ) -> None:
         self.messages = messages
         super().__init__(action="setMessages")

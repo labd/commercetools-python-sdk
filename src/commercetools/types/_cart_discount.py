@@ -103,25 +103,25 @@ class CartDiscount(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: "LocalizedString",
+        value: "CartDiscountValue",
+        cart_predicate: str,
+        sort_order: str,
+        is_active: bool,
+        requires_discount_code: bool,
+        references: typing.List["Reference"],
+        stacking_mode: "StackingMode",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: "LocalizedString" = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: "CartDiscountValue" = None,
-        cart_predicate: str = None,
         target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: str = None,
-        is_active: bool = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        requires_discount_code: bool = None,
-        references: typing.List["Reference"] = None,
-        stacking_mode: "StackingMode" = None,
         custom: typing.Optional["CustomFields"] = None
     ) -> None:
         self.id = id
@@ -210,17 +210,17 @@ class CartDiscountDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: "LocalizedString" = None,
+        name: "LocalizedString",
+        value: "CartDiscountValueDraft",
+        cart_predicate: str,
+        sort_order: str,
+        requires_discount_code: bool,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: "CartDiscountValueDraft" = None,
-        cart_predicate: str = None,
         target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: str = None,
         is_active: typing.Optional[bool] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        requires_discount_code: bool = None,
         stacking_mode: typing.Optional["StackingMode"] = None,
         custom: typing.Optional["CustomFields"] = None
     ) -> None:
@@ -275,11 +275,11 @@ class CartDiscountPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["CartDiscount"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["CartDiscount"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -299,13 +299,7 @@ class CartDiscountReference(Reference):
     #: Optional :class:`commercetools.types.CartDiscount`
     obj: typing.Optional["CartDiscount"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["CartDiscount"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["CartDiscount"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.CART_DISCOUNT, id=id)
 
@@ -319,11 +313,7 @@ class CartDiscountReference(Reference):
 
 class CartDiscountResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.CART_DISCOUNT, id=id, key=key)
 
@@ -339,7 +329,7 @@ class CartDiscountTarget(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -353,7 +343,7 @@ class CartDiscountUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -369,7 +359,7 @@ class CartDiscountUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -381,7 +371,7 @@ class CartDiscountValue(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -393,7 +383,7 @@ class CartDiscountValueDraft(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -415,7 +405,7 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: str
 
-    def __init__(self, *, action: str = None, cart_predicate: str = None) -> None:
+    def __init__(self, *, cart_predicate: str) -> None:
         self.cart_predicate = cart_predicate
         super().__init__(action="changeCartPredicate")
 
@@ -430,7 +420,7 @@ class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: bool
 
-    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
+    def __init__(self, *, is_active: bool) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -445,7 +435,7 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -460,9 +450,7 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
     #: :class:`bool` `(Named` ``requiresDiscountCode`` `in Commercetools)`
     requires_discount_code: bool
 
-    def __init__(
-        self, *, action: str = None, requires_discount_code: bool = None
-    ) -> None:
+    def __init__(self, *, requires_discount_code: bool) -> None:
         self.requires_discount_code = requires_discount_code
         super().__init__(action="changeRequiresDiscountCode")
 
@@ -477,7 +465,7 @@ class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
     sort_order: str
 
-    def __init__(self, *, action: str = None, sort_order: str = None) -> None:
+    def __init__(self, *, sort_order: str) -> None:
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -492,9 +480,7 @@ class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
     #: :class:`commercetools.types.StackingMode` `(Named` ``stackingMode`` `in Commercetools)`
     stacking_mode: "StackingMode"
 
-    def __init__(
-        self, *, action: str = None, stacking_mode: "StackingMode" = None
-    ) -> None:
+    def __init__(self, *, stacking_mode: "StackingMode") -> None:
         self.stacking_mode = stacking_mode
         super().__init__(action="changeStackingMode")
 
@@ -509,9 +495,7 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
     #: :class:`commercetools.types.CartDiscountTarget`
     target: "CartDiscountTarget"
 
-    def __init__(
-        self, *, action: str = None, target: "CartDiscountTarget" = None
-    ) -> None:
+    def __init__(self, *, target: "CartDiscountTarget") -> None:
         self.target = target
         super().__init__(action="changeTarget")
 
@@ -526,9 +510,7 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
     #: :class:`commercetools.types.CartDiscountValueDraft`
     value: "CartDiscountValueDraft"
 
-    def __init__(
-        self, *, action: str = None, value: "CartDiscountValueDraft" = None
-    ) -> None:
+    def __init__(self, *, value: "CartDiscountValueDraft") -> None:
         self.value = value
         super().__init__(action="changeValue")
 
@@ -543,7 +525,7 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
     #: :class:`str`
     predicate: str
 
-    def __init__(self, *, type: str = None, predicate: str = None) -> None:
+    def __init__(self, *, predicate: str) -> None:
         self.predicate = predicate
         super().__init__(type="customLineItems")
 
@@ -558,7 +540,7 @@ class CartDiscountLineItemsTarget(CartDiscountTarget):
     #: :class:`str`
     predicate: str
 
-    def __init__(self, *, type: str = None, predicate: str = None) -> None:
+    def __init__(self, *, predicate: str) -> None:
         self.predicate = predicate
         super().__init__(type="lineItems")
 
@@ -575,13 +557,7 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -603,7 +579,6 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional[object] = None
     ) -> None:
@@ -624,10 +599,7 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -643,7 +615,7 @@ class CartDiscountSetKeyAction(CartDiscountUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -656,10 +628,7 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
     valid_from: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        valid_from: typing.Optional[datetime.datetime] = None
+        self, *, valid_from: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_from = valid_from
         super().__init__(action="setValidFrom")
@@ -680,7 +649,6 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -700,10 +668,7 @@ class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        self, *, valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_until = valid_until
         super().__init__(action="setValidUntil")
@@ -716,7 +681,7 @@ class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
 
 
 class CartDiscountShippingCostTarget(CartDiscountTarget):
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type="shipping")
 
     def __repr__(self) -> str:
@@ -727,9 +692,7 @@ class CartDiscountValueAbsolute(CartDiscountValue):
     #: List of :class:`commercetools.types.TypedMoney`
     money: typing.List["TypedMoney"]
 
-    def __init__(
-        self, *, type: str = None, money: typing.List["TypedMoney"] = None
-    ) -> None:
+    def __init__(self, *, money: typing.List["TypedMoney"]) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -741,7 +704,7 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
     #: List of :class:`commercetools.types.Money`
     money: typing.List["Money"]
 
-    def __init__(self, *, type: str = None, money: typing.List["Money"] = None) -> None:
+    def __init__(self, *, money: typing.List["Money"]) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -765,9 +728,8 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
     def __init__(
         self,
         *,
-        type: str = None,
-        product: "ProductReference" = None,
-        variant_id: int = None,
+        product: "ProductReference",
+        variant_id: int,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None
     ) -> None:
@@ -803,9 +765,8 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
     def __init__(
         self,
         *,
-        type: str = None,
-        product: "ProductReference" = None,
-        variant_id: int = None,
+        product: "ProductReference",
+        variant_id: int,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None
     ) -> None:
@@ -832,7 +793,7 @@ class CartDiscountValueRelative(CartDiscountValue):
     #: :class:`int`
     permyriad: int
 
-    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
+    def __init__(self, *, permyriad: int) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -847,7 +808,7 @@ class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
     #: :class:`int`
     permyriad: int
 
-    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
+    def __init__(self, *, permyriad: int) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -873,12 +834,11 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
     def __init__(
         self,
         *,
-        type: str = None,
-        predicate: str = None,
-        trigger_quantity: int = None,
-        discounted_quantity: int = None,
-        max_occurrence: typing.Optional[int] = None,
-        selection_mode: "SelectionMode" = None
+        predicate: str,
+        trigger_quantity: int,
+        discounted_quantity: int,
+        selection_mode: "SelectionMode",
+        max_occurrence: typing.Optional[int] = None
     ) -> None:
         self.predicate = predicate
         self.trigger_quantity = trigger_quantity
@@ -916,12 +876,11 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
     def __init__(
         self,
         *,
-        type: str = None,
-        predicate: str = None,
-        trigger_quantity: int = None,
-        discounted_quantity: int = None,
-        max_occurrence: typing.Optional[int] = None,
-        selection_mode: "SelectionMode" = None
+        predicate: str,
+        trigger_quantity: int,
+        discounted_quantity: int,
+        selection_mode: "SelectionMode",
+        max_occurrence: typing.Optional[int] = None
     ) -> None:
         self.predicate = predicate
         self.trigger_quantity = trigger_quantity

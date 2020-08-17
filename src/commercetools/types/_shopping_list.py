@@ -97,10 +97,11 @@ class MyShoppingList(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: "LocalizedString",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -109,7 +110,6 @@ class MyShoppingList(BaseResource):
         description: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["ShoppingListLineItem"]] = None,
-        name: "LocalizedString" = None,
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
         anonymous_id: typing.Optional[str] = None
@@ -198,10 +198,11 @@ class ShoppingList(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: "LocalizedString",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -210,7 +211,6 @@ class ShoppingList(BaseResource):
         description: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["ShoppingListLineItem"]] = None,
-        name: "LocalizedString" = None,
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
         anonymous_id: typing.Optional[str] = None
@@ -287,13 +287,13 @@ class ShoppingListDraft(_BaseType):
     def __init__(
         self,
         *,
+        name: "LocalizedString",
         custom: typing.Optional["CustomFieldsDraft"] = None,
         customer: typing.Optional["CustomerResourceIdentifier"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
         description: typing.Optional["LocalizedString"] = None,
         key: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
-        name: "LocalizedString" = None,
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
         anonymous_id: typing.Optional[str] = None
@@ -355,15 +355,15 @@ class ShoppingListLineItem(_BaseType):
     def __init__(
         self,
         *,
-        added_at: datetime.datetime = None,
+        added_at: datetime.datetime,
+        id: str,
+        name: "LocalizedString",
+        product_id: str,
+        product_type: "ProductTypeReference",
+        quantity: int,
         custom: typing.Optional["CustomFields"] = None,
         deactivated_at: typing.Optional[datetime.datetime] = None,
-        id: str = None,
-        name: "LocalizedString" = None,
-        product_id: str = None,
         product_slug: typing.Optional["LocalizedString"] = None,
-        product_type: "ProductTypeReference" = None,
-        quantity: int = None,
         variant: typing.Optional["ProductVariant"] = None,
         variant_id: typing.Optional[int] = None
     ) -> None:
@@ -460,11 +460,11 @@ class ShoppingListPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["ShoppingList"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["ShoppingList"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -484,13 +484,7 @@ class ShoppingListReference(Reference):
     #: Optional :class:`commercetools.types.ShoppingList`
     obj: typing.Optional["ShoppingList"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["ShoppingList"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["ShoppingList"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.SHOPPING_LIST, id=id)
 
@@ -504,11 +498,7 @@ class ShoppingListReference(Reference):
 
 class ShoppingListResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.SHOPPING_LIST, id=id, key=key)
 
@@ -526,7 +516,7 @@ class ShoppingListUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -542,7 +532,7 @@ class ShoppingListUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -567,12 +557,12 @@ class TextLineItem(_BaseType):
     def __init__(
         self,
         *,
-        added_at: datetime.datetime = None,
+        added_at: datetime.datetime,
+        id: str,
+        name: "LocalizedString",
+        quantity: int,
         custom: typing.Optional["CustomFields"] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        id: str = None,
-        name: "LocalizedString" = None,
-        quantity: int = None
+        description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.added_at = added_at
         self.custom = custom
@@ -611,10 +601,10 @@ class TextLineItemDraft(_BaseType):
     def __init__(
         self,
         *,
+        name: "LocalizedString",
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        name: "LocalizedString" = None,
         quantity: typing.Optional[int] = None
     ) -> None:
         self.added_at = added_at
@@ -648,7 +638,6 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         sku: typing.Optional[str] = None,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -694,8 +683,7 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        name: "LocalizedString" = None,
+        name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
@@ -728,9 +716,7 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
     #: :class:`int`
     quantity: int
 
-    def __init__(
-        self, *, action: str = None, line_item_id: str = None, quantity: int = None
-    ) -> None:
+    def __init__(self, *, line_item_id: str, quantity: int) -> None:
         self.line_item_id = line_item_id
         self.quantity = quantity
         super().__init__(action="changeLineItemQuantity")
@@ -746,9 +732,7 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
     #: List of :class:`str` `(Named` ``lineItemOrder`` `in Commercetools)`
     line_item_order: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, line_item_order: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, line_item_order: typing.List[str]) -> None:
         self.line_item_order = line_item_order
         super().__init__(action="changeLineItemsOrder")
 
@@ -763,7 +747,7 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -780,13 +764,7 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        text_line_item_id: str = None,
-        name: "LocalizedString" = None
-    ) -> None:
+    def __init__(self, *, text_line_item_id: str, name: "LocalizedString") -> None:
         self.text_line_item_id = text_line_item_id
         self.name = name
         super().__init__(action="changeTextLineItemName")
@@ -804,9 +782,7 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
     #: :class:`int`
     quantity: int
 
-    def __init__(
-        self, *, action: str = None, text_line_item_id: str = None, quantity: int = None
-    ) -> None:
+    def __init__(self, *, text_line_item_id: str, quantity: int) -> None:
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
         super().__init__(action="changeTextLineItemQuantity")
@@ -822,9 +798,7 @@ class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
     #: List of :class:`str` `(Named` ``textLineItemOrder`` `in Commercetools)`
     text_line_item_order: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, text_line_item_order: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, text_line_item_order: typing.List[str]) -> None:
         self.text_line_item_order = text_line_item_order
         super().__init__(action="changeTextLineItemsOrder")
 
@@ -842,11 +816,7 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        line_item_id: str = None,
-        quantity: typing.Optional[int] = None
+        self, *, line_item_id: str, quantity: typing.Optional[int] = None
     ) -> None:
         self.line_item_id = line_item_id
         self.quantity = quantity
@@ -866,11 +836,7 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        text_line_item_id: str = None,
-        quantity: typing.Optional[int] = None
+        self, *, text_line_item_id: str, quantity: typing.Optional[int] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
@@ -887,9 +853,7 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, anonymous_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, anonymous_id: typing.Optional[str] = None) -> None:
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
 
@@ -906,13 +870,7 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -934,7 +892,6 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -955,10 +912,7 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
     customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        customer: typing.Optional["CustomerResourceIdentifier"] = None
+        self, *, customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
         super().__init__(action="setCustomer")
@@ -975,10 +929,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
     delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        delete_days_after_last_modification: typing.Optional[int] = None
+        self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ) -> None:
         self.delete_days_after_last_modification = delete_days_after_last_modification
         super().__init__(action="setDeleteDaysAfterLastModification")
@@ -995,10 +946,7 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -1014,7 +962,7 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -1031,12 +979,7 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        line_item_id: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
+        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
     ) -> None:
         self.line_item_id = line_item_id
         self.name = name
@@ -1061,8 +1004,7 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        line_item_id: str = None,
+        line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -1082,9 +1024,7 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
     #: Optional :class:`commercetools.types.LocalizedString`
     slug: typing.Optional["LocalizedString"]
 
-    def __init__(
-        self, *, action: str = None, slug: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, slug: typing.Optional["LocalizedString"] = None) -> None:
         self.slug = slug
         super().__init__(action="setSlug")
 
@@ -1106,9 +1046,8 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        text_line_item_id: str = None,
-        name: str = None,
+        text_line_item_id: str,
+        name: str,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id
@@ -1134,8 +1073,7 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        text_line_item_id: str = None,
+        text_line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -1160,8 +1098,7 @@ class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        text_line_item_id: str = None,
+        text_line_item_id: str,
         description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id

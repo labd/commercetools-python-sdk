@@ -791,7 +791,7 @@ class CustomerEmailVerifiedMessagePayloadSchema(MessagePayloadSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.CustomerEmailVerifiedMessagePayload(**data)
+        return types.CustomerEmailVerifiedMessagePayload()
 
 
 class CustomerEmailVerifiedMessageSchema(MessageSchema):
@@ -3215,7 +3215,7 @@ class ProductUnpublishedMessagePayloadSchema(MessagePayloadSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.ProductUnpublishedMessagePayload(**data)
+        return types.ProductUnpublishedMessagePayload()
 
 
 class ProductUnpublishedMessageSchema(MessageSchema):

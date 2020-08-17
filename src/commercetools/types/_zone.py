@@ -35,9 +35,7 @@ class Location(_BaseType):
     #: Optional :class:`str`
     state: typing.Optional[str]
 
-    def __init__(
-        self, *, country: "str" = None, state: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, country: "str", state: typing.Optional[str] = None) -> None:
         self.country = country
         self.state = state
         super().__init__()
@@ -71,16 +69,16 @@ class Zone(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: str,
+        locations: typing.List["Location"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        name: str = None,
-        description: typing.Optional[str] = None,
-        locations: typing.List["Location"] = None
+        description: typing.Optional[str] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -130,10 +128,10 @@ class ZoneDraft(_BaseType):
     def __init__(
         self,
         *,
+        name: str,
+        locations: typing.List["Location"],
         key: typing.Optional[str] = None,
-        name: str = None,
-        description: typing.Optional[str] = None,
-        locations: typing.List["Location"] = None
+        description: typing.Optional[str] = None
     ) -> None:
         self.key = key
         self.name = name
@@ -165,11 +163,11 @@ class ZonePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Zone"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Zone"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -189,13 +187,7 @@ class ZoneReference(Reference):
     #: Optional :class:`commercetools.types.Zone`
     obj: typing.Optional["Zone"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Zone"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Zone"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.ZONE, id=id)
 
@@ -209,11 +201,7 @@ class ZoneReference(Reference):
 
 class ZoneResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.ZONE, id=id, key=key)
 
@@ -231,7 +219,7 @@ class ZoneUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -244,7 +232,7 @@ class ZoneUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -256,7 +244,7 @@ class ZoneAddLocationAction(ZoneUpdateAction):
     #: :class:`commercetools.types.Location`
     location: "Location"
 
-    def __init__(self, *, action: str = None, location: "Location" = None) -> None:
+    def __init__(self, *, location: "Location") -> None:
         self.location = location
         super().__init__(action="addLocation")
 
@@ -271,7 +259,7 @@ class ZoneChangeNameAction(ZoneUpdateAction):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, action: str = None, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -283,7 +271,7 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
     #: :class:`commercetools.types.Location`
     location: "Location"
 
-    def __init__(self, *, action: str = None, location: "Location" = None) -> None:
+    def __init__(self, *, location: "Location") -> None:
         self.location = location
         super().__init__(action="removeLocation")
 
@@ -298,9 +286,7 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
     #: Optional :class:`str`
     description: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, description: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, description: typing.Optional[str] = None) -> None:
         self.description = description
         super().__init__(action="setDescription")
 
@@ -315,7 +301,7 @@ class ZoneSetKeyAction(ZoneUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 

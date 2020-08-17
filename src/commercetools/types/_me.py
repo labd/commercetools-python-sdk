@@ -228,27 +228,29 @@ class MyCart(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        line_items: typing.List["LineItem"],
+        custom_line_items: typing.List["CustomLineItem"],
+        total_price: "TypedMoney",
+        cart_state: "CartState",
+        tax_mode: "TaxMode",
+        tax_rounding_mode: "RoundingMode",
+        tax_calculation_mode: "TaxCalculationMode",
+        refused_gifts: typing.List["CartDiscountReference"],
+        origin: "CartOrigin",
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
         store: typing.Optional["StoreKeyReference"] = None,
-        line_items: typing.List["LineItem"] = None,
-        custom_line_items: typing.List["CustomLineItem"] = None,
-        total_price: "TypedMoney" = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
-        cart_state: "CartState" = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
-        tax_mode: "TaxMode" = None,
-        tax_rounding_mode: "RoundingMode" = None,
-        tax_calculation_mode: "TaxCalculationMode" = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         country: typing.Optional["str"] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
@@ -257,8 +259,6 @@ class MyCart(BaseResource):
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        refused_gifts: typing.List["CartDiscountReference"] = None,
-        origin: "CartOrigin" = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
     ) -> None:
@@ -374,7 +374,7 @@ class MyCartDraft(_BaseType):
     def __init__(
         self,
         *,
-        currency: "str" = None,
+        currency: "str",
         customer_email: typing.Optional[str] = None,
         country: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
@@ -428,7 +428,7 @@ class MyCartUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -499,15 +499,17 @@ class MyCustomer(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        email: str,
+        password: str,
+        addresses: typing.List["Address"],
+        is_email_verified: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_number: typing.Optional[str] = None,
-        email: str = None,
-        password: str = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -515,12 +517,10 @@ class MyCustomer(BaseResource):
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
         vat_id: typing.Optional[str] = None,
-        addresses: typing.List["Address"] = None,
         default_shipping_address_id: typing.Optional[str] = None,
         shipping_address_ids: typing.Optional[typing.List[str]] = None,
         default_billing_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List[str]] = None,
-        is_email_verified: bool = None,
         external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
@@ -637,8 +637,8 @@ class MyCustomerDraft(_BaseType):
     def __init__(
         self,
         *,
-        email: str = None,
-        password: str = None,
+        email: str,
+        password: str,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -697,7 +697,7 @@ class MyCustomerUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -726,9 +726,9 @@ class MyLineItemDraft(_BaseType):
     def __init__(
         self,
         *,
-        product_id: str = None,
-        variant_id: int = None,
-        quantity: int = None,
+        product_id: str,
+        variant_id: int,
+        quantity: int,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -848,10 +848,18 @@ class MyOrder(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        line_items: typing.List["LineItem"],
+        custom_line_items: typing.List["CustomLineItem"],
+        total_price: "TypedMoney",
+        order_state: "OrderState",
+        sync_info: typing.List["SyncInfo"],
+        last_message_sequence_number: int,
+        origin: "CartOrigin",
+        refused_gifts: typing.List["CartDiscountReference"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
@@ -860,9 +868,6 @@ class MyOrder(BaseResource):
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
         store: typing.Optional["StoreKeyReference"] = None,
-        line_items: typing.List["LineItem"] = None,
-        custom_line_items: typing.List["CustomLineItem"] = None,
-        total_price: "TypedMoney" = None,
         taxed_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
@@ -870,25 +875,20 @@ class MyOrder(BaseResource):
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         country: typing.Optional[str] = None,
-        order_state: "OrderState" = None,
         state: typing.Optional["StateReference"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
-        sync_info: typing.List["SyncInfo"] = None,
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: int = None,
         cart: typing.Optional["CartReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
-        origin: "CartOrigin" = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
-        refused_gifts: typing.List["CartDiscountReference"] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -993,7 +993,7 @@ class MyOrderFromCartDraft(_BaseType):
     #: :class:`int`
     version: int
 
-    def __init__(self, *, id: str = None, version: int = None) -> None:
+    def __init__(self, *, id: str, version: int) -> None:
         self.id = id
         self.version = version
         super().__init__()
@@ -1023,13 +1023,13 @@ class MyPayment(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
+        id: str,
+        version: int,
+        amount_planned: "TypedMoney",
+        payment_method_info: "PaymentMethodInfo",
+        transactions: typing.List["Transaction"],
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
-        amount_planned: "TypedMoney" = None,
-        payment_method_info: "PaymentMethodInfo" = None,
-        transactions: typing.List["Transaction"] = None,
         custom: typing.Optional["CustomFields"] = None
     ) -> None:
         self.id = id
@@ -1071,7 +1071,7 @@ class MyPaymentDraft(_BaseType):
     def __init__(
         self,
         *,
-        amount_planned: "Money" = None,
+        amount_planned: "Money",
         payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         transaction: typing.Optional["MyTransactionDraft"] = None
@@ -1109,11 +1109,11 @@ class MyPaymentPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["MyPayment"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["MyPayment"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -1135,7 +1135,7 @@ class MyPaymentUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -1148,7 +1148,7 @@ class MyPaymentUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -1173,7 +1173,7 @@ class MyShoppingListDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: "LocalizedString" = None,
+        name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
         text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
@@ -1208,7 +1208,7 @@ class MyShoppingListUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -1224,7 +1224,7 @@ class MyShoppingListUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -1245,9 +1245,9 @@ class MyTransactionDraft(_BaseType):
     def __init__(
         self,
         *,
+        type: "TransactionType",
+        amount: "Money",
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: "TransactionType" = None,
-        amount: "Money" = None,
         interaction_id: typing.Optional[str] = None
     ) -> None:
         self.timestamp = timestamp
@@ -1267,7 +1267,7 @@ class MyCartAddDiscountCodeAction(MyCartUpdateAction):
     #: :class:`str`
     code: str
 
-    def __init__(self, *, action: str = None, code: str = None) -> None:
+    def __init__(self, *, code: str) -> None:
         self.code = code
         super().__init__(action="addDiscountCode")
 
@@ -1282,7 +1282,7 @@ class MyCartAddItemShippingAddressAction(MyCartUpdateAction):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -1320,7 +1320,6 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -1370,9 +1369,7 @@ class MyCartAddPaymentAction(MyCartUpdateAction):
     #: :class:`commercetools.types.PaymentResourceIdentifier`
     payment: "PaymentResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, payment: "PaymentResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, payment: "PaymentResourceIdentifier") -> None:
         self.payment = payment
         super().__init__(action="addPayment")
 
@@ -1390,11 +1387,7 @@ class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction)
     targets_delta: typing.List["ItemShippingTarget"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        line_item_id: str = None,
-        targets_delta: typing.List["ItemShippingTarget"] = None
+        self, *, line_item_id: str, targets_delta: typing.List["ItemShippingTarget"]
     ) -> None:
         self.line_item_id = line_item_id
         self.targets_delta = targets_delta
@@ -1420,9 +1413,8 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        line_item_id: str = None,
-        quantity: int = None,
+        line_item_id: str,
+        quantity: int,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ) -> None:
@@ -1449,7 +1441,7 @@ class MyCartChangeTaxModeAction(MyCartUpdateAction):
     #: :class:`commercetools.types.TaxMode` `(Named` ``taxMode`` `in Commercetools)`
     tax_mode: "TaxMode"
 
-    def __init__(self, *, action: str = None, tax_mode: "TaxMode" = None) -> None:
+    def __init__(self, *, tax_mode: "TaxMode") -> None:
         self.tax_mode = tax_mode
         super().__init__(action="changeTaxMode")
 
@@ -1464,9 +1456,7 @@ class MyCartRecalculateAction(MyCartUpdateAction):
     #: Optional :class:`bool` `(Named` ``updateProductData`` `in Commercetools)`
     update_product_data: typing.Optional[bool]
 
-    def __init__(
-        self, *, action: str = None, update_product_data: typing.Optional[bool] = None
-    ) -> None:
+    def __init__(self, *, update_product_data: typing.Optional[bool] = None) -> None:
         self.update_product_data = update_product_data
         super().__init__(action="recalculate")
 
@@ -1481,9 +1471,7 @@ class MyCartRemoveDiscountCodeAction(MyCartUpdateAction):
     #: :class:`commercetools.types.DiscountCodeReference` `(Named` ``discountCode`` `in Commercetools)`
     discount_code: "DiscountCodeReference"
 
-    def __init__(
-        self, *, action: str = None, discount_code: "DiscountCodeReference" = None
-    ) -> None:
+    def __init__(self, *, discount_code: "DiscountCodeReference") -> None:
         self.discount_code = discount_code
         super().__init__(action="removeDiscountCode")
 
@@ -1498,7 +1486,7 @@ class MyCartRemoveItemShippingAddressAction(MyCartUpdateAction):
     #: :class:`str` `(Named` ``addressKey`` `in Commercetools)`
     address_key: str
 
-    def __init__(self, *, action: str = None, address_key: str = None) -> None:
+    def __init__(self, *, address_key: str) -> None:
         self.address_key = address_key
         super().__init__(action="removeItemShippingAddress")
 
@@ -1524,8 +1512,7 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        line_item_id: str = None,
+        line_item_id: str,
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -1556,9 +1543,7 @@ class MyCartRemovePaymentAction(MyCartUpdateAction):
     #: :class:`commercetools.types.PaymentResourceIdentifier`
     payment: "PaymentResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, payment: "PaymentResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, payment: "PaymentResourceIdentifier") -> None:
         self.payment = payment
         super().__init__(action="removePayment")
 
@@ -1573,9 +1558,7 @@ class MyCartSetBillingAddressAction(MyCartUpdateAction):
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
-    def __init__(
-        self, *, action: str = None, address: typing.Optional["Address"] = None
-    ) -> None:
+    def __init__(self, *, address: typing.Optional["Address"] = None) -> None:
         self.address = address
         super().__init__(action="setBillingAddress")
 
@@ -1590,9 +1573,7 @@ class MyCartSetCountryAction(MyCartUpdateAction):
     #: Optional :class:`str`
     country: typing.Optional["str"]
 
-    def __init__(
-        self, *, action: str = None, country: typing.Optional["str"] = None
-    ) -> None:
+    def __init__(self, *, country: typing.Optional["str"] = None) -> None:
         self.country = country
         super().__init__(action="setCountry")
 
@@ -1609,13 +1590,7 @@ class MyCartSetCustomFieldAction(MyCartUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -1641,9 +1616,8 @@ class MyCartSetCustomShippingMethodAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        shipping_method_name: str = None,
-        shipping_rate: "ShippingRateDraft" = None,
+        shipping_method_name: str,
+        shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ) -> None:
@@ -1675,7 +1649,6 @@ class MyCartSetCustomTypeAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -1696,10 +1669,7 @@ class MyCartSetDeleteDaysAfterLastModificationAction(MyCartUpdateAction):
     delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        delete_days_after_last_modification: typing.Optional[int] = None
+        self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ) -> None:
         self.delete_days_after_last_modification = delete_days_after_last_modification
         super().__init__(action="setDeleteDaysAfterLastModification")
@@ -1720,12 +1690,7 @@ class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        line_item_id: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
+        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
     ) -> None:
         self.line_item_id = line_item_id
         self.name = name
@@ -1750,8 +1715,7 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        line_item_id: str = None,
+        line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -1776,8 +1740,7 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        line_item_id: str = None,
+        line_item_id: str,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ) -> None:
         self.line_item_id = line_item_id
@@ -1795,9 +1758,7 @@ class MyCartSetLocaleAction(MyCartUpdateAction):
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, locale: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, locale: typing.Optional[str] = None) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -1812,9 +1773,7 @@ class MyCartSetShippingAddressAction(MyCartUpdateAction):
     #: Optional :class:`commercetools.types.Address`
     address: typing.Optional["Address"]
 
-    def __init__(
-        self, *, action: str = None, address: typing.Optional["Address"] = None
-    ) -> None:
+    def __init__(self, *, address: typing.Optional["Address"] = None) -> None:
         self.address = address
         super().__init__(action="setShippingAddress")
 
@@ -1834,7 +1793,6 @@ class MyCartSetShippingMethodAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ) -> None:
@@ -1853,7 +1811,7 @@ class MyCartUpdateItemShippingAddressAction(MyCartUpdateAction):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 
@@ -1868,7 +1826,7 @@ class MyCustomerAddAddressAction(MyCustomerUpdateAction):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, action: str = None, address: "Address" = None) -> None:
+    def __init__(self, *, address: "Address") -> None:
         self.address = address
         super().__init__(action="addAddress")
 
@@ -1883,7 +1841,7 @@ class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: str
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(self, *, address_id: str) -> None:
         self.address_id = address_id
         super().__init__(action="addBillingAddressId")
 
@@ -1898,7 +1856,7 @@ class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: str
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(self, *, address_id: str) -> None:
         self.address_id = address_id
         super().__init__(action="addShippingAddressId")
 
@@ -1915,9 +1873,7 @@ class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(
-        self, *, action: str = None, address_id: str = None, address: "Address" = None
-    ) -> None:
+    def __init__(self, *, address_id: str, address: "Address") -> None:
         self.address_id = address_id
         self.address = address
         super().__init__(action="changeAddress")
@@ -1934,7 +1890,7 @@ class MyCustomerChangeEmailAction(MyCustomerUpdateAction):
     #: :class:`str`
     email: str
 
-    def __init__(self, *, action: str = None, email: str = None) -> None:
+    def __init__(self, *, email: str) -> None:
         self.email = email
         super().__init__(action="changeEmail")
 
@@ -1949,7 +1905,7 @@ class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: str
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(self, *, address_id: str) -> None:
         self.address_id = address_id
         super().__init__(action="removeAddress")
 
@@ -1964,7 +1920,7 @@ class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: str
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(self, *, address_id: str) -> None:
         self.address_id = address_id
         super().__init__(action="removeBillingAddressId")
 
@@ -1979,7 +1935,7 @@ class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
     #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: str
 
-    def __init__(self, *, action: str = None, address_id: str = None) -> None:
+    def __init__(self, *, address_id: str) -> None:
         self.address_id = address_id
         super().__init__(action="removeShippingAddressId")
 
@@ -1994,9 +1950,7 @@ class MyCustomerSetCompanyNameAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``companyName`` `in Commercetools)`
     company_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, company_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, company_name: typing.Optional[str] = None) -> None:
         self.company_name = company_name
         super().__init__(action="setCompanyName")
 
@@ -2013,13 +1967,7 @@ class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -2041,7 +1989,6 @@ class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -2061,12 +2008,7 @@ class MyCustomerSetDateOfBirthAction(MyCustomerUpdateAction):
     #: Optional :class:`datetime.date` `(Named` ``dateOfBirth`` `in Commercetools)`
     date_of_birth: typing.Optional[datetime.date]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        date_of_birth: typing.Optional[datetime.date] = None
-    ) -> None:
+    def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None) -> None:
         self.date_of_birth = date_of_birth
         super().__init__(action="setDateOfBirth")
 
@@ -2081,9 +2023,7 @@ class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, address_id: typing.Optional[str] = None) -> None:
         self.address_id = address_id
         super().__init__(action="setDefaultBillingAddress")
 
@@ -2098,9 +2038,7 @@ class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, address_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, address_id: typing.Optional[str] = None) -> None:
         self.address_id = address_id
         super().__init__(action="setDefaultShippingAddress")
 
@@ -2115,9 +2053,7 @@ class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``firstName`` `in Commercetools)`
     first_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, first_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, first_name: typing.Optional[str] = None) -> None:
         self.first_name = first_name
         super().__init__(action="setFirstName")
 
@@ -2132,9 +2068,7 @@ class MyCustomerSetLastNameAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``lastName`` `in Commercetools)`
     last_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, last_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, last_name: typing.Optional[str] = None) -> None:
         self.last_name = last_name
         super().__init__(action="setLastName")
 
@@ -2149,9 +2083,7 @@ class MyCustomerSetLocaleAction(MyCustomerUpdateAction):
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, locale: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, locale: typing.Optional[str] = None) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -2166,9 +2098,7 @@ class MyCustomerSetMiddleNameAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``middleName`` `in Commercetools)`
     middle_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, middle_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, middle_name: typing.Optional[str] = None) -> None:
         self.middle_name = middle_name
         super().__init__(action="setMiddleName")
 
@@ -2183,9 +2113,7 @@ class MyCustomerSetSalutationAction(MyCustomerUpdateAction):
     #: Optional :class:`str`
     salutation: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, salutation: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, salutation: typing.Optional[str] = None) -> None:
         self.salutation = salutation
         super().__init__(action="setSalutation")
 
@@ -2200,9 +2128,7 @@ class MyCustomerSetTitleAction(MyCustomerUpdateAction):
     #: Optional :class:`str`
     title: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, title: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, title: typing.Optional[str] = None) -> None:
         self.title = title
         super().__init__(action="setTitle")
 
@@ -2217,9 +2143,7 @@ class MyCustomerSetVatIdAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``vatId`` `in Commercetools)`
     vat_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, vat_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, vat_id: typing.Optional[str] = None) -> None:
         self.vat_id = vat_id
         super().__init__(action="setVatId")
 
@@ -2234,9 +2158,7 @@ class MyPaymentAddTransactionAction(MyPaymentUpdateAction):
     #: :class:`commercetools.types.TransactionDraft`
     transaction: "TransactionDraft"
 
-    def __init__(
-        self, *, action: str = None, transaction: "TransactionDraft" = None
-    ) -> None:
+    def __init__(self, *, transaction: "TransactionDraft") -> None:
         self.transaction = transaction
         super().__init__(action="addTransaction")
 
@@ -2251,7 +2173,7 @@ class MyPaymentChangeAmountPlannedAction(MyPaymentUpdateAction):
     #: :class:`commercetools.types.Money`
     amount: "Money"
 
-    def __init__(self, *, action: str = None, amount: "Money" = None) -> None:
+    def __init__(self, *, amount: "Money") -> None:
         self.amount = amount
         super().__init__(action="changeAmountPlanned")
 
@@ -2268,13 +2190,7 @@ class MyPaymentSetCustomFieldAction(MyPaymentUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -2291,7 +2207,7 @@ class MyPaymentSetMethodInfoInterfaceAction(MyPaymentUpdateAction):
     #: :class:`str`
     interface: str
 
-    def __init__(self, *, action: str = None, interface: str = None) -> None:
+    def __init__(self, *, interface: str) -> None:
         self.interface = interface
         super().__init__(action="setMethodInfoInterface")
 
@@ -2306,9 +2222,7 @@ class MyPaymentSetMethodInfoMethodAction(MyPaymentUpdateAction):
     #: Optional :class:`str`
     method: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, method: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, method: typing.Optional[str] = None) -> None:
         self.method = method
         super().__init__(action="setMethodInfoMethod")
 
@@ -2323,9 +2237,7 @@ class MyPaymentSetMethodInfoNameAction(MyPaymentUpdateAction):
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
-    def __init__(
-        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, name: typing.Optional["LocalizedString"] = None) -> None:
         self.name = name
         super().__init__(action="setMethodInfoName")
 
@@ -2353,7 +2265,6 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         sku: typing.Optional[str] = None,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -2399,8 +2310,7 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        name: "LocalizedString" = None,
+        name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
@@ -2433,9 +2343,7 @@ class MyShoppingListChangeLineItemQuantityAction(MyShoppingListUpdateAction):
     #: :class:`int`
     quantity: int
 
-    def __init__(
-        self, *, action: str = None, line_item_id: str = None, quantity: int = None
-    ) -> None:
+    def __init__(self, *, line_item_id: str, quantity: int) -> None:
         self.line_item_id = line_item_id
         self.quantity = quantity
         super().__init__(action="changeLineItemQuantity")
@@ -2451,9 +2359,7 @@ class MyShoppingListChangeLineItemsOrderAction(MyShoppingListUpdateAction):
     #: List of :class:`str` `(Named` ``lineItemOrder`` `in Commercetools)`
     line_item_order: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, line_item_order: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, line_item_order: typing.List[str]) -> None:
         self.line_item_order = line_item_order
         super().__init__(action="changeLineItemsOrder")
 
@@ -2468,7 +2374,7 @@ class MyShoppingListChangeNameAction(MyShoppingListUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -2485,13 +2391,7 @@ class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        text_line_item_id: str = None,
-        name: "LocalizedString" = None
-    ) -> None:
+    def __init__(self, *, text_line_item_id: str, name: "LocalizedString") -> None:
         self.text_line_item_id = text_line_item_id
         self.name = name
         super().__init__(action="changeTextLineItemName")
@@ -2509,9 +2409,7 @@ class MyShoppingListChangeTextLineItemQuantityAction(MyShoppingListUpdateAction)
     #: :class:`int`
     quantity: int
 
-    def __init__(
-        self, *, action: str = None, text_line_item_id: str = None, quantity: int = None
-    ) -> None:
+    def __init__(self, *, text_line_item_id: str, quantity: int) -> None:
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
         super().__init__(action="changeTextLineItemQuantity")
@@ -2527,9 +2425,7 @@ class MyShoppingListChangeTextLineItemsOrderAction(MyShoppingListUpdateAction):
     #: List of :class:`str` `(Named` ``textLineItemOrder`` `in Commercetools)`
     text_line_item_order: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, text_line_item_order: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, text_line_item_order: typing.List[str]) -> None:
         self.text_line_item_order = text_line_item_order
         super().__init__(action="changeTextLineItemsOrder")
 
@@ -2547,11 +2443,7 @@ class MyShoppingListRemoveLineItemAction(MyShoppingListUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        line_item_id: str = None,
-        quantity: typing.Optional[int] = None
+        self, *, line_item_id: str, quantity: typing.Optional[int] = None
     ) -> None:
         self.line_item_id = line_item_id
         self.quantity = quantity
@@ -2571,11 +2463,7 @@ class MyShoppingListRemoveTextLineItemAction(MyShoppingListUpdateAction):
     quantity: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        text_line_item_id: str = None,
-        quantity: typing.Optional[int] = None
+        self, *, text_line_item_id: str, quantity: typing.Optional[int] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
@@ -2594,13 +2482,7 @@ class MyShoppingListSetCustomFieldAction(MyShoppingListUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -2622,7 +2504,6 @@ class MyShoppingListSetCustomTypeAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -2645,10 +2526,7 @@ class MyShoppingListSetDeleteDaysAfterLastModificationAction(
     delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        delete_days_after_last_modification: typing.Optional[int] = None
+        self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ) -> None:
         self.delete_days_after_last_modification = delete_days_after_last_modification
         super().__init__(action="setDeleteDaysAfterLastModification")
@@ -2665,10 +2543,7 @@ class MyShoppingListSetDescriptionAction(MyShoppingListUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -2689,12 +2564,7 @@ class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        line_item_id: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
+        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
     ) -> None:
         self.line_item_id = line_item_id
         self.name = name
@@ -2719,8 +2589,7 @@ class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        line_item_id: str = None,
+        line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -2747,9 +2616,8 @@ class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction)
     def __init__(
         self,
         *,
-        action: str = None,
-        text_line_item_id: str = None,
-        name: str = None,
+        text_line_item_id: str,
+        name: str,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id
@@ -2775,8 +2643,7 @@ class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        text_line_item_id: str = None,
+        text_line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -2801,8 +2668,7 @@ class MyShoppingListSetTextLineItemDescriptionAction(MyShoppingListUpdateAction)
     def __init__(
         self,
         *,
-        action: str = None,
-        text_line_item_id: str = None,
+        text_line_item_id: str,
         description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.text_line_item_id = text_line_item_id

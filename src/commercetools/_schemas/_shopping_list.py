@@ -696,7 +696,7 @@ class ShoppingListSetCustomTypeActionSchema(ShoppingListUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -798,7 +798,7 @@ class ShoppingListSetLineItemCustomTypeActionSchema(ShoppingListUpdateActionSche
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -855,7 +855,7 @@ class ShoppingListSetTextLineItemCustomTypeActionSchema(ShoppingListUpdateAction
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE

@@ -108,25 +108,25 @@ class Payment(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        amount_planned: "TypedMoney",
+        payment_method_info: "PaymentMethodInfo",
+        payment_status: "PaymentStatus",
+        transactions: typing.List["Transaction"],
+        interface_interactions: typing.List["CustomFields"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: "TypedMoney" = None,
         amount_authorized: typing.Optional["TypedMoney"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["TypedMoney"] = None,
         amount_refunded: typing.Optional["TypedMoney"] = None,
-        payment_method_info: "PaymentMethodInfo" = None,
-        payment_status: "PaymentStatus" = None,
-        transactions: typing.List["Transaction"] = None,
-        interface_interactions: typing.List["CustomFields"] = None,
         custom: typing.Optional["CustomFields"] = None,
         key: typing.Optional[str] = None
     ) -> None:
@@ -222,11 +222,11 @@ class PaymentDraft(_BaseType):
     def __init__(
         self,
         *,
+        amount_planned: "Money",
         customer: typing.Optional["CustomerResourceIdentifier"] = None,
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: "Money" = None,
         amount_authorized: typing.Optional["Money"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["Money"] = None,
@@ -323,11 +323,11 @@ class PaymentPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Payment"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Payment"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -347,13 +347,7 @@ class PaymentReference(Reference):
     #: Optional :class:`commercetools.types.Payment`
     obj: typing.Optional["Payment"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Payment"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Payment"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.PAYMENT, id=id)
 
@@ -367,11 +361,7 @@ class PaymentReference(Reference):
 
 class PaymentResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.PAYMENT, id=id, key=key)
 
@@ -445,7 +435,7 @@ class PaymentUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -458,7 +448,7 @@ class PaymentUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -483,10 +473,10 @@ class Transaction(_BaseType):
     def __init__(
         self,
         *,
-        id: str = None,
+        id: str,
+        type: "TransactionType",
+        amount: "TypedMoney",
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: "TransactionType" = None,
-        amount: "TypedMoney" = None,
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None
     ) -> None:
@@ -527,9 +517,9 @@ class TransactionDraft(_BaseType):
     def __init__(
         self,
         *,
+        type: "TransactionType",
+        amount: "Money",
         timestamp: typing.Optional[datetime.datetime] = None,
-        type: "TransactionType" = None,
-        amount: "Money" = None,
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None
     ) -> None:
@@ -571,8 +561,7 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
-        type: "TypeResourceIdentifier" = None,
+        type: "TypeResourceIdentifier",
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
         self.type = type
@@ -591,9 +580,7 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
     #: :class:`commercetools.types.TransactionDraft`
     transaction: "TransactionDraft"
 
-    def __init__(
-        self, *, action: str = None, transaction: "TransactionDraft" = None
-    ) -> None:
+    def __init__(self, *, transaction: "TransactionDraft") -> None:
         self.transaction = transaction
         super().__init__(action="addTransaction")
 
@@ -608,7 +595,7 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
     #: :class:`commercetools.types.Money`
     amount: "Money"
 
-    def __init__(self, *, action: str = None, amount: "Money" = None) -> None:
+    def __init__(self, *, amount: "Money") -> None:
         self.amount = amount
         super().__init__(action="changeAmountPlanned")
 
@@ -625,13 +612,7 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
     #: :class:`str` `(Named` ``interactionId`` `in Commercetools)`
     interaction_id: str
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        transaction_id: str = None,
-        interaction_id: str = None
-    ) -> None:
+    def __init__(self, *, transaction_id: str, interaction_id: str) -> None:
         self.transaction_id = transaction_id
         self.interaction_id = interaction_id
         super().__init__(action="changeTransactionInteractionId")
@@ -649,13 +630,7 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
     #: :class:`commercetools.types.TransactionState`
     state: "TransactionState"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        transaction_id: str = None,
-        state: "TransactionState" = None
-    ) -> None:
+    def __init__(self, *, transaction_id: str, state: "TransactionState") -> None:
         self.transaction_id = transaction_id
         self.state = state
         super().__init__(action="changeTransactionState")
@@ -673,13 +648,7 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
     #: :class:`datetime.datetime`
     timestamp: datetime.datetime
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        transaction_id: str = None,
-        timestamp: datetime.datetime = None
-    ) -> None:
+    def __init__(self, *, transaction_id: str, timestamp: datetime.datetime) -> None:
         self.transaction_id = transaction_id
         self.timestamp = timestamp
         super().__init__(action="changeTransactionTimestamp")
@@ -695,9 +664,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
     #: Optional :class:`commercetools.types.Money`
     amount: typing.Optional["Money"]
 
-    def __init__(
-        self, *, action: str = None, amount: typing.Optional["Money"] = None
-    ) -> None:
+    def __init__(self, *, amount: typing.Optional["Money"] = None) -> None:
         self.amount = amount
         super().__init__(action="setAmountPaid")
 
@@ -712,9 +679,7 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
     #: Optional :class:`commercetools.types.Money`
     amount: typing.Optional["Money"]
 
-    def __init__(
-        self, *, action: str = None, amount: typing.Optional["Money"] = None
-    ) -> None:
+    def __init__(self, *, amount: typing.Optional["Money"] = None) -> None:
         self.amount = amount
         super().__init__(action="setAmountRefunded")
 
@@ -729,9 +694,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
     #: Optional :class:`str` `(Named` ``anonymousId`` `in Commercetools)`
     anonymous_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, anonymous_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, anonymous_id: typing.Optional[str] = None) -> None:
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
 
@@ -751,7 +714,6 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         amount: typing.Optional["Money"] = None,
         until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -773,13 +735,7 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -801,7 +757,6 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -822,10 +777,7 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
     customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        customer: typing.Optional["CustomerResourceIdentifier"] = None
+        self, *, customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
         super().__init__(action="setCustomer")
@@ -841,9 +793,7 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, external_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, external_id: typing.Optional[str] = None) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
 
@@ -858,7 +808,7 @@ class PaymentSetInterfaceIdAction(PaymentUpdateAction):
     #: :class:`str` `(Named` ``interfaceId`` `in Commercetools)`
     interface_id: str
 
-    def __init__(self, *, action: str = None, interface_id: str = None) -> None:
+    def __init__(self, *, interface_id: str) -> None:
         self.interface_id = interface_id
         super().__init__(action="setInterfaceId")
 
@@ -873,7 +823,7 @@ class PaymentSetKeyAction(PaymentUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -885,7 +835,7 @@ class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
     #: :class:`str`
     interface: str
 
-    def __init__(self, *, action: str = None, interface: str = None) -> None:
+    def __init__(self, *, interface: str) -> None:
         self.interface = interface
         super().__init__(action="setMethodInfoInterface")
 
@@ -900,9 +850,7 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
     #: Optional :class:`str`
     method: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, method: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, method: typing.Optional[str] = None) -> None:
         self.method = method
         super().__init__(action="setMethodInfoMethod")
 
@@ -917,9 +865,7 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
-    def __init__(
-        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, name: typing.Optional["LocalizedString"] = None) -> None:
         self.name = name
         super().__init__(action="setMethodInfoName")
 
@@ -934,9 +880,7 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
     #: Optional :class:`str` `(Named` ``interfaceCode`` `in Commercetools)`
     interface_code: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, interface_code: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, interface_code: typing.Optional[str] = None) -> None:
         self.interface_code = interface_code
         super().__init__(action="setStatusInterfaceCode")
 
@@ -951,7 +895,7 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
     #: :class:`str` `(Named` ``interfaceText`` `in Commercetools)`
     interface_text: str
 
-    def __init__(self, *, action: str = None, interface_text: str = None) -> None:
+    def __init__(self, *, interface_text: str) -> None:
         self.interface_text = interface_text
         super().__init__(action="setStatusInterfaceText")
 
@@ -969,11 +913,7 @@ class PaymentTransitionStateAction(PaymentUpdateAction):
     force: typing.Optional[bool]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        state: "StateResourceIdentifier" = None,
-        force: typing.Optional[bool] = None
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
     ) -> None:
         self.state = state
         self.force = force

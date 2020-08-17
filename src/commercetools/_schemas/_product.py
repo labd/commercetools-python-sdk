@@ -1458,7 +1458,7 @@ class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["action"]
-        return types.ProductRevertStagedChangesAction(**data)
+        return types.ProductRevertStagedChangesAction()
 
 
 class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
@@ -1521,7 +1521,7 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = marshmallow.fields.Dict(allow_none=True, missing=None)
+    fields = marshmallow.fields.Dict(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1863,7 +1863,7 @@ class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1978,7 +1978,7 @@ class ProductUnpublishActionSchema(ProductUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["action"]
-        return types.ProductUnpublishAction(**data)
+        return types.ProductUnpublishAction()
 
 
 class RangeFacetResultSchema(FacetResultSchema):
@@ -2034,4 +2034,4 @@ class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.WhitespaceTokenizer(**data)
+        return types.WhitespaceTokenizer()

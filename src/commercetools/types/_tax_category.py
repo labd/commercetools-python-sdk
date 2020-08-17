@@ -38,7 +38,7 @@ class SubRate(_BaseType):
     #: :class:`float`
     amount: float
 
-    def __init__(self, *, name: str = None, amount: float = None) -> None:
+    def __init__(self, *, name: str, amount: float) -> None:
         self.name = name
         self.amount = amount
         super().__init__()
@@ -72,15 +72,15 @@ class TaxCategory(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: str,
+        rates: typing.List["TaxRate"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: str = None,
         description: typing.Optional[str] = None,
-        rates: typing.List["TaxRate"] = None,
         key: typing.Optional[str] = None
     ) -> None:
         self.id = id
@@ -131,9 +131,9 @@ class TaxCategoryDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: str = None,
+        name: str,
+        rates: typing.List["TaxRateDraft"],
         description: typing.Optional[str] = None,
-        rates: typing.List["TaxRateDraft"] = None,
         key: typing.Optional[str] = None
     ) -> None:
         self.name = name
@@ -166,11 +166,11 @@ class TaxCategoryPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["TaxCategory"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["TaxCategory"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -190,13 +190,7 @@ class TaxCategoryReference(Reference):
     #: Optional :class:`commercetools.types.TaxCategory`
     obj: typing.Optional["TaxCategory"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["TaxCategory"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["TaxCategory"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.TAX_CATEGORY, id=id)
 
@@ -210,11 +204,7 @@ class TaxCategoryReference(Reference):
 
 class TaxCategoryResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.TAX_CATEGORY, id=id, key=key)
 
@@ -232,7 +222,7 @@ class TaxCategoryUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -248,7 +238,7 @@ class TaxCategoryUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -275,11 +265,11 @@ class TaxRate(_BaseType):
     def __init__(
         self,
         *,
+        name: str,
+        amount: float,
+        included_in_price: bool,
+        country: "str",
         id: typing.Optional[str] = None,
-        name: str = None,
-        amount: float = None,
-        included_in_price: bool = None,
-        country: "str" = None,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None
     ) -> None:
@@ -324,10 +314,10 @@ class TaxRateDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: str = None,
+        name: str,
+        included_in_price: bool,
+        country: "str",
         amount: typing.Optional[float] = None,
-        included_in_price: bool = None,
-        country: "str" = None,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None
     ) -> None:
@@ -357,7 +347,7 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: "TaxRateDraft"
 
-    def __init__(self, *, action: str = None, tax_rate: "TaxRateDraft" = None) -> None:
+    def __init__(self, *, tax_rate: "TaxRateDraft") -> None:
         self.tax_rate = tax_rate
         super().__init__(action="addTaxRate")
 
@@ -372,7 +362,7 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, action: str = None, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -387,7 +377,7 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
     #: :class:`str` `(Named` ``taxRateId`` `in Commercetools)`
     tax_rate_id: str
 
-    def __init__(self, *, action: str = None, tax_rate_id: str = None) -> None:
+    def __init__(self, *, tax_rate_id: str) -> None:
         self.tax_rate_id = tax_rate_id
         super().__init__(action="removeTaxRate")
 
@@ -404,13 +394,7 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
     #: :class:`commercetools.types.TaxRateDraft` `(Named` ``taxRate`` `in Commercetools)`
     tax_rate: "TaxRateDraft"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        tax_rate_id: str = None,
-        tax_rate: "TaxRateDraft" = None
-    ) -> None:
+    def __init__(self, *, tax_rate_id: str, tax_rate: "TaxRateDraft") -> None:
         self.tax_rate_id = tax_rate_id
         self.tax_rate = tax_rate
         super().__init__(action="replaceTaxRate")
@@ -426,9 +410,7 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
     #: Optional :class:`str`
     description: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, description: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, description: typing.Optional[str] = None) -> None:
         self.description = description
         super().__init__(action="setDescription")
 
@@ -443,7 +425,7 @@ class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 

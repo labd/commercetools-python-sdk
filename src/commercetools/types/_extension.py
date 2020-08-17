@@ -56,15 +56,15 @@ class Extension(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        destination: "ExtensionDestination",
+        triggers: typing.List["ExtensionTrigger"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        destination: "ExtensionDestination" = None,
-        triggers: typing.List["ExtensionTrigger"] = None,
         timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.id = id
@@ -111,7 +111,7 @@ class ExtensionDestination(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -132,9 +132,9 @@ class ExtensionDraft(_BaseType):
     def __init__(
         self,
         *,
+        destination: "ExtensionDestination",
+        triggers: typing.List["ExtensionTrigger"],
         key: typing.Optional[str] = None,
-        destination: "ExtensionDestination" = None,
-        triggers: typing.List["ExtensionTrigger"] = None,
         timeout_in_ms: typing.Optional[int] = None
     ) -> None:
         self.key = key
@@ -154,7 +154,7 @@ class ExtensionHttpDestinationAuthentication(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -168,9 +168,7 @@ class ExtensionInput(_BaseType):
     #: :class:`commercetools.types.Reference`
     resource: "Reference"
 
-    def __init__(
-        self, *, action: "ExtensionAction" = None, resource: "Reference" = None
-    ) -> None:
+    def __init__(self, *, action: "ExtensionAction", resource: "Reference") -> None:
         self.action = action
         self.resource = resource
         super().__init__()
@@ -194,11 +192,11 @@ class ExtensionPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Extension"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Extension"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -230,8 +228,8 @@ class ExtensionTrigger(_BaseType):
     def __init__(
         self,
         *,
-        resource_type_id: "ExtensionResourceTypeId" = None,
-        actions: typing.List["ExtensionAction"] = None
+        resource_type_id: "ExtensionResourceTypeId",
+        actions: typing.List["ExtensionAction"]
     ) -> None:
         self.resource_type_id = resource_type_id
         self.actions = actions
@@ -250,7 +248,7 @@ class ExtensionUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -263,7 +261,7 @@ class ExtensionUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -279,14 +277,7 @@ class ExtensionAWSLambdaDestination(ExtensionDestination):
     #: :class:`str` `(Named` ``accessSecret`` `in Commercetools)`
     access_secret: str
 
-    def __init__(
-        self,
-        *,
-        type: str = None,
-        arn: str = None,
-        access_key: str = None,
-        access_secret: str = None
-    ) -> None:
+    def __init__(self, *, arn: str, access_key: str, access_secret: str) -> None:
         self.arn = arn
         self.access_key = access_key
         self.access_secret = access_secret
@@ -305,7 +296,7 @@ class ExtensionAuthorizationHeaderAuthentication(
     #: :class:`str` `(Named` ``headerValue`` `in Commercetools)`
     header_value: str
 
-    def __init__(self, *, type: str = None, header_value: str = None) -> None:
+    def __init__(self, *, header_value: str) -> None:
         self.header_value = header_value
         super().__init__(type="AuthorizationHeader")
 
@@ -320,7 +311,7 @@ class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthenticati
     #: :class:`str`
     key: str
 
-    def __init__(self, *, type: str = None, key: str = None) -> None:
+    def __init__(self, *, key: str) -> None:
         self.key = key
         super().__init__(type="AzureFunctions")
 
@@ -335,9 +326,7 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
     #: :class:`commercetools.types.ExtensionDestination`
     destination: "ExtensionDestination"
 
-    def __init__(
-        self, *, action: str = None, destination: "ExtensionDestination" = None
-    ) -> None:
+    def __init__(self, *, destination: "ExtensionDestination") -> None:
         self.destination = destination
         super().__init__(action="changeDestination")
 
@@ -352,9 +341,7 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
     #: List of :class:`commercetools.types.ExtensionTrigger`
     triggers: typing.List["ExtensionTrigger"]
 
-    def __init__(
-        self, *, action: str = None, triggers: typing.List["ExtensionTrigger"] = None
-    ) -> None:
+    def __init__(self, *, triggers: typing.List["ExtensionTrigger"]) -> None:
         self.triggers = triggers
         super().__init__(action="changeTriggers")
 
@@ -374,8 +361,7 @@ class ExtensionHttpDestination(ExtensionDestination):
     def __init__(
         self,
         *,
-        type: str = None,
-        url: str = None,
+        url: str,
         authentication: typing.Optional["ExtensionHttpDestinationAuthentication"] = None
     ) -> None:
         self.url = url
@@ -394,7 +380,7 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -406,9 +392,7 @@ class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
     #: Optional :class:`int` `(Named` ``timeoutInMs`` `in Commercetools)`
     timeout_in_ms: typing.Optional[int]
 
-    def __init__(
-        self, *, action: str = None, timeout_in_ms: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, timeout_in_ms: typing.Optional[int] = None) -> None:
         self.timeout_in_ms = timeout_in_ms
         super().__init__(action="setTimeoutInMs")
 

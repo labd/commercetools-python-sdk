@@ -53,7 +53,7 @@ class PriceFunction(_BaseType):
     #: :class:`str`
     function: str
 
-    def __init__(self, *, currency_code: "str" = None, function: str = None) -> None:
+    def __init__(self, *, currency_code: "str", function: str) -> None:
         self.currency_code = currency_code
         self.function = function
         super().__init__()
@@ -98,19 +98,19 @@ class ShippingMethod(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: str,
+        tax_category: "TaxCategoryReference",
+        zone_rates: typing.List["ZoneRate"],
+        is_default: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
-        name: str = None,
         description: typing.Optional[str] = None,
         localized_description: typing.Optional["LocalizedString"] = None,
-        tax_category: "TaxCategoryReference" = None,
-        zone_rates: typing.List["ZoneRate"] = None,
-        is_default: bool = None,
         predicate: typing.Optional[str] = None
     ) -> None:
         self.id = id
@@ -177,13 +177,13 @@ class ShippingMethodDraft(_BaseType):
     def __init__(
         self,
         *,
+        name: str,
+        tax_category: "TaxCategoryResourceIdentifier",
+        zone_rates: typing.List["ZoneRateDraft"],
+        is_default: bool,
         key: typing.Optional[str] = None,
-        name: str = None,
         description: typing.Optional[str] = None,
         localized_description: typing.Optional["LocalizedString"] = None,
-        tax_category: "TaxCategoryResourceIdentifier" = None,
-        zone_rates: typing.List["ZoneRateDraft"] = None,
-        is_default: bool = None,
         predicate: typing.Optional[str] = None
     ) -> None:
         self.key = key
@@ -227,11 +227,11 @@ class ShippingMethodPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
+        count: int,
+        results: typing.Sequence["ShippingMethod"],
         limit: typing.Optional[int] = None,
-        count: int = None,
         total: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        results: typing.Sequence["ShippingMethod"] = None
+        offset: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -252,11 +252,7 @@ class ShippingMethodReference(Reference):
     obj: typing.Optional["ShippingMethod"]
 
     def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["ShippingMethod"] = None
+        self, *, id: str, obj: typing.Optional["ShippingMethod"] = None
     ) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.SHIPPING_METHOD, id=id)
@@ -271,11 +267,7 @@ class ShippingMethodReference(Reference):
 
 class ShippingMethodResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.SHIPPING_METHOD, id=id, key=key)
 
@@ -293,7 +285,7 @@ class ShippingMethodUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -309,7 +301,7 @@ class ShippingMethodUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -330,10 +322,10 @@ class ShippingRate(_BaseType):
     def __init__(
         self,
         *,
-        price: "TypedMoney" = None,
+        price: "TypedMoney",
+        tiers: typing.List["ShippingRatePriceTier"],
         free_above: typing.Optional["TypedMoney"] = None,
-        is_matching: typing.Optional[bool] = None,
-        tiers: typing.List["ShippingRatePriceTier"] = None
+        is_matching: typing.Optional[bool] = None
     ) -> None:
         self.price = price
         self.free_above = free_above
@@ -361,7 +353,7 @@ class ShippingRateDraft(_BaseType):
     def __init__(
         self,
         *,
-        price: "Money" = None,
+        price: "Money",
         free_above: typing.Optional["Money"] = None,
         tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
     ) -> None:
@@ -382,7 +374,7 @@ class ShippingRatePriceTier(_BaseType):
     #: :class:`commercetools.types.ShippingRateTierType`
     type: "ShippingRateTierType"
 
-    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType") -> None:
         self.type = type
         super().__init__()
 
@@ -403,10 +395,7 @@ class ZoneRate(_BaseType):
     shipping_rates: typing.List["ShippingRate"]
 
     def __init__(
-        self,
-        *,
-        zone: "ZoneReference" = None,
-        shipping_rates: typing.List["ShippingRate"] = None
+        self, *, zone: "ZoneReference", shipping_rates: typing.List["ShippingRate"]
     ) -> None:
         self.zone = zone
         self.shipping_rates = shipping_rates
@@ -425,8 +414,8 @@ class ZoneRateDraft(_BaseType):
     def __init__(
         self,
         *,
-        zone: "ZoneResourceIdentifier" = None,
-        shipping_rates: typing.List["ShippingRateDraft"] = None
+        zone: "ZoneResourceIdentifier",
+        shipping_rates: typing.List["ShippingRateDraft"]
     ) -> None:
         self.zone = zone
         self.shipping_rates = shipping_rates
@@ -448,12 +437,7 @@ class CartClassificationTier(ShippingRatePriceTier):
     is_matching: typing.Optional[bool]
 
     def __init__(
-        self,
-        *,
-        type: "ShippingRateTierType" = None,
-        value: str = None,
-        price: "Money" = None,
-        is_matching: typing.Optional[bool] = None
+        self, *, value: str, price: "Money", is_matching: typing.Optional[bool] = None
     ) -> None:
         self.value = value
         self.price = price
@@ -482,8 +466,7 @@ class CartScoreTier(ShippingRatePriceTier):
     def __init__(
         self,
         *,
-        type: "ShippingRateTierType" = None,
-        score: int = None,
+        score: int,
         price: typing.Optional["Money"] = None,
         price_function: typing.Optional["PriceFunction"] = None,
         is_matching: typing.Optional[bool] = None
@@ -512,9 +495,8 @@ class CartValueTier(ShippingRatePriceTier):
     def __init__(
         self,
         *,
-        type: "ShippingRateTierType" = None,
-        minimum_cent_amount: int = None,
-        price: "Money" = None,
+        minimum_cent_amount: int,
+        price: "Money",
         is_matching: typing.Optional[bool] = None
     ) -> None:
         self.minimum_cent_amount = minimum_cent_amount
@@ -536,11 +518,7 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
     shipping_rate: "ShippingRateDraft"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        zone: "ZoneResourceIdentifier" = None,
-        shipping_rate: "ShippingRateDraft" = None
+        self, *, zone: "ZoneResourceIdentifier", shipping_rate: "ShippingRateDraft"
     ) -> None:
         self.zone = zone
         self.shipping_rate = shipping_rate
@@ -557,9 +535,7 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, zone: "ZoneResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, zone: "ZoneResourceIdentifier") -> None:
         self.zone = zone
         super().__init__(action="addZone")
 
@@ -574,7 +550,7 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
     #: :class:`bool` `(Named` ``isDefault`` `in Commercetools)`
     is_default: bool
 
-    def __init__(self, *, action: str = None, is_default: bool = None) -> None:
+    def __init__(self, *, is_default: bool) -> None:
         self.is_default = is_default
         super().__init__(action="changeIsDefault")
 
@@ -589,7 +565,7 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, action: str = None, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -604,12 +580,7 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
     #: :class:`commercetools.types.TaxCategoryResourceIdentifier` `(Named` ``taxCategory`` `in Commercetools)`
     tax_category: "TaxCategoryResourceIdentifier"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        tax_category: "TaxCategoryResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, tax_category: "TaxCategoryResourceIdentifier") -> None:
         self.tax_category = tax_category
         super().__init__(action="changeTaxCategory")
 
@@ -627,11 +598,7 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
     shipping_rate: "ShippingRateDraft"
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        zone: "ZoneResourceIdentifier" = None,
-        shipping_rate: "ShippingRateDraft" = None
+        self, *, zone: "ZoneResourceIdentifier", shipping_rate: "ShippingRateDraft"
     ) -> None:
         self.zone = zone
         self.shipping_rate = shipping_rate
@@ -648,9 +615,7 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
     #: :class:`commercetools.types.ZoneResourceIdentifier`
     zone: "ZoneResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, zone: "ZoneResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, zone: "ZoneResourceIdentifier") -> None:
         self.zone = zone
         super().__init__(action="removeZone")
 
@@ -665,9 +630,7 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
     #: Optional :class:`str`
     description: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, description: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, description: typing.Optional[str] = None) -> None:
         self.description = description
         super().__init__(action="setDescription")
 
@@ -682,7 +645,7 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -694,9 +657,7 @@ class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
     #: Optional :class:`str` `(Named` ``localizedDescription`` `in Commercetools)`
     localized_description: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, localized_description: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, localized_description: typing.Optional[str] = None) -> None:
         self.localized_description = localized_description
         super().__init__(action="setLocalizedDescription")
 
@@ -711,9 +672,7 @@ class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
     #: Optional :class:`str`
     predicate: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, predicate: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, predicate: typing.Optional[str] = None) -> None:
         self.predicate = predicate
         super().__init__(action="setPredicate")
 

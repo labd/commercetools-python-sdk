@@ -86,20 +86,20 @@ class ProductDiscount(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: "LocalizedString",
+        value: "ProductDiscountValue",
+        predicate: str,
+        sort_order: str,
+        is_active: bool,
+        references: typing.List["Reference"],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: "LocalizedString" = None,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: "ProductDiscountValue" = None,
-        predicate: str = None,
-        sort_order: str = None,
-        is_active: bool = None,
-        references: typing.List["Reference"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -173,13 +173,13 @@ class ProductDiscountDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: "LocalizedString" = None,
+        name: "LocalizedString",
+        value: "ProductDiscountValueDraft",
+        predicate: str,
+        sort_order: str,
+        is_active: bool,
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: "ProductDiscountValueDraft" = None,
-        predicate: str = None,
-        sort_order: str = None,
-        is_active: bool = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -222,12 +222,7 @@ class ProductDiscountMatchQuery(_BaseType):
     price: "QueryPrice"
 
     def __init__(
-        self,
-        *,
-        product_id: str = None,
-        variant_id: int = None,
-        staged: bool = None,
-        price: "QueryPrice" = None
+        self, *, product_id: str, variant_id: int, staged: bool, price: "QueryPrice"
     ) -> None:
         self.product_id = product_id
         self.variant_id = variant_id
@@ -257,11 +252,11 @@ class ProductDiscountPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["ProductDiscount"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["ProductDiscount"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -282,11 +277,7 @@ class ProductDiscountReference(Reference):
     obj: typing.Optional["ProductDiscount"]
 
     def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["ProductDiscount"] = None
+        self, *, id: str, obj: typing.Optional["ProductDiscount"] = None
     ) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.PRODUCT_DISCOUNT, id=id)
@@ -301,11 +292,7 @@ class ProductDiscountReference(Reference):
 
 class ProductDiscountResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.PRODUCT_DISCOUNT, id=id, key=key)
 
@@ -323,7 +310,7 @@ class ProductDiscountUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -339,7 +326,7 @@ class ProductDiscountUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -351,7 +338,7 @@ class ProductDiscountValue(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -363,7 +350,7 @@ class ProductDiscountValueDraft(_BaseType):
     #: :class:`str`
     type: str
 
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self, *, type: str) -> None:
         self.type = type
         super().__init__()
 
@@ -375,7 +362,7 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: bool
 
-    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
+    def __init__(self, *, is_active: bool) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -390,7 +377,7 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -405,7 +392,7 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
     #: :class:`str`
     predicate: str
 
-    def __init__(self, *, action: str = None, predicate: str = None) -> None:
+    def __init__(self, *, predicate: str) -> None:
         self.predicate = predicate
         super().__init__(action="changePredicate")
 
@@ -420,7 +407,7 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
     #: :class:`str` `(Named` ``sortOrder`` `in Commercetools)`
     sort_order: str
 
-    def __init__(self, *, action: str = None, sort_order: str = None) -> None:
+    def __init__(self, *, sort_order: str) -> None:
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -435,9 +422,7 @@ class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
     #: :class:`commercetools.types.ProductDiscountValueDraft`
     value: "ProductDiscountValueDraft"
 
-    def __init__(
-        self, *, action: str = None, value: "ProductDiscountValueDraft" = None
-    ) -> None:
+    def __init__(self, *, value: "ProductDiscountValueDraft") -> None:
         self.value = value
         super().__init__(action="changeValue")
 
@@ -453,10 +438,7 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -472,7 +454,7 @@ class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -488,10 +470,7 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
     valid_from: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        valid_from: typing.Optional[datetime.datetime] = None
+        self, *, valid_from: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_from = valid_from
         super().__init__(action="setValidFrom")
@@ -512,7 +491,6 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -532,10 +510,7 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        self, *, valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_until = valid_until
         super().__init__(action="setValidUntil")
@@ -551,9 +526,7 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
     #: List of :class:`commercetools.types.TypedMoney`
     money: typing.List["TypedMoney"]
 
-    def __init__(
-        self, *, type: str = None, money: typing.List["TypedMoney"] = None
-    ) -> None:
+    def __init__(self, *, money: typing.List["TypedMoney"]) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -568,7 +541,7 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
     #: List of :class:`commercetools.types.Money`
     money: typing.List["Money"]
 
-    def __init__(self, *, type: str = None, money: typing.List["Money"] = None) -> None:
+    def __init__(self, *, money: typing.List["Money"]) -> None:
         self.money = money
         super().__init__(type="absolute")
 
@@ -580,7 +553,7 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueExternal(ProductDiscountValue):
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type="external")
 
     def __repr__(self) -> str:
@@ -588,7 +561,7 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 
 
 class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
-    def __init__(self, *, type: str = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type="external")
 
     def __repr__(self) -> str:
@@ -599,7 +572,7 @@ class ProductDiscountValueRelative(ProductDiscountValue):
     #: :class:`int`
     permyriad: int
 
-    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
+    def __init__(self, *, permyriad: int) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -614,7 +587,7 @@ class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
     #: :class:`int`
     permyriad: int
 
-    def __init__(self, *, type: str = None, permyriad: int = None) -> None:
+    def __init__(self, *, permyriad: int) -> None:
         self.permyriad = permyriad
         super().__init__(type="relative")
 

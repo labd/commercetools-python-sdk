@@ -402,7 +402,7 @@ class DeliveryPlatformFormatSchema(DeliveryFormatSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.DeliveryPlatformFormat(**data)
+        return types.DeliveryPlatformFormat()
 
 
 class GoogleCloudPubSubDestinationSchema(DestinationSchema):

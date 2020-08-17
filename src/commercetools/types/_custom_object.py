@@ -38,15 +38,15 @@ class CustomObject(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        container: str,
+        key: str,
+        value: typing.Any,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        container: str = None,
-        key: str = None,
-        value: typing.Any = None
+        created_by: typing.Optional["CreatedBy"] = None
     ) -> None:
         self.id = id
         self.version = version
@@ -94,9 +94,9 @@ class CustomObjectDraft(_BaseType):
     def __init__(
         self,
         *,
-        container: str = None,
-        key: str = None,
-        value: typing.Any = None,
+        container: str,
+        key: str,
+        value: typing.Any,
         version: typing.Optional[int] = None
     ) -> None:
         self.container = container
@@ -129,11 +129,11 @@ class CustomObjectPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["CustomObject"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["CustomObject"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -153,13 +153,7 @@ class CustomObjectReference(Reference):
     #: Optional :class:`commercetools.types.CustomObject`
     obj: typing.Optional["CustomObject"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["CustomObject"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["CustomObject"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.KEY_VALUE_DOCUMENT, id=id)
 

@@ -85,10 +85,11 @@ class Review(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        included_in_statistics: bool,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
@@ -98,7 +99,6 @@ class Review(BaseResource):
         title: typing.Optional[str] = None,
         text: typing.Optional[str] = None,
         target: typing.Optional["ProductReference"] = None,
-        included_in_statistics: bool = None,
         rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
@@ -241,11 +241,11 @@ class ReviewPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Review"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Review"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -276,11 +276,11 @@ class ReviewRatingStatistics(_BaseType):
     def __init__(
         self,
         *,
-        average_rating: int = None,
-        highest_rating: int = None,
-        lowest_rating: int = None,
-        count: int = None,
-        ratings_distribution: object = None
+        average_rating: int,
+        highest_rating: int,
+        lowest_rating: int,
+        count: int,
+        ratings_distribution: object
     ) -> None:
         self.average_rating = average_rating
         self.highest_rating = highest_rating
@@ -306,13 +306,7 @@ class ReviewReference(Reference):
     #: Optional :class:`commercetools.types.Review`
     obj: typing.Optional["Review"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Review"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Review"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.REVIEW, id=id)
 
@@ -326,11 +320,7 @@ class ReviewReference(Reference):
 
 class ReviewResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.REVIEW, id=id, key=key)
 
@@ -348,7 +338,7 @@ class ReviewUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -361,7 +351,7 @@ class ReviewUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -373,9 +363,7 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
     #: Optional :class:`str` `(Named` ``authorName`` `in Commercetools)`
     author_name: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, author_name: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, author_name: typing.Optional[str] = None) -> None:
         self.author_name = author_name
         super().__init__(action="setAuthorName")
 
@@ -392,13 +380,7 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -420,7 +402,6 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -441,10 +422,7 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
     customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        customer: typing.Optional["CustomerResourceIdentifier"] = None
+        self, *, customer: typing.Optional["CustomerResourceIdentifier"] = None
     ) -> None:
         self.customer = customer
         super().__init__(action="setCustomer")
@@ -460,7 +438,7 @@ class ReviewSetKeyAction(ReviewUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -472,9 +450,7 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
     #: Optional :class:`str`
     locale: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, locale: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, locale: typing.Optional[str] = None) -> None:
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -489,9 +465,7 @@ class ReviewSetRatingAction(ReviewUpdateAction):
     #: Optional :class:`int`
     rating: typing.Optional[int]
 
-    def __init__(
-        self, *, action: str = None, rating: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, rating: typing.Optional[int] = None) -> None:
         self.rating = rating
         super().__init__(action="setRating")
 
@@ -506,9 +480,7 @@ class ReviewSetTargetAction(ReviewUpdateAction):
     #: :class:`commercetools.types.ProductResourceIdentifier`
     target: "ProductResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, target: "ProductResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, target: "ProductResourceIdentifier") -> None:
         self.target = target
         super().__init__(action="setTarget")
 
@@ -523,9 +495,7 @@ class ReviewSetTextAction(ReviewUpdateAction):
     #: Optional :class:`str`
     text: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, text: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, text: typing.Optional[str] = None) -> None:
         self.text = text
         super().__init__(action="setText")
 
@@ -537,9 +507,7 @@ class ReviewSetTitleAction(ReviewUpdateAction):
     #: Optional :class:`str`
     title: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, title: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, title: typing.Optional[str] = None) -> None:
         self.title = title
         super().__init__(action="setTitle")
 
@@ -554,11 +522,7 @@ class ReviewTransitionStateAction(ReviewUpdateAction):
     force: typing.Optional[bool]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        state: "StateResourceIdentifier" = None,
-        force: typing.Optional[bool] = None
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
     ) -> None:
         self.state = state
         self.force = force

@@ -96,7 +96,7 @@ class CustomFieldsDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(allow_none=True, missing=None)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -114,7 +114,7 @@ class CustomFieldsSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
-    fields = FieldContainerField(allow_none=True)
+    fields = FieldContainerField(allow_none=True)  # type: ignore
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -362,7 +362,7 @@ class CustomFieldBooleanTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldBooleanType(**data)
+        return types.CustomFieldBooleanType()
 
 
 class CustomFieldDateTimeTypeSchema(FieldTypeSchema):
@@ -374,7 +374,7 @@ class CustomFieldDateTimeTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldDateTimeType(**data)
+        return types.CustomFieldDateTimeType()
 
 
 class CustomFieldDateTypeSchema(FieldTypeSchema):
@@ -386,7 +386,7 @@ class CustomFieldDateTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldDateType(**data)
+        return types.CustomFieldDateType()
 
 
 class CustomFieldEnumTypeSchema(FieldTypeSchema):
@@ -436,7 +436,7 @@ class CustomFieldLocalizedStringTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldLocalizedStringType(**data)
+        return types.CustomFieldLocalizedStringType()
 
 
 class CustomFieldMoneyTypeSchema(FieldTypeSchema):
@@ -448,7 +448,7 @@ class CustomFieldMoneyTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldMoneyType(**data)
+        return types.CustomFieldMoneyType()
 
 
 class CustomFieldNumberTypeSchema(FieldTypeSchema):
@@ -460,7 +460,7 @@ class CustomFieldNumberTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldNumberType(**data)
+        return types.CustomFieldNumberType()
 
 
 class CustomFieldReferenceTypeSchema(FieldTypeSchema):
@@ -521,7 +521,7 @@ class CustomFieldStringTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldStringType(**data)
+        return types.CustomFieldStringType()
 
 
 class CustomFieldTimeTypeSchema(FieldTypeSchema):
@@ -533,7 +533,7 @@ class CustomFieldTimeTypeSchema(FieldTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["name"]
-        return types.CustomFieldTimeType(**data)
+        return types.CustomFieldTimeType()
 
 
 class TypeAddEnumValueActionSchema(TypeUpdateActionSchema):

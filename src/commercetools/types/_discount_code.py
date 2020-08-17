@@ -86,23 +86,23 @@ class DiscountCode(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        code: str,
+        cart_discounts: typing.List["CartDiscountReference"],
+        is_active: bool,
+        references: typing.List["Reference"],
+        groups: typing.List[str],
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        code: str = None,
-        cart_discounts: typing.List["CartDiscountReference"] = None,
         cart_predicate: typing.Optional[str] = None,
-        is_active: bool = None,
-        references: typing.List["Reference"] = None,
         max_applications: typing.Optional[int] = None,
         max_applications_per_customer: typing.Optional[int] = None,
         custom: typing.Optional["CustomFields"] = None,
-        groups: typing.List[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -188,10 +188,10 @@ class DiscountCodeDraft(_BaseType):
     def __init__(
         self,
         *,
+        code: str,
+        cart_discounts: typing.List["CartDiscountResourceIdentifier"],
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        code: str = None,
-        cart_discounts: typing.List["CartDiscountResourceIdentifier"] = None,
         cart_predicate: typing.Optional[str] = None,
         is_active: typing.Optional[bool] = None,
         max_applications: typing.Optional[int] = None,
@@ -250,11 +250,11 @@ class DiscountCodePagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["DiscountCode"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["DiscountCode"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -274,13 +274,7 @@ class DiscountCodeReference(Reference):
     #: Optional :class:`commercetools.types.DiscountCode`
     obj: typing.Optional["DiscountCode"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["DiscountCode"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["DiscountCode"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.DISCOUNT_CODE, id=id)
 
@@ -294,11 +288,7 @@ class DiscountCodeReference(Reference):
 
 class DiscountCodeResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.DISCOUNT_CODE, id=id, key=key)
 
@@ -316,7 +306,7 @@ class DiscountCodeUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -332,7 +322,7 @@ class DiscountCodeUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -345,10 +335,7 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
     cart_discounts: typing.List["CartDiscountResourceIdentifier"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        cart_discounts: typing.List["CartDiscountResourceIdentifier"] = None
+        self, *, cart_discounts: typing.List["CartDiscountResourceIdentifier"]
     ) -> None:
         self.cart_discounts = cart_discounts
         super().__init__(action="changeCartDiscounts")
@@ -364,7 +351,7 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
     #: List of :class:`str`
     groups: typing.List[str]
 
-    def __init__(self, *, action: str = None, groups: typing.List[str] = None) -> None:
+    def __init__(self, *, groups: typing.List[str]) -> None:
         self.groups = groups
         super().__init__(action="changeGroups")
 
@@ -379,7 +366,7 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
     #: :class:`bool` `(Named` ``isActive`` `in Commercetools)`
     is_active: bool
 
-    def __init__(self, *, action: str = None, is_active: bool = None) -> None:
+    def __init__(self, *, is_active: bool) -> None:
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -394,9 +381,7 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
     #: Optional :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, cart_predicate: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, cart_predicate: typing.Optional[str] = None) -> None:
         self.cart_predicate = cart_predicate
         super().__init__(action="setCartPredicate")
 
@@ -413,13 +398,7 @@ class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -441,7 +420,6 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -462,10 +440,7 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -481,9 +456,7 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
     #: Optional :class:`int` `(Named` ``maxApplications`` `in Commercetools)`
     max_applications: typing.Optional[int]
 
-    def __init__(
-        self, *, action: str = None, max_applications: typing.Optional[int] = None
-    ) -> None:
+    def __init__(self, *, max_applications: typing.Optional[int] = None) -> None:
         self.max_applications = max_applications
         super().__init__(action="setMaxApplications")
 
@@ -499,10 +472,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
     max_applications_per_customer: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        max_applications_per_customer: typing.Optional[int] = None
+        self, *, max_applications_per_customer: typing.Optional[int] = None
     ) -> None:
         self.max_applications_per_customer = max_applications_per_customer
         super().__init__(action="setMaxApplicationsPerCustomer")
@@ -518,9 +488,7 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
     #: Optional :class:`commercetools.types.LocalizedString`
     name: typing.Optional["LocalizedString"]
 
-    def __init__(
-        self, *, action: str = None, name: typing.Optional["LocalizedString"] = None
-    ) -> None:
+    def __init__(self, *, name: typing.Optional["LocalizedString"] = None) -> None:
         self.name = name
         super().__init__(action="setName")
 
@@ -536,10 +504,7 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
     valid_from: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        valid_from: typing.Optional[datetime.datetime] = None
+        self, *, valid_from: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_from = valid_from
         super().__init__(action="setValidFrom")
@@ -560,7 +525,6 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -580,10 +544,7 @@ class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        self, *, valid_until: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.valid_until = valid_until
         super().__init__(action="setValidUntil")

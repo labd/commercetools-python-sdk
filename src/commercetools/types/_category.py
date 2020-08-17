@@ -101,18 +101,18 @@ class Category(BaseResource):
     def __init__(
         self,
         *,
-        id: str = None,
-        version: int = None,
-        created_at: datetime.datetime = None,
-        last_modified_at: datetime.datetime = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        name: "LocalizedString",
+        slug: "LocalizedString",
+        ancestors: typing.List["CategoryReference"],
+        order_hint: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: "LocalizedString" = None,
-        slug: "LocalizedString" = None,
         description: typing.Optional["LocalizedString"] = None,
-        ancestors: typing.List["CategoryReference"] = None,
         parent: typing.Optional["CategoryReference"] = None,
-        order_hint: str = None,
         external_id: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
@@ -203,8 +203,8 @@ class CategoryDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: "LocalizedString" = None,
-        slug: "LocalizedString" = None,
+        name: "LocalizedString",
+        slug: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         parent: typing.Optional["CategoryResourceIdentifier"] = None,
         order_hint: typing.Optional[str] = None,
@@ -265,11 +265,11 @@ class CategoryPagedQueryResponse(_BaseType):
     def __init__(
         self,
         *,
-        limit: int = None,
-        count: int = None,
-        total: typing.Optional[int] = None,
-        offset: int = None,
-        results: typing.Sequence["Category"] = None
+        limit: int,
+        count: int,
+        offset: int,
+        results: typing.Sequence["Category"],
+        total: typing.Optional[int] = None
     ) -> None:
         self.limit = limit
         self.count = count
@@ -289,13 +289,7 @@ class CategoryReference(Reference):
     #: Optional :class:`commercetools.types.Category`
     obj: typing.Optional["Category"]
 
-    def __init__(
-        self,
-        *,
-        type_id: "ReferenceTypeId" = None,
-        id: str = None,
-        obj: typing.Optional["Category"] = None
-    ) -> None:
+    def __init__(self, *, id: str, obj: typing.Optional["Category"] = None) -> None:
         self.obj = obj
         super().__init__(type_id=ReferenceTypeId.CATEGORY, id=id)
 
@@ -309,11 +303,7 @@ class CategoryReference(Reference):
 
 class CategoryResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self,
-        *,
-        type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ) -> None:
         super().__init__(type_id=ReferenceTypeId.CATEGORY, id=id, key=key)
 
@@ -331,7 +321,7 @@ class CategoryUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -344,7 +334,7 @@ class CategoryUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -359,11 +349,7 @@ class CategoryAddAssetAction(CategoryUpdateAction):
     position: typing.Optional[int]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        asset: "AssetDraft" = None,
-        position: typing.Optional[int] = None
+        self, *, asset: "AssetDraft", position: typing.Optional[int] = None
     ) -> None:
         self.asset = asset
         self.position = position
@@ -388,10 +374,9 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
+        name: "LocalizedString",
         asset_id: typing.Optional[str] = None,
-        asset_key: typing.Optional[str] = None,
-        name: "LocalizedString" = None
+        asset_key: typing.Optional[str] = None
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -409,9 +394,7 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
     #: List of :class:`str` `(Named` ``assetOrder`` `in Commercetools)`
     asset_order: typing.List[str]
 
-    def __init__(
-        self, *, action: str = None, asset_order: typing.List[str] = None
-    ) -> None:
+    def __init__(self, *, asset_order: typing.List[str]) -> None:
         self.asset_order = asset_order
         super().__init__(action="changeAssetOrder")
 
@@ -426,7 +409,7 @@ class CategoryChangeNameAction(CategoryUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     name: "LocalizedString"
 
-    def __init__(self, *, action: str = None, name: "LocalizedString" = None) -> None:
+    def __init__(self, *, name: "LocalizedString") -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -438,7 +421,7 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
     #: :class:`str` `(Named` ``orderHint`` `in Commercetools)`
     order_hint: str
 
-    def __init__(self, *, action: str = None, order_hint: str = None) -> None:
+    def __init__(self, *, order_hint: str) -> None:
         self.order_hint = order_hint
         super().__init__(action="changeOrderHint")
 
@@ -453,9 +436,7 @@ class CategoryChangeParentAction(CategoryUpdateAction):
     #: :class:`commercetools.types.CategoryResourceIdentifier`
     parent: "CategoryResourceIdentifier"
 
-    def __init__(
-        self, *, action: str = None, parent: "CategoryResourceIdentifier" = None
-    ) -> None:
+    def __init__(self, *, parent: "CategoryResourceIdentifier") -> None:
         self.parent = parent
         super().__init__(action="changeParent")
 
@@ -470,7 +451,7 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
     #: :class:`commercetools.types.LocalizedString`
     slug: "LocalizedString"
 
-    def __init__(self, *, action: str = None, slug: "LocalizedString" = None) -> None:
+    def __init__(self, *, slug: "LocalizedString") -> None:
         self.slug = slug
         super().__init__(action="changeSlug")
 
@@ -487,7 +468,6 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None
     ) -> None:
@@ -516,10 +496,9 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
+        name: str,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: str = None,
         value: typing.Optional[typing.Any] = None
     ) -> None:
         self.asset_id = asset_id
@@ -548,7 +527,6 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
@@ -578,7 +556,6 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None
@@ -602,11 +579,7 @@ class CategorySetAssetKeyAction(CategoryUpdateAction):
     asset_key: typing.Optional[str]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        asset_id: str = None,
-        asset_key: typing.Optional[str] = None
+        self, *, asset_id: str, asset_key: typing.Optional[str] = None
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -631,10 +604,9 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
+        sources: typing.List["AssetSource"],
         asset_id: typing.Optional[str] = None,
-        asset_key: typing.Optional[str] = None,
-        sources: typing.List["AssetSource"] = None
+        asset_key: typing.Optional[str] = None
     ) -> None:
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -659,7 +631,6 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         tags: typing.Optional[typing.List[str]] = None
@@ -682,13 +653,7 @@ class CategorySetCustomFieldAction(CategoryUpdateAction):
     #: Optional :class:`typing.Any`
     value: typing.Optional[typing.Any]
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        name: str = None,
-        value: typing.Optional[typing.Any] = None
-    ) -> None:
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None) -> None:
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -710,7 +675,6 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ) -> None:
@@ -731,10 +695,7 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
     description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        description: typing.Optional["LocalizedString"] = None
+        self, *, description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.description = description
         super().__init__(action="setDescription")
@@ -750,9 +711,7 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
     #: Optional :class:`str` `(Named` ``externalId`` `in Commercetools)`
     external_id: typing.Optional[str]
 
-    def __init__(
-        self, *, action: str = None, external_id: typing.Optional[str] = None
-    ) -> None:
+    def __init__(self, *, external_id: typing.Optional[str] = None) -> None:
         self.external_id = external_id
         super().__init__(action="setExternalId")
 
@@ -767,7 +726,7 @@ class CategorySetKeyAction(CategoryUpdateAction):
     #: Optional :class:`str`
     key: typing.Optional[str]
 
-    def __init__(self, *, action: str = None, key: typing.Optional[str] = None) -> None:
+    def __init__(self, *, key: typing.Optional[str] = None) -> None:
         self.key = key
         super().__init__(action="setKey")
 
@@ -780,10 +739,7 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
     meta_description: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        meta_description: typing.Optional["LocalizedString"] = None
+        self, *, meta_description: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.meta_description = meta_description
         super().__init__(action="setMetaDescription")
@@ -800,10 +756,7 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
     meta_keywords: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        meta_keywords: typing.Optional["LocalizedString"] = None
+        self, *, meta_keywords: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.meta_keywords = meta_keywords
         super().__init__(action="setMetaKeywords")
@@ -820,10 +773,7 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
     meta_title: typing.Optional["LocalizedString"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        meta_title: typing.Optional["LocalizedString"] = None
+        self, *, meta_title: typing.Optional["LocalizedString"] = None
     ) -> None:
         self.meta_title = meta_title
         super().__init__(action="setMetaTitle")

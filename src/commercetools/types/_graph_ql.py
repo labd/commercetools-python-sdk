@@ -21,9 +21,7 @@ class GraphQLError(_BaseType):
     #: :class:`list`
     path: list
 
-    def __init__(
-        self, *, message: str = None, locations: list = None, path: list = None
-    ) -> None:
+    def __init__(self, *, message: str, locations: list, path: list) -> None:
         self.message = message
         self.locations = locations
         self.path = path
@@ -43,7 +41,7 @@ class GraphQLErrorLocation(_BaseType):
     #: :class:`int`
     column: int
 
-    def __init__(self, *, line: int = None, column: int = None) -> None:
+    def __init__(self, *, line: int, column: int) -> None:
         self.line = line
         self.column = column
         super().__init__()
@@ -63,7 +61,7 @@ class GraphQLRequest(_BaseType):
     def __init__(
         self,
         *,
-        query: str = None,
+        query: str,
         operation_name: typing.Optional[str] = None,
         variables: typing.Optional["GraphQLVariablesMap"] = None,
     ) -> None:

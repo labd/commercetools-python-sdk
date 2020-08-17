@@ -51,7 +51,7 @@ class ExternalOAuth(_BaseType):
     #: :class:`str` `(Named` ``authorizationHeader`` `in Commercetools)`
     authorization_header: str
 
-    def __init__(self, *, url: str = None, authorization_header: str = None) -> None:
+    def __init__(self, *, url: str, authorization_header: str) -> None:
         self.url = url
         self.authorization_header = authorization_header
         super().__init__()
@@ -92,18 +92,18 @@ class Project(_BaseType):
     def __init__(
         self,
         *,
-        version: int = None,
-        key: str = None,
-        name: str = None,
-        countries: typing.List["str"] = None,
-        currencies: typing.List["str"] = None,
-        languages: typing.List["str"] = None,
-        created_at: datetime.datetime = None,
+        version: int,
+        key: str,
+        name: str,
+        countries: typing.List["str"],
+        currencies: typing.List["str"],
+        languages: typing.List["str"],
+        created_at: datetime.datetime,
+        messages: "MessageConfiguration",
+        carts: "CartsConfiguration",
         trial_until: typing.Optional[str] = None,
-        messages: "MessageConfiguration" = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
-        external_oauth: typing.Optional["ExternalOAuth"] = None,
-        carts: "CartsConfiguration" = None
+        external_oauth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
         self.version = version
         self.key = key
@@ -145,7 +145,7 @@ class ProjectUpdate(_BaseType):
     #: :class:`list`
     actions: list
 
-    def __init__(self, *, version: int = None, actions: list = None) -> None:
+    def __init__(self, *, version: int, actions: list) -> None:
         self.version = version
         self.actions = actions
         super().__init__()
@@ -158,7 +158,7 @@ class ProjectUpdateAction(_BaseType):
     #: :class:`str`
     action: str
 
-    def __init__(self, *, action: str = None) -> None:
+    def __init__(self, *, action: str) -> None:
         self.action = action
         super().__init__()
 
@@ -170,7 +170,7 @@ class ShippingRateInputType(_BaseType):
     #: :class:`commercetools.types.ShippingRateTierType`
     type: "ShippingRateTierType"
 
-    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
+    def __init__(self, *, type: "ShippingRateTierType") -> None:
         self.type = type
         super().__init__()
 
@@ -182,9 +182,7 @@ class CartClassificationType(ShippingRateInputType):
     #: :class:`list`
     values: list
 
-    def __init__(
-        self, *, type: "ShippingRateTierType" = None, values: list = None
-    ) -> None:
+    def __init__(self, *, values: list) -> None:
         self.values = values
         super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
 
@@ -193,7 +191,7 @@ class CartClassificationType(ShippingRateInputType):
 
 
 class CartScoreType(ShippingRateInputType):
-    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     def __repr__(self) -> str:
@@ -201,7 +199,7 @@ class CartScoreType(ShippingRateInputType):
 
 
 class CartValueType(ShippingRateInputType):
-    def __init__(self, *, type: "ShippingRateTierType" = None) -> None:
+    def __init__(self) -> None:
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     def __repr__(self) -> str:
@@ -212,9 +210,7 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
     #: List of :class:`str`
     countries: typing.List["str"]
 
-    def __init__(
-        self, *, action: str = None, countries: typing.List["str"] = None
-    ) -> None:
+    def __init__(self, *, countries: typing.List["str"]) -> None:
         self.countries = countries
         super().__init__(action="changeCountries")
 
@@ -229,9 +225,7 @@ class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
     #: :class:`bool` `(Named` ``countryTaxRateFallbackEnabled`` `in Commercetools)`
     country_tax_rate_fallback_enabled: bool
 
-    def __init__(
-        self, *, action: str = None, country_tax_rate_fallback_enabled: bool = None
-    ) -> None:
+    def __init__(self, *, country_tax_rate_fallback_enabled: bool) -> None:
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
         super().__init__(action="changeCountryTaxRateFallbackEnabled")
 
@@ -246,9 +240,7 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
     #: List of :class:`str`
     currencies: typing.List["str"]
 
-    def __init__(
-        self, *, action: str = None, currencies: typing.List["str"] = None
-    ) -> None:
+    def __init__(self, *, currencies: typing.List["str"]) -> None:
         self.currencies = currencies
         super().__init__(action="changeCurrencies")
 
@@ -263,9 +255,7 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
     #: List of :class:`str`
     languages: typing.List["str"]
 
-    def __init__(
-        self, *, action: str = None, languages: typing.List["str"] = None
-    ) -> None:
+    def __init__(self, *, languages: typing.List["str"]) -> None:
         self.languages = languages
         super().__init__(action="changeLanguages")
 
@@ -280,12 +270,7 @@ class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
     #: :class:`commercetools.types.MessageConfigurationDraft` `(Named` ``messagesConfiguration`` `in Commercetools)`
     messages_configuration: "MessageConfigurationDraft"
 
-    def __init__(
-        self,
-        *,
-        action: str = None,
-        messages_configuration: "MessageConfigurationDraft" = None
-    ) -> None:
+    def __init__(self, *, messages_configuration: "MessageConfigurationDraft") -> None:
         self.messages_configuration = messages_configuration
         super().__init__(action="changeMessagesConfiguration")
 
@@ -300,7 +285,7 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
     #: :class:`bool` `(Named` ``messagesEnabled`` `in Commercetools)`
     messages_enabled: bool
 
-    def __init__(self, *, action: str = None, messages_enabled: bool = None) -> None:
+    def __init__(self, *, messages_enabled: bool) -> None:
         self.messages_enabled = messages_enabled
         super().__init__(action="changeMessagesEnabled")
 
@@ -315,7 +300,7 @@ class ProjectChangeNameAction(ProjectUpdateAction):
     #: :class:`str`
     name: str
 
-    def __init__(self, *, action: str = None, name: str = None) -> None:
+    def __init__(self, *, name: str) -> None:
         self.name = name
         super().__init__(action="changeName")
 
@@ -328,10 +313,7 @@ class ProjectSetExternalOAuthAction(ProjectUpdateAction):
     external_oauth: typing.Optional["ExternalOAuth"]
 
     def __init__(
-        self,
-        *,
-        action: str = None,
-        external_oauth: typing.Optional["ExternalOAuth"] = None
+        self, *, external_oauth: typing.Optional["ExternalOAuth"] = None
     ) -> None:
         self.external_oauth = external_oauth
         super().__init__(action="setExternalOAuth")
@@ -350,7 +332,6 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
     def __init__(
         self,
         *,
-        action: str = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None
     ) -> None:
         self.shipping_rate_input_type = shipping_rate_input_type

@@ -198,7 +198,7 @@ class CartScoreTypeSchema(ShippingRateInputTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.CartScoreType(**data)
+        return types.CartScoreType()
 
 
 class CartValueTypeSchema(ShippingRateInputTypeSchema):
@@ -210,7 +210,7 @@ class CartValueTypeSchema(ShippingRateInputTypeSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return types.CartValueType(**data)
+        return types.CartValueType()
 
 
 class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):

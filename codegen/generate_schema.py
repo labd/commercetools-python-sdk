@@ -203,6 +203,13 @@ class SchemaClassGenerator:
             if node:
                 class_node.body.append(node)
 
+                # Properties set by marshmallow Schema confuses mypy. It thinks
+                # the class properties conflict, however since the fields
+                # defined here are removed by a metaclass this isn't the case
+                # simple workaround to silicen these
+                if prop.name in ["fields"]:
+                    class_node.body.append(ast.Name(id="  # type: ignore"))
+
         # Add the Meta class
         class_node.body.append(
             ast.ClassDef(

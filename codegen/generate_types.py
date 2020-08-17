@@ -455,6 +455,10 @@ class _ResourceClassGenerator:
             if not attribute_name:
                 continue
 
+            # The discriminator value is an internal value
+            if self.discriminator_attr and self.discriminator_attr.name == prop.name:
+                continue
+
             arg = ast.arg(
                 arg=attribute_name,
                 annotation=self._get_annotation_for_property(prop),

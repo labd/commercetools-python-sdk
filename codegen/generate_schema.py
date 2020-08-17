@@ -24,10 +24,11 @@ FIELD_TYPES = {
 class SchemaModuleGenerator(AbstractModuleGenerator):
     """This generator is responsible for generating the schemas.py file"""
 
-    def __init__(self):
+    def __init__(self, types):
         self._field_nodes: typing.Dict[str, typing.List[ast.AST]] = defaultdict(list)
         self._type_nodes: typing.Dict[str, typing.List[ast.AST]] = defaultdict(list)
         self._type_nodes_map: typing.Dict[str, str] = {}
+        self._types = {t.name: t for t in types}
         super().__init__()
 
     def get_module_nodes(self):
@@ -222,12 +223,25 @@ class SchemaClassGenerator:
         post_load_node = self._create_marshmallow_hook("post_load")
         if self.contains_regex_field:
             post_load_node.body.append(self._create_regex_call("_regex", "postprocess"))
+
+        # if the parent type doesn't accept any keyword args then don't
+        # generate the **data kwarg to make mypy happy.
+        # Special care here for discriminator fields where we don't want to
+        # pass it from subclasses but do want to pass it to base classes
+        all_properties = self.resource.get_all_properties()
+        d_field = self.resource.get_discriminator_field()
+        if d_field and d_field not in self.resource.properties:
+            all_properties.remove(d_field)
+        type_init_keywords = []
+        if len(all_properties) > 0:
+            type_init_keywords = [ast.keyword(arg=None, value=ast.Name(id="data"))]
+
         post_load_node.body.append(
             ast.Return(
                 value=ast.Call(
                     func=ast.Name(id=f"types.{self.resource.name}"),
                     args=[],
-                    keywords=[ast.keyword(arg=None, value=ast.Name(id="data"))],
+                    keywords=type_init_keywords,
                 )
             )
         )
@@ -250,7 +264,6 @@ class SchemaClassGenerator:
             node.body.append(ast.Return(value=ast.Name(id="data")))
             class_node.body.append(node)
 
-        d_field = self.resource.get_discriminator_field()
         if d_field:
             post_load_node.body.insert(
                 0,

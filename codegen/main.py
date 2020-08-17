@@ -32,7 +32,7 @@ def generate_types_module(types):
 
 
 def generate_schemas_modules(types):
-    generator = SchemaModuleGenerator()
+    generator = SchemaModuleGenerator(types)
     for resource in types:
         generator.add_type_definition(resource)
     return generator.get_module_nodes()

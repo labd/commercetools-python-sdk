@@ -43,8 +43,12 @@ def test_unknown_reference_expand_terms(client, commercetools_api):
 def test_multiple_expand(client, commercetools_api):
     shipping_method = client.shipping_methods.create(
         types.ShippingMethodDraft(
-            key="test-shipping-method", name="test shipping method"
+            key="test-shipping-method", name="test shipping method",
+            tax_category=types.TaxCategoryResourceIdentifier(id="dummy"),
+            zone_rates=[],
+            is_default=False,
         )
+
     )
 
     payment = client.payments.create(

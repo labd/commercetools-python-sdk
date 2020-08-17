@@ -10,11 +10,11 @@ from commercetools._schemas._cart import (
     CartSchema,
     CartUpdateSchema,
 )
+from commercetools._schemas._product import ProductSchema
 from commercetools._schemas._order import PaymentInfoSchema
 from commercetools._schemas._payment import PaymentResourceIdentifierSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import set_custom_field
 
 
 class CartsModel(BaseModel):
@@ -26,13 +26,28 @@ class CartsModel(BaseModel):
     ) -> types.LineItem:
         line_id = str(uuid.uuid4())
         price = 1000
+
+        product_data = self._storage.get_by_resource_identifier(
+            types.ProductResourceIdentifier(id=line_item_draft.product_id)
+        )
+        product: types.Product = ProductSchema().load(product_data)
+
+        variant = None
+        for v in product.master_data.current.variants:
+            if v.id == line_item_draft.variant_id:
+                variant = v
+
         return types.LineItem(
             id=line_id,
             name=types.LocalizedString({"en": line_id}),
+            product_id=line_item_draft.product_id,
+            product_type=product.product_type,
+            variant=variant,
             price=types.Price(
+                id=str(uuid.uuid4()),
                 value=types.CentPrecisionMoney(
-                    currency_code=draft.currency, cent_amount=price
-                )
+                    currency_code=draft.currency, cent_amount=price, fraction_digits=2
+                ),
             ),
             taxed_price=types.TaxedItemPrice(
                 total_net=types.CentPrecisionMoney(
@@ -49,8 +64,11 @@ class CartsModel(BaseModel):
             total_price=types.CentPrecisionMoney(
                 currency_code=draft.currency,
                 cent_amount=price * (line_item_draft.quantity or 0),
+                fraction_digits=2,
             ),
             quantity=line_item_draft.quantity,
+            discounted_price_per_quantity=[],
+            state=[],
             price_mode=types.LineItemPriceMode.PLATFORM,
             line_item_mode=types.LineItemMode.STANDARD,
             custom=utils.create_from_draft(line_item_draft.custom),
@@ -70,8 +88,8 @@ class CartsModel(BaseModel):
 
         total_price = None
         taxed_price = None
-        if line_items:
 
+        if line_items:
             total_price = types.CentPrecisionMoney(
                 currency_code=draft.currency,
                 cent_amount=sum(
@@ -89,6 +107,7 @@ class CartsModel(BaseModel):
                         for line_item in line_items
                         if line_item.taxed_price and line_item.taxed_price.total_net
                     ),
+                    fraction_digits=2,
                 ),
                 total_gross=types.CentPrecisionMoney(
                     currency_code=draft.currency,
@@ -97,12 +116,16 @@ class CartsModel(BaseModel):
                         for line_item in line_items
                         if line_item.taxed_price and line_item.taxed_price.total_gross
                     ),
+                    fraction_digits=2,
                 ),
                 tax_portions=[
                     types.TaxPortion(
                         name="0% VAT",
+                        rate=0,
                         amount=types.CentPrecisionMoney(
-                            currency_code=draft.currency, cent_amount=0
+                            currency_code=draft.currency,
+                            cent_amount=0,
+                            fraction_digits=2,
                         ),
                     )
                 ],
@@ -122,7 +145,8 @@ class CartsModel(BaseModel):
             inventory_mode=draft.inventory_mode,
             tax_mode=draft.tax_mode or types.TaxMode.PLATFORM,
             tax_rounding_mode=draft.tax_rounding_mode or types.RoundingMode.HALF_EVEN,
-            tax_calculation_mode=draft.tax_calculation_mode or types.TaxCalculationMode.LINE_ITEM_LEVEL,
+            tax_calculation_mode=draft.tax_calculation_mode
+            or types.TaxCalculationMode.LINE_ITEM_LEVEL,
             line_items=line_items,
             custom_line_items=[],
             refused_gifts=[],
@@ -171,12 +195,8 @@ class CartsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
-    def set_custom_field(
-        self,
-        obj,
-        action: types.CartSetCustomFieldAction,
-    ):
-        if not obj['custom']:
+    def set_custom_field(self, obj, action: types.CartSetCustomFieldAction):
+        if not obj["custom"]:
             raise ValueError(
                 "This resource has no custom type set - please use "
                 "setCustomType first to set the type of the custom fields"
@@ -190,22 +210,20 @@ class CartsBackend(ServiceBackend):
         new["custom"]["fields"][name] = value
         return new
 
-    def set_custom_type(
-        self,
-        obj,
-        action: types.CartSetCustomTypeAction,
-    ):
+    def set_custom_type(self, obj, action: types.CartSetCustomTypeAction):
         custom_type = self.model._storage.get_by_resource_identifier(action.type)
 
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
         new["custom"] = {
-            "type": {
-                "id": custom_type["id"],
-                "typeId": "type",
-            },
-            "fields": {}
+            "type": {"id": custom_type["id"], "typeId": "type"},
+            "fields": {},
         }
         return new
 
-    _actions = {"addPayment": add_payment(), "setCustomField": set_custom_field, "setCustomType": set_custom_type}
+    _actions = {
+        "addPayment": add_payment(),
+        "setCustomField": set_custom_field,
+        "setCustomType": set_custom_type,
+    }
+

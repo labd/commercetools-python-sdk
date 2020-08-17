@@ -32,6 +32,7 @@ class StateModel(BaseModel):
             type=draft.type,
             name=draft.name,
             description=draft.description,
+            built_in=False,
             roles=draft.roles,
             initial=draft.initial or False,
             transitions=create_references_from_resources(self, draft.transitions),

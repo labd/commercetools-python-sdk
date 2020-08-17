@@ -45,6 +45,7 @@ class PaymentsModel(BaseModel):
                 for transaction in draft.transactions or []
             ],
             custom=utils.create_from_draft(draft.custom),
+            interface_interactions=[],
         )
         return payment
 
@@ -112,7 +113,9 @@ def change_transaction_interaction_id():
 
 def add_interface_interaction():
     def updater(self, obj, action):
-        value = types.CustomFields(fields=getattr(action, "fields"))
+        self.model._storage.get_by_resource_identifier(action.type)
+
+        value = types.CustomFields(type=action.type, fields=getattr(action, "fields"))
         value = CustomFieldsSchema().dump(value)
         if not obj["interfaceInteractions"]:
             obj["interfaceInteractions"] = []

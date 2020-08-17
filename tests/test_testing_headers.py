@@ -4,7 +4,14 @@ from commercetools import CommercetoolsError, types
 
 
 def test_correlation_id_is_set_in_exception(client):
-    product = client.products.create(types.ProductDraft(key="test-product"))
+    product = client.products.create(
+        types.ProductDraft(
+            key="test-product",
+            name=types.LocalizedString(en=f"my-product"),
+            slug=types.LocalizedString(en=f"my-product"),
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+        )
+    )
 
     product = client.products.update_by_id(
         id=product.id,

@@ -25,10 +25,14 @@ def test_get_by_key(client):
 
 def test_query(client):
     client.customer_groups.create(
-        draft=types.CustomerGroupDraft(key="test-customer-group-1")
+        draft=types.CustomerGroupDraft(
+            key="test-customer-group-1", group_name="group-1"
+        )
     )
     client.customer_groups.create(
-        draft=types.CustomerGroupDraft(key="test-customer-group-2")
+        draft=types.CustomerGroupDraft(
+            key="test-customer-group-2", group_name="group-2"
+        )
     )
 
     result = client.customer_groups.query(sort="id asc", limit=10)

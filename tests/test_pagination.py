@@ -3,12 +3,19 @@ import pytest
 from commercetools import paginators, types
 
 
-def test_page_paginator(client):
+def create_products(client):
     for i in range(100):
         client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
+            types.ProductDraft(
+                key=f"test-product-{i}",
+                product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+                name=types.LocalizedString(en=f"my-product-{i}"),
+                slug=types.LocalizedString(en=f"my-product-{i}"),
+            ))
 
+
+def test_page_paginator(client):
+    create_products(client)
     paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
 
     items = []
@@ -18,11 +25,7 @@ def test_page_paginator(client):
 
 
 def test_page_paginator_slice_start(client):
-    for i in range(100):
-        client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
-
+    create_products(client)
     paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
 
     items = []
@@ -34,11 +37,7 @@ def test_page_paginator_slice_start(client):
 
 
 def test_page_paginator_slice_stop(client):
-    for i in range(100):
-        client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
-
+    create_products(client)
     paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
 
     items = []
@@ -50,11 +49,7 @@ def test_page_paginator_slice_stop(client):
 
 
 def test_page_paginator_slice_start_stop(client):
-    for i in range(100):
-        client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
-
+    create_products(client)
     paginator = paginators.Paginator(client.products.query, sort=["id asc", "name asc"])
 
     items = []
@@ -66,11 +61,7 @@ def test_page_paginator_slice_start_stop(client):
 
 
 def test_cursor_paginator(client):
-    for i in range(100):
-        client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
-
+    create_products(client)
     paginator = paginators.CursorPaginator(
         client.products.query, sort=["id asc", "name asc"]
     )
@@ -82,11 +73,7 @@ def test_cursor_paginator(client):
 
 
 def test_cursor_paginator_slice_start(client):
-    for i in range(100):
-        client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
-
+    create_products(client)
     paginator = paginators.CursorPaginator(
         client.products.query, sort=["id asc", "name asc"]
     )
@@ -98,11 +85,7 @@ def test_cursor_paginator_slice_start(client):
 
 
 def test_cursor_paginator_slice_stop(client):
-    for i in range(100):
-        client.products.create(
-            types.ProductDraft(name=types.LocalizedString(en=f"Product {i}"))
-        )
-
+    create_products(client)
     paginator = paginators.CursorPaginator(
         client.products.query, sort=["id asc", "name asc"]
     )

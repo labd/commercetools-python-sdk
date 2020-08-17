@@ -12,7 +12,24 @@ def test_cart_get_by_id(client, cart_draft):
 
 
 @pytest.fixture
-def cart_draft():
+def cart_draft(client):
+    product_1 = client.products.create(
+        types.ProductDraft(
+            key=f"product-1",
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+            name=types.LocalizedString(en=f"my-product-1"),
+            slug=types.LocalizedString(en=f"my-product-1"),
+            publish=True,
+        ))
+    product_2 = client.products.create(
+        types.ProductDraft(
+            key=f"product-2",
+            product_type=types.ProductTypeResourceIdentifier(key="dummy"),
+            name=types.LocalizedString(en=f"my-product-2"),
+            slug=types.LocalizedString(en=f"my-product-2"),
+            publish=True,
+        ))
+
     return types.CartDraft(
         customer_id=str(uuid.uuid4()),
         customer_email="foo@example.com",
@@ -24,8 +41,8 @@ def cart_draft():
         tax_rounding_mode=types.RoundingMode.HALF_EVEN,
         tax_calculation_mode=types.TaxCalculationMode.LINE_ITEM_LEVEL,
         line_items=[
-            types.LineItemDraft(sku="123", quantity=2),
-            types.LineItemDraft(sku="124", quantity=1),
+            types.LineItemDraft(product_id=product_1.id, quantity=1),
+            types.LineItemDraft(product_id=product_2.id, quantity=2),
         ],
         locale="en",
         origin=types.CartOrigin.CUSTOMER,

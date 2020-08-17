@@ -86,6 +86,8 @@ class ShoppingListModel(BaseModel):
         return types.ShoppingList(
             id=str(object_id),
             version=1,
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(draft.custom),
             customer=draft.customer,
             delete_days_after_last_modification=draft.delete_days_after_last_modification,

@@ -2,13 +2,14 @@ import os
 
 import requests
 
-from commercetools import Client
+from commercetools import Client, types
 from commercetools.types import (
     ChannelDraft,
     ChannelResourceIdentifier,
     ChannelRoleEnum,
     LocalizedString,
     ProductDraft,
+    ProductTypeResourceIdentifier,
     StoreDraft,
 )
 
@@ -27,7 +28,14 @@ def test_http_server(commercetools_client, commercetools_http_server):
 
     query_result = client.products.query()
     assert query_result.count == 0
-    product = client.products.create(ProductDraft(name=LocalizedString(nl="Testje")))
+    product = client.products.create(
+        ProductDraft(
+            key="test-product",
+            product_type=ProductTypeResourceIdentifier(key="dummy"),
+            name={"nl": "Testje"},
+            slug={"en": "foo-bar"},
+        )
+    )
 
     client.products.get_by_id(product.id)
     url = commercetools_http_server.api_url + f"/unittest/products/{product.id}"
@@ -56,7 +64,9 @@ def test_http_server_expanding(commercetools_client, commercetools_http_server):
 
     store = client.stores.create(
         StoreDraft(
-            key="FOO", distribution_channels=[ChannelResourceIdentifier(key="FOO")]
+            name=types.LocalizedString(nl="foo"),
+            key="FOO",
+            distribution_channels=[ChannelResourceIdentifier(key="FOO")],
         )
     )
 

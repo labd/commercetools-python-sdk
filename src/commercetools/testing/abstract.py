@@ -182,6 +182,7 @@ class ServiceBackend(BaseBackend):
     _schema_update: typing.Optional[marshmallow.Schema] = None
     _schema_query_response: typing.Optional[marshmallow.Schema] = None
     _schema_query_params: marshmallow.Schema = GenericSchema
+    _query_default_limit = 20
 
     _verify_version: bool = True
 
@@ -216,8 +217,9 @@ class ServiceBackend(BaseBackend):
         params = utils.parse_request_params(self._schema_query_params, request)
         results = self.model.query(params.get("where"))
         total_count = len(results)
-        if params.get("limit"):
-            results = results[: params["limit"]]
+        limit = params.get("limit", self._query_default_limit)
+        if limit:
+            results = results[: limit]
 
         if params.get("expand"):
             expanded_results = []
@@ -229,6 +231,7 @@ class ServiceBackend(BaseBackend):
             "count": len(results),
             "total": total_count,
             "offset": 0,
+            "limit": limit,
             "results": self.model._resource_schema().load(results, many=True),
         }
         content = self._schema_query_response().dumps(data)

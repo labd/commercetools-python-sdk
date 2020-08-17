@@ -1,10 +1,16 @@
 from commercetools import types
+import commercetools
 from tests.test_service_order import get_test_order
 
 
-def test_unknown_expand_terms(client):
+def test_unknown_expand_terms(client: commercetools.Client):
+    cart = client.carts.create(types.CartDraft(currency="EUR"))
+
     order = client.orders.create(
-        types.OrderFromCartDraft(order_number="test-order"), expand="nonExisting"
+        types.OrderFromCartDraft(
+            id=cart.id, version=1, order_number="test-order"
+        ),
+        expand="nonExisting",
     )
 
     assert order.id

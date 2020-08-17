@@ -11,6 +11,7 @@ from commercetools._schemas._order import (
     OrderSchema,
     OrderUpdateSchema,
 )
+from commercetools._schemas._cart import CartSchema
 from commercetools._schemas._payment import PaymentReferenceSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
@@ -35,11 +36,24 @@ class OrdersModel(BaseModel):
         """
 
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
+        cart_identifier = types.CartResourceIdentifier(id=draft.id)
+
+        cart_data = self._storage.get_by_resource_identifier(cart_identifier)
+        cart = None
+        if cart_data:
+            cart = CartSchema().load(cart_data)
+
         order = types.Order(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
+            line_items=[],
+            custom_line_items=[],
+            total_price=copy.deepcopy(cart.total_price),
+            sync_info=[],
+            last_message_sequence_number=0,
+            refused_gifts=[],
             order_number=draft.order_number,
             payment_state=draft.payment_state,
             order_state=OrderState.OPEN,

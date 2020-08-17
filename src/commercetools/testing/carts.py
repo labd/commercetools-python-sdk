@@ -60,10 +60,14 @@ class CartsModel(BaseModel):
         self, draft: types.CartDraft, id: typing.Optional[str] = None
     ) -> types.Cart:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        line_items = [
-            self._create_line_item_from_draft(draft, line_item)
-            for line_item in draft.line_items
-        ]
+        if draft.line_items:
+            line_items = [
+                self._create_line_item_from_draft(draft, line_item)
+                for line_item in draft.line_items
+            ]
+        else:
+            line_items = []
+
         total_price = None
         taxed_price = None
         if line_items:
@@ -116,14 +120,16 @@ class CartsModel(BaseModel):
             anonymous_id=draft.anonymous_id,
             country=draft.country,
             inventory_mode=draft.inventory_mode,
-            tax_mode=draft.tax_mode,
-            tax_rounding_mode=draft.tax_rounding_mode,
-            tax_calculation_mode=draft.tax_calculation_mode,
+            tax_mode=draft.tax_mode or types.TaxMode.PLATFORM,
+            tax_rounding_mode=draft.tax_rounding_mode or types.RoundingMode.HALF_EVEN,
+            tax_calculation_mode=draft.tax_calculation_mode or types.TaxCalculationMode.LINE_ITEM_LEVEL,
             line_items=line_items,
+            custom_line_items=[],
+            refused_gifts=[],
             shipping_address=draft.shipping_address,
             billing_address=draft.billing_address,
             locale=draft.locale,
-            origin=draft.origin,
+            origin=draft.origin or types.CartOrigin.CUSTOMER,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(draft.custom),

@@ -431,11 +431,12 @@ class _ResourceClassGenerator:
                 slice=ast.Index(value=annotation_type),
             )
 
-        # Wrap it in a typing.Optional[T]
-        annotation_type = ast.Subscript(
-            value=ast.Attribute(value=ast.Name(id="typing"), attr="Optional"),
-            slice=ast.Index(value=annotation_type),
-        )
+        if prop.optional:
+            # Wrap it in a typing.Optional[T]
+            annotation_type = ast.Subscript(
+                value=ast.Attribute(value=ast.Name(id="typing"), attr="Optional"),
+                slice=ast.Index(value=annotation_type),
+            )
 
         return annotation_type
 
@@ -447,18 +448,22 @@ class _ResourceClassGenerator:
 
         """
         # Create the arguments for the __init__ method
-        init_args = []
+        req_args = []
+        opt_args = []
         for prop in self.properties:
             attribute_name = prop.attribute_name
             if not attribute_name:
                 continue
 
-            init_args.append(
-                ast.arg(
-                    arg=attribute_name,
-                    annotation=self._get_annotation_for_property(prop),
-                )
+            arg = ast.arg(
+                arg=attribute_name,
+                annotation=self._get_annotation_for_property(prop),
             )
+
+            if prop.optional:
+                opt_args.append(arg)
+            else:
+                req_args.append(arg)
 
         # Generate an __init__ function.
         init_func = ast.FunctionDef(
@@ -466,10 +471,10 @@ class _ResourceClassGenerator:
             args=ast.arguments(
                 args=[ast.arg(arg="self", annotation=None)],
                 vararg=None,
-                kwonlyargs=init_args,
+                kwonlyargs=req_args + opt_args,
                 kw_defaults=[
                     ast.NameConstant(value=None, kind=None)
-                    for _ in range(0, len(init_args))
+                    for _ in range(0, len(opt_args))
                 ],
                 kwarg=None,
                 defaults=[],

@@ -35,15 +35,6 @@ class ProductsModel(BaseModel):
     ) -> types.Product:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
 
-        product = types.Product(
-            id=str(object_id),
-            key=draft.key,
-            product_type=draft.product_type,
-            version=1,
-            created_at=datetime.datetime.now(datetime.timezone.utc),
-            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-        )
-
         master_variant = None
         if draft.master_variant:
             master_variant = self._create_variant_from_draft(draft.master_variant)
@@ -54,17 +45,35 @@ class ProductsModel(BaseModel):
             category_order_hints=draft.category_order_hints,
             description=draft.description,
             master_variant=master_variant,
+            variants=[master_variant] if master_variant else [],
             slug=draft.slug or types.LocalizedString(),
+            search_keywords=types.SearchKeywords()
         )
 
         if draft.publish:
-            product.master_data = types.ProductCatalogData(
-                staged=None, current=product_data, published=True
+            master_data = types.ProductCatalogData(
+                staged=None,
+                current=product_data,
+                published=True,
+                has_staged_changes=False,
             )
         else:
-            product.master_data = types.ProductCatalogData(
-                staged=product_data, current=None, published=False
+            master_data = types.ProductCatalogData(
+                staged=product_data,
+                current=None,
+                published=False,
+                has_staged_changes=True,
             )
+
+        product = types.Product(
+            id=str(object_id),
+            key=draft.key,
+            product_type=draft.product_type,
+            master_data=master_data,
+            version=1,
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
+        )
 
         return product
 

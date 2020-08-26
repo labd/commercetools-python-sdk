@@ -4,7 +4,7 @@ import typing
 import uuid
 
 from commercetools import types
-from commercetools._schemas._cart import CartSchema
+from commercetools._schemas._cart import CartSchema, ShippingInfoSchema
 from commercetools._schemas._order import (
     DeliverySchema,
     OrderFromCartDraftSchema,

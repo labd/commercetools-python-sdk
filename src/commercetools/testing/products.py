@@ -9,10 +9,12 @@ from marshmallow import fields as schema_fields
 from commercetools import types
 from commercetools._schemas._common import ImageSchema, PriceSchema
 from commercetools._schemas._product import (
+    AttributeSchema,
     ProductDraftSchema,
     ProductPagedQueryResponseSchema,
     ProductSchema,
     ProductUpdateSchema,
+    ProductVariantSchema,
 )
 from commercetools.services.products import _ProductQuerySchema
 from commercetools.testing import utils

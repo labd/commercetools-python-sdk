@@ -22,12 +22,13 @@ class CustomerModel(abstract.BaseModel):
         self, draft: types.CustomerDraft, id: Optional[str] = None
     ) -> types.Customer:
         object_id = uuid.UUID(id) if id is not None else uuid.uuid4()
+        now = datetime.datetime.now(datetime.timezone.utc)
 
         return types.Customer(
             id=str(object_id),
             version=1,
-            created_at=datetime.datetime.now(datetime.timezone.utc),
-            last_modified_at=None,
+            created_at=now,
+            last_modified_at=now,
             customer_number=draft.customer_number,
             email=draft.email,
             password=draft.password,

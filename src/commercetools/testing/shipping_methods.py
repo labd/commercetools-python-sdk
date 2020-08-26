@@ -9,7 +9,10 @@ from commercetools._schemas._shipping_method import (
     ShippingMethodPagedQueryResponseSchema,
     ShippingMethodSchema,
     ShippingMethodUpdateSchema,
+    ShippingRateSchema,
+    ZoneRateSchema,
 )
+from commercetools._schemas._tax_category import TaxCategoryResourceIdentifierSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import InternalUpdateError, update_attribute
@@ -65,14 +68,12 @@ def create_shipping_rate_from_draft(
         free_above = types.CentPrecisionMoney(
             cent_amount=draft.free_above.cent_amount,
             currency_code=draft.free_above.currency_code,
-            type=types.MoneyType.CENT_PRECISION,
             fraction_digits=2,
         )
     shipping_rate = types.ShippingRate(
         price=types.CentPrecisionMoney(
             cent_amount=draft.price.cent_amount,
             currency_code=draft.price.currency_code,
-            type=types.MoneyType.CENT_PRECISION,
             fraction_digits=2,
         ),
         free_above=free_above,

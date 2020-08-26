@@ -54,8 +54,7 @@ def create_from_draft(draft):
 
     if isinstance(draft, types.CustomFieldsDraft):
         return types.CustomFields(
-            type=types.TypeReference(type_id=draft.type.type_id, id=draft.type.id),
-            fields=draft.fields,
+            type=types.TypeReference(id=draft.type.id), fields=draft.fields
         )
     if isinstance(draft, types.PriceTierDraft):
         return types.PriceTier(
@@ -164,7 +163,6 @@ def update_attribute_delete_item(dst: str, src: str, schema: Schema):
             return new
         else:
             raise InternalUpdateError("No item found with id %r" % (obj["id"]))
-        return obj
 
     return updater
 

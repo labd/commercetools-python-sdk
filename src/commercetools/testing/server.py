@@ -8,7 +8,6 @@ from requests.packages.urllib3.response import HTTPResponse
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools.testing import BackendRepository
-from commercetools.testing.internal import InternalBackend
 
 logger = logging.getLogger(__name__)
 

@@ -14,7 +14,6 @@ from commercetools._schemas._payment import (
 from commercetools._schemas._type import CustomFieldsSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute_add_item
 
 
 class PaymentsModel(BaseModel):

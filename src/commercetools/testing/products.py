@@ -1,7 +1,7 @@
 import copy
 import datetime
 import uuid
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from marshmallow import Schema
 from marshmallow import fields as schema_fields
@@ -9,10 +9,12 @@ from marshmallow import fields as schema_fields
 from commercetools import types
 from commercetools._schemas._common import ImageSchema, PriceSchema
 from commercetools._schemas._product import (
+    AttributeSchema,
     ProductDraftSchema,
     ProductPagedQueryResponseSchema,
     ProductSchema,
     ProductUpdateSchema,
+    ProductVariantSchema,
 )
 from commercetools.services.products import _ProductQuerySchema
 from commercetools.testing import utils
@@ -45,7 +47,9 @@ class ProductsModel(BaseModel):
             category_order_hints=draft.category_order_hints,
             description=draft.description,
             master_variant=master_variant,
-            variants=[master_variant] if master_variant else [],
+            variants=[self._create_variant_from_draft(vd) for vd in draft.variants]
+            if draft.variants
+            else [],
             slug=draft.slug or types.LocalizedString(),
             search_keywords=types.SearchKeywords(),
         )
@@ -375,6 +379,33 @@ def _add_price():
     return updater
 
 
+def _change_master_variant():
+    def updater(self, obj: Dict, action: types.ProductChangeMasterVariantAction):
+        new = copy.deepcopy(obj)
+        staged = action.staged
+        if staged is None:
+            staged = True
+        target_obj = _get_target_obj(new, staged)
+        master_variant = target_obj["masterVariant"]
+        if master_variant and master_variant["sku"] == action.sku:
+            return obj
+        found_sku = False
+        for variant in get_product_variants(target_obj):
+            if variant["sku"] == action.sku:
+                target_obj["variants"].append(target_obj["masterVariant"])
+                target_obj["masterVariant"] = variant
+                target_obj["variants"].remove(variant)
+                found_sku = True
+                break
+        if not found_sku:
+            raise ValueError("Could not find sku %s" % action.sku)
+        if staged:
+            new["masterData"]["hasStagedChanges"] = True
+        return new
+
+    return updater
+
+
 class UploadImageQuerySchema(Schema):
     staged = schema_fields.Bool()
     filename = schema_fields.Field()
@@ -410,6 +441,7 @@ class ProductsBackend(ServiceBackend):
         "setPrices": _set_product_prices(),
         "changePrice": _change_price(),
         "addPrice": _add_price(),
+        "changeMasterVariant": _change_master_variant(),
         "publish": _publish_product_action(),
     }
 

@@ -111,7 +111,7 @@ class ProductProjectionsBackend(ServiceBackend):
 
     def _convert_product_projection(
         self, product: types.Product, staged: bool = False
-    ) -> typing.Optional[typing.Dict]:
+    ) -> typing.Optional[types.ProductProjection]:
         """Convert a Product object to a ProductProjection object"""
         if product.master_data is None:
             return None

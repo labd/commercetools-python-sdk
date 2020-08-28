@@ -177,9 +177,9 @@ class GenericSchema(traits.QuerySchema, traits.SortableSchema, traits.PagingSche
 class ServiceBackend(BaseBackend):
     hostnames = ["api.sphere.io", "localhost"]
     model_class: typing.Any = None
-    _schema_draft: typing.Optional[marshmallow.Schema] = None
-    _schema_update: typing.Optional[marshmallow.Schema] = None
-    _schema_query_response: typing.Optional[marshmallow.Schema] = None
+    _schema_draft: typing.Optional[typing.Type[marshmallow.Schema]] = None
+    _schema_update: typing.Optional[typing.Type[marshmallow.Schema]] = None
+    _schema_query_response: typing.Optional[typing.Type[marshmallow.Schema]] = None
     _schema_query_params: marshmallow.Schema = GenericSchema
     _query_default_limit = 20
 

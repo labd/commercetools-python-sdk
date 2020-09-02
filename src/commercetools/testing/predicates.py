@@ -53,7 +53,7 @@ class Tokenizer:
     def __next__(self):
         return next(self._iterator)
 
-    def _get_tokens(self, program) -> typing.Generator[Symbol, None, None]:
+    def _get_tokens(self, program) -> typing.Generator["Symbol", None, None]:
         buf: typing.List[str] = []
         for match in token_pat.finditer(program):
             value, identifier, symbol = match.groups()
@@ -203,7 +203,7 @@ class Infix(Symbol):
     def __repr__(self):
         return "<'%s'>(%s, %s)" % (self.value, self.first, self.second)
 
-    def ast(self, context: Context):
+    def ast(self, context: "Context"):
         lhs = self.first.ast(context)
         if self.second:
             rhs = self.second.ast(context)
@@ -294,7 +294,7 @@ class LParen(Symbol):
         else:
             return self.first[0]
 
-    def ast(self, context: Context):
+    def ast(self, context: "Context"):
         if not self.second:
             return ast.Tuple(
                 elts=[item.ast(context) for item in self.first], ctx=ast.Load()
@@ -316,7 +316,7 @@ class LiteralToken(Symbol):
     def nud(self):
         return self
 
-    def ast(self, context: Context):
+    def ast(self, context: "Context"):
         if self.value.isdigit():
             return ast.Num(n=int(self.value))
         if self.value in ["true", "false"]:
@@ -343,7 +343,7 @@ class NameToken(Symbol):
     def nud(self):
         return self
 
-    def ast(self, context: Context):
+    def ast(self, context: "Context"):
         return ast.Name(id=self.value, ctx=ast.Load())
 
 
@@ -354,7 +354,7 @@ class Constant(Symbol):
     def nud(self):
         return self
 
-    def ast(self, context: Context):
+    def ast(self, context: "Context"):
         return ast.Constant(value=None, ctx=ast.Load())
 
 
@@ -365,7 +365,7 @@ class FunctionCall(Symbol):
         self.first = self.parser.expression(2000)
         return self
 
-    def ast(self, context: Context):
+    def ast(self, context: "Context"):
         node = self.first.ast()
         node.elts.insert(0, ast.Str(s=self.value))
         return node

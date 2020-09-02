@@ -41,7 +41,7 @@ class OrdersModel(BaseModel):
         cart_data = self._storage.get_by_resource_identifier(cart_identifier)
         cart = None
         if cart_data:
-            cart = CartSchema().load(cart_data)
+            cart: types.Cart = CartSchema().load(cart_data)
 
         order = types.Order(
             id=str(object_id),

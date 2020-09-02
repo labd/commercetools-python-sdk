@@ -53,7 +53,7 @@ class Tokenizer:
     def __next__(self):
         return next(self._iterator)
 
-    def _get_tokens(self, program):
+    def _get_tokens(self, program) -> typing.Generator[Symbol, None, None]:
         buf: typing.List[str] = []
         for match in token_pat.finditer(program):
             value, identifier, symbol = match.groups()
@@ -117,7 +117,7 @@ class Symbol:
         )
 
     def led(self, left):
-        raise SyntaxError("Unknown operator (%r)." % self.id)
+        raise SyntaxError("Unknown operator (%r)." % self.identifier)
 
     def __repr__(self):
         return "Symbol(identifier=%r, value=%r)" % (self.identifier, self.value)
@@ -126,7 +126,8 @@ class Symbol:
 class Parser:
     def __init__(self):
         self.symbol_table: typing.Dict[str, typing.Type[Symbol]] = {}
-        self._peek = None
+        self._peek: typing.Optional[Symbol] = None
+        self.token: typing.Optional[Symbol] = None
         self.tokenizer = Tokenizer(self)
 
     def parse(self, program):
@@ -138,6 +139,7 @@ class Parser:
         return next(self.tokenizer)
 
     def expression(self, rbp=0):
+        assert self.token is not None
         t = self.token
         self.advance()
         left = t.nud()
@@ -151,6 +153,7 @@ class Parser:
         return left
 
     def advance(self, identifier=None):
+        assert self.token is not None
         if identifier and self.token.identifier != identifier:
             raise SyntaxError(
                 "Expected %r, received %r" % (identifier, self.token.identifier)
@@ -170,9 +173,9 @@ class Parser:
 
     def define(self, sid, bp=0, symbol_class=Symbol):
         symbol_table = self.symbol_table
-        sym: Symbol = type(
+        sym: Symbol = typing.cast(Symbol, type(
             symbol_class.__name__, (symbol_class,), {"identifier": sid, "lbp": bp}
-        )
+        ))
         symbol_table[sid] = sym
 
         def wrapper(val):
@@ -191,7 +194,7 @@ class Infix(Symbol):
     rightAssoc = False
     _logical_map = {"and": ast.And(), "or": ast.Or()}
 
-    def led(self, left):
+    def led(self, left: Symbol):
         self.first = left
         rbp = self.lbp - int(self.rightAssoc)
         self.second = self.parser.expression(rbp)
@@ -200,7 +203,7 @@ class Infix(Symbol):
     def __repr__(self):
         return "<'%s'>(%s, %s)" % (self.value, self.first, self.second)
 
-    def ast(self, context=None):
+    def ast(self, context: Context):
         lhs = self.first.ast(context)
         if self.second:
             rhs = self.second.ast(context)
@@ -262,7 +265,9 @@ class Prefix(Symbol):
 
 
 class LParen(Symbol):
-    def led(self, left):
+    first: typing.Union[Symbol, list]
+
+    def led(self, left: Symbol):
         self.first = left
         self.second = []
         while self.parser.token.identifier != ")":
@@ -289,7 +294,7 @@ class LParen(Symbol):
         else:
             return self.first[0]
 
-    def ast(self, context=None):
+    def ast(self, context: Context):
         if not self.second:
             return ast.Tuple(
                 elts=[item.ast(context) for item in self.first], ctx=ast.Load()
@@ -311,7 +316,7 @@ class LiteralToken(Symbol):
     def nud(self):
         return self
 
-    def ast(self, context=None):
+    def ast(self, context: Context):
         if self.value.isdigit():
             return ast.Num(n=int(self.value))
         if self.value in ["true", "false"]:
@@ -338,7 +343,7 @@ class NameToken(Symbol):
     def nud(self):
         return self
 
-    def ast(self, context=None):
+    def ast(self, context: Context):
         return ast.Name(id=self.value, ctx=ast.Load())
 
 
@@ -349,7 +354,7 @@ class Constant(Symbol):
     def nud(self):
         return self
 
-    def ast(self, context=None):
+    def ast(self, context: Context):
         return ast.Constant(value=None, ctx=ast.Load())
 
 
@@ -360,7 +365,7 @@ class FunctionCall(Symbol):
         self.first = self.parser.expression(2000)
         return self
 
-    def ast(self, context):
+    def ast(self, context: Context):
         node = self.first.ast()
         node.elts.insert(0, ast.Str(s=self.value))
         return node
@@ -445,7 +450,7 @@ class PredicateFilter:
         if schema is None:
             schema = self.schema
 
-        schema_field = None
+        schema_field: typing.Optional[marshmallow.fields.Field] = None
 
         for i, key in enumerate(path):
             fields = self._get_schema_fields(schema)
@@ -454,6 +459,7 @@ class PredicateFilter:
             # Query field doesn't exist
             if schema_field is None:
                 raise ValueError("No field %s on schema %s" % (key, schema))
+            assert schema_field is not None
 
             if isinstance(schema_field, marshmallow.fields.Nested):
                 schema = schema_field.schema

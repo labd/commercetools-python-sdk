@@ -83,7 +83,20 @@ def add_delivery():
 
         if not obj["shippingInfo"]:
             obj["shippingInfo"] = ShippingInfoSchema().dump(
-                types.ShippingInfo(deliveries=[])
+                types.ShippingInfo(
+                    shipping_method_name="dummy",
+                    price=types.CentPrecisionMoney(
+                        fraction_digits=0, cent_amount=0, currency_code="EUR"
+                    ),
+                    shipping_rate=types.ShippingRate(
+                        price=types.CentPrecisionMoney(
+                            fraction_digits=0, cent_amount=0, currency_code="EUR"
+                        ),
+                        tiers=[],
+                    ),
+                    shipping_method_state=types.ShippingMethodState(value=None),
+                    deliveries=[],
+                )
             )
         elif not obj["shippingInfo"]["deliveries"]:
             obj["shippingInfo"]["deliveries"] = []

@@ -173,9 +173,12 @@ class Parser:
 
     def define(self, sid, bp=0, symbol_class=Symbol):
         symbol_table = self.symbol_table
-        sym: Symbol = typing.cast(Symbol, type(
-            symbol_class.__name__, (symbol_class,), {"identifier": sid, "lbp": bp}
-        ))
+        sym: Symbol = typing.cast(
+            Symbol,
+            type(
+                symbol_class.__name__, (symbol_class,), {"identifier": sid, "lbp": bp}
+            ),
+        )
         symbol_table[sid] = sym
 
         def wrapper(val):

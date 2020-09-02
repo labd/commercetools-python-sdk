@@ -360,10 +360,10 @@ class OrderService(abstract.AbstractService):
             response_schema_cls=OrderSchema,
         )
 
-    def order_edit_apply(self, action: OrderEditApply) -> OrderEdit:
+    def order_edit_apply(self, id: str, action: OrderEditApply) -> OrderEdit:
         params: typing.Dict[str, str] = {}
         return self._client._post(
-            endpoint="orders/edits/apply",
+            endpoint=f"orders/edits/{id}/apply",
             params=params,
             data_object=action,
             request_schema_cls=OrderEditApplySchema,

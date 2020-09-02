@@ -360,6 +360,7 @@ class ProductService(abstract.AbstractService):
 
     def file_upload(
         self,
+        id: str,
         fh: typing.BinaryIO,
         *,
         filename: str = None,
@@ -376,7 +377,7 @@ class ProductService(abstract.AbstractService):
             _ProductImagesSchema,
         )
         return self._client._upload(
-            endpoint="products/images",
+            endpoint=f"products/{id}/images",
             params=params,
             response_schema_cls=ProductSchema,
             file=fh,
@@ -384,6 +385,7 @@ class ProductService(abstract.AbstractService):
 
     def upload_image(
         self,
+        id: str,
         fh: typing.BinaryIO,
         *,
         filename: str = None,
@@ -400,7 +402,7 @@ class ProductService(abstract.AbstractService):
             _ProductImagesSchema,
         )
         return self._client._upload(
-            endpoint="products/images",
+            endpoint=f"products/{id}/images",
             params=params,
             response_schema_cls=ProductSchema,
             file=fh,

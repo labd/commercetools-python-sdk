@@ -126,7 +126,11 @@ def add_shipping_zone(
     for zone_rate in new["zoneRates"]:
         if zone_rate["zone"]["id"] == action.zone.id:
             raise InternalUpdateError("Zone already exists")
-    new["zoneRates"].append(ZoneRateSchema().dump(types.ZoneRate(zone=action.zone)))
+
+    zone_rate = ZoneRateSchema().dump(
+        types.ZoneRate(zone=action.zone, shipping_rates=[])
+    )
+    new["zoneRates"].append(zone_rate)
     return new
 
 

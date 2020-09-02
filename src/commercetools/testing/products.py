@@ -462,7 +462,10 @@ class ProductsBackend(ServiceBackend):
         image_schema = ImageSchema()
         variant["images"].append(
             image_schema.dump(
-                types.Image(url=f"cdn.commercetools.local/detail-{filename}")
+                types.Image(
+                    url=f"cdn.commercetools.local/detail-{filename}",
+                    dimensions=types.ImageDimensions(w=500, h=500),
+                )
             )
         )
         self.model.save(obj)

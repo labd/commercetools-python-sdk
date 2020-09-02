@@ -133,7 +133,7 @@ class ServiceProcessor:
                 subparams = self._get_parameters(endpoint_data)
                 if not subparams:
                     method = self._get_action_method(
-                        domain, endpoint, endpoint_data, source
+                        domain, endpoint, endpoint_data, source, path_params=[]
                     )
                     if method:
                         domain.add_method(method)
@@ -176,7 +176,7 @@ class ServiceProcessor:
             )
             return self._add_metadata(method, method_data, parent_data)
 
-    def _get_action_method(self, service_domain, path, data, parent_data):
+    def _get_action_method(self, service_domain, path, data, parent_data, path_params):
         if "get" in data and "post" in data:
             if data["post"].get("responses"):
                 endpoint_data = data["post"]
@@ -200,7 +200,7 @@ class ServiceProcessor:
         method = ServiceMethod(
             name=method_name,
             path=service_domain.path + path,
-            path_params=[],
+            path_params=path_params,
             query_params=[],
             type="action",
             method=method,
@@ -264,7 +264,8 @@ class ServiceProcessor:
 
             elif endpoint_path.startswith("/"):
                 yield self._get_action_method(
-                    service_domain, endpoint_path, endpoint_data, data
+                    service_domain, endpoint_path, endpoint_data, data,
+                    path_params=params,
                 )
 
     def _get_parameters(self, data) -> typing.List[ServiceParameter]:

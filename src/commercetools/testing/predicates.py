@@ -153,8 +153,7 @@ class Parser:
         return left
 
     def advance(self, identifier=None):
-        assert self.token is not None
-        if identifier and self.token.identifier != identifier:
+        if identifier and self.token and self.token.identifier != identifier:
             raise SyntaxError(
                 "Expected %r, received %r" % (identifier, self.token.identifier)
             )
@@ -369,7 +368,7 @@ class FunctionCall(Symbol):
         return self
 
     def ast(self, context: "Context"):
-        node = self.first.ast()
+        node = self.first.ast(context)
         node.elts.insert(0, ast.Str(s=self.value))
         return node
 

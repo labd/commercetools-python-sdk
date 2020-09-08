@@ -1,3 +1,7 @@
+10.0.2 (2020-09-08)
+-------------------
+- Testing predicates now support 'in' syntax
+
 10.0.1 (2020-09-04)
 -------------------
 - Fix product upload_image missing product id

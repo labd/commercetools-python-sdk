@@ -1,6 +1,3 @@
-import ast
-import re
-
 import pytest
 
 from commercetools._schemas._product import ProductDataSchema
@@ -58,3 +55,27 @@ def test_filter(predicate, paths):
     pf.filter_field = mock_filter_field
     pf.match({"slug": {"nl-BE": "test-categorie"}})
     assert paths == found_paths
+
+
+def test_in_filter():
+    skus = '("1337", "1338")'
+    predicate = f"masterVariant(sku in {skus}) or variants(sku in {skus})"
+    pf = predicates.PredicateFilter(predicate, schema=ProductDataSchema)
+
+    product_data = {
+        "masterVariant": {"sku": "1337"},
+        "variants": [{"sku": "1338"}, {"sku": "1339"}],
+    }
+    assert pf.match(product_data) is True
+
+    product_data = {
+        "masterVariant": {"sku": "1444"},
+        "variants": [{"sku": "1338"}, {"sku": "1339"}],
+    }
+    assert pf.match(product_data) is True
+
+    product_data = {
+        "masterVariant": {"sku": "1444"},
+        "variants": [{"sku": "1438"}, {"sku": "1139"}],
+    }
+    assert pf.match(product_data) is False

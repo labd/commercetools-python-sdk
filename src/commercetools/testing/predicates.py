@@ -9,6 +9,7 @@ import logging
 import operator
 import re
 import typing
+from functools import partial
 
 import marshmallow
 
@@ -419,6 +420,7 @@ class PredicateFilter:
         "!=": operator.ne,
         "<>": operator.ne,
         "is not": operator.is_not,
+        "in": operator.contains,
     }
 
     def __init__(self, predicate, schema):
@@ -481,6 +483,8 @@ class PredicateFilter:
                     for child_doc in obj
                 )
 
+        is_sequence_value = False
+
         if isinstance(schema_field, marshmallow.fields.Dict):
             obj = schema_field._deserialize(obj, None, None)
             assert len(path) == 1
@@ -489,15 +493,27 @@ class PredicateFilter:
             if obj is not None:
                 obj = schema_field._deserialize(obj, None, None)
             if value is not None:
-                value = schema_field._deserialize(value, None, None)
+                is_sequence_value = isinstance(value, tuple) or isinstance(value, list)
+                if is_sequence_value:
+                    deserialize = partial(
+                        schema_field._deserialize, attr=None, data=None
+                    )
+                    value = list(map(deserialize, value))
+                else:
+                    value = schema_field._deserialize(value, None, None)
 
-        # Case insensitve comparison for strings
+        op = self.operators[operator_value]
+
+        # Case insensitive comparison for strings
         if isinstance(obj, str):
             obj = obj.lower()
         if isinstance(value, str):
             value = value.lower()
+        elif is_sequence_value:
+            value = [x.lower() if isinstance(x, str) else x for x in value]
+            if operator_value == "in":
+                return op(value, obj)
 
-        op = self.operators[operator_value]
         return op(obj, value)
 
     def case_insensitive_get(sef, dict, key, default=None):

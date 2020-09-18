@@ -50,7 +50,12 @@ class CustomObjectsBackend(ServiceBackend):
 
     def get_by_container_key(self, request, container: str, key: str):
         item = next(
-            (obj for obj in self.model.objects.values() if obj["container"] == container and obj["key"] == key), None
+            (
+                obj
+                for obj in self.model.objects.values()
+                if obj["container"] == container and obj["key"] == key
+            ),
+            None,
         )
         if item:
             return create_commercetools_response(request, json=item)

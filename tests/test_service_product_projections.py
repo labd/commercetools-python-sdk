@@ -47,7 +47,9 @@ def test_product_projections_get_by_key(client):
 
 
 def test_product_projections_query_parameters_are_passed(client, commercetools_api):
-    client.products.query(expand="productType", price_country="GB", price_currency="GBP")
+    client.products.query(
+        expand="productType", price_country="GB", price_currency="GBP"
+    )
 
     last_request = commercetools_api.requests_mock.request_history[-1]
 

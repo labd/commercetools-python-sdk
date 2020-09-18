@@ -14,7 +14,9 @@ def test_custom_object_get_by_container_and_key(client):
     assert custom_object.key == "test-object"
     assert custom_object.value == 1234
 
-    custom_object = client.custom_objects.get_by_container_and_key("unittest", "test-object")
+    custom_object = client.custom_objects.get_by_container_and_key(
+        "unittest", "test-object"
+    )
     assert custom_object.container == "unittest"
     assert custom_object.key == "test-object"
     assert custom_object.value == 1234

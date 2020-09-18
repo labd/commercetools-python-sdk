@@ -382,6 +382,8 @@ class CartDraft(_BaseType):
     shipping_rate_input: typing.Optional["ShippingRateInputDraft"]
     #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: Optional list of :class:`str` `(Named` ``discountCodes`` `in Commercetools)`
+    discount_codes: typing.Optional[typing.List[str]]
 
     def __init__(
         self,
@@ -410,7 +412,8 @@ class CartDraft(_BaseType):
         delete_days_after_last_modification: typing.Optional[int] = None,
         origin: typing.Optional["CartOrigin"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        discount_codes: typing.Optional[typing.List[str]] = None
     ) -> None:
         self.currency = currency
         self.customer_id = customer_id
@@ -437,11 +440,12 @@ class CartDraft(_BaseType):
         self.origin = origin
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
+        self.discount_codes = discount_codes
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "CartDraft(currency=%r, customer_id=%r, customer_email=%r, customer_group=%r, anonymous_id=%r, store=%r, country=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, line_items=%r, custom_line_items=%r, shipping_address=%r, billing_address=%r, shipping_method=%r, external_tax_rate_for_shipping_method=%r, custom=%r, locale=%r, delete_days_after_last_modification=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r)"
+            "CartDraft(currency=%r, customer_id=%r, customer_email=%r, customer_group=%r, anonymous_id=%r, store=%r, country=%r, inventory_mode=%r, tax_mode=%r, tax_rounding_mode=%r, tax_calculation_mode=%r, line_items=%r, custom_line_items=%r, shipping_address=%r, billing_address=%r, shipping_method=%r, external_tax_rate_for_shipping_method=%r, custom=%r, locale=%r, delete_days_after_last_modification=%r, origin=%r, shipping_rate_input=%r, item_shipping_addresses=%r, discount_codes=%r)"
             % (
                 self.currency,
                 self.customer_id,
@@ -466,6 +470,7 @@ class CartDraft(_BaseType):
                 self.origin,
                 self.shipping_rate_input,
                 self.item_shipping_addresses,
+                self.discount_codes,
             )
         )
 
@@ -962,6 +967,8 @@ class LineItem(_BaseType):
     total_price: "TypedMoney"
     #: :class:`int`
     quantity: int
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
     #: List of :class:`commercetools.types.ItemState`
     state: typing.List["ItemState"]
     #: Optional :class:`commercetools.types.TaxRate` `(Named` ``taxRate`` `in Commercetools)`
@@ -1000,6 +1007,7 @@ class LineItem(_BaseType):
         line_item_mode: "LineItemMode",
         product_slug: typing.Optional["LocalizedString"] = None,
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
@@ -1016,6 +1024,7 @@ class LineItem(_BaseType):
         self.taxed_price = taxed_price
         self.total_price = total_price
         self.quantity = quantity
+        self.added_at = added_at
         self.state = state
         self.tax_rate = tax_rate
         self.supply_channel = supply_channel
@@ -1029,7 +1038,7 @@ class LineItem(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "LineItem(id=%r, product_id=%r, name=%r, product_slug=%r, product_type=%r, variant=%r, price=%r, taxed_price=%r, total_price=%r, quantity=%r, state=%r, tax_rate=%r, supply_channel=%r, distribution_channel=%r, discounted_price_per_quantity=%r, price_mode=%r, line_item_mode=%r, custom=%r, shipping_details=%r)"
+            "LineItem(id=%r, product_id=%r, name=%r, product_slug=%r, product_type=%r, variant=%r, price=%r, taxed_price=%r, total_price=%r, quantity=%r, added_at=%r, state=%r, tax_rate=%r, supply_channel=%r, distribution_channel=%r, discounted_price_per_quantity=%r, price_mode=%r, line_item_mode=%r, custom=%r, shipping_details=%r)"
             % (
                 self.id,
                 self.product_id,
@@ -1041,6 +1050,7 @@ class LineItem(_BaseType):
                 self.taxed_price,
                 self.total_price,
                 self.quantity,
+                self.added_at,
                 self.state,
                 self.tax_rate,
                 self.supply_channel,
@@ -1063,6 +1073,8 @@ class LineItemDraft(_BaseType):
     sku: typing.Optional[str]
     #: Optional :class:`int`
     quantity: typing.Optional[int]
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
@@ -1085,6 +1097,7 @@ class LineItemDraft(_BaseType):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -1097,6 +1110,7 @@ class LineItemDraft(_BaseType):
         self.variant_id = variant_id
         self.sku = sku
         self.quantity = quantity
+        self.added_at = added_at
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
         self.external_tax_rate = external_tax_rate
@@ -1108,12 +1122,13 @@ class LineItemDraft(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "LineItemDraft(product_id=%r, variant_id=%r, sku=%r, quantity=%r, supply_channel=%r, distribution_channel=%r, external_tax_rate=%r, custom=%r, external_price=%r, external_total_price=%r, shipping_details=%r)"
+            "LineItemDraft(product_id=%r, variant_id=%r, sku=%r, quantity=%r, added_at=%r, supply_channel=%r, distribution_channel=%r, external_tax_rate=%r, custom=%r, external_price=%r, external_total_price=%r, shipping_details=%r)"
             % (
                 self.product_id,
                 self.variant_id,
                 self.sku,
                 self.quantity,
+                self.added_at,
                 self.supply_channel,
                 self.distribution_channel,
                 self.external_tax_rate,

@@ -45,33 +45,14 @@ class CustomObjectsBackend(ServiceBackend):
         return [
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
-            ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
         ]
 
-    def get_by_id(self, request, id):
+    def get_by_container_key(self, request, container: str, key: str):
         item = next(
-            (obj for obj in self.model.objects.values() if obj["id"] == id), None
+            (obj for obj in self.model.objects.values() if obj["container"] == container and obj["key"] == key), None
         )
         if item:
             return create_commercetools_response(request, json=item)
-        return create_commercetools_response(request, status_code=404)
-
-    def get_by_container_key(self, request, container: str, key: str):
-        id = (container, key)
-        item = self.model.objects.get(id)
-        if item:
-            return create_commercetools_response(request, json=item)
         else:
-            content = ErrorResponseSchema().dumps(
-                types.ErrorResponse(
-                    status_code=404,
-                    message=f"The CustomObject with ID '({container},{key})'",
-                    errors=[
-                        types.InvalidSubjectError(
-                            message=f"The CustomObject with ID '({container},{key}' was not found."  # noqa E501
-                        )
-                    ],
-                )
-            )
-            return create_commercetools_response(request, text=content, status_code=404)
+            return create_commercetools_response(request, status_code=404)

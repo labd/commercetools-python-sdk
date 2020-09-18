@@ -1,7 +1,12 @@
+import uuid
+
+import marshmallow
 import pytest
+from marshmallow import fields
 from requests.exceptions import HTTPError
 
 from commercetools import types
+from commercetools.helpers import OptionalList
 
 
 def test_product_projections_get_by_id(client):
@@ -44,6 +49,15 @@ def test_product_projections_get_by_key(client):
     product = client.product_projections.get_by_key(product_create.key, staged=True)
     assert product.id == product_create.id
     assert product.key == product_create.key
+
+
+def test_product_projections_query_parameters_are_passed(client, commercetools_api):
+    client.products.query(expand="productType", price_country="GB", price_currency="GBP")
+
+    last_request = commercetools_api.requests_mock.request_history[-1]
+
+    assert "priceCurrency" in last_request.qs
+    assert "priceCountry" in last_request.qs
 
 
 def test_product_projections_get_by_key_not_found(client):

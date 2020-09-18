@@ -4,7 +4,7 @@ from requests.exceptions import HTTPError
 from commercetools import types
 
 
-def test_custom_object_get_by_id(client):
+def test_custom_object_get_by_container_and_key(client):
     custom_object = client.custom_objects.create_or_update(
         types.CustomObjectDraft(container="unittest", key="test-object", value=1234)
     )
@@ -14,13 +14,13 @@ def test_custom_object_get_by_id(client):
     assert custom_object.key == "test-object"
     assert custom_object.value == 1234
 
-    custom_object = client.custom_objects.get_by_id(custom_object.id)
+    custom_object = client.custom_objects.get_by_container_and_key("unittest", "test-object")
     assert custom_object.container == "unittest"
     assert custom_object.key == "test-object"
     assert custom_object.value == 1234
 
     with pytest.raises(HTTPError):
-        client.custom_objects.get_by_id("invalid")
+        client.custom_objects.get_by_container_and_key("invalid", "invalid")
 
 
 def test_custom_object_query(client):

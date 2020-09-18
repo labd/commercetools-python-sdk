@@ -722,6 +722,8 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     sku: typing.Optional[str]
     #: Optional :class:`int`
     quantity: typing.Optional[int]
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.Money` `(Named` ``externalPrice`` `in Commercetools)`
@@ -741,6 +743,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -753,6 +756,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         self.variant_id = variant_id
         self.sku = sku
         self.quantity = quantity
+        self.added_at = added_at
         self.supply_channel = supply_channel
         self.external_price = external_price
         self.external_total_price = external_total_price
@@ -761,7 +765,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
 
     def __repr__(self) -> str:
         return (
-            "StagedOrderAddLineItemAction(action=%r, custom=%r, distribution_channel=%r, external_tax_rate=%r, product_id=%r, variant_id=%r, sku=%r, quantity=%r, supply_channel=%r, external_price=%r, external_total_price=%r, shipping_details=%r)"
+            "StagedOrderAddLineItemAction(action=%r, custom=%r, distribution_channel=%r, external_tax_rate=%r, product_id=%r, variant_id=%r, sku=%r, quantity=%r, added_at=%r, supply_channel=%r, external_price=%r, external_total_price=%r, shipping_details=%r)"
             % (
                 self.action,
                 self.custom,
@@ -771,6 +775,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
                 self.variant_id,
                 self.sku,
                 self.quantity,
+                self.added_at,
                 self.supply_channel,
                 self.external_price,
                 self.external_total_price,

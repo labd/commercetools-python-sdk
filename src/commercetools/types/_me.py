@@ -712,6 +712,8 @@ class MyLineItemDraft(_BaseType):
     variant_id: int
     #: :class:`int`
     quantity: int
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
@@ -729,6 +731,7 @@ class MyLineItemDraft(_BaseType):
         product_id: str,
         variant_id: int,
         quantity: int,
+        added_at: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -738,6 +741,7 @@ class MyLineItemDraft(_BaseType):
         self.product_id = product_id
         self.variant_id = variant_id
         self.quantity = quantity
+        self.added_at = added_at
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
         self.custom = custom
@@ -747,11 +751,12 @@ class MyLineItemDraft(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "MyLineItemDraft(product_id=%r, variant_id=%r, quantity=%r, supply_channel=%r, distribution_channel=%r, custom=%r, shipping_details=%r, sku=%r)"
+            "MyLineItemDraft(product_id=%r, variant_id=%r, quantity=%r, added_at=%r, supply_channel=%r, distribution_channel=%r, custom=%r, shipping_details=%r, sku=%r)"
             % (
                 self.product_id,
                 self.variant_id,
                 self.quantity,
+                self.added_at,
                 self.supply_channel,
                 self.distribution_channel,
                 self.custom,
@@ -1316,6 +1321,8 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: Optional :class:`datetime.datetime` `(Named` ``addedAt`` `in Commercetools)`
+    added_at: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
@@ -1330,7 +1337,8 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        added_at: typing.Optional[datetime.datetime] = None
     ) -> None:
         self.custom = custom
         self.distribution_channel = distribution_channel
@@ -1343,11 +1351,12 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details = shipping_details
+        self.added_at = added_at
         super().__init__(action="addLineItem")
 
     def __repr__(self) -> str:
         return (
-            "MyCartAddLineItemAction(action=%r, custom=%r, distribution_channel=%r, external_tax_rate=%r, product_id=%r, variant_id=%r, sku=%r, quantity=%r, supply_channel=%r, external_price=%r, external_total_price=%r, shipping_details=%r)"
+            "MyCartAddLineItemAction(action=%r, custom=%r, distribution_channel=%r, external_tax_rate=%r, product_id=%r, variant_id=%r, sku=%r, quantity=%r, supply_channel=%r, external_price=%r, external_total_price=%r, shipping_details=%r, added_at=%r)"
             % (
                 self.action,
                 self.custom,
@@ -1361,6 +1370,7 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
                 self.external_price,
                 self.external_total_price,
                 self.shipping_details,
+                self.added_at,
             )
         )
 

@@ -97,7 +97,7 @@ class ShippingMethodService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },
@@ -206,7 +206,7 @@ class ShippingMethodService(abstract.AbstractService):
         """Get ShippingMethods for a cart
         """
         params = self._serialize_params(
-            {"expand": expand, "cartId": cart_id}, _ShippingMethodMatching_CartSchema
+            {"expand": expand, "cart_id": cart_id}, _ShippingMethodMatching_CartSchema
         )
         return self._client._get(
             endpoint="shipping-methods/matching-cart",
@@ -245,7 +245,7 @@ class ShippingMethodService(abstract.AbstractService):
         """Get ShippingMethods for an order edit
         """
         params = self._serialize_params(
-            {"orderEditId": order_edit_id, "country": country, "state": state},
+            {"order_edit_id": order_edit_id, "country": country, "state": state},
             _ShippingMethodMatching_OrdereditSchema,
         )
         return self._client._get(

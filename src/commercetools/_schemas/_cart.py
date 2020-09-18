@@ -215,6 +215,11 @@ class CartDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="itemShippingAddresses",
     )
+    discount_codes = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        missing=None,
+        data_key="discountCodes",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -896,6 +901,9 @@ class LineItemDraftSchema(marshmallow.Schema):
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     supply_channel = helpers.LazyNestedField(
         nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -996,6 +1004,9 @@ class LineItemSchema(marshmallow.Schema):
         data_key="totalPrice",
     )
     quantity = marshmallow.fields.Integer(allow_none=True)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     state = helpers.LazyNestedField(
         nested="commercetools._schemas._order.ItemStateSchema",
         unknown=marshmallow.EXCLUDE,

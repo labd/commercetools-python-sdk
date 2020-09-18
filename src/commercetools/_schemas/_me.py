@@ -540,6 +540,9 @@ class MyLineItemDraftSchema(marshmallow.Schema):
     product_id = marshmallow.fields.String(allow_none=True, data_key="productId")
     variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
     quantity = marshmallow.fields.Integer(allow_none=True)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     supply_channel = helpers.LazyNestedField(
         nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1167,6 +1170,9 @@ class MyCartAddLineItemActionSchema(MyCartUpdateActionSchema):
         allow_none=True,
         missing=None,
         data_key="shippingDetails",
+    )
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
     )
 
     class Meta:

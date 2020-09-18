@@ -77,7 +77,7 @@ class SubscriptionService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },

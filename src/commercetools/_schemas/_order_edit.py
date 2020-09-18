@@ -640,6 +640,9 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    added_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="addedAt"
+    )
     supply_channel = helpers.LazyNestedField(
         nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,

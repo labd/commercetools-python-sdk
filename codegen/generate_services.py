@@ -631,11 +631,11 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             schema_name = bases[0].id
 
         # params = self._serialize_params({}, schema)
-        input_params = {}
+        input_params = []
         for key, param in query_params.items():
             if key.startswith("/"):
                 key = snakeit(param.extra_data["(placeholderParam)"]["paramName"])
-            input_params[key] = snakeit(key)
+            input_params.append(snakeit(key))
 
         line = ast.Assign(
             targets=[ast.Name(id="params")],
@@ -643,8 +643,8 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                 func=ast.Attribute(value=ast.Name(id="self"), attr="_serialize_params"),
                 args=[
                     ast.Dict(
-                        keys=[ast.Str(s=val, kind="") for val in input_params.keys()],
-                        values=[ast.Name(id=val) for val in input_params.values()],
+                        keys=[ast.Str(s=val, kind="") for val in input_params],
+                        values=[ast.Name(id=val) for val in input_params],
                     ),
                     ast.Name(id=schema_name),
                 ],

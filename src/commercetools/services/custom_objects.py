@@ -29,13 +29,23 @@ class _CustomObjectQuerySchema(
 
 
 class _CustomObjectDeleteSchema(
-    traits.VersionedSchema, traits.ExpandableSchema, traits.DataErasureSchema
+    traits.DataErasureSchema, traits.VersionedSchema, traits.ExpandableSchema
 ):
     version = OptionalList(fields.String(), required=False)
 
 
 class CustomObjectService(abstract.AbstractService):
     """Store custom JSON values."""
+
+    def get_by_container(
+        self, container: str, *, expand: OptionalListStr = None
+    ) -> CustomObject:
+        params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
+        return self._client._get(
+            endpoint=f"custom-objects/{container}",
+            params=params,
+            schema_cls=CustomObjectSchema,
+        )
 
     def get_by_container_and_key(
         self, container, key, *, expand: OptionalListStr = None
@@ -44,14 +54,6 @@ class CustomObjectService(abstract.AbstractService):
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
             endpoint=f"custom-objects/{container}/{key}",
-            params=params,
-            schema_cls=CustomObjectSchema,
-        )
-
-    def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> CustomObject:
-        params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
-        return self._client._get(
-            endpoint=f"custom-objects/{id}",
             params=params,
             schema_cls=CustomObjectSchema,
         )
@@ -80,7 +82,7 @@ class CustomObjectService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },
@@ -148,36 +150,11 @@ class CustomObjectService(abstract.AbstractService):
     ) -> CustomObject:
         """Delete CustomObject by container and key"""
         params = self._serialize_params(
-            {"dataErasure": data_erasure, "version": version, "expand": expand},
+            {"data_erasure": data_erasure, "version": version, "expand": expand},
             _CustomObjectDeleteSchema,
         )
         return self._client._delete(
             endpoint=f"custom-objects/{container}/{key}",
-            params=params,
-            response_schema_cls=CustomObjectSchema,
-            force_delete=force_delete,
-        )
-
-    def delete_by_id(
-        self,
-        id: str,
-        *,
-        version: str = None,
-        expand: OptionalListStr = None,
-        data_erasure: bool = None,
-        force_delete: bool = False,
-    ) -> CustomObject:
-        """The version control is optional.
-
-        If the query contains a version, then it must match the version of the
-        object.
-        """
-        params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
-            _CustomObjectDeleteSchema,
-        )
-        return self._client._delete(
-            endpoint=f"custom-objects/{id}",
             params=params,
             response_schema_cls=CustomObjectSchema,
             force_delete=force_delete,

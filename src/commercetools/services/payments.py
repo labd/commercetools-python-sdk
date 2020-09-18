@@ -75,7 +75,7 @@ class PaymentService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },
@@ -153,7 +153,7 @@ class PaymentService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Payment:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _PaymentDeleteSchema,
         )
         return self._client._delete(
@@ -173,7 +173,7 @@ class PaymentService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Payment:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _PaymentDeleteSchema,
         )
         return self._client._delete(

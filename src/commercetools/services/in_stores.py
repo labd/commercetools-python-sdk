@@ -237,10 +237,10 @@ class In_StoreService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
-                "customerId": customer_id,
+                "customer_id": customer_id,
             },
             _In_StoreQuerySchema,
         )
@@ -271,7 +271,7 @@ class In_StoreService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },
@@ -306,7 +306,7 @@ class In_StoreService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },
@@ -536,7 +536,7 @@ class In_StoreService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Cart:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _In_StoreDeleteSchema,
         )
         return self._client._delete(
@@ -557,7 +557,7 @@ class In_StoreService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Customer:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _In_StoreDeleteSchema,
         )
         return self._client._delete(
@@ -578,7 +578,7 @@ class In_StoreService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Customer:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _In_StoreDeleteSchema,
         )
         return self._client._delete(
@@ -599,7 +599,7 @@ class In_StoreService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Order:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _In_StoreDeleteSchema,
         )
         return self._client._delete(
@@ -620,7 +620,7 @@ class In_StoreService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> Order:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _In_StoreDeleteSchema,
         )
         return self._client._delete(

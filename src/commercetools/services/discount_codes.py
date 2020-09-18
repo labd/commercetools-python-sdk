@@ -71,7 +71,7 @@ class DiscountCodeService(abstract.AbstractService):
                 "sort": sort,
                 "limit": limit,
                 "offset": offset,
-                "withTotal": with_total,
+                "with_total": with_total,
                 "where": where,
                 "predicate_var": predicate_var,
             },
@@ -128,7 +128,7 @@ class DiscountCodeService(abstract.AbstractService):
         force_delete: bool = False,
     ) -> DiscountCode:
         params = self._serialize_params(
-            {"version": version, "expand": expand, "dataErasure": data_erasure},
+            {"version": version, "expand": expand, "data_erasure": data_erasure},
             _DiscountCodeDeleteSchema,
         )
         return self._client._delete(

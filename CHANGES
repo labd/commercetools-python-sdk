@@ -1,3 +1,9 @@
+11.0.0 (2020-09-18)
+-------------------
+- Regenerated types (custom objects get by id has been removed)
+- Fixed query parameters not being sent:
+    for example: delete's dataErasure or product price query priceCurrency where not being sent
+
 10.0.2 (2020-09-08)
 -------------------
 - Testing predicates now support 'in' syntax

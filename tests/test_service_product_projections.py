@@ -51,8 +51,8 @@ def test_product_projections_query_parameters_are_passed(client, commercetools_a
 
     last_request = commercetools_api.requests_mock.request_history[-1]
 
-    assert "priceCurrency" in last_request.qs
-    assert "priceCountry" in last_request.qs
+    for field in ["expand", "priceCurrency", "priceCountry"]:
+        assert field in last_request.qs
 
 
 def test_product_projections_get_by_key_not_found(client):

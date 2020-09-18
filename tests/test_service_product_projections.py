@@ -1,12 +1,7 @@
-import uuid
-
-import marshmallow
 import pytest
-from marshmallow import fields
 from requests.exceptions import HTTPError
 
 from commercetools import types
-from commercetools.helpers import OptionalList
 
 
 def test_product_projections_get_by_id(client):

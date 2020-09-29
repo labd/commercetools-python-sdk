@@ -131,8 +131,9 @@ class Discriminator(Field):
 
     def get_schema(self, name):
         context = getattr(self.parent, "context", {})
-        schema_class = class_registry.get_class(name)
+        schema_class = self.get_schema_class(name)
 
+        assert schema_class is not None
         # Class registry can return a list if multiple classes with the same
         # name are registered. We shouldn't do that so lets assert it.
         # and make mypy happy :-)
@@ -148,6 +149,34 @@ class Discriminator(Field):
         )
         schema.ordered = getattr(self.parent, "ordered", False)
         return schema
+
+    def get_schema_class(self, name):
+        """Get schema class for this field.
+
+        Due do lazy loading imports keep retrying.
+        """
+        tries = 0
+        max_tries = 50  # more than the amount of schema .py files
+        last_import_error: typing.Optional[str] = None
+        while tries < max_tries:
+            try:
+                schema_class = class_registry.get_class(name)
+                return schema_class
+            except RegistryError as e:
+                if not e.__cause__:
+                    raise e
+                key_error = typing.cast(KeyError, e.__cause__)
+                import_name = key_error.args[0]
+                names = import_name.rsplit(".", 1)
+                importlib.import_module(names[0])
+                tries += 1
+                if not last_import_error:
+                    last_import_error = import_name
+                elif last_import_error and last_import_error == import_name:
+                    # same error as before, abort
+                    raise e
+
+        return None
 
     def _nested_normalized_option(self, option_name):
         nested_field = "%s." % self.name

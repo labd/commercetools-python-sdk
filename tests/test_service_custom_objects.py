@@ -59,3 +59,21 @@ def test_custom_object_update(client):
         types.CustomObjectDraft(container="unittest", key="test-object-1", value=2345)
     )
     assert custom_object.key == "test-object-1"
+
+
+def test_custom_object_query_by_container(client):
+    """Test filtering by container."""
+    client.custom_objects.create_or_update(
+        types.CustomObjectDraft(container="unittest", key="test-object-1", value=1234)
+    )
+    client.custom_objects.create_or_update(
+        types.CustomObjectDraft(container="unittest", key="test-object-2", value=1234)
+    )
+    client.custom_objects.create_or_update(
+        types.CustomObjectDraft(container="unittest2", key="test-object-1", value=1234)
+    )
+
+    result = client.custom_objects.query_by_container("unittest")
+    assert len(result.results) == 2
+    assert result.total == 2
+

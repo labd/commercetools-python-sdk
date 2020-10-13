@@ -46,7 +46,17 @@ class CustomObjectsBackend(ServiceBackend):
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
             ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
+            ("^(?P<container>[^/]+)$", "GET", self.query_by_container),
         ]
+
+    def query_by_container(self, request, container: str):
+        # container is not a valid predicate filter, but we can abuse it internally.
+        if "where" not in request.qs:
+            request.qs["where"] = f'container = "{container}"'
+        else:
+            request.qs["where"] = f'container = "{container}" AND {request.qs["where"]}'
+
+        return self.query(request)
 
     def get_by_container_key(self, request, container: str, key: str):
         item = next(

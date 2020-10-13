@@ -29,6 +29,7 @@ __all__ = [
     "MyCartSetDeleteDaysAfterLastModificationActionSchema",
     "MyCartSetLineItemCustomFieldActionSchema",
     "MyCartSetLineItemCustomTypeActionSchema",
+    "MyCartSetLineItemDistributionChannelActionSchema",
     "MyCartSetLineItemShippingDetailsActionSchema",
     "MyCartSetLocaleActionSchema",
     "MyCartSetShippingAddressActionSchema",
@@ -1528,6 +1529,27 @@ class MyCartSetLineItemCustomTypeActionSchema(MyCartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.MyCartSetLineItemCustomTypeAction(**data)
+
+
+class MyCartSetLineItemDistributionChannelActionSchema(MyCartUpdateActionSchema):
+    """Marshmallow schema for :class:`commercetools.types.MyCartSetLineItemDistributionChannelAction`."""
+
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    distribution_channel = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.MyCartSetLineItemDistributionChannelAction(**data)
 
 
 class MyCartSetLineItemShippingDetailsActionSchema(MyCartUpdateActionSchema):

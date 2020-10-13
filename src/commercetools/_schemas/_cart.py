@@ -55,6 +55,7 @@ __all__ = [
     "CartSetDeleteDaysAfterLastModificationActionSchema",
     "CartSetLineItemCustomFieldActionSchema",
     "CartSetLineItemCustomTypeActionSchema",
+    "CartSetLineItemDistributionChannelActionSchema",
     "CartSetLineItemPriceActionSchema",
     "CartSetLineItemShippingDetailsActionSchema",
     "CartSetLineItemTaxAmountActionSchema",
@@ -516,6 +517,7 @@ class CartUpdateSchema(marshmallow.Schema):
                 "setDeleteDaysAfterLastModification": "commercetools._schemas._cart.CartSetDeleteDaysAfterLastModificationActionSchema",
                 "setLineItemCustomField": "commercetools._schemas._cart.CartSetLineItemCustomFieldActionSchema",
                 "setLineItemCustomType": "commercetools._schemas._cart.CartSetLineItemCustomTypeActionSchema",
+                "setLineItemDistributionChannel": "commercetools._schemas._cart.CartSetLineItemDistributionChannelActionSchema",
                 "setLineItemPrice": "commercetools._schemas._cart.CartSetLineItemPriceActionSchema",
                 "setLineItemShippingDetails": "commercetools._schemas._cart.CartSetLineItemShippingDetailsActionSchema",
                 "setLineItemTaxAmount": "commercetools._schemas._cart.CartSetLineItemTaxAmountActionSchema",
@@ -2174,6 +2176,27 @@ class CartSetLineItemCustomTypeActionSchema(CartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return types.CartSetLineItemCustomTypeAction(**data)
+
+
+class CartSetLineItemDistributionChannelActionSchema(CartUpdateActionSchema):
+    """Marshmallow schema for :class:`commercetools.types.CartSetLineItemDistributionChannelAction`."""
+
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    distribution_channel = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.CartSetLineItemDistributionChannelAction(**data)
 
 
 class CartSetLineItemPriceActionSchema(CartUpdateActionSchema):

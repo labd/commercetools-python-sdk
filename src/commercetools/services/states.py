@@ -51,6 +51,12 @@ class StateService(abstract.AbstractService):
             endpoint=f"states/{id}", params=params, schema_cls=StateSchema
         )
 
+    def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> State:
+        params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
+        return self._client._get(
+            endpoint=f"states/key={key}", params=params, schema_cls=StateSchema
+        )
+
     def query(
         self,
         *,
@@ -118,6 +124,26 @@ class StateService(abstract.AbstractService):
             force_update=force_update,
         )
 
+    def update_by_key(
+        self,
+        key: str,
+        version: int,
+        actions: typing.List[StateUpdateAction],
+        *,
+        expand: OptionalListStr = None,
+        force_update: bool = False,
+    ) -> State:
+        params = self._serialize_params({"expand": expand}, _StateUpdateSchema)
+        update_action = StateUpdate(version=version, actions=actions)
+        return self._client._post(
+            endpoint=f"states/key={key}",
+            params=params,
+            data_object=update_action,
+            request_schema_cls=StateUpdateSchema,
+            response_schema_cls=StateSchema,
+            force_update=force_update,
+        )
+
     def delete_by_id(
         self,
         id: str,
@@ -131,6 +157,24 @@ class StateService(abstract.AbstractService):
         )
         return self._client._delete(
             endpoint=f"states/{id}",
+            params=params,
+            response_schema_cls=StateSchema,
+            force_delete=force_delete,
+        )
+
+    def delete_by_key(
+        self,
+        key: str,
+        version: int,
+        *,
+        expand: OptionalListStr = None,
+        force_delete: bool = False,
+    ) -> State:
+        params = self._serialize_params(
+            {"version": version, "expand": expand}, _StateDeleteSchema
+        )
+        return self._client._delete(
+            endpoint=f"states/key={key}",
             params=params,
             response_schema_cls=StateSchema,
             force_delete=force_delete,

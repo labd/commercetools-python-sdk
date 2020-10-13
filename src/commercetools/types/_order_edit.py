@@ -141,6 +141,7 @@ __all__ = [
     "StagedOrderSetDeliveryItemsAction",
     "StagedOrderSetLineItemCustomFieldAction",
     "StagedOrderSetLineItemCustomTypeAction",
+    "StagedOrderSetLineItemDistributionChannelAction",
     "StagedOrderSetLineItemPriceAction",
     "StagedOrderSetLineItemShippingDetailsAction",
     "StagedOrderSetLineItemTaxAmountAction",
@@ -1599,6 +1600,29 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
         return (
             "StagedOrderSetLineItemCustomTypeAction(action=%r, line_item_id=%r, type=%r, fields=%r)"
             % (self.action, self.line_item_id, self.type, self.fields)
+        )
+
+
+class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: str
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        line_item_id: str,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.distribution_channel = distribution_channel
+        super().__init__(action="setLineItemDistributionChannel")
+
+    def __repr__(self) -> str:
+        return (
+            "StagedOrderSetLineItemDistributionChannelAction(action=%r, line_item_id=%r, distribution_channel=%r)"
+            % (self.action, self.line_item_id, self.distribution_channel)
         )
 
 

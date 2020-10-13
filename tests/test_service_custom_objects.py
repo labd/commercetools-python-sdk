@@ -76,4 +76,3 @@ def test_custom_object_query_by_container(client):
     result = client.custom_objects.query_by_container("unittest")
     assert len(result.results) == 2
     assert result.total == 2
-

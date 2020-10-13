@@ -39,6 +39,7 @@ __all__ = [
     "OutOfStockErrorSchema",
     "PriceChangedErrorSchema",
     "ReferenceExistsErrorSchema",
+    "ReferencedResourceNotFoundErrorSchema",
     "RequiredFieldErrorSchema",
     "ResourceNotFoundErrorSchema",
     "ShippingMethodDoesNotMatchCartErrorSchema",
@@ -116,6 +117,7 @@ class ErrorResponseSchema(marshmallow.Schema):
                 "OutOfStock": "commercetools._schemas._error.OutOfStockErrorSchema",
                 "PriceChanged": "commercetools._schemas._error.PriceChangedErrorSchema",
                 "ReferenceExists": "commercetools._schemas._error.ReferenceExistsErrorSchema",
+                "ReferencedResourceNotFound": "commercetools._schemas._error.ReferencedResourceNotFoundErrorSchema",
                 "RequiredField": "commercetools._schemas._error.RequiredFieldErrorSchema",
                 "ResourceNotFound": "commercetools._schemas._error.ResourceNotFoundErrorSchema",
                 "ShippingMethodDoesNotMatchCart": "commercetools._schemas._error.ShippingMethodDoesNotMatchCartErrorSchema",
@@ -727,6 +729,24 @@ class ReferenceExistsErrorSchema(ErrorObjectSchema):
     def post_load(self, data, **kwargs):
         del data["code"]
         return types.ReferenceExistsError(**data)
+
+
+class ReferencedResourceNotFoundErrorSchema(ErrorObjectSchema):
+    """Marshmallow schema for :class:`commercetools.types.ReferencedResourceNotFoundError`."""
+
+    type_id = marshmallow_enum.EnumField(
+        types.ReferenceTypeId, by_value=True, data_key="typeId"
+    )
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["code"]
+        return types.ReferencedResourceNotFoundError(**data)
 
 
 class RequiredFieldErrorSchema(ErrorObjectSchema):

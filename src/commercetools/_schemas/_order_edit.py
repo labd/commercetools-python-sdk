@@ -78,6 +78,7 @@ __all__ = [
     "StagedOrderSetDeliveryItemsActionSchema",
     "StagedOrderSetLineItemCustomFieldActionSchema",
     "StagedOrderSetLineItemCustomTypeActionSchema",
+    "StagedOrderSetLineItemDistributionChannelActionSchema",
     "StagedOrderSetLineItemPriceActionSchema",
     "StagedOrderSetLineItemShippingDetailsActionSchema",
     "StagedOrderSetLineItemTaxAmountActionSchema",
@@ -179,6 +180,7 @@ class OrderEditDraftSchema(marshmallow.Schema):
                 "setDeliveryItems": "commercetools._schemas._order_edit.StagedOrderSetDeliveryItemsActionSchema",
                 "setLineItemCustomField": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomFieldActionSchema",
                 "setLineItemCustomType": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomTypeActionSchema",
+                "setLineItemDistributionChannel": "commercetools._schemas._order_edit.StagedOrderSetLineItemDistributionChannelActionSchema",
                 "setLineItemPrice": "commercetools._schemas._order_edit.StagedOrderSetLineItemPriceActionSchema",
                 "setLineItemShippingDetails": "commercetools._schemas._order_edit.StagedOrderSetLineItemShippingDetailsActionSchema",
                 "setLineItemTaxAmount": "commercetools._schemas._order_edit.StagedOrderSetLineItemTaxAmountActionSchema",
@@ -372,6 +374,7 @@ class OrderEditSchema(BaseResourceSchema):
                 "setDeliveryItems": "commercetools._schemas._order_edit.StagedOrderSetDeliveryItemsActionSchema",
                 "setLineItemCustomField": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomFieldActionSchema",
                 "setLineItemCustomType": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomTypeActionSchema",
+                "setLineItemDistributionChannel": "commercetools._schemas._order_edit.StagedOrderSetLineItemDistributionChannelActionSchema",
                 "setLineItemPrice": "commercetools._schemas._order_edit.StagedOrderSetLineItemPriceActionSchema",
                 "setLineItemShippingDetails": "commercetools._schemas._order_edit.StagedOrderSetLineItemShippingDetailsActionSchema",
                 "setLineItemTaxAmount": "commercetools._schemas._order_edit.StagedOrderSetLineItemTaxAmountActionSchema",
@@ -1485,6 +1488,29 @@ class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema
         return types.StagedOrderSetLineItemCustomTypeAction(**data)
 
 
+class StagedOrderSetLineItemDistributionChannelActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    """Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemDistributionChannelAction`."""
+
+    line_item_id = marshmallow.fields.String(allow_none=True, data_key="lineItemId")
+    distribution_channel = helpers.LazyNestedField(
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return types.StagedOrderSetLineItemDistributionChannelAction(**data)
+
+
 class StagedOrderSetLineItemPriceActionSchema(StagedOrderUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.StagedOrderSetLineItemPriceAction`."""
 
@@ -2104,6 +2130,7 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
             "setDeliveryItems": "commercetools._schemas._order_edit.StagedOrderSetDeliveryItemsActionSchema",
             "setLineItemCustomField": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomFieldActionSchema",
             "setLineItemCustomType": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomTypeActionSchema",
+            "setLineItemDistributionChannel": "commercetools._schemas._order_edit.StagedOrderSetLineItemDistributionChannelActionSchema",
             "setLineItemPrice": "commercetools._schemas._order_edit.StagedOrderSetLineItemPriceActionSchema",
             "setLineItemShippingDetails": "commercetools._schemas._order_edit.StagedOrderSetLineItemShippingDetailsActionSchema",
             "setLineItemTaxAmount": "commercetools._schemas._order_edit.StagedOrderSetLineItemTaxAmountActionSchema",
@@ -2219,6 +2246,7 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "OutOfStock": "commercetools._schemas._error.OutOfStockErrorSchema",
                 "PriceChanged": "commercetools._schemas._error.PriceChangedErrorSchema",
                 "ReferenceExists": "commercetools._schemas._error.ReferenceExistsErrorSchema",
+                "ReferencedResourceNotFound": "commercetools._schemas._error.ReferencedResourceNotFoundErrorSchema",
                 "RequiredField": "commercetools._schemas._error.RequiredFieldErrorSchema",
                 "ResourceNotFound": "commercetools._schemas._error.ResourceNotFoundErrorSchema",
                 "ShippingMethodDoesNotMatchCart": "commercetools._schemas._error.ShippingMethodDoesNotMatchCartErrorSchema",
@@ -2450,6 +2478,7 @@ class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
                 "setDeliveryItems": "commercetools._schemas._order_edit.StagedOrderSetDeliveryItemsActionSchema",
                 "setLineItemCustomField": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomFieldActionSchema",
                 "setLineItemCustomType": "commercetools._schemas._order_edit.StagedOrderSetLineItemCustomTypeActionSchema",
+                "setLineItemDistributionChannel": "commercetools._schemas._order_edit.StagedOrderSetLineItemDistributionChannelActionSchema",
                 "setLineItemPrice": "commercetools._schemas._order_edit.StagedOrderSetLineItemPriceActionSchema",
                 "setLineItemShippingDetails": "commercetools._schemas._order_edit.StagedOrderSetLineItemShippingDetailsActionSchema",
                 "setLineItemTaxAmount": "commercetools._schemas._order_edit.StagedOrderSetLineItemTaxAmountActionSchema",

@@ -37,16 +37,6 @@ class _CustomObjectDeleteSchema(
 class CustomObjectService(abstract.AbstractService):
     """Store custom JSON values."""
 
-    def get_by_container(
-        self, container: str, *, expand: OptionalListStr = None
-    ) -> CustomObject:
-        params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
-        return self._client._get(
-            endpoint=f"custom-objects/{container}",
-            params=params,
-            schema_cls=CustomObjectSchema,
-        )
-
     def get_by_container_and_key(
         self, container, key, *, expand: OptionalListStr = None
     ) -> CustomObject:
@@ -90,6 +80,38 @@ class CustomObjectService(abstract.AbstractService):
         )
         return self._client._get(
             endpoint="custom-objects",
+            params=params,
+            schema_cls=CustomObjectPagedQueryResponseSchema,
+        )
+
+    def query_by_container(
+        self,
+        container: str,
+        *,
+        expand: OptionalListStr = None,
+        sort: OptionalListStr = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        where: OptionalListStr = None,
+        predicate_var: typing.Dict[str, str] = None,
+    ) -> CustomObjectPagedQueryResponse:
+        """Store custom JSON values.
+        """
+        params = self._serialize_params(
+            {
+                "expand": expand,
+                "sort": sort,
+                "limit": limit,
+                "offset": offset,
+                "with_total": with_total,
+                "where": where,
+                "predicate_var": predicate_var,
+            },
+            _CustomObjectQuerySchema,
+        )
+        return self._client._get(
+            endpoint=f"custom-objects/{container}",
             params=params,
             schema_cls=CustomObjectPagedQueryResponseSchema,
         )

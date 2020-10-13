@@ -43,6 +43,7 @@ __all__ = [
     "OutOfStockError",
     "PriceChangedError",
     "ReferenceExistsError",
+    "ReferencedResourceNotFoundError",
     "RequiredFieldError",
     "ResourceNotFoundError",
     "ShippingMethodDoesNotMatchCartError",
@@ -746,6 +747,34 @@ class ReferenceExistsError(ErrorObject):
             self.code,
             self.message,
             self.referenced_by,
+        )
+
+
+class ReferencedResourceNotFoundError(ErrorObject):
+    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``typeId`` `in Commercetools)`
+    type_id: "ReferenceTypeId"
+    #: Optional :class:`str`
+    id: typing.Optional[str]
+    #: Optional :class:`str`
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        type_id: "ReferenceTypeId",
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
+    ) -> None:
+        self.type_id = type_id
+        self.id = id
+        self.key = key
+        super().__init__(code="ReferencedResourceNotFound", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "ReferencedResourceNotFoundError(code=%r, message=%r, type_id=%r, id=%r, key=%r)"
+            % (self.code, self.message, self.type_id, self.id, self.key)
         )
 
 

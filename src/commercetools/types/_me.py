@@ -87,6 +87,7 @@ __all__ = [
     "MyCartSetDeleteDaysAfterLastModificationAction",
     "MyCartSetLineItemCustomFieldAction",
     "MyCartSetLineItemCustomTypeAction",
+    "MyCartSetLineItemDistributionChannelAction",
     "MyCartSetLineItemShippingDetailsAction",
     "MyCartSetLocaleAction",
     "MyCartSetShippingAddressAction",
@@ -1738,6 +1739,29 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
         return (
             "MyCartSetLineItemCustomTypeAction(action=%r, line_item_id=%r, type=%r, fields=%r)"
             % (self.action, self.line_item_id, self.type, self.fields)
+        )
+
+
+class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
+    #: :class:`str` `(Named` ``lineItemId`` `in Commercetools)`
+    line_item_id: str
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        line_item_id: str,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ) -> None:
+        self.line_item_id = line_item_id
+        self.distribution_channel = distribution_channel
+        super().__init__(action="setLineItemDistributionChannel")
+
+    def __repr__(self) -> str:
+        return (
+            "MyCartSetLineItemDistributionChannelAction(action=%r, line_item_id=%r, distribution_channel=%r)"
+            % (self.action, self.line_item_id, self.distribution_channel)
         )
 
 

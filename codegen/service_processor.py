@@ -139,7 +139,7 @@ class ServiceProcessor:
                         domain.add_method(method)
                 else:
                     for method in self._get_resource_methods(
-                        domain, endpoint, endpoint_data
+                        domain, endpoint, endpoint_data, source
                     ):
                         domain.add_method(method)
         return domain
@@ -209,7 +209,7 @@ class ServiceProcessor:
         )
         return self._add_metadata(method, endpoint_data, data)
 
-    def _get_resource_methods(self, service_domain, path, data):
+    def _get_resource_methods(self, service_domain, path, data, parent_data):
         params = list(service_domain.path_parameters)
         params.extend(self._get_parameters(data))
         method_name = "_%s" % snakeit(data["(methodName)"])
@@ -237,17 +237,29 @@ class ServiceProcessor:
                 yield self._add_metadata(method, endpoint_data, data)
 
             elif endpoint_path == "get":
+                service_type = "get"
+                service_name = name_prefix + "get" + method_name
+                service_resource_type = service_domain.resource_type
+                pdata = data
+
+                # Workaround custom object container query method
+                if service_domain.context_name == "CustomObject" and path == "/{container}":
+                    service_type = "query"
+                    service_name = "query_by_container"
+                    service_resource_type = service_domain.resource_querytype
+                    pdata = parent_data
+
                 method = ServiceMethod(
-                    name=name_prefix + "get" + method_name,
+                    name=service_name,
                     path=service_domain.path + path,
                     path_params=list(params),
-                    type="get",
+                    type=service_type,
                     method="get",
                     returns=_get_return_type(
-                        endpoint_data, service_domain.resource_type
+                        endpoint_data, service_resource_type,
                     ),
                 )
-                yield self._add_metadata(method, endpoint_data, data)
+                yield self._add_metadata(method, endpoint_data, pdata)
 
             elif endpoint_path == "delete":
                 method = ServiceMethod(

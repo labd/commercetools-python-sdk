@@ -1,3 +1,8 @@
+12.0.0 (2020-10-15)
+-------------------
+- Regenerate types (commercetools-api-reference 5ebb3153) 
+- Removed get_by_container and replaced by query_by_container (it's a query endpoint, not a get custom object endpoint)
+
 11.0.0 (2020-09-18)
 -------------------
 - Regenerated types (custom objects get by id has been removed)

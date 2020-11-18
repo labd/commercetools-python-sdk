@@ -514,6 +514,10 @@ class PredicateFilter:
             if operator_value == "in":
                 return op(value, obj)
 
+        # allow comparing single values with 'in' syntax
+        if operator_value == "in" and not isinstance(value, list):
+            return op([value], obj)
+
         return op(obj, value)
 
     def case_insensitive_get(sef, dict, key, default=None):

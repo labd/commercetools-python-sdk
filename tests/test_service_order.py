@@ -268,3 +268,12 @@ def get_test_order():
         refused_gifts=[],
     )
     return order
+
+
+def test_where_query_state(commercetools_api, client):
+    order = get_test_order()
+    commercetools_api.orders.add_existing(order)
+
+    result = client.orders.query(where='orderState in ("Open")')
+
+    assert result.results[0].id == order.id

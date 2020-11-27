@@ -48,17 +48,28 @@ def test_custom_object_update(client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
-    TODO: See if this is worth testing since we're using a mocking backend
     """
     custom_object = client.custom_objects.create_or_update(
         types.CustomObjectDraft(container="unittest", key="test-object-1", value=1234)
     )
     assert custom_object.key == "test-object-1"
+    assert custom_object.value == 1234
+    assert custom_object.version == 1
 
     custom_object = client.custom_objects.create_or_update(
         types.CustomObjectDraft(container="unittest", key="test-object-1", value=2345)
     )
     assert custom_object.key == "test-object-1"
+    assert custom_object.value == 2345
+    assert custom_object.version == 2
+
+    # And another key
+    custom_object = client.custom_objects.create_or_update(
+        types.CustomObjectDraft(container="unittest", key="test-object-2", value=3456)
+    )
+    assert custom_object.key == "test-object-2"
+    assert custom_object.value == 3456
+    assert custom_object.version == 1
 
 
 def test_custom_object_query_by_container(client):

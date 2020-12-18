@@ -192,6 +192,8 @@ __all__ = [
     "ProductStateTransitionMessagePayload",
     "ProductUnpublishedMessage",
     "ProductUnpublishedMessagePayload",
+    "ProductVariantAddedMessage",
+    "ProductVariantAddedMessagePayload",
     "ProductVariantDeletedMessage",
     "ProductVariantDeletedMessagePayload",
     "ReviewCreatedMessage",
@@ -5895,6 +5897,86 @@ class ProductUnpublishedMessagePayload(MessagePayload):
 
     def __repr__(self) -> str:
         return "ProductUnpublishedMessagePayload(type=%r)" % (self.type,)
+
+
+class ProductVariantAddedMessage(Message):
+    #: :class:`commercetools.types.ProductVariant`
+    variant: "ProductVariant"
+    #: :class:`bool`
+    staged: bool
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        variant: "ProductVariant",
+        staged: bool,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ) -> None:
+        self.variant = variant
+        self.staged = staged
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type="ProductVariantAdded",
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+        )
+
+    def __repr__(self) -> str:
+        return (
+            "ProductVariantAddedMessage(id=%r, version=%r, created_at=%r, last_modified_at=%r, last_modified_by=%r, created_by=%r, sequence_number=%r, resource=%r, resource_version=%r, type=%r, resource_user_provided_identifiers=%r, variant=%r, staged=%r)"
+            % (
+                self.id,
+                self.version,
+                self.created_at,
+                self.last_modified_at,
+                self.last_modified_by,
+                self.created_by,
+                self.sequence_number,
+                self.resource,
+                self.resource_version,
+                self.type,
+                self.resource_user_provided_identifiers,
+                self.variant,
+                self.staged,
+            )
+        )
+
+
+class ProductVariantAddedMessagePayload(MessagePayload):
+    #: :class:`commercetools.types.ProductVariant`
+    variant: "ProductVariant"
+    #: :class:`bool`
+    staged: bool
+
+    def __init__(self, *, variant: "ProductVariant", staged: bool) -> None:
+        self.variant = variant
+        self.staged = staged
+        super().__init__(type="ProductVariantAdded")
+
+    def __repr__(self) -> str:
+        return "ProductVariantAddedMessagePayload(type=%r, variant=%r, staged=%r)" % (
+            self.type,
+            self.variant,
+            self.staged,
+        )
 
 
 class ProductVariantDeletedMessage(Message):

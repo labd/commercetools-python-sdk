@@ -195,9 +195,9 @@ class CartDiscountSchema(BaseResourceSchema):
     value = helpers.Discriminator(
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "absolute": "commercetools._schemas._cart_discount.CartDiscountValueAbsoluteSchema",
-            "giftLineItem": "commercetools._schemas._cart_discount.CartDiscountValueGiftLineItemSchema",
-            "relative": "commercetools._schemas._cart_discount.CartDiscountValueRelativeSchema",
+            "absolute": "commercetools._schemas._cart_discount.CartDiscountValueAbsoluteDraftSchema",
+            "giftLineItem": "commercetools._schemas._cart_discount.CartDiscountValueGiftLineItemDraftSchema",
+            "relative": "commercetools._schemas._cart_discount.CartDiscountValueRelativeDraftSchema",
         },
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
@@ -714,20 +714,20 @@ class CartDiscountValueGiftLineItemDraftSchema(CartDiscountValueDraftSchema):
     """Marshmallow schema for :class:`commercetools.types.CartDiscountValueGiftLineItemDraft`."""
 
     product = helpers.LazyNestedField(
-        nested="commercetools._schemas._product.ProductReferenceSchema",
+        nested="commercetools._schemas._product.ProductResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
     )
     variant_id = marshmallow.fields.Integer(allow_none=True, data_key="variantId")
     supply_channel = helpers.LazyNestedField(
-        nested="commercetools._schemas._channel.ChannelReferenceSchema",
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
         data_key="supplyChannel",
     )
     distribution_channel = helpers.LazyNestedField(
-        nested="commercetools._schemas._channel.ChannelReferenceSchema",
+        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,

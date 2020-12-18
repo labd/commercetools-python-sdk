@@ -741,6 +741,8 @@ class ProductProjectionPagedQueryResponse(_BaseType):
 
 class ProductProjectionPagedSearchResponse(_BaseType):
     #: :class:`int`
+    limit: int
+    #: :class:`int`
     count: int
     #: Optional :class:`int`
     total: typing.Optional[int]
@@ -754,12 +756,14 @@ class ProductProjectionPagedSearchResponse(_BaseType):
     def __init__(
         self,
         *,
+        limit: int,
         count: int,
         offset: int,
         results: typing.List["ProductProjection"],
         facets: "FacetResults",
         total: typing.Optional[int] = None,
     ) -> None:
+        self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
@@ -769,8 +773,15 @@ class ProductProjectionPagedSearchResponse(_BaseType):
 
     def __repr__(self) -> str:
         return (
-            "ProductProjectionPagedSearchResponse(count=%r, total=%r, offset=%r, results=%r, facets=%r)"
-            % (self.count, self.total, self.offset, self.results, self.facets)
+            "ProductProjectionPagedSearchResponse(limit=%r, count=%r, total=%r, offset=%r, results=%r, facets=%r)"
+            % (
+                self.limit,
+                self.count,
+                self.total,
+                self.offset,
+                self.results,
+                self.facets,
+            )
         )
 
 

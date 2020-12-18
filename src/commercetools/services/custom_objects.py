@@ -96,8 +96,7 @@ class CustomObjectService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> CustomObjectPagedQueryResponse:
-        """Store custom JSON values.
-        """
+        """Store custom JSON values."""
         params = self._serialize_params(
             {
                 "expand": expand,

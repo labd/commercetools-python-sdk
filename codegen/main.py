@@ -3,7 +3,6 @@ import typing
 from pathlib import Path
 
 import astor
-import astunparse
 import black
 import isort.api
 
@@ -49,7 +48,7 @@ def generate_services_modules(services: ServiceProcessor, types):
 
 
 def generate():
-    raml = parse_raml_file("../commercetools-api-reference/api.raml")
+    raml = parse_raml_file("../commercetools-api-reference/api-specs/api/api.raml")
 
     types = raml["types"].types.values()
     services = raml["services"]
@@ -99,18 +98,18 @@ def write_module(filename, ast):
     reformat_code(filename)
 
 
-def reformat_code(filename):
-
+def reformat_code(filename: str):
     config = isort.api.Config()
     isort.api.sort_file(filename, config=config)
 
     src = Path(filename)
     report = black.Report()
+    mode = black.Mode()
     black.reformat_one(
         src=src,
-        line_length=88,
-        fast=False,
+        # https://github.com/psf/black/issues/1629 known issue
+        fast=True,
         write_back=black.WriteBack.YES,
-        mode=black.FileMode.AUTO_DETECT,
+        mode=mode,
         report=report,
     )

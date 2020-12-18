@@ -161,6 +161,20 @@ class MyCartDraftSchema(marshmallow.Schema):
         missing=None,
         data_key="itemShippingAddresses",
     )
+    store = helpers.LazyNestedField(
+        nested="commercetools._schemas._store.StoreKeyReferenceSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        missing=None,
+    )
+    discount_codes = helpers.LazyNestedField(
+        nested="commercetools._schemas._cart.DiscountCodeInfoSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+        many=True,
+        missing=None,
+        data_key="discountCodes",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1672,7 +1686,12 @@ class MyCustomerAddAddressActionSchema(MyCustomerUpdateActionSchema):
 class MyCustomerAddBillingAddressIdActionSchema(MyCustomerUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.MyCustomerAddBillingAddressIdAction`."""
 
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1686,7 +1705,12 @@ class MyCustomerAddBillingAddressIdActionSchema(MyCustomerUpdateActionSchema):
 class MyCustomerAddShippingAddressIdActionSchema(MyCustomerUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.MyCustomerAddShippingAddressIdAction`."""
 
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1700,7 +1724,12 @@ class MyCustomerAddShippingAddressIdActionSchema(MyCustomerUpdateActionSchema):
 class MyCustomerChangeAddressActionSchema(MyCustomerUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.MyCustomerChangeAddressAction`."""
 
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
     address = helpers.LazyNestedField(
         nested="commercetools._schemas._common.AddressSchema",
         unknown=marshmallow.EXCLUDE,
@@ -1733,7 +1762,12 @@ class MyCustomerChangeEmailActionSchema(MyCustomerUpdateActionSchema):
 class MyCustomerRemoveAddressActionSchema(MyCustomerUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.MyCustomerRemoveAddressAction`."""
 
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1747,7 +1781,12 @@ class MyCustomerRemoveAddressActionSchema(MyCustomerUpdateActionSchema):
 class MyCustomerRemoveBillingAddressIdActionSchema(MyCustomerUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.MyCustomerRemoveBillingAddressIdAction`."""
 
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1761,7 +1800,12 @@ class MyCustomerRemoveBillingAddressIdActionSchema(MyCustomerUpdateActionSchema)
 class MyCustomerRemoveShippingAddressIdActionSchema(MyCustomerUpdateActionSchema):
     """Marshmallow schema for :class:`commercetools.types.MyCustomerRemoveShippingAddressIdAction`."""
 
-    address_id = marshmallow.fields.String(allow_none=True, data_key="addressId")
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1845,6 +1889,9 @@ class MyCustomerSetDefaultBillingAddressActionSchema(MyCustomerUpdateActionSchem
     address_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="addressId"
     )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1860,6 +1907,9 @@ class MyCustomerSetDefaultShippingAddressActionSchema(MyCustomerUpdateActionSche
 
     address_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="addressId"
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
     )
 
     class Meta:

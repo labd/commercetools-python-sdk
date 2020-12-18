@@ -55,8 +55,8 @@ class Store(BaseResource):
     languages: typing.Optional[typing.List[str]]
     #: List of :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannels`` `in Commercetools)`
     distribution_channels: typing.List["ChannelReference"]
-    #: Optional list of :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannels`` `in Commercetools)`
-    supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+    #: Optional list of :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannels`` `in Commercetools)`
+    supply_channels: typing.Optional[typing.List["ChannelReference"]]
 
     def __init__(
         self,
@@ -71,9 +71,7 @@ class Store(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         name: typing.Optional["LocalizedString"] = None,
         languages: typing.Optional[typing.List[str]] = None,
-        supply_channels: typing.Optional[
-            typing.List["ChannelResourceIdentifier"]
-        ] = None
+        supply_channels: typing.Optional[typing.List["ChannelReference"]] = None
     ) -> None:
         self.id = id
         self.version = version

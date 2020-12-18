@@ -71,8 +71,7 @@ class ProductDiscountService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> ProductDiscountPagedQueryResponse:
-        """Product discounts are used to change certain product prices.
-        """
+        """Product discounts are used to change certain product prices."""
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -94,8 +93,7 @@ class ProductDiscountService(abstract.AbstractService):
     def create(
         self, draft: ProductDiscountDraft, *, expand: OptionalListStr = None
     ) -> ProductDiscount:
-        """Product discounts are used to change certain product prices.
-        """
+        """Product discounts are used to change certain product prices."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="product-discounts",

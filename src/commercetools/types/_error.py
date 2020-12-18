@@ -5,28 +5,42 @@ import typing
 from commercetools.types._abstract import _BaseType
 
 if typing.TYPE_CHECKING:
-    from ._channel import ChannelReference
+    from ._channel import ChannelReference, ChannelResourceIdentifier, ChannelRoleEnum
     from ._common import LocalizedString, Price, PriceDraft, Reference, ReferenceTypeId
     from ._customer_group import CustomerGroupReference
+    from ._order_edit import OrderEditPreviewFailure
     from ._product import Attribute
 __all__ = [
     "AccessDeniedError",
+    "AnonymousIdAlreadyInUseError",
+    "AttributeDefinitionAlreadyExistsError",
+    "AttributeDefinitionTypeConflictError",
+    "AttributeNameDoesNotExistError",
     "ConcurrentModificationError",
     "DiscountCodeNonApplicableError",
     "DuplicateAttributeValueError",
     "DuplicateAttributeValuesError",
+    "DuplicateEnumValuesError",
     "DuplicateFieldError",
     "DuplicateFieldWithConflictingResourceError",
     "DuplicatePriceScopeError",
     "DuplicateVariantValuesError",
+    "EditPreviewFailedError",
+    "EnumKeyAlreadyExistsError",
+    "EnumKeyDoesNotExistError",
     "EnumValueIsUsedError",
+    "EnumValuesMustMatchError",
     "ErrorByExtension",
     "ErrorObject",
     "ErrorResponse",
     "ExtensionBadResponseError",
     "ExtensionNoResponseError",
     "ExtensionUpdateActionsFailedError",
+    "ExternalOAuthFailedError",
+    "FeatureRemovedError",
+    "GeneralError",
     "InsufficientScopeError",
+    "InternalConstraintViolatedError",
     "InvalidCredentialsError",
     "InvalidCurrentPasswordError",
     "InvalidFieldError",
@@ -38,16 +52,31 @@ __all__ = [
     "InvalidTokenError",
     "LanguageUsedInStoresError",
     "MatchingPriceNotFoundError",
+    "MaxResourceLimitExceededError",
+    "MissingRoleOnChannelError",
     "MissingTaxRateForCountryError",
     "NoMatchingProductDiscountFoundError",
+    "NotEnabledError",
+    "ObjectNotFoundError",
     "OutOfStockError",
+    "OverCapacityError",
+    "PendingOperationError",
     "PriceChangedError",
+    "ProjectNotConfiguredForLanguagesError",
+    "QueryComplexityLimitExceededError",
+    "QueryTimedOutError",
     "ReferenceExistsError",
     "ReferencedResourceNotFoundError",
     "RequiredFieldError",
     "ResourceNotFoundError",
+    "ResourceSizeLimitExceededError",
+    "SearchExecutionFailureError",
+    "SearchFacetPathNotFoundError",
+    "SemanticErrorError",
     "ShippingMethodDoesNotMatchCartError",
+    "SyntaxErrorError",
     "VariantValues",
+    "WeakPasswordError",
 ]
 
 
@@ -158,6 +187,100 @@ class AccessDeniedError(ErrorObject):
         return "AccessDeniedError(code=%r, message=%r)" % (self.code, self.message)
 
 
+class AnonymousIdAlreadyInUseError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="AnonymousIdAlreadyInUse", message=message)
+
+    def __repr__(self) -> str:
+        return "AnonymousIdAlreadyInUseError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+class AttributeDefinitionAlreadyExistsError(ErrorObject):
+    #: :class:`str` `(Named` ``conflictingProductTypeId`` `in Commercetools)`
+    conflicting_product_type_id: str
+    #: :class:`str` `(Named` ``conflictingProductTypeName`` `in Commercetools)`
+    conflicting_product_type_name: str
+    #: :class:`str` `(Named` ``conflictingAttributeName`` `in Commercetools)`
+    conflicting_attribute_name: str
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        conflicting_product_type_id: str,
+        conflicting_product_type_name: str,
+        conflicting_attribute_name: str
+    ) -> None:
+        self.conflicting_product_type_id = conflicting_product_type_id
+        self.conflicting_product_type_name = conflicting_product_type_name
+        self.conflicting_attribute_name = conflicting_attribute_name
+        super().__init__(code="AttributeDefinitionAlreadyExists", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "AttributeDefinitionAlreadyExistsError(code=%r, message=%r, conflicting_product_type_id=%r, conflicting_product_type_name=%r, conflicting_attribute_name=%r)"
+            % (
+                self.code,
+                self.message,
+                self.conflicting_product_type_id,
+                self.conflicting_product_type_name,
+                self.conflicting_attribute_name,
+            )
+        )
+
+
+class AttributeDefinitionTypeConflictError(ErrorObject):
+    #: :class:`str` `(Named` ``conflictingProductTypeId`` `in Commercetools)`
+    conflicting_product_type_id: str
+    #: :class:`str` `(Named` ``conflictingProductTypeName`` `in Commercetools)`
+    conflicting_product_type_name: str
+    #: :class:`str` `(Named` ``conflictingAttributeName`` `in Commercetools)`
+    conflicting_attribute_name: str
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        conflicting_product_type_id: str,
+        conflicting_product_type_name: str,
+        conflicting_attribute_name: str
+    ) -> None:
+        self.conflicting_product_type_id = conflicting_product_type_id
+        self.conflicting_product_type_name = conflicting_product_type_name
+        self.conflicting_attribute_name = conflicting_attribute_name
+        super().__init__(code="AttributeDefinitionTypeConflict", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "AttributeDefinitionTypeConflictError(code=%r, message=%r, conflicting_product_type_id=%r, conflicting_product_type_name=%r, conflicting_attribute_name=%r)"
+            % (
+                self.code,
+                self.message,
+                self.conflicting_product_type_id,
+                self.conflicting_product_type_name,
+                self.conflicting_attribute_name,
+            )
+        )
+
+
+class AttributeNameDoesNotExistError(ErrorObject):
+    #: :class:`str` `(Named` ``invalidAttributeName`` `in Commercetools)`
+    invalid_attribute_name: str
+
+    def __init__(self, *, message: str, invalid_attribute_name: str) -> None:
+        self.invalid_attribute_name = invalid_attribute_name
+        super().__init__(code="AttributeNameDoesNotExist", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "AttributeNameDoesNotExistError(code=%r, message=%r, invalid_attribute_name=%r)"
+            % (self.code, self.message, self.invalid_attribute_name)
+        )
+
+
 class ConcurrentModificationError(ErrorObject):
     #: Optional :class:`int` `(Named` ``currentVersion`` `in Commercetools)`
     current_version: typing.Optional[int]
@@ -253,6 +376,22 @@ class DuplicateAttributeValuesError(ErrorObject):
             self.code,
             self.message,
             self.attributes,
+        )
+
+
+class DuplicateEnumValuesError(ErrorObject):
+    #: List of :class:`str`
+    duplicates: typing.List[str]
+
+    def __init__(self, *, message: str, duplicates: typing.List[str]) -> None:
+        self.duplicates = duplicates
+        super().__init__(code="DuplicateEnumValues", message=message)
+
+    def __repr__(self) -> str:
+        return "DuplicateEnumValuesError(code=%r, message=%r, duplicates=%r)" % (
+            self.code,
+            self.message,
+            self.duplicates,
         )
 
 
@@ -357,6 +496,80 @@ class DuplicateVariantValuesError(ErrorObject):
         )
 
 
+class EditPreviewFailedError(ErrorObject):
+    #: :class:`commercetools.types.OrderEditPreviewFailure`
+    result: "OrderEditPreviewFailure"
+
+    def __init__(self, *, message: str, result: "OrderEditPreviewFailure") -> None:
+        self.result = result
+        super().__init__(code="EditPreviewFailed", message=message)
+
+    def __repr__(self) -> str:
+        return "EditPreviewFailedError(code=%r, message=%r, result=%r)" % (
+            self.code,
+            self.message,
+            self.result,
+        )
+
+
+class EnumKeyAlreadyExistsError(ErrorObject):
+    #: :class:`str` `(Named` ``conflictingEnumKey`` `in Commercetools)`
+    conflicting_enum_key: str
+    #: :class:`str` `(Named` ``conflictingAttributeName`` `in Commercetools)`
+    conflicting_attribute_name: str
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        conflicting_enum_key: str,
+        conflicting_attribute_name: str
+    ) -> None:
+        self.conflicting_enum_key = conflicting_enum_key
+        self.conflicting_attribute_name = conflicting_attribute_name
+        super().__init__(code="EnumKeyAlreadyExists", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "EnumKeyAlreadyExistsError(code=%r, message=%r, conflicting_enum_key=%r, conflicting_attribute_name=%r)"
+            % (
+                self.code,
+                self.message,
+                self.conflicting_enum_key,
+                self.conflicting_attribute_name,
+            )
+        )
+
+
+class EnumKeyDoesNotExistError(ErrorObject):
+    #: :class:`str` `(Named` ``conflictingEnumKey`` `in Commercetools)`
+    conflicting_enum_key: str
+    #: :class:`str` `(Named` ``conflictingAttributeName`` `in Commercetools)`
+    conflicting_attribute_name: str
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        conflicting_enum_key: str,
+        conflicting_attribute_name: str
+    ) -> None:
+        self.conflicting_enum_key = conflicting_enum_key
+        self.conflicting_attribute_name = conflicting_attribute_name
+        super().__init__(code="EnumKeyDoesNotExist", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "EnumKeyDoesNotExistError(code=%r, message=%r, conflicting_enum_key=%r, conflicting_attribute_name=%r)"
+            % (
+                self.code,
+                self.message,
+                self.conflicting_enum_key,
+                self.conflicting_attribute_name,
+            )
+        )
+
+
 class EnumValueIsUsedError(ErrorObject):
     def __init__(self, *, message: str) -> None:
         super().__init__(code="EnumValueIsUsed", message=message)
@@ -365,21 +578,32 @@ class EnumValueIsUsedError(ErrorObject):
         return "EnumValueIsUsedError(code=%r, message=%r)" % (self.code, self.message)
 
 
+class EnumValuesMustMatchError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="EnumValuesMustMatch", message=message)
+
+    def __repr__(self) -> str:
+        return "EnumValuesMustMatchError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
 class ExtensionBadResponseError(ErrorObject):
     #: Optional :class:`commercetools.types.LocalizedString` `(Named` ``localizedMessage`` `in Commercetools)`
     localized_message: typing.Optional["LocalizedString"]
     #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
     extension_extra_info: typing.Optional[object]
-    #: :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
-    error_by_extension: "ErrorByExtension"
+    #: Optional :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
+    error_by_extension: typing.Optional["ErrorByExtension"]
 
     def __init__(
         self,
         *,
         message: str,
-        error_by_extension: "ErrorByExtension",
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional[object] = None
+        extension_extra_info: typing.Optional[object] = None,
+        error_by_extension: typing.Optional["ErrorByExtension"] = None
     ) -> None:
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -404,16 +628,16 @@ class ExtensionNoResponseError(ErrorObject):
     localized_message: typing.Optional["LocalizedString"]
     #: Optional :class:`object` `(Named` ``extensionExtraInfo`` `in Commercetools)`
     extension_extra_info: typing.Optional[object]
-    #: :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
-    error_by_extension: "ErrorByExtension"
+    #: Optional :class:`commercetools.types.ErrorByExtension` `(Named` ``errorByExtension`` `in Commercetools)`
+    error_by_extension: typing.Optional["ErrorByExtension"]
 
     def __init__(
         self,
         *,
         message: str,
-        error_by_extension: "ErrorByExtension",
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional[object] = None
+        extension_extra_info: typing.Optional[object] = None,
+        error_by_extension: typing.Optional["ErrorByExtension"] = None
     ) -> None:
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -467,12 +691,50 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
         )
 
 
+class ExternalOAuthFailedError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="ExternalOAuthFailed", message=message)
+
+    def __repr__(self) -> str:
+        return "ExternalOAuthFailedError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+class FeatureRemovedError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="FeatureRemoved", message=message)
+
+    def __repr__(self) -> str:
+        return "FeatureRemovedError(code=%r, message=%r)" % (self.code, self.message)
+
+
+class GeneralError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="General", message=message)
+
+    def __repr__(self) -> str:
+        return "GeneralError(code=%r, message=%r)" % (self.code, self.message)
+
+
 class InsufficientScopeError(ErrorObject):
     def __init__(self, *, message: str) -> None:
         super().__init__(code="insufficient_scope", message=message)
 
     def __repr__(self) -> str:
         return "InsufficientScopeError(code=%r, message=%r)" % (self.code, self.message)
+
+
+class InternalConstraintViolatedError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="InternalConstraintViolated", message=message)
+
+    def __repr__(self) -> str:
+        return "InternalConstraintViolatedError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
 
 
 class InvalidCredentialsError(ErrorObject):
@@ -649,6 +911,45 @@ class MatchingPriceNotFoundError(ErrorObject):
         )
 
 
+class MaxResourceLimitExceededError(ErrorObject):
+    #: :class:`commercetools.types.ReferenceTypeId` `(Named` ``exceededResource`` `in Commercetools)`
+    exceeded_resource: "ReferenceTypeId"
+
+    def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId") -> None:
+        self.exceeded_resource = exceeded_resource
+        super().__init__(code="MaxResourceLimitExceeded", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "MaxResourceLimitExceededError(code=%r, message=%r, exceeded_resource=%r)"
+            % (self.code, self.message, self.exceeded_resource)
+        )
+
+
+class MissingRoleOnChannelError(ErrorObject):
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier`
+    channel: typing.Optional["ChannelResourceIdentifier"]
+    #: :class:`commercetools.types.ChannelRoleEnum` `(Named` ``missingRole`` `in Commercetools)`
+    missing_role: "ChannelRoleEnum"
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        missing_role: "ChannelRoleEnum",
+        channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ) -> None:
+        self.channel = channel
+        self.missing_role = missing_role
+        super().__init__(code="MissingRoleOnChannel", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "MissingRoleOnChannelError(code=%r, message=%r, channel=%r, missing_role=%r)"
+            % (self.code, self.message, self.channel, self.missing_role)
+        )
+
+
 class MissingTaxRateForCountryError(ErrorObject):
     #: :class:`str` `(Named` ``taxCategoryId`` `in Commercetools)`
     tax_category_id: str
@@ -688,6 +989,22 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
         )
 
 
+class NotEnabledError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="NotEnabled", message=message)
+
+    def __repr__(self) -> str:
+        return "NotEnabledError(code=%r, message=%r)" % (self.code, self.message)
+
+
+class ObjectNotFoundError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="ObjectNotFound", message=message)
+
+    def __repr__(self) -> str:
+        return "ObjectNotFoundError(code=%r, message=%r)" % (self.code, self.message)
+
+
 class OutOfStockError(ErrorObject):
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.List[str]
@@ -710,6 +1027,22 @@ class OutOfStockError(ErrorObject):
         )
 
 
+class OverCapacityError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="OverCapacity", message=message)
+
+    def __repr__(self) -> str:
+        return "OverCapacityError(code=%r, message=%r)" % (self.code, self.message)
+
+
+class PendingOperationError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="PendingOperation", message=message)
+
+    def __repr__(self) -> str:
+        return "PendingOperationError(code=%r, message=%r)" % (self.code, self.message)
+
+
 class PriceChangedError(ErrorObject):
     #: List of :class:`str` `(Named` ``lineItems`` `in Commercetools)`
     line_items: typing.List[str]
@@ -730,6 +1063,42 @@ class PriceChangedError(ErrorObject):
             self.line_items,
             self.shipping,
         )
+
+
+class ProjectNotConfiguredForLanguagesError(ErrorObject):
+    #: Optional list of :class:`str`
+    languages: typing.Optional[typing.List[str]]
+
+    def __init__(
+        self, *, message: str, languages: typing.Optional[typing.List[str]] = None
+    ) -> None:
+        self.languages = languages
+        super().__init__(code="ProjectNotConfiguredForLanguages", message=message)
+
+    def __repr__(self) -> str:
+        return (
+            "ProjectNotConfiguredForLanguagesError(code=%r, message=%r, languages=%r)"
+            % (self.code, self.message, self.languages)
+        )
+
+
+class QueryComplexityLimitExceededError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="QueryComplexityLimitExceeded", message=message)
+
+    def __repr__(self) -> str:
+        return "QueryComplexityLimitExceededError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+class QueryTimedOutError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="QueryTimedOut", message=message)
+
+    def __repr__(self) -> str:
+        return "QueryTimedOutError(code=%r, message=%r)" % (self.code, self.message)
 
 
 class ReferenceExistsError(ErrorObject):
@@ -802,6 +1171,47 @@ class ResourceNotFoundError(ErrorObject):
         return "ResourceNotFoundError(code=%r, message=%r)" % (self.code, self.message)
 
 
+class ResourceSizeLimitExceededError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="ResourceSizeLimitExceeded", message=message)
+
+    def __repr__(self) -> str:
+        return "ResourceSizeLimitExceededError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+class SearchExecutionFailureError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="SearchExecutionFailure", message=message)
+
+    def __repr__(self) -> str:
+        return "SearchExecutionFailureError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+class SearchFacetPathNotFoundError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="SearchFacetPathNotFound", message=message)
+
+    def __repr__(self) -> str:
+        return "SearchFacetPathNotFoundError(code=%r, message=%r)" % (
+            self.code,
+            self.message,
+        )
+
+
+class SemanticErrorError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="SemanticError", message=message)
+
+    def __repr__(self) -> str:
+        return "SemanticErrorError(code=%r, message=%r)" % (self.code, self.message)
+
+
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
     def __init__(self, *, message: str) -> None:
         super().__init__(code="ShippingMethodDoesNotMatchCart", message=message)
@@ -811,3 +1221,19 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
             self.code,
             self.message,
         )
+
+
+class SyntaxErrorError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="SyntaxError", message=message)
+
+    def __repr__(self) -> str:
+        return "SyntaxErrorError(code=%r, message=%r)" % (self.code, self.message)
+
+
+class WeakPasswordError(ErrorObject):
+    def __init__(self, *, message: str) -> None:
+        super().__init__(code="WeakPassword", message=message)
+
+    def __repr__(self) -> str:
+        return "WeakPasswordError(code=%r, message=%r)" % (self.code, self.message)

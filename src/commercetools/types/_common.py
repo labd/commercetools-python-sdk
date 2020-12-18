@@ -1102,34 +1102,47 @@ class LastModifiedBy(ClientLogging):
 class TypedMoneyDraft(Money):
     #: :class:`commercetools.types.MoneyType`
     type: "MoneyType"
+    #: Optional :class:`int` `(Named` ``fractionDigits`` `in Commercetools)`
+    fraction_digits: typing.Optional[int]
 
     def __init__(
-        self, *, cent_amount: int, currency_code: "str", type: "MoneyType"
+        self,
+        *,
+        cent_amount: int,
+        currency_code: "str",
+        type: "MoneyType",
+        fraction_digits: typing.Optional[int] = None,
     ) -> None:
         self.type = type
+        self.fraction_digits = fraction_digits
         super().__init__(cent_amount=cent_amount, currency_code=currency_code)
 
     def __repr__(self) -> str:
-        return "TypedMoneyDraft(cent_amount=%r, currency_code=%r, type=%r)" % (
-            self.cent_amount,
-            self.currency_code,
-            self.type,
+        return (
+            "TypedMoneyDraft(cent_amount=%r, currency_code=%r, type=%r, fraction_digits=%r)"
+            % (self.cent_amount, self.currency_code, self.type, self.fraction_digits)
         )
 
 
 class CentPrecisionMoneyDraft(TypedMoneyDraft):
-    def __init__(self, *, cent_amount: int, currency_code: "str") -> None:
+    def __init__(
+        self,
+        *,
+        cent_amount: int,
+        currency_code: "str",
+        fraction_digits: typing.Optional[int] = None,
+    ) -> None:
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,
             type=MoneyType.CENT_PRECISION,
+            fraction_digits=fraction_digits,
         )
 
     def __repr__(self) -> str:
-        return "CentPrecisionMoneyDraft(cent_amount=%r, currency_code=%r, type=%r)" % (
-            self.cent_amount,
-            self.currency_code,
-            self.type,
+        return (
+            "CentPrecisionMoneyDraft(cent_amount=%r, currency_code=%r, type=%r, fraction_digits=%r)"
+            % (self.cent_amount, self.currency_code, self.type, self.fraction_digits)
         )
 
 
@@ -1138,17 +1151,29 @@ class HighPrecisionMoneyDraft(TypedMoneyDraft):
     precise_amount: int
 
     def __init__(
-        self, *, cent_amount: int, currency_code: "str", precise_amount: int
+        self,
+        *,
+        cent_amount: int,
+        currency_code: "str",
+        precise_amount: int,
+        fraction_digits: typing.Optional[int] = None,
     ) -> None:
         self.precise_amount = precise_amount
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,
             type=MoneyType.HIGH_PRECISION,
+            fraction_digits=fraction_digits,
         )
 
     def __repr__(self) -> str:
         return (
-            "HighPrecisionMoneyDraft(cent_amount=%r, currency_code=%r, type=%r, precise_amount=%r)"
-            % (self.cent_amount, self.currency_code, self.type, self.precise_amount)
+            "HighPrecisionMoneyDraft(cent_amount=%r, currency_code=%r, type=%r, fraction_digits=%r, precise_amount=%r)"
+            % (
+                self.cent_amount,
+                self.currency_code,
+                self.type,
+                self.fraction_digits,
+                self.precise_amount,
+            )
         )

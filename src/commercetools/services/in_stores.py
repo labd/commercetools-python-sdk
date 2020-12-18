@@ -642,7 +642,7 @@ class In_StoreService(abstract.AbstractService):
         )
 
     def customer_email_token(self, action: CustomerCreateEmailToken) -> CustomerToken:
-        """Create a Token for verifying the Customer's Email
+        """Create a Token for verifying the Customer's Email in store
 
         To verify a customer's email, an email token can be created. This should
         be embedded in a link and sent to the customer via email. When the
@@ -703,7 +703,7 @@ class In_StoreService(abstract.AbstractService):
         )
 
     def login(self, action: CustomerSignin) -> CustomerSignInResult:
-        """Authenticate Customer (Sign In)
+        """Authenticate Customer (Sign In) in store
 
         Retrieves the authenticated customer.
         """

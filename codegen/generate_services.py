@@ -5,10 +5,6 @@ import re
 import textwrap
 import typing
 from collections import defaultdict
-from re import A
-
-from attr import Attribute
-from black import KEYWORDS
 
 from codegen.generate_abstract import AbstractModuleGenerator
 from codegen.service_processor import (

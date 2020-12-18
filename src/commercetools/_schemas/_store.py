@@ -164,7 +164,7 @@ class StoreSchema(BaseResourceSchema):
         data_key="distributionChannels",
     )
     supply_channels = helpers.LazyNestedField(
-        nested="commercetools._schemas._channel.ChannelResourceIdentifierSchema",
+        nested="commercetools._schemas._channel.ChannelReferenceSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         many=True,

@@ -203,8 +203,7 @@ class ShippingMethodService(abstract.AbstractService):
     def matching_cart(
         self, cart_id: str, *, expand: OptionalListStr = None
     ) -> ShippingMethodPagedQueryResponse:
-        """Get ShippingMethods for a cart
-        """
+        """Get ShippingMethods for a cart"""
         params = self._serialize_params(
             {"expand": expand, "cart_id": cart_id}, _ShippingMethodMatching_CartSchema
         )
@@ -222,8 +221,7 @@ class ShippingMethodService(abstract.AbstractService):
         state: str = None,
         currency: str = None,
     ) -> ShippingMethodPagedQueryResponse:
-        """Get ShippingMethods for a location
-        """
+        """Get ShippingMethods for a location"""
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -242,8 +240,7 @@ class ShippingMethodService(abstract.AbstractService):
     def matching_orderedit(
         self, order_edit_id: str, country: str, *, state: str = None
     ) -> ShippingMethodPagedQueryResponse:
-        """Get ShippingMethods for an order edit
-        """
+        """Get ShippingMethods for an order edit"""
         params = self._serialize_params(
             {"order_edit_id": order_edit_id, "country": country, "state": state},
             _ShippingMethodMatching_OrdereditSchema,

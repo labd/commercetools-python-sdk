@@ -12,9 +12,9 @@ from commercetools.types._common import (
 )
 
 if typing.TYPE_CHECKING:
-    from ._channel import ChannelReference
+    from ._channel import ChannelReference, ChannelResourceIdentifier
     from ._common import CreatedBy, LastModifiedBy, LocalizedString, Money, TypedMoney
-    from ._product import ProductReference
+    from ._product import ProductReference, ProductResourceIdentifier
     from ._type import CustomFields, TypeResourceIdentifier
 __all__ = [
     "CartDiscount",
@@ -77,8 +77,8 @@ class CartDiscount(BaseResource):
     key: typing.Optional[str]
     #: Optional :class:`commercetools.types.LocalizedString`
     description: typing.Optional["LocalizedString"]
-    #: :class:`commercetools.types.CartDiscountValue`
-    value: "CartDiscountValue"
+    #: :class:`commercetools.types.CartDiscountValueDraft`
+    value: "CartDiscountValueDraft"
     #: :class:`str` `(Named` ``cartPredicate`` `in Commercetools)`
     cart_predicate: str
     #: Optional :class:`commercetools.types.CartDiscountTarget`
@@ -108,7 +108,7 @@ class CartDiscount(BaseResource):
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
         name: "LocalizedString",
-        value: "CartDiscountValue",
+        value: "CartDiscountValueDraft",
         cart_predicate: str,
         sort_order: str,
         is_active: bool,
@@ -753,22 +753,22 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 
 
 class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
-    #: :class:`commercetools.types.ProductReference`
-    product: "ProductReference"
+    #: :class:`commercetools.types.ProductResourceIdentifier`
+    product: "ProductResourceIdentifier"
     #: :class:`int` `(Named` ``variantId`` `in Commercetools)`
     variant_id: int
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``supplyChannel`` `in Commercetools)`
-    supply_channel: typing.Optional["ChannelReference"]
-    #: Optional :class:`commercetools.types.ChannelReference` `(Named` ``distributionChannel`` `in Commercetools)`
-    distribution_channel: typing.Optional["ChannelReference"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``supplyChannel`` `in Commercetools)`
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Optional :class:`commercetools.types.ChannelResourceIdentifier` `(Named` ``distributionChannel`` `in Commercetools)`
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
-        product: "ProductReference",
+        product: "ProductResourceIdentifier",
         variant_id: int,
-        supply_channel: typing.Optional["ChannelReference"] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ) -> None:
         self.product = product
         self.variant_id = variant_id

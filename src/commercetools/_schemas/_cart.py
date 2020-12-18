@@ -571,7 +571,7 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
         data_key="externalTaxRate",
     )
     custom = helpers.LazyNestedField(
-        nested="commercetools._schemas._type.CustomFieldsSchema",
+        nested="commercetools._schemas._type.CustomFieldsDraftSchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         missing=None,
@@ -1268,22 +1268,14 @@ class TaxedItemPriceSchema(marshmallow.Schema):
 class TaxedPriceDraftSchema(marshmallow.Schema):
     """Marshmallow schema for :class:`commercetools.types.TaxedPriceDraft`."""
 
-    total_net = helpers.Discriminator(
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "centPrecision": "commercetools._schemas._common.CentPrecisionMoneyDraftSchema",
-            "highPrecision": "commercetools._schemas._common.HighPrecisionMoneyDraftSchema",
-        },
+    total_net = helpers.LazyNestedField(
+        nested="commercetools._schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalNet",
     )
-    total_gross = helpers.Discriminator(
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "centPrecision": "commercetools._schemas._common.CentPrecisionMoneyDraftSchema",
-            "highPrecision": "commercetools._schemas._common.HighPrecisionMoneyDraftSchema",
-        },
+    total_gross = helpers.LazyNestedField(
+        nested="commercetools._schemas._common.MoneySchema",
         unknown=marshmallow.EXCLUDE,
         allow_none=True,
         data_key="totalGross",

@@ -485,6 +485,9 @@ class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
 
     version = marshmallow.fields.Integer(allow_none=True)
     modified_at = marshmallow.fields.DateTime(allow_none=True, data_key="modifiedAt")
+    data_erasure = marshmallow.fields.Bool(
+        allow_none=True, missing=None, data_key="dataErasure"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

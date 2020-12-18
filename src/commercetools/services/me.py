@@ -128,8 +128,7 @@ class MeService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> CartPagedQueryResponse:
-        """A shopping cart holds product variants and can be ordered.
-        """
+        """A shopping cart holds product variants and can be ordered."""
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -270,7 +269,7 @@ class MeService(abstract.AbstractService):
         )
 
     def create(self) -> MyCustomer:
-        """Create a customer"""
+        """Create my customer"""
         params: typing.Dict[str, str] = {}
         return self._client._post(
             endpoint="me",
@@ -283,8 +282,7 @@ class MeService(abstract.AbstractService):
     def my_cart_create(
         self, draft: MyCartDraft, *, expand: OptionalListStr = None
     ) -> MyCart:
-        """A shopping cart holds product variants and can be ordered.
-        """
+        """A shopping cart holds product variants and can be ordered."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="me/carts",

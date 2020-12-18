@@ -413,6 +413,7 @@ class ProductProjectionPagedQueryResponseSchema(marshmallow.Schema):
 class ProductProjectionPagedSearchResponseSchema(marshmallow.Schema):
     """Marshmallow schema for :class:`commercetools.types.ProductProjectionPagedSearchResponse`."""
 
+    limit = marshmallow.fields.Integer(allow_none=True)
     count = marshmallow.fields.Integer(allow_none=True)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True)

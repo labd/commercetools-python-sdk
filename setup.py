@@ -3,24 +3,24 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "requests>=2.7.0",
+    "requests>=2.25.1",
     "pytz",
-    "requests-oauthlib>=1.0.0",
-    "requests_mock>=0.7.0",
-    "marshmallow>=3.0.0",
+    "requests-oauthlib>=1.3.0",
+    "requests_mock>=1.8.0",
+    "marshmallow>=3.9.1",
     "marshmallow-enum>=1.5.1",
-    "WebOb>=1.8.0",
-    "Werkzeug>=0.15.2",
-    "wrapt>=1.10.0",
+    "WebOb>=1.8.6",
+    "Werkzeug>=1.0.1",
+    "wrapt>=1.12.1",
 ]
 
 codegen_requires = [
     "astunparse==1.6.3",
     "astor==0.8.1",
-    "attrs>=18.2.0",
-    "black==18.9b0",
-    "isort[pyproject]==5.2.2",
-    "PyYAML==3.13",
+    "attrs>=20.3.0",
+    "black==20.8b1",
+    "isort==5.6.4",
+    "PyYAML==5.3.1",
 ]
 
 docs_require = [
@@ -30,19 +30,19 @@ docs_require = [
 ]
 
 tests_require = [
-    "freezegun==0.3.8",
-    "mock==2.0.0",
-    "pretend==1.0.8",
-    "coverage[toml]>=5.0.2",
-    "pytest-cov==2.5.1",
-    "pytest==3.1.3",
+    "freezegun==1.0.0",
+    "mock==4.0.3",
+    "pretend==1.0.9",
+    "coverage[toml]>=5.3",
+    "pytest-cov==2.10.1",
+    "pytest==6.2.1",
     # Linting
-    "isort==5.2.2",
-    "flake8==3.3.0",
+    "isort==5.6.4",
+    "flake8==3.8.4",
     "flake8-blind-except==0.1.1",
     "flake8-debugger==1.4.0",
     "flake8-imports==0.1.1",
-    "mypy==0.761",
+    "mypy==0.790",
 ]
 
 

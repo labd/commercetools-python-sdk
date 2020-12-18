@@ -812,6 +812,9 @@ class TypedMoneyDraftSchema(MoneySchema):
     """Marshmallow schema for :class:`commercetools.types.TypedMoneyDraft`."""
 
     type = marshmallow_enum.EnumField(types.MoneyType, by_value=True)
+    fraction_digits = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="fractionDigits"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

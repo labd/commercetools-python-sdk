@@ -65,8 +65,7 @@ class ReviewService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> ReviewPagedQueryResponse:
-        """Reviews are used to evaluate products and channels.
-        """
+        """Reviews are used to evaluate products and channels."""
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -84,8 +83,7 @@ class ReviewService(abstract.AbstractService):
         )
 
     def create(self, draft: ReviewDraft, *, expand: OptionalListStr = None) -> Review:
-        """Reviews are used to evaluate products and channels.
-        """
+        """Reviews are used to evaluate products and channels."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="reviews",

@@ -371,6 +371,10 @@ class MyCartDraft(_BaseType):
     delete_days_after_last_modification: typing.Optional[int]
     #: Optional list of :class:`commercetools.types.Address` `(Named` ``itemShippingAddresses`` `in Commercetools)`
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: Optional :class:`commercetools.types.StoreKeyReference`
+    store: typing.Optional["StoreKeyReference"]
+    #: Optional list of :class:`commercetools.types.DiscountCodeInfo` `(Named` ``discountCodes`` `in Commercetools)`
+    discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
 
     def __init__(
         self,
@@ -387,7 +391,9 @@ class MyCartDraft(_BaseType):
         locale: typing.Optional[str] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        store: typing.Optional["StoreKeyReference"] = None,
+        discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None
     ) -> None:
         self.currency = currency
         self.customer_email = customer_email
@@ -402,11 +408,13 @@ class MyCartDraft(_BaseType):
         self.tax_mode = tax_mode
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.item_shipping_addresses = item_shipping_addresses
+        self.store = store
+        self.discount_codes = discount_codes
         super().__init__()
 
     def __repr__(self) -> str:
         return (
-            "MyCartDraft(currency=%r, customer_email=%r, country=%r, inventory_mode=%r, line_items=%r, shipping_address=%r, billing_address=%r, shipping_method=%r, custom=%r, locale=%r, tax_mode=%r, delete_days_after_last_modification=%r, item_shipping_addresses=%r)"
+            "MyCartDraft(currency=%r, customer_email=%r, country=%r, inventory_mode=%r, line_items=%r, shipping_address=%r, billing_address=%r, shipping_method=%r, custom=%r, locale=%r, tax_mode=%r, delete_days_after_last_modification=%r, item_shipping_addresses=%r, store=%r, discount_codes=%r)"
             % (
                 self.currency,
                 self.customer_email,
@@ -421,6 +429,8 @@ class MyCartDraft(_BaseType):
                 self.tax_mode,
                 self.delete_days_after_last_modification,
                 self.item_shipping_addresses,
+                self.store,
+                self.discount_codes,
             )
         )
 
@@ -1872,51 +1882,75 @@ class MyCustomerAddAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: str) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="addBillingAddressId")
 
     def __repr__(self) -> str:
-        return "MyCustomerAddBillingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerAddBillingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: str) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="addShippingAddressId")
 
     def __repr__(self) -> str:
-        return "MyCustomerAddShippingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerAddShippingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
     #: :class:`commercetools.types.Address`
     address: "Address"
 
-    def __init__(self, *, address_id: str, address: "Address") -> None:
+    def __init__(
+        self,
+        *,
+        address: "Address",
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         self.address = address
         super().__init__(action="changeAddress")
 
     def __repr__(self) -> str:
-        return "MyCustomerChangeAddressAction(action=%r, address_id=%r, address=%r)" % (
-            self.action,
-            self.address_id,
-            self.address,
+        return (
+            "MyCustomerChangeAddressAction(action=%r, address_id=%r, address_key=%r, address=%r)"
+            % (self.action, self.address_id, self.address_key, self.address)
         )
 
 
@@ -1936,47 +1970,71 @@ class MyCustomerChangeEmailAction(MyCustomerUpdateAction):
 
 
 class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: str) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="removeAddress")
 
     def __repr__(self) -> str:
-        return "MyCustomerRemoveAddressAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerRemoveAddressAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: str) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="removeBillingAddressId")
 
     def __repr__(self) -> str:
-        return "MyCustomerRemoveBillingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerRemoveBillingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
-    #: :class:`str` `(Named` ``addressId`` `in Commercetools)`
-    address_id: str
+    #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
+    address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: str) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="removeShippingAddressId")
 
     def __repr__(self) -> str:
-        return "MyCustomerRemoveShippingAddressIdAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerRemoveShippingAddressIdAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
@@ -2056,30 +2114,46 @@ class MyCustomerSetDateOfBirthAction(MyCustomerUpdateAction):
 class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: typing.Optional[str] = None) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="setDefaultBillingAddress")
 
     def __repr__(self) -> str:
-        return "MyCustomerSetDefaultBillingAddressAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerSetDefaultBillingAddressAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 
 class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
     #: Optional :class:`str` `(Named` ``addressId`` `in Commercetools)`
     address_id: typing.Optional[str]
+    #: Optional :class:`str` `(Named` ``addressKey`` `in Commercetools)`
+    address_key: typing.Optional[str]
 
-    def __init__(self, *, address_id: typing.Optional[str] = None) -> None:
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ) -> None:
         self.address_id = address_id
+        self.address_key = address_key
         super().__init__(action="setDefaultShippingAddress")
 
     def __repr__(self) -> str:
-        return "MyCustomerSetDefaultShippingAddressAction(action=%r, address_id=%r)" % (
-            self.action,
-            self.address_id,
+        return (
+            "MyCustomerSetDefaultShippingAddressAction(action=%r, address_id=%r, address_key=%r)"
+            % (self.action, self.address_id, self.address_key)
         )
 
 

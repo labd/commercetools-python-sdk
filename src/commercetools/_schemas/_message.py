@@ -146,6 +146,8 @@ __all__ = [
     "ProductStateTransitionMessageSchema",
     "ProductUnpublishedMessagePayloadSchema",
     "ProductUnpublishedMessageSchema",
+    "ProductVariantAddedMessagePayloadSchema",
+    "ProductVariantAddedMessageSchema",
     "ProductVariantDeletedMessagePayloadSchema",
     "ProductVariantDeletedMessageSchema",
     "ReviewCreatedMessagePayloadSchema",
@@ -268,6 +270,7 @@ class MessagePagedQueryResponseSchema(marshmallow.Schema):
                 "ProductSlugChanged": "commercetools._schemas._message.ProductSlugChangedMessageSchema",
                 "ProductStateTransition": "commercetools._schemas._message.ProductStateTransitionMessageSchema",
                 "ProductUnpublished": "commercetools._schemas._message.ProductUnpublishedMessageSchema",
+                "ProductVariantAdded": "commercetools._schemas._message.ProductVariantAddedMessageSchema",
                 "ProductVariantDeleted": "commercetools._schemas._message.ProductVariantDeletedMessageSchema",
                 "ReviewCreated": "commercetools._schemas._message.ReviewCreatedMessageSchema",
                 "ReviewRatingSet": "commercetools._schemas._message.ReviewRatingSetMessageSchema",
@@ -3020,7 +3023,7 @@ class ProductPublishedMessagePayloadSchema(MessagePayloadSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductPublishedMessagePayload`."""
 
     removed_image_urls = marshmallow.fields.List(
-        marshmallow.fields.Raw(allow_none=True),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3045,7 +3048,7 @@ class ProductPublishedMessageSchema(MessageSchema):
     """Marshmallow schema for :class:`commercetools.types.ProductPublishedMessage`."""
 
     removed_image_urls = marshmallow.fields.List(
-        marshmallow.fields.Raw(allow_none=True),
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
         data_key="removedImageUrls",
     )
@@ -3228,6 +3231,44 @@ class ProductUnpublishedMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return types.ProductUnpublishedMessage(**data)
+
+
+class ProductVariantAddedMessagePayloadSchema(MessagePayloadSchema):
+    """Marshmallow schema for :class:`commercetools.types.ProductVariantAddedMessagePayload`."""
+
+    variant = helpers.LazyNestedField(
+        nested="commercetools._schemas._product.ProductVariantSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    staged = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return types.ProductVariantAddedMessagePayload(**data)
+
+
+class ProductVariantAddedMessageSchema(MessageSchema):
+    """Marshmallow schema for :class:`commercetools.types.ProductVariantAddedMessage`."""
+
+    variant = helpers.LazyNestedField(
+        nested="commercetools._schemas._product.ProductVariantSchema",
+        unknown=marshmallow.EXCLUDE,
+        allow_none=True,
+    )
+    staged = marshmallow.fields.Bool(allow_none=True)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return types.ProductVariantAddedMessage(**data)
 
 
 class ProductVariantDeletedMessagePayloadSchema(MessagePayloadSchema):

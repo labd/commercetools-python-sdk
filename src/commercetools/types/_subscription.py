@@ -539,6 +539,8 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
     version: int
     #: :class:`datetime.datetime` `(Named` ``modifiedAt`` `in Commercetools)`
     modified_at: datetime.datetime
+    #: Optional :class:`bool` `(Named` ``dataErasure`` `in Commercetools)`
+    data_erasure: typing.Optional[bool]
 
     def __init__(
         self,
@@ -549,10 +551,12 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
         modified_at: datetime.datetime,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
+        data_erasure: typing.Optional[bool] = None
     ) -> None:
         self.version = version
         self.modified_at = modified_at
+        self.data_erasure = data_erasure
         super().__init__(
             project_key=project_key,
             notification_type="ResourceDeleted",
@@ -562,7 +566,7 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 
     def __repr__(self) -> str:
         return (
-            "ResourceDeletedDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r, version=%r, modified_at=%r)"
+            "ResourceDeletedDelivery(project_key=%r, notification_type=%r, resource=%r, resource_user_provided_identifiers=%r, version=%r, modified_at=%r, data_erasure=%r)"
             % (
                 self.project_key,
                 self.notification_type,
@@ -570,6 +574,7 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
                 self.resource_user_provided_identifiers,
                 self.version,
                 self.modified_at,
+                self.data_erasure,
             )
         )
 

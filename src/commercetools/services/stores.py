@@ -63,8 +63,7 @@ class StoreService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> StorePagedQueryResponse:
-        """Stores let you model the context your customers shop in.
-        """
+        """Stores let you model the context your customers shop in."""
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -82,8 +81,7 @@ class StoreService(abstract.AbstractService):
         )
 
     def create(self, draft: StoreDraft, *, expand: OptionalListStr = None) -> Store:
-        """Stores let you model the context your customers shop in.
-        """
+        """Stores let you model the context your customers shop in."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="stores",

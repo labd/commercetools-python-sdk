@@ -22,7 +22,6 @@ if typing.TYPE_CHECKING:
         Money,
         Price,
         TypedMoney,
-        TypedMoneyDraft,
     )
     from ._customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from ._discount_code import DiscountCodeReference
@@ -675,8 +674,8 @@ class CustomLineItemDraft(_BaseType):
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: Optional :class:`commercetools.types.ExternalTaxRateDraft` `(Named` ``externalTaxRate`` `in Commercetools)`
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
-    #: Optional :class:`commercetools.types.CustomFields`
-    custom: typing.Optional["CustomFields"]
+    #: Optional :class:`commercetools.types.CustomFieldsDraft`
+    custom: typing.Optional["CustomFieldsDraft"]
     #: Optional :class:`commercetools.types.ItemShippingDetailsDraft` `(Named` ``shippingDetails`` `in Commercetools)`
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
@@ -689,7 +688,7 @@ class CustomLineItemDraft(_BaseType):
         slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        custom: typing.Optional["CustomFields"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ) -> None:
         self.name = name
@@ -1377,18 +1376,18 @@ class TaxedPrice(_BaseType):
 
 
 class TaxedPriceDraft(_BaseType):
-    #: :class:`commercetools.types.TypedMoneyDraft` `(Named` ``totalNet`` `in Commercetools)`
-    total_net: "TypedMoneyDraft"
-    #: :class:`commercetools.types.TypedMoneyDraft` `(Named` ``totalGross`` `in Commercetools)`
-    total_gross: "TypedMoneyDraft"
+    #: :class:`commercetools.types.Money` `(Named` ``totalNet`` `in Commercetools)`
+    total_net: "Money"
+    #: :class:`commercetools.types.Money` `(Named` ``totalGross`` `in Commercetools)`
+    total_gross: "Money"
     #: List of :class:`commercetools.types.TaxPortionDraft` `(Named` ``taxPortions`` `in Commercetools)`
     tax_portions: typing.List["TaxPortionDraft"]
 
     def __init__(
         self,
         *,
-        total_net: "TypedMoneyDraft",
-        total_gross: "TypedMoneyDraft",
+        total_net: "Money",
+        total_gross: "Money",
         tax_portions: typing.List["TaxPortionDraft"]
     ) -> None:
         self.total_net = total_net

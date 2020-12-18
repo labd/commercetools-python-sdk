@@ -63,8 +63,7 @@ class CategoryService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> CategoryPagedQueryResponse:
-        """Categories are used to organize products in a hierarchical structure.
-        """
+        """Categories are used to organize products in a hierarchical structure."""
         params = self._serialize_params(
             {
                 "expand": expand,

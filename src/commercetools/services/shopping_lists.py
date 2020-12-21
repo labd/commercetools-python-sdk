@@ -74,7 +74,8 @@ class ShoppingListService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> ShoppingListPagedQueryResponse:
-        """shopping-lists e.g. for wishlist support"""
+        """shopping-lists e.g. for wishlist support
+        """
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -96,7 +97,8 @@ class ShoppingListService(abstract.AbstractService):
     def create(
         self, draft: ShoppingListDraft, *, expand: OptionalListStr = None
     ) -> ShoppingList:
-        """shopping-lists e.g. for wishlist support"""
+        """shopping-lists e.g. for wishlist support
+        """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="shopping-lists",

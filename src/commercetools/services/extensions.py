@@ -65,7 +65,8 @@ class ExtensionService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> ExtensionPagedQueryResponse:
-        """Extend the behavior of an API with your business logic"""
+        """Extend the behavior of an API with your business logic
+        """
         params = self._serialize_params(
             {
                 "expand": expand,

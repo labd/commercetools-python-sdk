@@ -24,12 +24,7 @@ def test_extension_no_response_error():
 
 def test_query_timeout_error():
     error_response = {
-        "errors": [
-            {
-                "code": "QueryTimedOut",
-                "message": "The query timed out."
-            }
-        ],
+        "errors": [{"code": "QueryTimedOut", "message": "The query timed out."}],
         "message": "The query timed out.",
         "statusCode": 400,
     }

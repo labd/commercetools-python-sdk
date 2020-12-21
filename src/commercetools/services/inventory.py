@@ -57,7 +57,8 @@ class InventoryEntryService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> InventoryPagedQueryResponse:
-        """Inventory allows you to track stock quantities."""
+        """Inventory allows you to track stock quantities.
+        """
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -79,7 +80,8 @@ class InventoryEntryService(abstract.AbstractService):
     def create(
         self, draft: InventoryEntryDraft, *, expand: OptionalListStr = None
     ) -> InventoryEntry:
-        """Inventory allows you to track stock quantities."""
+        """Inventory allows you to track stock quantities.
+        """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="inventory",

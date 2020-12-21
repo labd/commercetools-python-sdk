@@ -104,11 +104,10 @@ def reformat_code(filename: str):
 
     src = Path(filename)
     report = black.Report()
-    mode = black.Mode()
+    mode = black.FileMode(line_length=88)
     black.reformat_one(
         src=src,
-        # https://github.com/psf/black/issues/1629 known issue
-        fast=True,
+        fast=False,
         write_back=black.WriteBack.YES,
         mode=mode,
         report=report,

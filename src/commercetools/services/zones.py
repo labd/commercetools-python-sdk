@@ -63,7 +63,8 @@ class ZoneService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> ZonePagedQueryResponse:
-        """Zones allow defining ShippingRates for specific Locations."""
+        """Zones allow defining ShippingRates for specific Locations.
+        """
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -81,7 +82,8 @@ class ZoneService(abstract.AbstractService):
         )
 
     def create(self, draft: ZoneDraft, *, expand: OptionalListStr = None) -> Zone:
-        """Zones allow defining ShippingRates for specific Locations."""
+        """Zones allow defining ShippingRates for specific Locations.
+        """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="zones",

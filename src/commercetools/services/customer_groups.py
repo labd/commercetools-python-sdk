@@ -68,7 +68,8 @@ class CustomerGroupService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> CustomerGroupPagedQueryResponse:
-        """customer-groups are used to evaluate products and channels."""
+        """customer-groups are used to evaluate products and channels.
+        """
         params = self._serialize_params(
             {
                 "expand": expand,
@@ -90,7 +91,8 @@ class CustomerGroupService(abstract.AbstractService):
     def create(
         self, draft: CustomerGroupDraft, *, expand: OptionalListStr = None
     ) -> CustomerGroup:
-        """customer-groups are used to evaluate products and channels."""
+        """customer-groups are used to evaluate products and channels.
+        """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
             endpoint="customer-groups",

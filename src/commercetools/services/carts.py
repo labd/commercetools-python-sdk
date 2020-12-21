@@ -87,7 +87,8 @@ class CartService(abstract.AbstractService):
         predicate_var: typing.Dict[str, str] = None,
         customer_id: str = None,
     ) -> CartPagedQueryResponse:
-        """A shopping cart holds product variants and can be ordered."""
+        """A shopping cart holds product variants and can be ordered.
+        """
         params = self._serialize_params(
             {
                 "expand": expand,

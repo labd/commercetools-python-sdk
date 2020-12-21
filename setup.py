@@ -3,15 +3,15 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "requests>=2.25.1",
+    "requests>=2.7.0",
     "pytz",
-    "requests-oauthlib>=1.3.0",
+    "requests-oauthlib>=1.0.0",
     "requests_mock>=1.8.0",
-    "marshmallow>=3.9.1",
+    "marshmallow>=3.0.0",
     "marshmallow-enum>=1.5.1",
-    "WebOb>=1.8.6",
-    "Werkzeug>=1.0.1",
-    "wrapt>=1.12.1",
+    "WebOb>=1.8.0",
+    "Werkzeug>=0.15.2",
+    "wrapt>=1.10.0",
 ]
 
 codegen_requires = [

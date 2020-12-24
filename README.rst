@@ -93,14 +93,8 @@ accidentally update a Pypi dependency. If not, push the code:
 
     git push --follow-tags
 
-We use GitHub actions so make sure the build succeeds and then go to the release tab.
-GitHub will already have created a release for the tag, but ignore that for now and
-draft a new release and enter the tag which you created.
+We use GitHub actions so make sure the build succeeds and then go to the tags tab (https://github.com/labd/commercetools-python-sdk/tags).
 
-Copy the changelog items in in the release description and save. This will then 
-automatically trigger a GitHub action to create and upload the package to PyPi.
-
-Then go to Azure Pipelines and wait for the build to create an artifact.
-Once the build succeeded go to Releases and create a release with the correct artifact.
-This will release the package to Pypi.
+Click the dots to trigger a release action. Copy the changelog items in the release description  and enter the release version. 
+This will upload the release to PyPi.
 

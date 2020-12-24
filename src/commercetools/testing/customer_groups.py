@@ -10,6 +10,7 @@ from commercetools._schemas._customer_group import (
 )
 from commercetools._schemas._review import ReviewUpdateSchema
 from commercetools.testing import abstract, utils
+from commercetools.testing.utils import update_attribute
 
 
 class CustomerGroupModel(abstract.BaseModel):
@@ -51,3 +52,8 @@ class CustomerGroupBackend(abstract.ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
+
+    _actions = {
+        "changeName": update_attribute("name", "name"),
+        "setKey": update_attribute("key", "key")
+    }

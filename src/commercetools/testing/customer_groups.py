@@ -55,5 +55,5 @@ class CustomerGroupBackend(abstract.ServiceBackend):
 
     _actions = {
         "changeName": update_attribute("name", "name"),
-        "setKey": update_attribute("key", "key")
+        "setKey": update_attribute("key", "key"),
     }

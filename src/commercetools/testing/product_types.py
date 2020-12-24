@@ -43,7 +43,7 @@ class ProductTypesModel(BaseModel):
 
 
 def _create_attribute_from_draft(
-    draft: types.AttributeDefinitionDraft
+    draft: types.AttributeDefinitionDraft,
 ) -> types.AttributeDefinition:
     return types.AttributeDefinition(
         type=draft.type,

@@ -1,24 +1,27 @@
 from typing import List
 
-from commercetools import types
-from commercetools._schemas._project import ProjectSchema, ProjectUpdateSchema
+from commercetools.platform import models
+from commercetools.platform.models._schemas.project import (
+    ProjectSchema,
+    ProjectUpdateSchema,
+)
 from commercetools.services import abstract
 
 __all__ = ["ProjectService"]
 
 
 class ProjectService(abstract.AbstractService):
-    def get(self) -> types.Order:
+    def get(self) -> models.Order:
         return self._client._get("", {}, ProjectSchema)
 
     def update(
         self,
         version: int,
-        actions: List[types.OrderUpdateAction],
+        actions: List[models.OrderUpdateAction],
         *,
         force_update: bool = False,
-    ) -> types.Order:
-        update_action = types.ProjectUpdate(version=version, actions=actions)
+    ) -> models.Order:
+        update_action = models.ProjectUpdate(version=version, actions=actions)
         return self._client._post(
             endpoint="",
             params={},

@@ -8,11 +8,14 @@ from marshmallow import Schema
 from requests_mock import create_response
 from requests_mock.request import _RequestObjectProxy
 
-from commercetools import types
-from commercetools._schemas._product import ProductSchema
 from commercetools.constants import HEADER_CORRELATION_ID
-from commercetools.types import CartSetCustomFieldAction, OrderSetCustomFieldAction
-from commercetools.types._abstract import _BaseType
+from commercetools.platform import models
+from commercetools.platform.models import (
+    CartSetCustomFieldAction,
+    OrderSetCustomFieldAction,
+)
+from commercetools.platform.models._abstract import _BaseType
+from commercetools.platform.models._schemas.product import ProductSchema
 
 
 class InternalUpdateError(ValueError):
@@ -52,15 +55,15 @@ def create_from_draft(draft):
     if not draft:
         return None
 
-    if isinstance(draft, types.CustomFieldsDraft):
-        return types.CustomFields(
-            type=types.TypeReference(id=draft.type.id), fields=draft.fields
+    if isinstance(draft, models.CustomFieldsDraft):
+        return models.CustomFields(
+            type=models.TypeReference(id=draft.type.id), fields=draft.fields
         )
-    if isinstance(draft, types.PriceTierDraft):
-        return types.PriceTier(
+    if isinstance(draft, models.PriceTierDraft):
+        return models.PriceTier(
             minimum_quantity=draft.minimum_quantity,
             value=_money_to_typed(
-                types.Money(
+                models.Money(
                     cent_amount=draft.value.cent_amount,
                     currency_code=draft.value.currency_code,
                 )
@@ -71,10 +74,10 @@ def create_from_draft(draft):
 
 
 def custom_fields_from_draft(
-    storage, draft: types.CustomFieldsDraft
-) -> types.CustomFields:
-    return types.CustomFields(
-        type=types.TypeReference(
+    storage, draft: models.CustomFieldsDraft
+) -> models.CustomFields:
+    return models.CustomFields(
+        type=models.TypeReference(
             id=storage.get_by_resource_identifier(draft.type)["id"]
         ),
         fields=draft.fields,
@@ -82,13 +85,13 @@ def custom_fields_from_draft(
 
 
 def _money_to_typed(
-    money: typing.Optional[types.Money],
-) -> typing.Optional[types.TypedMoney]:
+    money: typing.Optional[models.Money],
+) -> typing.Optional[models.TypedMoney]:
     if money is not None:
-        return types.TypedMoney(
+        return models.TypedMoney(
             cent_amount=money.cent_amount,
             currency_code=money.currency_code,
-            type=types.MoneyType.CENT_PRECISION,
+            type=models.MoneyType.CENT_PRECISION,
             fraction_digits=2,
         )
     return None
@@ -99,14 +102,8 @@ def update_attribute(dst: str, src: str):
         value = getattr(action, src)
 
         if isinstance(value, _BaseType):
-            # FIXME: this stupidly assumes the types and schemas module names
-            # are in sync. which might be the case since we auto-generate both,
-            # but still...
-            pkg_name = value.__class__.__module__.replace(".types.", "._schemas.")
-            module = importlib.import_module(pkg_name)
-            schema = getattr(module, value.__class__.__name__ + "Schema", None)
-            if schema:
-                value = schema().dump(value)
+            value = value.serialize()
+
         if obj[dst] != value:
             new = copy.deepcopy(obj)
             new[dst] = value
@@ -207,7 +204,7 @@ def get_product_from_storage(
     storage: "commercetools.testing.Storage",
     product_id: uuid.UUID = None,
     sku: str = None,
-) -> typing.Optional[types.Product]:
+) -> typing.Optional[models.Product]:
     product = None
     product_store = storage._stores["product"]
 

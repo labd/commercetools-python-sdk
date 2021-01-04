@@ -9,10 +9,10 @@ from requests.adapters import HTTPAdapter
 from requests_oauthlib import OAuth2Session
 from urllib3.util.retry import Retry
 
-from commercetools._schemas._error import ErrorResponseSchema
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
+from commercetools.platform.models._schemas.error import ErrorResponseSchema
 from commercetools.services import ServicesMixin
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver, fix_token_url
 
@@ -24,7 +24,7 @@ class RefreshingOAuth2Session(OAuth2Session):
         return self.fetch_token(token_url, **kwargs)
 
 
-class Client(ServicesMixin):
+class BaseClient:
     """The Commercetools Client, used to interact with the Commercetools API.
 
     :param project_key: the key for the project with which you want to interact
@@ -66,7 +66,7 @@ class Client(ServicesMixin):
         self._config["token_url"] = fix_token_url(self._config["token_url"])
         self._token_saver = token_saver or DefaultTokenSaver()
         self._url = self._config["url"]
-        self._base_url = f"{self._config['url']}/{self._config['project_key']}/"
+        self._base_url = f"{self._config['url']}"
 
         # Fetch token from the token saver
         token = self._token_saver.get_token(
@@ -113,12 +113,16 @@ class Client(ServicesMixin):
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        schema_cls: typing.Type[SchemaABC],
+        schema_cls: typing.Type[SchemaABC] = None,
+        response_object: typing.Type[SchemaABC] = None,
+        headers=None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
         response = self._http_client.get(self._base_url + endpoint, params=params)
 
         if response.status_code == 200:
+            if response_object:
+                return response_object.deserialize(response.json())
             return schema_cls().load(response.json())
         return self._process_error(response)
 
@@ -129,6 +133,7 @@ class Client(ServicesMixin):
         data_object: typing.Any,
         request_schema_cls: typing.Optional[typing.Type[SchemaABC]],
         response_schema_cls: typing.Type[SchemaABC],
+        response_object: typing.Type[SchemaABC] = None,
         form_encoded: bool = False,
         force_update: bool = False,
     ) -> typing.Any:
@@ -145,11 +150,13 @@ class Client(ServicesMixin):
 
             response = self._http_client.post(self._base_url + endpoint, **kwargs)
             if response.status_code in (200, 201):
+                if response_object:
+                    return response_object.deserialize(response.json())
                 return response_schema_cls().load(response.json())
             return self._process_error(response)
 
-        if request_schema_cls is not None:
-            data = request_schema_cls().dump(data_object)
+        if data_object is not None:
+            data = data_object.serialize()
         else:
             data = None
         return remote_http_call(data)
@@ -160,6 +167,7 @@ class Client(ServicesMixin):
         params: typing.Dict[str, str],
         file: typing.IO,
         response_schema_cls: typing.Type[SchemaABC],
+        response_object: typing.Type[SchemaABC] = None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
         response = self._http_client.post(
@@ -167,6 +175,8 @@ class Client(ServicesMixin):
         )
 
         if response.status_code in (200, 201):
+            if response_object:
+                return response_object.deserialize(response.json())
             return response_schema_cls().load(response.json())
         return self._process_error(response)
 
@@ -175,6 +185,7 @@ class Client(ServicesMixin):
         endpoint: str,
         params: typing.Dict[str, str],
         response_schema_cls: typing.Type[SchemaABC],
+        response_object: typing.Type[SchemaABC] = None,
         force_delete: bool = False,
     ) -> typing.Any:
         """Delete an object from the commercetools platform"""
@@ -185,6 +196,8 @@ class Client(ServicesMixin):
                 self._base_url + endpoint, params=params
             )
             if response.status_code == 200:
+                if response_object:
+                    return response_object.deserialize(response.json())
                 return response_schema_cls().load(response.json())
             return self._process_error(response)
 
@@ -238,3 +251,7 @@ class Client(ServicesMixin):
                 raise ValueError(f"No value set for {key}")
 
         return config
+
+
+class Client(BaseClient, ServicesMixin):
+    pass

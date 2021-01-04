@@ -3,8 +3,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._state import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.state import (
     StateDraftSchema,
     StatePagedQueryResponseSchema,
     StateReferenceSchema,
@@ -22,10 +22,10 @@ class StateModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.StateDraft, id: typing.Optional[str] = None
-    ) -> types.State:
+        self, draft: models.StateDraft, id: typing.Optional[str] = None
+    ) -> models.State:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.State(
+        return models.State(
             id=str(object_id),
             version=1,
             key=draft.key,
@@ -43,24 +43,24 @@ class StateModel(BaseModel):
 
 def create_references_from_resources(
     model: StateModel,
-    state_transitions: typing.Optional[typing.List[types.StateResourceIdentifier]],
-) -> typing.List[types.StateReference]:
+    state_transitions: typing.Optional[typing.List[models.StateResourceIdentifier]],
+) -> typing.List[models.StateReference]:
     if not state_transitions:
         return []
     references = []
     for state_identifier in state_transitions:
         if state_identifier.id:
-            references.append(types.StateReference(id=state_identifier.id))
+            references.append(models.StateReference(id=state_identifier.id))
         if state_identifier.key:
             obj = model.get_by_key(state_identifier.key)
             if obj:
-                references.append(types.StateReference(id=obj["id"]))
+                references.append(models.StateReference(id=obj["id"]))
 
     return references
 
 
 def set_roles():
-    def updater(self, obj: dict, action: types.StateSetRolesAction):
+    def updater(self, obj: dict, action: models.StateSetRolesAction):
         roles = getattr(action, "roles")
 
         if roles:
@@ -76,7 +76,7 @@ def set_roles():
 
 
 def set_transitions():
-    def updater(self, obj: dict, action: types.StateSetTransitionsAction):
+    def updater(self, obj: dict, action: models.StateSetTransitionsAction):
         transitions = action.transitions
         references = []
         if action.transitions:

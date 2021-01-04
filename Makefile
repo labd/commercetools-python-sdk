@@ -5,7 +5,12 @@ install:
 	pip install -e .[test,codegen]
 
 generate:
-	python -mcodegen
+	java -jar ../rmf-codegen/rmf-gen.jar  generate ../commercetools-api-reference/api-specs/api/api.raml -o src/commercetools/platform/ -t PYTHON_CLIENT
+	java -jar ../rmf-codegen/rmf-gen.jar  generate ../commercetools-api-reference/api-specs/importapi/api.raml -o src/commercetools/importapi/ -t PYTHON_CLIENT
+	java -jar ../rmf-codegen/rmf-gen.jar  generate ../commercetools-api-reference/api-specs/ml/api.raml -o src/commercetools/ml/ -t PYTHON_CLIENT
+	find src/ -name "gen.properties" -delete
+	isort src/commercetools/
+	black src/commercetools/
 
 test:
 	pytest tests/

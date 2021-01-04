@@ -1,6 +1,6 @@
 import typing
 
-from commercetools.types import ErrorResponse
+from commercetools.platform.models import ErrorResponse
 
 
 class CommercetoolsError(Exception):

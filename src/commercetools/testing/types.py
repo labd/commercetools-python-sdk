@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._type import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.type import (
     FieldDefinitionSchema,
     TypeDraftSchema,
     TypePagedQueryResponseSchema,
@@ -20,10 +20,10 @@ class TypesModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.TypeDraft, id: typing.Optional[str] = None
-    ) -> types.Type:
+        self, draft: models.TypeDraft, id: typing.Optional[str] = None
+    ) -> models.Type:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.Type(
+        return models.Type(
             id=str(object_id),
             version=1,
             name=draft.name,

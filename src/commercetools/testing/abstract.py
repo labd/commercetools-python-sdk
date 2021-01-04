@@ -7,10 +7,14 @@ import marshmallow
 from marshmallow import fields
 from requests_mock.request import _RequestObjectProxy
 
-from commercetools import CommercetoolsError, types
-from commercetools._schemas._common import BaseResourceSchema
-from commercetools._schemas._error import DuplicateFieldErrorSchema, ErrorResponseSchema
+from commercetools import CommercetoolsError
 from commercetools.helpers import OptionalList
+from commercetools.platform import models
+from commercetools.platform.models._schemas.common import BaseResourceSchema
+from commercetools.platform.models._schemas.error import (
+    DuplicateFieldErrorSchema,
+    ErrorResponseSchema,
+)
 from commercetools.services import traits
 from commercetools.testing import utils
 from commercetools.testing.predicates import PredicateFilter
@@ -56,7 +60,7 @@ class BaseModel:
                     continue
 
                 msg = f"A duplicate value '{value}' exists for field '{field}'."
-                error = types.DuplicateFieldError(
+                error = models.DuplicateFieldError(
                     message=msg,
                     field=field,
                     duplicate_value=value,
@@ -66,7 +70,7 @@ class BaseModel:
                 raise CommercetoolsError(
                     msg,
                     errors=serialized_errors,
-                    response=types.ErrorResponse(
+                    response=models.ErrorResponse(
                         status_code=400,
                         message=msg,
                         error=error.code,
@@ -391,11 +395,11 @@ class ServiceBackend(BaseBackend):
 
     def _create_data_error_response(self, message, obj):
         return ErrorResponseSchema().dump(
-            types.ErrorResponse(
+            models.ErrorResponse(
                 status_code=400,
                 message=message,
                 errors=[
-                    types.ConcurrentModificationError(
+                    models.ConcurrentModificationError(
                         message=message, current_version=obj["version"]
                     )
                 ],
@@ -404,11 +408,11 @@ class ServiceBackend(BaseBackend):
 
     def _create_version_error_response(self, version):
         return ErrorResponseSchema().dump(
-            types.ErrorResponse(
+            models.ErrorResponse(
                 status_code=409,
                 message="Version mismatch. Concurrent modification.",
                 errors=[
-                    types.ConcurrentModificationError(
+                    models.ConcurrentModificationError(
                         message="Version mismatch. Concurrent modification.",
                         current_version=version,
                     )

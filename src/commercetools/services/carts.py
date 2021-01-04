@@ -3,15 +3,15 @@ import typing
 
 from marshmallow import fields
 
-from commercetools._schemas._cart import (
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.platform.models._schemas.cart import (
     CartDraftSchema,
     CartPagedQueryResponseSchema,
     CartSchema,
     CartUpdateSchema,
     ReplicaCartDraftSchema,
 )
-from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.types._cart import (
+from commercetools.platform.models.cart import (
     Cart,
     CartDraft,
     CartPagedQueryResponse,
@@ -87,8 +87,7 @@ class CartService(abstract.AbstractService):
         predicate_var: typing.Dict[str, str] = None,
         customer_id: str = None,
     ) -> CartPagedQueryResponse:
-        """A shopping cart holds product variants and can be ordered.
-        """
+        """A shopping cart holds product variants and can be ordered."""
         params = self._serialize_params(
             {
                 "expand": expand,

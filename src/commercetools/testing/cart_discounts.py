@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._cart_discount import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.cart_discount import (
     CartDiscountDraftSchema,
     CartDiscountPagedQueryResponseSchema,
     CartDiscountSchema,
@@ -20,10 +20,10 @@ class CartDiscountsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.CartDiscountDraft, id: typing.Optional[str] = None
-    ) -> types.CartDiscount:
+        self, draft: models.CartDiscountDraft, id: typing.Optional[str] = None
+    ) -> models.CartDiscount:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.CartDiscount(
+        return models.CartDiscount(
             id=str(object_id),
             version=1,
             key=draft.key,
@@ -34,7 +34,7 @@ class CartDiscountsModel(BaseModel):
             cart_predicate=draft.cart_predicate,
             is_active=draft.is_active or False,
             references=[],
-            stacking_mode=draft.stacking_mode or types.StackingMode.STACKING,
+            stacking_mode=draft.stacking_mode or models.StackingMode.STACKING,
             sort_order=draft.sort_order,
             valid_from=draft.valid_from,
             valid_until=draft.valid_until,

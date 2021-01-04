@@ -3,23 +3,23 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._cart import CartSchema, ShippingInfoSchema
-from commercetools._schemas._order import (
+from commercetools.platform import models
+from commercetools.platform.models import CartOrigin, OrderState
+from commercetools.platform.models._schemas.cart import CartSchema, ShippingInfoSchema
+from commercetools.platform.models._schemas.order import (
     DeliverySchema,
     OrderFromCartDraftSchema,
     OrderPagedQueryResponseSchema,
     OrderSchema,
     OrderUpdateSchema,
 )
-from commercetools._schemas._payment import PaymentReferenceSchema
+from commercetools.platform.models._schemas.payment import PaymentReferenceSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     set_custom_field,
     update_attribute,
     update_enum_attribute,
 )
-from commercetools.types import CartOrigin, OrderState
 
 
 class OrdersModel(BaseModel):
@@ -27,8 +27,8 @@ class OrdersModel(BaseModel):
     _resource_schema = OrderSchema
 
     def _create_from_draft(
-        self, draft: types.OrderFromCartDraft, id: typing.Optional[str] = None
-    ) -> types.Order:
+        self, draft: models.OrderFromCartDraft, id: typing.Optional[str] = None
+    ) -> models.Order:
         """
         Note this implementation needs further refinement. For example:
          - Copying fields from an existing cart
@@ -36,14 +36,14 @@ class OrdersModel(BaseModel):
         """
 
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        cart_identifier = types.CartResourceIdentifier(id=draft.id)
+        cart_identifier = models.CartResourceIdentifier(id=draft.id)
 
         cart_data = self._storage.get_by_resource_identifier(cart_identifier)
         cart = None
         if cart_data:
-            cart: types.Cart = CartSchema().load(cart_data)
+            cart: models.Cart = CartSchema().load(cart_data)
 
-        order = types.Order(
+        order = models.Order(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
@@ -64,13 +64,13 @@ class OrdersModel(BaseModel):
 
 def add_delivery():
     def updater(self, obj, action):
-        parcels: typing.List[types.ParcelDraft] = getattr(action, "parcels")
-        delivery = types.Delivery(
+        parcels: typing.List[models.ParcelDraft] = getattr(action, "parcels")
+        delivery = models.Delivery(
             id=str(uuid.uuid4()),
             created_at=datetime.datetime.now(datetime.timezone.utc),
             items=[],
             parcels=[
-                types.Parcel(
+                models.Parcel(
                     id=str(uuid.uuid4()),
                     created_at=datetime.datetime.now(datetime.timezone.utc),
                     measurements=parcel_draft.measurements,
@@ -83,18 +83,18 @@ def add_delivery():
 
         if not obj["shippingInfo"]:
             obj["shippingInfo"] = ShippingInfoSchema().dump(
-                types.ShippingInfo(
+                models.ShippingInfo(
                     shipping_method_name="dummy",
-                    price=types.CentPrecisionMoney(
+                    price=models.CentPrecisionMoney(
                         fraction_digits=0, cent_amount=0, currency_code="EUR"
                     ),
-                    shipping_rate=types.ShippingRate(
-                        price=types.CentPrecisionMoney(
+                    shipping_rate=models.ShippingRate(
+                        price=models.CentPrecisionMoney(
                             fraction_digits=0, cent_amount=0, currency_code="EUR"
                         ),
                         tiers=[],
                     ),
-                    shipping_method_state=types.ShippingMethodState(value=None),
+                    shipping_method_state=models.ShippingMethodState(value=None),
                     deliveries=[],
                 )
             )

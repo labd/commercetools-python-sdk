@@ -1,6 +1,9 @@
 import uuid
 
-from commercetools._schemas._project import ProjectSchema, ProjectUpdateSchema
+from commercetools.platform.models._schemas.project import (
+    ProjectSchema,
+    ProjectUpdateSchema,
+)
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import update_attribute
 

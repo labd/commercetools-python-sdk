@@ -2,13 +2,13 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._custom_object import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.custom_object import (
     CustomObjectDraftSchema,
     CustomObjectPagedQueryResponseSchema,
     CustomObjectSchema,
 )
-from commercetools._schemas._error import ErrorResponseSchema
+from commercetools.platform.models._schemas.error import ErrorResponseSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
 
@@ -42,10 +42,10 @@ class CustomObjectsModel(BaseModel):
             return self._store_obj(new_obj)
 
     def _create_from_draft(
-        self, obj: types.CustomObjectDraft, id: typing.Optional[str] = None
-    ) -> types.CustomObject:
+        self, obj: models.CustomObjectDraft, id: typing.Optional[str] = None
+    ) -> models.CustomObject:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.CustomObject(
+        return models.CustomObject(
             id=str(object_id),
             version=1,
             key=obj.key,

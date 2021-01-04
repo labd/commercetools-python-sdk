@@ -2,9 +2,9 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._error import ErrorResponseSchema
-from commercetools._schemas._subscription import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.error import ErrorResponseSchema
+from commercetools.platform.models._schemas.subscription import (
     SubscriptionDraftSchema,
     SubscriptionPagedQueryResponseSchema,
     SubscriptionSchema,
@@ -20,10 +20,10 @@ class SubscriptionsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.SubscriptionDraft, id: typing.Optional[str] = None
-    ) -> types.Subscription:
+        self, draft: models.SubscriptionDraft, id: typing.Optional[str] = None
+    ) -> models.Subscription:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.Subscription(
+        return models.Subscription(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
@@ -55,17 +55,17 @@ class SubscriptionsBackend(ServiceBackend):
     def create(self, request):
         obj = self._schema_draft().loads(request.body)
 
-        if isinstance(obj.destination, types.SqsDestination):
+        if isinstance(obj.destination, models.SqsDestination):
             dest = obj.destination
             message = (
                 "A test message could not be delivered to this destination: "
                 "SQS %r in %r for %r. "
                 "Please make sure your destination is correctly configured."
             ) % (dest.queue_url, dest.region, dest.access_key)
-            error = types.ErrorResponse(
+            error = models.ErrorResponse(
                 status_code=400,
                 message=message,
-                errors=[types.InvalidInputError(message=message)],
+                errors=[models.InvalidInputError(message=message)],
             )
             error_data = ErrorResponseSchema().dumps(error).encode("utf-8")
             return create_commercetools_response(

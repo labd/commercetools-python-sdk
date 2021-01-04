@@ -1,7 +1,7 @@
 import typing
 
-from commercetools import types
-from commercetools._schemas._product import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.product import (
     ProductProjectionPagedQueryResponseSchema,
     ProductProjectionSchema,
     ProductSchema,
@@ -110,21 +110,21 @@ class ProductProjectionsBackend(ServiceBackend):
         return create_commercetools_response(request, status_code=404)
 
     def _convert_product_projection(
-        self, product: types.Product, staged: bool = False
-    ) -> typing.Optional[types.ProductProjection]:
+        self, product: models.Product, staged: bool = False
+    ) -> typing.Optional[models.ProductProjection]:
         """Convert a Product object to a ProductProjection object"""
         if product.master_data is None:
             return None
 
         if staged:
-            data: types.ProductData = product.master_data.staged
+            data: models.ProductData = product.master_data.staged
         else:
-            data: types.ProductData = product.master_data.current
+            data: models.ProductData = product.master_data.current
 
         if data is None:
             return None
 
-        return types.ProductProjection(
+        return models.ProductProjection(
             id=product.id,
             version=product.version,
             key=product.key,

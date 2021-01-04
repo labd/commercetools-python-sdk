@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._discount_code import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.discount_code import (
     DiscountCodeDraftSchema,
     DiscountCodePagedQueryResponseSchema,
     DiscountCodeSchema,
@@ -19,10 +19,10 @@ class DiscountCodesModel(BaseModel):
     _primary_type_name = "discount-code"
 
     def _create_from_draft(
-        self, draft: types.DiscountCodeDraft, id: typing.Optional[str] = None
-    ) -> types.DiscountCode:
+        self, draft: models.DiscountCodeDraft, id: typing.Optional[str] = None
+    ) -> models.DiscountCode:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.DiscountCode(
+        return models.DiscountCode(
             id=str(object_id),
             version=1,
             name=draft.name,

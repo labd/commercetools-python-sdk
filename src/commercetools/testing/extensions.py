@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._extension import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.extension import (
     ExtensionDraftSchema,
     ExtensionPagedQueryResponseSchema,
     ExtensionSchema,
@@ -18,10 +18,10 @@ class ExtensionsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.ExtensionDraft, id: typing.Optional[str] = None
-    ) -> types.Extension:
+        self, draft: models.ExtensionDraft, id: typing.Optional[str] = None
+    ) -> models.Extension:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.Extension(
+        return models.Extension(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),

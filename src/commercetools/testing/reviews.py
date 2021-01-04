@@ -2,8 +2,8 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import types
-from commercetools._schemas._review import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.review import (
     ReviewDraftSchema,
     ReviewPagedQueryResponseSchema,
     ReviewSchema,
@@ -18,11 +18,11 @@ class ReviewModel(abstract.BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.ReviewDraft, id: Optional[str] = None
-    ) -> types.Review:
+        self, draft: models.ReviewDraft, id: Optional[str] = None
+    ) -> models.Review:
         object_id = uuid.UUID(id) if id is not None else uuid.uuid4()
 
-        return types.Review(
+        return models.Review(
             id=str(object_id),
             version=1,
             key=draft.key,

@@ -3,15 +3,15 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._payment import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.payment import (
     PaymentDraftSchema,
     PaymentPagedQueryResponseSchema,
     PaymentSchema,
     PaymentUpdateSchema,
     TransactionSchema,
 )
-from commercetools._schemas._type import CustomFieldsSchema
+from commercetools.platform.models._schemas.type import CustomFieldsSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
@@ -22,10 +22,10 @@ class PaymentsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.PaymentDraft, id: typing.Optional[str] = None
-    ) -> types.Payment:
+        self, draft: models.PaymentDraft, id: typing.Optional[str] = None
+    ) -> models.Payment:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        payment = types.Payment(
+        payment = models.Payment(
             id=str(object_id),
             key=draft.key,
             version=1,
@@ -49,9 +49,9 @@ class PaymentsModel(BaseModel):
         return payment
 
     def _create_transaction_draft(
-        self, draft: types.TransactionDraft
-    ) -> types.Transaction:
-        return types.Transaction(
+        self, draft: models.TransactionDraft
+    ) -> models.Transaction:
+        return models.Transaction(
             id=str(uuid.uuid4()),
             timestamp=draft.timestamp,
             type=draft.type,
@@ -63,8 +63,8 @@ class PaymentsModel(BaseModel):
 
 def add_transaction():
     def updater(self, obj, action):
-        draft: types.TransactionDraft = getattr(action, "transaction")
-        transaction = types.Transaction(
+        draft: models.TransactionDraft = getattr(action, "transaction")
+        transaction = models.Transaction(
             id=str(uuid.uuid4()),
             timestamp=draft.timestamp,
             type=draft.type,
@@ -114,7 +114,7 @@ def add_interface_interaction():
     def updater(self, obj, action):
         self.model._storage.get_by_resource_identifier(action.type)
 
-        value = types.CustomFields(type=action.type, fields=getattr(action, "fields"))
+        value = models.CustomFields(type=action.type, fields=getattr(action, "fields"))
         value = CustomFieldsSchema().dump(value)
         if not obj["interfaceInteractions"]:
             obj["interfaceInteractions"] = []

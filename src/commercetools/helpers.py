@@ -1,4 +1,5 @@
 import importlib
+import inspect
 import typing
 
 from marshmallow import class_registry, fields, missing, post_dump
@@ -12,6 +13,26 @@ from marshmallow.utils import RAISE, is_collection
 from marshmallow.utils import missing as missing_
 
 from commercetools.exceptions import CommercetoolsError
+
+
+def absmod(source, target):
+    """We generate relative paths, but Marshmallow needs absolute
+    paths for imports.
+
+    So let's combine it this way. Using inspect and analyzing the
+    stacktrace is way to slow, so we consume __name__ for source
+    """
+    if target.startswith(".") and target.count(".") == 1:
+        return source + target
+
+    source_parts = source.split(".")
+    for i, char in enumerate(target):
+        if char == ".":
+            source_parts.pop()
+        else:
+            break
+    modname = ".".join(source_parts) + "." + target[i:]
+    return modname
 
 
 class OptionalList(fields.List):
@@ -91,6 +112,9 @@ class RegexField(Field):
 
 
 class LazyNestedField(Nested):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     @property
     def schema(self):
         try:

@@ -3,8 +3,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._product_type import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.product_type import (
     AttributeDefinitionSchema,
     ProductTypeDraftSchema,
     ProductTypePagedQueryResponseSchema,
@@ -21,8 +21,8 @@ class ProductTypesModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.ProductTypeDraft, id: typing.Optional[str] = None
-    ) -> types.ProductType:
+        self, draft: models.ProductTypeDraft, id: typing.Optional[str] = None
+    ) -> models.ProductType:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         attributes = (
             [_create_attribute_from_draft(attr) for attr in draft.attributes]
@@ -30,7 +30,7 @@ class ProductTypesModel(BaseModel):
             else []
         )
 
-        return types.ProductType(
+        return models.ProductType(
             id=str(object_id),
             version=1,
             name=draft.name,
@@ -43,22 +43,22 @@ class ProductTypesModel(BaseModel):
 
 
 def _create_attribute_from_draft(
-    draft: types.AttributeDefinitionDraft,
-) -> types.AttributeDefinition:
-    return types.AttributeDefinition(
+    draft: models.AttributeDefinitionDraft,
+) -> models.AttributeDefinition:
+    return models.AttributeDefinition(
         type=draft.type,
         name=draft.name,
         label=draft.label,
         is_required=draft.is_required,
         attribute_constraint=draft.attribute_constraint,
         input_tip=draft.input_tip,
-        input_hint=draft.input_hint or types.TextInputHint.SINGLE_LINE,
+        input_hint=draft.input_hint or models.TextInputHint.SINGLE_LINE,
         is_searchable=draft.is_searchable,
     )
 
 
 def change_label_action():
-    def updater(self, obj: dict, action: types.ProductTypeChangeLabelAction):
+    def updater(self, obj: dict, action: models.ProductTypeChangeLabelAction):
         new = copy.deepcopy(obj)
 
         for attribute in new["attributes"]:
@@ -75,7 +75,7 @@ def change_label_action():
 
 def change_localized_enum_value_label():
     def updater(
-        self, obj: dict, action: types.ProductTypeChangeLocalizedEnumValueLabelAction
+        self, obj: dict, action: models.ProductTypeChangeLocalizedEnumValueLabelAction
     ):
         new = copy.deepcopy(obj)
 
@@ -107,7 +107,9 @@ def change_localized_enum_value_label():
 def add_attribute_definition_action():
     schema = AttributeDefinitionSchema()
 
-    def updater(self, obj: dict, action: types.ProductTypeAddAttributeDefinitionAction):
+    def updater(
+        self, obj: dict, action: models.ProductTypeAddAttributeDefinitionAction
+    ):
         existing = [attr["name"] for attr in obj["attributes"]]
 
         if action.attribute.name in existing:

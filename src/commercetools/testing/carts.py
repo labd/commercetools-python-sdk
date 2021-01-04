@@ -3,16 +3,18 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._cart import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.cart import (
     CartDraftSchema,
     CartPagedQueryResponseSchema,
     CartSchema,
     CartUpdateSchema,
 )
-from commercetools._schemas._order import PaymentInfoSchema
-from commercetools._schemas._payment import PaymentResourceIdentifierSchema
-from commercetools._schemas._product import ProductSchema
+from commercetools.platform.models._schemas.order import PaymentInfoSchema
+from commercetools.platform.models._schemas.payment import (
+    PaymentResourceIdentifierSchema,
+)
+from commercetools.platform.models._schemas.product import ProductSchema
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 
@@ -22,46 +24,46 @@ class CartsModel(BaseModel):
     _primary_type_name = "cart"
 
     def _create_line_item_from_draft(
-        self, draft: types.CartDraft, line_item_draft: types.LineItemDraft
-    ) -> types.LineItem:
+        self, draft: models.CartDraft, line_item_draft: models.LineItemDraft
+    ) -> models.LineItem:
         line_id = str(uuid.uuid4())
         price = 1000
 
         product_data = self._storage.get_by_resource_identifier(
-            types.ProductResourceIdentifier(id=line_item_draft.product_id)
+            models.ProductResourceIdentifier(id=line_item_draft.product_id)
         )
-        product: types.Product = ProductSchema().load(product_data)
+        product: models.Product = ProductSchema().load(product_data)
 
         variant = None
         for v in product.master_data.current.variants:
             if v.id == line_item_draft.variant_id:
                 variant = v
 
-        return types.LineItem(
+        return models.LineItem(
             id=line_id,
-            name=types.LocalizedString({"en": line_id}),
+            name=models.LocalizedString({"en": line_id}),
             product_id=line_item_draft.product_id,
             product_type=product.product_type,
             variant=variant,
-            price=types.Price(
+            price=models.Price(
                 id=str(uuid.uuid4()),
-                value=types.CentPrecisionMoney(
+                value=models.CentPrecisionMoney(
                     currency_code=draft.currency, cent_amount=price, fraction_digits=2
                 ),
             ),
-            taxed_price=types.TaxedItemPrice(
-                total_net=types.CentPrecisionMoney(
+            taxed_price=models.TaxedItemPrice(
+                total_net=models.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
-                total_gross=types.CentPrecisionMoney(
+                total_gross=models.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
             ),
-            total_price=types.CentPrecisionMoney(
+            total_price=models.CentPrecisionMoney(
                 currency_code=draft.currency,
                 cent_amount=price * (line_item_draft.quantity or 0),
                 fraction_digits=2,
@@ -69,14 +71,14 @@ class CartsModel(BaseModel):
             quantity=line_item_draft.quantity,
             discounted_price_per_quantity=[],
             state=[],
-            price_mode=types.LineItemPriceMode.PLATFORM,
-            line_item_mode=types.LineItemMode.STANDARD,
+            price_mode=models.LineItemPriceMode.PLATFORM,
+            line_item_mode=models.LineItemMode.STANDARD,
             custom=utils.create_from_draft(line_item_draft.custom),
         )
 
     def _create_from_draft(
-        self, draft: types.CartDraft, id: typing.Optional[str] = None
-    ) -> types.Cart:
+        self, draft: models.CartDraft, id: typing.Optional[str] = None
+    ) -> models.Cart:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
         if draft.line_items:
             line_items = [
@@ -90,7 +92,7 @@ class CartsModel(BaseModel):
         taxed_price = None
 
         if line_items:
-            total_price = types.CentPrecisionMoney(
+            total_price = models.CentPrecisionMoney(
                 currency_code=draft.currency,
                 cent_amount=sum(
                     line_item.taxed_price.total_gross.cent_amount
@@ -99,8 +101,8 @@ class CartsModel(BaseModel):
                 ),
                 fraction_digits=2,
             )
-            taxed_price = types.TaxedPrice(
-                total_net=types.CentPrecisionMoney(
+            taxed_price = models.TaxedPrice(
+                total_net=models.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=sum(
                         line_item.taxed_price.total_net.cent_amount
@@ -109,7 +111,7 @@ class CartsModel(BaseModel):
                     ),
                     fraction_digits=2,
                 ),
-                total_gross=types.CentPrecisionMoney(
+                total_gross=models.CentPrecisionMoney(
                     currency_code=draft.currency,
                     cent_amount=sum(
                         line_item.taxed_price.total_gross.cent_amount
@@ -119,10 +121,10 @@ class CartsModel(BaseModel):
                     fraction_digits=2,
                 ),
                 tax_portions=[
-                    types.TaxPortion(
+                    models.TaxPortion(
                         name="0% VAT",
                         rate=0,
-                        amount=types.CentPrecisionMoney(
+                        amount=models.CentPrecisionMoney(
                             currency_code=draft.currency,
                             cent_amount=0,
                             fraction_digits=2,
@@ -133,27 +135,27 @@ class CartsModel(BaseModel):
 
         # Some fields such as itemShippingAddresses are currently missing. See
         # https://docs.commercetools.com/http-api-projects-carts for a complete overview
-        return types.Cart(
+        return models.Cart(
             id=str(object_id),
             version=1,
-            cart_state=types.CartState.ACTIVE,
+            cart_state=models.CartState.ACTIVE,
             customer_id=draft.customer_id,
             customer_email=draft.customer_email,
             customer_group=draft.customer_group,
             anonymous_id=draft.anonymous_id,
             country=draft.country,
             inventory_mode=draft.inventory_mode,
-            tax_mode=draft.tax_mode or types.TaxMode.PLATFORM,
-            tax_rounding_mode=draft.tax_rounding_mode or types.RoundingMode.HALF_EVEN,
+            tax_mode=draft.tax_mode or models.TaxMode.PLATFORM,
+            tax_rounding_mode=draft.tax_rounding_mode or models.RoundingMode.HALF_EVEN,
             tax_calculation_mode=draft.tax_calculation_mode
-            or types.TaxCalculationMode.LINE_ITEM_LEVEL,
+            or models.TaxCalculationMode.LINE_ITEM_LEVEL,
             line_items=line_items,
             custom_line_items=[],
             refused_gifts=[],
             shipping_address=draft.shipping_address,
             billing_address=draft.billing_address,
             locale=draft.locale,
-            origin=draft.origin or types.CartOrigin.CUSTOMER,
+            origin=draft.origin or models.CartOrigin.CUSTOMER,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(draft.custom),
@@ -168,7 +170,7 @@ def add_payment():
         value = PaymentResourceIdentifierSchema().dump(value)
         if not obj["paymentInfo"]:
             obj["paymentInfo"] = PaymentInfoSchema().dump(
-                types.PaymentInfo(payments=[])
+                models.PaymentInfo(payments=[])
             )
         if value not in obj["paymentInfo"]["payments"]:
             new = copy.deepcopy(obj)
@@ -195,7 +197,7 @@ class CartsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
-    def set_custom_field(self, obj, action: types.CartSetCustomFieldAction):
+    def set_custom_field(self, obj, action: models.CartSetCustomFieldAction):
         if not obj["custom"]:
             raise ValueError(
                 "This resource has no custom type set - please use "
@@ -210,7 +212,7 @@ class CartsBackend(ServiceBackend):
         new["custom"]["fields"][name] = value
         return new
 
-    def set_custom_type(self, obj, action: types.CartSetCustomTypeAction):
+    def set_custom_type(self, obj, action: models.CartSetCustomTypeAction):
         custom_type = self.model._storage.get_by_resource_identifier(action.type)
 
         # real API always increments version, so always apply new value.

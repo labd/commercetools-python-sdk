@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._category import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.category import (
     CategoryDraftSchema,
     CategoryPagedQueryResponseSchema,
     CategorySchema,
@@ -19,10 +19,10 @@ class CategoriesModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.CategoryDraft, id: typing.Optional[str] = None
-    ) -> types.Category:
+        self, draft: models.CategoryDraft, id: typing.Optional[str] = None
+    ) -> models.Category:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.Category(
+        return models.Category(
             id=str(object_id),
             version=1,
             name=draft.name,

@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._product_discount import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.product_discount import (
     ProductDiscountDraftSchema,
     ProductDiscountPagedQueryResponseSchema,
     ProductDiscountSchema,
@@ -17,10 +17,10 @@ class ProductDiscountsModel(BaseModel):
     _resource_schema = ProductDiscountSchema
 
     def _create_from_draft(
-        self, draft: types.ProductDiscountDraft, id: typing.Optional[str] = None
-    ) -> types.ProductDiscount:
+        self, draft: models.ProductDiscountDraft, id: typing.Optional[str] = None
+    ) -> models.ProductDiscount:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.ProductDiscount(
+        return models.ProductDiscount(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),

@@ -2,12 +2,14 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import types
-from commercetools._schemas._customer_group import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.customer_group import (
     CustomerGroupDraftSchema,
     CustomerGroupPagedQueryResponseSchema,
-    CustomerGroupSchema, CustomerGroupUpdateSchema,
+    CustomerGroupSchema,
+    CustomerGroupUpdateSchema,
 )
+from commercetools.platform.models._schemas.review import ReviewUpdateSchema
 from commercetools.testing import abstract, utils
 from commercetools.testing.utils import update_attribute
 
@@ -18,10 +20,10 @@ class CustomerGroupModel(abstract.BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.CustomerGroupDraft, id: Optional[str] = None
-    ) -> types.CustomerGroup:
+        self, draft: models.CustomerGroupDraft, id: Optional[str] = None
+    ) -> models.CustomerGroup:
         object_id = uuid.UUID(id) if id is not None else uuid.uuid4()
-        return types.CustomerGroup(
+        return models.CustomerGroup(
             id=str(object_id),
             key=draft.key,
             version=1,

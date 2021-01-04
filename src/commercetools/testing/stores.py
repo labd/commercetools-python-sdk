@@ -3,12 +3,12 @@ import datetime
 import uuid
 from typing import Dict, List, Optional
 
-from commercetools import types
-from commercetools._schemas._channel import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.channel import (
     ChannelResourceIdentifierSchema,
     ChannelSchema,
 )
-from commercetools._schemas._store import (
+from commercetools.platform.models._schemas.store import (
     StoreDraftSchema,
     StorePagedQueryResponseSchema,
     StoreSchema,
@@ -24,16 +24,16 @@ class StoresModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.StoreDraft, id: Optional[str] = None
-    ) -> types.Store:
+        self, draft: models.StoreDraft, id: Optional[str] = None
+    ) -> models.Store:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        distribution_channels: List[types.ChannelReference] = []
+        distribution_channels: List[models.ChannelReference] = []
         if draft.distribution_channels:
             distribution_channels = convert_identifiers_to_references(
                 self._storage._stores["channel"], draft.distribution_channels
             )
 
-        return types.Store(
+        return models.Store(
             id=str(object_id),
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
@@ -46,9 +46,9 @@ class StoresModel(BaseModel):
 
 
 def convert_identifiers_to_references(
-    channel_store: Dict, channel_identifiers: List[types.ChannelResourceIdentifier]
-) -> List[types.ChannelReference]:
-    channel_references: List[types.ChannelReference] = []
+    channel_store: Dict, channel_identifiers: List[models.ChannelResourceIdentifier]
+) -> List[models.ChannelReference]:
+    channel_references: List[models.ChannelReference] = []
     for ci in channel_identifiers:
         channel_data: Optional[Dict] = None
         for c in channel_store.values():
@@ -60,12 +60,12 @@ def convert_identifiers_to_references(
                 break
         if not channel_data:
             raise InternalUpdateError("Channel not found.")
-        channel: types.Channel = ChannelSchema().load(data=channel_data)
-        if types.ChannelRoleEnum.PRODUCT_DISTRIBUTION not in channel.roles:
+        channel: models.Channel = ChannelSchema().load(data=channel_data)
+        if models.ChannelRoleEnum.PRODUCT_DISTRIBUTION not in channel.roles:
             raise InternalUpdateError(
                 "Channel does not have product distribution role."
             )
-        channel_references.append(types.ChannelReference(id=channel.id))
+        channel_references.append(models.ChannelReference(id=channel.id))
     return channel_references
 
 
@@ -82,7 +82,7 @@ def set_languages():
 def set_distribution_channels(
     backend: "StoresBackend",
     obj: Dict,
-    action: types.StoresSetDistributionChannelsAction,
+    action: models.StoresSetDistributionChannelsAction,
 ):
     channel_references = []
     if action.distribution_channels:

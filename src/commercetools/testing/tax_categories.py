@@ -4,8 +4,8 @@ import string
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._tax_category import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.tax_category import (
     TaxCategoryDraftSchema,
     TaxCategoryPagedQueryResponseSchema,
     TaxCategorySchema,
@@ -30,10 +30,10 @@ class TaxCategoryModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.TaxCategoryDraft, id: typing.Optional[str] = None
-    ) -> types.TaxCategory:
+        self, draft: models.TaxCategoryDraft, id: typing.Optional[str] = None
+    ) -> models.TaxCategory:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.TaxCategory(
+        return models.TaxCategory(
             id=str(object_id),
             key=draft.key,
             version=1,
@@ -45,13 +45,13 @@ class TaxCategoryModel(BaseModel):
         )
 
     def _create_rates(
-        self, drafts: typing.Optional[typing.List[types.TaxRateDraft]]
-    ) -> typing.List[types.TaxRate]:
-        result: typing.List[types.TaxRate] = []
+        self, drafts: typing.Optional[typing.List[models.TaxRateDraft]]
+    ) -> typing.List[models.TaxRate]:
+        result: typing.List[models.TaxRate] = []
         if not drafts:
             return result
         for draft in drafts:
-            obj = types.TaxRate(
+            obj = models.TaxRate(
                 id=generate_tax_rate_id(),
                 name=draft.name,
                 amount=draft.amount,

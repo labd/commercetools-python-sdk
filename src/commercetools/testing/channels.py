@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._channel import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.channel import (
     ChannelDraftSchema,
     ChannelPagedQueryResponseSchema,
     ChannelSchema,
@@ -19,10 +19,10 @@ class ChannelsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.ChannelDraft, id: typing.Optional[str] = None
-    ) -> types.Channel:
+        self, draft: models.ChannelDraft, id: typing.Optional[str] = None
+    ) -> models.Channel:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.Channel(
+        return models.Channel(
             id=str(object_id),
             version=1,
             name=draft.name,

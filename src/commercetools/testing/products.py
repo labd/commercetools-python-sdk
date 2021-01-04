@@ -6,9 +6,9 @@ from typing import Dict, List, Optional, Union
 from marshmallow import Schema
 from marshmallow import fields as schema_fields
 
-from commercetools import types
-from commercetools._schemas._common import ImageSchema, PriceSchema
-from commercetools._schemas._product import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.common import ImageSchema, PriceSchema
+from commercetools.platform.models._schemas.product import (
     AttributeSchema,
     ProductDraftSchema,
     ProductPagedQueryResponseSchema,
@@ -33,15 +33,15 @@ class ProductsModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.ProductDraft, id: Optional[str] = None
-    ) -> types.Product:
+        self, draft: models.ProductDraft, id: Optional[str] = None
+    ) -> models.Product:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
 
         master_variant = None
         if draft.master_variant:
             master_variant = self._create_variant_from_draft(draft.master_variant)
 
-        product_data = types.ProductData(
+        product_data = models.ProductData(
             name=draft.name,
             categories=draft.categories,
             category_order_hints=draft.category_order_hints,
@@ -50,26 +50,26 @@ class ProductsModel(BaseModel):
             variants=[self._create_variant_from_draft(vd) for vd in draft.variants]
             if draft.variants
             else [],
-            slug=draft.slug or types.LocalizedString(),
-            search_keywords=types.SearchKeywords(),
+            slug=draft.slug or models.LocalizedString(),
+            search_keywords=models.SearchKeywords(),
         )
 
         if draft.publish:
-            master_data = types.ProductCatalogData(
+            master_data = models.ProductCatalogData(
                 staged=None,
                 current=product_data,
                 published=True,
                 has_staged_changes=False,
             )
         else:
-            master_data = types.ProductCatalogData(
+            master_data = models.ProductCatalogData(
                 staged=product_data,
                 current=None,
                 published=False,
                 has_staged_changes=True,
             )
 
-        product = types.Product(
+        product = models.Product(
             id=str(object_id),
             key=draft.key,
             product_type=draft.product_type,
@@ -82,18 +82,18 @@ class ProductsModel(BaseModel):
         return product
 
     def _create_variant_from_draft(
-        self, draft: types.ProductVariantDraft
-    ) -> types.ProductVariant:
+        self, draft: models.ProductVariantDraft
+    ) -> models.ProductVariant:
 
-        assets: Optional[List[types.Asset]] = None
+        assets: Optional[List[models.Asset]] = None
         if draft.assets:
             assets = self._create_assets_from_draft(draft.assets)
 
-        prices: Optional[List[types.Price]] = None
+        prices: Optional[List[models.Price]] = None
         if draft.prices:
             prices = self._create_prices_from_draft(draft.prices)
 
-        return types.ProductVariant(
+        return models.ProductVariant(
             id=1,
             sku=draft.sku,
             key=draft.key,
@@ -109,15 +109,15 @@ class ProductsModel(BaseModel):
         )
 
     def _create_assets_from_draft(
-        self, drafts: List[types.AssetDraft]
-    ) -> List[types.Asset]:
-        assets: List[types.Asset] = []
+        self, drafts: List[models.AssetDraft]
+    ) -> List[models.Asset]:
+        assets: List[models.Asset] = []
         for draft in drafts:
-            custom: Optional[types.CustomFields] = None
+            custom: Optional[models.CustomFields] = None
             if draft.custom:
                 custom = custom_fields_from_draft(self._storage, draft.custom)
 
-            asset = types.Asset(
+            asset = models.Asset(
                 id=str(uuid.uuid4()),
                 sources=draft.sources,
                 name=draft.name,
@@ -130,15 +130,15 @@ class ProductsModel(BaseModel):
         return assets
 
     def _create_prices_from_draft(
-        self, drafts: List[types.PriceDraft]
-    ) -> List[types.Price]:
-        prices: List[types.Price] = []
+        self, drafts: List[models.PriceDraft]
+    ) -> List[models.Price]:
+        prices: List[models.Price] = []
         for draft in drafts:
             custom = None
             if draft.custom:
                 custom = custom_fields_from_draft(self._storage, draft.custom)
 
-            price = types.Price(
+            price = models.Price(
                 id=str(uuid.uuid4()),
                 value=self._create_price_from_draft(draft.value),
                 country=draft.country,
@@ -154,29 +154,29 @@ class ProductsModel(BaseModel):
         return prices
 
     def _create_price_from_draft(
-        self, draft: Union[types.Money, Optional[types.TypedMoneyDraft]]
-    ) -> Optional[types.TypedMoney]:
+        self, draft: Union[models.Money, Optional[models.TypedMoneyDraft]]
+    ) -> Optional[models.TypedMoney]:
         if draft is None:
             return None
 
-        if isinstance(draft, types.CentPrecisionMoneyDraft):
-            return types.CentPrecisionMoney(
+        if isinstance(draft, models.CentPrecisionMoneyDraft):
+            return models.CentPrecisionMoney(
                 cent_amount=draft.cent_amount, currency_code=draft.currency_code
             )
-        elif isinstance(draft, types.HighPrecisionMoneyDraft):
-            return types.HighPrecisionMoney(
+        elif isinstance(draft, models.HighPrecisionMoneyDraft):
+            return models.HighPrecisionMoney(
                 cent_amount=draft.cent_amount,
                 currency_code=draft.currency_code,
                 precise_amount=draft.precise_amount,
             )
-        elif isinstance(draft, types.Money):
-            return types.CentPrecisionMoney(
+        elif isinstance(draft, models.Money):
+            return models.CentPrecisionMoney(
                 cent_amount=draft.cent_amount,
                 currency_code=draft.currency_code,
                 fraction_digits=2,
             )
         else:
-            return types.TypedMoney(
+            return models.TypedMoney(
                 cent_amount=draft.cent_amount,
                 currency_code=draft.currency_code,
                 type=draft.type,
@@ -207,7 +207,7 @@ def _get_variant(data_object: dict, *, id: int = "", sku: str = "") -> Optional[
 
 
 def _update_productdata_attr(dst: str, src: str):
-    def updater(self, obj: dict, action: types.ProductUpdateAction):
+    def updater(self, obj: dict, action: models.ProductUpdateAction):
         value = getattr(action, src)
         target_obj = _get_target_obj(obj, getattr(action, "staged", False))
 
@@ -221,7 +221,7 @@ def _update_productdata_attr(dst: str, src: str):
 
 
 def _set_attribute_action():
-    def updater(self, obj: dict, action: types.ProductSetAttributeAction):
+    def updater(self, obj: dict, action: models.ProductSetAttributeAction):
         staged = getattr(action, "staged", False)
         new = copy.deepcopy(obj)
 
@@ -236,7 +236,7 @@ def _set_attribute_action():
             # Attribute not found, will add it
             attr_schema = AttributeSchema()
             variant["attributes"].append(
-                attr_schema.dump(types.Attribute(name=action.name, value=action.value))
+                attr_schema.dump(models.Attribute(name=action.name, value=action.value))
             )
 
         return new
@@ -245,9 +245,9 @@ def _set_attribute_action():
 
 
 def _add_variant_action():
-    def updater(self, obj: dict, action: types.ProductAddVariantAction):
+    def updater(self, obj: dict, action: models.ProductAddVariantAction):
         variant = self.model._create_variant_from_draft(
-            types.ProductVariantDraft(
+            models.ProductVariantDraft(
                 sku=action.sku,
                 key=action.key,
                 prices=action.prices,
@@ -270,7 +270,7 @@ def _add_variant_action():
 
 
 def _publish_product_action():
-    def updater(self, obj: dict, action: types.ProductPublishAction):
+    def updater(self, obj: dict, action: models.ProductPublishAction):
         new = copy.deepcopy(obj)
         # not implemented scopes right now.
         if new["masterData"].get("staged"):
@@ -284,12 +284,12 @@ def _publish_product_action():
 
 
 def convert_draft_price(
-    price_draft: types.PriceDraft, price_id: str = None
-) -> types.Price:
-    tiers: Optional[List[types.PriceTier]] = None
+    price_draft: models.PriceDraft, price_id: str = None
+) -> models.Price:
+    tiers: Optional[List[models.PriceTier]] = None
     if price_draft.tiers:
         tiers = [utils.create_from_draft(tier) for tier in price_draft.tiers]
-    return types.Price(
+    return models.Price(
         id=price_id or str(uuid.uuid4()),
         country=price_draft.country,
         channel=price_draft.channel,
@@ -303,7 +303,7 @@ def convert_draft_price(
 
 
 def _set_product_prices():
-    def updater(self, obj: dict, action: types.ProductSetPricesAction):
+    def updater(self, obj: dict, action: models.ProductSetPricesAction):
         new = copy.deepcopy(obj)
         target_obj = _get_target_obj(new, getattr(action, "staged", True))
         prices = []
@@ -323,7 +323,7 @@ def _set_product_prices():
 
 
 def _change_price():
-    def updater(self, obj: dict, action: types.ProductChangePriceAction):
+    def updater(self, obj: dict, action: models.ProductChangePriceAction):
         new = copy.deepcopy(obj)
         staged = action.staged
         if staged is None:
@@ -351,7 +351,7 @@ def _change_price():
 
 
 def _add_price():
-    def updater(self, obj: dict, action: types.ProductAddPriceAction):
+    def updater(self, obj: dict, action: models.ProductAddPriceAction):
         new = copy.deepcopy(obj)
         staged = action.staged
         if staged is None:
@@ -380,7 +380,7 @@ def _add_price():
 
 
 def _change_master_variant():
-    def updater(self, obj: Dict, action: types.ProductChangeMasterVariantAction):
+    def updater(self, obj: Dict, action: models.ProductChangeMasterVariantAction):
         new = copy.deepcopy(obj)
         staged = action.staged
         if staged is None:
@@ -462,9 +462,9 @@ class ProductsBackend(ServiceBackend):
         image_schema = ImageSchema()
         variant["images"].append(
             image_schema.dump(
-                types.Image(
+                models.Image(
                     url=f"cdn.commercetools.local/detail-{filename}",
-                    dimensions=types.ImageDimensions(w=500, h=500),
+                    dimensions=models.ImageDimensions(w=500, h=500),
                 )
             )
         )

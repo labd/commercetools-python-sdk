@@ -3,8 +3,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._inventory import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.inventory import (
     InventoryEntryDraftSchema,
     InventoryEntrySchema,
     InventoryEntryUpdateSchema,
@@ -20,10 +20,10 @@ class InventoryEntryModel(BaseModel):
     _resource_schema = InventoryEntrySchema
 
     def _create_from_draft(
-        self, draft: types.InventoryEntryDraft, id: typing.Optional[str] = None
-    ) -> types.InventoryEntry:
+        self, draft: models.InventoryEntryDraft, id: typing.Optional[str] = None
+    ) -> models.InventoryEntry:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.InventoryEntry(
+        return models.InventoryEntry(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
@@ -39,16 +39,16 @@ class InventoryEntryModel(BaseModel):
 
 
 def change_stock():
-    def updater(self, obj, action: types.InventoryEntryUpdateAction):
+    def updater(self, obj, action: models.InventoryEntryUpdateAction):
         quantity = getattr(action, "quantity")
 
         new = copy.deepcopy(obj)
 
-        if isinstance(action, types.InventoryEntryAddQuantityAction):
+        if isinstance(action, models.InventoryEntryAddQuantityAction):
             new["availableQuantity"] += quantity
-        elif isinstance(action, types.InventoryEntryRemoveQuantityAction):
+        elif isinstance(action, models.InventoryEntryRemoveQuantityAction):
             new["availableQuantity"] -= quantity
-        elif isinstance(action, types.InventoryEntryChangeQuantityAction):
+        elif isinstance(action, models.InventoryEntryChangeQuantityAction):
             new["availableQuantity"] = quantity
         else:
             raise InternalUpdateError("Unknown action to change stock: %r", action)

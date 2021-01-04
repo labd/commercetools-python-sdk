@@ -3,13 +3,13 @@ import typing
 
 from marshmallow import fields
 
-from commercetools._schemas._custom_object import (
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.platform.models._schemas.custom_object import (
     CustomObjectDraftSchema,
     CustomObjectPagedQueryResponseSchema,
     CustomObjectSchema,
 )
-from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.types._custom_object import (
+from commercetools.platform.models.custom_object import (
     CustomObject,
     CustomObjectDraft,
     CustomObjectPagedQueryResponse,
@@ -96,8 +96,7 @@ class CustomObjectService(abstract.AbstractService):
         where: OptionalListStr = None,
         predicate_var: typing.Dict[str, str] = None,
     ) -> CustomObjectPagedQueryResponse:
-        """Store custom JSON values.
-        """
+        """Store custom JSON values."""
         params = self._serialize_params(
             {
                 "expand": expand,

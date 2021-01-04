@@ -2,8 +2,8 @@ import datetime
 import typing
 import uuid
 
-from commercetools import types
-from commercetools._schemas._api_client import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.api_client import (
     ApiClientDraftSchema,
     ApiClientPagedQueryResponseSchema,
     ApiClientSchema,
@@ -16,10 +16,10 @@ class ApiClientsModel(BaseModel):
     _resource_schema = ApiClientSchema
 
     def _create_from_draft(
-        self, draft: types.ApiClientDraft, id: typing.Optional[str] = None
-    ) -> types.ApiClient:
+        self, draft: models.ApiClientDraft, id: typing.Optional[str] = None
+    ) -> models.ApiClient:
         object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
-        return types.ApiClient(
+        return models.ApiClient(
             id=str(object_id),
             name=draft.name,
             scope=draft.scope,

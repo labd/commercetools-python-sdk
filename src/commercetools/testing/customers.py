@@ -2,8 +2,8 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import types
-from commercetools._schemas._customer import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.customer import (
     CustomerDraftSchema,
     CustomerPagedQueryResponseSchema,
     CustomerSchema,
@@ -19,12 +19,12 @@ class CustomerModel(abstract.BaseModel):
     _unique_values = ["key"]
 
     def _create_from_draft(
-        self, draft: types.CustomerDraft, id: Optional[str] = None
-    ) -> types.Customer:
+        self, draft: models.CustomerDraft, id: Optional[str] = None
+    ) -> models.Customer:
         object_id = uuid.UUID(id) if id is not None else uuid.uuid4()
         now = datetime.datetime.now(datetime.timezone.utc)
 
-        return types.Customer(
+        return models.Customer(
             id=str(object_id),
             version=1,
             created_at=now,

@@ -4,14 +4,14 @@ import typing
 import marshmallow
 from marshmallow import fields
 
-from commercetools._schemas._product import (
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.platform.models._schemas.product import (
     ProductDraftSchema,
     ProductPagedQueryResponseSchema,
     ProductSchema,
     ProductUpdateSchema,
 )
-from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.types._product import (
+from commercetools.platform.models.product import (
     Product,
     ProductDraft,
     ProductPagedQueryResponse,

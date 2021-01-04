@@ -2,8 +2,8 @@ import datetime
 import uuid
 from typing import Optional
 
-from commercetools import types
-from commercetools._schemas._shopping_list import (
+from commercetools.platform import models
+from commercetools.platform.models._schemas.shopping_list import (
     ShoppingListDraftSchema,
     ShoppingListPagedQueryResponseSchema,
     ShoppingListSchema,
@@ -19,8 +19,8 @@ class ShoppingListModel(BaseModel):
     _unique_values = ["key"]
 
     def _create_line_item_from_draft(
-        self, line_item_draft: types.ShoppingListLineItemDraft
-    ) -> types.ShoppingListLineItem:
+        self, line_item_draft: models.ShoppingListLineItemDraft
+    ) -> models.ShoppingListLineItem:
         product_id = (
             uuid.UUID(line_item_draft.product_id)
             if line_item_draft.product_id
@@ -34,11 +34,11 @@ class ShoppingListModel(BaseModel):
             raise NotImplementedError
 
         variant = product.master_data.current.master_variant
-        variant_object: Optional[types.ProductVariant] = None
+        variant_object: Optional[models.ProductVariant] = None
         if variant:
-            variant_object = types.ProductVariant(id=variant.id, sku=variant.sku)
+            variant_object = models.ProductVariant(id=variant.id, sku=variant.sku)
 
-        return types.ShoppingListLineItem(
+        return models.ShoppingListLineItem(
             id=str(uuid.uuid4()),
             added_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(line_item_draft.custom),
@@ -53,9 +53,9 @@ class ShoppingListModel(BaseModel):
         )
 
     def _create_line_item_text_from_draft(
-        self, text_line_item_draft: types.TextLineItemDraft
-    ) -> types.TextLineItem:
-        return types.TextLineItem(
+        self, text_line_item_draft: models.TextLineItemDraft
+    ) -> models.TextLineItem:
+        return models.TextLineItem(
             id=str(uuid.uuid4()),
             added_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(text_line_item_draft.custom),
@@ -65,8 +65,8 @@ class ShoppingListModel(BaseModel):
         )
 
     def _create_from_draft(
-        self, draft: types.ShoppingListDraft, id: Optional[str] = None
-    ) -> types.ShoppingList:
+        self, draft: models.ShoppingListDraft, id: Optional[str] = None
+    ) -> models.ShoppingList:
         object_id = str(uuid.UUID(id)) if id is not None else uuid.uuid4()
 
         line_items = None
@@ -83,7 +83,7 @@ class ShoppingListModel(BaseModel):
                 for text_line_item in draft.text_line_items
             ]
 
-        return types.ShoppingList(
+        return models.ShoppingList(
             id=str(object_id),
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),

@@ -3,13 +3,14 @@ import typing
 
 from marshmallow import fields
 
-from commercetools._schemas._cart import (
+from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
+from commercetools.platform.models._schemas.cart import (
     CartDraftSchema,
     CartPagedQueryResponseSchema,
     CartSchema,
     CartUpdateSchema,
 )
-from commercetools._schemas._customer import (
+from commercetools.platform.models._schemas.customer import (
     CustomerChangePasswordSchema,
     CustomerCreateEmailTokenSchema,
     CustomerCreatePasswordResetTokenSchema,
@@ -23,21 +24,20 @@ from commercetools._schemas._customer import (
     CustomerTokenSchema,
     CustomerUpdateSchema,
 )
-from commercetools._schemas._order import (
+from commercetools.platform.models._schemas.order import (
     OrderFromCartDraftSchema,
     OrderPagedQueryResponseSchema,
     OrderSchema,
     OrderUpdateSchema,
 )
-from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.types._cart import (
+from commercetools.platform.models.cart import (
     Cart,
     CartDraft,
     CartPagedQueryResponse,
     CartUpdate,
     CartUpdateAction,
 )
-from commercetools.types._customer import (
+from commercetools.platform.models.customer import (
     Customer,
     CustomerChangePassword,
     CustomerCreateEmailToken,
@@ -52,7 +52,7 @@ from commercetools.types._customer import (
     CustomerUpdate,
     CustomerUpdateAction,
 )
-from commercetools.types._order import (
+from commercetools.platform.models.order import (
     Order,
     OrderFromCartDraft,
     OrderPagedQueryResponse,

@@ -94,7 +94,7 @@ def _create_data_type(name: str, data: Dict[str, Any]):
         if key.startswith("("):
             obj.annotations[key[1:-1]] = value
 
-    obj.package_name = "_" + snakeit(obj.annotations.get("package", "base"))
+    obj.package_name = snakeit(obj.annotations.get("package", "base"))
 
     # Copy enum properties
     obj.enum = data.get("enum", [])

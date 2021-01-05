@@ -104,7 +104,9 @@ def test_resource_update_conflict(old_client):
             id=product.id,
             version=1,
             actions=[
-                models.ProductChangeSlugAction(slug=models.LocalizedString(nl="nl-slug3"))
+                models.ProductChangeSlugAction(
+                    slug=models.LocalizedString(nl="nl-slug3")
+                )
             ],
         )
     assert exc.value.response.status_code == 409

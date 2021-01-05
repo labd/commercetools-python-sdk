@@ -13,13 +13,19 @@ class ByProjectKeyMeOrdersRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyMeOrdersByIDRequestBuilder:
         return ByProjectKeyMeOrdersByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -33,8 +39,7 @@ class ByProjectKeyMeOrdersRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderPagedQueryResponse":
-        """Query orders
-        """
+        """Query orders"""
         return self._client._get(
             endpoint=f"/{self._project_key}/me/orders",
             params={
@@ -45,7 +50,7 @@ class ByProjectKeyMeOrdersRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=OrderPagedQueryResponse,
+            response_class=OrderPagedQueryResponse,
             headers=headers,
         )
 
@@ -56,12 +61,11 @@ class ByProjectKeyMeOrdersRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyOrder":
-        """Create MyOrder
-        """
+        """Create MyOrder"""
         return self._client._post(
             endpoint=f"/{self._project_key}/me/orders",
             params={"expand": expand},
             data_object=body,
-            response_object=MyOrder,
+            response_class=MyOrder,
             headers={"Content-Type": "application/json", **headers},
         )

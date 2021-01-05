@@ -10,7 +10,12 @@ class ByProjectKeyProductProjectionsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -31,7 +36,7 @@ class ByProjectKeyProductProjectionsByIDRequestBuilder:
         """Gets the current or staged representation of a product in a catalog by ID.
         When used with an API client that has the view_published_products:{projectKey} scope,
         this endpoint only returns published (current) product projections.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/product-projections/{self._id}",
@@ -45,6 +50,6 @@ class ByProjectKeyProductProjectionsByIDRequestBuilder:
                 "storeProjection": store_projection,
                 "expand": expand,
             },
-            response_object=ProductProjection,
+            response_class=ProductProjection,
             headers=headers,
         )

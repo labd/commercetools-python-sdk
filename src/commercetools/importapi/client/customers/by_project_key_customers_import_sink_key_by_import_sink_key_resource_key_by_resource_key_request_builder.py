@@ -12,7 +12,11 @@ class ByProjectKeyCustomersImportSinkKeyByImportSinkKeyResourceKeyByResourceKeyR
     _resource_key: str
 
     def __init__(
-        self, projectKey: str, importSinkKey: str, resourceKey: str, client: "Client"
+        self,
+        projectKey: str,
+        importSinkKey: str,
+        resourceKey: str,
+        client: "Client",
     ):
         self._project_key = projectKey
         self._import_sink_key = importSinkKey
@@ -22,11 +26,10 @@ class ByProjectKeyCustomersImportSinkKeyByImportSinkKeyResourceKeyByResourceKeyR
     def delete(
         self, *, headers: typing.Dict[str, str] = None
     ) -> "ImportOperationStatus":
-        """Deletes the customer given by the resource key.
-        """
+        """Deletes the customer given by the resource key."""
         return self._client._delete(
             endpoint=f"/{self._project_key}/customers/importSinkKey={self._import_sink_key}/resourceKey={self._resource_key}",
             params={},
-            response_object=ImportOperationStatus,
+            response_class=ImportOperationStatus,
             headers=headers,
         )

@@ -2,7 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.customer import CustomerSignInResultSchema
 from commercetools.platform.models.customer import CustomerSignInResult
 from commercetools.typing import OptionalListStr
 
@@ -28,6 +27,5 @@ class LoginService(abstract.AbstractService):
             endpoint="login",
             params=params,
             data_object=None,
-            request_schema_cls=None,
-            response_schema_cls=CustomerSignInResultSchema,
+            response_class=CustomerSignInResult,
         )

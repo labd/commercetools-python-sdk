@@ -12,13 +12,18 @@ class ByProjectKeyImageSearchRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def config(self) -> ByProjectKeyImageSearchConfigRequestBuilder:
         return ByProjectKeyImageSearchConfigRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def post(
@@ -29,13 +34,11 @@ class ByProjectKeyImageSearchRequestBuilder:
         offset: "int" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ImageSearchResponse":
-        """Accepts an image file and returns similar products from product catalogue.
-        
-        """
+        """Accepts an image file and returns similar products from product catalogue."""
         return self._client._post(
             endpoint=f"/{self._project_key}/image-search",
             params={"limit": limit, "offset": offset},
             data_object=body,
-            response_object=ImageSearchResponse,
+            response_class=ImageSearchResponse,
             headers={"Content-Type": "multipart/form-data", **headers},
         )

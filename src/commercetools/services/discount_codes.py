@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.discount_code import (
-    DiscountCodeDraftSchema,
-    DiscountCodePagedQueryResponseSchema,
-    DiscountCodeSchema,
-    DiscountCodeUpdateSchema,
-)
 from commercetools.platform.models.discount_code import (
     DiscountCode,
     DiscountCodeDraft,
@@ -46,9 +40,7 @@ class DiscountCodeService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> DiscountCode:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"discount-codes/{id}",
-            params=params,
-            schema_cls=DiscountCodeSchema,
+            endpoint=f"discount-codes/{id}", params=params, response_class=DiscountCode
         )
 
     def query(
@@ -80,7 +72,7 @@ class DiscountCodeService(abstract.AbstractService):
         return self._client._get(
             endpoint="discount-codes",
             params=params,
-            schema_cls=DiscountCodePagedQueryResponseSchema,
+            response_class=DiscountCodePagedQueryResponse,
         )
 
     def create(
@@ -94,8 +86,7 @@ class DiscountCodeService(abstract.AbstractService):
             endpoint="discount-codes",
             params=params,
             data_object=draft,
-            request_schema_cls=DiscountCodeDraftSchema,
-            response_schema_cls=DiscountCodeSchema,
+            response_class=DiscountCode,
         )
 
     def update_by_id(
@@ -113,8 +104,7 @@ class DiscountCodeService(abstract.AbstractService):
             endpoint=f"discount-codes/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=DiscountCodeUpdateSchema,
-            response_schema_cls=DiscountCodeSchema,
+            response_class=DiscountCode,
             force_update=force_update,
         )
 
@@ -134,6 +124,6 @@ class DiscountCodeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"discount-codes/{id}",
             params=params,
-            response_schema_cls=DiscountCodeSchema,
+            response_class=DiscountCode,
             force_delete=force_delete,
         )

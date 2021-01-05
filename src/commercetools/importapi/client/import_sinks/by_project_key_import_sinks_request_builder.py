@@ -12,7 +12,11 @@ class ByProjectKeyImportSinksRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -28,24 +32,22 @@ class ByProjectKeyImportSinksRequestBuilder:
     def post(
         self, body: "ImportSinkDraft", *, headers: typing.Dict[str, str] = None
     ) -> "ImportSink":
-        """Creates a new import sink.
-        """
+        """Creates a new import sink."""
         return self._client._post(
             endpoint=f"/{self._project_key}/import-sinks",
             params={},
             data_object=body,
-            response_object=ImportSink,
+            response_class=ImportSink,
             headers={"Content-Type": "application/json", **headers},
         )
 
     def get(
         self, *, limit: "float", offset: "float", headers: typing.Dict[str, str] = None
     ) -> "ImportSinkPagedResponse":
-        """Retrieves all import sinks of a project key.
-        """
+        """Retrieves all import sinks of a project key."""
         return self._client._get(
             endpoint=f"/{self._project_key}/import-sinks",
             params={"limit": limit, "offset": offset},
-            response_object=ImportSinkPagedResponse,
+            response_class=ImportSinkPagedResponse,
             headers=headers,
         )

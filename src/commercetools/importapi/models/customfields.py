@@ -17,8 +17,7 @@ if typing.TYPE_CHECKING:
 
 
 class Custom(_BaseType):
-    """The representation to be sent to the server when creating a resource with custom fields.
-    """
+    """The representation to be sent to the server when creating a resource with custom fields."""
 
     #: The type that provides the field definitions for this object.
     type: "TypeKeyReference"
@@ -52,8 +51,7 @@ class FieldContainer(typing.Dict[str, str]):
 
 
 class CustomField(_BaseType):
-    """Provides the value for a custom field of a specific type.
-    """
+    """Provides the value for a custom field of a specific type."""
 
     #: The type of this field.
     type: "str"
@@ -75,8 +73,7 @@ class CustomField(_BaseType):
 
 
 class BooleanField(CustomField):
-    """A field with a boolean value.
-    """
+    """A field with a boolean value."""
 
     value: "bool"
 
@@ -97,8 +94,7 @@ class BooleanField(CustomField):
 
 
 class StringField(CustomField):
-    """A field with a string value.
-    """
+    """A field with a string value."""
 
     value: "str"
 
@@ -119,8 +115,7 @@ class StringField(CustomField):
 
 
 class LocalizedStringField(CustomField):
-    """A field with a localized string value.
-    """
+    """A field with a localized string value."""
 
     value: "LocalizedString"
 
@@ -141,8 +136,7 @@ class LocalizedStringField(CustomField):
 
 
 class EnumField(CustomField):
-    """A field with a enum value.
-    """
+    """A field with a enum value."""
 
     value: "str"
 
@@ -163,8 +157,7 @@ class EnumField(CustomField):
 
 
 class LocalizedEnumField(CustomField):
-    """A field with a localized enum value.
-    """
+    """A field with a localized enum value."""
 
     value: "str"
 
@@ -185,8 +178,7 @@ class LocalizedEnumField(CustomField):
 
 
 class NumberField(CustomField):
-    """A field with a number value.
-    """
+    """A field with a number value."""
 
     value: "float"
 
@@ -207,8 +199,7 @@ class NumberField(CustomField):
 
 
 class MoneyField(CustomField):
-    """A field with a money value.
-    """
+    """A field with a money value."""
 
     value: "TypedMoney"
 
@@ -229,8 +220,7 @@ class MoneyField(CustomField):
 
 
 class DateField(CustomField):
-    """A field with a date value.
-    """
+    """A field with a date value."""
 
     value: "datetime.date"
 
@@ -251,8 +241,7 @@ class DateField(CustomField):
 
 
 class TimeField(CustomField):
-    """A field with a time value.
-    """
+    """A field with a time value."""
 
     value: "datetime.time"
 
@@ -273,8 +262,7 @@ class TimeField(CustomField):
 
 
 class DateTimeField(CustomField):
-    """A field with a date time value.
-    """
+    """A field with a date time value."""
 
     value: "datetime.datetime"
 
@@ -295,8 +283,7 @@ class DateTimeField(CustomField):
 
 
 class ReferenceField(CustomField):
-    """A field with a reference value.
-    """
+    """A field with a reference value."""
 
     #: References a resource by its key.
     value: "KeyReference"
@@ -318,8 +305,7 @@ class ReferenceField(CustomField):
 
 
 class BooleanSetField(CustomField):
-    """A field with a boolean set value.
-    """
+    """A field with a boolean set value."""
 
     value: typing.List["bool"]
 
@@ -340,8 +326,7 @@ class BooleanSetField(CustomField):
 
 
 class StringSetField(CustomField):
-    """A field with a string set value.
-    """
+    """A field with a string set value."""
 
     value: typing.List["str"]
 
@@ -362,8 +347,7 @@ class StringSetField(CustomField):
 
 
 class LocalizedStringSetField(CustomField):
-    """A field with a localized string set value.
-    """
+    """A field with a localized string set value."""
 
     value: typing.List["LocalizedString"]
 
@@ -386,8 +370,7 @@ class LocalizedStringSetField(CustomField):
 
 
 class EnumSetField(CustomField):
-    """A field with a enum set value.
-    """
+    """A field with a enum set value."""
 
     value: typing.List["str"]
 
@@ -408,8 +391,7 @@ class EnumSetField(CustomField):
 
 
 class LocalizedEnumSetField(CustomField):
-    """A field with a localized enum set value.
-    """
+    """A field with a localized enum set value."""
 
     value: typing.List["str"]
 
@@ -430,8 +412,7 @@ class LocalizedEnumSetField(CustomField):
 
 
 class NumberSetField(CustomField):
-    """A field with a number value.
-    """
+    """A field with a number value."""
 
     value: typing.List["float"]
 
@@ -452,8 +433,7 @@ class NumberSetField(CustomField):
 
 
 class MoneySetField(CustomField):
-    """A field with a money set value.
-    """
+    """A field with a money set value."""
 
     value: typing.List["Money"]
 
@@ -474,8 +454,7 @@ class MoneySetField(CustomField):
 
 
 class DateSetField(CustomField):
-    """A field with a date set value.
-    """
+    """A field with a date set value."""
 
     value: typing.List["datetime.date"]
 
@@ -496,8 +475,7 @@ class DateSetField(CustomField):
 
 
 class TimeSetField(CustomField):
-    """A field with a time set value.
-    """
+    """A field with a time set value."""
 
     value: typing.List["datetime.time"]
 
@@ -518,8 +496,7 @@ class TimeSetField(CustomField):
 
 
 class DateTimeSetField(CustomField):
-    """A field with a date time set value.
-    """
+    """A field with a date time set value."""
 
     value: typing.List["datetime.datetime"]
 
@@ -540,8 +517,7 @@ class DateTimeSetField(CustomField):
 
 
 class ReferenceSetField(CustomField):
-    """A field with a reference set value.
-    """
+    """A field with a reference set value."""
 
     value: typing.List["KeyReference"]
 

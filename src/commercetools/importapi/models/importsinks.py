@@ -13,9 +13,9 @@ if typing.TYPE_CHECKING:
 
 class ImportSink(_BaseType):
     """An import sink is the entry point for import resources from other systems.
-    
+
     It has an unique key and is specific to an import resource type.
-    
+
     """
 
     #: The unique key of the import sink.
@@ -61,9 +61,7 @@ class ImportSink(_BaseType):
 
 
 class ImportSinkDraft(_BaseType):
-    """The representation sent to the server when creating or updating an import sink.
-    
-    """
+    """The representation sent to the server when creating or updating an import sink."""
 
     #: The version of this resource.
     version: typing.Optional["int"]
@@ -97,8 +95,7 @@ class ImportSinkDraft(_BaseType):
 
 
 class ImportSinkPagedResponse(_BaseType):
-    """This type represents a paged importsink result.
-    """
+    """This type represents a paged importsink result."""
 
     #: The maximum number of import operations returned for a page.
     limit: "int"

@@ -11,7 +11,12 @@ class ByProjectKeyCustomersByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyCustomersByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Customer":
-        """Get Customer by ID
-        """
+        """Get Customer by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/customers/{self._id}",
             params={"expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyCustomersByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Customer":
-        """Update Customer by ID
-        """
+        """Update Customer by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/customers/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Customer,
+            response_class=Customer,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -53,11 +56,10 @@ class ByProjectKeyCustomersByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Customer":
-        """Delete Customer by ID
-        """
+        """Delete Customer by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/customers/{self._id}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )

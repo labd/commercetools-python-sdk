@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.type import (
-    TypeDraftSchema,
-    TypePagedQueryResponseSchema,
-    TypeSchema,
-    TypeUpdateSchema,
-)
 from commercetools.platform.models.type import (
     Type,
     TypeDraft,
@@ -43,13 +37,13 @@ class TypeService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Type:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"types/{id}", params=params, schema_cls=TypeSchema
+            endpoint=f"types/{id}", params=params, response_class=Type
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Type:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"types/key={key}", params=params, schema_cls=TypeSchema
+            endpoint=f"types/key={key}", params=params, response_class=Type
         )
 
     def query(
@@ -79,7 +73,7 @@ class TypeService(abstract.AbstractService):
             _TypeQuerySchema,
         )
         return self._client._get(
-            endpoint="types", params=params, schema_cls=TypePagedQueryResponseSchema
+            endpoint="types", params=params, response_class=TypePagedQueryResponse
         )
 
     def create(self, draft: TypeDraft, *, expand: OptionalListStr = None) -> Type:
@@ -88,11 +82,7 @@ class TypeService(abstract.AbstractService):
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="types",
-            params=params,
-            data_object=draft,
-            request_schema_cls=TypeDraftSchema,
-            response_schema_cls=TypeSchema,
+            endpoint="types", params=params, data_object=draft, response_class=Type
         )
 
     def update_by_id(
@@ -110,8 +100,7 @@ class TypeService(abstract.AbstractService):
             endpoint=f"types/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=TypeUpdateSchema,
-            response_schema_cls=TypeSchema,
+            response_class=Type,
             force_update=force_update,
         )
 
@@ -130,8 +119,7 @@ class TypeService(abstract.AbstractService):
             endpoint=f"types/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=TypeUpdateSchema,
-            response_schema_cls=TypeSchema,
+            response_class=Type,
             force_update=force_update,
         )
 
@@ -149,7 +137,7 @@ class TypeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"types/{id}",
             params=params,
-            response_schema_cls=TypeSchema,
+            response_class=Type,
             force_delete=force_delete,
         )
 
@@ -167,6 +155,6 @@ class TypeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"types/key={key}",
             params=params,
-            response_schema_cls=TypeSchema,
+            response_class=Type,
             force_delete=force_delete,
         )

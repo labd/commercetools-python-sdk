@@ -13,13 +13,19 @@ class ByProjectKeyMeCartsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyMeCartsByIDRequestBuilder:
         return ByProjectKeyMeCartsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -33,8 +39,7 @@ class ByProjectKeyMeCartsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CartPagedQueryResponse":
-        """Query carts
-        """
+        """Query carts"""
         return self._client._get(
             endpoint=f"/{self._project_key}/me/carts",
             params={
@@ -45,7 +50,7 @@ class ByProjectKeyMeCartsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=CartPagedQueryResponse,
+            response_class=CartPagedQueryResponse,
             headers=headers,
         )
 
@@ -56,12 +61,11 @@ class ByProjectKeyMeCartsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyCart":
-        """Create MyCart
-        """
+        """Create MyCart"""
         return self._client._post(
             endpoint=f"/{self._project_key}/me/carts",
             params={"expand": expand},
             data_object=body,
-            response_object=MyCart,
+            response_class=MyCart,
             headers={"Content-Type": "application/json", **headers},
         )

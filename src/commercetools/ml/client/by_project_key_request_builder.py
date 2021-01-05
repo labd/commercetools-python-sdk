@@ -20,29 +20,35 @@ class ByProjectKeyRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def imageSearch(self) -> ByProjectKeyImageSearchRequestBuilder:
-        """Search for similar products using an image as search input.
-        
-        """
+        """Search for similar products using an image as search input."""
         return ByProjectKeyImageSearchRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def recommendations(self) -> ByProjectKeyRecommendationsRequestBuilder:
         return ByProjectKeyRecommendationsRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def missingData(self) -> ByProjectKeyMissingDataRequestBuilder:
         return ByProjectKeyMissingDataRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def similarities(self) -> ByProjectKeySimilaritiesRequestBuilder:
         return ByProjectKeySimilaritiesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )

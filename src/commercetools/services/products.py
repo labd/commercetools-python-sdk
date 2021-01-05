@@ -5,12 +5,6 @@ import marshmallow
 from marshmallow import fields
 
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.product import (
-    ProductDraftSchema,
-    ProductPagedQueryResponseSchema,
-    ProductSchema,
-    ProductUpdateSchema,
-)
 from commercetools.platform.models.product import (
     Product,
     ProductDraft,
@@ -93,7 +87,7 @@ class ProductService(abstract.AbstractService):
             _ProductGetSchema,
         )
         return self._client._get(
-            endpoint=f"products/{id}", params=params, schema_cls=ProductSchema
+            endpoint=f"products/{id}", params=params, response_class=Product
         )
 
     def get_by_key(
@@ -122,7 +116,7 @@ class ProductService(abstract.AbstractService):
             _ProductGetSchema,
         )
         return self._client._get(
-            endpoint=f"products/key={key}", params=params, schema_cls=ProductSchema
+            endpoint=f"products/key={key}", params=params, response_class=Product
         )
 
     def query(
@@ -170,9 +164,7 @@ class ProductService(abstract.AbstractService):
             _ProductQuerySchema,
         )
         return self._client._get(
-            endpoint="products",
-            params=params,
-            schema_cls=ProductPagedQueryResponseSchema,
+            endpoint="products", params=params, response_class=ProductPagedQueryResponse
         )
 
     def create(
@@ -212,8 +204,7 @@ class ProductService(abstract.AbstractService):
             endpoint="products",
             params=params,
             data_object=draft,
-            request_schema_cls=ProductDraftSchema,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
         )
 
     def update_by_id(
@@ -248,8 +239,7 @@ class ProductService(abstract.AbstractService):
             endpoint=f"products/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ProductUpdateSchema,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
             force_update=force_update,
         )
 
@@ -285,8 +275,7 @@ class ProductService(abstract.AbstractService):
             endpoint=f"products/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ProductUpdateSchema,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
             force_update=force_update,
         )
 
@@ -320,7 +309,7 @@ class ProductService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"products/{id}",
             params=params,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
             force_delete=force_delete,
         )
 
@@ -354,7 +343,7 @@ class ProductService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"products/key={key}",
             params=params,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
             force_delete=force_delete,
         )
 
@@ -379,7 +368,7 @@ class ProductService(abstract.AbstractService):
         return self._client._upload(
             endpoint=f"products/{id}/images",
             params=params,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
             file=fh,
         )
 
@@ -404,6 +393,6 @@ class ProductService(abstract.AbstractService):
         return self._client._upload(
             endpoint=f"products/{id}/images",
             params=params,
-            response_schema_cls=ProductSchema,
+            response_class=Product,
             file=fh,
         )

@@ -11,7 +11,12 @@ class ByProjectKeyProductTypesByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyProductTypesByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "ProductType":
-        """Get ProductType by ID
-        """
+        """Get ProductType by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/product-types/{self._id}",
             params={"expand": expand},
-            response_object=ProductType,
+            response_class=ProductType,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyProductTypesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductType":
-        """Update ProductType by ID
-        """
+        """Update ProductType by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-types/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=ProductType,
+            response_class=ProductType,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyProductTypesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductType":
-        """Delete ProductType by ID
-        """
+        """Delete ProductType by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/product-types/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=ProductType,
+            response_class=ProductType,
             headers=headers,
         )

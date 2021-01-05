@@ -11,7 +11,12 @@ class ByProjectKeyOrdersEditsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyOrdersEditsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "OrderEdit":
-        """Get OrderEdit by key
-        """
+        """Get OrderEdit by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/orders/edits/key={self._key}",
             params={"expand": expand},
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyOrdersEditsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderEdit":
-        """Update OrderEdit by key
-        """
+        """Update OrderEdit by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/orders/edits/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyOrdersEditsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderEdit":
-        """Delete OrderEdit by key
-        """
+        """Delete OrderEdit by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/orders/edits/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers=headers,
         )

@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.review import (
-    ReviewDraftSchema,
-    ReviewPagedQueryResponseSchema,
-    ReviewSchema,
-    ReviewUpdateSchema,
-)
 from commercetools.platform.models.review import (
     Review,
     ReviewDraft,
@@ -45,13 +39,13 @@ class ReviewService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Review:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"reviews/{id}", params=params, schema_cls=ReviewSchema
+            endpoint=f"reviews/{id}", params=params, response_class=Review
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Review:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"reviews/key={key}", params=params, schema_cls=ReviewSchema
+            endpoint=f"reviews/key={key}", params=params, response_class=Review
         )
 
     def query(
@@ -79,18 +73,14 @@ class ReviewService(abstract.AbstractService):
             _ReviewQuerySchema,
         )
         return self._client._get(
-            endpoint="reviews", params=params, schema_cls=ReviewPagedQueryResponseSchema
+            endpoint="reviews", params=params, response_class=ReviewPagedQueryResponse
         )
 
     def create(self, draft: ReviewDraft, *, expand: OptionalListStr = None) -> Review:
         """Reviews are used to evaluate products and channels."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="reviews",
-            params=params,
-            data_object=draft,
-            request_schema_cls=ReviewDraftSchema,
-            response_schema_cls=ReviewSchema,
+            endpoint="reviews", params=params, data_object=draft, response_class=Review
         )
 
     def update_by_id(
@@ -108,8 +98,7 @@ class ReviewService(abstract.AbstractService):
             endpoint=f"reviews/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ReviewUpdateSchema,
-            response_schema_cls=ReviewSchema,
+            response_class=Review,
             force_update=force_update,
         )
 
@@ -128,8 +117,7 @@ class ReviewService(abstract.AbstractService):
             endpoint=f"reviews/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ReviewUpdateSchema,
-            response_schema_cls=ReviewSchema,
+            response_class=Review,
             force_update=force_update,
         )
 
@@ -149,7 +137,7 @@ class ReviewService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"reviews/{id}",
             params=params,
-            response_schema_cls=ReviewSchema,
+            response_class=Review,
             force_delete=force_delete,
         )
 
@@ -169,6 +157,6 @@ class ReviewService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"reviews/key={key}",
             params=params,
-            response_schema_cls=ReviewSchema,
+            response_class=Review,
             force_delete=force_delete,
         )

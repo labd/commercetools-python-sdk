@@ -9,17 +9,20 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def post(self, *, headers: typing.Dict[str, str] = None) -> None:
-        """Search Product Projection
-        """
+        """Search Product Projection"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-projections/search",
             params={},
-            response_object=None,
+            response_class=None,
             headers=headers,
         )
 
@@ -47,8 +50,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductProjectionPagedSearchResponse":
-        """Search Product Projection
-        """
+        """Search Product Projection"""
         return self._client._get(
             endpoint=f"/{self._project_key}/product-projections/search",
             params={
@@ -72,6 +74,6 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
                 "storeProjection": store_projection,
                 "expand": expand,
             },
-            response_object=ProductProjectionPagedSearchResponse,
+            response_class=ProductProjectionPagedSearchResponse,
             headers=headers,
         )

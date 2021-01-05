@@ -12,13 +12,19 @@ class ByProjectKeyChannelsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyChannelsByIDRequestBuilder:
         return ByProjectKeyChannelsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -32,8 +38,7 @@ class ByProjectKeyChannelsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ChannelPagedQueryResponse":
-        """Query channels
-        """
+        """Query channels"""
         return self._client._get(
             endpoint=f"/{self._project_key}/channels",
             params={
@@ -44,7 +49,7 @@ class ByProjectKeyChannelsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ChannelPagedQueryResponse,
+            response_class=ChannelPagedQueryResponse,
             headers=headers,
         )
 
@@ -55,12 +60,11 @@ class ByProjectKeyChannelsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Channel":
-        """Create Channel
-        """
+        """Create Channel"""
         return self._client._post(
             endpoint=f"/{self._project_key}/channels",
             params={"expand": expand},
             data_object=body,
-            response_object=Channel,
+            response_class=Channel,
             headers={"Content-Type": "application/json", **headers},
         )

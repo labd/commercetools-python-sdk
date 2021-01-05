@@ -19,7 +19,11 @@ class ByProjectKeyCustomObjectsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -37,7 +41,9 @@ class ByProjectKeyCustomObjectsRequestBuilder:
         self, container: str
     ) -> ByProjectKeyCustomObjectsByContainerRequestBuilder:
         return ByProjectKeyCustomObjectsByContainerRequestBuilder(
-            container=container, projectKey=self._project_key, client=self._client
+            container=container,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -54,7 +60,7 @@ class ByProjectKeyCustomObjectsRequestBuilder:
         """The query endpoint allows to retrieve custom objects in a specific container or all custom objects.
         For performance reasons, it is highly advisable to query only for custom objects in a container by using
         the container field in the where predicate.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/custom-objects",
@@ -66,7 +72,7 @@ class ByProjectKeyCustomObjectsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=CustomObjectPagedQueryResponse,
+            response_class=CustomObjectPagedQueryResponse,
             headers=headers,
         )
 
@@ -84,12 +90,12 @@ class ByProjectKeyCustomObjectsRequestBuilder:
         must match the version of the existing object. Concurrent updates for the same custom object still can result
         in a Conflict (409) even if the version is not provided.
         Fields with null values will not be saved.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/custom-objects",
             params={"expand": expand},
             data_object=body,
-            response_object=CustomObject,
+            response_class=CustomObject,
             headers={"Content-Type": "application/json", **headers},
         )

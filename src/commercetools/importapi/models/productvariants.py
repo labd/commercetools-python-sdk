@@ -22,7 +22,7 @@ if typing.TYPE_CHECKING:
 class Attribute(_BaseType):
     """This type represents the value of an attribute of a product variant.
     The name and type property must match the name and type property of an attribute definition of the product type.
-    
+
     """
 
     #: The name of this attribute must match a name of the product types attribute definitions.
@@ -49,9 +49,7 @@ class Attribute(_BaseType):
 
 
 class BooleanAttribute(Attribute):
-    """This type represents an attribute which value is either "true" or "false".
-    
-    """
+    """This type represents an attribute which value is either "true" or "false"."""
 
     value: "bool"
 
@@ -72,9 +70,7 @@ class BooleanAttribute(Attribute):
 
 
 class BooleanSetAttribute(Attribute):
-    """This type represents an attribute which value is set of boolean values.
-    
-    """
+    """This type represents an attribute which value is set of boolean values."""
 
     value: typing.List["bool"]
 
@@ -97,9 +93,7 @@ class BooleanSetAttribute(Attribute):
 
 
 class DateAttribute(Attribute):
-    """This type represents an attribute which value is a date.
-    
-    """
+    """This type represents an attribute which value is a date."""
 
     value: "datetime.date"
 
@@ -120,9 +114,7 @@ class DateAttribute(Attribute):
 
 
 class DateSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of dates.
-    
-    """
+    """This type represents an attribute which value is a set of dates."""
 
     value: typing.List["datetime.date"]
 
@@ -148,9 +140,7 @@ class DateSetAttribute(Attribute):
 
 
 class DateTimeAttribute(Attribute):
-    """This type represents an attribute which value is a date with time.
-    
-    """
+    """This type represents an attribute which value is a date with time."""
 
     value: "datetime.datetime"
 
@@ -173,9 +163,7 @@ class DateTimeAttribute(Attribute):
 
 
 class DateTimeSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of dates with time.
-    
-    """
+    """This type represents an attribute which value is a set of dates with time."""
 
     value: typing.List["datetime.datetime"]
 
@@ -203,7 +191,7 @@ class DateTimeSetAttribute(Attribute):
 class EnumAttribute(Attribute):
     """This type represents an attribute which value is an enum.
     The attribute value refers to the key of the enum value.
-    
+
     """
 
     value: "str"
@@ -227,7 +215,7 @@ class EnumAttribute(Attribute):
 class EnumSetAttribute(Attribute):
     """This type represents an attribute which value is an enum.
     The attribute value refers to the key of the enum value.
-    
+
     """
 
     value: typing.List["str"]
@@ -253,7 +241,7 @@ class EnumSetAttribute(Attribute):
 class LocalizableEnumAttribute(Attribute):
     """This type represents an attribute which value is a localized enum.
     The attribute value refers to the key of the enum value.
-    
+
     """
 
     value: "str"
@@ -279,7 +267,7 @@ class LocalizableEnumAttribute(Attribute):
 class LocalizableEnumSetAttribute(Attribute):
     """This type represents an attribute which value is a localized enum.
     The attribute value refers to the key of the enum value.
-    
+
     """
 
     value: typing.List["str"]
@@ -305,9 +293,7 @@ class LocalizableEnumSetAttribute(Attribute):
 
 
 class LocalizableTextAttribute(Attribute):
-    """This type represents an attribute which value is a localized text.
-    
-    """
+    """This type represents an attribute which value is a localized text."""
 
     value: "LocalizedString"
 
@@ -332,9 +318,7 @@ class LocalizableTextAttribute(Attribute):
 
 
 class LocalizableTextSetAttribute(Attribute):
-    """This type represents an attribute which value is a localized text.
-    
-    """
+    """This type represents an attribute which value is a localized text."""
 
     value: typing.List["LocalizedString"]
 
@@ -362,9 +346,7 @@ class LocalizableTextSetAttribute(Attribute):
 
 
 class MoneyAttribute(Attribute):
-    """This type represents an attribute which value is a money object.
-    
-    """
+    """This type represents an attribute which value is a money object."""
 
     value: "TypedMoney"
 
@@ -385,9 +367,7 @@ class MoneyAttribute(Attribute):
 
 
 class MoneySetAttribute(Attribute):
-    """This type represents an attribute which value is a set of money objects.
-    
-    """
+    """This type represents an attribute which value is a set of money objects."""
 
     value: typing.List["TypedMoney"]
 
@@ -410,9 +390,7 @@ class MoneySetAttribute(Attribute):
 
 
 class NumberAttribute(Attribute):
-    """This type represents an attribute which value is a number.
-    
-    """
+    """This type represents an attribute which value is a number."""
 
     value: "float"
 
@@ -433,9 +411,7 @@ class NumberAttribute(Attribute):
 
 
 class NumberSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of numbers.
-    
-    """
+    """This type represents an attribute which value is a set of numbers."""
 
     value: typing.List["float"]
 
@@ -458,9 +434,7 @@ class NumberSetAttribute(Attribute):
 
 
 class ReferenceAttribute(Attribute):
-    """This type represents an attribute which value is a key reference.
-    
-    """
+    """This type represents an attribute which value is a key reference."""
 
     #: References a resource by its key.
     value: "KeyReference"
@@ -482,9 +456,7 @@ class ReferenceAttribute(Attribute):
 
 
 class ReferenceSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of references.
-    
-    """
+    """This type represents an attribute which value is a set of references."""
 
     value: typing.List["KeyReference"]
 
@@ -507,9 +479,7 @@ class ReferenceSetAttribute(Attribute):
 
 
 class TextAttribute(Attribute):
-    """This type represents an attribute which value is a string.
-    
-    """
+    """This type represents an attribute which value is a string."""
 
     value: "str"
 
@@ -530,9 +500,7 @@ class TextAttribute(Attribute):
 
 
 class TextSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of strings.
-    
-    """
+    """This type represents an attribute which value is a set of strings."""
 
     value: typing.List["str"]
 
@@ -555,9 +523,7 @@ class TextSetAttribute(Attribute):
 
 
 class TimeAttribute(Attribute):
-    """This type represents an attribute which value is a time.
-    
-    """
+    """This type represents an attribute which value is a time."""
 
     value: "datetime.time"
 
@@ -578,9 +544,7 @@ class TimeAttribute(Attribute):
 
 
 class TimeSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of times.
-    
-    """
+    """This type represents an attribute which value is a set of times."""
 
     value: typing.List["datetime.time"]
 
@@ -608,7 +572,7 @@ class TimeSetAttribute(Attribute):
 class ProductVariantImport(ImportResource):
     """Import representation for a product variant. Use this type for importing new product variants
     into a commercetools project.
-    
+
     """
 
     #: Maps to `ProductVariant.sku`.
@@ -670,7 +634,7 @@ class ProductVariantImport(ImportResource):
 class ProductVariantPatch(_BaseType):
     """Import representation for an update to a product variant. Use this type for importing updates to existing
     product variants into a commercetools project.
-    
+
     """
 
     #: The product variant to which this patch is applied.

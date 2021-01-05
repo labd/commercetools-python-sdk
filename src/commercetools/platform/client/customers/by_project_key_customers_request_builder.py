@@ -40,7 +40,11 @@ class ByProjectKeyCustomersRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -57,54 +61,65 @@ class ByProjectKeyCustomersRequestBuilder:
         self, emailToken: str
     ) -> ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder:
         return ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder(
-            emailToken=emailToken, projectKey=self._project_key, client=self._client
+            emailToken=emailToken,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def emailToken(self) -> ByProjectKeyCustomersEmailTokenRequestBuilder:
         """To verify a customer's email, an email token can be created. This should be embedded in a link and sent to the
         customer via email. When the customer clicks on the link, the "verify customer's email" endpoint should be called,
         which sets customer's isVerifiedEmail field to true.
-        
+
         """
         return ByProjectKeyCustomersEmailTokenRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def emailConfirm(self) -> ByProjectKeyCustomersEmailConfirmRequestBuilder:
         return ByProjectKeyCustomersEmailConfirmRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def password(self) -> ByProjectKeyCustomersPasswordRequestBuilder:
         return ByProjectKeyCustomersPasswordRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def passwordReset(self) -> ByProjectKeyCustomersPasswordResetRequestBuilder:
         return ByProjectKeyCustomersPasswordResetRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def passwordToken(self) -> ByProjectKeyCustomersPasswordTokenRequestBuilder:
         """The following workflow can be used to reset the customer's password:
-        
+
         * Create a password reset token and send it embedded in a link to the customer.
         * When the customer clicks on the link, the customer is retrieved with the token.
         * The customer enters a new password and the "reset customer's password" endpoint is called.
-        
+
         """
         return ByProjectKeyCustomersPasswordTokenRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withKey(self, key: str) -> ByProjectKeyCustomersKeyByKeyRequestBuilder:
         return ByProjectKeyCustomersKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyCustomersByIDRequestBuilder:
         return ByProjectKeyCustomersByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -118,8 +133,7 @@ class ByProjectKeyCustomersRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerPagedQueryResponse":
-        """Query customers
-        """
+        """Query customers"""
         return self._client._get(
             endpoint=f"/{self._project_key}/customers",
             params={
@@ -130,7 +144,7 @@ class ByProjectKeyCustomersRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=CustomerPagedQueryResponse,
+            response_class=CustomerPagedQueryResponse,
             headers=headers,
         )
 
@@ -144,12 +158,12 @@ class ByProjectKeyCustomersRequestBuilder:
         """Creates a customer. If an anonymous cart is passed in,
         then the cart is assigned to the created customer and the version number of the Cart will increase.
         If the ID of an anonymous session is given, all carts and orders will be assigned to the created customer.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/customers",
             params={"expand": expand},
             data_object=body,
-            response_object=CustomerSignInResult,
+            response_class=CustomerSignInResult,
             headers={"Content-Type": "application/json", **headers},
         )

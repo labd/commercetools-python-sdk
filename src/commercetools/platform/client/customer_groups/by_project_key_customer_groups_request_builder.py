@@ -19,18 +19,26 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder:
         return ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyCustomerGroupsByIDRequestBuilder:
         return ByProjectKeyCustomerGroupsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -44,8 +52,7 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerGroupPagedQueryResponse":
-        """Query customer-groups
-        """
+        """Query customer-groups"""
         return self._client._get(
             endpoint=f"/{self._project_key}/customer-groups",
             params={
@@ -56,7 +63,7 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=CustomerGroupPagedQueryResponse,
+            response_class=CustomerGroupPagedQueryResponse,
             headers=headers,
         )
 
@@ -67,12 +74,11 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerGroup":
-        """Create CustomerGroup
-        """
+        """Create CustomerGroup"""
         return self._client._post(
             endpoint=f"/{self._project_key}/customer-groups",
             params={"expand": expand},
             data_object=body,
-            response_object=CustomerGroup,
+            response_class=CustomerGroup,
             headers={"Content-Type": "application/json", **headers},
         )

@@ -11,11 +11,16 @@ class ByProjectKeySimilaritiesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def products(self) -> ByProjectKeySimilaritiesProductsRequestBuilder:
         return ByProjectKeySimilaritiesProductsRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )

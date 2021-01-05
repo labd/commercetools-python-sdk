@@ -284,8 +284,7 @@ class MissingAttributesPagedQueryResult(_BaseType):
 
 
 class MissingDataTaskStatus(_BaseType):
-    """Represents a URL path to poll to get the results of an Asynchronous Request.
-    """
+    """Represents a URL path to poll to get the results of an Asynchronous Request."""
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.
@@ -528,8 +527,7 @@ class MissingImagesPagedQueryResult(_BaseType):
 
 
 class MissingImagesTaskStatus(_BaseType):
-    """Represents a URL path to poll to get the results of an Asynchronous Request.
-    """
+    """Represents a URL path to poll to get the results of an Asynchronous Request."""
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.
@@ -774,8 +772,7 @@ class MissingPricesPagedQueryResult(_BaseType):
 
 
 class MissingPricesTaskStatus(_BaseType):
-    """Represents a URL path to poll to get the results of an Asynchronous Request.
-    """
+    """Represents a URL path to poll to get the results of an Asynchronous Request."""
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.

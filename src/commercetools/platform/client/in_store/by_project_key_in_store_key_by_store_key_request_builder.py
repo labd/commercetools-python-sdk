@@ -27,49 +27,63 @@ class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
     _project_key: str
     _store_key: str
 
-    def __init__(self, projectKey: str, storeKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._client = client
 
     def carts(self) -> ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
-        """A shopping cart holds product variants and can be ordered.
-        """
+        """A shopping cart holds product variants and can be ordered."""
         return ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def orders(self) -> ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
-        """An order can be created from a cart, usually after a checkout process has been completed.
-        """
+        """An order can be created from a cart, usually after a checkout process has been completed."""
         return ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def me(self) -> ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def customers(self) -> ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
         """A customer is a person purchasing products. customers, Orders,
         Comments and Reviews can be associated to a customer.
-        
+
         """
         return ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def login(self) -> ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder:
-        """Retrieves the authenticated customer.
-        """
+        """Retrieves the authenticated customer."""
         return ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def shippingMethods(
-        self
+        self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )

@@ -9,7 +9,11 @@ class ByProjectKeyMeActiveCartRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -17,6 +21,6 @@ class ByProjectKeyMeActiveCartRequestBuilder:
         return self._client._get(
             endpoint=f"/{self._project_key}/me/active-cart",
             params={},
-            response_object=MyCart,
+            response_class=MyCart,
             headers=headers,
         )

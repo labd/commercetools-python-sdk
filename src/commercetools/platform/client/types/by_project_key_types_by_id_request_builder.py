@@ -11,7 +11,12 @@ class ByProjectKeyTypesByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyTypesByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Type":
-        """Get Type by ID
-        """
+        """Get Type by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/types/{self._id}",
             params={"expand": expand},
-            response_object=Type,
+            response_class=Type,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyTypesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Type":
-        """Update Type by ID
-        """
+        """Update Type by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/types/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Type,
+            response_class=Type,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyTypesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Type":
-        """Delete Type by ID
-        """
+        """Delete Type by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/types/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=Type,
+            response_class=Type,
             headers=headers,
         )

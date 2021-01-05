@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.store import (
-    StoreDraftSchema,
-    StorePagedQueryResponseSchema,
-    StoreSchema,
-    StoreUpdateSchema,
-)
 from commercetools.platform.models.store import (
     Store,
     StoreDraft,
@@ -43,13 +37,13 @@ class StoreService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Store:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"stores/{id}", params=params, schema_cls=StoreSchema
+            endpoint=f"stores/{id}", params=params, response_class=Store
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Store:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"stores/key={key}", params=params, schema_cls=StoreSchema
+            endpoint=f"stores/key={key}", params=params, response_class=Store
         )
 
     def query(
@@ -77,18 +71,14 @@ class StoreService(abstract.AbstractService):
             _StoreQuerySchema,
         )
         return self._client._get(
-            endpoint="stores", params=params, schema_cls=StorePagedQueryResponseSchema
+            endpoint="stores", params=params, response_class=StorePagedQueryResponse
         )
 
     def create(self, draft: StoreDraft, *, expand: OptionalListStr = None) -> Store:
         """Stores let you model the context your customers shop in."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="stores",
-            params=params,
-            data_object=draft,
-            request_schema_cls=StoreDraftSchema,
-            response_schema_cls=StoreSchema,
+            endpoint="stores", params=params, data_object=draft, response_class=Store
         )
 
     def update_by_id(
@@ -106,8 +96,7 @@ class StoreService(abstract.AbstractService):
             endpoint=f"stores/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=StoreUpdateSchema,
-            response_schema_cls=StoreSchema,
+            response_class=Store,
             force_update=force_update,
         )
 
@@ -126,8 +115,7 @@ class StoreService(abstract.AbstractService):
             endpoint=f"stores/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=StoreUpdateSchema,
-            response_schema_cls=StoreSchema,
+            response_class=Store,
             force_update=force_update,
         )
 
@@ -145,7 +133,7 @@ class StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"stores/{id}",
             params=params,
-            response_schema_cls=StoreSchema,
+            response_class=Store,
             force_delete=force_delete,
         )
 
@@ -163,6 +151,6 @@ class StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"stores/key={key}",
             params=params,
-            response_schema_cls=StoreSchema,
+            response_class=Store,
             force_delete=force_delete,
         )

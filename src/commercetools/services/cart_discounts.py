@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.cart_discount import (
-    CartDiscountDraftSchema,
-    CartDiscountPagedQueryResponseSchema,
-    CartDiscountSchema,
-    CartDiscountUpdateSchema,
-)
 from commercetools.platform.models.cart_discount import (
     CartDiscount,
     CartDiscountDraft,
@@ -44,9 +38,7 @@ class CartDiscountService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> CartDiscount:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"cart-discounts/{id}",
-            params=params,
-            schema_cls=CartDiscountSchema,
+            endpoint=f"cart-discounts/{id}", params=params, response_class=CartDiscount
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> CartDiscount:
@@ -54,7 +46,7 @@ class CartDiscountService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"cart-discounts/key={key}",
             params=params,
-            schema_cls=CartDiscountSchema,
+            response_class=CartDiscount,
         )
 
     def query(
@@ -86,7 +78,7 @@ class CartDiscountService(abstract.AbstractService):
         return self._client._get(
             endpoint="cart-discounts",
             params=params,
-            schema_cls=CartDiscountPagedQueryResponseSchema,
+            response_class=CartDiscountPagedQueryResponse,
         )
 
     def create(
@@ -100,8 +92,7 @@ class CartDiscountService(abstract.AbstractService):
             endpoint="cart-discounts",
             params=params,
             data_object=draft,
-            request_schema_cls=CartDiscountDraftSchema,
-            response_schema_cls=CartDiscountSchema,
+            response_class=CartDiscount,
         )
 
     def update_by_id(
@@ -119,8 +110,7 @@ class CartDiscountService(abstract.AbstractService):
             endpoint=f"cart-discounts/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CartDiscountUpdateSchema,
-            response_schema_cls=CartDiscountSchema,
+            response_class=CartDiscount,
             force_update=force_update,
         )
 
@@ -139,8 +129,7 @@ class CartDiscountService(abstract.AbstractService):
             endpoint=f"cart-discounts/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CartDiscountUpdateSchema,
-            response_schema_cls=CartDiscountSchema,
+            response_class=CartDiscount,
             force_update=force_update,
         )
 
@@ -158,7 +147,7 @@ class CartDiscountService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"cart-discounts/{id}",
             params=params,
-            response_schema_cls=CartDiscountSchema,
+            response_class=CartDiscount,
             force_delete=force_delete,
         )
 
@@ -176,6 +165,6 @@ class CartDiscountService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"cart-discounts/key={key}",
             params=params,
-            response_schema_cls=CartDiscountSchema,
+            response_class=CartDiscount,
             force_delete=force_delete,
         )

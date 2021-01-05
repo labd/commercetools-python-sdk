@@ -11,7 +11,12 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "DiscountCode":
-        """Get DiscountCode by ID
-        """
+        """Get DiscountCode by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
             params={"expand": expand},
-            response_object=DiscountCode,
+            response_class=DiscountCode,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "DiscountCode":
-        """Update DiscountCode by ID
-        """
+        """Update DiscountCode by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=DiscountCode,
+            response_class=DiscountCode,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -53,11 +56,10 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "DiscountCode":
-        """Delete DiscountCode by ID
-        """
+        """Delete DiscountCode by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=DiscountCode,
+            response_class=DiscountCode,
             headers=headers,
         )

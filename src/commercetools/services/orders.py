@@ -2,20 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.order import (
-    OrderFromCartDraftSchema,
-    OrderImportDraftSchema,
-    OrderPagedQueryResponseSchema,
-    OrderSchema,
-    OrderUpdateSchema,
-)
-from commercetools.platform.models._schemas.order_edit import (
-    OrderEditApplySchema,
-    OrderEditDraftSchema,
-    OrderEditPagedQueryResponseSchema,
-    OrderEditSchema,
-    OrderEditUpdateSchema,
-)
 from commercetools.platform.models.order import (
     Order,
     OrderFromCartDraft,
@@ -61,7 +47,7 @@ class OrderService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Order:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"orders/{id}", params=params, schema_cls=OrderSchema
+            endpoint=f"orders/{id}", params=params, response_class=Order
         )
 
     def get_by_order_number(
@@ -76,7 +62,7 @@ class OrderService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"orders/order-number={order_number}",
             params=params,
-            schema_cls=OrderSchema,
+            response_class=Order,
         )
 
     def order_edit_get_by_id(
@@ -84,7 +70,7 @@ class OrderService(abstract.AbstractService):
     ) -> OrderEdit:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"orders/edits/{id}", params=params, schema_cls=OrderEditSchema
+            endpoint=f"orders/edits/{id}", params=params, response_class=OrderEdit
         )
 
     def order_edit_get_by_key(
@@ -92,9 +78,7 @@ class OrderService(abstract.AbstractService):
     ) -> OrderEdit:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"orders/edits/key={key}",
-            params=params,
-            schema_cls=OrderEditSchema,
+            endpoint=f"orders/edits/key={key}", params=params, response_class=OrderEdit
         )
 
     def order_edit_query(
@@ -126,7 +110,7 @@ class OrderService(abstract.AbstractService):
         return self._client._get(
             endpoint="orders/edits",
             params=params,
-            schema_cls=OrderEditPagedQueryResponseSchema,
+            response_class=OrderEditPagedQueryResponse,
         )
 
     def query(
@@ -156,7 +140,7 @@ class OrderService(abstract.AbstractService):
             _OrderQuerySchema,
         )
         return self._client._get(
-            endpoint="orders", params=params, schema_cls=OrderPagedQueryResponseSchema
+            endpoint="orders", params=params, response_class=OrderPagedQueryResponse
         )
 
     def create(
@@ -171,11 +155,7 @@ class OrderService(abstract.AbstractService):
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="orders",
-            params=params,
-            data_object=draft,
-            request_schema_cls=OrderFromCartDraftSchema,
-            response_schema_cls=OrderSchema,
+            endpoint="orders", params=params, data_object=draft, response_class=Order
         )
 
     def order_edit_create(
@@ -189,8 +169,7 @@ class OrderService(abstract.AbstractService):
             endpoint="orders/edits",
             params=params,
             data_object=draft,
-            request_schema_cls=OrderEditDraftSchema,
-            response_schema_cls=OrderEditSchema,
+            response_class=OrderEdit,
         )
 
     def order_edit_update_by_id(
@@ -208,8 +187,7 @@ class OrderService(abstract.AbstractService):
             endpoint=f"orders/edits/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=OrderEditUpdateSchema,
-            response_schema_cls=OrderEditSchema,
+            response_class=OrderEdit,
             force_update=force_update,
         )
 
@@ -228,8 +206,7 @@ class OrderService(abstract.AbstractService):
             endpoint=f"orders/edits/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=OrderEditUpdateSchema,
-            response_schema_cls=OrderEditSchema,
+            response_class=OrderEdit,
             force_update=force_update,
         )
 
@@ -248,8 +225,7 @@ class OrderService(abstract.AbstractService):
             endpoint=f"orders/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=OrderUpdateSchema,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_update=force_update,
         )
 
@@ -268,8 +244,7 @@ class OrderService(abstract.AbstractService):
             endpoint=f"orders/order-number={order_number}",
             params=params,
             data_object=update_action,
-            request_schema_cls=OrderUpdateSchema,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_update=force_update,
         )
 
@@ -289,7 +264,7 @@ class OrderService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"orders/{id}",
             params=params,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_delete=force_delete,
         )
 
@@ -309,7 +284,7 @@ class OrderService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"orders/order-number={order_number}",
             params=params,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_delete=force_delete,
         )
 
@@ -327,7 +302,7 @@ class OrderService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"orders/edits/{id}",
             params=params,
-            response_schema_cls=OrderEditSchema,
+            response_class=OrderEdit,
             force_delete=force_delete,
         )
 
@@ -345,7 +320,7 @@ class OrderService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"orders/edits/key={key}",
             params=params,
-            response_schema_cls=OrderEditSchema,
+            response_class=OrderEdit,
             force_delete=force_delete,
         )
 
@@ -356,8 +331,7 @@ class OrderService(abstract.AbstractService):
             endpoint="orders/import",
             params=params,
             data_object=draft,
-            request_schema_cls=OrderImportDraftSchema,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
         )
 
     def order_edit_apply(self, id: str, action: OrderEditApply) -> OrderEdit:
@@ -366,6 +340,5 @@ class OrderService(abstract.AbstractService):
             endpoint=f"orders/edits/{id}/apply",
             params=params,
             data_object=action,
-            request_schema_cls=OrderEditApplySchema,
-            response_schema_cls=OrderEditSchema,
+            response_class=OrderEdit,
         )

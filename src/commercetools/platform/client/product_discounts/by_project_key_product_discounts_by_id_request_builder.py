@@ -11,7 +11,12 @@ class ByProjectKeyProductDiscountsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyProductDiscountsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "ProductDiscount":
-        """Get ProductDiscount by ID
-        """
+        """Get ProductDiscount by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/product-discounts/{self._id}",
             params={"expand": expand},
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyProductDiscountsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductDiscount":
-        """Update ProductDiscount by ID
-        """
+        """Update ProductDiscount by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-discounts/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyProductDiscountsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductDiscount":
-        """Delete ProductDiscount by ID
-        """
+        """Delete ProductDiscount by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/product-discounts/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers=headers,
         )

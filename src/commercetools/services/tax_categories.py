@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.tax_category import (
-    TaxCategoryDraftSchema,
-    TaxCategoryPagedQueryResponseSchema,
-    TaxCategorySchema,
-    TaxCategoryUpdateSchema,
-)
 from commercetools.platform.models.tax_category import (
     TaxCategory,
     TaxCategoryDraft,
@@ -43,7 +37,7 @@ class TaxCategoryService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> TaxCategory:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"tax-categories/{id}", params=params, schema_cls=TaxCategorySchema
+            endpoint=f"tax-categories/{id}", params=params, response_class=TaxCategory
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> TaxCategory:
@@ -51,7 +45,7 @@ class TaxCategoryService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"tax-categories/key={key}",
             params=params,
-            schema_cls=TaxCategorySchema,
+            response_class=TaxCategory,
         )
 
     def query(
@@ -83,7 +77,7 @@ class TaxCategoryService(abstract.AbstractService):
         return self._client._get(
             endpoint="tax-categories",
             params=params,
-            schema_cls=TaxCategoryPagedQueryResponseSchema,
+            response_class=TaxCategoryPagedQueryResponse,
         )
 
     def create(
@@ -97,8 +91,7 @@ class TaxCategoryService(abstract.AbstractService):
             endpoint="tax-categories",
             params=params,
             data_object=draft,
-            request_schema_cls=TaxCategoryDraftSchema,
-            response_schema_cls=TaxCategorySchema,
+            response_class=TaxCategory,
         )
 
     def update_by_id(
@@ -116,8 +109,7 @@ class TaxCategoryService(abstract.AbstractService):
             endpoint=f"tax-categories/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=TaxCategoryUpdateSchema,
-            response_schema_cls=TaxCategorySchema,
+            response_class=TaxCategory,
             force_update=force_update,
         )
 
@@ -136,8 +128,7 @@ class TaxCategoryService(abstract.AbstractService):
             endpoint=f"tax-categories/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=TaxCategoryUpdateSchema,
-            response_schema_cls=TaxCategorySchema,
+            response_class=TaxCategory,
             force_update=force_update,
         )
 
@@ -155,7 +146,7 @@ class TaxCategoryService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"tax-categories/{id}",
             params=params,
-            response_schema_cls=TaxCategorySchema,
+            response_class=TaxCategory,
             force_delete=force_delete,
         )
 
@@ -173,6 +164,6 @@ class TaxCategoryService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"tax-categories/key={key}",
             params=params,
-            response_schema_cls=TaxCategorySchema,
+            response_class=TaxCategory,
             force_delete=force_delete,
         )

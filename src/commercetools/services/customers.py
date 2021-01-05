@@ -2,19 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.customer import (
-    CustomerChangePasswordSchema,
-    CustomerCreateEmailTokenSchema,
-    CustomerCreatePasswordResetTokenSchema,
-    CustomerDraftSchema,
-    CustomerEmailVerifySchema,
-    CustomerPagedQueryResponseSchema,
-    CustomerResetPasswordSchema,
-    CustomerSchema,
-    CustomerSignInResultSchema,
-    CustomerTokenSchema,
-    CustomerUpdateSchema,
-)
 from commercetools.platform.models.customer import (
     Customer,
     CustomerChangePassword,
@@ -66,19 +53,19 @@ class CustomerService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"customers/email-token={email_token}",
             params=params,
-            schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Customer:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"customers/{id}", params=params, schema_cls=CustomerSchema
+            endpoint=f"customers/{id}", params=params, response_class=Customer
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Customer:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"customers/key={key}", params=params, schema_cls=CustomerSchema
+            endpoint=f"customers/key={key}", params=params, response_class=Customer
         )
 
     def get_by_password_token(
@@ -88,7 +75,7 @@ class CustomerService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"customers/password-token={password_token}",
             params=params,
-            schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def query(
@@ -120,7 +107,7 @@ class CustomerService(abstract.AbstractService):
         return self._client._get(
             endpoint="customers",
             params=params,
-            schema_cls=CustomerPagedQueryResponseSchema,
+            response_class=CustomerPagedQueryResponse,
         )
 
     def create(
@@ -140,8 +127,7 @@ class CustomerService(abstract.AbstractService):
             endpoint="customers",
             params=params,
             data_object=draft,
-            request_schema_cls=CustomerDraftSchema,
-            response_schema_cls=CustomerSignInResultSchema,
+            response_class=CustomerSignInResult,
         )
 
     def update_by_id(
@@ -159,8 +145,7 @@ class CustomerService(abstract.AbstractService):
             endpoint=f"customers/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CustomerUpdateSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_update=force_update,
         )
 
@@ -179,8 +164,7 @@ class CustomerService(abstract.AbstractService):
             endpoint=f"customers/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CustomerUpdateSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_update=force_update,
         )
 
@@ -200,7 +184,7 @@ class CustomerService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"customers/{id}",
             params=params,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_delete=force_delete,
         )
 
@@ -220,7 +204,7 @@ class CustomerService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"customers/key={key}",
             params=params,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_delete=force_delete,
         )
 
@@ -231,8 +215,7 @@ class CustomerService(abstract.AbstractService):
             endpoint="customers/email/confirm",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerEmailVerifySchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def email_token(self, action: CustomerCreateEmailToken) -> CustomerToken:
@@ -248,8 +231,7 @@ class CustomerService(abstract.AbstractService):
             endpoint="customers/email-token",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerCreateEmailTokenSchema,
-            response_schema_cls=CustomerTokenSchema,
+            response_class=CustomerToken,
         )
 
     def password(self, action: CustomerChangePassword) -> Customer:
@@ -259,8 +241,7 @@ class CustomerService(abstract.AbstractService):
             endpoint="customers/password",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerChangePasswordSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def password_reset(self, action: CustomerResetPassword) -> Customer:
@@ -270,8 +251,7 @@ class CustomerService(abstract.AbstractService):
             endpoint="customers/password/reset",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerResetPasswordSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def password_token(self, action: CustomerCreatePasswordResetToken) -> CustomerToken:
@@ -290,6 +270,5 @@ class CustomerService(abstract.AbstractService):
             endpoint="customers/password-token",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerCreatePasswordResetTokenSchema,
-            response_schema_cls=CustomerTokenSchema,
+            response_class=CustomerToken,
         )

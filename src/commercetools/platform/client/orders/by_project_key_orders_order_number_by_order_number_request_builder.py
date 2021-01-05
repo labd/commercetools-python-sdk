@@ -11,7 +11,12 @@ class ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder:
     _project_key: str
     _order_number: str
 
-    def __init__(self, projectKey: str, orderNumber: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        orderNumber: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._order_number = orderNumber
         self._client = client
@@ -21,12 +26,12 @@ class ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder:
     ) -> "Order":
         """In case the orderNumber does not match the regular expression [a-zA-Z0-9_\-]+,
         it should be provided in URL-encoded format.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/orders/order-number={self._order_number}",
             params={"expand": expand},
-            response_object=Order,
+            response_class=Order,
             headers=headers,
         )
 
@@ -37,13 +42,12 @@ class ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Order":
-        """Update Order by orderNumber
-        """
+        """Update Order by orderNumber"""
         return self._client._post(
             endpoint=f"/{self._project_key}/orders/order-number={self._order_number}",
             params={"expand": expand},
             data_object=body,
-            response_object=Order,
+            response_class=Order,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -55,11 +59,10 @@ class ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Order":
-        """Delete Order by orderNumber
-        """
+        """Delete Order by orderNumber"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/orders/order-number={self._order_number}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Order,
+            response_class=Order,
             headers=headers,
         )

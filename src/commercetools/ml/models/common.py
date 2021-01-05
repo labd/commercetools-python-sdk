@@ -132,8 +132,7 @@ class ProductTypeReference(Reference):
 
 
 class ProductVariant(_BaseType):
-    """The product variant that contains the image.
-    """
+    """The product variant that contains the image."""
 
     #: The product that contains this variant.
     product: "ProductReference"
@@ -168,8 +167,7 @@ class TaskStatusEnum(enum.Enum):
 
 
 class TaskToken(_BaseType):
-    """Represents a URL path to poll to get the results of an Asynchronous Request.
-    """
+    """Represents a URL path to poll to get the results of an Asynchronous Request."""
 
     #: The ID for the task. Used to find the status of the task.
     task_id: "str"

@@ -9,7 +9,11 @@ class ByProjectKeyMePasswordResetRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -17,6 +21,6 @@ class ByProjectKeyMePasswordResetRequestBuilder:
         return self._client._post(
             endpoint=f"/{self._project_key}/me/password/reset",
             params={},
-            response_object=MyCustomer,
+            response_class=MyCustomer,
             headers=headers,
         )

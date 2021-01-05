@@ -15,18 +15,26 @@ class ByProjectKeyPaymentsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyPaymentsKeyByKeyRequestBuilder:
         return ByProjectKeyPaymentsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyPaymentsByIDRequestBuilder:
         return ByProjectKeyPaymentsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyPaymentsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "PaymentPagedQueryResponse":
-        """Query payments
-        """
+        """Query payments"""
         return self._client._get(
             endpoint=f"/{self._project_key}/payments",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyPaymentsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=PaymentPagedQueryResponse,
+            response_class=PaymentPagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyPaymentsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Payment":
-        """To create a payment object a payment draft object has to be given with the request.
-        """
+        """To create a payment object a payment draft object has to be given with the request."""
         return self._client._post(
             endpoint=f"/{self._project_key}/payments",
             params={"expand": expand},
             data_object=body,
-            response_object=Payment,
+            response_class=Payment,
             headers={"Content-Type": "application/json", **headers},
         )

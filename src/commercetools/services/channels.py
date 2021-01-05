@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.channel import (
-    ChannelDraftSchema,
-    ChannelPagedQueryResponseSchema,
-    ChannelSchema,
-    ChannelUpdateSchema,
-)
 from commercetools.platform.models.channel import (
     Channel,
     ChannelDraft,
@@ -46,7 +40,7 @@ class ChannelService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Channel:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"channels/{id}", params=params, schema_cls=ChannelSchema
+            endpoint=f"channels/{id}", params=params, response_class=Channel
         )
 
     def query(
@@ -76,9 +70,7 @@ class ChannelService(abstract.AbstractService):
             _ChannelQuerySchema,
         )
         return self._client._get(
-            endpoint="channels",
-            params=params,
-            schema_cls=ChannelPagedQueryResponseSchema,
+            endpoint="channels", params=params, response_class=ChannelPagedQueryResponse
         )
 
     def create(self, draft: ChannelDraft, *, expand: OptionalListStr = None) -> Channel:
@@ -90,8 +82,7 @@ class ChannelService(abstract.AbstractService):
             endpoint="channels",
             params=params,
             data_object=draft,
-            request_schema_cls=ChannelDraftSchema,
-            response_schema_cls=ChannelSchema,
+            response_class=Channel,
         )
 
     def update_by_id(
@@ -109,8 +100,7 @@ class ChannelService(abstract.AbstractService):
             endpoint=f"channels/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ChannelUpdateSchema,
-            response_schema_cls=ChannelSchema,
+            response_class=Channel,
             force_update=force_update,
         )
 
@@ -128,6 +118,6 @@ class ChannelService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"channels/{id}",
             params=params,
-            response_schema_cls=ChannelSchema,
+            response_class=Channel,
             force_delete=force_delete,
         )

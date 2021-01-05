@@ -16,7 +16,12 @@ class ByProjectKeyProductTypesImportSinkKeyByImportSinkKeyRequestBuilder:
     _project_key: str
     _import_sink_key: str
 
-    def __init__(self, projectKey: str, importSinkKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        importSinkKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._import_sink_key = importSinkKey
         self._client = client
@@ -32,7 +37,7 @@ class ByProjectKeyProductTypesImportSinkKeyByImportSinkKeyRequestBuilder:
         )
 
     def importOperations(
-        self
+        self,
     ) -> ByProjectKeyProductTypesImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder:
         return ByProjectKeyProductTypesImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder(
             projectKey=self._project_key,
@@ -43,12 +48,11 @@ class ByProjectKeyProductTypesImportSinkKeyByImportSinkKeyRequestBuilder:
     def post(
         self, body: "ProductTypeImportRequest", *, headers: typing.Dict[str, str] = None
     ) -> "ImportResponse":
-        """Creates import request for creating new product types or updating existing ones.
-        """
+        """Creates import request for creating new product types or updating existing ones."""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-types/importSinkKey={self._import_sink_key}",
             params={},
             data_object=body,
-            response_object=ImportResponse,
+            response_class=ImportResponse,
             headers={"Content-Type": "application/json", **headers},
         )

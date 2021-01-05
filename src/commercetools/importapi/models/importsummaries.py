@@ -9,9 +9,9 @@ from ._abstract import _BaseType
 
 class ImportSummary(_BaseType):
     """An import summary describes the states of import resources of a given import sink.
-    
+
     It is used to track the overall progress of import resources.
-    
+
     """
 
     #: The states summary for this import summary.

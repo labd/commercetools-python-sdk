@@ -15,18 +15,26 @@ class ByProjectKeyZonesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyZonesKeyByKeyRequestBuilder:
         return ByProjectKeyZonesKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyZonesByIDRequestBuilder:
         return ByProjectKeyZonesByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyZonesRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ZonePagedQueryResponse":
-        """Query zones
-        """
+        """Query zones"""
         return self._client._get(
             endpoint=f"/{self._project_key}/zones",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyZonesRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ZonePagedQueryResponse,
+            response_class=ZonePagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyZonesRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Zone":
-        """Create Zone
-        """
+        """Create Zone"""
         return self._client._post(
             endpoint=f"/{self._project_key}/zones",
             params={"expand": expand},
             data_object=body,
-            response_object=Zone,
+            response_class=Zone,
             headers={"Content-Type": "application/json", **headers},
         )

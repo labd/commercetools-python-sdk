@@ -11,7 +11,12 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "MyShoppingList":
-        """Get MyShoppingList by ID
-        """
+        """Get MyShoppingList by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
             params={"expand": expand},
-            response_object=MyShoppingList,
+            response_class=MyShoppingList,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyShoppingList":
-        """Update MyShoppingList by ID
-        """
+        """Update MyShoppingList by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=MyShoppingList,
+            response_class=MyShoppingList,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyShoppingList":
-        """Delete MyShoppingList by ID
-        """
+        """Delete MyShoppingList by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=MyShoppingList,
+            response_class=MyShoppingList,
             headers=headers,
         )

@@ -11,7 +11,13 @@ class ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder:
     _container: str
     _key: str
 
-    def __init__(self, projectKey: str, container: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        container: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._container = container
         self._key = key
@@ -20,12 +26,11 @@ class ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "CustomObject":
-        """Get CustomObject by container and key
-        """
+        """Get CustomObject by container and key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/custom-objects/{self._container}/{self._key}",
             params={"expand": expand},
-            response_object=CustomObject,
+            response_class=CustomObject,
             headers=headers,
         )
 
@@ -37,11 +42,10 @@ class ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomObject":
-        """Delete CustomObject by container and key
-        """
+        """Delete CustomObject by container and key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/custom-objects/{self._container}/{self._key}",
             params={"version": version, "dataErasure": data_erasure, "expand": expand},
-            response_object=CustomObject,
+            response_class=CustomObject,
             headers=headers,
         )

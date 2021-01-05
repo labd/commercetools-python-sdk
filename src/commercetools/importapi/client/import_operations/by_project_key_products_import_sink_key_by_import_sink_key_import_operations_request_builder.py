@@ -14,7 +14,12 @@ class ByProjectKeyProductsImportSinkKeyByImportSinkKeyImportOperationsRequestBui
     _project_key: str
     _import_sink_key: str
 
-    def __init__(self, projectKey: str, importSinkKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        importSinkKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._import_sink_key = importSinkKey
         self._client = client
@@ -39,8 +44,7 @@ class ByProjectKeyProductsImportSinkKeyByImportSinkKeyImportOperationsRequestBui
         state: "ProcessingState" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ImportOperationPagedResponse":
-        """Retrieves all product import operations of an import sink key.
-        """
+        """Retrieves all product import operations of an import sink key."""
         return self._client._get(
             endpoint=f"/{self._project_key}/products/importSinkKey={self._import_sink_key}/import-operations",
             params={
@@ -50,6 +54,6 @@ class ByProjectKeyProductsImportSinkKeyByImportSinkKeyImportOperationsRequestBui
                 "resourceKey": resource_key,
                 "state": state,
             },
-            response_object=ImportOperationPagedResponse,
+            response_class=ImportOperationPagedResponse,
             headers=headers,
         )

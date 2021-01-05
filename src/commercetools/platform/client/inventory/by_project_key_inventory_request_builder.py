@@ -16,13 +16,19 @@ class ByProjectKeyInventoryRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyInventoryByIDRequestBuilder:
         return ByProjectKeyInventoryByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -36,8 +42,7 @@ class ByProjectKeyInventoryRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "InventoryPagedQueryResponse":
-        """Query inventory
-        """
+        """Query inventory"""
         return self._client._get(
             endpoint=f"/{self._project_key}/inventory",
             params={
@@ -48,7 +53,7 @@ class ByProjectKeyInventoryRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=InventoryPagedQueryResponse,
+            response_class=InventoryPagedQueryResponse,
             headers=headers,
         )
 
@@ -59,12 +64,11 @@ class ByProjectKeyInventoryRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "InventoryEntry":
-        """Create InventoryEntry
-        """
+        """Create InventoryEntry"""
         return self._client._post(
             endpoint=f"/{self._project_key}/inventory",
             params={"expand": expand},
             data_object=body,
-            response_object=InventoryEntry,
+            response_class=InventoryEntry,
             headers={"Content-Type": "application/json", **headers},
         )

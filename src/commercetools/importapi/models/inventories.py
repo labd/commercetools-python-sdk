@@ -13,9 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class InventoryImport(ImportResource):
-    """Import representation for a inventory.
-    
-    """
+    """Import representation for a inventory."""
 
     sku: "str"
     #: Maps to `Inventory.quantityOnStock`

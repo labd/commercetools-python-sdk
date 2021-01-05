@@ -21,7 +21,11 @@ class ByProjectKeyProductProjectionsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -30,27 +34,32 @@ class ByProjectKeyProductProjectionsRequestBuilder:
         ProductProjections for which at least one ProductVariant matches the search query. This means that variants can
         be included in the result also for which the search query does not match. To determine which ProductVariants match
         the search query, the returned ProductProjections include the additional field isMatchingVariant.
-        
+
         """
         return ByProjectKeyProductProjectionsSearchRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def suggest(self) -> ByProjectKeyProductProjectionsSuggestRequestBuilder:
-        """The source of data for suggestions is the searchKeyword field in a product
-        """
+        """The source of data for suggestions is the searchKeyword field in a product"""
         return ByProjectKeyProductProjectionsSuggestRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withKey(self, key: str) -> ByProjectKeyProductProjectionsKeyByKeyRequestBuilder:
         return ByProjectKeyProductProjectionsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyProductProjectionsByIDRequestBuilder:
         return ByProjectKeyProductProjectionsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -74,7 +83,7 @@ class ByProjectKeyProductProjectionsRequestBuilder:
         """You can use the product projections query endpoint to get the current or staged representations of Products.
         When used with an API client that has the view_published_products:{projectKey} scope,
         this endpoint only returns published (current) product projections.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/product-projections",
@@ -93,6 +102,6 @@ class ByProjectKeyProductProjectionsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ProductProjectionPagedQueryResponse,
+            response_class=ProductProjectionPagedQueryResponse,
             headers=headers,
         )

@@ -2,7 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.graph_ql import GraphQLResponseSchema
 from commercetools.platform.models.graph_ql import GraphQLResponse
 from commercetools.typing import OptionalListStr
 
@@ -22,6 +21,5 @@ class GraphqlService(abstract.AbstractService):
             endpoint="graphql",
             params=params,
             data_object=None,
-            request_schema_cls=None,
-            response_schema_cls=GraphQLResponseSchema,
+            response_class=GraphQLResponse,
         )

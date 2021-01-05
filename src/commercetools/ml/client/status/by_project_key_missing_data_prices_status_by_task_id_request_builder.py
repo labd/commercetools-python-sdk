@@ -10,7 +10,12 @@ class ByProjectKeyMissingDataPricesStatusByTaskIdRequestBuilder:
     _project_key: str
     _task_id: str
 
-    def __init__(self, projectKey: str, taskId: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        taskId: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._task_id = taskId
         self._client = client
@@ -21,6 +26,6 @@ class ByProjectKeyMissingDataPricesStatusByTaskIdRequestBuilder:
         return self._client._get(
             endpoint=f"/{self._project_key}/missing-data/prices/status/{self._task_id}",
             params={},
-            response_object=MissingPricesTaskStatus,
+            response_class=MissingPricesTaskStatus,
             headers=headers,
         )

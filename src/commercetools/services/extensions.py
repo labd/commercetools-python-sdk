@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.extension import (
-    ExtensionDraftSchema,
-    ExtensionPagedQueryResponseSchema,
-    ExtensionSchema,
-    ExtensionUpdateSchema,
-)
 from commercetools.platform.models.extension import (
     Extension,
     ExtensionDraft,
@@ -44,14 +38,14 @@ class ExtensionService(abstract.AbstractService):
         """Retrieves the representation of an extension by its id."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"extensions/{id}", params=params, schema_cls=ExtensionSchema
+            endpoint=f"extensions/{id}", params=params, response_class=Extension
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Extension:
         """Retrieves the representation of an extension by its key."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"extensions/key={key}", params=params, schema_cls=ExtensionSchema
+            endpoint=f"extensions/key={key}", params=params, response_class=Extension
         )
 
     def query(
@@ -81,7 +75,7 @@ class ExtensionService(abstract.AbstractService):
         return self._client._get(
             endpoint="extensions",
             params=params,
-            schema_cls=ExtensionPagedQueryResponseSchema,
+            response_class=ExtensionPagedQueryResponse,
         )
 
     def create(
@@ -96,8 +90,7 @@ class ExtensionService(abstract.AbstractService):
             endpoint="extensions",
             params=params,
             data_object=draft,
-            request_schema_cls=ExtensionDraftSchema,
-            response_schema_cls=ExtensionSchema,
+            response_class=Extension,
         )
 
     def update_by_id(
@@ -115,8 +108,7 @@ class ExtensionService(abstract.AbstractService):
             endpoint=f"extensions/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ExtensionUpdateSchema,
-            response_schema_cls=ExtensionSchema,
+            response_class=Extension,
             force_update=force_update,
         )
 
@@ -135,8 +127,7 @@ class ExtensionService(abstract.AbstractService):
             endpoint=f"extensions/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ExtensionUpdateSchema,
-            response_schema_cls=ExtensionSchema,
+            response_class=Extension,
             force_update=force_update,
         )
 
@@ -154,7 +145,7 @@ class ExtensionService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"extensions/{id}",
             params=params,
-            response_schema_cls=ExtensionSchema,
+            response_class=Extension,
             force_delete=force_delete,
         )
 
@@ -172,6 +163,6 @@ class ExtensionService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"extensions/key={key}",
             params=params,
-            response_schema_cls=ExtensionSchema,
+            response_class=Extension,
             force_delete=force_delete,
         )

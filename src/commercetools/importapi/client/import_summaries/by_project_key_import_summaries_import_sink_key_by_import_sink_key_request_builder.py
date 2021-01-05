@@ -10,20 +10,25 @@ class ByProjectKeyImportSummariesImportSinkKeyByImportSinkKeyRequestBuilder:
     _project_key: str
     _import_sink_key: str
 
-    def __init__(self, projectKey: str, importSinkKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        importSinkKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._import_sink_key = importSinkKey
         self._client = client
 
     def get(self, *, headers: typing.Dict[str, str] = None) -> "ImportSummary":
         """Retrieves an import summary for the given import sink.
-        
+
         The import summary is calculated on demand.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/import-summaries/importSinkKey={self._import_sink_key}",
             params={},
-            response_object=ImportSummary,
+            response_class=ImportSummary,
             headers=headers,
         )

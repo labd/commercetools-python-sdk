@@ -22,9 +22,7 @@ if typing.TYPE_CHECKING:
 
 
 class ImportRequest(_BaseType):
-    """An import request batches multiple import resources of the same import resource type for processing by an import sink.
-    
-    """
+    """An import request batches multiple import resources of the same import resource type for processing by an import sink."""
 
     #: The type of the import resource.
     type: "ImportResourceType"
@@ -47,9 +45,9 @@ class ImportRequest(_BaseType):
 
 class ImportResponse(_BaseType):
     """The import response contains an import operation for each import resource sent with an import request. Use it for tracking the progress of imports to a commercetools project.
-    
+
     This is a generic parent type. In practice, send a specific import request type (`CategoryImportRequest`, `OrderImportRequest`, etc.) to an import sink with a matching import type.
-    
+
     """
 
     operation_status: typing.List["ImportOperationStatus"]
@@ -71,9 +69,7 @@ class ImportResponse(_BaseType):
 
 
 class CategoryImportRequest(ImportRequest):
-    """An import request for multiple category import resources.
-    
-    """
+    """An import request for multiple category import resources."""
 
     #: The category import resources of this request.
     resources: typing.List["CategoryImport"]
@@ -95,9 +91,7 @@ class CategoryImportRequest(ImportRequest):
 
 
 class ProductImportRequest(ImportRequest):
-    """An import request for multiple product import resources.
-    
-    """
+    """An import request for multiple product import resources."""
 
     #: The product import resources of this request.
     resources: typing.List["ProductImport"]
@@ -119,9 +113,7 @@ class ProductImportRequest(ImportRequest):
 
 
 class ProductDraftImportRequest(ImportRequest):
-    """An import request for multiple product draft import resources.
-    
-    """
+    """An import request for multiple product draft import resources."""
 
     #: The product draft import resources of this request.
     resources: typing.List["ProductDraftImport"]
@@ -145,9 +137,7 @@ class ProductDraftImportRequest(ImportRequest):
 
 
 class ProductTypeImportRequest(ImportRequest):
-    """An import request for multiple product type import resources.
-    
-    """
+    """An import request for multiple product type import resources."""
 
     #: The product type import resources of this request.
     resources: typing.List["ProductTypeImport"]
@@ -171,9 +161,7 @@ class ProductTypeImportRequest(ImportRequest):
 
 
 class ProductVariantImportRequest(ImportRequest):
-    """An import request for multiple product variant import resources.
-    
-    """
+    """An import request for multiple product variant import resources."""
 
     #: The product variant import resources of this request.
     resources: typing.List["ProductVariantImport"]
@@ -197,9 +185,7 @@ class ProductVariantImportRequest(ImportRequest):
 
 
 class PriceImportRequest(ImportRequest):
-    """An import request for multiple price import resources.
-    
-    """
+    """An import request for multiple price import resources."""
 
     #: The price import resources of this request.
     resources: typing.List["PriceImport"]
@@ -221,9 +207,7 @@ class PriceImportRequest(ImportRequest):
 
 
 class OrderImportRequest(ImportRequest):
-    """An import request for multiple order import resources.
-    
-    """
+    """An import request for multiple order import resources."""
 
     #: The order import resources of this request.
     resources: typing.List["OrderImport"]
@@ -245,9 +229,7 @@ class OrderImportRequest(ImportRequest):
 
 
 class ProductVariantPatchRequest(ImportRequest):
-    """An import request for multiple product variant patch resources.
-    
-    """
+    """An import request for multiple product variant patch resources."""
 
     #: The product variant patches of this request.
     patches: typing.List["ProductVariantPatch"]
@@ -271,9 +253,7 @@ class ProductVariantPatchRequest(ImportRequest):
 
 
 class CustomerImportRequest(ImportRequest):
-    """An import request for multiple customer import resources.
-    
-    """
+    """An import request for multiple customer import resources."""
 
     #: The customer import resources of this request.
     resources: typing.List["CustomerImport"]
@@ -295,9 +275,7 @@ class CustomerImportRequest(ImportRequest):
 
 
 class InventoryImportRequest(ImportRequest):
-    """An import request for multiple inventory import resources.
-    
-    """
+    """An import request for multiple inventory import resources."""
 
     #: The inventory import resources of this request.
     resources: typing.List["InventoryImport"]

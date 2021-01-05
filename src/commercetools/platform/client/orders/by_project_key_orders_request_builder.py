@@ -21,32 +21,41 @@ class ByProjectKeyOrdersRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def importOrder(self) -> ByProjectKeyOrdersImportRequestBuilder:
         return ByProjectKeyOrdersImportRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withOrderNumber(
         self, orderNumber: str
     ) -> ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder:
         return ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder(
-            orderNumber=orderNumber, projectKey=self._project_key, client=self._client
+            orderNumber=orderNumber,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def edits(self) -> ByProjectKeyOrdersEditsRequestBuilder:
-        """OrderEdit are containers for financial changes after an Order has been placed.
-        """
+        """OrderEdit are containers for financial changes after an Order has been placed."""
         return ByProjectKeyOrdersEditsRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyOrdersByIDRequestBuilder:
         return ByProjectKeyOrdersByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -60,8 +69,7 @@ class ByProjectKeyOrdersRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderPagedQueryResponse":
-        """Query orders
-        """
+        """Query orders"""
         return self._client._get(
             endpoint=f"/{self._project_key}/orders",
             params={
@@ -72,7 +80,7 @@ class ByProjectKeyOrdersRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=OrderPagedQueryResponse,
+            response_class=OrderPagedQueryResponse,
             headers=headers,
         )
 
@@ -86,12 +94,12 @@ class ByProjectKeyOrdersRequestBuilder:
         """Creates an order from a Cart.
         The cart must have a shipping address set before creating an order.
         When using the Platform TaxMode, the shipping address is used for tax calculation.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/orders",
             params={"expand": expand},
             data_object=body,
-            response_object=Order,
+            response_class=Order,
             headers={"Content-Type": "application/json", **headers},
         )

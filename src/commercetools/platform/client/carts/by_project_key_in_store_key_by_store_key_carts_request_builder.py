@@ -16,7 +16,12 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
     _project_key: str
     _store_key: str
 
-    def __init__(self, projectKey: str, storeKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._client = client
@@ -24,11 +29,13 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
     def withCustomerId(
         self, customerId: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyCartsCustomerIdByCustomerIdRequestBuilder:
-        return ByProjectKeyInStoreKeyByStoreKeyCartsCustomerIdByCustomerIdRequestBuilder(
-            customerId=customerId,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
-            client=self._client,
+        return (
+            ByProjectKeyInStoreKeyByStoreKeyCartsCustomerIdByCustomerIdRequestBuilder(
+                customerId=customerId,
+                projectKey=self._project_key,
+                storeKey=self._store_key,
+                client=self._client,
+            )
         )
 
     def withId(
@@ -53,8 +60,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "any":
-        """Queries carts in a specific Store. The {storeKey} path parameter maps to a Store's key.
-        """
+        """Queries carts in a specific Store. The {storeKey} path parameter maps to a Store's key."""
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/carts",
             params={
@@ -66,7 +72,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=any,
+            response_class=any,
             headers=headers,
         )
 
@@ -81,12 +87,12 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         When using this endpoint the cart's store field is always set to the store specified in the path parameter.
         Creating a cart can fail with an InvalidOperation if the referenced shipping method
         in the CartDraft has a predicate which does not match the cart.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/carts",
             params={"expand": expand},
             data_object=body,
-            response_object=Cart,
+            response_class=Cart,
             headers={"Content-Type": "application/json", **headers},
         )

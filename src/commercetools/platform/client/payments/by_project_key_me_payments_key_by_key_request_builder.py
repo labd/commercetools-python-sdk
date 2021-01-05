@@ -11,7 +11,12 @@ class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "MyPayment":
-        """Get MyPayment by key
-        """
+        """Get MyPayment by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/me/payments/key={self._key}",
             params={"expand": expand},
-            response_object=MyPayment,
+            response_class=MyPayment,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyPayment":
-        """Update MyPayment by key
-        """
+        """Update MyPayment by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/me/payments/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=MyPayment,
+            response_class=MyPayment,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyPayment":
-        """Delete MyPayment by key
-        """
+        """Delete MyPayment by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/me/payments/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=MyPayment,
+            response_class=MyPayment,
             headers=headers,
         )

@@ -15,18 +15,26 @@ class ByProjectKeyStoresRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyStoresKeyByKeyRequestBuilder:
         return ByProjectKeyStoresKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyStoresByIDRequestBuilder:
         return ByProjectKeyStoresByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyStoresRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "StorePagedQueryResponse":
-        """Query stores
-        """
+        """Query stores"""
         return self._client._get(
             endpoint=f"/{self._project_key}/stores",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyStoresRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=StorePagedQueryResponse,
+            response_class=StorePagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyStoresRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Store":
-        """Create Store
-        """
+        """Create Store"""
         return self._client._post(
             endpoint=f"/{self._project_key}/stores",
             params={"expand": expand},
             data_object=body,
-            response_object=Store,
+            response_class=Store,
             headers={"Content-Type": "application/json", **headers},
         )

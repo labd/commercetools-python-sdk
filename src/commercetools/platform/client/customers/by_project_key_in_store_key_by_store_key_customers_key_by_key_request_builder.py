@@ -12,7 +12,13 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
     _store_key: str
     _key: str
 
-    def __init__(self, projectKey: str, storeKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._key = key
@@ -25,12 +31,12 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         It also considers customers that do not have the stores field.
         If the customer exists in the commercetools project but the stores field references different stores,
         this method returns a ResourceNotFound error.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/key={self._key}",
             params={"expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )
 
@@ -43,13 +49,13 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
     ) -> "Customer":
         """If the customer exists in the commercetools project but the stores field references a different store,
         this method returns a ResourceNotFound error.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Customer,
+            response_class=Customer,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -61,11 +67,10 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Customer":
-        """Delete Customer by key
-        """
+        """Delete Customer by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/key={self._key}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )

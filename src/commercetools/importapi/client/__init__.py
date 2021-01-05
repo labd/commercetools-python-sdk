@@ -10,4 +10,7 @@ class Client(BaseClient):
         super().__init__(self, **kwargs)
 
     def withProjectKeyValue(self, projectKey: str) -> ByProjectKeyRequestBuilder:
-        return ByProjectKeyRequestBuilder(projectKey=projectKey, client=self)
+        return ByProjectKeyRequestBuilder(
+            projectKey=projectKey,
+            client=self,
+        )

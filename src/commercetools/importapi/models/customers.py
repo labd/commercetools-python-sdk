@@ -13,9 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class CustomerImport(ImportResource):
-    """Import representation for a customer.
-    
-    """
+    """Import representation for a customer."""
 
     #: Maps to `Customer.customerNumber`.
     customer_number: typing.Optional["str"]

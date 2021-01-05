@@ -9,7 +9,11 @@ class ByProjectKeyProductDiscountsMatchingRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -23,6 +27,6 @@ class ByProjectKeyProductDiscountsMatchingRequestBuilder:
             endpoint=f"/{self._project_key}/product-discounts/matching",
             params={},
             data_object=body,
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers={"Content-Type": "application/json", **headers},
         )

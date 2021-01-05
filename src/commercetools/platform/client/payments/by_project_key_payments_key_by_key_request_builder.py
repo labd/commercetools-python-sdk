@@ -11,7 +11,12 @@ class ByProjectKeyPaymentsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyPaymentsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Payment":
-        """Get Payment by key
-        """
+        """Get Payment by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/payments/key={self._key}",
             params={"expand": expand},
-            response_object=Payment,
+            response_class=Payment,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyPaymentsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Payment":
-        """Update Payment by key
-        """
+        """Update Payment by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/payments/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Payment,
+            response_class=Payment,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -53,11 +56,10 @@ class ByProjectKeyPaymentsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Payment":
-        """Delete Payment by key
-        """
+        """Delete Payment by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/payments/key={self._key}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Payment,
+            response_class=Payment,
             headers=headers,
         )

@@ -19,18 +19,26 @@ class ByProjectKeySubscriptionsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeySubscriptionsKeyByKeyRequestBuilder:
         return ByProjectKeySubscriptionsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeySubscriptionsByIDRequestBuilder:
         return ByProjectKeySubscriptionsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -44,8 +52,7 @@ class ByProjectKeySubscriptionsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "SubscriptionPagedQueryResponse":
-        """Query subscriptions
-        """
+        """Query subscriptions"""
         return self._client._get(
             endpoint=f"/{self._project_key}/subscriptions",
             params={
@@ -56,7 +63,7 @@ class ByProjectKeySubscriptionsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=SubscriptionPagedQueryResponse,
+            response_class=SubscriptionPagedQueryResponse,
             headers=headers,
         )
 
@@ -72,12 +79,12 @@ class ByProjectKeySubscriptionsRequestBuilder:
         If the message could not be delivered, the subscription will not be created.
         The payload of the test message is a notification of type ResourceCreated for the resourceTypeId subscription.
         Currently, a maximum of 25 subscriptions can be created per project.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/subscriptions",
             params={"expand": expand},
             data_object=body,
-            response_object=Subscription,
+            response_class=Subscription,
             headers={"Content-Type": "application/json", **headers},
         )

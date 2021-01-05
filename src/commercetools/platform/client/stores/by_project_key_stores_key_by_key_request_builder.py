@@ -11,7 +11,12 @@ class ByProjectKeyStoresKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyStoresKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Store":
-        """Get Store by key
-        """
+        """Get Store by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/stores/key={self._key}",
             params={"expand": expand},
-            response_object=Store,
+            response_class=Store,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyStoresKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Store":
-        """Update Store by key
-        """
+        """Update Store by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/stores/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Store,
+            response_class=Store,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyStoresKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Store":
-        """Delete Store by key
-        """
+        """Delete Store by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/stores/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=Store,
+            response_class=Store,
             headers=headers,
         )

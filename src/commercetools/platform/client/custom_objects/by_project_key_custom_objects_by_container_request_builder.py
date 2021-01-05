@@ -10,7 +10,12 @@ class ByProjectKeyCustomObjectsByContainerRequestBuilder:
     _project_key: str
     _container: str
 
-    def __init__(self, projectKey: str, container: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        container: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._container = container
         self._client = client
@@ -18,11 +23,10 @@ class ByProjectKeyCustomObjectsByContainerRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "CustomObject":
-        """Get CustomObject by container
-        """
+        """Get CustomObject by container"""
         return self._client._get(
             endpoint=f"/{self._project_key}/custom-objects/{self._container}",
             params={"expand": expand},
-            response_object=CustomObject,
+            response_class=CustomObject,
             headers=headers,
         )

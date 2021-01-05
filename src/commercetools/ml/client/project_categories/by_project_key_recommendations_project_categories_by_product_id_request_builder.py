@@ -12,7 +12,12 @@ class ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
     _project_key: str
     _product_id: str
 
-    def __init__(self, projectKey: str, productId: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        productId: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._product_id = productId
         self._client = client
@@ -27,9 +32,7 @@ class ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
         confidence_max: "float" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProjectCategoryRecommendationPagedQueryResponse":
-        """Response Representation: PagedQueryResult with a results array of ProjectCategoryrecommendation, sorted by confidence scores in descending order and the meta information of ProjectCategoryrecommendationMeta.
-        
-        """
+        """Response Representation: PagedQueryResult with a results array of ProjectCategoryrecommendation, sorted by confidence scores in descending order and the meta information of ProjectCategoryrecommendationMeta."""
         return self._client._get(
             endpoint=f"/{self._project_key}/recommendations/project-categories/{self._product_id}",
             params={
@@ -39,6 +42,6 @@ class ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
                 "confidenceMin": confidence_min,
                 "confidenceMax": confidence_max,
             },
-            response_object=ProjectCategoryRecommendationPagedQueryResponse,
+            response_class=ProjectCategoryRecommendationPagedQueryResponse,
             headers=headers,
         )

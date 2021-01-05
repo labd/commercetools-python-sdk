@@ -15,18 +15,26 @@ class ByProjectKeyStatesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyStatesKeyByKeyRequestBuilder:
         return ByProjectKeyStatesKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyStatesByIDRequestBuilder:
         return ByProjectKeyStatesByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyStatesRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "StatePagedQueryResponse":
-        """Query states
-        """
+        """Query states"""
         return self._client._get(
             endpoint=f"/{self._project_key}/states",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyStatesRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=StatePagedQueryResponse,
+            response_class=StatePagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyStatesRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "State":
-        """Create State
-        """
+        """Create State"""
         return self._client._post(
             endpoint=f"/{self._project_key}/states",
             params={"expand": expand},
             data_object=body,
-            response_object=State,
+            response_class=State,
             headers={"Content-Type": "application/json", **headers},
         )

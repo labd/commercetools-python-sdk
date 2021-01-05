@@ -9,7 +9,11 @@ class ByProjectKeyMeLoginRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -20,6 +24,6 @@ class ByProjectKeyMeLoginRequestBuilder:
             endpoint=f"/{self._project_key}/me/login",
             params={},
             data_object=body,
-            response_object=CustomerSignInResult,
+            response_class=CustomerSignInResult,
             headers={"Content-Type": "application/json", **headers},
         )

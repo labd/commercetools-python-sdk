@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.inventory import (
-    InventoryEntryDraftSchema,
-    InventoryEntrySchema,
-    InventoryEntryUpdateSchema,
-    InventoryPagedQueryResponseSchema,
-)
 from commercetools.platform.models.inventory import (
     InventoryEntry,
     InventoryEntryDraft,
@@ -43,7 +37,7 @@ class InventoryEntryService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> InventoryEntry:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"inventory/{id}", params=params, schema_cls=InventoryEntrySchema
+            endpoint=f"inventory/{id}", params=params, response_class=InventoryEntry
         )
 
     def query(
@@ -73,7 +67,7 @@ class InventoryEntryService(abstract.AbstractService):
         return self._client._get(
             endpoint="inventory",
             params=params,
-            schema_cls=InventoryPagedQueryResponseSchema,
+            response_class=InventoryPagedQueryResponse,
         )
 
     def create(
@@ -85,8 +79,7 @@ class InventoryEntryService(abstract.AbstractService):
             endpoint="inventory",
             params=params,
             data_object=draft,
-            request_schema_cls=InventoryEntryDraftSchema,
-            response_schema_cls=InventoryEntrySchema,
+            response_class=InventoryEntry,
         )
 
     def update_by_id(
@@ -104,8 +97,7 @@ class InventoryEntryService(abstract.AbstractService):
             endpoint=f"inventory/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=InventoryEntryUpdateSchema,
-            response_schema_cls=InventoryEntrySchema,
+            response_class=InventoryEntry,
             force_update=force_update,
         )
 
@@ -123,6 +115,6 @@ class InventoryEntryService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"inventory/{id}",
             params=params,
-            response_schema_cls=InventoryEntrySchema,
+            response_class=InventoryEntry,
             force_delete=force_delete,
         )

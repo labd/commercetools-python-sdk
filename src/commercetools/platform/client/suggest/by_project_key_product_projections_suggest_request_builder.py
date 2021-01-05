@@ -7,7 +7,11 @@ class ByProjectKeyProductProjectionsSuggestRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -32,6 +36,6 @@ class ByProjectKeyProductProjectionsSuggestRequestBuilder:
                 "offset": offset,
                 "withTotal": with_total,
             },
-            response_object=any,
+            response_class=any,
             headers=headers,
         )

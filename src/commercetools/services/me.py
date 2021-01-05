@@ -2,32 +2,13 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.cart import CartPagedQueryResponseSchema
-from commercetools.platform.models._schemas.customer import CustomerSignInResultSchema
-from commercetools.platform.models._schemas.me import (
-    MyCartDraftSchema,
-    MyCartSchema,
-    MyCustomerDraftSchema,
-    MyCustomerSchema,
-    MyOrderFromCartDraftSchema,
-    MyOrderSchema,
-    MyPaymentDraftSchema,
-    MyPaymentPagedQueryResponseSchema,
-    MyPaymentSchema,
-    MyPaymentUpdateSchema,
-    MyShoppingListDraftSchema,
-    MyShoppingListUpdateSchema,
-)
-from commercetools.platform.models._schemas.order import OrderPagedQueryResponseSchema
-from commercetools.platform.models._schemas.shopping_list import (
-    MyShoppingListSchema,
-    ShoppingListPagedQueryResponseSchema,
-)
 from commercetools.platform.models.cart import CartPagedQueryResponse
 from commercetools.platform.models.customer import CustomerSignInResult
 from commercetools.platform.models.me import (
     MyCart,
     MyCartDraft,
+    MyCartUpdate,
+    MyCartUpdateAction,
     MyCustomer,
     MyCustomerDraft,
     MyOrder,
@@ -72,13 +53,13 @@ class MeService(abstract.AbstractService):
     def my_cart_get_by_id(self, id: str, *, expand: OptionalListStr = None) -> MyCart:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"me/carts/{id}", params=params, schema_cls=MyCartSchema
+            endpoint=f"me/carts/{id}", params=params, response_class=MyCart
         )
 
     def my_order_get_by_id(self, id: str, *, expand: OptionalListStr = None) -> MyOrder:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"me/orders/{id}", params=params, schema_cls=MyOrderSchema
+            endpoint=f"me/orders/{id}", params=params, response_class=MyOrder
         )
 
     def my_payment_get_by_id(
@@ -86,7 +67,7 @@ class MeService(abstract.AbstractService):
     ) -> MyPayment:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"me/payments/{id}", params=params, schema_cls=MyPaymentSchema
+            endpoint=f"me/payments/{id}", params=params, response_class=MyPayment
         )
 
     def my_payment_get_by_key(
@@ -94,7 +75,7 @@ class MeService(abstract.AbstractService):
     ) -> MyPayment:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"me/payments/key={key}", params=params, schema_cls=MyPaymentSchema
+            endpoint=f"me/payments/key={key}", params=params, response_class=MyPayment
         )
 
     def my_shopping_list_get_by_id(
@@ -104,7 +85,7 @@ class MeService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"me/shopping-lists/{id}",
             params=params,
-            schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
         )
 
     def my_shopping_list_get_by_key(
@@ -114,7 +95,7 @@ class MeService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"me/shopping-lists/key={key}",
             params=params,
-            schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
         )
 
     def my_cart_query(
@@ -142,7 +123,7 @@ class MeService(abstract.AbstractService):
             _MeQuerySchema,
         )
         return self._client._get(
-            endpoint="me/carts", params=params, schema_cls=CartPagedQueryResponseSchema
+            endpoint="me/carts", params=params, response_class=CartPagedQueryResponse
         )
 
     def my_order_query(
@@ -172,9 +153,7 @@ class MeService(abstract.AbstractService):
             _MeQuerySchema,
         )
         return self._client._get(
-            endpoint="me/orders",
-            params=params,
-            schema_cls=OrderPagedQueryResponseSchema,
+            endpoint="me/orders", params=params, response_class=OrderPagedQueryResponse
         )
 
     def my_payment_query(
@@ -206,7 +185,7 @@ class MeService(abstract.AbstractService):
         return self._client._get(
             endpoint="me/payments",
             params=params,
-            schema_cls=MyPaymentPagedQueryResponseSchema,
+            response_class=MyPaymentPagedQueryResponse,
         )
 
     def my_shopping_list_query(
@@ -238,7 +217,7 @@ class MeService(abstract.AbstractService):
         return self._client._get(
             endpoint="me/shopping-lists",
             params=params,
-            schema_cls=ShoppingListPagedQueryResponseSchema,
+            response_class=ShoppingListPagedQueryResponse,
         )
 
     def query(
@@ -265,18 +244,14 @@ class MeService(abstract.AbstractService):
             _MeQuerySchema,
         )
         return self._client._get(
-            endpoint="me", params=params, schema_cls=MyCustomerSchema
+            endpoint="me", params=params, response_class=MyCustomer
         )
 
     def create(self) -> MyCustomer:
-        """Create my customer"""
+        """Update my customer"""
         params: typing.Dict[str, str] = {}
         return self._client._post(
-            endpoint="me",
-            params=params,
-            data_object=None,
-            request_schema_cls=None,
-            response_schema_cls=MyCustomerSchema,
+            endpoint="me", params=params, data_object=None, response_class=MyCustomer
         )
 
     def my_cart_create(
@@ -285,11 +260,7 @@ class MeService(abstract.AbstractService):
         """A shopping cart holds product variants and can be ordered."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="me/carts",
-            params=params,
-            data_object=draft,
-            request_schema_cls=MyCartDraftSchema,
-            response_schema_cls=MyCartSchema,
+            endpoint="me/carts", params=params, data_object=draft, response_class=MyCart
         )
 
     def my_order_create(
@@ -303,8 +274,7 @@ class MeService(abstract.AbstractService):
             endpoint="me/orders",
             params=params,
             data_object=draft,
-            request_schema_cls=MyOrderFromCartDraftSchema,
-            response_schema_cls=MyOrderSchema,
+            response_class=MyOrder,
         )
 
     def my_payment_create(
@@ -318,8 +288,7 @@ class MeService(abstract.AbstractService):
             endpoint="me/payments",
             params=params,
             data_object=draft,
-            request_schema_cls=MyPaymentDraftSchema,
-            response_schema_cls=MyPaymentSchema,
+            response_class=MyPayment,
         )
 
     def my_shopping_list_create(
@@ -333,8 +302,26 @@ class MeService(abstract.AbstractService):
             endpoint="me/shopping-lists",
             params=params,
             data_object=draft,
-            request_schema_cls=MyShoppingListDraftSchema,
-            response_schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
+        )
+
+    def my_cart_update_by_id(
+        self,
+        id: str,
+        version: int,
+        actions: typing.List[MyCartUpdateAction],
+        *,
+        expand: OptionalListStr = None,
+        force_update: bool = False,
+    ) -> MyCart:
+        params = self._serialize_params({"expand": expand}, _MeUpdateSchema)
+        update_action = MyCartUpdate(version=version, actions=actions)
+        return self._client._post(
+            endpoint=f"me/carts/{id}",
+            params=params,
+            data_object=update_action,
+            response_class=MyCart,
+            force_update=force_update,
         )
 
     def my_payment_update_by_id(
@@ -352,8 +339,7 @@ class MeService(abstract.AbstractService):
             endpoint=f"me/payments/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=MyPaymentUpdateSchema,
-            response_schema_cls=MyPaymentSchema,
+            response_class=MyPayment,
             force_update=force_update,
         )
 
@@ -372,8 +358,7 @@ class MeService(abstract.AbstractService):
             endpoint=f"me/payments/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=MyPaymentUpdateSchema,
-            response_schema_cls=MyPaymentSchema,
+            response_class=MyPayment,
             force_update=force_update,
         )
 
@@ -392,8 +377,7 @@ class MeService(abstract.AbstractService):
             endpoint=f"me/shopping-lists/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=MyShoppingListUpdateSchema,
-            response_schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
             force_update=force_update,
         )
 
@@ -412,8 +396,7 @@ class MeService(abstract.AbstractService):
             endpoint=f"me/shopping-lists/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=MyShoppingListUpdateSchema,
-            response_schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
             force_update=force_update,
         )
 
@@ -431,7 +414,7 @@ class MeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"me/carts/{id}",
             params=params,
-            response_schema_cls=MyCartSchema,
+            response_class=MyCart,
             force_delete=force_delete,
         )
 
@@ -449,7 +432,7 @@ class MeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"me/payments/{id}",
             params=params,
-            response_schema_cls=MyPaymentSchema,
+            response_class=MyPayment,
             force_delete=force_delete,
         )
 
@@ -467,7 +450,7 @@ class MeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"me/payments/key={key}",
             params=params,
-            response_schema_cls=MyPaymentSchema,
+            response_class=MyPayment,
             force_delete=force_delete,
         )
 
@@ -485,7 +468,7 @@ class MeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"me/shopping-lists/{id}",
             params=params,
-            response_schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
             force_delete=force_delete,
         )
 
@@ -503,23 +486,20 @@ class MeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"me/shopping-lists/key={key}",
             params=params,
-            response_schema_cls=MyShoppingListSchema,
+            response_class=MyShoppingList,
             force_delete=force_delete,
         )
 
     def active_cart(self) -> MyCart:
         params: typing.Dict[str, str] = {}
         return self._client._get(
-            endpoint="me/active-cart", params=params, schema_cls=MyCartSchema
+            endpoint="me/active-cart", params=params, response_class=MyCart
         )
 
     def email_confirm(self):
         params: typing.Dict[str, str] = {}
         return self._client._post(
-            endpoint="me/email/confirm",
-            params=params,
-            data_object=None,
-            request_schema_cls=None,
+            endpoint="me/email/confirm", params=params, data_object=None
         )
 
     def login(self) -> CustomerSignInResult:
@@ -528,8 +508,7 @@ class MeService(abstract.AbstractService):
             endpoint="me/login",
             params=params,
             data_object=None,
-            request_schema_cls=None,
-            response_schema_cls=CustomerSignInResultSchema,
+            response_class=CustomerSignInResult,
         )
 
     def password(self) -> MyCustomer:
@@ -538,8 +517,7 @@ class MeService(abstract.AbstractService):
             endpoint="me/password",
             params=params,
             data_object=None,
-            request_schema_cls=None,
-            response_schema_cls=MyCustomerSchema,
+            response_class=MyCustomer,
         )
 
     def signup(self, draft: MyCustomerDraft) -> CustomerSignInResult:
@@ -548,6 +526,5 @@ class MeService(abstract.AbstractService):
             endpoint="me/signup",
             params=params,
             data_object=draft,
-            request_schema_cls=MyCustomerDraftSchema,
-            response_schema_cls=CustomerSignInResultSchema,
+            response_class=CustomerSignInResult,
         )

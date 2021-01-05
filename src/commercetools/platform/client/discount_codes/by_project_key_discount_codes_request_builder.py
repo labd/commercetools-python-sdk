@@ -16,13 +16,19 @@ class ByProjectKeyDiscountCodesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyDiscountCodesByIDRequestBuilder:
         return ByProjectKeyDiscountCodesByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -36,8 +42,7 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "DiscountCodePagedQueryResponse":
-        """Query discount-codes
-        """
+        """Query discount-codes"""
         return self._client._get(
             endpoint=f"/{self._project_key}/discount-codes",
             params={
@@ -48,7 +53,7 @@ class ByProjectKeyDiscountCodesRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=DiscountCodePagedQueryResponse,
+            response_class=DiscountCodePagedQueryResponse,
             headers=headers,
         )
 
@@ -59,12 +64,11 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "DiscountCode":
-        """Create DiscountCode
-        """
+        """Create DiscountCode"""
         return self._client._post(
             endpoint=f"/{self._project_key}/discount-codes",
             params={"expand": expand},
             data_object=body,
-            response_object=DiscountCode,
+            response_class=DiscountCode,
             headers={"Content-Type": "application/json", **headers},
         )

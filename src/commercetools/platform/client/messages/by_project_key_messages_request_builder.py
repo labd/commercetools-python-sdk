@@ -12,13 +12,19 @@ class ByProjectKeyMessagesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyMessagesByIDRequestBuilder:
         return ByProjectKeyMessagesByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -32,8 +38,7 @@ class ByProjectKeyMessagesRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MessagePagedQueryResponse":
-        """Query messages
-        """
+        """Query messages"""
         return self._client._get(
             endpoint=f"/{self._project_key}/messages",
             params={
@@ -44,6 +49,6 @@ class ByProjectKeyMessagesRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=MessagePagedQueryResponse,
+            response_class=MessagePagedQueryResponse,
             headers=headers,
         )

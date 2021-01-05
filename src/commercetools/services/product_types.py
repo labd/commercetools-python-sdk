@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.product_type import (
-    ProductTypeDraftSchema,
-    ProductTypePagedQueryResponseSchema,
-    ProductTypeSchema,
-    ProductTypeUpdateSchema,
-)
 from commercetools.platform.models.product_type import (
     ProductType,
     ProductTypeDraft,
@@ -47,7 +41,7 @@ class ProductTypeService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> ProductType:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"product-types/{id}", params=params, schema_cls=ProductTypeSchema
+            endpoint=f"product-types/{id}", params=params, response_class=ProductType
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> ProductType:
@@ -55,7 +49,7 @@ class ProductTypeService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-types/key={key}",
             params=params,
-            schema_cls=ProductTypeSchema,
+            response_class=ProductType,
         )
 
     def query(
@@ -87,7 +81,7 @@ class ProductTypeService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-types",
             params=params,
-            schema_cls=ProductTypePagedQueryResponseSchema,
+            response_class=ProductTypePagedQueryResponse,
         )
 
     def create(
@@ -101,8 +95,7 @@ class ProductTypeService(abstract.AbstractService):
             endpoint="product-types",
             params=params,
             data_object=draft,
-            request_schema_cls=ProductTypeDraftSchema,
-            response_schema_cls=ProductTypeSchema,
+            response_class=ProductType,
         )
 
     def update_by_id(
@@ -120,8 +113,7 @@ class ProductTypeService(abstract.AbstractService):
             endpoint=f"product-types/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ProductTypeUpdateSchema,
-            response_schema_cls=ProductTypeSchema,
+            response_class=ProductType,
             force_update=force_update,
         )
 
@@ -140,8 +132,7 @@ class ProductTypeService(abstract.AbstractService):
             endpoint=f"product-types/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ProductTypeUpdateSchema,
-            response_schema_cls=ProductTypeSchema,
+            response_class=ProductType,
             force_update=force_update,
         )
 
@@ -159,7 +150,7 @@ class ProductTypeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"product-types/{id}",
             params=params,
-            response_schema_cls=ProductTypeSchema,
+            response_class=ProductType,
             force_delete=force_delete,
         )
 
@@ -177,6 +168,6 @@ class ProductTypeService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"product-types/key={key}",
             params=params,
-            response_schema_cls=ProductTypeSchema,
+            response_class=ProductType,
             force_delete=force_delete,
         )

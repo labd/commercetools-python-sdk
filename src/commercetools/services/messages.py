@@ -2,10 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.message import (
-    MessagePagedQueryResponseSchema,
-    MessageSchema,
-)
 from commercetools.platform.models.message import Message, MessagePagedQueryResponse
 from commercetools.typing import OptionalListStr
 
@@ -28,7 +24,7 @@ class MessageService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Message:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"messages/{id}", params=params, schema_cls=MessageSchema
+            endpoint=f"messages/{id}", params=params, response_class=Message
         )
 
     def query(
@@ -58,7 +54,5 @@ class MessageService(abstract.AbstractService):
             _MessageQuerySchema,
         )
         return self._client._get(
-            endpoint="messages",
-            params=params,
-            schema_cls=MessagePagedQueryResponseSchema,
+            endpoint="messages", params=params, response_class=MessagePagedQueryResponse
         )

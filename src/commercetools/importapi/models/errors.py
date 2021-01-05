@@ -14,9 +14,7 @@ if typing.TYPE_CHECKING:
 
 
 class ErrorResponse(_BaseType):
-    """The response in case of an error.
-    
-    """
+    """The response in case of an error."""
 
     #: The http status code of the response.
     status_code: "int"
@@ -61,9 +59,7 @@ class ErrorResponse(_BaseType):
 
 
 class ErrorObject(_BaseType):
-    """An error.
-    
-    """
+    """An error."""
 
     code: "str"
     #: The error's description.
@@ -104,9 +100,7 @@ class AccessDeniedError(ErrorObject):
 
 
 class InvalidScopeError(ErrorObject):
-    """The requested scope is invalid, unknown, malformed, or exceeds the scope granted by the resource owner.
-    
-    """
+    """The requested scope is invalid, unknown, malformed, or exceeds the scope granted by the resource owner."""
 
     def __init__(self, *, message: "str"):
 
@@ -127,7 +121,7 @@ class InvalidScopeError(ErrorObject):
 class InvalidOperation(ErrorObject):
     """The resources involved in the request are not in a valid state for the operation.
     The client application should validate the constraints described in the error message before sending the request.
-    
+
     """
 
     def __init__(self, *, message: "str"):
@@ -147,8 +141,7 @@ class InvalidOperation(ErrorObject):
 
 
 class DuplicateAttributeValueError(ErrorObject):
-    """The Unique AttributeConstraint was violated.
-    """
+    """The Unique AttributeConstraint was violated."""
 
     #: The conflicting attribute.
     attribute: "Attribute"
@@ -172,8 +165,7 @@ class DuplicateAttributeValueError(ErrorObject):
 
 
 class DuplicateAttributeValuesError(ErrorObject):
-    """The CombinationUnique AttributeConstraint was violated.
-    """
+    """The CombinationUnique AttributeConstraint was violated."""
 
     attributes: typing.List["Attribute"]
 
@@ -196,8 +188,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 
 
 class DuplicateFieldError(ErrorObject):
-    """A value for a field conflicts with an existing duplicate value.
-    """
+    """A value for a field conflicts with an existing duplicate value."""
 
     #: The name of the field.
     field: typing.Optional["str"]
@@ -230,7 +221,7 @@ class DuplicateFieldError(ErrorObject):
 class DuplicateVariantValuesError(ErrorObject):
     """A given combination of variant values conflicts with an existing one.
     Every product variant must have a distinct combination of SKU, prices, and custom attribute values.
-    
+
     """
 
     #: The offending variant values.
@@ -339,8 +330,7 @@ class InvalidTokenError(ErrorObject):
 
 
 class InvalidFieldError(ErrorObject):
-    """A field has an invalid value.
-    """
+    """A field has an invalid value."""
 
     #: The name of the field.
     field: "str"
@@ -378,7 +368,7 @@ class InvalidJsonInput(ErrorObject):
     """Invalid JSON input has been sent to the service. Either the JSON is syntactically not correct, or the JSON does not
     conform to the expected shape (e.g. is missing a required field). The client application should validate the input
     according to the constraints described in the error message before sending the request.
-    
+
     """
 
     def __init__(self, *, message: "str"):
@@ -400,7 +390,7 @@ class InvalidJsonInput(ErrorObject):
 class InvalidInput(ErrorObject):
     """Invalid input has been sent to the service. The client application should validate the input according to the
     constraints described in the error message before sending the request.
-    
+
     """
 
     def __init__(self, *, message: "str"):
@@ -496,8 +486,7 @@ class ResourceDeletionError(ErrorObject):
 
 
 class RequiredFieldError(ErrorObject):
-    """A required field is missing a value.
-    """
+    """A required field is missing a value."""
 
     #: The name of the field.
     field: "str"
@@ -553,7 +542,7 @@ class ConcurrentModificationError(ErrorObject):
     """The request conflicts with the current state of the involved resource(s). Typically, the request attempts to modify a resource
     that is out of date, i.e. that has been modified by another client since the last time it was retrieved.
     The client application should resolve the conflict (with or without involving the end-user) before retrying the request
-    
+
     """
 
     #: The version specified in the failed request.

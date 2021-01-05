@@ -11,7 +11,12 @@ class ByProjectKeyExtensionsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyExtensionsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Extension":
-        """Retrieves the representation of an extension by its id.
-        """
+        """Retrieves the representation of an extension by its id."""
         return self._client._get(
             endpoint=f"/{self._project_key}/extensions/{self._id}",
             params={"expand": expand},
-            response_object=Extension,
+            response_class=Extension,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyExtensionsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Extension":
-        """Update Extension by ID
-        """
+        """Update Extension by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/extensions/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Extension,
+            response_class=Extension,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyExtensionsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Extension":
-        """Delete Extension by ID
-        """
+        """Delete Extension by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/extensions/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=Extension,
+            response_class=Extension,
             headers=headers,
         )

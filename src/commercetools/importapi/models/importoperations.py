@@ -13,9 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class ImportOperation(_BaseType):
-    """Tracks the status of a single import resource as it is imported into the commercetools project.
-    
-    """
+    """Tracks the status of a single import resource as it is imported into the commercetools project."""
 
     #: The import operation version.
     version: "int"
@@ -82,8 +80,7 @@ class ImportOperation(_BaseType):
 
 
 class ImportOperationPagedResponse(_BaseType):
-    """This type represents a paged import operation result.
-    """
+    """This type represents a paged import operation result."""
 
     #: The maximum number of import operations returned for a page.
     limit: "int"
@@ -123,9 +120,7 @@ class ImportOperationPagedResponse(_BaseType):
 
 
 class ImportOperationState(enum.Enum):
-    """This enumeration describes the operation state of a newly created import operation.
-   
-   """
+    """This enumeration describes the operation state of a newly created import operation."""
 
     UNRESOLVED = "Unresolved"
     VALIDATION_FAILED = "ValidationFailed"
@@ -133,9 +128,7 @@ class ImportOperationState(enum.Enum):
 
 
 class ImportOperationStatus(_BaseType):
-    """The validation status of a created operation.
-    
-    """
+    """The validation status of a created operation."""
 
     #: Id of the import operation.
     operation_id: typing.Optional["str"]

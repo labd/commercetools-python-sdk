@@ -11,7 +11,12 @@ class ByProjectKeyTaxCategoriesKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyTaxCategoriesKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "TaxCategory":
-        """Get TaxCategory by key
-        """
+        """Get TaxCategory by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/tax-categories/key={self._key}",
             params={"expand": expand},
-            response_object=TaxCategory,
+            response_class=TaxCategory,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyTaxCategoriesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "TaxCategory":
-        """Update TaxCategory by key
-        """
+        """Update TaxCategory by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/tax-categories/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=TaxCategory,
+            response_class=TaxCategory,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyTaxCategoriesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "TaxCategory":
-        """Delete TaxCategory by key
-        """
+        """Delete TaxCategory by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/tax-categories/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=TaxCategory,
+            response_class=TaxCategory,
             headers=headers,
         )

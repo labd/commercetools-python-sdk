@@ -4,11 +4,6 @@ import typing
 from marshmallow import fields
 
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.custom_object import (
-    CustomObjectDraftSchema,
-    CustomObjectPagedQueryResponseSchema,
-    CustomObjectSchema,
-)
 from commercetools.platform.models.custom_object import (
     CustomObject,
     CustomObjectDraft,
@@ -45,7 +40,7 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"custom-objects/{container}/{key}",
             params=params,
-            schema_cls=CustomObjectSchema,
+            response_class=CustomObject,
         )
 
     def query(
@@ -81,7 +76,7 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._get(
             endpoint="custom-objects",
             params=params,
-            schema_cls=CustomObjectPagedQueryResponseSchema,
+            response_class=CustomObjectPagedQueryResponse,
         )
 
     def query_by_container(
@@ -112,7 +107,7 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"custom-objects/{container}",
             params=params,
-            schema_cls=CustomObjectPagedQueryResponseSchema,
+            response_class=CustomObjectPagedQueryResponse,
         )
 
     def create_or_update(
@@ -133,8 +128,7 @@ class CustomObjectService(abstract.AbstractService):
             endpoint="custom-objects",
             params=params,
             data_object=draft,
-            request_schema_cls=CustomObjectDraftSchema,
-            response_schema_cls=CustomObjectSchema,
+            response_class=CustomObject,
         )
 
     def create(
@@ -155,8 +149,7 @@ class CustomObjectService(abstract.AbstractService):
             endpoint="custom-objects",
             params=params,
             data_object=draft,
-            request_schema_cls=CustomObjectDraftSchema,
-            response_schema_cls=CustomObjectSchema,
+            response_class=CustomObject,
         )
 
     def delete_by_container_and_key(
@@ -177,6 +170,6 @@ class CustomObjectService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"custom-objects/{container}/{key}",
             params=params,
-            response_schema_cls=CustomObjectSchema,
+            response_class=CustomObject,
             force_delete=force_delete,
         )

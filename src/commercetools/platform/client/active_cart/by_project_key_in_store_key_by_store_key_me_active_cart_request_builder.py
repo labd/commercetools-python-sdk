@@ -10,7 +10,12 @@ class ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
     _project_key: str
     _store_key: str
 
-    def __init__(self, projectKey: str, storeKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._client = client
@@ -19,6 +24,6 @@ class ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/active-cart",
             params={},
-            response_object=Cart,
+            response_class=Cart,
             headers=headers,
         )

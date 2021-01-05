@@ -5,12 +5,6 @@ import marshmallow
 from marshmallow import fields
 
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.shipping_method import (
-    ShippingMethodDraftSchema,
-    ShippingMethodPagedQueryResponseSchema,
-    ShippingMethodSchema,
-    ShippingMethodUpdateSchema,
-)
 from commercetools.platform.models.shipping_method import (
     ShippingMethod,
     ShippingMethodDraft,
@@ -66,7 +60,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"shipping-methods/{id}",
             params=params,
-            schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> ShippingMethod:
@@ -74,7 +68,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"shipping-methods/key={key}",
             params=params,
-            schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
         )
 
     def query(
@@ -106,7 +100,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods",
             params=params,
-            schema_cls=ShippingMethodPagedQueryResponseSchema,
+            response_class=ShippingMethodPagedQueryResponse,
         )
 
     def create(
@@ -120,8 +114,7 @@ class ShippingMethodService(abstract.AbstractService):
             endpoint="shipping-methods",
             params=params,
             data_object=draft,
-            request_schema_cls=ShippingMethodDraftSchema,
-            response_schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
         )
 
     def update_by_id(
@@ -139,8 +132,7 @@ class ShippingMethodService(abstract.AbstractService):
             endpoint=f"shipping-methods/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ShippingMethodUpdateSchema,
-            response_schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
             force_update=force_update,
         )
 
@@ -159,8 +151,7 @@ class ShippingMethodService(abstract.AbstractService):
             endpoint=f"shipping-methods/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ShippingMethodUpdateSchema,
-            response_schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
             force_update=force_update,
         )
 
@@ -178,7 +169,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"shipping-methods/{id}",
             params=params,
-            response_schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
             force_delete=force_delete,
         )
 
@@ -196,7 +187,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"shipping-methods/key={key}",
             params=params,
-            response_schema_cls=ShippingMethodSchema,
+            response_class=ShippingMethod,
             force_delete=force_delete,
         )
 
@@ -210,7 +201,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods/matching-cart",
             params=params,
-            schema_cls=ShippingMethodPagedQueryResponseSchema,
+            response_class=ShippingMethodPagedQueryResponse,
         )
 
     def matching_location(
@@ -234,7 +225,7 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods/matching-location",
             params=params,
-            schema_cls=ShippingMethodPagedQueryResponseSchema,
+            response_class=ShippingMethodPagedQueryResponse,
         )
 
     def matching_orderedit(
@@ -248,5 +239,5 @@ class ShippingMethodService(abstract.AbstractService):
         return self._client._get(
             endpoint="shipping-methods/matching-orderedit",
             params=params,
-            schema_cls=ShippingMethodPagedQueryResponseSchema,
+            response_class=ShippingMethodPagedQueryResponse,
         )

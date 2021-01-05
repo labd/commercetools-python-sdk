@@ -11,19 +11,23 @@ class ByProjectKeyCategoriesImportSinkKeyByImportSinkKeyImportOperationsByIdRequ
     _import_sink_key: str
     _id: str
 
-    def __init__(self, projectKey: str, importSinkKey: str, id: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        importSinkKey: str,
+        id: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._import_sink_key = importSinkKey
         self._id = id
         self._client = client
 
     def get(self, *, headers: typing.Dict[str, str] = None) -> "ImportOperation":
-        """Retrieves the import operation with the given id.
-        
-        """
+        """Retrieves the import operation with the given id."""
         return self._client._get(
             endpoint=f"/{self._project_key}/categories/importSinkKey={self._import_sink_key}/import-operations/{self._id}",
             params={},
-            response_object=ImportOperation,
+            response_class=ImportOperation,
             headers=headers,
         )

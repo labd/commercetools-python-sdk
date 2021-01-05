@@ -19,18 +19,26 @@ class ByProjectKeyShoppingListsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyShoppingListsKeyByKeyRequestBuilder:
         return ByProjectKeyShoppingListsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyShoppingListsByIDRequestBuilder:
         return ByProjectKeyShoppingListsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -44,8 +52,7 @@ class ByProjectKeyShoppingListsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShoppingListPagedQueryResponse":
-        """Query shopping-lists
-        """
+        """Query shopping-lists"""
         return self._client._get(
             endpoint=f"/{self._project_key}/shopping-lists",
             params={
@@ -56,7 +63,7 @@ class ByProjectKeyShoppingListsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ShoppingListPagedQueryResponse,
+            response_class=ShoppingListPagedQueryResponse,
             headers=headers,
         )
 
@@ -67,12 +74,11 @@ class ByProjectKeyShoppingListsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShoppingList":
-        """Create ShoppingList
-        """
+        """Create ShoppingList"""
         return self._client._post(
             endpoint=f"/{self._project_key}/shopping-lists",
             params={"expand": expand},
             data_object=body,
-            response_object=ShoppingList,
+            response_class=ShoppingList,
             headers={"Content-Type": "application/json", **headers},
         )

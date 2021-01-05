@@ -11,7 +11,12 @@ class ByProjectKeyReviewsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyReviewsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Review":
-        """Get Review by key
-        """
+        """Get Review by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/reviews/key={self._key}",
             params={"expand": expand},
-            response_object=Review,
+            response_class=Review,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyReviewsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Review":
-        """Update Review by key
-        """
+        """Update Review by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/reviews/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Review,
+            response_class=Review,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -53,11 +56,10 @@ class ByProjectKeyReviewsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Review":
-        """Delete Review by key
-        """
+        """Delete Review by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/reviews/key={self._key}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Review,
+            response_class=Review,
             headers=headers,
         )

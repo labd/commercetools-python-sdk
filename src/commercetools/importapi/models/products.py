@@ -104,10 +104,10 @@ class WhitespaceTokenizer(SuggestTokenizer):
 
 class ProductImport(ImportResource):
     """Import representation for a prduct.
-    
+
     The import representation for a product is the most minimal representation required
     for creating a product in commercetools.
-    
+
     """
 
     #: Maps to `Product.name`.

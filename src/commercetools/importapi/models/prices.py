@@ -84,9 +84,7 @@ class TaxRate(_BaseType):
 
 
 class PriceImport(ImportResource):
-    """Imports a product variant's prices.
-    
-    """
+    """Imports a product variant's prices."""
 
     #: Maps to `Price.value`.
     #:

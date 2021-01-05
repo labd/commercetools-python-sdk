@@ -10,7 +10,12 @@ class ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder:
     _project_key: str
     _email_token: str
 
-    def __init__(self, projectKey: str, emailToken: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        emailToken: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._email_token = emailToken
         self._client = client
@@ -18,11 +23,10 @@ class ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Customer":
-        """Get Customer by emailToken
-        """
+        """Get Customer by emailToken"""
         return self._client._get(
             endpoint=f"/{self._project_key}/customers/email-token={self._email_token}",
             params={"expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )

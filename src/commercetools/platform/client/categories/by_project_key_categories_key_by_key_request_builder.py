@@ -11,7 +11,12 @@ class ByProjectKeyCategoriesKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyCategoriesKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Category":
-        """Get Category by key
-        """
+        """Get Category by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/categories/key={self._key}",
             params={"expand": expand},
-            response_object=Category,
+            response_class=Category,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyCategoriesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Category":
-        """Update Category by key
-        """
+        """Update Category by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/categories/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Category,
+            response_class=Category,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyCategoriesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Category":
-        """Delete Category by key
-        """
+        """Delete Category by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/categories/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=Category,
+            response_class=Category,
             headers=headers,
         )

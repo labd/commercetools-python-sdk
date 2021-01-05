@@ -14,14 +14,21 @@ class ByProjectKeyProductsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
 
     def images(self) -> ByProjectKeyProductsByIDImagesRequestBuilder:
         return ByProjectKeyProductsByIDImagesRequestBuilder(
-            projectKey=self._project_key, ID=self._id, client=self._client
+            projectKey=self._project_key,
+            ID=self._id,
+            client=self._client,
         )
 
     def get(
@@ -36,8 +43,7 @@ class ByProjectKeyProductsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Product":
-        """Gets the full representation of a product by ID.
-        """
+        """Gets the full representation of a product by ID."""
         return self._client._get(
             endpoint=f"/{self._project_key}/products/{self._id}",
             params={
@@ -49,7 +55,7 @@ class ByProjectKeyProductsByIDRequestBuilder:
                 "storeProjection": store_projection,
                 "expand": expand,
             },
-            response_object=Product,
+            response_class=Product,
             headers=headers,
         )
 
@@ -66,8 +72,7 @@ class ByProjectKeyProductsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Product":
-        """Update Product by ID
-        """
+        """Update Product by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/products/{self._id}",
             params={
@@ -80,7 +85,7 @@ class ByProjectKeyProductsByIDRequestBuilder:
                 "expand": expand,
             },
             data_object=body,
-            response_object=Product,
+            response_class=Product,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -97,8 +102,7 @@ class ByProjectKeyProductsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Product":
-        """Delete Product by ID
-        """
+        """Delete Product by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/products/{self._id}",
             params={
@@ -111,6 +115,6 @@ class ByProjectKeyProductsByIDRequestBuilder:
                 "version": version,
                 "expand": expand,
             },
-            response_object=Product,
+            response_class=Product,
             headers=headers,
         )

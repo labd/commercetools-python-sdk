@@ -28,43 +28,51 @@ class ByProjectKeyShippingMethodsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
         return ByProjectKeyShippingMethodsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def matchingCart(self) -> ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
-        """Get ShippingMethods for a cart
-        """
+        """Get ShippingMethods for a cart"""
         return ByProjectKeyShippingMethodsMatchingCartRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def matchingOrderedit(
-        self
+        self,
     ) -> ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder:
-        """Get ShippingMethods for an order edit
-        """
+        """Get ShippingMethods for an order edit"""
         return ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def matchingLocation(
-        self
+        self,
     ) -> ByProjectKeyShippingMethodsMatchingLocationRequestBuilder:
-        """Get ShippingMethods for a location
-        """
+        """Get ShippingMethods for a location"""
         return ByProjectKeyShippingMethodsMatchingLocationRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyShippingMethodsByIDRequestBuilder:
         return ByProjectKeyShippingMethodsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -78,8 +86,7 @@ class ByProjectKeyShippingMethodsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethodPagedQueryResponse":
-        """Query shipping-methods
-        """
+        """Query shipping-methods"""
         return self._client._get(
             endpoint=f"/{self._project_key}/shipping-methods",
             params={
@@ -90,7 +97,7 @@ class ByProjectKeyShippingMethodsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ShippingMethodPagedQueryResponse,
+            response_class=ShippingMethodPagedQueryResponse,
             headers=headers,
         )
 
@@ -101,12 +108,11 @@ class ByProjectKeyShippingMethodsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethod":
-        """Create ShippingMethod
-        """
+        """Create ShippingMethod"""
         return self._client._post(
             endpoint=f"/{self._project_key}/shipping-methods",
             params={"expand": expand},
             data_object=body,
-            response_object=ShippingMethod,
+            response_class=ShippingMethod,
             headers={"Content-Type": "application/json", **headers},
         )

@@ -11,7 +11,12 @@ class ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "ShippingMethod":
-        """Get ShippingMethod by key
-        """
+        """Get ShippingMethod by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/shipping-methods/key={self._key}",
             params={"expand": expand},
-            response_object=ShippingMethod,
+            response_class=ShippingMethod,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethod":
-        """Update ShippingMethod by key
-        """
+        """Update ShippingMethod by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/shipping-methods/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=ShippingMethod,
+            response_class=ShippingMethod,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethod":
-        """Delete ShippingMethod by key
-        """
+        """Delete ShippingMethod by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/shipping-methods/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=ShippingMethod,
+            response_class=ShippingMethod,
             headers=headers,
         )

@@ -12,7 +12,13 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
     _store_key: str
     _id: str
 
-    def __init__(self, projectKey: str, storeKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._id = ID
@@ -24,12 +30,12 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
         """Returns an order by its ID from a specific Store. The {storeKey} path parameter maps to a Store's key.
         If the order exists in the commercetools project but does not have the store field,
         or the store field references a different store, this method returns a ResourceNotFound error.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/orders/{self._id}",
             params={"expand": expand},
-            response_object=Order,
+            response_class=Order,
             headers=headers,
         )
 
@@ -43,13 +49,13 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
         """Updates an order in the store specified by {storeKey}. The {storeKey} path parameter maps to a Store's key.
         If the order exists in the commercetools project but does not have the store field,
         or the store field references a different store, this method returns a ResourceNotFound error.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/orders/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Order,
+            response_class=Order,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -61,11 +67,10 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Order":
-        """Delete Order by ID
-        """
+        """Delete Order by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/orders/{self._id}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Order,
+            response_class=Order,
             headers=headers,
         )

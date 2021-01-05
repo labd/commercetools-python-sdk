@@ -10,7 +10,12 @@ class ByProjectKeyMissingDataAttributesStatusByTaskIdRequestBuilder:
     _project_key: str
     _task_id: str
 
-    def __init__(self, projectKey: str, taskId: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        taskId: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._task_id = taskId
         self._client = client
@@ -19,6 +24,6 @@ class ByProjectKeyMissingDataAttributesStatusByTaskIdRequestBuilder:
         return self._client._get(
             endpoint=f"/{self._project_key}/missing-data/attributes/status/{self._task_id}",
             params={},
-            response_object=MissingDataTaskStatus,
+            response_class=MissingDataTaskStatus,
             headers=headers,
         )

@@ -15,18 +15,26 @@ class ByProjectKeyProductsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyProductsKeyByKeyRequestBuilder:
         return ByProjectKeyProductsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyProductsByIDRequestBuilder:
         return ByProjectKeyProductsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -49,7 +57,7 @@ class ByProjectKeyProductsRequestBuilder:
         """You can use the query endpoint to get the full representations of products.
         REMARK: We suggest to use the performance optimized search endpoint which has a bunch functionalities,
         the query API lacks like sorting on custom attributes, etc.
-        
+
         """
         return self._client._get(
             endpoint=f"/{self._project_key}/products",
@@ -67,7 +75,7 @@ class ByProjectKeyProductsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ProductPagedQueryResponse,
+            response_class=ProductPagedQueryResponse,
             headers=headers,
         )
 
@@ -87,7 +95,7 @@ class ByProjectKeyProductsRequestBuilder:
         """To create a new product, send a representation that is going to become the initial staged representation
         of the new product in the master catalog. If price selection query parameters are provided,
         the selected prices will be added to the response.
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/products",
@@ -101,6 +109,6 @@ class ByProjectKeyProductsRequestBuilder:
                 "expand": expand,
             },
             data_object=body,
-            response_object=Product,
+            response_class=Product,
             headers={"Content-Type": "application/json", **headers},
         )

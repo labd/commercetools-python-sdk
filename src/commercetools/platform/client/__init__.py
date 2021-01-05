@@ -10,6 +10,8 @@ class Client(BaseClient):
         super().__init__(self, **kwargs)
 
     def withProjectKey(self, projectKey: str) -> ByProjectKeyRequestBuilder:
-        """The Project endpoint is used to retrieve certain information from a project.
-            """
-        return ByProjectKeyRequestBuilder(projectKey=projectKey, client=self)
+        """The Project endpoint is used to retrieve certain information from a project."""
+        return ByProjectKeyRequestBuilder(
+            projectKey=projectKey,
+            client=self,
+        )

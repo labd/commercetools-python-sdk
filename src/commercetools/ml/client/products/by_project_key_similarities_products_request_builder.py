@@ -13,13 +13,18 @@ class ByProjectKeySimilaritiesProductsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def status(self) -> ByProjectKeySimilaritiesProductsStatusRequestBuilder:
         return ByProjectKeySimilaritiesProductsStatusRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def post(
@@ -32,6 +37,6 @@ class ByProjectKeySimilaritiesProductsRequestBuilder:
             endpoint=f"/{self._project_key}/similarities/products",
             params={},
             data_object=body,
-            response_object=TaskToken,
+            response_class=TaskToken,
             headers={"Content-Type": "application/json", **headers},
         )

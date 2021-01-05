@@ -11,7 +11,12 @@ class ByProjectKeyProductTypesKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyProductTypesKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "ProductType":
-        """Get ProductType by key
-        """
+        """Get ProductType by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/product-types/key={self._key}",
             params={"expand": expand},
-            response_object=ProductType,
+            response_class=ProductType,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyProductTypesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductType":
-        """Update ProductType by key
-        """
+        """Update ProductType by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-types/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=ProductType,
+            response_class=ProductType,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyProductTypesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductType":
-        """Delete ProductType by key
-        """
+        """Delete ProductType by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/product-types/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=ProductType,
+            response_class=ProductType,
             headers=headers,
         )

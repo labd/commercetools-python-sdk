@@ -372,9 +372,7 @@ class TextInputHint(enum.Enum):
 
 
 class ProductTypeImport(ImportResource):
-    """Import representation for a product type.
-    
-    """
+    """Import representation for a product type."""
 
     #: Maps to `ProductType.name`.
     name: "str"

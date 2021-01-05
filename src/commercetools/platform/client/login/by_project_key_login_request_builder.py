@@ -9,7 +9,11 @@ class ByProjectKeyLoginRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -23,12 +27,12 @@ class ByProjectKeyLoginRequestBuilder:
         If a cart is is returned as part of the CustomerSignInResult,
         it has been recalculated (It will have up-to-date prices, taxes and discounts,
         and invalid line items have been removed.).
-        
+
         """
         return self._client._post(
             endpoint=f"/{self._project_key}/login",
             params={},
             data_object=body,
-            response_object=CustomerSignInResult,
+            response_class=CustomerSignInResult,
             headers={"Content-Type": "application/json", **headers},
         )

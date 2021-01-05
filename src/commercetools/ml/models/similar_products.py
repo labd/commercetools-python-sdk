@@ -12,8 +12,7 @@ if typing.TYPE_CHECKING:
 
 
 class ProductSetSelector(_BaseType):
-    """A set of ProductData for comparison. If no optional attributes are specified, all `current` ProductData are selected for comparison.
-    """
+    """A set of ProductData for comparison. If no optional attributes are specified, all `current` ProductData are selected for comparison."""
 
     #: The project containing the project set.
     project_key: "str"
@@ -59,8 +58,7 @@ class ProductSetSelector(_BaseType):
 
 
 class SimilarityMeasures(_BaseType):
-    """Specify which ProductData attributes to use for estimating similarity and how to weigh them. An attribute's weight can be any whole positive integer, starting with 0. The larger the integer, the higher its weight.
-    """
+    """Specify which ProductData attributes to use for estimating similarity and how to weigh them. An attribute's weight can be any whole positive integer, starting with 0. The larger the integer, the higher its weight."""
 
     #: Importance of the `name` attribute in overall similarity.
     name: typing.Optional["int"]
@@ -154,8 +152,7 @@ class SimilarProductSearchRequest(_BaseType):
 
 
 class SimilarProduct(_BaseType):
-    """One part of a SimilarProductPair. Refers to a specific ProductVariant.
-    """
+    """One part of a SimilarProductPair. Refers to a specific ProductVariant."""
 
     #: Reference to Product
     product: typing.Optional["ProductReference"]
@@ -225,8 +222,7 @@ class SimilarProductMeta(_BaseType):
 
 
 class SimilarProductPair(_BaseType):
-    """A pair of SimilarProducts
-    """
+    """A pair of SimilarProducts"""
 
     #: The probability of product similarity.
     confidence: "float"
@@ -309,8 +305,7 @@ class SimilarProductsPagedQueryResult(_BaseType):
 
 
 class SimilarProductsTaskStatus(_BaseType):
-    """Represents a URL path to poll to get the results of an Asynchronous Request.
-    """
+    """Represents a URL path to poll to get the results of an Asynchronous Request."""
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.

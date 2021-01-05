@@ -10,7 +10,12 @@ class ByProjectKeyMeOrdersByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -18,11 +23,10 @@ class ByProjectKeyMeOrdersByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "MyOrder":
-        """Get MyOrder by ID
-        """
+        """Get MyOrder by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/me/orders/{self._id}",
             params={"expand": expand},
-            response_object=MyOrder,
+            response_class=MyOrder,
             headers=headers,
         )

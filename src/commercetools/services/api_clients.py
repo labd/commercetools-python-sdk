@@ -2,11 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.api_client import (
-    ApiClientDraftSchema,
-    ApiClientPagedQueryResponseSchema,
-    ApiClientSchema,
-)
 from commercetools.platform.models.api_client import (
     ApiClient,
     ApiClientDraft,
@@ -36,7 +31,7 @@ class ApiClientService(abstract.AbstractService):
         """Get ApiClient by ID"""
         params: typing.Dict[str, str] = {}
         return self._client._get(
-            endpoint=f"api-clients/{id}", params=params, schema_cls=ApiClientSchema
+            endpoint=f"api-clients/{id}", params=params, response_class=ApiClient
         )
 
     def query(
@@ -68,7 +63,7 @@ class ApiClientService(abstract.AbstractService):
         return self._client._get(
             endpoint="api-clients",
             params=params,
-            schema_cls=ApiClientPagedQueryResponseSchema,
+            response_class=ApiClientPagedQueryResponse,
         )
 
     def create(
@@ -82,8 +77,7 @@ class ApiClientService(abstract.AbstractService):
             endpoint="api-clients",
             params=params,
             data_object=draft,
-            request_schema_cls=ApiClientDraftSchema,
-            response_schema_cls=ApiClientSchema,
+            response_class=ApiClient,
         )
 
     def delete_by_id(self, id, *, force_delete: bool = False) -> ApiClient:
@@ -92,6 +86,6 @@ class ApiClientService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"api-clients/{id}",
             params=params,
-            response_schema_cls=ApiClientSchema,
+            response_class=ApiClient,
             force_delete=force_delete,
         )

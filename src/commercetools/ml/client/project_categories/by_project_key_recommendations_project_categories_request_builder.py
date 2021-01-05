@@ -11,7 +11,11 @@ class ByProjectKeyRecommendationsProjectCategoriesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -19,5 +23,7 @@ class ByProjectKeyRecommendationsProjectCategoriesRequestBuilder:
         self, productId: str
     ) -> ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
         return ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder(
-            productId=productId, projectKey=self._project_key, client=self._client
+            productId=productId,
+            projectKey=self._project_key,
+            client=self._client,
         )

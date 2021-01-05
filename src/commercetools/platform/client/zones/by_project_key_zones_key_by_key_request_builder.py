@@ -11,7 +11,12 @@ class ByProjectKeyZonesKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyZonesKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Zone":
-        """Get Zone by key
-        """
+        """Get Zone by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/zones/key={self._key}",
             params={"expand": expand},
-            response_object=Zone,
+            response_class=Zone,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyZonesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Zone":
-        """Update Zone by key
-        """
+        """Update Zone by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/zones/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Zone,
+            response_class=Zone,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyZonesKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Zone":
-        """Delete Zone by key
-        """
+        """Delete Zone by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/zones/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=Zone,
+            response_class=Zone,
             headers=headers,
         )

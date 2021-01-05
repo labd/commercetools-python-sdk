@@ -44,66 +44,82 @@ class ByProjectKeyRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def importSinks(self) -> ByProjectKeyImportSinksRequestBuilder:
         return ByProjectKeyImportSinksRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def importSummaries(self) -> ByProjectKeyImportSummariesRequestBuilder:
         return ByProjectKeyImportSummariesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def categories(self) -> ByProjectKeyCategoriesRequestBuilder:
         return ByProjectKeyCategoriesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def prices(self) -> ByProjectKeyPricesRequestBuilder:
         return ByProjectKeyPricesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def products(self) -> ByProjectKeyProductsRequestBuilder:
         return ByProjectKeyProductsRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def productDrafts(self) -> ByProjectKeyProductDraftsRequestBuilder:
         return ByProjectKeyProductDraftsRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def productTypes(self) -> ByProjectKeyProductTypesRequestBuilder:
         return ByProjectKeyProductTypesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def productVariants(self) -> ByProjectKeyProductVariantsRequestBuilder:
         return ByProjectKeyProductVariantsRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def productVariantPatches(self) -> ByProjectKeyProductVariantPatchesRequestBuilder:
         return ByProjectKeyProductVariantPatchesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def orders(self) -> ByProjectKeyOrdersRequestBuilder:
         return ByProjectKeyOrdersRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def customers(self) -> ByProjectKeyCustomersRequestBuilder:
         return ByProjectKeyCustomersRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def inventories(self) -> ByProjectKeyInventoriesRequestBuilder:
         return ByProjectKeyInventoriesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )

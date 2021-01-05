@@ -15,18 +15,26 @@ class ByProjectKeyOrdersEditsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyOrdersEditsKeyByKeyRequestBuilder:
         return ByProjectKeyOrdersEditsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyOrdersEditsByIDRequestBuilder:
         return ByProjectKeyOrdersEditsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyOrdersEditsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderEditPagedQueryResponse":
-        """Query edits
-        """
+        """Query edits"""
         return self._client._get(
             endpoint=f"/{self._project_key}/orders/edits",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyOrdersEditsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=OrderEditPagedQueryResponse,
+            response_class=OrderEditPagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyOrdersEditsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderEdit":
-        """Create OrderEdit
-        """
+        """Create OrderEdit"""
         return self._client._post(
             endpoint=f"/{self._project_key}/orders/edits",
             params={"expand": expand},
             data_object=body,
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers={"Content-Type": "application/json", **headers},
         )

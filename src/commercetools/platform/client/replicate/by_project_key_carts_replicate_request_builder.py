@@ -9,7 +9,11 @@ class ByProjectKeyCartsReplicateRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -20,6 +24,6 @@ class ByProjectKeyCartsReplicateRequestBuilder:
             endpoint=f"/{self._project_key}/carts/replicate",
             params={},
             data_object=body,
-            response_object=Cart,
+            response_class=Cart,
             headers={"Content-Type": "application/json", **headers},
         )

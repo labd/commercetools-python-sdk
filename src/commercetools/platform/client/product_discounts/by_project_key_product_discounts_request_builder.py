@@ -22,23 +22,32 @@ class ByProjectKeyProductDiscountsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def matching(self) -> ByProjectKeyProductDiscountsMatchingRequestBuilder:
         return ByProjectKeyProductDiscountsMatchingRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withKey(self, key: str) -> ByProjectKeyProductDiscountsKeyByKeyRequestBuilder:
         return ByProjectKeyProductDiscountsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyProductDiscountsByIDRequestBuilder:
         return ByProjectKeyProductDiscountsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -52,8 +61,7 @@ class ByProjectKeyProductDiscountsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductDiscountPagedQueryResponse":
-        """Query product-discounts
-        """
+        """Query product-discounts"""
         return self._client._get(
             endpoint=f"/{self._project_key}/product-discounts",
             params={
@@ -64,7 +72,7 @@ class ByProjectKeyProductDiscountsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ProductDiscountPagedQueryResponse,
+            response_class=ProductDiscountPagedQueryResponse,
             headers=headers,
         )
 
@@ -75,12 +83,11 @@ class ByProjectKeyProductDiscountsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductDiscount":
-        """Create ProductDiscount
-        """
+        """Create ProductDiscount"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-discounts",
             params={"expand": expand},
             data_object=body,
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers={"Content-Type": "application/json", **headers},
         )

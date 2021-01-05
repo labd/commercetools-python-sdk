@@ -4,13 +4,6 @@ import typing
 from marshmallow import fields
 
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.cart import (
-    CartDraftSchema,
-    CartPagedQueryResponseSchema,
-    CartSchema,
-    CartUpdateSchema,
-    ReplicaCartDraftSchema,
-)
 from commercetools.platform.models.cart import (
     Cart,
     CartDraft,
@@ -61,7 +54,7 @@ class CartService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"carts/customer-id={customer_id}",
             params=params,
-            schema_cls=CartSchema,
+            response_class=Cart,
         )
 
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Cart:
@@ -72,7 +65,7 @@ class CartService(abstract.AbstractService):
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"carts/{id}", params=params, schema_cls=CartSchema
+            endpoint=f"carts/{id}", params=params, response_class=Cart
         )
 
     def query(
@@ -102,7 +95,7 @@ class CartService(abstract.AbstractService):
             _CartQuerySchema,
         )
         return self._client._get(
-            endpoint="carts", params=params, schema_cls=CartPagedQueryResponseSchema
+            endpoint="carts", params=params, response_class=CartPagedQueryResponse
         )
 
     def create(self, draft: CartDraft, *, expand: OptionalListStr = None) -> Cart:
@@ -114,11 +107,7 @@ class CartService(abstract.AbstractService):
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="carts",
-            params=params,
-            data_object=draft,
-            request_schema_cls=CartDraftSchema,
-            response_schema_cls=CartSchema,
+            endpoint="carts", params=params, data_object=draft, response_class=Cart
         )
 
     def update_by_id(
@@ -136,8 +125,7 @@ class CartService(abstract.AbstractService):
             endpoint=f"carts/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CartUpdateSchema,
-            response_schema_cls=CartSchema,
+            response_class=Cart,
             force_update=force_update,
         )
 
@@ -157,7 +145,7 @@ class CartService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"carts/{id}",
             params=params,
-            response_schema_cls=CartSchema,
+            response_class=Cart,
             force_delete=force_delete,
         )
 
@@ -167,6 +155,5 @@ class CartService(abstract.AbstractService):
             endpoint="carts/replicate",
             params=params,
             data_object=draft,
-            request_schema_cls=ReplicaCartDraftSchema,
-            response_schema_cls=CartSchema,
+            response_class=Cart,
         )

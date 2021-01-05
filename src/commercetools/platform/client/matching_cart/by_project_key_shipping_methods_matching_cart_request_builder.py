@@ -9,7 +9,11 @@ class ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -23,6 +27,6 @@ class ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
         return self._client._get(
             endpoint=f"/{self._project_key}/shipping-methods/matching-cart",
             params={"cartId": cart_id, "expand": expand},
-            response_object=ShippingMethodPagedQueryResponse,
+            response_class=ShippingMethodPagedQueryResponse,
             headers=headers,
         )

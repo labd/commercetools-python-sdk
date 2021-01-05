@@ -17,21 +17,28 @@ class ByProjectKeyMissingDataRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def attributes(self) -> ByProjectKeyMissingDataAttributesRequestBuilder:
         return ByProjectKeyMissingDataAttributesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def images(self) -> ByProjectKeyMissingDataImagesRequestBuilder:
         return ByProjectKeyMissingDataImagesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def prices(self) -> ByProjectKeyMissingDataPricesRequestBuilder:
         return ByProjectKeyMissingDataPricesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )

@@ -11,7 +11,12 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Category":
-        """Get Category by ID
-        """
+        """Get Category by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/categories/{self._id}",
             params={"expand": expand},
-            response_object=Category,
+            response_class=Category,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Category":
-        """Update Category by ID
-        """
+        """Update Category by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/categories/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Category,
+            response_class=Category,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Category":
-        """Delete Category by ID
-        """
+        """Delete Category by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/categories/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=Category,
+            response_class=Category,
             headers=headers,
         )

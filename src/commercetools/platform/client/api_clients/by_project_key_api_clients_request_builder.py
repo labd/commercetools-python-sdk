@@ -12,13 +12,19 @@ class ByProjectKeyApiClientsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyApiClientsByIDRequestBuilder:
         return ByProjectKeyApiClientsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -32,8 +38,7 @@ class ByProjectKeyApiClientsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ApiClientPagedQueryResponse":
-        """Query api-clients
-        """
+        """Query api-clients"""
         return self._client._get(
             endpoint=f"/{self._project_key}/api-clients",
             params={
@@ -44,7 +49,7 @@ class ByProjectKeyApiClientsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ApiClientPagedQueryResponse,
+            response_class=ApiClientPagedQueryResponse,
             headers=headers,
         )
 
@@ -55,12 +60,11 @@ class ByProjectKeyApiClientsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ApiClient":
-        """Create ApiClient
-        """
+        """Create ApiClient"""
         return self._client._post(
             endpoint=f"/{self._project_key}/api-clients",
             params={"expand": expand},
             data_object=body,
-            response_object=ApiClient,
+            response_class=ApiClient,
             headers={"Content-Type": "application/json", **headers},
         )

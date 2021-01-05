@@ -11,7 +11,12 @@ class ByProjectKeyPaymentsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyPaymentsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Payment":
-        """Get Payment by ID
-        """
+        """Get Payment by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/payments/{self._id}",
             params={"expand": expand},
-            response_object=Payment,
+            response_class=Payment,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyPaymentsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Payment":
-        """Update Payment by ID
-        """
+        """Update Payment by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/payments/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Payment,
+            response_class=Payment,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -53,11 +56,10 @@ class ByProjectKeyPaymentsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Payment":
-        """Delete Payment by ID
-        """
+        """Delete Payment by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/payments/{self._id}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Payment,
+            response_class=Payment,
             headers=headers,
         )

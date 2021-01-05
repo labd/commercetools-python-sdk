@@ -11,7 +11,12 @@ class ByProjectKeyCartDiscountsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyCartDiscountsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "CartDiscount":
-        """Get CartDiscount by key
-        """
+        """Get CartDiscount by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/cart-discounts/key={self._key}",
             params={"expand": expand},
-            response_object=CartDiscount,
+            response_class=CartDiscount,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyCartDiscountsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CartDiscount":
-        """Update CartDiscount by key
-        """
+        """Update CartDiscount by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/cart-discounts/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=CartDiscount,
+            response_class=CartDiscount,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyCartDiscountsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CartDiscount":
-        """Delete CartDiscount by key
-        """
+        """Delete CartDiscount by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/cart-discounts/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=CartDiscount,
+            response_class=CartDiscount,
             headers=headers,
         )

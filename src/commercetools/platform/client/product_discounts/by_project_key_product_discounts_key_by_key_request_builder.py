@@ -11,7 +11,12 @@ class ByProjectKeyProductDiscountsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyProductDiscountsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "ProductDiscount":
-        """Get ProductDiscount by key
-        """
+        """Get ProductDiscount by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/product-discounts/key={self._key}",
             params={"expand": expand},
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyProductDiscountsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductDiscount":
-        """Update ProductDiscount by key
-        """
+        """Update ProductDiscount by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-discounts/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyProductDiscountsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductDiscount":
-        """Delete ProductDiscount by key
-        """
+        """Delete ProductDiscount by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/product-discounts/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=ProductDiscount,
+            response_class=ProductDiscount,
             headers=headers,
         )

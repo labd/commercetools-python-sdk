@@ -13,13 +13,18 @@ class ByProjectKeyProductVariantPatchesImportSinkKeyByImportSinkKeyRequestBuilde
     _project_key: str
     _import_sink_key: str
 
-    def __init__(self, projectKey: str, importSinkKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        importSinkKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._import_sink_key = importSinkKey
         self._client = client
 
     def importOperations(
-        self
+        self,
     ) -> ByProjectKeyProductVariantPatchesImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder:
         return ByProjectKeyProductVariantPatchesImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder(
             projectKey=self._project_key,
@@ -33,12 +38,11 @@ class ByProjectKeyProductVariantPatchesImportSinkKeyByImportSinkKeyRequestBuilde
         *,
         headers: typing.Dict[str, str] = None,
     ) -> "ImportResponse":
-        """Creates a new import request for product variant patches
-        """
+        """Creates a new import request for product variant patches"""
         return self._client._post(
             endpoint=f"/{self._project_key}/product-variant-patches/importSinkKey={self._import_sink_key}",
             params={},
             data_object=body,
-            response_object=ImportResponse,
+            response_class=ImportResponse,
             headers={"Content-Type": "application/json", **headers},
         )

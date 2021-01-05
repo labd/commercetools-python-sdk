@@ -14,7 +14,12 @@ class ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder:
     _project_key: str
     _store_key: str
 
-    def __init__(self, projectKey: str, storeKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._client = client
@@ -40,8 +45,7 @@ class ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderPagedQueryResponse":
-        """Query orders
-        """
+        """Query orders"""
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/orders",
             params={
@@ -52,7 +56,7 @@ class ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=OrderPagedQueryResponse,
+            response_class=OrderPagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +67,11 @@ class ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Order":
-        """Create Order
-        """
+        """Create Order"""
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/orders",
             params={"expand": expand},
             data_object=body,
-            response_object=Order,
+            response_class=Order,
             headers={"Content-Type": "application/json", **headers},
         )

@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.subscription import (
-    SubscriptionDraftSchema,
-    SubscriptionPagedQueryResponseSchema,
-    SubscriptionSchema,
-    SubscriptionUpdateSchema,
-)
 from commercetools.platform.models.subscription import (
     Subscription,
     SubscriptionDraft,
@@ -45,7 +39,7 @@ class SubscriptionService(abstract.AbstractService):
         """Retrieves the representation of a subscription by its id."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"subscriptions/{id}", params=params, schema_cls=SubscriptionSchema
+            endpoint=f"subscriptions/{id}", params=params, response_class=Subscription
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Subscription:
@@ -54,7 +48,7 @@ class SubscriptionService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"subscriptions/key={key}",
             params=params,
-            schema_cls=SubscriptionSchema,
+            response_class=Subscription,
         )
 
     def query(
@@ -86,7 +80,7 @@ class SubscriptionService(abstract.AbstractService):
         return self._client._get(
             endpoint="subscriptions",
             params=params,
-            schema_cls=SubscriptionPagedQueryResponseSchema,
+            response_class=SubscriptionPagedQueryResponse,
         )
 
     def create(
@@ -108,8 +102,7 @@ class SubscriptionService(abstract.AbstractService):
             endpoint="subscriptions",
             params=params,
             data_object=draft,
-            request_schema_cls=SubscriptionDraftSchema,
-            response_schema_cls=SubscriptionSchema,
+            response_class=Subscription,
         )
 
     def update_by_id(
@@ -127,8 +120,7 @@ class SubscriptionService(abstract.AbstractService):
             endpoint=f"subscriptions/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=SubscriptionUpdateSchema,
-            response_schema_cls=SubscriptionSchema,
+            response_class=Subscription,
             force_update=force_update,
         )
 
@@ -147,8 +139,7 @@ class SubscriptionService(abstract.AbstractService):
             endpoint=f"subscriptions/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=SubscriptionUpdateSchema,
-            response_schema_cls=SubscriptionSchema,
+            response_class=Subscription,
             force_update=force_update,
         )
 
@@ -166,7 +157,7 @@ class SubscriptionService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"subscriptions/{id}",
             params=params,
-            response_schema_cls=SubscriptionSchema,
+            response_class=Subscription,
             force_delete=force_delete,
         )
 
@@ -184,6 +175,6 @@ class SubscriptionService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"subscriptions/key={key}",
             params=params,
-            response_schema_cls=SubscriptionSchema,
+            response_class=Subscription,
             force_delete=force_delete,
         )

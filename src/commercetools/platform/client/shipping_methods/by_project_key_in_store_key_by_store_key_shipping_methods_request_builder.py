@@ -12,16 +12,24 @@ class ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder:
     _project_key: str
     _store_key: str
 
-    def __init__(self, projectKey: str, storeKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._client = client
 
     def matchingCart(
-        self
+        self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder:
-        """Get ShippingMethods for a cart in a store
-        """
-        return ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+        """Get ShippingMethods for a cart in a store"""
+        return (
+            ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder(
+                projectKey=self._project_key,
+                storeKey=self._store_key,
+                client=self._client,
+            )
         )

@@ -16,18 +16,26 @@ class ByProjectKeyMeShoppingListsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withId(self, ID: str) -> ByProjectKeyMeShoppingListsByIDRequestBuilder:
         return ByProjectKeyMeShoppingListsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withKey(self, key: str) -> ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
         return ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -41,8 +49,7 @@ class ByProjectKeyMeShoppingListsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShoppingListPagedQueryResponse":
-        """Query shopping-lists
-        """
+        """Query shopping-lists"""
         return self._client._get(
             endpoint=f"/{self._project_key}/me/shopping-lists",
             params={
@@ -53,7 +60,7 @@ class ByProjectKeyMeShoppingListsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ShoppingListPagedQueryResponse,
+            response_class=ShoppingListPagedQueryResponse,
             headers=headers,
         )
 
@@ -64,12 +71,11 @@ class ByProjectKeyMeShoppingListsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyShoppingList":
-        """Create MyShoppingList
-        """
+        """Create MyShoppingList"""
         return self._client._post(
             endpoint=f"/{self._project_key}/me/shopping-lists",
             params={"expand": expand},
             data_object=body,
-            response_object=MyShoppingList,
+            response_class=MyShoppingList,
             headers={"Content-Type": "application/json", **headers},
         )

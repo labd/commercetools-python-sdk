@@ -5,11 +5,6 @@ import marshmallow
 from marshmallow import fields
 
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.product import (
-    ProductProjectionPagedQueryResponseSchema,
-    ProductProjectionPagedSearchResponseSchema,
-    ProductProjectionSchema,
-)
 from commercetools.platform.models.product import (
     ProductProjection,
     ProductProjectionPagedQueryResponse,
@@ -143,7 +138,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-projections/{id}",
             params=params,
-            schema_cls=ProductProjectionSchema,
+            response_class=ProductProjection,
         )
 
     def get_by_key(
@@ -181,7 +176,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-projections/key={key}",
             params=params,
-            schema_cls=ProductProjectionSchema,
+            response_class=ProductProjection,
         )
 
     def query(
@@ -234,7 +229,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-projections",
             params=params,
-            schema_cls=ProductProjectionPagedQueryResponseSchema,
+            response_class=ProductProjectionPagedQueryResponse,
         )
 
     def search(
@@ -299,7 +294,7 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-projections/search",
             params=params,
-            schema_cls=ProductProjectionPagedSearchResponseSchema,
+            response_class=ProductProjectionPagedSearchResponse,
         )
 
     def suggest(
@@ -331,5 +326,5 @@ class ProductProjectionService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-projections/suggest",
             params=params,
-            schema_cls=ProductProjectionSchema,
+            response_class=ProductProjection,
         )

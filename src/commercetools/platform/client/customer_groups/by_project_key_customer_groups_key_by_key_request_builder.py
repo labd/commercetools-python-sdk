@@ -11,7 +11,12 @@ class ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "CustomerGroup":
-        """Gets a customer group by Key.
-        """
+        """Gets a customer group by Key."""
         return self._client._get(
             endpoint=f"/{self._project_key}/customer-groups/key={self._key}",
             params={"expand": expand},
-            response_object=CustomerGroup,
+            response_class=CustomerGroup,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerGroup":
-        """Updates a customer group by Key.
-        """
+        """Updates a customer group by Key."""
         return self._client._post(
             endpoint=f"/{self._project_key}/customer-groups/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=CustomerGroup,
+            response_class=CustomerGroup,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerGroup":
-        """Delete CustomerGroup by key
-        """
+        """Delete CustomerGroup by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/customer-groups/key={self._key}",
             params={"version": version, "expand": expand},
-            response_object=CustomerGroup,
+            response_class=CustomerGroup,
             headers=headers,
         )

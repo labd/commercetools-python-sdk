@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.customer_group import (
-    CustomerGroupDraftSchema,
-    CustomerGroupPagedQueryResponseSchema,
-    CustomerGroupSchema,
-    CustomerGroupUpdateSchema,
-)
 from commercetools.platform.models.customer_group import (
     CustomerGroup,
     CustomerGroupDraft,
@@ -45,7 +39,7 @@ class CustomerGroupService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"customer-groups/{id}",
             params=params,
-            schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> CustomerGroup:
@@ -54,7 +48,7 @@ class CustomerGroupService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"customer-groups/key={key}",
             params=params,
-            schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
         )
 
     def query(
@@ -84,7 +78,7 @@ class CustomerGroupService(abstract.AbstractService):
         return self._client._get(
             endpoint="customer-groups",
             params=params,
-            schema_cls=CustomerGroupPagedQueryResponseSchema,
+            response_class=CustomerGroupPagedQueryResponse,
         )
 
     def create(
@@ -96,8 +90,7 @@ class CustomerGroupService(abstract.AbstractService):
             endpoint="customer-groups",
             params=params,
             data_object=draft,
-            request_schema_cls=CustomerGroupDraftSchema,
-            response_schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
         )
 
     def update_by_id(
@@ -115,8 +108,7 @@ class CustomerGroupService(abstract.AbstractService):
             endpoint=f"customer-groups/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CustomerGroupUpdateSchema,
-            response_schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
             force_update=force_update,
         )
 
@@ -136,8 +128,7 @@ class CustomerGroupService(abstract.AbstractService):
             endpoint=f"customer-groups/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CustomerGroupUpdateSchema,
-            response_schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
             force_update=force_update,
         )
 
@@ -155,7 +146,7 @@ class CustomerGroupService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"customer-groups/{id}",
             params=params,
-            response_schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
             force_delete=force_delete,
         )
 
@@ -173,6 +164,6 @@ class CustomerGroupService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"customer-groups/key={key}",
             params=params,
-            response_schema_cls=CustomerGroupSchema,
+            response_class=CustomerGroup,
             force_delete=force_delete,
         )

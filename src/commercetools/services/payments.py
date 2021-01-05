@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.payment import (
-    PaymentDraftSchema,
-    PaymentPagedQueryResponseSchema,
-    PaymentSchema,
-    PaymentUpdateSchema,
-)
 from commercetools.platform.models.payment import (
     Payment,
     PaymentDraft,
@@ -46,13 +40,13 @@ class PaymentService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Payment:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"payments/{id}", params=params, schema_cls=PaymentSchema
+            endpoint=f"payments/{id}", params=params, response_class=Payment
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Payment:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"payments/key={key}", params=params, schema_cls=PaymentSchema
+            endpoint=f"payments/key={key}", params=params, response_class=Payment
         )
 
     def query(
@@ -82,9 +76,7 @@ class PaymentService(abstract.AbstractService):
             _PaymentQuerySchema,
         )
         return self._client._get(
-            endpoint="payments",
-            params=params,
-            schema_cls=PaymentPagedQueryResponseSchema,
+            endpoint="payments", params=params, response_class=PaymentPagedQueryResponse
         )
 
     def create(self, draft: PaymentDraft, *, expand: OptionalListStr = None) -> Payment:
@@ -99,8 +91,7 @@ class PaymentService(abstract.AbstractService):
             endpoint="payments",
             params=params,
             data_object=draft,
-            request_schema_cls=PaymentDraftSchema,
-            response_schema_cls=PaymentSchema,
+            response_class=Payment,
         )
 
     def update_by_id(
@@ -118,8 +109,7 @@ class PaymentService(abstract.AbstractService):
             endpoint=f"payments/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=PaymentUpdateSchema,
-            response_schema_cls=PaymentSchema,
+            response_class=Payment,
             force_update=force_update,
         )
 
@@ -138,8 +128,7 @@ class PaymentService(abstract.AbstractService):
             endpoint=f"payments/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=PaymentUpdateSchema,
-            response_schema_cls=PaymentSchema,
+            response_class=Payment,
             force_update=force_update,
         )
 
@@ -159,7 +148,7 @@ class PaymentService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"payments/{id}",
             params=params,
-            response_schema_cls=PaymentSchema,
+            response_class=Payment,
             force_delete=force_delete,
         )
 
@@ -179,6 +168,6 @@ class PaymentService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"payments/key={key}",
             params=params,
-            response_schema_cls=PaymentSchema,
+            response_class=Payment,
             force_delete=force_delete,
         )

@@ -13,9 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class CategoryImport(ImportResource):
-    """Import representation for a category.
-    
-    """
+    """Import representation for a category."""
 
     #: Maps to `Category.name`.
     name: "LocalizedString"

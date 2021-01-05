@@ -12,7 +12,13 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder:
     _store_key: str
     _id: str
 
-    def __init__(self, projectKey: str, storeKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._id = ID
@@ -21,12 +27,11 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Cart":
-        """Get Cart by ID
-        """
+        """Get Cart by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/carts/{self._id}",
             params={"expand": expand},
-            response_object=Cart,
+            response_class=Cart,
             headers=headers,
         )
 
@@ -37,13 +42,12 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Cart":
-        """Update Cart by ID
-        """
+        """Update Cart by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/carts/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Cart,
+            response_class=Cart,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -54,11 +58,10 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Cart":
-        """Delete Cart by ID
-        """
+        """Delete Cart by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/carts/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=Cart,
+            response_class=Cart,
             headers=headers,
         )

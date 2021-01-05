@@ -15,18 +15,26 @@ class ByProjectKeyTypesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyTypesKeyByKeyRequestBuilder:
         return ByProjectKeyTypesKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyTypesByIDRequestBuilder:
         return ByProjectKeyTypesByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyTypesRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "TypePagedQueryResponse":
-        """Query types
-        """
+        """Query types"""
         return self._client._get(
             endpoint=f"/{self._project_key}/types",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyTypesRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=TypePagedQueryResponse,
+            response_class=TypePagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyTypesRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Type":
-        """Create Type
-        """
+        """Create Type"""
         return self._client._post(
             endpoint=f"/{self._project_key}/types",
             params={"expand": expand},
             data_object=body,
-            response_object=Type,
+            response_class=Type,
             headers={"Content-Type": "application/json", **headers},
         )

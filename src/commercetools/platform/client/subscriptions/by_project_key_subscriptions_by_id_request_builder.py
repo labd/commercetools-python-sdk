@@ -11,7 +11,12 @@ class ByProjectKeySubscriptionsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeySubscriptionsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Subscription":
-        """Retrieves the representation of a subscription by its id.
-        """
+        """Retrieves the representation of a subscription by its id."""
         return self._client._get(
             endpoint=f"/{self._project_key}/subscriptions/{self._id}",
             params={"expand": expand},
-            response_object=Subscription,
+            response_class=Subscription,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeySubscriptionsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Subscription":
-        """Update Subscription by ID
-        """
+        """Update Subscription by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/subscriptions/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Subscription,
+            response_class=Subscription,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeySubscriptionsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Subscription":
-        """Delete Subscription by ID
-        """
+        """Delete Subscription by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/subscriptions/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=Subscription,
+            response_class=Subscription,
             headers=headers,
         )

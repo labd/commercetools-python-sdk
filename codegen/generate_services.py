@@ -636,8 +636,8 @@ def _generate_init_file(services, modules):
 
     # Import ClientProtocol
     node = ast.ImportFrom(
-        module="commercetools.protocols",
-        names=[ast.alias(name="ClientProtocol", asname=None)],
+        module="commercetools.client",
+        names=[ast.alias(name="Client", asname=None)],
         level=0,
     )
     if_node.body.append(node)
@@ -655,7 +655,7 @@ def _generate_init_file(services, modules):
             args=ast.arguments(
                 args=[
                     ast.arg(
-                        arg="self", annotation=ast.Str(s="ClientProtocol", kind=None)
+                        arg="self", annotation=ast.Str(s="Client", kind=None)
                     )
                 ],
                 vararg=None,

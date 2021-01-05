@@ -19,18 +19,26 @@ class ByProjectKeyCartDiscountsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyCartDiscountsKeyByKeyRequestBuilder:
         return ByProjectKeyCartDiscountsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyCartDiscountsByIDRequestBuilder:
         return ByProjectKeyCartDiscountsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -44,8 +52,7 @@ class ByProjectKeyCartDiscountsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CartDiscountPagedQueryResponse":
-        """Query cart-discounts
-        """
+        """Query cart-discounts"""
         return self._client._get(
             endpoint=f"/{self._project_key}/cart-discounts",
             params={
@@ -56,7 +63,7 @@ class ByProjectKeyCartDiscountsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=CartDiscountPagedQueryResponse,
+            response_class=CartDiscountPagedQueryResponse,
             headers=headers,
         )
 
@@ -67,12 +74,11 @@ class ByProjectKeyCartDiscountsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CartDiscount":
-        """Create CartDiscount
-        """
+        """Create CartDiscount"""
         return self._client._post(
             endpoint=f"/{self._project_key}/cart-discounts",
             params={"expand": expand},
             data_object=body,
-            response_object=CartDiscount,
+            response_class=CartDiscount,
             headers={"Content-Type": "application/json", **headers},
         )

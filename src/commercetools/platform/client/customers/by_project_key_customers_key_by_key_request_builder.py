@@ -11,7 +11,12 @@ class ByProjectKeyCustomersKeyByKeyRequestBuilder:
     _project_key: str
     _key: str
 
-    def __init__(self, projectKey: str, key: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        key: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._key = key
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyCustomersKeyByKeyRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Customer":
-        """Get Customer by key
-        """
+        """Get Customer by key"""
         return self._client._get(
             endpoint=f"/{self._project_key}/customers/key={self._key}",
             params={"expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyCustomersKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Customer":
-        """Update Customer by key
-        """
+        """Update Customer by key"""
         return self._client._post(
             endpoint=f"/{self._project_key}/customers/key={self._key}",
             params={"expand": expand},
             data_object=body,
-            response_object=Customer,
+            response_class=Customer,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -53,11 +56,10 @@ class ByProjectKeyCustomersKeyByKeyRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Customer":
-        """Delete Customer by key
-        """
+        """Delete Customer by key"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/customers/key={self._key}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )

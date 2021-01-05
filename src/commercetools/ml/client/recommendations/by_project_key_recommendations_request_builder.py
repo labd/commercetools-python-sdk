@@ -14,20 +14,26 @@ class ByProjectKeyRecommendationsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def projectCategories(
-        self
+        self,
     ) -> ByProjectKeyRecommendationsProjectCategoriesRequestBuilder:
         return ByProjectKeyRecommendationsProjectCategoriesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def generalCategories(
-        self
+        self,
     ) -> ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder:
         return ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder(
-            projectKey=self._project_key, client=self._client
+            projectKey=self._project_key,
+            client=self._client,
         )

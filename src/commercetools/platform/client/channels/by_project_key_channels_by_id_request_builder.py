@@ -11,7 +11,12 @@ class ByProjectKeyChannelsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
@@ -19,12 +24,11 @@ class ByProjectKeyChannelsByIDRequestBuilder:
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Channel":
-        """Get Channel by ID
-        """
+        """Get Channel by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/channels/{self._id}",
             params={"expand": expand},
-            response_object=Channel,
+            response_class=Channel,
             headers=headers,
         )
 
@@ -35,13 +39,12 @@ class ByProjectKeyChannelsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Channel":
-        """Update Channel by ID
-        """
+        """Update Channel by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/channels/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=Channel,
+            response_class=Channel,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -52,11 +55,10 @@ class ByProjectKeyChannelsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Channel":
-        """Delete Channel by ID
-        """
+        """Delete Channel by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/channels/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=Channel,
+            response_class=Channel,
             headers=headers,
         )

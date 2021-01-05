@@ -15,18 +15,26 @@ class ByProjectKeyExtensionsRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyExtensionsKeyByKeyRequestBuilder:
         return ByProjectKeyExtensionsKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyExtensionsByIDRequestBuilder:
         return ByProjectKeyExtensionsByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -40,8 +48,7 @@ class ByProjectKeyExtensionsRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ExtensionPagedQueryResponse":
-        """Query extensions
-        """
+        """Query extensions"""
         return self._client._get(
             endpoint=f"/{self._project_key}/extensions",
             params={
@@ -52,7 +59,7 @@ class ByProjectKeyExtensionsRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=ExtensionPagedQueryResponse,
+            response_class=ExtensionPagedQueryResponse,
             headers=headers,
         )
 
@@ -63,12 +70,11 @@ class ByProjectKeyExtensionsRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Extension":
-        """Currently, a maximum of 25 extensions can be created per project.
-        """
+        """Currently, a maximum of 25 extensions can be created per project."""
         return self._client._post(
             endpoint=f"/{self._project_key}/extensions",
             params={"expand": expand},
             data_object=body,
-            response_object=Extension,
+            response_class=Extension,
             headers={"Content-Type": "application/json", **headers},
         )

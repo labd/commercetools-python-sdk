@@ -2,13 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.product_discount import (
-    ProductDiscountDraftSchema,
-    ProductDiscountMatchQuerySchema,
-    ProductDiscountPagedQueryResponseSchema,
-    ProductDiscountSchema,
-    ProductDiscountUpdateSchema,
-)
 from commercetools.platform.models.product_discount import (
     ProductDiscount,
     ProductDiscountDraft,
@@ -47,7 +40,7 @@ class ProductDiscountService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-discounts/{id}",
             params=params,
-            schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
         )
 
     def get_by_key(
@@ -57,7 +50,7 @@ class ProductDiscountService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"product-discounts/key={key}",
             params=params,
-            schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
         )
 
     def query(
@@ -87,7 +80,7 @@ class ProductDiscountService(abstract.AbstractService):
         return self._client._get(
             endpoint="product-discounts",
             params=params,
-            schema_cls=ProductDiscountPagedQueryResponseSchema,
+            response_class=ProductDiscountPagedQueryResponse,
         )
 
     def create(
@@ -99,8 +92,7 @@ class ProductDiscountService(abstract.AbstractService):
             endpoint="product-discounts",
             params=params,
             data_object=draft,
-            request_schema_cls=ProductDiscountDraftSchema,
-            response_schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
         )
 
     def update_by_id(
@@ -120,8 +112,7 @@ class ProductDiscountService(abstract.AbstractService):
             endpoint=f"product-discounts/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ProductDiscountUpdateSchema,
-            response_schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
             force_update=force_update,
         )
 
@@ -142,8 +133,7 @@ class ProductDiscountService(abstract.AbstractService):
             endpoint=f"product-discounts/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ProductDiscountUpdateSchema,
-            response_schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
             force_update=force_update,
         )
 
@@ -161,7 +151,7 @@ class ProductDiscountService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"product-discounts/{id}",
             params=params,
-            response_schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
             force_delete=force_delete,
         )
 
@@ -179,7 +169,7 @@ class ProductDiscountService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"product-discounts/key={key}",
             params=params,
-            response_schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
             force_delete=force_delete,
         )
 
@@ -189,6 +179,5 @@ class ProductDiscountService(abstract.AbstractService):
             endpoint="product-discounts/matching",
             params=params,
             data_object=action,
-            request_schema_cls=ProductDiscountMatchQuerySchema,
-            response_schema_cls=ProductDiscountSchema,
+            response_class=ProductDiscount,
         )

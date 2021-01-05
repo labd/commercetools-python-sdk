@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.category import (
-    CategoryDraftSchema,
-    CategoryPagedQueryResponseSchema,
-    CategorySchema,
-    CategoryUpdateSchema,
-)
 from commercetools.platform.models.category import (
     Category,
     CategoryDraft,
@@ -43,13 +37,13 @@ class CategoryService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Category:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"categories/{id}", params=params, schema_cls=CategorySchema
+            endpoint=f"categories/{id}", params=params, response_class=Category
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Category:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"categories/key={key}", params=params, schema_cls=CategorySchema
+            endpoint=f"categories/key={key}", params=params, response_class=Category
         )
 
     def query(
@@ -79,7 +73,7 @@ class CategoryService(abstract.AbstractService):
         return self._client._get(
             endpoint="categories",
             params=params,
-            schema_cls=CategoryPagedQueryResponseSchema,
+            response_class=CategoryPagedQueryResponse,
         )
 
     def create(
@@ -94,8 +88,7 @@ class CategoryService(abstract.AbstractService):
             endpoint="categories",
             params=params,
             data_object=draft,
-            request_schema_cls=CategoryDraftSchema,
-            response_schema_cls=CategorySchema,
+            response_class=Category,
         )
 
     def update_by_id(
@@ -113,8 +106,7 @@ class CategoryService(abstract.AbstractService):
             endpoint=f"categories/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CategoryUpdateSchema,
-            response_schema_cls=CategorySchema,
+            response_class=Category,
             force_update=force_update,
         )
 
@@ -133,8 +125,7 @@ class CategoryService(abstract.AbstractService):
             endpoint=f"categories/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CategoryUpdateSchema,
-            response_schema_cls=CategorySchema,
+            response_class=Category,
             force_update=force_update,
         )
 
@@ -152,7 +143,7 @@ class CategoryService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"categories/{id}",
             params=params,
-            response_schema_cls=CategorySchema,
+            response_class=Category,
             force_delete=force_delete,
         )
 
@@ -170,6 +161,6 @@ class CategoryService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"categories/key={key}",
             params=params,
-            response_schema_cls=CategorySchema,
+            response_class=Category,
             force_delete=force_delete,
         )

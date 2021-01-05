@@ -184,7 +184,7 @@ class ImportResource(_BaseType):
     Import resources are similar to commercetools draft types, but they only support key references.
     In general, import resources are more granular then the normal commercetools resource.
     They are optimized for incremental updates and therefore have a slightly different structure.
-    
+
     """
 
     key: "str"
@@ -206,8 +206,7 @@ class ImportResource(_BaseType):
 
 
 class KeyReference(_BaseType):
-    """References a resource by its key.
-    """
+    """References a resource by its key."""
 
     key: "str"
     #: The type of the referenced resource.
@@ -231,8 +230,7 @@ class KeyReference(_BaseType):
 
 
 class CartDiscountKeyReference(KeyReference):
-    """References a cart discount by its key.
-    """
+    """References a cart discount by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -253,8 +251,7 @@ class CartDiscountKeyReference(KeyReference):
 
 
 class CategoryKeyReference(KeyReference):
-    """References a category by its key.
-    """
+    """References a category by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -273,8 +270,7 @@ class CategoryKeyReference(KeyReference):
 
 
 class ChannelKeyReference(KeyReference):
-    """References a channel by its key.
-    """
+    """References a channel by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -293,8 +289,7 @@ class ChannelKeyReference(KeyReference):
 
 
 class CustomerKeyReference(KeyReference):
-    """References a customer by its key.
-    """
+    """References a customer by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -313,8 +308,7 @@ class CustomerKeyReference(KeyReference):
 
 
 class CustomerGroupKeyReference(KeyReference):
-    """References a customer group by its key.
-    """
+    """References a customer group by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -335,8 +329,7 @@ class CustomerGroupKeyReference(KeyReference):
 
 
 class PriceKeyReference(KeyReference):
-    """References a price by its key.
-    """
+    """References a price by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -355,8 +348,7 @@ class PriceKeyReference(KeyReference):
 
 
 class ProductKeyReference(KeyReference):
-    """References a product by its key.
-    """
+    """References a product by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -375,8 +367,7 @@ class ProductKeyReference(KeyReference):
 
 
 class ProductDiscountKeyReference(KeyReference):
-    """References a product discount by its key.
-    """
+    """References a product discount by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -397,8 +388,7 @@ class ProductDiscountKeyReference(KeyReference):
 
 
 class ProductTypeKeyReference(KeyReference):
-    """References a product type by its key.
-    """
+    """References a product type by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -419,8 +409,7 @@ class ProductTypeKeyReference(KeyReference):
 
 
 class ProductVariantKeyReference(KeyReference):
-    """References a product variant by its key.
-    """
+    """References a product variant by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -441,8 +430,7 @@ class ProductVariantKeyReference(KeyReference):
 
 
 class ShippingMethodKeyReference(KeyReference):
-    """References a shipping method by its key.
-    """
+    """References a shipping method by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -463,8 +451,7 @@ class ShippingMethodKeyReference(KeyReference):
 
 
 class StateKeyReference(KeyReference):
-    """References a state by its key.
-    """
+    """References a state by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -483,8 +470,7 @@ class StateKeyReference(KeyReference):
 
 
 class StoreKeyReference(KeyReference):
-    """References a store by its key.
-    """
+    """References a store by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -503,8 +489,7 @@ class StoreKeyReference(KeyReference):
 
 
 class TaxCategoryKeyReference(KeyReference):
-    """References a tax category by its key.
-    """
+    """References a tax category by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -525,8 +510,7 @@ class TaxCategoryKeyReference(KeyReference):
 
 
 class TypeKeyReference(KeyReference):
-    """References a type by its key.
-    """
+    """References a type by its key."""
 
     def __init__(self, *, key: "str"):
 
@@ -664,9 +648,7 @@ class DiscountedPrice(_BaseType):
 
 
 class PriceTier(_BaseType):
-    """A price tier is selected instead of the default price when a certain quantity of the ProductVariant is added to a cart and ordered.
-    
-    """
+    """A price tier is selected instead of the default price when a certain quantity of the ProductVariant is added to a cart and ordered."""
 
     #: The minimum quantity this price tier is valid for.
     minimum_quantity: "int"
@@ -691,9 +673,7 @@ class PriceTier(_BaseType):
 
 
 class ImportResourceType(enum.Enum):
-    """The type of the import resource.
-   
-   """
+    """The type of the import resource."""
 
     CATEGORY = "category"
     ORDER = "order"
@@ -708,9 +688,7 @@ class ImportResourceType(enum.Enum):
 
 
 class ReferenceType(enum.Enum):
-    """The type of the referenced resource.
-   
-   """
+    """The type of the referenced resource."""
 
     CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
@@ -730,9 +708,7 @@ class ReferenceType(enum.Enum):
 
 
 class ProcessingState(enum.Enum):
-    """This enumeration describes the processing state of an import operation.
-   
-   """
+    """This enumeration describes the processing state of an import operation."""
 
     VALIDATION_FAILED = "ValidationFailed"
     UNRESOLVED = "Unresolved"

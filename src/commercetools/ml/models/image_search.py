@@ -11,9 +11,7 @@ if typing.TYPE_CHECKING:
 
 
 class ImageSearchResponse(_BaseType):
-    """Response format from image search endpoint.
-    
-    """
+    """Response format from image search endpoint."""
 
     #: The maximum number of results to return from a query.
     count: "int"
@@ -51,8 +49,7 @@ class ImageSearchResponse(_BaseType):
 
 
 class ResultItem(_BaseType):
-    """An image URL and the product variants it is contained in. If no matching images are found, ResultItem is not present.
-    """
+    """An image URL and the product variants it is contained in. If no matching images are found, ResultItem is not present."""
 
     #: The URL of the image.
     image_url: "str"

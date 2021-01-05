@@ -19,18 +19,26 @@ class ByProjectKeyTaxCategoriesRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
     def withKey(self, key: str) -> ByProjectKeyTaxCategoriesKeyByKeyRequestBuilder:
         return ByProjectKeyTaxCategoriesKeyByKeyRequestBuilder(
-            key=key, projectKey=self._project_key, client=self._client
+            key=key,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def withId(self, ID: str) -> ByProjectKeyTaxCategoriesByIDRequestBuilder:
         return ByProjectKeyTaxCategoriesByIDRequestBuilder(
-            ID=ID, projectKey=self._project_key, client=self._client
+            ID=ID,
+            projectKey=self._project_key,
+            client=self._client,
         )
 
     def get(
@@ -44,8 +52,7 @@ class ByProjectKeyTaxCategoriesRequestBuilder:
         where: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "TaxCategoryPagedQueryResponse":
-        """Query tax-categories
-        """
+        """Query tax-categories"""
         return self._client._get(
             endpoint=f"/{self._project_key}/tax-categories",
             params={
@@ -56,7 +63,7 @@ class ByProjectKeyTaxCategoriesRequestBuilder:
                 "withTotal": with_total,
                 "where": where,
             },
-            response_object=TaxCategoryPagedQueryResponse,
+            response_class=TaxCategoryPagedQueryResponse,
             headers=headers,
         )
 
@@ -67,12 +74,11 @@ class ByProjectKeyTaxCategoriesRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "TaxCategory":
-        """Create TaxCategory
-        """
+        """Create TaxCategory"""
         return self._client._post(
             endpoint=f"/{self._project_key}/tax-categories",
             params={"expand": expand},
             data_object=body,
-            response_object=TaxCategory,
+            response_class=TaxCategory,
             headers={"Content-Type": "application/json", **headers},
         )

@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.state import (
-    StateDraftSchema,
-    StatePagedQueryResponseSchema,
-    StateSchema,
-    StateUpdateSchema,
-)
 from commercetools.platform.models.state import (
     State,
     StateDraft,
@@ -48,13 +42,13 @@ class StateService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> State:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"states/{id}", params=params, schema_cls=StateSchema
+            endpoint=f"states/{id}", params=params, response_class=State
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> State:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"states/key={key}", params=params, schema_cls=StateSchema
+            endpoint=f"states/key={key}", params=params, response_class=State
         )
 
     def query(
@@ -86,7 +80,7 @@ class StateService(abstract.AbstractService):
             _StateQuerySchema,
         )
         return self._client._get(
-            endpoint="states", params=params, schema_cls=StatePagedQueryResponseSchema
+            endpoint="states", params=params, response_class=StatePagedQueryResponse
         )
 
     def create(self, draft: StateDraft, *, expand: OptionalListStr = None) -> State:
@@ -97,11 +91,7 @@ class StateService(abstract.AbstractService):
         """
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="states",
-            params=params,
-            data_object=draft,
-            request_schema_cls=StateDraftSchema,
-            response_schema_cls=StateSchema,
+            endpoint="states", params=params, data_object=draft, response_class=State
         )
 
     def update_by_id(
@@ -119,8 +109,7 @@ class StateService(abstract.AbstractService):
             endpoint=f"states/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=StateUpdateSchema,
-            response_schema_cls=StateSchema,
+            response_class=State,
             force_update=force_update,
         )
 
@@ -139,8 +128,7 @@ class StateService(abstract.AbstractService):
             endpoint=f"states/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=StateUpdateSchema,
-            response_schema_cls=StateSchema,
+            response_class=State,
             force_update=force_update,
         )
 
@@ -158,7 +146,7 @@ class StateService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"states/{id}",
             params=params,
-            response_schema_cls=StateSchema,
+            response_class=State,
             force_delete=force_delete,
         )
 
@@ -176,6 +164,6 @@ class StateService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"states/key={key}",
             params=params,
-            response_schema_cls=StateSchema,
+            response_class=State,
             force_delete=force_delete,
         )

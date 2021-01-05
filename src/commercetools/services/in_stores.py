@@ -4,32 +4,6 @@ import typing
 from marshmallow import fields
 
 from commercetools.helpers import OptionalList, RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.cart import (
-    CartDraftSchema,
-    CartPagedQueryResponseSchema,
-    CartSchema,
-    CartUpdateSchema,
-)
-from commercetools.platform.models._schemas.customer import (
-    CustomerChangePasswordSchema,
-    CustomerCreateEmailTokenSchema,
-    CustomerCreatePasswordResetTokenSchema,
-    CustomerDraftSchema,
-    CustomerEmailVerifySchema,
-    CustomerPagedQueryResponseSchema,
-    CustomerResetPasswordSchema,
-    CustomerSchema,
-    CustomerSignInResultSchema,
-    CustomerSigninSchema,
-    CustomerTokenSchema,
-    CustomerUpdateSchema,
-)
-from commercetools.platform.models._schemas.order import (
-    OrderFromCartDraftSchema,
-    OrderPagedQueryResponseSchema,
-    OrderSchema,
-    OrderUpdateSchema,
-)
 from commercetools.platform.models.cart import (
     Cart,
     CartDraft,
@@ -101,7 +75,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/carts/customer-id={customer_id}",
             params=params,
-            schema_cls=CartSchema,
+            response_class=Cart,
         )
 
     def cart_get_by_id(
@@ -120,7 +94,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/carts/{id}",
             params=params,
-            schema_cls=CartSchema,
+            response_class=Cart,
         )
 
     def customer_get_by_email_token(
@@ -130,7 +104,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/email-token={email_token}",
             params=params,
-            schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def customer_get_by_id(
@@ -147,7 +121,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/{id}",
             params=params,
-            schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def customer_get_by_key(
@@ -164,7 +138,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/key={key}",
             params=params,
-            schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def customer_get_by_password_token(
@@ -174,7 +148,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers/password-token={password_token}",
             params=params,
-            schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def order_get_by_id(
@@ -191,7 +165,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/orders/{id}",
             params=params,
-            schema_cls=OrderSchema,
+            response_class=Order,
         )
 
     def order_get_by_order_number(
@@ -210,7 +184,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/orders/order-number={order_number}",
             params=params,
-            schema_cls=OrderSchema,
+            response_class=Order,
         )
 
     def cart_query(
@@ -247,7 +221,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/carts",
             params=params,
-            schema_cls=CartPagedQueryResponseSchema,
+            response_class=CartPagedQueryResponse,
         )
 
     def customer_query(
@@ -280,7 +254,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/customers",
             params=params,
-            schema_cls=CustomerPagedQueryResponseSchema,
+            response_class=CustomerPagedQueryResponse,
         )
 
     def order_query(
@@ -315,7 +289,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"in-store/key={store_key}/orders",
             params=params,
-            schema_cls=OrderPagedQueryResponseSchema,
+            response_class=OrderPagedQueryResponse,
         )
 
     def cart_create(
@@ -335,8 +309,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/carts",
             params=params,
             data_object=draft,
-            request_schema_cls=CartDraftSchema,
-            response_schema_cls=CartSchema,
+            response_class=Cart,
         )
 
     def customer_create(
@@ -361,8 +334,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers",
             params=params,
             data_object=draft,
-            request_schema_cls=CustomerDraftSchema,
-            response_schema_cls=CustomerSignInResultSchema,
+            response_class=CustomerSignInResult,
         )
 
     def order_create(
@@ -382,8 +354,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/orders",
             params=params,
             data_object=draft,
-            request_schema_cls=OrderFromCartDraftSchema,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
         )
 
     def cart_update_by_id(
@@ -409,8 +380,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/carts/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CartUpdateSchema,
-            response_schema_cls=CartSchema,
+            response_class=Cart,
             force_update=force_update,
         )
 
@@ -436,8 +406,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CustomerUpdateSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_update=force_update,
         )
 
@@ -462,8 +431,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=CustomerUpdateSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_update=force_update,
         )
 
@@ -490,8 +458,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/orders/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=OrderUpdateSchema,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_update=force_update,
         )
 
@@ -520,8 +487,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/orders/order-number={order_number}",
             params=params,
             data_object=update_action,
-            request_schema_cls=OrderUpdateSchema,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_update=force_update,
         )
 
@@ -542,7 +508,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/carts/{id}",
             params=params,
-            response_schema_cls=CartSchema,
+            response_class=Cart,
             force_delete=force_delete,
         )
 
@@ -563,7 +529,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/customers/{id}",
             params=params,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_delete=force_delete,
         )
 
@@ -584,7 +550,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/customers/key={key}",
             params=params,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
             force_delete=force_delete,
         )
 
@@ -605,7 +571,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/orders/{id}",
             params=params,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_delete=force_delete,
         )
 
@@ -626,7 +592,7 @@ class In_StoreService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"in-store/key={store_key}/orders/order-number={order_number}",
             params=params,
-            response_schema_cls=OrderSchema,
+            response_class=Order,
             force_delete=force_delete,
         )
 
@@ -637,8 +603,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/email/confirm",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerEmailVerifySchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def customer_email_token(self, action: CustomerCreateEmailToken) -> CustomerToken:
@@ -654,8 +619,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/email-token",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerCreateEmailTokenSchema,
-            response_schema_cls=CustomerTokenSchema,
+            response_class=CustomerToken,
         )
 
     def customer_password(self, action: CustomerChangePassword) -> Customer:
@@ -665,8 +629,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/password",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerChangePasswordSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def customer_password_reset(self, action: CustomerResetPassword) -> Customer:
@@ -676,8 +639,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/password/reset",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerResetPasswordSchema,
-            response_schema_cls=CustomerSchema,
+            response_class=Customer,
         )
 
     def customer_password_token(
@@ -698,8 +660,7 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/customers/password-token",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerCreatePasswordResetTokenSchema,
-            response_schema_cls=CustomerTokenSchema,
+            response_class=CustomerToken,
         )
 
     def login(self, action: CustomerSignin) -> CustomerSignInResult:
@@ -712,6 +673,5 @@ class In_StoreService(abstract.AbstractService):
             endpoint=f"in-store/key={store_key}/login",
             params=params,
             data_object=action,
-            request_schema_cls=CustomerSigninSchema,
-            response_schema_cls=CustomerSignInResultSchema,
+            response_class=CustomerSignInResult,
         )

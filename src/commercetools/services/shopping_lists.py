@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.shopping_list import (
-    ShoppingListDraftSchema,
-    ShoppingListPagedQueryResponseSchema,
-    ShoppingListSchema,
-    ShoppingListUpdateSchema,
-)
 from commercetools.platform.models.shopping_list import (
     ShoppingList,
     ShoppingListDraft,
@@ -49,9 +43,7 @@ class ShoppingListService(abstract.AbstractService):
         """Gets a shopping list by ID."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"shopping-lists/{id}",
-            params=params,
-            schema_cls=ShoppingListSchema,
+            endpoint=f"shopping-lists/{id}", params=params, response_class=ShoppingList
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> ShoppingList:
@@ -60,7 +52,7 @@ class ShoppingListService(abstract.AbstractService):
         return self._client._get(
             endpoint=f"shopping-lists/key={key}",
             params=params,
-            schema_cls=ShoppingListSchema,
+            response_class=ShoppingList,
         )
 
     def query(
@@ -90,7 +82,7 @@ class ShoppingListService(abstract.AbstractService):
         return self._client._get(
             endpoint="shopping-lists",
             params=params,
-            schema_cls=ShoppingListPagedQueryResponseSchema,
+            response_class=ShoppingListPagedQueryResponse,
         )
 
     def create(
@@ -102,8 +94,7 @@ class ShoppingListService(abstract.AbstractService):
             endpoint="shopping-lists",
             params=params,
             data_object=draft,
-            request_schema_cls=ShoppingListDraftSchema,
-            response_schema_cls=ShoppingListSchema,
+            response_class=ShoppingList,
         )
 
     def update_by_id(
@@ -121,8 +112,7 @@ class ShoppingListService(abstract.AbstractService):
             endpoint=f"shopping-lists/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ShoppingListUpdateSchema,
-            response_schema_cls=ShoppingListSchema,
+            response_class=ShoppingList,
             force_update=force_update,
         )
 
@@ -142,8 +132,7 @@ class ShoppingListService(abstract.AbstractService):
             endpoint=f"shopping-lists/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ShoppingListUpdateSchema,
-            response_schema_cls=ShoppingListSchema,
+            response_class=ShoppingList,
             force_update=force_update,
         )
 
@@ -163,7 +152,7 @@ class ShoppingListService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"shopping-lists/{id}",
             params=params,
-            response_schema_cls=ShoppingListSchema,
+            response_class=ShoppingList,
             force_delete=force_delete,
         )
 
@@ -183,6 +172,6 @@ class ShoppingListService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"shopping-lists/key={key}",
             params=params,
-            response_schema_cls=ShoppingListSchema,
+            response_class=ShoppingList,
             force_delete=force_delete,
         )

@@ -14,25 +14,31 @@ class ByProjectKeyOrdersEditsByIDRequestBuilder:
     _project_key: str
     _id: str
 
-    def __init__(self, projectKey: str, ID: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        ID: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._id = ID
         self._client = client
 
     def apply(self) -> ByProjectKeyOrdersEditsByIDApplyRequestBuilder:
         return ByProjectKeyOrdersEditsByIDApplyRequestBuilder(
-            projectKey=self._project_key, ID=self._id, client=self._client
+            projectKey=self._project_key,
+            ID=self._id,
+            client=self._client,
         )
 
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "OrderEdit":
-        """Get OrderEdit by ID
-        """
+        """Get OrderEdit by ID"""
         return self._client._get(
             endpoint=f"/{self._project_key}/orders/edits/{self._id}",
             params={"expand": expand},
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers=headers,
         )
 
@@ -43,13 +49,12 @@ class ByProjectKeyOrdersEditsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderEdit":
-        """Update OrderEdit by ID
-        """
+        """Update OrderEdit by ID"""
         return self._client._post(
             endpoint=f"/{self._project_key}/orders/edits/{self._id}",
             params={"expand": expand},
             data_object=body,
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers={"Content-Type": "application/json", **headers},
         )
 
@@ -60,11 +65,10 @@ class ByProjectKeyOrdersEditsByIDRequestBuilder:
         expand: "str" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderEdit":
-        """Delete OrderEdit by ID
-        """
+        """Delete OrderEdit by ID"""
         return self._client._delete(
             endpoint=f"/{self._project_key}/orders/edits/{self._id}",
             params={"version": version, "expand": expand},
-            response_object=OrderEdit,
+            response_class=OrderEdit,
             headers=headers,
         )

@@ -7,7 +7,11 @@ class ByProjectKeyMeEmailConfirmRequestBuilder:
     _client: "Client"
     _project_key: str
 
-    def __init__(self, projectKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._client = client
 
@@ -15,6 +19,6 @@ class ByProjectKeyMeEmailConfirmRequestBuilder:
         return self._client._post(
             endpoint=f"/{self._project_key}/me/email/confirm",
             params={},
-            response_object=None,
+            response_class=None,
             headers=headers,
         )

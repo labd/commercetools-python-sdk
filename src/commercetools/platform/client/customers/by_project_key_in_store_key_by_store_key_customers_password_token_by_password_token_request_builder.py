@@ -12,7 +12,11 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenByPasswordTokenReque
     _password_token: str
 
     def __init__(
-        self, projectKey: str, storeKey: str, passwordToken: str, client: "Client"
+        self,
+        projectKey: str,
+        storeKey: str,
+        passwordToken: str,
+        client: "Client",
     ):
         self._project_key = projectKey
         self._store_key = storeKey
@@ -22,11 +26,10 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenByPasswordTokenReque
     def get(
         self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
     ) -> "Customer":
-        """Get Customer by passwordToken
-        """
+        """Get Customer by passwordToken"""
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/password-token={self._password_token}",
             params={"expand": expand},
-            response_object=Customer,
+            response_class=Customer,
             headers=headers,
         )

@@ -2,12 +2,6 @@
 import typing
 
 from commercetools.helpers import RemoveEmptyValuesMixin
-from commercetools.platform.models._schemas.zone import (
-    ZoneDraftSchema,
-    ZonePagedQueryResponseSchema,
-    ZoneSchema,
-    ZoneUpdateSchema,
-)
 from commercetools.platform.models.zone import (
     Zone,
     ZoneDraft,
@@ -43,13 +37,13 @@ class ZoneService(abstract.AbstractService):
     def get_by_id(self, id: str, *, expand: OptionalListStr = None) -> Zone:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"zones/{id}", params=params, schema_cls=ZoneSchema
+            endpoint=f"zones/{id}", params=params, response_class=Zone
         )
 
     def get_by_key(self, key: str, *, expand: OptionalListStr = None) -> Zone:
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._get(
-            endpoint=f"zones/key={key}", params=params, schema_cls=ZoneSchema
+            endpoint=f"zones/key={key}", params=params, response_class=Zone
         )
 
     def query(
@@ -77,18 +71,14 @@ class ZoneService(abstract.AbstractService):
             _ZoneQuerySchema,
         )
         return self._client._get(
-            endpoint="zones", params=params, schema_cls=ZonePagedQueryResponseSchema
+            endpoint="zones", params=params, response_class=ZonePagedQueryResponse
         )
 
     def create(self, draft: ZoneDraft, *, expand: OptionalListStr = None) -> Zone:
         """Zones allow defining ShippingRates for specific Locations."""
         params = self._serialize_params({"expand": expand}, traits.ExpandableSchema)
         return self._client._post(
-            endpoint="zones",
-            params=params,
-            data_object=draft,
-            request_schema_cls=ZoneDraftSchema,
-            response_schema_cls=ZoneSchema,
+            endpoint="zones", params=params, data_object=draft, response_class=Zone
         )
 
     def update_by_id(
@@ -106,8 +96,7 @@ class ZoneService(abstract.AbstractService):
             endpoint=f"zones/{id}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ZoneUpdateSchema,
-            response_schema_cls=ZoneSchema,
+            response_class=Zone,
             force_update=force_update,
         )
 
@@ -126,8 +115,7 @@ class ZoneService(abstract.AbstractService):
             endpoint=f"zones/key={key}",
             params=params,
             data_object=update_action,
-            request_schema_cls=ZoneUpdateSchema,
-            response_schema_cls=ZoneSchema,
+            response_class=Zone,
             force_update=force_update,
         )
 
@@ -145,7 +133,7 @@ class ZoneService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"zones/{id}",
             params=params,
-            response_schema_cls=ZoneSchema,
+            response_class=Zone,
             force_delete=force_delete,
         )
 
@@ -163,6 +151,6 @@ class ZoneService(abstract.AbstractService):
         return self._client._delete(
             endpoint=f"zones/key={key}",
             params=params,
-            response_schema_cls=ZoneSchema,
+            response_class=Zone,
             force_delete=force_delete,
         )

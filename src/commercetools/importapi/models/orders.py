@@ -31,9 +31,7 @@ if typing.TYPE_CHECKING:
 
 
 class ItemState(_BaseType):
-    """The item's state.
-    
-    """
+    """The item's state."""
 
     quantity: "float"
     #: Maps to `ItemState.state`.
@@ -57,9 +55,7 @@ class ItemState(_BaseType):
 
 
 class ItemShippingTarget(_BaseType):
-    """The item's shipping target.
-    
-    """
+    """The item's shipping target."""
 
     #: Maps to `ItemShippingTarget.addressKey`.
     address_key: "str"
@@ -205,10 +201,10 @@ class LineItemProductVariantImportDraft(_BaseType):
 
 class LineItemImportDraft(_BaseType):
     """Represents an individual line item in an Order. A line item is a snapshot of a product at the time it was added to the order.
-    
+
     You cannot create an order which includes line operations that do not exist in the project or have been deleted.
     Products and variants referenced by a line item must already exist in the commercetools project.
-    
+
     """
 
     #: Maps to `LineItem.productId`.
@@ -585,7 +581,7 @@ class ShippingMethodState(enum.Enum):
 class ShippingInfoImportDraft(_BaseType):
     """Maps to an order's `shippingInfo` property. This field is usually populated by the cart assosciated with
     the order, but when importing orders you must provide a draft representation as a part of the OrderImport.
-    
+
     """
 
     shipping_method_name: "str"
@@ -822,8 +818,7 @@ class TaxedPrice(_BaseType):
 
 
 class OrderState(enum.Enum):
-    """Maps to `Order.orderState`.
-   """
+    """Maps to `Order.orderState`."""
 
     OPEN = "Open"
     CONFIRMED = "Confirmed"
@@ -832,8 +827,7 @@ class OrderState(enum.Enum):
 
 
 class ShipmentState(enum.Enum):
-    """Maps to `Order.shipmentState`.
-   """
+    """Maps to `Order.shipmentState`."""
 
     SHIPPED = "Shipped"
     READY = "Ready"
@@ -844,8 +838,7 @@ class ShipmentState(enum.Enum):
 
 
 class PaymentState(enum.Enum):
-    """Maps to `Order.paymentState`.
-   """
+    """Maps to `Order.paymentState`."""
 
     BALANCE_DUE = "BalanceDue"
     FAILED = "Failed"
@@ -855,16 +848,14 @@ class PaymentState(enum.Enum):
 
 
 class InventoryMode(enum.Enum):
-    """Maps to `Order.inventoryMode`.
-   """
+    """Maps to `Order.inventoryMode`."""
 
     TRACK_ONLY = "TrackOnly"
     RESERVE_ON_ORDER = "ReserveOnOrder"
 
 
 class RoundingMode(enum.Enum):
-    """Maps to `Order.taxRoundingMode`.
-   """
+    """Maps to `Order.taxRoundingMode`."""
 
     HALF_EVEN = "HalfEven"
     HALF_UP = "HalfUp"
@@ -872,16 +863,14 @@ class RoundingMode(enum.Enum):
 
 
 class TaxCalculationMode(enum.Enum):
-    """Maps to `Order.taxCalculationMode`.
-   """
+    """Maps to `Order.taxCalculationMode`."""
 
     LINE_ITEM_LEVEL = "LineItemLevel"
     UNIT_PRICE_LEVEL = "UnitPriceLevel"
 
 
 class CartOrigin(enum.Enum):
-    """Maps to `Order.origin`.
-   """
+    """Maps to `Order.origin`."""
 
     CUSTOMER = "Customer"
     MERCHANT = "Merchant"
@@ -889,13 +878,13 @@ class CartOrigin(enum.Enum):
 
 class OrderImport(ImportResource):
     """Import representation for an order.
-    
+
     In commercetools, you can import an order using the
     [Create Order by Import](https://docs.commercetools.com/http-api-projects-orders-import.html#create-an-order-by-import)
     endpoint method instead of creating it from a cart.
-    
+
     The order import draft is a snapshot of an order at the time it was imported.
-    
+
     """
 
     #: Maps to `Order.orderNumber`.

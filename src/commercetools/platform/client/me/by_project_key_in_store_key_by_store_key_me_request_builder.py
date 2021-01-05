@@ -18,26 +18,35 @@ class ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
     _project_key: str
     _store_key: str
 
-    def __init__(self, projectKey: str, storeKey: str, client: "Client"):
+    def __init__(
+        self,
+        projectKey: str,
+        storeKey: str,
+        client: "Client",
+    ):
         self._project_key = projectKey
         self._store_key = storeKey
         self._client = client
 
     def carts(self) -> ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder:
-        """A shopping cart holds product variants and can be ordered.
-        """
+        """A shopping cart holds product variants and can be ordered."""
         return ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def orders(self) -> ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder:
-        """An order can be created from a order, usually after a checkout process has been completed.
-        """
+        """An order can be created from a order, usually after a checkout process has been completed."""
         return ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )
 
     def activeCart(self) -> ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder(
-            projectKey=self._project_key, storeKey=self._store_key, client=self._client
+            projectKey=self._project_key,
+            storeKey=self._store_key,
+            client=self._client,
         )

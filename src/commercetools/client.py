@@ -13,6 +13,7 @@ from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
 from commercetools.platform.models._schemas.error import ErrorResponseSchema
+from commercetools.protocols import Model
 from commercetools.services import ServicesMixin
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver, fix_token_url
 
@@ -113,14 +114,15 @@ class BaseClient:
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        response_class: typing.Type[SchemaABC] = None,
+        response_class: Model = None,
         headers: typing.Dict[str, str] = None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
         response = self._http_client.get(self._base_url + endpoint, params=params)
 
         if response.status_code == 200:
-            return response_class.deserialize(response.json())
+            if response_class:
+                return response_class.deserialize(response.json())
         return self._process_error(response)
 
     def _post(
@@ -128,7 +130,7 @@ class BaseClient:
         endpoint: str,
         params: typing.Dict[str, typing.Any],
         data_object: typing.Any = None,
-        response_class: typing.Type[SchemaABC] = None,
+        response_class: Model = None,
         headers: typing.Dict[str, str] = None,
         form_encoded: bool = False,
         force_update: bool = False,
@@ -161,7 +163,7 @@ class BaseClient:
         endpoint: str,
         params: typing.Dict[str, typing.Any],
         file: typing.IO,
-        response_class: typing.Type[SchemaABC] = None,
+        response_class: Model = None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
         response = self._http_client.post(
@@ -169,14 +171,15 @@ class BaseClient:
         )
 
         if response.status_code in (200, 201):
-            return response_class.deserialize(response.json())
+            if response_class:
+                return response_class.deserialize(response.json())
         return self._process_error(response)
 
     def _delete(
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        response_class: typing.Type[SchemaABC] = None,
+        response_class: Model = None,
         headers: typing.Dict[str, str] = None,
         force_delete: bool = False,
     ) -> typing.Any:

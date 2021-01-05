@@ -285,7 +285,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     method="_get",
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
-                    response_object=ast.Name(id=return_obj.name)
+                    response_class=ast.Name(id=return_obj.name)
                     if return_obj
                     else None,
                 )

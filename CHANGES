@@ -1,6 +1,28 @@
 13.0.0 (2021-01-04)
 -------------------
-- Regenerate code (fixed not being able to parse a lot of errors!)
+- Regenerate code (fixed not being able to parse a lot of errors, so upgrading is recommended)
+  - Cart:
+    - CartDiscountValueGiftLineItemDraft channel variables type changed ChannelReference -> ChannelResourceIdentifier
+    - CartDiscount value field type changed CartDiscountValue -> CartDiscountValueDraft
+    - CustomLineItemDraft custom field type changed CustomFields -> CustomFieldsDraft
+    - TaxedPriceDraft total_net and total_gross fields type changed TypedMoneyDraft -> Money
+  - Common:
+    - Add back fraction_digits to Money draft classes
+  - Errors:
+    - Many commercetools errors can now be parsed instead of throwing a ValueError
+    - Fixed incorrect typing of extension response errors
+  - Me:
+    - Added address_key to various billing/shipping address update actions
+  - Product:
+    - Add limit to ProductProjectionPagedSearchResponse
+    - Add ProductVariantAddedMessage
+  - Store:
+    - Change supply_channels from ChannelResourceIdentifier to ChannelReference
+  - Subscription:
+    - ResourceDeletedDeliverySchema added data_erasure
+- Minimum required dependencies now require requests_mock>=1.8.0 (it already didn't work without it)
+- Testing customer group added changeName and setKey actions
+- Use Black 19 for formatting generated code
 
 12.0.2 (2020-11-27)
 -------------------

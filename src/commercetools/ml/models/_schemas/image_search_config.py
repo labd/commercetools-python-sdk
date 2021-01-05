@@ -16,7 +16,7 @@ from ..image_search_config import ImageSearchConfigStatus
 # Marshmallow Schemas
 
 
-class ImageSearchConfigUpdateActionSchema(marshmallow.Schema):
+class ImageSearchConfigUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -42,7 +42,7 @@ class ChangeStatusUpdateActionSchema(ImageSearchConfigUpdateActionSchema):
         return models.ChangeStatusUpdateAction(**data)
 
 
-class ImageSearchConfigRequestSchema(marshmallow.Schema):
+class ImageSearchConfigRequestSchema(helpers.BaseSchema):
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -66,7 +66,7 @@ class ImageSearchConfigRequestSchema(marshmallow.Schema):
         return models.ImageSearchConfigRequest(**data)
 
 
-class ImageSearchConfigResponseSchema(marshmallow.Schema):
+class ImageSearchConfigResponseSchema(helpers.BaseSchema):
     status = marshmallow_enum.EnumField(
         ImageSearchConfigStatus, by_value=True, allow_none=True, missing=None
     )

@@ -9,11 +9,48 @@ from ._abstract import _BaseType
 if typing.TYPE_CHECKING:
     from .customfields import Custom
 
+__all__ = [
+    "Address",
+    "Asset",
+    "AssetDimensions",
+    "AssetSource",
+    "CartDiscountKeyReference",
+    "CategoryKeyReference",
+    "ChannelKeyReference",
+    "CustomerGroupKeyReference",
+    "CustomerKeyReference",
+    "DiscountedPrice",
+    "EnumValue",
+    "HighPrecisionMoney",
+    "Image",
+    "ImportResource",
+    "ImportResourceType",
+    "KeyReference",
+    "LocalizedEnumValue",
+    "LocalizedString",
+    "Money",
+    "MoneyType",
+    "PriceKeyReference",
+    "PriceTier",
+    "ProcessingState",
+    "ProductDiscountKeyReference",
+    "ProductKeyReference",
+    "ProductTypeKeyReference",
+    "ProductVariantKeyReference",
+    "ReferenceType",
+    "ShippingMethodKeyReference",
+    "StateKeyReference",
+    "StoreKeyReference",
+    "TaxCategoryKeyReference",
+    "TypeKeyReference",
+    "TypedMoney",
+]
+
 
 class Asset(_BaseType):
     #: User-defined identifier for the asset.
     #: Asset keys are unique inside their container (a product variant or a category).
-    key: "str"
+    key: str
     sources: typing.List["AssetSource"]
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
@@ -24,7 +61,7 @@ class Asset(_BaseType):
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         sources: typing.List["AssetSource"],
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
@@ -52,10 +89,10 @@ class Asset(_BaseType):
 
 
 class AssetDimensions(_BaseType):
-    w: "float"
-    h: "float"
+    w: float
+    h: float
 
-    def __init__(self, *, w: "float", h: "float"):
+    def __init__(self, *, w: float, h: float):
         self.w = w
         self.h = h
         super().__init__()
@@ -73,18 +110,18 @@ class AssetDimensions(_BaseType):
 
 
 class AssetSource(_BaseType):
-    uri: "str"
-    key: typing.Optional["str"]
+    uri: str
+    key: typing.Optional[str]
     dimensions: typing.Optional["AssetDimensions"]
-    content_type: typing.Optional["str"]
+    content_type: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        uri: "str",
-        key: typing.Optional["str"] = None,
+        uri: str,
+        key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
-        content_type: typing.Optional["str"] = None
+        content_type: typing.Optional[str] = None
     ):
         self.uri = uri
         self.key = key
@@ -105,16 +142,16 @@ class AssetSource(_BaseType):
 
 
 class Image(_BaseType):
-    url: "str"
+    url: str
     dimensions: "AssetDimensions"
-    label: typing.Optional["str"]
+    label: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        url: "str",
+        url: str,
         dimensions: "AssetDimensions",
-        label: typing.Optional["str"] = None
+        label: typing.Optional[str] = None
     ):
         self.url = url
         self.dimensions = dimensions
@@ -134,10 +171,10 @@ class Image(_BaseType):
 
 
 class EnumValue(_BaseType):
-    key: "str"
-    label: "str"
+    key: str
+    label: str
 
-    def __init__(self, *, key: "str", label: "str"):
+    def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
         super().__init__()
@@ -155,10 +192,10 @@ class EnumValue(_BaseType):
 
 
 class LocalizedEnumValue(_BaseType):
-    key: "str"
+    key: str
     label: "LocalizedString"
 
-    def __init__(self, *, key: "str", label: "LocalizedString"):
+    def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
         super().__init__()
@@ -187,9 +224,9 @@ class ImportResource(_BaseType):
 
     """
 
-    key: "str"
+    key: str
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
         self.key = key
         super().__init__()
 
@@ -208,20 +245,77 @@ class ImportResource(_BaseType):
 class KeyReference(_BaseType):
     """References a resource by its key."""
 
-    key: "str"
+    key: str
     #: The type of the referenced resource.
     type_id: "ReferenceType"
 
-    def __init__(self, *, key: "str", type_id: "ReferenceType"):
+    def __init__(self, *, key: str, type_id: "ReferenceType"):
         self.key = key
         self.type_id = type_id
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "KeyReference":
-        from ._schemas.common import KeyReferenceSchema
+        if data["typeId"] == "cart-discount":
+            from ._schemas.common import CartDiscountKeyReferenceSchema
 
-        return KeyReferenceSchema().load(data)
+            return CartDiscountKeyReferenceSchema().load(data)
+        if data["typeId"] == "category":
+            from ._schemas.common import CategoryKeyReferenceSchema
+
+            return CategoryKeyReferenceSchema().load(data)
+        if data["typeId"] == "channel":
+            from ._schemas.common import ChannelKeyReferenceSchema
+
+            return ChannelKeyReferenceSchema().load(data)
+        if data["typeId"] == "customer":
+            from ._schemas.common import CustomerKeyReferenceSchema
+
+            return CustomerKeyReferenceSchema().load(data)
+        if data["typeId"] == "customer-group":
+            from ._schemas.common import CustomerGroupKeyReferenceSchema
+
+            return CustomerGroupKeyReferenceSchema().load(data)
+        if data["typeId"] == "price":
+            from ._schemas.common import PriceKeyReferenceSchema
+
+            return PriceKeyReferenceSchema().load(data)
+        if data["typeId"] == "product":
+            from ._schemas.common import ProductKeyReferenceSchema
+
+            return ProductKeyReferenceSchema().load(data)
+        if data["typeId"] == "product-discount":
+            from ._schemas.common import ProductDiscountKeyReferenceSchema
+
+            return ProductDiscountKeyReferenceSchema().load(data)
+        if data["typeId"] == "product-type":
+            from ._schemas.common import ProductTypeKeyReferenceSchema
+
+            return ProductTypeKeyReferenceSchema().load(data)
+        if data["typeId"] == "product-variant":
+            from ._schemas.common import ProductVariantKeyReferenceSchema
+
+            return ProductVariantKeyReferenceSchema().load(data)
+        if data["typeId"] == "shipping-method":
+            from ._schemas.common import ShippingMethodKeyReferenceSchema
+
+            return ShippingMethodKeyReferenceSchema().load(data)
+        if data["typeId"] == "state":
+            from ._schemas.common import StateKeyReferenceSchema
+
+            return StateKeyReferenceSchema().load(data)
+        if data["typeId"] == "store":
+            from ._schemas.common import StoreKeyReferenceSchema
+
+            return StoreKeyReferenceSchema().load(data)
+        if data["typeId"] == "tax-category":
+            from ._schemas.common import TaxCategoryKeyReferenceSchema
+
+            return TaxCategoryKeyReferenceSchema().load(data)
+        if data["typeId"] == "type":
+            from ._schemas.common import TypeKeyReferenceSchema
+
+            return TypeKeyReferenceSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import KeyReferenceSchema
@@ -232,7 +326,7 @@ class KeyReference(_BaseType):
 class CartDiscountKeyReference(KeyReference):
     """References a cart discount by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.CART_DISCOUNT)
 
@@ -253,7 +347,7 @@ class CartDiscountKeyReference(KeyReference):
 class CategoryKeyReference(KeyReference):
     """References a category by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.CATEGORY)
 
@@ -272,7 +366,7 @@ class CategoryKeyReference(KeyReference):
 class ChannelKeyReference(KeyReference):
     """References a channel by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.CHANNEL)
 
@@ -291,7 +385,7 @@ class ChannelKeyReference(KeyReference):
 class CustomerKeyReference(KeyReference):
     """References a customer by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.CUSTOMER)
 
@@ -310,7 +404,7 @@ class CustomerKeyReference(KeyReference):
 class CustomerGroupKeyReference(KeyReference):
     """References a customer group by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.CUSTOMER_GROUP)
 
@@ -331,7 +425,7 @@ class CustomerGroupKeyReference(KeyReference):
 class PriceKeyReference(KeyReference):
     """References a price by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.PRICE)
 
@@ -350,7 +444,7 @@ class PriceKeyReference(KeyReference):
 class ProductKeyReference(KeyReference):
     """References a product by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.PRODUCT)
 
@@ -369,7 +463,7 @@ class ProductKeyReference(KeyReference):
 class ProductDiscountKeyReference(KeyReference):
     """References a product discount by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.PRODUCT_DISCOUNT)
 
@@ -390,7 +484,7 @@ class ProductDiscountKeyReference(KeyReference):
 class ProductTypeKeyReference(KeyReference):
     """References a product type by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.PRODUCT_TYPE)
 
@@ -411,7 +505,7 @@ class ProductTypeKeyReference(KeyReference):
 class ProductVariantKeyReference(KeyReference):
     """References a product variant by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.PRODUCT_VARIANT)
 
@@ -432,7 +526,7 @@ class ProductVariantKeyReference(KeyReference):
 class ShippingMethodKeyReference(KeyReference):
     """References a shipping method by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.SHIPPING_METHOD)
 
@@ -453,7 +547,7 @@ class ShippingMethodKeyReference(KeyReference):
 class StateKeyReference(KeyReference):
     """References a state by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.STATE)
 
@@ -472,7 +566,7 @@ class StateKeyReference(KeyReference):
 class StoreKeyReference(KeyReference):
     """References a store by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.STORE)
 
@@ -491,7 +585,7 @@ class StoreKeyReference(KeyReference):
 class TaxCategoryKeyReference(KeyReference):
     """References a tax category by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.TAX_CATEGORY)
 
@@ -512,7 +606,7 @@ class TaxCategoryKeyReference(KeyReference):
 class TypeKeyReference(KeyReference):
     """References a type by its key."""
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceType.TYPE)
 
@@ -535,18 +629,18 @@ class MoneyType(enum.Enum):
 
 class TypedMoney(_BaseType):
     type: "MoneyType"
-    fraction_digits: typing.Optional["int"]
-    cent_amount: "int"
+    fraction_digits: typing.Optional[int]
+    cent_amount: int
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency_code: "str"
+    currency_code: str
 
     def __init__(
         self,
         *,
         type: "MoneyType",
-        fraction_digits: typing.Optional["int"] = None,
-        cent_amount: "int",
-        currency_code: "str"
+        fraction_digits: typing.Optional[int] = None,
+        cent_amount: int,
+        currency_code: str
     ):
         self.type = type
         self.fraction_digits = fraction_digits
@@ -556,9 +650,14 @@ class TypedMoney(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "TypedMoney":
-        from ._schemas.common import TypedMoneySchema
+        if data["type"] == "highPrecision":
+            from ._schemas.common import HighPrecisionMoneySchema
 
-        return TypedMoneySchema().load(data)
+            return HighPrecisionMoneySchema().load(data)
+        if data["type"] == "centPrecision":
+            from ._schemas.common import MoneySchema
+
+            return MoneySchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import TypedMoneySchema
@@ -567,15 +666,15 @@ class TypedMoney(_BaseType):
 
 
 class HighPrecisionMoney(TypedMoney):
-    precise_amount: "int"
+    precise_amount: int
 
     def __init__(
         self,
         *,
-        fraction_digits: typing.Optional["int"] = None,
-        cent_amount: "int",
-        currency_code: "str",
-        precise_amount: "int"
+        fraction_digits: typing.Optional[int] = None,
+        cent_amount: int,
+        currency_code: str,
+        precise_amount: int
     ):
         self.precise_amount = precise_amount
         super().__init__(
@@ -601,9 +700,9 @@ class Money(TypedMoney):
     def __init__(
         self,
         *,
-        fraction_digits: typing.Optional["int"] = None,
-        cent_amount: "int",
-        currency_code: "str"
+        fraction_digits: typing.Optional[int] = None,
+        cent_amount: int,
+        currency_code: str
     ):
 
         super().__init__(
@@ -651,11 +750,11 @@ class PriceTier(_BaseType):
     """A price tier is selected instead of the default price when a certain quantity of the ProductVariant is added to a cart and ordered."""
 
     #: The minimum quantity this price tier is valid for.
-    minimum_quantity: "int"
+    minimum_quantity: int
     #: The currency of a price tier is always the same as the currency of the base Price.
     value: "TypedMoney"
 
-    def __init__(self, *, minimum_quantity: "int", value: "TypedMoney"):
+    def __init__(self, *, minimum_quantity: int, value: "TypedMoney"):
         self.minimum_quantity = minimum_quantity
         self.value = value
         super().__init__()
@@ -720,61 +819,61 @@ class ProcessingState(enum.Enum):
 
 
 class Address(_BaseType):
-    id: typing.Optional["str"]
-    key: typing.Optional["str"]
-    title: typing.Optional["str"]
-    salutation: typing.Optional["str"]
-    first_name: typing.Optional["str"]
-    last_name: typing.Optional["str"]
-    street_name: typing.Optional["str"]
-    street_number: typing.Optional["str"]
-    additional_street_info: typing.Optional["str"]
-    postal_code: typing.Optional["str"]
-    city: typing.Optional["str"]
-    region: typing.Optional["str"]
-    state: typing.Optional["str"]
+    id: typing.Optional[str]
+    key: typing.Optional[str]
+    title: typing.Optional[str]
+    salutation: typing.Optional[str]
+    first_name: typing.Optional[str]
+    last_name: typing.Optional[str]
+    street_name: typing.Optional[str]
+    street_number: typing.Optional[str]
+    additional_street_info: typing.Optional[str]
+    postal_code: typing.Optional[str]
+    city: typing.Optional[str]
+    region: typing.Optional[str]
+    state: typing.Optional[str]
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
-    company: typing.Optional["str"]
-    department: typing.Optional["str"]
-    building: typing.Optional["str"]
-    apartment: typing.Optional["str"]
-    p_o_box: typing.Optional["str"]
-    phone: typing.Optional["str"]
-    mobile: typing.Optional["str"]
-    email: typing.Optional["str"]
-    fax: typing.Optional["str"]
-    additional_address_info: typing.Optional["str"]
-    external_id: typing.Optional["str"]
+    country: str
+    company: typing.Optional[str]
+    department: typing.Optional[str]
+    building: typing.Optional[str]
+    apartment: typing.Optional[str]
+    p_o_box: typing.Optional[str]
+    phone: typing.Optional[str]
+    mobile: typing.Optional[str]
+    email: typing.Optional[str]
+    fax: typing.Optional[str]
+    additional_address_info: typing.Optional[str]
+    external_id: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        salutation: typing.Optional["str"] = None,
-        first_name: typing.Optional["str"] = None,
-        last_name: typing.Optional["str"] = None,
-        street_name: typing.Optional["str"] = None,
-        street_number: typing.Optional["str"] = None,
-        additional_street_info: typing.Optional["str"] = None,
-        postal_code: typing.Optional["str"] = None,
-        city: typing.Optional["str"] = None,
-        region: typing.Optional["str"] = None,
-        state: typing.Optional["str"] = None,
-        country: "str",
-        company: typing.Optional["str"] = None,
-        department: typing.Optional["str"] = None,
-        building: typing.Optional["str"] = None,
-        apartment: typing.Optional["str"] = None,
-        p_o_box: typing.Optional["str"] = None,
-        phone: typing.Optional["str"] = None,
-        mobile: typing.Optional["str"] = None,
-        email: typing.Optional["str"] = None,
-        fax: typing.Optional["str"] = None,
-        additional_address_info: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        street_name: typing.Optional[str] = None,
+        street_number: typing.Optional[str] = None,
+        additional_street_info: typing.Optional[str] = None,
+        postal_code: typing.Optional[str] = None,
+        city: typing.Optional[str] = None,
+        region: typing.Optional[str] = None,
+        state: typing.Optional[str] = None,
+        country: str,
+        company: typing.Optional[str] = None,
+        department: typing.Optional[str] = None,
+        building: typing.Optional[str] = None,
+        apartment: typing.Optional[str] = None,
+        p_o_box: typing.Optional[str] = None,
+        phone: typing.Optional[str] = None,
+        mobile: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        fax: typing.Optional[str] = None,
+        additional_address_info: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None
     ):
         self.id = id
         self.key = key

@@ -24,6 +24,7 @@ class CustomerSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -31,31 +32,54 @@ class CustomerSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerNumber",
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
     password = marshmallow.fields.String(allow_none=True, missing=None)
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="firstName",
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastName",
     )
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="middleName",
     )
-    title = marshmallow.fields.String(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="dateOfBirth",
     )
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="companyName",
     )
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="vatId"
+    )
     addresses = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
@@ -64,20 +88,28 @@ class CustomerSchema(BaseResourceSchema):
         missing=None,
     )
     default_shipping_address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="defaultShippingAddressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="defaultShippingAddressId",
     )
     shipping_address_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingAddressIds",
     )
     default_billing_address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="defaultBillingAddressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="defaultBillingAddressId",
     )
     billing_address_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="billingAddressIds",
     )
@@ -85,12 +117,16 @@ class CustomerSchema(BaseResourceSchema):
         allow_none=True, missing=None, data_key="isEmailVerified"
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -98,16 +134,24 @@ class CustomerSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
-    salutation = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    salutation = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     stores = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -120,7 +164,7 @@ class CustomerSchema(BaseResourceSchema):
         return models.Customer(**data)
 
 
-class CustomerChangePasswordSchema(marshmallow.Schema):
+class CustomerChangePasswordSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     current_password = marshmallow.fields.String(
@@ -139,9 +183,11 @@ class CustomerChangePasswordSchema(marshmallow.Schema):
         return models.CustomerChangePassword(**data)
 
 
-class CustomerCreateEmailTokenSchema(marshmallow.Schema):
+class CustomerCreateEmailTokenSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     ttl_minutes = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="ttlMinutes"
     )
@@ -155,10 +201,13 @@ class CustomerCreateEmailTokenSchema(marshmallow.Schema):
         return models.CustomerCreateEmailToken(**data)
 
 
-class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
+class CustomerCreatePasswordResetTokenSchema(helpers.BaseSchema):
     email = marshmallow.fields.String(allow_none=True, missing=None)
     ttl_minutes = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="ttlMinutes"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="ttlMinutes",
     )
 
     class Meta:
@@ -170,65 +219,108 @@ class CustomerCreatePasswordResetTokenSchema(marshmallow.Schema):
         return models.CustomerCreatePasswordResetToken(**data)
 
 
-class CustomerDraftSchema(marshmallow.Schema):
+class CustomerDraftSchema(helpers.BaseSchema):
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerNumber",
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
     password = marshmallow.fields.String(allow_none=True, missing=None)
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="firstName",
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastName",
     )
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="middleName",
     )
-    title = marshmallow.fields.String(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     anonymous_cart_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousCartId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousCartId",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousId",
     )
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="dateOfBirth",
     )
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="companyName",
     )
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="vatId"
+    )
     addresses = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     default_shipping_address = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="defaultShippingAddress"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="defaultShippingAddress",
     )
     shipping_addresses = marshmallow.fields.List(
         marshmallow.fields.Integer(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingAddresses",
     )
     default_billing_address = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="defaultBillingAddress"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="defaultBillingAddress",
     )
     billing_addresses = marshmallow.fields.List(
         marshmallow.fields.Integer(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="billingAddresses",
     )
     is_email_verified = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isEmailVerified"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isEmailVerified",
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -236,6 +328,7 @@ class CustomerDraftSchema(marshmallow.Schema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -243,16 +336,24 @@ class CustomerDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
-    salutation = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    salutation = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     stores = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -265,8 +366,10 @@ class CustomerDraftSchema(marshmallow.Schema):
         return models.CustomerDraft(**data)
 
 
-class CustomerEmailVerifySchema(marshmallow.Schema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+class CustomerEmailVerifySchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     token_value = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="tokenValue"
     )
@@ -280,10 +383,12 @@ class CustomerEmailVerifySchema(marshmallow.Schema):
         return models.CustomerEmailVerify(**data)
 
 
-class CustomerPagedQueryResponseSchema(marshmallow.Schema):
+class CustomerPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CustomerSchema"),
@@ -307,6 +412,7 @@ class CustomerReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".CustomerSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -319,14 +425,16 @@ class CustomerReferenceSchema(ReferenceSchema):
         return models.CustomerReference(**data)
 
 
-class CustomerResetPasswordSchema(marshmallow.Schema):
+class CustomerResetPasswordSchema(helpers.BaseSchema):
     token_value = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="tokenValue"
     )
     new_password = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="newPassword"
     )
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -347,14 +455,16 @@ class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.CustomerResourceIdentifier(**data)
 
 
-class CustomerSignInResultSchema(marshmallow.Schema):
+class CustomerSignInResultSchema(helpers.BaseSchema):
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CustomerSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    cart = marshmallow.fields.Raw(allow_none=True, missing=None)
+    cart = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -365,24 +475,34 @@ class CustomerSignInResultSchema(marshmallow.Schema):
         return models.CustomerSignInResult(**data)
 
 
-class CustomerSigninSchema(marshmallow.Schema):
+class CustomerSigninSchema(helpers.BaseSchema):
     email = marshmallow.fields.String(allow_none=True, missing=None)
     password = marshmallow.fields.String(allow_none=True, missing=None)
     anonymous_cart_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousCartId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousCartId",
     )
     anonymous_cart_sign_in_mode = marshmallow_enum.EnumField(
         AnonymousCartSignInMode,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="anonymousCartSignInMode",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousId",
     )
     update_product_data = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="updateProductData"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="updateProductData",
     )
 
     class Meta:
@@ -394,13 +514,16 @@ class CustomerSigninSchema(marshmallow.Schema):
         return models.CustomerSignin(**data)
 
 
-class CustomerTokenSchema(marshmallow.Schema):
+class CustomerTokenSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     created_at = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="createdAt"
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastModifiedAt",
     )
     customer_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customerId"
@@ -419,7 +542,7 @@ class CustomerTokenSchema(marshmallow.Schema):
         return models.CustomerToken(**data)
 
 
-class CustomerUpdateSchema(marshmallow.Schema):
+class CustomerUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -513,7 +636,7 @@ class CustomerUpdateSchema(marshmallow.Schema):
         return models.CustomerUpdate(**data)
 
 
-class CustomerUpdateActionSchema(marshmallow.Schema):
+class CustomerUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -544,10 +667,16 @@ class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
 
 class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -561,10 +690,16 @@ class CustomerAddBillingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 class CustomerAddShippingAddressIdActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -595,10 +730,16 @@ class CustomerAddStoreActionSchema(CustomerUpdateActionSchema):
 
 class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
@@ -630,10 +771,16 @@ class CustomerChangeEmailActionSchema(CustomerUpdateActionSchema):
 
 class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -647,10 +794,16 @@ class CustomerRemoveAddressActionSchema(CustomerUpdateActionSchema):
 
 class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -664,10 +817,16 @@ class CustomerRemoveBillingAddressIdActionSchema(CustomerUpdateActionSchema):
 
 class CustomerRemoveShippingAddressIdActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -698,7 +857,10 @@ class CustomerRemoveStoreActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
     company_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="companyName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="companyName",
     )
 
     class Meta:
@@ -712,7 +874,9 @@ class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetCustomFieldActionSchema(CustomerUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -728,9 +892,12 @@ class CustomerSetCustomTypeActionSchema(CustomerUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -748,6 +915,7 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -763,7 +931,10 @@ class CustomerSetCustomerGroupActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerNumber",
     )
 
     class Meta:
@@ -777,7 +948,10 @@ class CustomerSetCustomerNumberActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
     date_of_birth = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="dateOfBirth"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="dateOfBirth",
     )
 
     class Meta:
@@ -791,10 +965,16 @@ class CustomerSetDateOfBirthActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -808,10 +988,16 @@ class CustomerSetDefaultBillingAddressActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
     address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
     )
     address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
     )
 
     class Meta:
@@ -825,7 +1011,10 @@ class CustomerSetDefaultShippingAddressActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
 
     class Meta:
@@ -839,7 +1028,10 @@ class CustomerSetExternalIdActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetFirstNameActionSchema(CustomerUpdateActionSchema):
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="firstName",
     )
 
     class Meta:
@@ -852,7 +1044,9 @@ class CustomerSetFirstNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetKeyActionSchema(CustomerUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -865,7 +1059,10 @@ class CustomerSetKeyActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetLastNameActionSchema(CustomerUpdateActionSchema):
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastName",
     )
 
     class Meta:
@@ -878,7 +1075,9 @@ class CustomerSetLastNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetLocaleActionSchema(CustomerUpdateActionSchema):
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -891,7 +1090,10 @@ class CustomerSetLocaleActionSchema(CustomerUpdateActionSchema):
 
 class CustomerSetMiddleNameActionSchema(CustomerUpdateActionSchema):
     middle_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="middleName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="middleName",
     )
 
     class Meta:
@@ -904,7 +1106,9 @@ class CustomerSetMiddleNameActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetSalutationActionSchema(CustomerUpdateActionSchema):
-    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+    salutation = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -921,6 +1125,7 @@ class CustomerSetStoresActionSchema(CustomerUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -934,7 +1139,9 @@ class CustomerSetStoresActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):
-    title = marshmallow.fields.String(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -946,7 +1153,9 @@ class CustomerSetTitleActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetVatIdActionSchema(CustomerUpdateActionSchema):
-    vat_id = marshmallow.fields.String(allow_none=True, missing=None, data_key="vatId")
+    vat_id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="vatId"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

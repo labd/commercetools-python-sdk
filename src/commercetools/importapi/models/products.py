@@ -16,19 +16,28 @@ if typing.TYPE_CHECKING:
         TaxCategoryKeyReference,
     )
 
+__all__ = [
+    "CustomTokenizer",
+    "ProductImport",
+    "SearchKeyword",
+    "SearchKeywords",
+    "SuggestTokenizer",
+    "WhitespaceTokenizer",
+]
+
 
 class SearchKeywords(typing.Dict[str, str]):
     pass
 
 
 class SearchKeyword(_BaseType):
-    text: "str"
+    text: str
     suggest_tokenizer: typing.Optional["SuggestTokenizer"]
 
     def __init__(
         self,
         *,
-        text: "str",
+        text: str,
         suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None
     ):
         self.text = text
@@ -48,17 +57,22 @@ class SearchKeyword(_BaseType):
 
 
 class SuggestTokenizer(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SuggestTokenizer":
-        from ._schemas.products import SuggestTokenizerSchema
+        if data["type"] == "custom":
+            from ._schemas.products import CustomTokenizerSchema
 
-        return SuggestTokenizerSchema().load(data)
+            return CustomTokenizerSchema().load(data)
+        if data["type"] == "whitespace":
+            from ._schemas.products import WhitespaceTokenizerSchema
+
+            return WhitespaceTokenizerSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.products import SuggestTokenizerSchema
@@ -146,12 +160,12 @@ class ProductImport(ImportResource):
     #: import operation state is set to `Unresolved`.
     state: typing.Optional["StateKeyReference"]
     #: If there were updates, only the updates will be published to `staged` and `current` projection.
-    publish: typing.Optional["bool"]
+    publish: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         name: "LocalizedString",
         product_type: "ProductTypeKeyReference",
         slug: "LocalizedString",
@@ -163,7 +177,7 @@ class ProductImport(ImportResource):
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateKeyReference"] = None,
-        publish: typing.Optional["bool"] = None
+        publish: typing.Optional[bool] = None
     ):
         self.name = name
         self.product_type = product_type

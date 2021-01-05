@@ -38,6 +38,7 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -45,22 +46,33 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerId",
     )
     customer_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerEmail"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerEmail",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousId",
     )
     store = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     line_items = helpers.LazyNestedField(
@@ -97,6 +109,7 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".TaxedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -107,6 +120,7 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingAddress",
     )
@@ -114,6 +128,7 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="billingAddress",
     )
@@ -121,6 +136,7 @@ class CartSchema(BaseResourceSchema):
         InventoryMode,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="inventoryMode",
     )
@@ -145,14 +161,18 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     shipping_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ShippingInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingInfo",
     )
@@ -161,6 +181,7 @@ class CartSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="discountCodes",
     )
@@ -168,18 +189,25 @@ class CartSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     payment_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.PaymentInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="paymentInfo",
     )
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterLastModification",
     )
     refused_gifts = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart_discount.CartDiscountReferenceSchema"),
@@ -201,6 +229,7 @@ class CartSchema(BaseResourceSchema):
             ),
             "Score": helpers.absmod(__name__, ".ScoreShippingRateInputSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInput",
     )
@@ -209,6 +238,7 @@ class CartSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="itemShippingAddresses",
     )
@@ -222,13 +252,19 @@ class CartSchema(BaseResourceSchema):
         return models.Cart(**data)
 
 
-class CartDraftSchema(marshmallow.Schema):
+class CartDraftSchema(helpers.BaseSchema):
     currency = marshmallow.fields.String(allow_none=True, missing=None)
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerId",
     )
     customer_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerEmail"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerEmail",
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -236,33 +272,47 @@ class CartDraftSchema(marshmallow.Schema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousId",
     )
     store = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     inventory_mode = marshmallow_enum.EnumField(
         InventoryMode,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="inventoryMode",
     )
     tax_mode = marshmallow_enum.EnumField(
-        TaxMode, by_value=True, allow_none=True, missing=None, data_key="taxMode"
+        TaxMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="taxMode",
     )
     tax_rounding_mode = marshmallow_enum.EnumField(
         RoundingMode,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxRoundingMode",
     )
@@ -270,6 +320,7 @@ class CartDraftSchema(marshmallow.Schema):
         TaxCalculationMode,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCalculationMode",
     )
@@ -278,6 +329,7 @@ class CartDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lineItems",
     )
@@ -286,6 +338,7 @@ class CartDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customLineItems",
     )
@@ -293,6 +346,7 @@ class CartDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingAddress",
     )
@@ -300,6 +354,7 @@ class CartDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="billingAddress",
     )
@@ -309,6 +364,7 @@ class CartDraftSchema(marshmallow.Schema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingMethod",
     )
@@ -316,6 +372,7 @@ class CartDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRateForShippingMethod",
     )
@@ -323,14 +380,24 @@ class CartDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterLastModification",
     )
     origin = marshmallow_enum.EnumField(
-        CartOrigin, by_value=True, allow_none=True, missing=None
+        CartOrigin,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
     shipping_rate_input = helpers.Discriminator(
         allow_none=True,
@@ -341,6 +408,7 @@ class CartDraftSchema(marshmallow.Schema):
             ),
             "Score": helpers.absmod(__name__, ".ScoreShippingRateInputDraftSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInput",
     )
@@ -349,12 +417,14 @@ class CartDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="itemShippingAddresses",
     )
     discount_codes = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="discountCodes",
     )
@@ -368,10 +438,12 @@ class CartDraftSchema(marshmallow.Schema):
         return models.CartDraft(**data)
 
 
-class CartPagedQueryResponseSchema(marshmallow.Schema):
+class CartPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CartSchema"),
@@ -395,6 +467,7 @@ class CartReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".CartSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -417,7 +490,7 @@ class CartResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.CartResourceIdentifier(**data)
 
 
-class CartUpdateSchema(marshmallow.Schema):
+class CartUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -584,7 +657,7 @@ class CartUpdateSchema(marshmallow.Schema):
         return models.CartUpdate(**data)
 
 
-class CartUpdateActionSchema(marshmallow.Schema):
+class CartUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -596,7 +669,7 @@ class CartUpdateActionSchema(marshmallow.Schema):
         return models.CartUpdateAction(**data)
 
 
-class CustomLineItemSchema(marshmallow.Schema):
+class CustomLineItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(allow_none=True, missing=None)
     money = helpers.Discriminator(
@@ -616,6 +689,7 @@ class CustomLineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -646,6 +720,7 @@ class CustomLineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".tax_category.TaxCategoryReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -653,6 +728,7 @@ class CustomLineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".tax_category.TaxRateSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxRate",
     )
@@ -668,12 +744,14 @@ class CustomLineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     shipping_details = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemShippingDetailsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -687,7 +765,7 @@ class CustomLineItemSchema(marshmallow.Schema):
         return models.CustomLineItem(**data)
 
 
-class CustomLineItemDraftSchema(marshmallow.Schema):
+class CustomLineItemDraftSchema(helpers.BaseSchema):
     name = LocalizedStringField(allow_none=True, missing=None)
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     money = helpers.LazyNestedField(
@@ -703,6 +781,7 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -710,6 +789,7 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -717,12 +797,14 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     shipping_details = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -736,7 +818,7 @@ class CustomLineItemDraftSchema(marshmallow.Schema):
         return models.CustomLineItemDraft(**data)
 
 
-class DiscountCodeInfoSchema(marshmallow.Schema):
+class DiscountCodeInfoSchema(helpers.BaseSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -757,7 +839,7 @@ class DiscountCodeInfoSchema(marshmallow.Schema):
         return models.DiscountCodeInfo(**data)
 
 
-class DiscountedLineItemPortionSchema(marshmallow.Schema):
+class DiscountedLineItemPortionSchema(helpers.BaseSchema):
     discount = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart_discount.CartDiscountReferenceSchema"),
         allow_none=True,
@@ -788,7 +870,7 @@ class DiscountedLineItemPortionSchema(marshmallow.Schema):
         return models.DiscountedLineItemPortion(**data)
 
 
-class DiscountedLineItemPriceSchema(marshmallow.Schema):
+class DiscountedLineItemPriceSchema(helpers.BaseSchema):
     value = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -820,7 +902,7 @@ class DiscountedLineItemPriceSchema(marshmallow.Schema):
         return models.DiscountedLineItemPrice(**data)
 
 
-class DiscountedLineItemPriceForQuantitySchema(marshmallow.Schema):
+class DiscountedLineItemPriceForQuantitySchema(helpers.BaseSchema):
     quantity = marshmallow.fields.Float(allow_none=True, missing=None)
     discounted_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedLineItemPriceSchema"),
@@ -839,7 +921,7 @@ class DiscountedLineItemPriceForQuantitySchema(marshmallow.Schema):
         return models.DiscountedLineItemPriceForQuantity(**data)
 
 
-class ExternalLineItemTotalPriceSchema(marshmallow.Schema):
+class ExternalLineItemTotalPriceSchema(helpers.BaseSchema):
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
@@ -863,7 +945,7 @@ class ExternalLineItemTotalPriceSchema(marshmallow.Schema):
         return models.ExternalLineItemTotalPrice(**data)
 
 
-class ExternalTaxAmountDraftSchema(marshmallow.Schema):
+class ExternalTaxAmountDraftSchema(helpers.BaseSchema):
     total_gross = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
@@ -888,21 +970,29 @@ class ExternalTaxAmountDraftSchema(marshmallow.Schema):
         return models.ExternalTaxAmountDraft(**data)
 
 
-class ExternalTaxRateDraftSchema(marshmallow.Schema):
+class ExternalTaxRateDraftSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    amount = marshmallow.fields.Float(allow_none=True, missing=None)
+    amount = marshmallow.fields.Float(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     country = marshmallow.fields.String(allow_none=True, missing=None)
-    state = marshmallow.fields.String(allow_none=True, missing=None)
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     sub_rates = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".tax_category.SubRateSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="subRates",
     )
     included_in_price = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="includedInPrice"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="includedInPrice",
     )
 
     class Meta:
@@ -914,7 +1004,7 @@ class ExternalTaxRateDraftSchema(marshmallow.Schema):
         return models.ExternalTaxRateDraft(**data)
 
 
-class ItemShippingDetailsSchema(marshmallow.Schema):
+class ItemShippingDetailsSchema(helpers.BaseSchema):
     targets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemShippingTargetSchema"),
         allow_none=True,
@@ -933,7 +1023,7 @@ class ItemShippingDetailsSchema(marshmallow.Schema):
         return models.ItemShippingDetails(**data)
 
 
-class ItemShippingDetailsDraftSchema(marshmallow.Schema):
+class ItemShippingDetailsDraftSchema(helpers.BaseSchema):
     targets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemShippingTargetSchema"),
         allow_none=True,
@@ -951,7 +1041,7 @@ class ItemShippingDetailsDraftSchema(marshmallow.Schema):
         return models.ItemShippingDetailsDraft(**data)
 
 
-class ItemShippingTargetSchema(marshmallow.Schema):
+class ItemShippingTargetSchema(helpers.BaseSchema):
     address_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="addressKey"
     )
@@ -966,14 +1056,17 @@ class ItemShippingTargetSchema(marshmallow.Schema):
         return models.ItemShippingTarget(**data)
 
 
-class LineItemSchema(marshmallow.Schema):
+class LineItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     product_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="productId"
     )
     name = LocalizedStringField(allow_none=True, missing=None)
     product_slug = LocalizedStringField(
-        allow_none=True, missing=None, data_key="productSlug"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productSlug",
     )
     product_type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".product_type.ProductTypeReferenceSchema"),
@@ -998,6 +1091,7 @@ class LineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -1017,7 +1111,7 @@ class LineItemSchema(marshmallow.Schema):
     )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="addedAt"
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.ItemStateSchema"),
@@ -1030,6 +1124,7 @@ class LineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".tax_category.TaxRateSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxRate",
     )
@@ -1037,6 +1132,7 @@ class LineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -1044,6 +1140,7 @@ class LineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -1073,12 +1170,14 @@ class LineItemSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     shipping_details = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemShippingDetailsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -1092,22 +1191,33 @@ class LineItemSchema(marshmallow.Schema):
         return models.LineItem(**data)
 
 
-class LineItemDraftSchema(marshmallow.Schema):
+class LineItemDraftSchema(helpers.BaseSchema):
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productId",
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantId",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    quantity = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="addedAt"
     )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -1115,6 +1225,7 @@ class LineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -1122,6 +1233,7 @@ class LineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -1129,12 +1241,14 @@ class LineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     external_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -1142,6 +1256,7 @@ class LineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -1149,6 +1264,7 @@ class LineItemDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -1162,7 +1278,7 @@ class LineItemDraftSchema(marshmallow.Schema):
         return models.LineItemDraft(**data)
 
 
-class ReplicaCartDraftSchema(marshmallow.Schema):
+class ReplicaCartDraftSchema(helpers.BaseSchema):
     reference = marshmallow.fields.Raw(allow_none=True, missing=None)
 
     class Meta:
@@ -1174,7 +1290,7 @@ class ReplicaCartDraftSchema(marshmallow.Schema):
         return models.ReplicaCartDraft(**data)
 
 
-class ShippingInfoSchema(marshmallow.Schema):
+class ShippingInfoSchema(helpers.BaseSchema):
     shipping_method_name = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="shippingMethodName"
     )
@@ -1202,6 +1318,7 @@ class ShippingInfoSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -1209,6 +1326,7 @@ class ShippingInfoSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".tax_category.TaxRateSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxRate",
     )
@@ -1216,6 +1334,7 @@ class ShippingInfoSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".tax_category.TaxCategoryReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -1225,6 +1344,7 @@ class ShippingInfoSchema(marshmallow.Schema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingMethod",
     )
@@ -1233,12 +1353,14 @@ class ShippingInfoSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     discounted_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedLineItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="discountedPrice",
     )
@@ -1259,7 +1381,7 @@ class ShippingInfoSchema(marshmallow.Schema):
         return models.ShippingInfo(**data)
 
 
-class ShippingRateInputSchema(marshmallow.Schema):
+class ShippingRateInputSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -1296,7 +1418,7 @@ class ScoreShippingRateInputSchema(ShippingRateInputSchema):
         return models.ScoreShippingRateInput(**data)
 
 
-class ShippingRateInputDraftSchema(marshmallow.Schema):
+class ShippingRateInputDraftSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -1332,8 +1454,10 @@ class ScoreShippingRateInputDraftSchema(ShippingRateInputDraftSchema):
         return models.ScoreShippingRateInputDraft(**data)
 
 
-class TaxPortionSchema(marshmallow.Schema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+class TaxPortionSchema(helpers.BaseSchema):
+    name = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     rate = marshmallow.fields.Float(allow_none=True, missing=None)
     amount = helpers.Discriminator(
         allow_none=True,
@@ -1358,8 +1482,10 @@ class TaxPortionSchema(marshmallow.Schema):
         return models.TaxPortion(**data)
 
 
-class TaxPortionDraftSchema(marshmallow.Schema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+class TaxPortionDraftSchema(helpers.BaseSchema):
+    name = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     rate = marshmallow.fields.Float(allow_none=True, missing=None)
     amount = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
@@ -1377,7 +1503,7 @@ class TaxPortionDraftSchema(marshmallow.Schema):
         return models.TaxPortionDraft(**data)
 
 
-class TaxedItemPriceSchema(marshmallow.Schema):
+class TaxedItemPriceSchema(helpers.BaseSchema):
     total_net = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -1416,7 +1542,7 @@ class TaxedItemPriceSchema(marshmallow.Schema):
         return models.TaxedItemPrice(**data)
 
 
-class TaxedPriceSchema(marshmallow.Schema):
+class TaxedPriceSchema(helpers.BaseSchema):
     total_net = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -1463,7 +1589,7 @@ class TaxedPriceSchema(marshmallow.Schema):
         return models.TaxedPrice(**data)
 
 
-class TaxedPriceDraftSchema(marshmallow.Schema):
+class TaxedPriceDraftSchema(helpers.BaseSchema):
     total_net = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
@@ -1512,6 +1638,7 @@ class CartAddCustomLineItemActionSchema(CartUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -1519,12 +1646,14 @@ class CartAddCustomLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     external_tax_rate = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -1572,12 +1701,14 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     distribution_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -1585,21 +1716,33 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productId",
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantId",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    quantity = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -1607,6 +1750,7 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -1614,6 +1758,7 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -1621,6 +1766,7 @@ class CartAddLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -1665,6 +1811,7 @@ class CartAddShoppingListActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -1672,6 +1819,7 @@ class CartAddShoppingListActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -1777,6 +1925,7 @@ class CartChangeLineItemQuantityActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -1784,6 +1933,7 @@ class CartChangeLineItemQuantityActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -1849,7 +1999,10 @@ class CartChangeTaxRoundingModeActionSchema(CartUpdateActionSchema):
 
 class CartRecalculateActionSchema(CartUpdateActionSchema):
     update_product_data = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="updateProductData"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="updateProductData",
     )
 
     class Meta:
@@ -1911,11 +2064,14 @@ class CartRemoveLineItemActionSchema(CartUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     external_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -1923,6 +2079,7 @@ class CartRemoveLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -1930,6 +2087,7 @@ class CartRemoveLineItemActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetailsToRemove",
     )
@@ -1962,7 +2120,10 @@ class CartRemovePaymentActionSchema(CartUpdateActionSchema):
 
 class CartSetAnonymousIdActionSchema(CartUpdateActionSchema):
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousId",
     )
 
     class Meta:
@@ -1979,6 +2140,7 @@ class CartSetBillingAddressActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -2004,6 +2166,7 @@ class CartSetCartTotalTaxActionSchema(CartUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxPortions",
     )
@@ -2018,7 +2181,9 @@ class CartSetCartTotalTaxActionSchema(CartUpdateActionSchema):
 
 
 class CartSetCountryActionSchema(CartUpdateActionSchema):
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2031,7 +2196,9 @@ class CartSetCountryActionSchema(CartUpdateActionSchema):
 
 class CartSetCustomFieldActionSchema(CartUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2047,7 +2214,9 @@ class CartSetCustomLineItemCustomFieldActionSchema(CartUpdateActionSchema):
         allow_none=True, missing=None, data_key="customLineItemId"
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2066,9 +2235,12 @@ class CartSetCustomLineItemCustomTypeActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2087,6 +2259,7 @@ class CartSetCustomLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -2108,6 +2281,7 @@ class CartSetCustomLineItemTaxAmountActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxAmountDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -2129,6 +2303,7 @@ class CartSetCustomLineItemTaxRateActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2159,6 +2334,7 @@ class CartSetCustomShippingMethodActionSchema(CartUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -2166,6 +2342,7 @@ class CartSetCustomShippingMethodActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2184,9 +2361,12 @@ class CartSetCustomTypeActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2216,6 +2396,7 @@ class CartSetCustomerGroupActionSchema(CartUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -2231,7 +2412,10 @@ class CartSetCustomerGroupActionSchema(CartUpdateActionSchema):
 
 class CartSetCustomerIdActionSchema(CartUpdateActionSchema):
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerId",
     )
 
     class Meta:
@@ -2245,7 +2429,10 @@ class CartSetCustomerIdActionSchema(CartUpdateActionSchema):
 
 class CartSetDeleteDaysAfterLastModificationActionSchema(CartUpdateActionSchema):
     delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterLastModification"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterLastModification",
     )
 
     class Meta:
@@ -2262,7 +2449,9 @@ class CartSetLineItemCustomFieldActionSchema(CartUpdateActionSchema):
         allow_none=True, missing=None, data_key="lineItemId"
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2281,9 +2470,12 @@ class CartSetLineItemCustomTypeActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2302,6 +2494,7 @@ class CartSetLineItemDistributionChannelActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -2323,6 +2516,7 @@ class CartSetLineItemPriceActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -2344,6 +2538,7 @@ class CartSetLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -2365,6 +2560,7 @@ class CartSetLineItemTaxAmountActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxAmountDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -2386,6 +2582,7 @@ class CartSetLineItemTaxRateActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2407,6 +2604,7 @@ class CartSetLineItemTotalPriceActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -2421,7 +2619,9 @@ class CartSetLineItemTotalPriceActionSchema(CartUpdateActionSchema):
 
 
 class CartSetLocaleActionSchema(CartUpdateActionSchema):
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2437,6 +2637,7 @@ class CartSetShippingAddressActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -2456,6 +2657,7 @@ class CartSetShippingMethodActionSchema(CartUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingMethod",
     )
@@ -2463,6 +2665,7 @@ class CartSetShippingMethodActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2481,6 +2684,7 @@ class CartSetShippingMethodTaxAmountActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxAmountDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -2499,6 +2703,7 @@ class CartSetShippingMethodTaxRateActionSchema(CartUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2522,6 +2727,7 @@ class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
             ),
             "Score": helpers.absmod(__name__, ".ScoreShippingRateInputDraftSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInput",
     )

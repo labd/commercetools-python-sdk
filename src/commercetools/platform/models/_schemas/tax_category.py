@@ -15,7 +15,7 @@ from .common import BaseResourceSchema, ReferenceSchema, ResourceIdentifierSchem
 
 
 # Marshmallow Schemas
-class SubRateSchema(marshmallow.Schema):
+class SubRateSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
     amount = marshmallow.fields.Float(allow_none=True, missing=None)
 
@@ -33,6 +33,7 @@ class TaxCategorySchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -40,11 +41,14 @@ class TaxCategorySchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     rates = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TaxRateSchema"),
         allow_none=True,
@@ -52,7 +56,9 @@ class TaxCategorySchema(BaseResourceSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -63,9 +69,11 @@ class TaxCategorySchema(BaseResourceSchema):
         return models.TaxCategory(**data)
 
 
-class TaxCategoryDraftSchema(marshmallow.Schema):
+class TaxCategoryDraftSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     rates = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TaxRateDraftSchema"),
         allow_none=True,
@@ -73,7 +81,9 @@ class TaxCategoryDraftSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -84,10 +94,12 @@ class TaxCategoryDraftSchema(marshmallow.Schema):
         return models.TaxCategoryDraft(**data)
 
 
-class TaxCategoryPagedQueryResponseSchema(marshmallow.Schema):
+class TaxCategoryPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TaxCategorySchema"),
@@ -111,6 +123,7 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".TaxCategorySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -133,7 +146,7 @@ class TaxCategoryResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.TaxCategoryResourceIdentifier(**data)
 
 
-class TaxCategoryUpdateSchema(marshmallow.Schema):
+class TaxCategoryUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -171,7 +184,7 @@ class TaxCategoryUpdateSchema(marshmallow.Schema):
         return models.TaxCategoryUpdate(**data)
 
 
-class TaxCategoryUpdateActionSchema(marshmallow.Schema):
+class TaxCategoryUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -183,20 +196,25 @@ class TaxCategoryUpdateActionSchema(marshmallow.Schema):
         return models.TaxCategoryUpdateAction(**data)
 
 
-class TaxRateSchema(marshmallow.Schema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+class TaxRateSchema(helpers.BaseSchema):
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
     amount = marshmallow.fields.Float(allow_none=True, missing=None)
     included_in_price = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="includedInPrice"
     )
     country = marshmallow.fields.String(allow_none=True, missing=None)
-    state = marshmallow.fields.String(allow_none=True, missing=None)
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     sub_rates = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SubRateSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="subRates",
     )
@@ -210,19 +228,24 @@ class TaxRateSchema(marshmallow.Schema):
         return models.TaxRate(**data)
 
 
-class TaxRateDraftSchema(marshmallow.Schema):
+class TaxRateDraftSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    amount = marshmallow.fields.Float(allow_none=True, missing=None)
+    amount = marshmallow.fields.Float(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     included_in_price = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="includedInPrice"
     )
     country = marshmallow.fields.String(allow_none=True, missing=None)
-    state = marshmallow.fields.String(allow_none=True, missing=None)
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     sub_rates = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SubRateSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="subRates",
     )
@@ -302,7 +325,9 @@ class TaxCategoryReplaceTaxRateActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TaxCategorySetDescriptionActionSchema(TaxCategoryUpdateActionSchema):
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -314,7 +339,9 @@ class TaxCategorySetDescriptionActionSchema(TaxCategoryUpdateActionSchema):
 
 
 class TaxCategorySetKeyActionSchema(TaxCategoryUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

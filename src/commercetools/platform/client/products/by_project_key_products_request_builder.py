@@ -9,49 +9,53 @@ from .by_project_key_products_key_by_key_request_builder import (
     ByProjectKeyProductsKeyByKeyRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyProductsRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def withKey(self, key: str) -> ByProjectKeyProductsKeyByKeyRequestBuilder:
+    def with_key(self, key: str) -> ByProjectKeyProductsKeyByKeyRequestBuilder:
         return ByProjectKeyProductsKeyByKeyRequestBuilder(
             key=key,
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def withId(self, ID: str) -> ByProjectKeyProductsByIDRequestBuilder:
+    def with_id(self, id: str) -> ByProjectKeyProductsByIDRequestBuilder:
         return ByProjectKeyProductsByIDRequestBuilder(
-            ID=ID,
-            projectKey=self._project_key,
+            id=id,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def get(
         self,
         *,
-        price_currency: "str" = None,
-        price_country: "str" = None,
-        price_customer_group: "str" = None,
-        price_channel: "str" = None,
-        locale_projection: "str" = None,
-        store_projection: "str" = None,
-        expand: "str" = None,
-        sort: "str" = None,
-        limit: "int" = None,
-        offset: "int" = None,
-        with_total: "bool" = None,
-        where: "str" = None,
+        price_currency: str = None,
+        price_country: str = None,
+        price_customer_group: str = None,
+        price_channel: str = None,
+        locale_projection: str = None,
+        store_projection: str = None,
+        expand: str = None,
+        sort: str = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        where: str = None,
+        predicate_var: typing.Dict[str, str] = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ProductPagedQueryResponse":
         """You can use the query endpoint to get the full representations of products.
@@ -59,22 +63,27 @@ class ByProjectKeyProductsRequestBuilder:
         the query API lacks like sorting on custom attributes, etc.
 
         """
+        params = {
+            "priceCurrency": price_currency,
+            "priceCountry": price_country,
+            "priceCustomerGroup": price_customer_group,
+            "priceChannel": price_channel,
+            "localeProjection": locale_projection,
+            "storeProjection": store_projection,
+            "expand": expand,
+            "sort": sort,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/products",
-            params={
-                "priceCurrency": price_currency,
-                "priceCountry": price_country,
-                "priceCustomerGroup": price_customer_group,
-                "priceChannel": price_channel,
-                "localeProjection": locale_projection,
-                "storeProjection": store_projection,
-                "expand": expand,
-                "sort": sort,
-                "limit": limit,
-                "offset": offset,
-                "withTotal": with_total,
-                "where": where,
-            },
+            params=params,
             response_class=ProductPagedQueryResponse,
             headers=headers,
         )
@@ -83,13 +92,13 @@ class ByProjectKeyProductsRequestBuilder:
         self,
         body: "ProductDraft",
         *,
-        price_currency: "str" = None,
-        price_country: "str" = None,
-        price_customer_group: "str" = None,
-        price_channel: "str" = None,
-        locale_projection: "str" = None,
-        store_projection: "str" = None,
-        expand: "str" = None,
+        price_currency: str = None,
+        price_country: str = None,
+        price_customer_group: str = None,
+        price_channel: str = None,
+        locale_projection: str = None,
+        store_projection: str = None,
+        expand: str = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Product":
         """To create a new product, send a representation that is going to become the initial staged representation
@@ -97,6 +106,7 @@ class ByProjectKeyProductsRequestBuilder:
         the selected prices will be added to the response.
 
         """
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/products",
             params={

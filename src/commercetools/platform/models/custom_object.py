@@ -10,27 +10,34 @@ from .common import BaseResource, Reference, ReferenceTypeId
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, ReferenceTypeId
 
+__all__ = [
+    "CustomObject",
+    "CustomObjectDraft",
+    "CustomObjectPagedQueryResponse",
+    "CustomObjectReference",
+]
+
 
 class CustomObject(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     created_by: typing.Optional["CreatedBy"]
     #: A namespace to group custom objects.
-    container: "str"
-    key: "str"
-    value: "any"
+    container: str
+    key: str
+    value: typing.Any
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        container: "str",
-        key: "str",
-        value: "any"
+        container: str,
+        key: str,
+        value: typing.Any
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -58,19 +65,19 @@ class CustomObject(BaseResource):
 
 class CustomObjectDraft(_BaseType):
     #: A namespace to group custom objects.
-    container: "str"
+    container: str
     #: A user-defined key that is unique within the given container.
-    key: "str"
-    value: "any"
-    version: typing.Optional["int"]
+    key: str
+    value: typing.Any
+    version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        container: "str",
-        key: "str",
-        value: "any",
-        version: typing.Optional["int"] = None
+        container: str,
+        key: str,
+        value: typing.Any,
+        version: typing.Optional[int] = None
     ):
         self.container = container
         self.key = key
@@ -91,19 +98,19 @@ class CustomObjectDraft(_BaseType):
 
 
 class CustomObjectPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["CustomObject"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["CustomObject"]
     ):
         self.limit = limit
@@ -130,7 +137,7 @@ class CustomObjectPagedQueryResponse(_BaseType):
 class CustomObjectReference(Reference):
     obj: typing.Optional["CustomObject"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["CustomObject"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["CustomObject"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.KEY_VALUE_DOCUMENT)
 

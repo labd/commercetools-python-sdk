@@ -4,27 +4,31 @@ import typing
 from ...models.cart_discount import CartDiscount
 from ...models.common import Update
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyCartDiscountsByIDRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _id: str
 
     def __init__(
         self,
-        projectKey: str,
-        ID: str,
-        client: "Client",
+        project_key: str,
+        id: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._id = ID
+        self._project_key = project_key
+        self._id = id
         self._client = client
 
     def get(
-        self, *, expand: "str" = None, headers: typing.Dict[str, str] = None
+        self, *, expand: str = None, headers: typing.Dict[str, str] = None
     ) -> "CartDiscount":
         """Get CartDiscount by ID"""
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/cart-discounts/{self._id}",
             params={"expand": expand},
@@ -36,10 +40,11 @@ class ByProjectKeyCartDiscountsByIDRequestBuilder:
         self,
         body: "Update",
         *,
-        expand: "str" = None,
+        expand: str = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CartDiscount":
         """Update CartDiscount by ID"""
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/cart-discounts/{self._id}",
             params={"expand": expand},
@@ -49,13 +54,10 @@ class ByProjectKeyCartDiscountsByIDRequestBuilder:
         )
 
     def delete(
-        self,
-        *,
-        version: "int",
-        expand: "str" = None,
-        headers: typing.Dict[str, str] = None,
+        self, *, version: int, expand: str = None, headers: typing.Dict[str, str] = None
     ) -> "CartDiscount":
         """Delete CartDiscount by ID"""
+        headers = {} if headers is None else headers
         return self._client._delete(
             endpoint=f"/{self._project_key}/cart-discounts/{self._id}",
             params={"version": version, "expand": expand},

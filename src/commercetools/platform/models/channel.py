@@ -24,6 +24,27 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "Channel",
+    "ChannelAddRolesAction",
+    "ChannelChangeDescriptionAction",
+    "ChannelChangeKeyAction",
+    "ChannelChangeNameAction",
+    "ChannelDraft",
+    "ChannelPagedQueryResponse",
+    "ChannelReference",
+    "ChannelRemoveRolesAction",
+    "ChannelResourceIdentifier",
+    "ChannelRoleEnum",
+    "ChannelSetAddressAction",
+    "ChannelSetCustomFieldAction",
+    "ChannelSetCustomTypeAction",
+    "ChannelSetGeoLocationAction",
+    "ChannelSetRolesAction",
+    "ChannelUpdate",
+    "ChannelUpdateAction",
+]
+
 
 class Channel(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -31,7 +52,7 @@ class Channel(BaseResource):
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
     #: Any arbitrary string key that uniquely identifies this channel within the project.
-    key: "str"
+    key: str
     #: The roles of this channel.
     #: Each channel must have at least one role.
     roles: typing.List["ChannelRoleEnum"]
@@ -51,13 +72,13 @@ class Channel(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: "str",
+        key: str,
         roles: typing.List["ChannelRoleEnum"],
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -96,7 +117,7 @@ class Channel(BaseResource):
 
 
 class ChannelDraft(_BaseType):
-    key: "str"
+    key: str
     #: If not specified, then channel will get InventorySupply role by default
     roles: typing.Optional[typing.List["ChannelRoleEnum"]]
     name: typing.Optional["LocalizedString"]
@@ -109,7 +130,7 @@ class ChannelDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
@@ -139,19 +160,19 @@ class ChannelDraft(_BaseType):
 
 
 class ChannelPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Channel"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Channel"]
     ):
         self.limit = limit
@@ -178,7 +199,7 @@ class ChannelPagedQueryResponse(_BaseType):
 class ChannelReference(Reference):
     obj: typing.Optional["Channel"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Channel"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Channel"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.CHANNEL)
 
@@ -196,7 +217,7 @@ class ChannelReference(Reference):
 
 class ChannelResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CHANNEL)
@@ -224,10 +245,10 @@ class ChannelRoleEnum(enum.Enum):
 
 
 class ChannelUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ChannelUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["ChannelUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["ChannelUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -245,17 +266,54 @@ class ChannelUpdate(_BaseType):
 
 
 class ChannelUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ChannelUpdateAction":
-        from ._schemas.channel import ChannelUpdateActionSchema
+        if data["action"] == "addRoles":
+            from ._schemas.channel import ChannelAddRolesActionSchema
 
-        return ChannelUpdateActionSchema().load(data)
+            return ChannelAddRolesActionSchema().load(data)
+        if data["action"] == "changeDescription":
+            from ._schemas.channel import ChannelChangeDescriptionActionSchema
+
+            return ChannelChangeDescriptionActionSchema().load(data)
+        if data["action"] == "changeKey":
+            from ._schemas.channel import ChannelChangeKeyActionSchema
+
+            return ChannelChangeKeyActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.channel import ChannelChangeNameActionSchema
+
+            return ChannelChangeNameActionSchema().load(data)
+        if data["action"] == "removeRoles":
+            from ._schemas.channel import ChannelRemoveRolesActionSchema
+
+            return ChannelRemoveRolesActionSchema().load(data)
+        if data["action"] == "setAddress":
+            from ._schemas.channel import ChannelSetAddressActionSchema
+
+            return ChannelSetAddressActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.channel import ChannelSetCustomFieldActionSchema
+
+            return ChannelSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.channel import ChannelSetCustomTypeActionSchema
+
+            return ChannelSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setGeoLocation":
+            from ._schemas.channel import ChannelSetGeoLocationActionSchema
+
+            return ChannelSetGeoLocationActionSchema().load(data)
+        if data["action"] == "setRoles":
+            from ._schemas.channel import ChannelSetRolesActionSchema
+
+            return ChannelSetRolesActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.channel import ChannelUpdateActionSchema
@@ -304,9 +362,9 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 
 
 class ChannelChangeKeyAction(ChannelUpdateAction):
-    key: "str"
+    key: str
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
         self.key = key
         super().__init__(action="changeKey")
 
@@ -388,10 +446,10 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 
 
 class ChannelSetCustomFieldAction(ChannelUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")

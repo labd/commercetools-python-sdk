@@ -11,48 +11,55 @@ if typing.TYPE_CHECKING:
     from .common import ProcessingState
     from .errors import ErrorObject
 
+__all__ = [
+    "ImportOperation",
+    "ImportOperationPagedResponse",
+    "ImportOperationState",
+    "ImportOperationStatus",
+]
+
 
 class ImportOperation(_BaseType):
     """Tracks the status of a single import resource as it is imported into the commercetools project."""
 
     #: The import operation version.
-    version: "int"
+    version: int
     #: The key of the import sink.
-    import_sink_key: "str"
+    import_sink_key: str
     #: The key of the import resource.
-    resource_key: "str"
+    resource_key: str
     #: The identifier of the operaton that is to be commited
-    id: "str"
+    id: str
     #: The status of the import resource.
     state: "ProcessingState"
     #: When the resource is successfully imported, this represents the imported resource version
-    resource_version: typing.Optional["int"]
+    resource_version: typing.Optional[int]
     #: The number of request retries for processing the import resource.
-    retry_count: "int"
+    retry_count: int
     #: If an import resource does not import correctly, the state is set to `Rejected` or `ValidationFailed`
     #: and this property contains the errors.
     errors: typing.Optional[typing.List["ErrorObject"]]
     #: When the import operation was created.
-    created_at: "datetime.datetime"
+    created_at: datetime.datetime
     #: When the import operation was modified.
-    last_modified_at: "datetime.datetime"
+    last_modified_at: datetime.datetime
     #: When the import operation expires.
-    expires_at: "datetime.datetime"
+    expires_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        version: "int",
-        import_sink_key: "str",
-        resource_key: "str",
-        id: "str",
+        version: int,
+        import_sink_key: str,
+        resource_key: str,
+        id: str,
         state: "ProcessingState",
-        resource_version: typing.Optional["int"] = None,
-        retry_count: "int",
+        resource_version: typing.Optional[int] = None,
+        retry_count: int,
         errors: typing.Optional[typing.List["ErrorObject"]] = None,
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
-        expires_at: "datetime.datetime"
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        expires_at: datetime.datetime
     ):
         self.version = version
         self.import_sink_key = import_sink_key
@@ -83,20 +90,20 @@ class ImportOperationPagedResponse(_BaseType):
     """This type represents a paged import operation result."""
 
     #: The maximum number of import operations returned for a page.
-    limit: "int"
+    limit: int
     #: The offset supplied by the client or the server default. It is the number of elements skipped.
-    offset: "int"
+    offset: int
     #: The actual number of results returned by this response.
-    count: "int"
+    count: int
     #: The results for this paged response.
     results: typing.List["ImportOperation"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        offset: "int",
-        count: "int",
+        limit: int,
+        offset: int,
+        count: int,
         results: typing.List["ImportOperation"]
     ):
         self.limit = limit
@@ -131,7 +138,7 @@ class ImportOperationStatus(_BaseType):
     """The validation status of a created operation."""
 
     #: Id of the import operation.
-    operation_id: typing.Optional["str"]
+    operation_id: typing.Optional[str]
     #: Validation state of the import operation.
     state: "ImportOperationState"
     #: Validation errors for the import operation.
@@ -140,7 +147,7 @@ class ImportOperationStatus(_BaseType):
     def __init__(
         self,
         *,
-        operation_id: typing.Optional["str"] = None,
+        operation_id: typing.Optional[str] = None,
         state: "ImportOperationState",
         errors: typing.Optional[typing.List["ErrorObject"]] = None
     ):

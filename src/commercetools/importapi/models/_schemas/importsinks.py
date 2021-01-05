@@ -14,7 +14,7 @@ from ..common import ImportResourceType
 
 
 # Marshmallow Schemas
-class ImportSinkSchema(marshmallow.Schema):
+class ImportSinkSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     resource_type = marshmallow_enum.EnumField(
         ImportResourceType,
@@ -40,8 +40,10 @@ class ImportSinkSchema(marshmallow.Schema):
         return models.ImportSink(**data)
 
 
-class ImportSinkDraftSchema(marshmallow.Schema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+class ImportSinkDraftSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     resource_type = marshmallow_enum.EnumField(
         ImportResourceType,
@@ -60,7 +62,7 @@ class ImportSinkDraftSchema(marshmallow.Schema):
         return models.ImportSinkDraft(**data)
 
 
-class ImportSinkPagedResponseSchema(marshmallow.Schema):
+class ImportSinkPagedResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)

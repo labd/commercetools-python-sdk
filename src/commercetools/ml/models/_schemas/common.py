@@ -19,7 +19,7 @@ class LocalizedStringField(marshmallow.fields.Dict):
 
 
 # Marshmallow Schemas
-class MoneySchema(marshmallow.Schema):
+class MoneySchema(helpers.BaseSchema):
     cent_amount = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="centAmount"
     )
@@ -36,7 +36,7 @@ class MoneySchema(marshmallow.Schema):
         return models.Money(**data)
 
 
-class ReferenceSchema(marshmallow.Schema):
+class ReferenceSchema(helpers.BaseSchema):
     type_id = marshmallow_enum.EnumField(
         ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
     )
@@ -81,7 +81,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
         return models.ProductTypeReference(**data)
 
 
-class ProductVariantSchema(marshmallow.Schema):
+class ProductVariantSchema(helpers.BaseSchema):
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductReferenceSchema"),
         allow_none=True,
@@ -102,7 +102,7 @@ class ProductVariantSchema(marshmallow.Schema):
         return models.ProductVariant(**data)
 
 
-class TaskTokenSchema(marshmallow.Schema):
+class TaskTokenSchema(helpers.BaseSchema):
     task_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="taskId"
     )

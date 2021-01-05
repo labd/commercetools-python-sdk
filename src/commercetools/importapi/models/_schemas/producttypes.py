@@ -16,7 +16,7 @@ from .common import ImportResourceSchema, LocalizedStringField
 
 
 # Marshmallow Schemas
-class AttributeDefinitionSchema(marshmallow.Schema):
+class AttributeDefinitionSchema(helpers.BaseSchema):
     type = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("name", "name"),
@@ -46,19 +46,29 @@ class AttributeDefinitionSchema(marshmallow.Schema):
         AttributeConstraintEnum,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="attributeConstraint",
     )
-    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
+    input_tip = LocalizedStringField(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="inputTip",
+    )
     input_hint = marshmallow_enum.EnumField(
         TextInputHint,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="inputHint",
     )
     is_searchable = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isSearchable"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isSearchable",
     )
 
     class Meta:
@@ -70,7 +80,7 @@ class AttributeDefinitionSchema(marshmallow.Schema):
         return models.AttributeDefinition(**data)
 
 
-class AttributeTypeSchema(marshmallow.Schema):
+class AttributeTypeSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -130,7 +140,7 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
         return models.AttributeEnumType(**data)
 
 
-class AttributePlainEnumValueSchema(marshmallow.Schema):
+class AttributePlainEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     label = marshmallow.fields.String(allow_none=True, missing=None)
 
@@ -171,7 +181,7 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
         return models.AttributeLocalizedEnumType(**data)
 
 
-class AttributeLocalizedEnumValueSchema(marshmallow.Schema):
+class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     label = LocalizedStringField(allow_none=True, missing=None)
 
@@ -300,6 +310,7 @@ class ProductTypeImportSchema(ImportResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 

@@ -6,17 +6,30 @@ import typing
 
 from ._abstract import _BaseType
 
+__all__ = [
+    "CategoryReference",
+    "LocalizedString",
+    "Money",
+    "ProductReference",
+    "ProductTypeReference",
+    "ProductVariant",
+    "Reference",
+    "ReferenceTypeId",
+    "TaskStatusEnum",
+    "TaskToken",
+]
+
 
 class LocalizedString(typing.Dict[str, str]):
     pass
 
 
 class Money(_BaseType):
-    cent_amount: "int"
+    cent_amount: int
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency_code: "str"
+    currency_code: str
 
-    def __init__(self, *, cent_amount: "int", currency_code: "str"):
+    def __init__(self, *, cent_amount: int, currency_code: str):
         self.cent_amount = cent_amount
         self.currency_code = currency_code
         super().__init__()
@@ -61,18 +74,27 @@ class ReferenceTypeId(enum.Enum):
 
 class Reference(_BaseType):
     type_id: "ReferenceTypeId"
-    id: "str"
+    id: str
 
-    def __init__(self, *, type_id: "ReferenceTypeId", id: "str"):
+    def __init__(self, *, type_id: "ReferenceTypeId", id: str):
         self.type_id = type_id
         self.id = id
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Reference":
-        from ._schemas.common import ReferenceSchema
+        if data["typeId"] == "category":
+            from ._schemas.common import CategoryReferenceSchema
 
-        return ReferenceSchema().load(data)
+            return CategoryReferenceSchema().load(data)
+        if data["typeId"] == "product":
+            from ._schemas.common import ProductReferenceSchema
+
+            return ProductReferenceSchema().load(data)
+        if data["typeId"] == "product-type":
+            from ._schemas.common import ProductTypeReferenceSchema
+
+            return ProductTypeReferenceSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import ReferenceSchema
@@ -81,7 +103,7 @@ class Reference(_BaseType):
 
 
 class CategoryReference(Reference):
-    def __init__(self, *, id: "str"):
+    def __init__(self, *, id: str):
 
         super().__init__(id=id, type_id=ReferenceTypeId.CATEGORY)
 
@@ -98,7 +120,7 @@ class CategoryReference(Reference):
 
 
 class ProductReference(Reference):
-    def __init__(self, *, id: "str"):
+    def __init__(self, *, id: str):
 
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT)
 
@@ -115,7 +137,7 @@ class ProductReference(Reference):
 
 
 class ProductTypeReference(Reference):
-    def __init__(self, *, id: "str"):
+    def __init__(self, *, id: str):
 
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_TYPE)
 
@@ -137,13 +159,11 @@ class ProductVariant(_BaseType):
     #: The product that contains this variant.
     product: "ProductReference"
     #: The state of the product variant.
-    staged: "bool"
+    staged: bool
     #: The id of the product variant.
-    variant_id: "int"
+    variant_id: int
 
-    def __init__(
-        self, *, product: "ProductReference", staged: "bool", variant_id: "int"
-    ):
+    def __init__(self, *, product: "ProductReference", staged: bool, variant_id: int):
         self.product = product
         self.staged = staged
         self.variant_id = variant_id
@@ -170,11 +190,11 @@ class TaskToken(_BaseType):
     """Represents a URL path to poll to get the results of an Asynchronous Request."""
 
     #: The ID for the task. Used to find the status of the task.
-    task_id: "str"
+    task_id: str
     #: The URI path to poll for the status of the task.
-    uri_path: "str"
+    uri_path: str
 
-    def __init__(self, *, task_id: "str", uri_path: "str"):
+    def __init__(self, *, task_id: str, uri_path: str):
         self.task_id = task_id
         self.uri_path = uri_path
         super().__init__()

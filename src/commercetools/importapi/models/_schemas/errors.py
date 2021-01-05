@@ -14,13 +14,17 @@ from ..common import ProcessingState
 
 
 # Marshmallow Schemas
-class ErrorResponseSchema(marshmallow.Schema):
+class ErrorResponseSchema(helpers.BaseSchema):
     status_code = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="statusCode"
     )
     message = marshmallow.fields.String(allow_none=True, missing=None)
-    error = marshmallow.fields.String(allow_none=True, missing=None)
-    error_description = marshmallow.fields.String(allow_none=True, missing=None)
+    error = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    error_description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     errors = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -75,6 +79,7 @@ class ErrorResponseSchema(marshmallow.Schema):
             },
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -87,7 +92,7 @@ class ErrorResponseSchema(marshmallow.Schema):
         return models.ErrorResponse(**data)
 
 
-class ErrorObjectSchema(marshmallow.Schema):
+class ErrorObjectSchema(helpers.BaseSchema):
     code = marshmallow.fields.String(allow_none=True, missing=None)
     message = marshmallow.fields.String(allow_none=True, missing=None)
 
@@ -292,9 +297,14 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
 
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(allow_none=True, missing=None)
+    field = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     duplicate_value = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="duplicateValue"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="duplicateValue",
     )
 
     class Meta:
@@ -324,8 +334,10 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
         return models.DuplicateVariantValuesError(**data)
 
 
-class VariantValuesSchema(marshmallow.Schema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+class VariantValuesSchema(helpers.BaseSchema):
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".prices.PriceImportSchema"),
         allow_none=True,
@@ -457,6 +469,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
     allowed_values = marshmallow.fields.List(
         marshmallow.fields.Raw(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="allowedValues",
     )
@@ -491,7 +504,9 @@ class InvalidInputSchema(ErrorObjectSchema):
 
 
 class ResourceNotFoundErrorSchema(ErrorObjectSchema):
-    resource = marshmallow.fields.Raw(allow_none=True, missing=None)
+    resource = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -503,7 +518,9 @@ class ResourceNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class ResourceCreationErrorSchema(ErrorObjectSchema):
-    resource = marshmallow.fields.Raw(allow_none=True, missing=None)
+    resource = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -515,7 +532,9 @@ class ResourceCreationErrorSchema(ErrorObjectSchema):
 
 
 class ResourceUpdateErrorSchema(ErrorObjectSchema):
-    resource = marshmallow.fields.Raw(allow_none=True, missing=None)
+    resource = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -527,7 +546,9 @@ class ResourceUpdateErrorSchema(ErrorObjectSchema):
 
 
 class ResourceDeletionErrorSchema(ErrorObjectSchema):
-    resource = marshmallow.fields.Raw(allow_none=True, missing=None)
+    resource = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -577,13 +598,19 @@ class InvalidStateTransitionErrorSchema(ErrorObjectSchema):
 
 class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     specified_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="specifiedVersion"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="specifiedVersion",
     )
     current_version = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="currentVersion"
     )
     conflicted_resource = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="conflictedResource"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="conflictedResource",
     )
 
     class Meta:

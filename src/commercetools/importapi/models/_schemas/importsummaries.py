@@ -13,7 +13,7 @@ from ... import models
 
 
 # Marshmallow Schemas
-class ImportSummarySchema(marshmallow.Schema):
+class ImportSummarySchema(helpers.BaseSchema):
     states = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".OperationStatesSchema"),
         allow_none=True,
@@ -31,7 +31,7 @@ class ImportSummarySchema(marshmallow.Schema):
         return models.ImportSummary(**data)
 
 
-class OperationStatesSchema(marshmallow.Schema):
+class OperationStatesSchema(helpers.BaseSchema):
     validation_failed = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="ValidationFailed"
     )

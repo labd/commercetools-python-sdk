@@ -24,27 +24,40 @@ class ProductDraftImportSchema(ImportResourceSchema):
     )
     name = LocalizedStringField(allow_none=True, missing=None)
     slug = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     categories = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CategoryKeyReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaKeywords",
     )
     master_variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductVariantDraftImportSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="masterVariant",
     )
@@ -53,12 +66,14 @@ class ProductDraftImportSchema(ImportResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.TaxCategoryKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -66,6 +81,7 @@ class ProductDraftImportSchema(ImportResourceSchema):
         nested=helpers.absmod(__name__, ".products.SearchKeywordsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="searchKeywords",
     )
@@ -73,9 +89,12 @@ class ProductDraftImportSchema(ImportResourceSchema):
         nested=helpers.absmod(__name__, ".common.StateKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    publish = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    publish = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -86,14 +105,19 @@ class ProductDraftImportSchema(ImportResourceSchema):
         return models.ProductDraftImport(**data)
 
 
-class ProductVariantDraftImportSchema(marshmallow.Schema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class ProductVariantDraftImportSchema(helpers.BaseSchema):
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PriceDraftImportSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     attributes = marshmallow.fields.List(
@@ -170,6 +194,7 @@ class ProductVariantDraftImportSchema(marshmallow.Schema):
             },
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
     images = helpers.LazyNestedField(
@@ -177,6 +202,7 @@ class ProductVariantDraftImportSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     assets = helpers.LazyNestedField(
@@ -184,6 +210,7 @@ class ProductVariantDraftImportSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -196,7 +223,7 @@ class ProductVariantDraftImportSchema(marshmallow.Schema):
         return models.ProductVariantDraftImport(**data)
 
 
-class PriceDraftImportSchema(marshmallow.Schema):
+class PriceDraftImportSchema(helpers.BaseSchema):
     value = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -208,11 +235,14 @@ class PriceDraftImportSchema(marshmallow.Schema):
         },
         missing=None,
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CustomerGroupKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -220,24 +250,33 @@ class PriceDraftImportSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".common.ChannelKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     tiers = helpers.LazyNestedField(
@@ -245,9 +284,12 @@ class PriceDraftImportSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

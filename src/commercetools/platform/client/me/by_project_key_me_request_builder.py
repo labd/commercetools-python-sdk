@@ -31,99 +31,108 @@ from ..signup.by_project_key_me_signup_request_builder import (
     ByProjectKeyMeSignupRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyMeRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def emailConfirm(self) -> ByProjectKeyMeEmailConfirmRequestBuilder:
+    def email_confirm(self) -> ByProjectKeyMeEmailConfirmRequestBuilder:
         return ByProjectKeyMeEmailConfirmRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def password(self) -> ByProjectKeyMePasswordRequestBuilder:
         return ByProjectKeyMePasswordRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def signup(self) -> ByProjectKeyMeSignupRequestBuilder:
         return ByProjectKeyMeSignupRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def login(self) -> ByProjectKeyMeLoginRequestBuilder:
         return ByProjectKeyMeLoginRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def activeCart(self) -> ByProjectKeyMeActiveCartRequestBuilder:
+    def active_cart(self) -> ByProjectKeyMeActiveCartRequestBuilder:
         return ByProjectKeyMeActiveCartRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def carts(self) -> ByProjectKeyMeCartsRequestBuilder:
         """A shopping cart holds product variants and can be ordered."""
         return ByProjectKeyMeCartsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def orders(self) -> ByProjectKeyMeOrdersRequestBuilder:
         """An order can be created from a cart, usually after a checkout process has been completed."""
         return ByProjectKeyMeOrdersRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def payments(self) -> ByProjectKeyMePaymentsRequestBuilder:
         """The My Payments endpoint creates and provides access to payments scoped to a specific user."""
         return ByProjectKeyMePaymentsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def shoppingLists(self) -> ByProjectKeyMeShoppingListsRequestBuilder:
+    def shopping_lists(self) -> ByProjectKeyMeShoppingListsRequestBuilder:
         """The My Shopping Lists endpoint creates and provides access to shopping lists scoped to a specific user."""
         return ByProjectKeyMeShoppingListsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def get(
         self,
         *,
-        sort: "str" = None,
-        limit: "int" = None,
-        offset: "int" = None,
-        with_total: "bool" = None,
-        expand: "str" = None,
-        where: "str" = None,
+        sort: str = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        expand: str = None,
+        where: str = None,
+        predicate_var: typing.Dict[str, str] = None,
         headers: typing.Dict[str, str] = None,
     ) -> "MyCustomer":
+        params = {
+            "sort": sort,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "expand": expand,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/me",
-            params={
-                "sort": sort,
-                "limit": limit,
-                "offset": offset,
-                "withTotal": with_total,
-                "expand": expand,
-                "where": where,
-            },
+            params=params,
             response_class=MyCustomer,
             headers=headers,
         )
@@ -132,6 +141,7 @@ class ByProjectKeyMeRequestBuilder:
         self, body: "Update", *, headers: typing.Dict[str, str] = None
     ) -> "MyCustomer":
         """Update my customer"""
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/me",
             params={},
@@ -141,9 +151,10 @@ class ByProjectKeyMeRequestBuilder:
         )
 
     def delete(
-        self, *, version: "int", headers: typing.Dict[str, str] = None
+        self, *, version: int, headers: typing.Dict[str, str] = None
     ) -> "MyCustomer":
         """Delete my Customer"""
+        headers = {} if headers is None else headers
         return self._client._delete(
             endpoint=f"/{self._project_key}/me",
             params={"version": version},

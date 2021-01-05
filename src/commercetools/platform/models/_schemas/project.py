@@ -14,9 +14,12 @@ from ..shipping_method import ShippingRateTierType
 
 
 # Marshmallow Schemas
-class CartsConfigurationSchema(marshmallow.Schema):
+class CartsConfigurationSchema(helpers.BaseSchema):
     country_tax_rate_fallback_enabled = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="countryTaxRateFallbackEnabled"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="countryTaxRateFallbackEnabled",
     )
 
     class Meta:
@@ -28,7 +31,7 @@ class CartsConfigurationSchema(marshmallow.Schema):
         return models.CartsConfiguration(**data)
 
 
-class ExternalOAuthSchema(marshmallow.Schema):
+class ExternalOAuthSchema(helpers.BaseSchema):
     url = marshmallow.fields.String(allow_none=True, missing=None)
     authorization_header = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="authorizationHeader"
@@ -43,7 +46,7 @@ class ExternalOAuthSchema(marshmallow.Schema):
         return models.ExternalOAuth(**data)
 
 
-class ProjectSchema(marshmallow.Schema):
+class ProjectSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True, missing=None)
@@ -60,7 +63,10 @@ class ProjectSchema(marshmallow.Schema):
         allow_none=True, missing=None, data_key="createdAt"
     )
     trial_until = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="trialUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="trialUntil",
     )
     messages = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".message.MessageConfigurationSchema"),
@@ -78,6 +84,7 @@ class ProjectSchema(marshmallow.Schema):
             "CartScore": helpers.absmod(__name__, ".CartScoreTypeSchema"),
             "CartValue": helpers.absmod(__name__, ".CartValueTypeSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInputType",
     )
@@ -85,6 +92,7 @@ class ProjectSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".ExternalOAuthSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalOAuth",
     )
@@ -104,7 +112,7 @@ class ProjectSchema(marshmallow.Schema):
         return models.Project(**data)
 
 
-class ProjectUpdateSchema(marshmallow.Schema):
+class ProjectUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -153,7 +161,7 @@ class ProjectUpdateSchema(marshmallow.Schema):
         return models.ProjectUpdate(**data)
 
 
-class ProjectUpdateActionSchema(marshmallow.Schema):
+class ProjectUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -165,7 +173,7 @@ class ProjectUpdateActionSchema(marshmallow.Schema):
         return models.ProjectUpdateAction(**data)
 
 
-class ShippingRateInputTypeSchema(marshmallow.Schema):
+class ShippingRateInputTypeSchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
         ShippingRateTierType, by_value=True, allow_none=True, missing=None
     )
@@ -322,6 +330,7 @@ class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):
         nested=helpers.absmod(__name__, ".ExternalOAuthSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalOAuth",
     )
@@ -346,6 +355,7 @@ class ProjectSetShippingRateInputTypeActionSchema(ProjectUpdateActionSchema):
             "CartScore": helpers.absmod(__name__, ".CartScoreTypeSchema"),
             "CartValue": helpers.absmod(__name__, ".CartValueTypeSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInputType",
     )

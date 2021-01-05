@@ -35,6 +35,7 @@ class OrderEditSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -42,10 +43,13 @@ class OrderEditSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     resource = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderReferenceSchema"),
         allow_none=True,
@@ -279,6 +283,7 @@ class OrderEditSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     result = helpers.Discriminator(
@@ -296,7 +301,9 @@ class OrderEditSchema(BaseResourceSchema):
         },
         missing=None,
     )
-    comment = marshmallow.fields.String(allow_none=True, missing=None)
+    comment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -307,7 +314,7 @@ class OrderEditSchema(BaseResourceSchema):
         return models.OrderEdit(**data)
 
 
-class OrderEditApplySchema(marshmallow.Schema):
+class OrderEditApplySchema(helpers.BaseSchema):
     edit_version = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="editVersion"
     )
@@ -324,8 +331,10 @@ class OrderEditApplySchema(marshmallow.Schema):
         return models.OrderEditApply(**data)
 
 
-class OrderEditDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class OrderEditDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     resource = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderReferenceSchema"),
         allow_none=True,
@@ -552,6 +561,7 @@ class OrderEditDraftSchema(marshmallow.Schema):
             },
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="stagedActions",
     )
@@ -559,11 +569,14 @@ class OrderEditDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    comment = marshmallow.fields.String(allow_none=True, missing=None)
+    comment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     dry_run = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="dryRun"
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="dryRun"
     )
 
     class Meta:
@@ -575,10 +588,12 @@ class OrderEditDraftSchema(marshmallow.Schema):
         return models.OrderEditDraft(**data)
 
 
-class OrderEditPagedQueryResponseSchema(marshmallow.Schema):
+class OrderEditPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".OrderEditSchema"),
@@ -602,6 +617,7 @@ class OrderEditReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".OrderEditSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -624,7 +640,7 @@ class OrderEditResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.OrderEditResourceIdentifier(**data)
 
 
-class OrderEditResultSchema(marshmallow.Schema):
+class OrderEditResultSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -1127,7 +1143,7 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
         return models.OrderEditPreviewSuccess(**data)
 
 
-class OrderEditUpdateSchema(marshmallow.Schema):
+class OrderEditUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -1156,7 +1172,7 @@ class OrderEditUpdateSchema(marshmallow.Schema):
         missing=None,
     )
     dry_run = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="dryRun"
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="dryRun"
     )
 
     class Meta:
@@ -1168,7 +1184,7 @@ class OrderEditUpdateSchema(marshmallow.Schema):
         return models.OrderEditUpdate(**data)
 
 
-class OrderEditUpdateActionSchema(marshmallow.Schema):
+class OrderEditUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -1180,7 +1196,7 @@ class OrderEditUpdateActionSchema(marshmallow.Schema):
         return models.OrderEditUpdateAction(**data)
 
 
-class OrderExcerptSchema(marshmallow.Schema):
+class OrderExcerptSchema(helpers.BaseSchema):
     total_price = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -1199,6 +1215,7 @@ class OrderExcerptSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".cart.TaxedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -1452,7 +1469,9 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
 
 
 class OrderEditSetCommentActionSchema(OrderEditUpdateActionSchema):
-    comment = marshmallow.fields.String(allow_none=True, missing=None)
+    comment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1465,7 +1484,9 @@ class OrderEditSetCommentActionSchema(OrderEditUpdateActionSchema):
 
 class OrderEditSetCustomFieldActionSchema(OrderEditUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1481,9 +1502,12 @@ class OrderEditSetCustomTypeActionSchema(OrderEditUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = marshmallow.fields.Raw(allow_none=True, missing=None)
+    fields = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1495,7 +1519,9 @@ class OrderEditSetCustomTypeActionSchema(OrderEditUpdateActionSchema):
 
 
 class OrderEditSetKeyActionSchema(OrderEditUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1748,7 +1774,9 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         missing=None,
     )
     name = LocalizedStringField(allow_none=True, missing=None)
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Float(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     slug = marshmallow.fields.String(allow_none=True, missing=None)
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -1756,6 +1784,7 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -1763,12 +1792,14 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     external_tax_rate = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -1788,12 +1819,14 @@ class StagedOrderAddDeliveryActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     parcels = helpers.LazyNestedField(
@@ -1801,6 +1834,7 @@ class StagedOrderAddDeliveryActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -1847,12 +1881,14 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     distribution_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -1860,24 +1896,36 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productId",
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantId",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    quantity = marshmallow.fields.Float(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     added_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="addedAt"
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="addedAt"
     )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -1885,6 +1933,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -1892,6 +1941,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -1899,6 +1949,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -1920,12 +1971,14 @@ class StagedOrderAddParcelToDeliveryActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".order.ParcelMeasurementsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     tracking_data = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="trackingData",
     )
@@ -1934,6 +1987,7 @@ class StagedOrderAddParcelToDeliveryActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -1965,7 +2019,10 @@ class StagedOrderAddPaymentActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderAddReturnInfoActionSchema(StagedOrderUpdateActionSchema):
     return_tracking_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="returnTrackingId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="returnTrackingId",
     )
     items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.ReturnItemDraftSchema"),
@@ -1975,7 +2032,10 @@ class StagedOrderAddReturnInfoActionSchema(StagedOrderUpdateActionSchema):
         missing=None,
     )
     return_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="returnDate"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="returnDate",
     )
 
     class Meta:
@@ -2001,6 +2061,7 @@ class StagedOrderAddShoppingListActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -2008,6 +2069,7 @@ class StagedOrderAddShoppingListActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -2067,6 +2129,7 @@ class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchem
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -2074,6 +2137,7 @@ class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchem
         nested=helpers.absmod(__name__, ".cart.ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -2106,6 +2170,7 @@ class StagedOrderChangePaymentStateActionSchema(StagedOrderUpdateActionSchema):
         PaymentState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="paymentState",
     )
@@ -2124,6 +2189,7 @@ class StagedOrderChangeShipmentStateActionSchema(StagedOrderUpdateActionSchema):
         ShipmentState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shipmentState",
     )
@@ -2293,11 +2359,14 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Float(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     external_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -2305,6 +2374,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -2312,6 +2382,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetailsToRemove",
     )
@@ -2361,6 +2432,7 @@ class StagedOrderSetBillingAddressActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -2374,7 +2446,9 @@ class StagedOrderSetBillingAddressActionSchema(StagedOrderUpdateActionSchema):
 
 
 class StagedOrderSetCountryActionSchema(StagedOrderUpdateActionSchema):
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2387,7 +2461,9 @@ class StagedOrderSetCountryActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetCustomFieldActionSchema(StagedOrderUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2405,7 +2481,9 @@ class StagedOrderSetCustomLineItemCustomFieldActionSchema(
         allow_none=True, missing=None, data_key="customLineItemId"
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2424,9 +2502,12 @@ class StagedOrderSetCustomLineItemCustomTypeActionSchema(StagedOrderUpdateAction
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2447,6 +2528,7 @@ class StagedOrderSetCustomLineItemShippingDetailsActionSchema(
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -2468,6 +2550,7 @@ class StagedOrderSetCustomLineItemTaxAmountActionSchema(StagedOrderUpdateActionS
         nested=helpers.absmod(__name__, ".cart.ExternalTaxAmountDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -2489,6 +2572,7 @@ class StagedOrderSetCustomLineItemTaxRateActionSchema(StagedOrderUpdateActionSch
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2519,6 +2603,7 @@ class StagedOrderSetCustomShippingMethodActionSchema(StagedOrderUpdateActionSche
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -2526,6 +2611,7 @@ class StagedOrderSetCustomShippingMethodActionSchema(StagedOrderUpdateActionSche
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2544,9 +2630,12 @@ class StagedOrderSetCustomTypeActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2558,7 +2647,9 @@ class StagedOrderSetCustomTypeActionSchema(StagedOrderUpdateActionSchema):
 
 
 class StagedOrderSetCustomerEmailActionSchema(StagedOrderUpdateActionSchema):
-    email = marshmallow.fields.String(allow_none=True, missing=None)
+    email = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2576,6 +2667,7 @@ class StagedOrderSetCustomerGroupActionSchema(StagedOrderUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -2591,7 +2683,10 @@ class StagedOrderSetCustomerGroupActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetCustomerIdActionSchema(StagedOrderUpdateActionSchema):
     customer_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerId",
     )
 
     class Meta:
@@ -2611,6 +2706,7 @@ class StagedOrderSetDeliveryAddressActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -2649,7 +2745,9 @@ class StagedOrderSetLineItemCustomFieldActionSchema(StagedOrderUpdateActionSchem
         allow_none=True, missing=None, data_key="lineItemId"
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2668,9 +2766,12 @@ class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2691,6 +2792,7 @@ class StagedOrderSetLineItemDistributionChannelActionSchema(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannel",
     )
@@ -2712,6 +2814,7 @@ class StagedOrderSetLineItemPriceActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalPrice",
     )
@@ -2733,6 +2836,7 @@ class StagedOrderSetLineItemShippingDetailsActionSchema(StagedOrderUpdateActionS
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingDetails",
     )
@@ -2754,6 +2858,7 @@ class StagedOrderSetLineItemTaxAmountActionSchema(StagedOrderUpdateActionSchema)
         nested=helpers.absmod(__name__, ".cart.ExternalTaxAmountDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -2775,6 +2880,7 @@ class StagedOrderSetLineItemTaxRateActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -2796,6 +2902,7 @@ class StagedOrderSetLineItemTotalPriceActionSchema(StagedOrderUpdateActionSchema
         nested=helpers.absmod(__name__, ".cart.ExternalLineItemTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTotalPrice",
     )
@@ -2810,7 +2917,9 @@ class StagedOrderSetLineItemTotalPriceActionSchema(StagedOrderUpdateActionSchema
 
 
 class StagedOrderSetLocaleActionSchema(StagedOrderUpdateActionSchema):
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2823,7 +2932,10 @@ class StagedOrderSetLocaleActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetOrderNumberActionSchema(StagedOrderUpdateActionSchema):
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="orderNumber",
     )
 
     class Meta:
@@ -2848,6 +2960,7 @@ class StagedOrderSetOrderTotalTaxActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxPortions",
     )
@@ -2890,6 +3003,7 @@ class StagedOrderSetParcelMeasurementsActionSchema(StagedOrderUpdateActionSchema
         nested=helpers.absmod(__name__, ".order.ParcelMeasurementsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -2910,6 +3024,7 @@ class StagedOrderSetParcelTrackingDataActionSchema(StagedOrderUpdateActionSchema
         nested=helpers.absmod(__name__, ".order.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="trackingData",
     )
@@ -2970,6 +3085,7 @@ class StagedOrderSetShippingAddressActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -3007,6 +3123,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema(
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -3014,6 +3131,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema(
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -3042,6 +3160,7 @@ class StagedOrderSetShippingAddressAndShippingMethodActionSchema(
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingMethod",
     )
@@ -3049,6 +3168,7 @@ class StagedOrderSetShippingAddressAndShippingMethodActionSchema(
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -3069,6 +3189,7 @@ class StagedOrderSetShippingMethodActionSchema(StagedOrderUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingMethod",
     )
@@ -3076,6 +3197,7 @@ class StagedOrderSetShippingMethodActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -3094,6 +3216,7 @@ class StagedOrderSetShippingMethodTaxAmountActionSchema(StagedOrderUpdateActionS
         nested=helpers.absmod(__name__, ".cart.ExternalTaxAmountDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxAmount",
     )
@@ -3112,6 +3235,7 @@ class StagedOrderSetShippingMethodTaxRateActionSchema(StagedOrderUpdateActionSch
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
     )
@@ -3137,6 +3261,7 @@ class StagedOrderSetShippingRateInputActionSchema(StagedOrderUpdateActionSchema)
                 __name__, ".cart.ScoreShippingRateInputDraftSchema"
             ),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInput",
     )
@@ -3172,7 +3297,10 @@ class StagedOrderTransitionCustomLineItemStateActionSchema(
         data_key="toState",
     )
     actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="actualTransitionDate",
     )
 
     class Meta:
@@ -3204,7 +3332,10 @@ class StagedOrderTransitionLineItemStateActionSchema(StagedOrderUpdateActionSche
         data_key="toState",
     )
     actual_transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="actualTransitionDate"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="actualTransitionDate",
     )
 
     class Meta:
@@ -3223,7 +3354,9 @@ class StagedOrderTransitionStateActionSchema(StagedOrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    force = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    force = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -3259,10 +3392,16 @@ class StagedOrderUpdateSyncInfoActionSchema(StagedOrderUpdateActionSchema):
         missing=None,
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
     synced_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="syncedAt"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="syncedAt",
     )
 
     class Meta:

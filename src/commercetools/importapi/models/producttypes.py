@@ -10,28 +10,51 @@ from .common import ImportResource, ReferenceType
 if typing.TYPE_CHECKING:
     from .common import LocalizedString, ProductTypeKeyReference, ReferenceType
 
+__all__ = [
+    "AttributeBooleanType",
+    "AttributeConstraintEnum",
+    "AttributeDateTimeType",
+    "AttributeDateType",
+    "AttributeDefinition",
+    "AttributeEnumType",
+    "AttributeLocalizableTextType",
+    "AttributeLocalizedEnumType",
+    "AttributeLocalizedEnumValue",
+    "AttributeMoneyType",
+    "AttributeNestedType",
+    "AttributeNumberType",
+    "AttributePlainEnumValue",
+    "AttributeReferenceType",
+    "AttributeSetType",
+    "AttributeTextType",
+    "AttributeTimeType",
+    "AttributeType",
+    "ProductTypeImport",
+    "TextInputHint",
+]
+
 
 class AttributeDefinition(_BaseType):
     type: "AttributeType"
-    name: "str"
+    name: str
     label: "LocalizedString"
-    is_required: "bool"
+    is_required: bool
     attribute_constraint: typing.Optional["AttributeConstraintEnum"]
     input_tip: typing.Optional["LocalizedString"]
     input_hint: typing.Optional["TextInputHint"]
-    is_searchable: typing.Optional["bool"]
+    is_searchable: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         type: "AttributeType",
-        name: "str",
+        name: str,
         label: "LocalizedString",
-        is_required: "bool",
+        is_required: bool,
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
-        is_searchable: typing.Optional["bool"] = None
+        is_searchable: typing.Optional[bool] = None
     ):
         self.type = type
         self.name = name
@@ -56,17 +79,66 @@ class AttributeDefinition(_BaseType):
 
 
 class AttributeType(_BaseType):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "AttributeType":
-        from ._schemas.producttypes import AttributeTypeSchema
+        if data["name"] == "boolean":
+            from ._schemas.producttypes import AttributeBooleanTypeSchema
 
-        return AttributeTypeSchema().load(data)
+            return AttributeBooleanTypeSchema().load(data)
+        if data["name"] == "datetime":
+            from ._schemas.producttypes import AttributeDateTimeTypeSchema
+
+            return AttributeDateTimeTypeSchema().load(data)
+        if data["name"] == "date":
+            from ._schemas.producttypes import AttributeDateTypeSchema
+
+            return AttributeDateTypeSchema().load(data)
+        if data["name"] == "enum":
+            from ._schemas.producttypes import AttributeEnumTypeSchema
+
+            return AttributeEnumTypeSchema().load(data)
+        if data["name"] == "ltext":
+            from ._schemas.producttypes import AttributeLocalizableTextTypeSchema
+
+            return AttributeLocalizableTextTypeSchema().load(data)
+        if data["name"] == "lenum":
+            from ._schemas.producttypes import AttributeLocalizedEnumTypeSchema
+
+            return AttributeLocalizedEnumTypeSchema().load(data)
+        if data["name"] == "money":
+            from ._schemas.producttypes import AttributeMoneyTypeSchema
+
+            return AttributeMoneyTypeSchema().load(data)
+        if data["name"] == "nested":
+            from ._schemas.producttypes import AttributeNestedTypeSchema
+
+            return AttributeNestedTypeSchema().load(data)
+        if data["name"] == "number":
+            from ._schemas.producttypes import AttributeNumberTypeSchema
+
+            return AttributeNumberTypeSchema().load(data)
+        if data["name"] == "reference":
+            from ._schemas.producttypes import AttributeReferenceTypeSchema
+
+            return AttributeReferenceTypeSchema().load(data)
+        if data["name"] == "set":
+            from ._schemas.producttypes import AttributeSetTypeSchema
+
+            return AttributeSetTypeSchema().load(data)
+        if data["name"] == "text":
+            from ._schemas.producttypes import AttributeTextTypeSchema
+
+            return AttributeTextTypeSchema().load(data)
+        if data["name"] == "time":
+            from ._schemas.producttypes import AttributeTimeTypeSchema
+
+            return AttributeTimeTypeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.producttypes import AttributeTypeSchema
@@ -145,10 +217,10 @@ class AttributeEnumType(AttributeType):
 
 
 class AttributePlainEnumValue(_BaseType):
-    key: "str"
-    label: "str"
+    key: str
+    label: str
 
-    def __init__(self, *, key: "str", label: "str"):
+    def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
         super().__init__()
@@ -208,10 +280,10 @@ class AttributeLocalizedEnumType(AttributeType):
 
 
 class AttributeLocalizedEnumValue(_BaseType):
-    key: "str"
+    key: str
     label: "LocalizedString"
 
-    def __init__(self, *, key: "str", label: "LocalizedString"):
+    def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
         super().__init__()
@@ -375,18 +447,18 @@ class ProductTypeImport(ImportResource):
     """Import representation for a product type."""
 
     #: Maps to `ProductType.name`.
-    name: "str"
+    name: str
     #: Maps to `ProductType.description`.
-    description: "str"
+    description: str
     #: The product type's attributes.
     attributes: typing.Optional[typing.List["AttributeDefinition"]]
 
     def __init__(
         self,
         *,
-        key: "str",
-        name: "str",
-        description: "str",
+        key: str,
+        name: str,
+        description: str,
         attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
     ):
         self.name = name

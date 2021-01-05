@@ -19,10 +19,12 @@ class LocalizedStringField(marshmallow.fields.Dict):
 
 
 # Marshmallow Schemas
-class PagedQueryResponseSchema(marshmallow.Schema):
+class PagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".BaseResourceSchema"),
@@ -31,7 +33,9 @@ class PagedQueryResponseSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    meta = marshmallow.fields.Raw(allow_none=True, missing=None)
+    meta = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -42,7 +46,7 @@ class PagedQueryResponseSchema(marshmallow.Schema):
         return models.PagedQueryResponse(**data)
 
 
-class UpdateSchema(marshmallow.Schema):
+class UpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".UpdateActionSchema"),
@@ -61,7 +65,7 @@ class UpdateSchema(marshmallow.Schema):
         return models.Update(**data)
 
 
-class UpdateActionSchema(marshmallow.Schema):
+class UpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -73,47 +77,103 @@ class UpdateActionSchema(marshmallow.Schema):
         return models.UpdateAction(**data)
 
 
-class AddressSchema(marshmallow.Schema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-    title = marshmallow.fields.String(allow_none=True, missing=None)
-    salutation = marshmallow.fields.String(allow_none=True, missing=None)
+class AddressSchema(helpers.BaseSchema):
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    salutation = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     first_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="firstName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="firstName",
     )
     last_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lastName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastName",
     )
     street_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="streetName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="streetName",
     )
     street_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="streetNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="streetNumber",
     )
     additional_street_info = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="additionalStreetInfo"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="additionalStreetInfo",
     )
     postal_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="postalCode"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="postalCode",
     )
-    city = marshmallow.fields.String(allow_none=True, missing=None)
-    region = marshmallow.fields.String(allow_none=True, missing=None)
-    state = marshmallow.fields.String(allow_none=True, missing=None)
+    city = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    region = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     country = marshmallow.fields.String(allow_none=True, missing=None)
-    company = marshmallow.fields.String(allow_none=True, missing=None)
-    department = marshmallow.fields.String(allow_none=True, missing=None)
-    building = marshmallow.fields.String(allow_none=True, missing=None)
-    apartment = marshmallow.fields.String(allow_none=True, missing=None)
-    p_o_box = marshmallow.fields.String(allow_none=True, missing=None, data_key="pOBox")
-    phone = marshmallow.fields.String(allow_none=True, missing=None)
-    mobile = marshmallow.fields.String(allow_none=True, missing=None)
-    email = marshmallow.fields.String(allow_none=True, missing=None)
-    fax = marshmallow.fields.String(allow_none=True, missing=None)
+    company = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    department = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    building = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    apartment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    p_o_box = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="pOBox"
+    )
+    phone = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    mobile = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    email = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    fax = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     additional_address_info = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="additionalAddressInfo"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="additionalAddressInfo",
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
 
     class Meta:
@@ -125,7 +185,7 @@ class AddressSchema(marshmallow.Schema):
         return models.Address(**data)
 
 
-class AssetSchema(marshmallow.Schema):
+class AssetSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     sources = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AssetSourceSchema"),
@@ -135,17 +195,25 @@ class AssetSchema(marshmallow.Schema):
         missing=None,
     )
     name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     tags = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -156,7 +224,7 @@ class AssetSchema(marshmallow.Schema):
         return models.Asset(**data)
 
 
-class AssetDimensionsSchema(marshmallow.Schema):
+class AssetDimensionsSchema(helpers.BaseSchema):
     w = marshmallow.fields.Integer(allow_none=True, missing=None)
     h = marshmallow.fields.Integer(allow_none=True, missing=None)
 
@@ -169,7 +237,7 @@ class AssetDimensionsSchema(marshmallow.Schema):
         return models.AssetDimensions(**data)
 
 
-class AssetDraftSchema(marshmallow.Schema):
+class AssetDraftSchema(helpers.BaseSchema):
     sources = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AssetSourceSchema"),
         allow_none=True,
@@ -178,17 +246,25 @@ class AssetDraftSchema(marshmallow.Schema):
         missing=None,
     )
     name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     tags = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -199,17 +275,23 @@ class AssetDraftSchema(marshmallow.Schema):
         return models.AssetDraft(**data)
 
 
-class AssetSourceSchema(marshmallow.Schema):
+class AssetSourceSchema(helpers.BaseSchema):
     uri = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     dimensions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AssetDimensionsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     content_type = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="contentType"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="contentType",
     )
 
     class Meta:
@@ -221,7 +303,7 @@ class AssetSourceSchema(marshmallow.Schema):
         return models.AssetSource(**data)
 
 
-class BaseResourceSchema(marshmallow.Schema):
+class BaseResourceSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     created_at = marshmallow.fields.DateTime(
@@ -240,21 +322,31 @@ class BaseResourceSchema(marshmallow.Schema):
         return models.BaseResource(**data)
 
 
-class ClientLoggingSchema(marshmallow.Schema):
+class ClientLoggingSchema(helpers.BaseSchema):
     client_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="clientId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="clientId",
     )
     external_user_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalUserId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalUserId",
     )
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     anonymous_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="anonymousId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousId",
     )
 
     class Meta:
@@ -276,7 +368,7 @@ class CreatedBySchema(ClientLoggingSchema):
         return models.CreatedBy(**data)
 
 
-class DiscountedPriceSchema(marshmallow.Schema):
+class DiscountedPriceSchema(helpers.BaseSchema):
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MoneySchema"),
         allow_none=True,
@@ -301,7 +393,7 @@ class DiscountedPriceSchema(marshmallow.Schema):
         return models.DiscountedPrice(**data)
 
 
-class GeoJsonSchema(marshmallow.Schema):
+class GeoJsonSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -327,7 +419,7 @@ class GeoJsonPointSchema(GeoJsonSchema):
         return models.GeoJsonPoint(**data)
 
 
-class ImageSchema(marshmallow.Schema):
+class ImageSchema(helpers.BaseSchema):
     url = marshmallow.fields.String(allow_none=True, missing=None)
     dimensions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ImageDimensionsSchema"),
@@ -335,7 +427,9 @@ class ImageSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    label = marshmallow.fields.String(allow_none=True, missing=None)
+    label = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -346,7 +440,7 @@ class ImageSchema(marshmallow.Schema):
         return models.Image(**data)
 
 
-class ImageDimensionsSchema(marshmallow.Schema):
+class ImageDimensionsSchema(helpers.BaseSchema):
     w = marshmallow.fields.Integer(allow_none=True, missing=None)
     h = marshmallow.fields.Integer(allow_none=True, missing=None)
 
@@ -359,7 +453,7 @@ class ImageDimensionsSchema(marshmallow.Schema):
         return models.ImageDimensions(**data)
 
 
-class KeyReferenceSchema(marshmallow.Schema):
+class KeyReferenceSchema(helpers.BaseSchema):
     type_id = marshmallow_enum.EnumField(
         ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
     )
@@ -384,7 +478,7 @@ class LastModifiedBySchema(ClientLoggingSchema):
         return models.LastModifiedBy(**data)
 
 
-class MoneySchema(marshmallow.Schema):
+class MoneySchema(helpers.BaseSchema):
     cent_amount = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="centAmount"
     )
@@ -401,7 +495,7 @@ class MoneySchema(marshmallow.Schema):
         return models.Money(**data)
 
 
-class PriceSchema(marshmallow.Schema):
+class PriceSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     value = helpers.Discriminator(
         allow_none=True,
@@ -412,11 +506,14 @@ class PriceSchema(marshmallow.Schema):
         },
         missing=None,
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -424,24 +521,33 @@ class PriceSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     tiers = helpers.LazyNestedField(
@@ -449,6 +555,7 @@ class PriceSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -461,20 +568,23 @@ class PriceSchema(marshmallow.Schema):
         return models.Price(**data)
 
 
-class PriceDraftSchema(marshmallow.Schema):
+class PriceDraftSchema(helpers.BaseSchema):
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
             __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -482,18 +592,26 @@ class PriceDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     tiers = helpers.LazyNestedField(
@@ -501,12 +619,14 @@ class PriceDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -519,7 +639,7 @@ class PriceDraftSchema(marshmallow.Schema):
         return models.PriceDraft(**data)
 
 
-class PriceTierSchema(marshmallow.Schema):
+class PriceTierSchema(helpers.BaseSchema):
     minimum_quantity = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="minimumQuantity"
     )
@@ -542,7 +662,7 @@ class PriceTierSchema(marshmallow.Schema):
         return models.PriceTier(**data)
 
 
-class PriceTierDraftSchema(marshmallow.Schema):
+class PriceTierDraftSchema(helpers.BaseSchema):
     minimum_quantity = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="minimumQuantity"
     )
@@ -562,7 +682,7 @@ class PriceTierDraftSchema(marshmallow.Schema):
         return models.PriceTierDraft(**data)
 
 
-class QueryPriceSchema(marshmallow.Schema):
+class QueryPriceSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MoneySchema"),
@@ -570,11 +690,14 @@ class QueryPriceSchema(marshmallow.Schema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -582,24 +705,33 @@ class QueryPriceSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     tiers = helpers.LazyNestedField(
@@ -607,6 +739,7 @@ class QueryPriceSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -619,7 +752,7 @@ class QueryPriceSchema(marshmallow.Schema):
         return models.QueryPrice(**data)
 
 
-class ReferenceSchema(marshmallow.Schema):
+class ReferenceSchema(helpers.BaseSchema):
     type_id = marshmallow_enum.EnumField(
         ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
     )
@@ -634,12 +767,21 @@ class ReferenceSchema(marshmallow.Schema):
         return models.Reference(**data)
 
 
-class ResourceIdentifierSchema(marshmallow.Schema):
+class ResourceIdentifierSchema(helpers.BaseSchema):
     type_id = marshmallow_enum.EnumField(
-        ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
+        ReferenceTypeId,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="typeId",
     )
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -650,7 +792,7 @@ class ResourceIdentifierSchema(marshmallow.Schema):
         return models.ResourceIdentifier(**data)
 
 
-class ScopedPriceSchema(marshmallow.Schema):
+class ScopedPriceSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     value = helpers.Discriminator(
         allow_none=True,
@@ -671,11 +813,14 @@ class ScopedPriceSchema(marshmallow.Schema):
         missing=None,
         data_key="currentValue",
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -683,24 +828,33 @@ class ScopedPriceSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -713,7 +867,7 @@ class ScopedPriceSchema(marshmallow.Schema):
         return models.ScopedPrice(**data)
 
 
-class TypedMoneySchema(marshmallow.Schema):
+class TypedMoneySchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
         MoneyType, by_value=True, allow_none=True, missing=None
     )
@@ -765,7 +919,10 @@ class TypedMoneyDraftSchema(MoneySchema):
         MoneyType, by_value=True, allow_none=True, missing=None
     )
     fraction_digits = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="fractionDigits"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="fractionDigits",
     )
 
     class Meta:

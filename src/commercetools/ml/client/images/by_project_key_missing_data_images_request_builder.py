@@ -7,23 +7,26 @@ from ..status.by_project_key_missing_data_images_status_request_builder import (
     ByProjectKeyMissingDataImagesStatusRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyMissingDataImagesRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
     def status(self) -> ByProjectKeyMissingDataImagesStatusRequestBuilder:
         return ByProjectKeyMissingDataImagesStatusRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
@@ -33,6 +36,7 @@ class ByProjectKeyMissingDataImagesRequestBuilder:
         *,
         headers: typing.Dict[str, str] = None,
     ) -> "TaskToken":
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/missing-data/images",
             params={},

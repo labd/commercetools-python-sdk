@@ -34,44 +34,47 @@ from .by_project_key_in_store_key_by_store_key_customers_password_token_by_passw
     ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenByPasswordTokenRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _store_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        storeKey: str,
-        client: "Client",
+        project_key: str,
+        store_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._store_key = storeKey
+        self._project_key = project_key
+        self._store_key = store_key
         self._client = client
 
-    def withPasswordToken(
-        self, passwordToken: str
+    def with_password_token(
+        self, password_token: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenByPasswordTokenRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenByPasswordTokenRequestBuilder(
-            passwordToken=passwordToken,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            password_token=password_token,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def withEmailToken(
-        self, emailToken: str
+    def with_email_token(
+        self, email_token: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenByEmailTokenRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenByEmailTokenRequestBuilder(
-            emailToken=emailToken,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            email_token=email_token,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def emailToken(
+    def email_token(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenRequestBuilder:
         """To verify a customer's email, an email token can be created. This should be embedded in a link and sent to the
@@ -81,17 +84,17 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
 
         """
         return ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def emailConfirm(
+    def email_confirm(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersEmailConfirmRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersEmailConfirmRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
@@ -99,21 +102,21 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def passwordReset(
+    def password_reset(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def passwordToken(
+    def password_token(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenRequestBuilder:
         """The following workflow can be used to reset the customer's password:
@@ -124,53 +127,59 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
 
         """
         return ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def withKey(
+    def with_key(
         self, key: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder(
             key=key,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def withId(
-        self, ID: str
+    def with_id(
+        self, id: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder(
-            ID=ID,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            id=id,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
     def get(
         self,
         *,
-        expand: "str" = None,
-        sort: "str" = None,
-        limit: "int" = None,
-        offset: "int" = None,
-        with_total: "bool" = None,
-        where: "str" = None,
+        expand: str = None,
+        sort: str = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        where: str = None,
+        predicate_var: typing.Dict[str, str] = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerPagedQueryResponse":
         """Query customers"""
+        params = {
+            "expand": expand,
+            "sort": sort,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers",
-            params={
-                "expand": expand,
-                "sort": sort,
-                "limit": limit,
-                "offset": offset,
-                "withTotal": with_total,
-                "where": where,
-            },
+            params=params,
             response_class=CustomerPagedQueryResponse,
             headers=headers,
         )
@@ -179,7 +188,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
         self,
         body: "CustomerDraft",
         *,
-        expand: "str" = None,
+        expand: str = None,
         headers: typing.Dict[str, str] = None,
     ) -> "CustomerSignInResult":
         """Creates a customer in a specific Store. The {storeKey} path parameter maps to a Store's key.
@@ -192,6 +201,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
         the store field must reference the same store specified in the {storeKey} path parameter.
 
         """
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers",
             params={"expand": expand},

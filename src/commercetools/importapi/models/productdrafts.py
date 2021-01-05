@@ -26,6 +26,8 @@ if typing.TYPE_CHECKING:
     from .products import SearchKeywords
     from .productvariants import Attribute
 
+__all__ = ["PriceDraftImport", "ProductDraftImport", "ProductVariantDraftImport"]
+
 
 class ProductDraftImport(ImportResource):
     #: The product's product type. Maps to `Product.productType`.
@@ -68,12 +70,12 @@ class ProductDraftImport(ImportResource):
     #: import operation state is set to `Unresolved`.
     state: typing.Optional["StateKeyReference"]
     #: If there were updates, only the updates will be published to `staged` and `current` projection.
-    publish: typing.Optional["bool"]
+    publish: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         product_type: "ProductTypeKeyReference",
         name: "LocalizedString",
         slug: "LocalizedString",
@@ -87,7 +89,7 @@ class ProductDraftImport(ImportResource):
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateKeyReference"] = None,
-        publish: typing.Optional["bool"] = None
+        publish: typing.Optional[bool] = None
     ):
         self.product_type = product_type
         self.name = name
@@ -118,8 +120,8 @@ class ProductDraftImport(ImportResource):
 
 
 class ProductVariantDraftImport(_BaseType):
-    sku: typing.Optional["str"]
-    key: typing.Optional["str"]
+    sku: typing.Optional[str]
+    key: typing.Optional[str]
     prices: typing.Optional[typing.List["PriceDraftImport"]]
     attributes: typing.Optional[typing.List["Attribute"]]
     images: typing.Optional[typing.List["Image"]]
@@ -128,8 +130,8 @@ class ProductVariantDraftImport(_BaseType):
     def __init__(
         self,
         *,
-        sku: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraftImport"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
@@ -160,34 +162,34 @@ class ProductVariantDraftImport(_BaseType):
 class PriceDraftImport(_BaseType):
     value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     #: References a customer group by its key.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: References a channel by its key.
     channel: typing.Optional["ChannelKeyReference"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     #: The custom fields for this category.
     custom: typing.Optional["Custom"]
     #: Sets a discounted price from an external service.
     discounted: typing.Optional["DiscountedPrice"]
     #: The tiered prices for this price.
     tiers: typing.Optional[typing.List["PriceTier"]]
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
         value: "TypedMoney",
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
         channel: typing.Optional["ChannelKeyReference"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["Custom"] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.value = value
         self.country = country

@@ -14,8 +14,10 @@ from .common import ImportResourceSchema, LocalizedStringField
 
 
 # Marshmallow Schemas
-class AttributeSchema(marshmallow.Schema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+class AttributeSchema(helpers.BaseSchema):
+    name = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -170,7 +172,9 @@ class LocalizableTextAttributeSchema(AttributeSchema):
 
 
 class LocalizableTextSetAttributeSchema(AttributeSchema):
-    value = helpers.LazyNestedField(allow_none=True, missing=None)
+    value = marshmallow.fields.List(
+        LocalizedStringField(allow_none=True), allow_none=True, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -412,7 +416,9 @@ class TimeSetAttributeSchema(AttributeSchema):
 
 
 class ProductVariantImportSchema(ImportResourceSchema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     is_master_variant = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="isMasterVariant"
     )
@@ -452,6 +458,7 @@ class ProductVariantImportSchema(ImportResourceSchema):
             },
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
     images = helpers.LazyNestedField(
@@ -459,6 +466,7 @@ class ProductVariantImportSchema(ImportResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     assets = helpers.LazyNestedField(
@@ -466,9 +474,12 @@ class ProductVariantImportSchema(ImportResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    publish = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    publish = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductKeyReferenceSchema"),
         allow_none=True,
@@ -485,7 +496,7 @@ class ProductVariantImportSchema(ImportResourceSchema):
         return models.ProductVariantImport(**data)
 
 
-class ProductVariantPatchSchema(marshmallow.Schema):
+class ProductVariantPatchSchema(helpers.BaseSchema):
     product_variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductVariantKeyReferenceSchema"),
         allow_none=True,
@@ -497,6 +508,7 @@ class ProductVariantPatchSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".AttributesSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -509,7 +521,7 @@ class ProductVariantPatchSchema(marshmallow.Schema):
         return models.ProductVariantPatch(**data)
 
 
-class AttributesSchema(marshmallow.Schema):
+class AttributesSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile(""),

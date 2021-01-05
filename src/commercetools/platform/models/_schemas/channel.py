@@ -27,6 +27,7 @@ class ChannelSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -34,6 +35,7 @@ class ChannelSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
@@ -43,18 +45,24 @@ class ChannelSchema(BaseResourceSchema):
         allow_none=True,
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     review_rating_statistics = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".review.ReviewRatingStatisticsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="reviewRatingStatistics",
     )
@@ -62,6 +70,7 @@ class ChannelSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     geo_location = helpers.Discriminator(
@@ -70,6 +79,7 @@ class ChannelSchema(BaseResourceSchema):
         discriminator_schemas={
             "Point": helpers.absmod(__name__, ".common.GeoJsonPointSchema")
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="geoLocation",
     )
@@ -83,25 +93,32 @@ class ChannelSchema(BaseResourceSchema):
         return models.Channel(**data)
 
 
-class ChannelDraftSchema(marshmallow.Schema):
+class ChannelDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     roles = marshmallow.fields.List(
         marshmallow_enum.EnumField(ChannelRoleEnum, by_value=True, allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     geo_location = helpers.Discriminator(
@@ -110,6 +127,7 @@ class ChannelDraftSchema(marshmallow.Schema):
         discriminator_schemas={
             "Point": helpers.absmod(__name__, ".common.GeoJsonPointSchema")
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="geoLocation",
     )
@@ -123,10 +141,12 @@ class ChannelDraftSchema(marshmallow.Schema):
         return models.ChannelDraft(**data)
 
 
-class ChannelPagedQueryResponseSchema(marshmallow.Schema):
+class ChannelPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ChannelSchema"),
@@ -150,6 +170,7 @@ class ChannelReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".ChannelSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -172,7 +193,7 @@ class ChannelResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.ChannelResourceIdentifier(**data)
 
 
-class ChannelUpdateSchema(marshmallow.Schema):
+class ChannelUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -218,7 +239,7 @@ class ChannelUpdateSchema(marshmallow.Schema):
         return models.ChannelUpdate(**data)
 
 
-class ChannelUpdateActionSchema(marshmallow.Schema):
+class ChannelUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -303,6 +324,7 @@ class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -317,7 +339,9 @@ class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
 
 class ChannelSetCustomFieldActionSchema(ChannelUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -333,9 +357,12 @@ class ChannelSetCustomTypeActionSchema(ChannelUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -353,6 +380,7 @@ class ChannelSetGeoLocationActionSchema(ChannelUpdateActionSchema):
         discriminator_schemas={
             "Point": helpers.absmod(__name__, ".common.GeoJsonPointSchema")
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="geoLocation",
     )

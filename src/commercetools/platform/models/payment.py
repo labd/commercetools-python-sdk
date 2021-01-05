@@ -25,6 +25,45 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "Payment",
+    "PaymentAddInterfaceInteractionAction",
+    "PaymentAddTransactionAction",
+    "PaymentChangeAmountPlannedAction",
+    "PaymentChangeTransactionInteractionIdAction",
+    "PaymentChangeTransactionStateAction",
+    "PaymentChangeTransactionTimestampAction",
+    "PaymentDraft",
+    "PaymentMethodInfo",
+    "PaymentPagedQueryResponse",
+    "PaymentReference",
+    "PaymentResourceIdentifier",
+    "PaymentSetAmountPaidAction",
+    "PaymentSetAmountRefundedAction",
+    "PaymentSetAnonymousIdAction",
+    "PaymentSetAuthorizationAction",
+    "PaymentSetCustomFieldAction",
+    "PaymentSetCustomTypeAction",
+    "PaymentSetCustomerAction",
+    "PaymentSetExternalIdAction",
+    "PaymentSetInterfaceIdAction",
+    "PaymentSetKeyAction",
+    "PaymentSetMethodInfoInterfaceAction",
+    "PaymentSetMethodInfoMethodAction",
+    "PaymentSetMethodInfoNameAction",
+    "PaymentSetStatusInterfaceCodeAction",
+    "PaymentSetStatusInterfaceTextAction",
+    "PaymentStatus",
+    "PaymentStatusDraft",
+    "PaymentTransitionStateAction",
+    "PaymentUpdate",
+    "PaymentUpdateAction",
+    "Transaction",
+    "TransactionDraft",
+    "TransactionState",
+    "TransactionType",
+]
+
 
 class Payment(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -34,17 +73,17 @@ class Payment(BaseResource):
     #: A reference to the customer this payment belongs to.
     customer: typing.Optional["CustomerReference"]
     #: Identifies payments belonging to an anonymous session (the customer has not signed up/in yet).
-    anonymous_id: typing.Optional["str"]
-    external_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
+    external_id: typing.Optional[str]
     #: The identifier that is used by the interface that manages the payment (usually the PSP).
     #: Cannot be changed once it has been set.
     #: The combination of this ID and the PaymentMethodInfo `paymentInterface` must be unique.
-    interface_id: typing.Optional["str"]
+    interface_id: typing.Optional[str]
     #: How much money this payment intends to receive from the customer.
     #: The value usually matches the cart or order gross total.
     amount_planned: "TypedMoney"
     amount_authorized: typing.Optional["TypedMoney"]
-    authorized_until: typing.Optional["str"]
+    authorized_until: typing.Optional[str]
     amount_paid: typing.Optional["TypedMoney"]
     amount_refunded: typing.Optional["TypedMoney"]
     payment_method_info: "PaymentMethodInfo"
@@ -59,24 +98,24 @@ class Payment(BaseResource):
     custom: typing.Optional["CustomFields"]
     #: User-specific unique identifier for the payment (max.
     #: 256 characters).
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer: typing.Optional["CustomerReference"] = None,
-        anonymous_id: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None,
-        interface_id: typing.Optional["str"] = None,
+        anonymous_id: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
+        interface_id: typing.Optional[str] = None,
         amount_planned: "TypedMoney",
         amount_authorized: typing.Optional["TypedMoney"] = None,
-        authorized_until: typing.Optional["str"] = None,
+        authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["TypedMoney"] = None,
         amount_refunded: typing.Optional["TypedMoney"] = None,
         payment_method_info: "PaymentMethodInfo",
@@ -84,7 +123,7 @@ class Payment(BaseResource):
         transactions: typing.List["Transaction"],
         interface_interactions: typing.List["CustomFields"],
         custom: typing.Optional["CustomFields"] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -126,17 +165,17 @@ class PaymentDraft(_BaseType):
     #: A reference to the customer this payment belongs to.
     customer: typing.Optional["CustomerResourceIdentifier"]
     #: Identifies payments belonging to an anonymous session (the customer has not signed up/in yet).
-    anonymous_id: typing.Optional["str"]
-    external_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
+    external_id: typing.Optional[str]
     #: The identifier that is used by the interface that manages the payment (usually the PSP).
     #: Cannot be changed once it has been set.
     #: The combination of this ID and the PaymentMethodInfo `paymentInterface` must be unique.
-    interface_id: typing.Optional["str"]
+    interface_id: typing.Optional[str]
     #: How much money this payment intends to receive from the customer.
     #: The value usually matches the cart or order gross total.
     amount_planned: "Money"
     amount_authorized: typing.Optional["Money"]
-    authorized_until: typing.Optional["str"]
+    authorized_until: typing.Optional[str]
     amount_paid: typing.Optional["Money"]
     amount_refunded: typing.Optional["Money"]
     payment_method_info: typing.Optional["PaymentMethodInfo"]
@@ -151,18 +190,18 @@ class PaymentDraft(_BaseType):
     custom: typing.Optional["CustomFieldsDraft"]
     #: User-specific unique identifier for the payment (max.
     #: 256 characters).
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
         customer: typing.Optional["CustomerResourceIdentifier"] = None,
-        anonymous_id: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None,
-        interface_id: typing.Optional["str"] = None,
+        anonymous_id: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
+        interface_id: typing.Optional[str] = None,
         amount_planned: "Money",
         amount_authorized: typing.Optional["Money"] = None,
-        authorized_until: typing.Optional["str"] = None,
+        authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["Money"] = None,
         amount_refunded: typing.Optional["Money"] = None,
         payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
@@ -172,7 +211,7 @@ class PaymentDraft(_BaseType):
             typing.List["CustomFieldsDraft"]
         ] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.customer = customer
         self.anonymous_id = anonymous_id
@@ -207,11 +246,11 @@ class PaymentMethodInfo(_BaseType):
     #: The interface that handles the payment (usually a PSP).
     #: Cannot be changed once it has been set.
     #: The combination of Payment`interfaceId` and this field must be unique.
-    payment_interface: typing.Optional["str"]
+    payment_interface: typing.Optional[str]
     #: The payment method that is used, e.g.
     #: e.g.
     #: a conventional string representing Credit Card, Cash Advance etc.
-    method: typing.Optional["str"]
+    method: typing.Optional[str]
     #: A human-readable, localized name for the payment method, e.g.
     #: 'Credit Card'.
     name: typing.Optional["LocalizedString"]
@@ -219,8 +258,8 @@ class PaymentMethodInfo(_BaseType):
     def __init__(
         self,
         *,
-        payment_interface: typing.Optional["str"] = None,
-        method: typing.Optional["str"] = None,
+        payment_interface: typing.Optional[str] = None,
+        method: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None
     ):
         self.payment_interface = payment_interface
@@ -241,19 +280,19 @@ class PaymentMethodInfo(_BaseType):
 
 
 class PaymentPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Payment"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Payment"]
     ):
         self.limit = limit
@@ -280,7 +319,7 @@ class PaymentPagedQueryResponse(_BaseType):
 class PaymentReference(Reference):
     obj: typing.Optional["Payment"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Payment"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Payment"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.PAYMENT)
 
@@ -298,7 +337,7 @@ class PaymentReference(Reference):
 
 class PaymentResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PAYMENT)
@@ -319,16 +358,16 @@ class PaymentResourceIdentifier(ResourceIdentifier):
 
 class PaymentStatus(_BaseType):
     #: A code describing the current status returned by the interface that processes the payment.
-    interface_code: typing.Optional["str"]
+    interface_code: typing.Optional[str]
     #: A text describing the current status returned by the interface that processes the payment.
-    interface_text: typing.Optional["str"]
+    interface_text: typing.Optional[str]
     state: typing.Optional["StateReference"]
 
     def __init__(
         self,
         *,
-        interface_code: typing.Optional["str"] = None,
-        interface_text: typing.Optional["str"] = None,
+        interface_code: typing.Optional[str] = None,
+        interface_text: typing.Optional[str] = None,
         state: typing.Optional["StateReference"] = None
     ):
         self.interface_code = interface_code
@@ -349,15 +388,15 @@ class PaymentStatus(_BaseType):
 
 
 class PaymentStatusDraft(_BaseType):
-    interface_code: typing.Optional["str"]
-    interface_text: typing.Optional["str"]
+    interface_code: typing.Optional[str]
+    interface_text: typing.Optional[str]
     state: typing.Optional["StateResourceIdentifier"]
 
     def __init__(
         self,
         *,
-        interface_code: typing.Optional["str"] = None,
-        interface_text: typing.Optional["str"] = None,
+        interface_code: typing.Optional[str] = None,
+        interface_text: typing.Optional[str] = None,
         state: typing.Optional["StateResourceIdentifier"] = None
     ):
         self.interface_code = interface_code
@@ -378,10 +417,10 @@ class PaymentStatusDraft(_BaseType):
 
 
 class PaymentUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["PaymentUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["PaymentUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["PaymentUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -399,17 +438,104 @@ class PaymentUpdate(_BaseType):
 
 
 class PaymentUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "PaymentUpdateAction":
-        from ._schemas.payment import PaymentUpdateActionSchema
+        if data["action"] == "addInterfaceInteraction":
+            from ._schemas.payment import PaymentAddInterfaceInteractionActionSchema
 
-        return PaymentUpdateActionSchema().load(data)
+            return PaymentAddInterfaceInteractionActionSchema().load(data)
+        if data["action"] == "addTransaction":
+            from ._schemas.payment import PaymentAddTransactionActionSchema
+
+            return PaymentAddTransactionActionSchema().load(data)
+        if data["action"] == "changeAmountPlanned":
+            from ._schemas.payment import PaymentChangeAmountPlannedActionSchema
+
+            return PaymentChangeAmountPlannedActionSchema().load(data)
+        if data["action"] == "changeTransactionInteractionId":
+            from ._schemas.payment import (
+                PaymentChangeTransactionInteractionIdActionSchema,
+            )
+
+            return PaymentChangeTransactionInteractionIdActionSchema().load(data)
+        if data["action"] == "changeTransactionState":
+            from ._schemas.payment import PaymentChangeTransactionStateActionSchema
+
+            return PaymentChangeTransactionStateActionSchema().load(data)
+        if data["action"] == "changeTransactionTimestamp":
+            from ._schemas.payment import PaymentChangeTransactionTimestampActionSchema
+
+            return PaymentChangeTransactionTimestampActionSchema().load(data)
+        if data["action"] == "setAmountPaid":
+            from ._schemas.payment import PaymentSetAmountPaidActionSchema
+
+            return PaymentSetAmountPaidActionSchema().load(data)
+        if data["action"] == "setAmountRefunded":
+            from ._schemas.payment import PaymentSetAmountRefundedActionSchema
+
+            return PaymentSetAmountRefundedActionSchema().load(data)
+        if data["action"] == "setAnonymousId":
+            from ._schemas.payment import PaymentSetAnonymousIdActionSchema
+
+            return PaymentSetAnonymousIdActionSchema().load(data)
+        if data["action"] == "setAuthorization":
+            from ._schemas.payment import PaymentSetAuthorizationActionSchema
+
+            return PaymentSetAuthorizationActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.payment import PaymentSetCustomFieldActionSchema
+
+            return PaymentSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.payment import PaymentSetCustomTypeActionSchema
+
+            return PaymentSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setCustomer":
+            from ._schemas.payment import PaymentSetCustomerActionSchema
+
+            return PaymentSetCustomerActionSchema().load(data)
+        if data["action"] == "setExternalId":
+            from ._schemas.payment import PaymentSetExternalIdActionSchema
+
+            return PaymentSetExternalIdActionSchema().load(data)
+        if data["action"] == "setInterfaceId":
+            from ._schemas.payment import PaymentSetInterfaceIdActionSchema
+
+            return PaymentSetInterfaceIdActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.payment import PaymentSetKeyActionSchema
+
+            return PaymentSetKeyActionSchema().load(data)
+        if data["action"] == "setMethodInfoInterface":
+            from ._schemas.payment import PaymentSetMethodInfoInterfaceActionSchema
+
+            return PaymentSetMethodInfoInterfaceActionSchema().load(data)
+        if data["action"] == "setMethodInfoMethod":
+            from ._schemas.payment import PaymentSetMethodInfoMethodActionSchema
+
+            return PaymentSetMethodInfoMethodActionSchema().load(data)
+        if data["action"] == "setMethodInfoName":
+            from ._schemas.payment import PaymentSetMethodInfoNameActionSchema
+
+            return PaymentSetMethodInfoNameActionSchema().load(data)
+        if data["action"] == "setStatusInterfaceCode":
+            from ._schemas.payment import PaymentSetStatusInterfaceCodeActionSchema
+
+            return PaymentSetStatusInterfaceCodeActionSchema().load(data)
+        if data["action"] == "setStatusInterfaceText":
+            from ._schemas.payment import PaymentSetStatusInterfaceTextActionSchema
+
+            return PaymentSetStatusInterfaceTextActionSchema().load(data)
+        if data["action"] == "transitionState":
+            from ._schemas.payment import PaymentTransitionStateActionSchema
+
+            return PaymentTransitionStateActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.payment import PaymentUpdateActionSchema
@@ -419,26 +545,26 @@ class PaymentUpdateAction(_BaseType):
 
 class Transaction(_BaseType):
     #: The unique ID of this object.
-    id: "str"
+    id: str
     #: The time at which the transaction took place.
-    timestamp: typing.Optional["datetime.datetime"]
+    timestamp: typing.Optional[datetime.datetime]
     #: The type of this transaction.
     type: "TransactionType"
     amount: "TypedMoney"
     #: The identifier that is used by the interface that managed the transaction (usually the PSP).
     #: If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
-    interaction_id: typing.Optional["str"]
+    interaction_id: typing.Optional[str]
     #: The state of this transaction.
     state: typing.Optional["TransactionState"]
 
     def __init__(
         self,
         *,
-        id: "str",
-        timestamp: typing.Optional["datetime.datetime"] = None,
+        id: str,
+        timestamp: typing.Optional[datetime.datetime] = None,
         type: "TransactionType",
         amount: "TypedMoney",
-        interaction_id: typing.Optional["str"] = None,
+        interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None
     ):
         self.id = id
@@ -463,13 +589,13 @@ class Transaction(_BaseType):
 
 class TransactionDraft(_BaseType):
     #: The time at which the transaction took place.
-    timestamp: typing.Optional["datetime.datetime"]
+    timestamp: typing.Optional[datetime.datetime]
     #: The type of this transaction.
     type: "TransactionType"
     amount: "Money"
     #: The identifier that is used by the interface that managed the transaction (usually the PSP).
     #: If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
-    interaction_id: typing.Optional["str"]
+    interaction_id: typing.Optional[str]
     #: The state of this transaction.
     #: If not set, defaults to `Initial`.
     state: typing.Optional["TransactionState"]
@@ -477,10 +603,10 @@ class TransactionDraft(_BaseType):
     def __init__(
         self,
         *,
-        timestamp: typing.Optional["datetime.datetime"] = None,
+        timestamp: typing.Optional[datetime.datetime] = None,
         type: "TransactionType",
         amount: "Money",
-        interaction_id: typing.Optional["str"] = None,
+        interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None
     ):
         self.timestamp = timestamp
@@ -588,10 +714,10 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
-    transaction_id: "str"
-    interaction_id: "str"
+    transaction_id: str
+    interaction_id: str
 
-    def __init__(self, *, transaction_id: "str", interaction_id: "str"):
+    def __init__(self, *, transaction_id: str, interaction_id: str):
         self.transaction_id = transaction_id
         self.interaction_id = interaction_id
         super().__init__(action="changeTransactionInteractionId")
@@ -611,10 +737,10 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionStateAction(PaymentUpdateAction):
-    transaction_id: "str"
+    transaction_id: str
     state: "TransactionState"
 
-    def __init__(self, *, transaction_id: "str", state: "TransactionState"):
+    def __init__(self, *, transaction_id: str, state: "TransactionState"):
         self.transaction_id = transaction_id
         self.state = state
         super().__init__(action="changeTransactionState")
@@ -634,10 +760,10 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
-    transaction_id: "str"
-    timestamp: "datetime.datetime"
+    transaction_id: str
+    timestamp: datetime.datetime
 
-    def __init__(self, *, transaction_id: "str", timestamp: "datetime.datetime"):
+    def __init__(self, *, transaction_id: str, timestamp: datetime.datetime):
         self.transaction_id = transaction_id
         self.timestamp = timestamp
         super().__init__(action="changeTransactionTimestamp")
@@ -701,9 +827,9 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
 class PaymentSetAnonymousIdAction(PaymentUpdateAction):
     #: Anonymous ID of the anonymous customer that this payment belongs to.
     #: If this field is not set any existing `anonymousId` is removed.
-    anonymous_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
 
-    def __init__(self, *, anonymous_id: typing.Optional["str"] = None):
+    def __init__(self, *, anonymous_id: typing.Optional[str] = None):
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
 
@@ -723,13 +849,13 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
 class PaymentSetAuthorizationAction(PaymentUpdateAction):
     amount: typing.Optional["Money"]
-    until: typing.Optional["datetime.datetime"]
+    until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
         amount: typing.Optional["Money"] = None,
-        until: typing.Optional["datetime.datetime"] = None
+        until: typing.Optional[datetime.datetime] = None
     ):
         self.amount = amount
         self.until = until
@@ -750,10 +876,10 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomFieldAction(PaymentUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -828,9 +954,9 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
 
 
 class PaymentSetExternalIdAction(PaymentUpdateAction):
-    external_id: typing.Optional["str"]
+    external_id: typing.Optional[str]
 
-    def __init__(self, *, external_id: typing.Optional["str"] = None):
+    def __init__(self, *, external_id: typing.Optional[str] = None):
         self.external_id = external_id
         super().__init__(action="setExternalId")
 
@@ -849,9 +975,9 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 
 
 class PaymentSetInterfaceIdAction(PaymentUpdateAction):
-    interface_id: "str"
+    interface_id: str
 
-    def __init__(self, *, interface_id: "str"):
+    def __init__(self, *, interface_id: str):
         self.interface_id = interface_id
         super().__init__(action="setInterfaceId")
 
@@ -873,9 +999,9 @@ class PaymentSetKeyAction(PaymentUpdateAction):
     #: User-specific unique identifier for the payment (max.
     #: 256 characters).
     #: If not provided an existing key will be removed.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -892,9 +1018,9 @@ class PaymentSetKeyAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
-    interface: "str"
+    interface: str
 
-    def __init__(self, *, interface: "str"):
+    def __init__(self, *, interface: str):
         self.interface = interface
         super().__init__(action="setMethodInfoInterface")
 
@@ -914,9 +1040,9 @@ class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
 
 class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
     #: If not provided, the method is unset.
-    method: typing.Optional["str"]
+    method: typing.Optional[str]
 
-    def __init__(self, *, method: typing.Optional["str"] = None):
+    def __init__(self, *, method: typing.Optional[str] = None):
         self.method = method
         super().__init__(action="setMethodInfoMethod")
 
@@ -957,9 +1083,9 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
 
 
 class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
-    interface_code: typing.Optional["str"]
+    interface_code: typing.Optional[str]
 
-    def __init__(self, *, interface_code: typing.Optional["str"] = None):
+    def __init__(self, *, interface_code: typing.Optional[str] = None):
         self.interface_code = interface_code
         super().__init__(action="setStatusInterfaceCode")
 
@@ -978,9 +1104,9 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 
 
 class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
-    interface_text: "str"
+    interface_text: str
 
-    def __init__(self, *, interface_text: "str"):
+    def __init__(self, *, interface_text: str):
         self.interface_text = interface_text
         super().__init__(action="setStatusInterfaceText")
 
@@ -1000,10 +1126,10 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 
 class PaymentTransitionStateAction(PaymentUpdateAction):
     state: "StateResourceIdentifier"
-    force: typing.Optional["bool"]
+    force: typing.Optional[bool]
 
     def __init__(
-        self, *, state: "StateResourceIdentifier", force: typing.Optional["bool"] = None
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
     ):
         self.state = state
         self.force = force

@@ -18,6 +18,53 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "AnonymousCartSignInMode",
+    "Customer",
+    "CustomerAddAddressAction",
+    "CustomerAddBillingAddressIdAction",
+    "CustomerAddShippingAddressIdAction",
+    "CustomerAddStoreAction",
+    "CustomerChangeAddressAction",
+    "CustomerChangeEmailAction",
+    "CustomerChangePassword",
+    "CustomerCreateEmailToken",
+    "CustomerCreatePasswordResetToken",
+    "CustomerDraft",
+    "CustomerEmailVerify",
+    "CustomerPagedQueryResponse",
+    "CustomerReference",
+    "CustomerRemoveAddressAction",
+    "CustomerRemoveBillingAddressIdAction",
+    "CustomerRemoveShippingAddressIdAction",
+    "CustomerRemoveStoreAction",
+    "CustomerResetPassword",
+    "CustomerResourceIdentifier",
+    "CustomerSetCompanyNameAction",
+    "CustomerSetCustomFieldAction",
+    "CustomerSetCustomTypeAction",
+    "CustomerSetCustomerGroupAction",
+    "CustomerSetCustomerNumberAction",
+    "CustomerSetDateOfBirthAction",
+    "CustomerSetDefaultBillingAddressAction",
+    "CustomerSetDefaultShippingAddressAction",
+    "CustomerSetExternalIdAction",
+    "CustomerSetFirstNameAction",
+    "CustomerSetKeyAction",
+    "CustomerSetLastNameAction",
+    "CustomerSetLocaleAction",
+    "CustomerSetMiddleNameAction",
+    "CustomerSetSalutationAction",
+    "CustomerSetStoresAction",
+    "CustomerSetTitleAction",
+    "CustomerSetVatIdAction",
+    "CustomerSignInResult",
+    "CustomerSignin",
+    "CustomerToken",
+    "CustomerUpdate",
+    "CustomerUpdateAction",
+]
+
 
 class AnonymousCartSignInMode(enum.Enum):
     MERGE_WITH_EXISTING_CUSTOMER_CART = "MergeWithExistingCustomerCart"
@@ -32,39 +79,39 @@ class Customer(BaseResource):
     #: The customer number can be used to create a more human-readable (in contrast to ID) identifier for the customer.
     #: It should be unique across a project.
     #: Once the field was set it cannot be changed anymore.
-    customer_number: typing.Optional["str"]
+    customer_number: typing.Optional[str]
     #: The customer's email address and the main identifier of uniqueness for a customer account.
     #: Email addresses are either unique to the store they're specified for, _or_ for the entire project.
     #: For more information, see Email uniquenes.
-    email: "str"
-    password: "str"
-    first_name: typing.Optional["str"]
-    last_name: typing.Optional["str"]
-    middle_name: typing.Optional["str"]
-    title: typing.Optional["str"]
-    date_of_birth: typing.Optional["datetime.date"]
-    company_name: typing.Optional["str"]
-    vat_id: typing.Optional["str"]
+    email: str
+    password: str
+    first_name: typing.Optional[str]
+    last_name: typing.Optional[str]
+    middle_name: typing.Optional[str]
+    title: typing.Optional[str]
+    date_of_birth: typing.Optional[datetime.date]
+    company_name: typing.Optional[str]
+    vat_id: typing.Optional[str]
     #: The addresses have unique IDs in the addresses list
     addresses: typing.List["Address"]
     #: The address ID in the addresses list
-    default_shipping_address_id: typing.Optional["str"]
+    default_shipping_address_id: typing.Optional[str]
     #: The IDs from the addresses list which are used as shipping addresses
     shipping_address_ids: typing.Optional[typing.List["str"]]
     #: The address ID in the addresses list
-    default_billing_address_id: typing.Optional["str"]
+    default_billing_address_id: typing.Optional[str]
     #: The IDs from the addresses list which are used as billing addresses
     billing_address_ids: typing.Optional[typing.List["str"]]
-    is_email_verified: "bool"
-    external_id: typing.Optional["str"]
+    is_email_verified: bool
+    external_id: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupReference"]
     custom: typing.Optional["CustomFields"]
-    locale: typing.Optional["str"]
-    salutation: typing.Optional["str"]
+    locale: typing.Optional[str]
+    salutation: typing.Optional[str]
     #: User-specific unique identifier for a customer.
     #: Must be unique across a project.
     #: The field can be reset using the Set Key UpdateAction
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     #: References to the stores the customer account is associated with.
     #: If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
     #: If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
@@ -73,34 +120,34 @@ class Customer(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        customer_number: typing.Optional["str"] = None,
-        email: "str",
-        password: "str",
-        first_name: typing.Optional["str"] = None,
-        last_name: typing.Optional["str"] = None,
-        middle_name: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        date_of_birth: typing.Optional["datetime.date"] = None,
-        company_name: typing.Optional["str"] = None,
-        vat_id: typing.Optional["str"] = None,
+        customer_number: typing.Optional[str] = None,
+        email: str,
+        password: str,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        middle_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None,
+        company_name: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None,
         addresses: typing.List["Address"],
-        default_shipping_address_id: typing.Optional["str"] = None,
+        default_shipping_address_id: typing.Optional[str] = None,
         shipping_address_ids: typing.Optional[typing.List["str"]] = None,
-        default_billing_address_id: typing.Optional["str"] = None,
+        default_billing_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List["str"]] = None,
-        is_email_verified: "bool",
-        external_id: typing.Optional["str"] = None,
+        is_email_verified: bool,
+        external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
-        locale: typing.Optional["str"] = None,
-        salutation: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
+        locale: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreKeyReference"]] = None
     ):
         self.last_modified_by = last_modified_by
@@ -148,13 +195,13 @@ class Customer(BaseResource):
 
 
 class CustomerChangePassword(_BaseType):
-    id: "str"
-    version: "int"
-    current_password: "str"
-    new_password: "str"
+    id: str
+    version: int
+    current_password: str
+    new_password: str
 
     def __init__(
-        self, *, id: "str", version: "int", current_password: "str", new_password: "str"
+        self, *, id: str, version: int, current_password: str, new_password: str
     ):
         self.id = id
         self.version = version
@@ -177,12 +224,12 @@ class CustomerChangePassword(_BaseType):
 
 
 class CustomerCreateEmailToken(_BaseType):
-    id: "str"
-    version: typing.Optional["int"]
-    ttl_minutes: "int"
+    id: str
+    version: typing.Optional[int]
+    ttl_minutes: int
 
     def __init__(
-        self, *, id: "str", version: typing.Optional["int"] = None, ttl_minutes: "int"
+        self, *, id: str, version: typing.Optional[int] = None, ttl_minutes: int
     ):
         self.id = id
         self.version = version
@@ -204,10 +251,10 @@ class CustomerCreateEmailToken(_BaseType):
 
 
 class CustomerCreatePasswordResetToken(_BaseType):
-    email: "str"
-    ttl_minutes: typing.Optional["int"]
+    email: str
+    ttl_minutes: typing.Optional[int]
 
-    def __init__(self, *, email: "str", ttl_minutes: typing.Optional["int"] = None):
+    def __init__(self, *, email: str, ttl_minutes: typing.Optional[int] = None):
         self.email = email
         self.ttl_minutes = ttl_minutes
         super().__init__()
@@ -231,49 +278,49 @@ class CustomerDraft(_BaseType):
     #: It can be used to create more human-readable (in contrast to ID) identifier for the customer.
     #: It should be **unique** across a project.
     #: Once it's set it cannot be changed.
-    customer_number: typing.Optional["str"]
+    customer_number: typing.Optional[str]
     #: The customer's email address and the main identifier of uniqueness for a customer account.
     #: Email addresses are either unique to the store they're specified for, _or_ for the entire project, and are case insensitive.
     #: For more information, see Email uniquenes.
-    email: "str"
-    password: "str"
-    first_name: typing.Optional["str"]
-    last_name: typing.Optional["str"]
-    middle_name: typing.Optional["str"]
-    title: typing.Optional["str"]
+    email: str
+    password: str
+    first_name: typing.Optional[str]
+    last_name: typing.Optional[str]
+    middle_name: typing.Optional[str]
+    title: typing.Optional[str]
     #: Identifies a single cart that will be assigned to the new customer account.
-    anonymous_cart_id: typing.Optional["str"]
+    anonymous_cart_id: typing.Optional[str]
     #: Identifies carts and orders belonging to an anonymous session that will be assigned to the new customer account.
-    anonymous_id: typing.Optional["str"]
-    date_of_birth: typing.Optional["datetime.date"]
-    company_name: typing.Optional["str"]
-    vat_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
+    date_of_birth: typing.Optional[datetime.date]
+    company_name: typing.Optional[str]
+    vat_id: typing.Optional[str]
     #: Sets the ID of each address to be unique in the addresses list.
     addresses: typing.Optional[typing.List["Address"]]
     #: The index of the address in the addresses array.
     #: The `defaultShippingAddressId` of the customer will be set to the ID of that address.
-    default_shipping_address: typing.Optional["int"]
+    default_shipping_address: typing.Optional[int]
     #: The indices of the shipping addresses in the addresses array.
     #: The `shippingAddressIds` of the Customer will be set to the IDs of that addresses.
     shipping_addresses: typing.Optional[typing.List["int"]]
     #: The index of the address in the addresses array.
     #: The `defaultBillingAddressId` of the customer will be set to the ID of that address.
-    default_billing_address: typing.Optional["int"]
+    default_billing_address: typing.Optional[int]
     #: The indices of the billing addresses in the addresses array.
     #: The `billingAddressIds` of the customer will be set to the IDs of that addresses.
     billing_addresses: typing.Optional[typing.List["int"]]
-    is_email_verified: typing.Optional["bool"]
-    external_id: typing.Optional["str"]
+    is_email_verified: typing.Optional[bool]
+    external_id: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
     #: Must be one of the languages supported for this project
-    locale: typing.Optional["str"]
-    salutation: typing.Optional["str"]
+    locale: typing.Optional[str]
+    salutation: typing.Optional[str]
     #: User-specific unique identifier for a customer.
     #: Must be unique across a project.
     #: The field can be reset using the Set Key UpdateAction
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     #: References to the stores the customer account is associated with.
     #: If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
     #: If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
@@ -282,30 +329,30 @@ class CustomerDraft(_BaseType):
     def __init__(
         self,
         *,
-        customer_number: typing.Optional["str"] = None,
-        email: "str",
-        password: "str",
-        first_name: typing.Optional["str"] = None,
-        last_name: typing.Optional["str"] = None,
-        middle_name: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        anonymous_cart_id: typing.Optional["str"] = None,
-        anonymous_id: typing.Optional["str"] = None,
-        date_of_birth: typing.Optional["datetime.date"] = None,
-        company_name: typing.Optional["str"] = None,
-        vat_id: typing.Optional["str"] = None,
+        customer_number: typing.Optional[str] = None,
+        email: str,
+        password: str,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        middle_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        anonymous_cart_id: typing.Optional[str] = None,
+        anonymous_id: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None,
+        company_name: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None,
         addresses: typing.Optional[typing.List["Address"]] = None,
-        default_shipping_address: typing.Optional["int"] = None,
+        default_shipping_address: typing.Optional[int] = None,
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
-        default_billing_address: typing.Optional["int"] = None,
+        default_billing_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
-        is_email_verified: typing.Optional["bool"] = None,
-        external_id: typing.Optional["str"] = None,
+        is_email_verified: typing.Optional[bool] = None,
+        external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        locale: typing.Optional["str"] = None,
-        salutation: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
+        locale: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
     ):
         self.customer_number = customer_number
@@ -348,10 +395,10 @@ class CustomerDraft(_BaseType):
 
 
 class CustomerEmailVerify(_BaseType):
-    version: typing.Optional["int"]
-    token_value: "str"
+    version: typing.Optional[int]
+    token_value: str
 
-    def __init__(self, *, version: typing.Optional["int"] = None, token_value: "str"):
+    def __init__(self, *, version: typing.Optional[int] = None, token_value: str):
         self.version = version
         self.token_value = token_value
         super().__init__()
@@ -369,19 +416,19 @@ class CustomerEmailVerify(_BaseType):
 
 
 class CustomerPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Customer"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Customer"]
     ):
         self.limit = limit
@@ -408,7 +455,7 @@ class CustomerPagedQueryResponse(_BaseType):
 class CustomerReference(Reference):
     obj: typing.Optional["Customer"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Customer"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Customer"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.CUSTOMER)
 
@@ -425,16 +472,16 @@ class CustomerReference(Reference):
 
 
 class CustomerResetPassword(_BaseType):
-    token_value: "str"
-    new_password: "str"
-    version: typing.Optional["int"]
+    token_value: str
+    new_password: str
+    version: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        token_value: "str",
-        new_password: "str",
-        version: typing.Optional["int"] = None
+        token_value: str,
+        new_password: str,
+        version: typing.Optional[int] = None
     ):
         self.token_value = token_value
         self.new_password = new_password
@@ -455,7 +502,7 @@ class CustomerResetPassword(_BaseType):
 
 class CustomerResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CUSTOMER)
@@ -478,9 +525,9 @@ class CustomerSignInResult(_BaseType):
     customer: "Customer"
     #: A cart that is associated to the customer.
     #: Empty if the customer does not have a cart yet.
-    cart: typing.Optional["any"]
+    cart: typing.Optional[object]
 
-    def __init__(self, *, customer: "Customer", cart: typing.Optional["any"] = None):
+    def __init__(self, *, customer: "Customer", cart: typing.Optional[object] = None):
         self.customer = customer
         self.cart = cart
         super().__init__()
@@ -498,22 +545,22 @@ class CustomerSignInResult(_BaseType):
 
 
 class CustomerSignin(_BaseType):
-    email: "str"
-    password: "str"
-    anonymous_cart_id: typing.Optional["str"]
+    email: str
+    password: str
+    anonymous_cart_id: typing.Optional[str]
     anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
-    anonymous_id: typing.Optional["str"]
-    update_product_data: typing.Optional["bool"]
+    anonymous_id: typing.Optional[str]
+    update_product_data: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        email: "str",
-        password: "str",
-        anonymous_cart_id: typing.Optional["str"] = None,
+        email: str,
+        password: str,
+        anonymous_cart_id: typing.Optional[str] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
-        anonymous_id: typing.Optional["str"] = None,
-        update_product_data: typing.Optional["bool"] = None
+        anonymous_id: typing.Optional[str] = None,
+        update_product_data: typing.Optional[bool] = None
     ):
         self.email = email
         self.password = password
@@ -536,22 +583,22 @@ class CustomerSignin(_BaseType):
 
 
 class CustomerToken(_BaseType):
-    id: "str"
-    created_at: "datetime.datetime"
-    last_modified_at: typing.Optional["datetime.datetime"]
-    customer_id: "str"
-    expires_at: "datetime.datetime"
-    value: "str"
+    id: str
+    created_at: datetime.datetime
+    last_modified_at: typing.Optional[datetime.datetime]
+    customer_id: str
+    expires_at: datetime.datetime
+    value: str
 
     def __init__(
         self,
         *,
-        id: "str",
-        created_at: "datetime.datetime",
-        last_modified_at: typing.Optional["datetime.datetime"] = None,
-        customer_id: "str",
-        expires_at: "datetime.datetime",
-        value: "str"
+        id: str,
+        created_at: datetime.datetime,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        customer_id: str,
+        expires_at: datetime.datetime,
+        value: str
     ):
         self.id = id
         self.created_at = created_at
@@ -574,10 +621,10 @@ class CustomerToken(_BaseType):
 
 
 class CustomerUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["CustomerUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["CustomerUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["CustomerUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -595,17 +642,126 @@ class CustomerUpdate(_BaseType):
 
 
 class CustomerUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CustomerUpdateAction":
-        from ._schemas.customer import CustomerUpdateActionSchema
+        if data["action"] == "addAddress":
+            from ._schemas.customer import CustomerAddAddressActionSchema
 
-        return CustomerUpdateActionSchema().load(data)
+            return CustomerAddAddressActionSchema().load(data)
+        if data["action"] == "addBillingAddressId":
+            from ._schemas.customer import CustomerAddBillingAddressIdActionSchema
+
+            return CustomerAddBillingAddressIdActionSchema().load(data)
+        if data["action"] == "addShippingAddressId":
+            from ._schemas.customer import CustomerAddShippingAddressIdActionSchema
+
+            return CustomerAddShippingAddressIdActionSchema().load(data)
+        if data["action"] == "addStore":
+            from ._schemas.customer import CustomerAddStoreActionSchema
+
+            return CustomerAddStoreActionSchema().load(data)
+        if data["action"] == "changeAddress":
+            from ._schemas.customer import CustomerChangeAddressActionSchema
+
+            return CustomerChangeAddressActionSchema().load(data)
+        if data["action"] == "changeEmail":
+            from ._schemas.customer import CustomerChangeEmailActionSchema
+
+            return CustomerChangeEmailActionSchema().load(data)
+        if data["action"] == "removeAddress":
+            from ._schemas.customer import CustomerRemoveAddressActionSchema
+
+            return CustomerRemoveAddressActionSchema().load(data)
+        if data["action"] == "removeBillingAddressId":
+            from ._schemas.customer import CustomerRemoveBillingAddressIdActionSchema
+
+            return CustomerRemoveBillingAddressIdActionSchema().load(data)
+        if data["action"] == "removeShippingAddressId":
+            from ._schemas.customer import CustomerRemoveShippingAddressIdActionSchema
+
+            return CustomerRemoveShippingAddressIdActionSchema().load(data)
+        if data["action"] == "removeStore":
+            from ._schemas.customer import CustomerRemoveStoreActionSchema
+
+            return CustomerRemoveStoreActionSchema().load(data)
+        if data["action"] == "setCompanyName":
+            from ._schemas.customer import CustomerSetCompanyNameActionSchema
+
+            return CustomerSetCompanyNameActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.customer import CustomerSetCustomFieldActionSchema
+
+            return CustomerSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.customer import CustomerSetCustomTypeActionSchema
+
+            return CustomerSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setCustomerGroup":
+            from ._schemas.customer import CustomerSetCustomerGroupActionSchema
+
+            return CustomerSetCustomerGroupActionSchema().load(data)
+        if data["action"] == "setCustomerNumber":
+            from ._schemas.customer import CustomerSetCustomerNumberActionSchema
+
+            return CustomerSetCustomerNumberActionSchema().load(data)
+        if data["action"] == "setDateOfBirth":
+            from ._schemas.customer import CustomerSetDateOfBirthActionSchema
+
+            return CustomerSetDateOfBirthActionSchema().load(data)
+        if data["action"] == "setDefaultBillingAddress":
+            from ._schemas.customer import CustomerSetDefaultBillingAddressActionSchema
+
+            return CustomerSetDefaultBillingAddressActionSchema().load(data)
+        if data["action"] == "setDefaultShippingAddress":
+            from ._schemas.customer import CustomerSetDefaultShippingAddressActionSchema
+
+            return CustomerSetDefaultShippingAddressActionSchema().load(data)
+        if data["action"] == "setExternalId":
+            from ._schemas.customer import CustomerSetExternalIdActionSchema
+
+            return CustomerSetExternalIdActionSchema().load(data)
+        if data["action"] == "setFirstName":
+            from ._schemas.customer import CustomerSetFirstNameActionSchema
+
+            return CustomerSetFirstNameActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.customer import CustomerSetKeyActionSchema
+
+            return CustomerSetKeyActionSchema().load(data)
+        if data["action"] == "setLastName":
+            from ._schemas.customer import CustomerSetLastNameActionSchema
+
+            return CustomerSetLastNameActionSchema().load(data)
+        if data["action"] == "setLocale":
+            from ._schemas.customer import CustomerSetLocaleActionSchema
+
+            return CustomerSetLocaleActionSchema().load(data)
+        if data["action"] == "setMiddleName":
+            from ._schemas.customer import CustomerSetMiddleNameActionSchema
+
+            return CustomerSetMiddleNameActionSchema().load(data)
+        if data["action"] == "setSalutation":
+            from ._schemas.customer import CustomerSetSalutationActionSchema
+
+            return CustomerSetSalutationActionSchema().load(data)
+        if data["action"] == "setStores":
+            from ._schemas.customer import CustomerSetStoresActionSchema
+
+            return CustomerSetStoresActionSchema().load(data)
+        if data["action"] == "setTitle":
+            from ._schemas.customer import CustomerSetTitleActionSchema
+
+            return CustomerSetTitleActionSchema().load(data)
+        if data["action"] == "setVatId":
+            from ._schemas.customer import CustomerSetVatIdActionSchema
+
+            return CustomerSetVatIdActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.customer import CustomerUpdateActionSchema
@@ -635,14 +791,14 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 
 
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -663,14 +819,14 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -712,15 +868,15 @@ class CustomerAddStoreAction(CustomerUpdateAction):
 
 
 class CustomerChangeAddressAction(CustomerUpdateAction):
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
     address: "Address"
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None,
         address: "Address"
     ):
         self.address_id = address_id
@@ -743,9 +899,9 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 
 
 class CustomerChangeEmailAction(CustomerUpdateAction):
-    email: "str"
+    email: str
 
-    def __init__(self, *, email: "str"):
+    def __init__(self, *, email: str):
         self.email = email
         super().__init__(action="changeEmail")
 
@@ -764,14 +920,14 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 
 
 class CustomerRemoveAddressAction(CustomerUpdateAction):
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -792,14 +948,14 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
 
 
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -820,14 +976,14 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -870,9 +1026,9 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
 
 class CustomerSetCompanyNameAction(CustomerUpdateAction):
     #: If not defined, the company name is unset.
-    company_name: typing.Optional["str"]
+    company_name: typing.Optional[str]
 
-    def __init__(self, *, company_name: typing.Optional["str"] = None):
+    def __init__(self, *, company_name: typing.Optional[str] = None):
         self.company_name = company_name
         super().__init__(action="setCompanyName")
 
@@ -891,10 +1047,10 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -973,9 +1129,9 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
 class CustomerSetCustomerNumberAction(CustomerUpdateAction):
     #: It should be **unique** across a project.
     #: Once it's set, it cannot be changed.
-    customer_number: typing.Optional["str"]
+    customer_number: typing.Optional[str]
 
-    def __init__(self, *, customer_number: typing.Optional["str"] = None):
+    def __init__(self, *, customer_number: typing.Optional[str] = None):
         self.customer_number = customer_number
         super().__init__(action="setCustomerNumber")
 
@@ -995,9 +1151,9 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
 
 class CustomerSetDateOfBirthAction(CustomerUpdateAction):
     #: If not defined, the date of birth is unset.
-    date_of_birth: typing.Optional["datetime.date"]
+    date_of_birth: typing.Optional[datetime.date]
 
-    def __init__(self, *, date_of_birth: typing.Optional["datetime.date"] = None):
+    def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
         self.date_of_birth = date_of_birth
         super().__init__(action="setDateOfBirth")
 
@@ -1017,14 +1173,14 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
 
 class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     #: If not defined, the customer's `defaultBillingAddress` is unset.
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1046,14 +1202,14 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
 
 class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     #: If not defined, the customer's `defaultShippingAddress` is unset.
-    address_id: typing.Optional["str"]
-    address_key: typing.Optional["str"]
+    address_id: typing.Optional[str]
+    address_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        address_id: typing.Optional["str"] = None,
-        address_key: typing.Optional["str"] = None
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1075,9 +1231,9 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
 
 class CustomerSetExternalIdAction(CustomerUpdateAction):
     #: If not defined, the external ID is unset.
-    external_id: typing.Optional["str"]
+    external_id: typing.Optional[str]
 
-    def __init__(self, *, external_id: typing.Optional["str"] = None):
+    def __init__(self, *, external_id: typing.Optional[str] = None):
         self.external_id = external_id
         super().__init__(action="setExternalId")
 
@@ -1096,9 +1252,9 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
 
 
 class CustomerSetFirstNameAction(CustomerUpdateAction):
-    first_name: typing.Optional["str"]
+    first_name: typing.Optional[str]
 
-    def __init__(self, *, first_name: typing.Optional["str"] = None):
+    def __init__(self, *, first_name: typing.Optional[str] = None):
         self.first_name = first_name
         super().__init__(action="setFirstName")
 
@@ -1118,9 +1274,9 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
 
 class CustomerSetKeyAction(CustomerUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -1137,9 +1293,9 @@ class CustomerSetKeyAction(CustomerUpdateAction):
 
 
 class CustomerSetLastNameAction(CustomerUpdateAction):
-    last_name: typing.Optional["str"]
+    last_name: typing.Optional[str]
 
-    def __init__(self, *, last_name: typing.Optional["str"] = None):
+    def __init__(self, *, last_name: typing.Optional[str] = None):
         self.last_name = last_name
         super().__init__(action="setLastName")
 
@@ -1158,9 +1314,9 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
 
 
 class CustomerSetLocaleAction(CustomerUpdateAction):
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
 
-    def __init__(self, *, locale: typing.Optional["str"] = None):
+    def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -1179,9 +1335,9 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
 
 
 class CustomerSetMiddleNameAction(CustomerUpdateAction):
-    middle_name: typing.Optional["str"]
+    middle_name: typing.Optional[str]
 
-    def __init__(self, *, middle_name: typing.Optional["str"] = None):
+    def __init__(self, *, middle_name: typing.Optional[str] = None):
         self.middle_name = middle_name
         super().__init__(action="setMiddleName")
 
@@ -1200,9 +1356,9 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
 
 
 class CustomerSetSalutationAction(CustomerUpdateAction):
-    salutation: typing.Optional["str"]
+    salutation: typing.Optional[str]
 
-    def __init__(self, *, salutation: typing.Optional["str"] = None):
+    def __init__(self, *, salutation: typing.Optional[str] = None):
         self.salutation = salutation
         super().__init__(action="setSalutation")
 
@@ -1244,9 +1400,9 @@ class CustomerSetStoresAction(CustomerUpdateAction):
 
 
 class CustomerSetTitleAction(CustomerUpdateAction):
-    title: typing.Optional["str"]
+    title: typing.Optional[str]
 
-    def __init__(self, *, title: typing.Optional["str"] = None):
+    def __init__(self, *, title: typing.Optional[str] = None):
         self.title = title
         super().__init__(action="setTitle")
 
@@ -1266,9 +1422,9 @@ class CustomerSetTitleAction(CustomerUpdateAction):
 
 class CustomerSetVatIdAction(CustomerUpdateAction):
     #: If not defined, the vat Id is unset.
-    vat_id: typing.Optional["str"]
+    vat_id: typing.Optional[str]
 
-    def __init__(self, *, vat_id: typing.Optional["str"] = None):
+    def __init__(self, *, vat_id: typing.Optional[str] = None):
         self.vat_id = vat_id
         super().__init__(action="setVatId")
 

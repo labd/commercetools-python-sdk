@@ -10,12 +10,58 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
 
+__all__ = [
+    "CustomFieldBooleanType",
+    "CustomFieldDateTimeType",
+    "CustomFieldDateType",
+    "CustomFieldEnumType",
+    "CustomFieldEnumValue",
+    "CustomFieldLocalizedEnumType",
+    "CustomFieldLocalizedEnumValue",
+    "CustomFieldLocalizedStringType",
+    "CustomFieldMoneyType",
+    "CustomFieldNumberType",
+    "CustomFieldReferenceType",
+    "CustomFieldSetType",
+    "CustomFieldStringType",
+    "CustomFieldTimeType",
+    "CustomFields",
+    "CustomFieldsDraft",
+    "FieldContainer",
+    "FieldDefinition",
+    "FieldType",
+    "ResourceTypeId",
+    "Type",
+    "TypeAddEnumValueAction",
+    "TypeAddFieldDefinitionAction",
+    "TypeAddLocalizedEnumValueAction",
+    "TypeChangeEnumValueLabelAction",
+    "TypeChangeEnumValueOrderAction",
+    "TypeChangeFieldDefinitionLabelAction",
+    "TypeChangeFieldDefinitionOrderAction",
+    "TypeChangeInputHintAction",
+    "TypeChangeKeyAction",
+    "TypeChangeLabelAction",
+    "TypeChangeLocalizedEnumValueLabelAction",
+    "TypeChangeLocalizedEnumValueOrderAction",
+    "TypeChangeNameAction",
+    "TypeDraft",
+    "TypePagedQueryResponse",
+    "TypeReference",
+    "TypeRemoveFieldDefinitionAction",
+    "TypeResourceIdentifier",
+    "TypeSetDescriptionAction",
+    "TypeTextInputHint",
+    "TypeUpdate",
+    "TypeUpdateAction",
+]
+
 
 class CustomFieldEnumValue(_BaseType):
-    key: "str"
-    label: "str"
+    key: str
+    label: str
 
-    def __init__(self, *, key: "str", label: "str"):
+    def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
         super().__init__()
@@ -33,10 +79,10 @@ class CustomFieldEnumValue(_BaseType):
 
 
 class CustomFieldLocalizedEnumValue(_BaseType):
-    key: "str"
+    key: str
     label: "LocalizedString"
 
-    def __init__(self, *, key: "str", label: "LocalizedString"):
+    def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
         super().__init__()
@@ -116,11 +162,11 @@ class FieldDefinition(_BaseType):
     #: The name must be between two and 36 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
     #: The name must be unique for a given resource type ID.
     #: In case there is a field with the same name in another type it has to have the same FieldType also.
-    name: "str"
+    name: str
     #: A human-readable label for the field.
     label: "LocalizedString"
     #: Whether the field is required to have a value.
-    required: "bool"
+    required: bool
     #: Provides a visual representation type for this field.
     #: It is only relevant for string-based field types like StringType and LocalizedStringType.
     input_hint: typing.Optional["TypeTextInputHint"]
@@ -129,9 +175,9 @@ class FieldDefinition(_BaseType):
         self,
         *,
         type: "FieldType",
-        name: "str",
+        name: str,
         label: "LocalizedString",
-        required: "bool",
+        required: bool,
         input_hint: typing.Optional["TypeTextInputHint"] = None
     ):
         self.type = type
@@ -154,17 +200,62 @@ class FieldDefinition(_BaseType):
 
 
 class FieldType(_BaseType):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FieldType":
-        from ._schemas.type import FieldTypeSchema
+        if data["name"] == "Boolean":
+            from ._schemas.type import CustomFieldBooleanTypeSchema
 
-        return FieldTypeSchema().load(data)
+            return CustomFieldBooleanTypeSchema().load(data)
+        if data["name"] == "DateTime":
+            from ._schemas.type import CustomFieldDateTimeTypeSchema
+
+            return CustomFieldDateTimeTypeSchema().load(data)
+        if data["name"] == "Date":
+            from ._schemas.type import CustomFieldDateTypeSchema
+
+            return CustomFieldDateTypeSchema().load(data)
+        if data["name"] == "Enum":
+            from ._schemas.type import CustomFieldEnumTypeSchema
+
+            return CustomFieldEnumTypeSchema().load(data)
+        if data["name"] == "LocalizedEnum":
+            from ._schemas.type import CustomFieldLocalizedEnumTypeSchema
+
+            return CustomFieldLocalizedEnumTypeSchema().load(data)
+        if data["name"] == "LocalizedString":
+            from ._schemas.type import CustomFieldLocalizedStringTypeSchema
+
+            return CustomFieldLocalizedStringTypeSchema().load(data)
+        if data["name"] == "Money":
+            from ._schemas.type import CustomFieldMoneyTypeSchema
+
+            return CustomFieldMoneyTypeSchema().load(data)
+        if data["name"] == "Number":
+            from ._schemas.type import CustomFieldNumberTypeSchema
+
+            return CustomFieldNumberTypeSchema().load(data)
+        if data["name"] == "Reference":
+            from ._schemas.type import CustomFieldReferenceTypeSchema
+
+            return CustomFieldReferenceTypeSchema().load(data)
+        if data["name"] == "Set":
+            from ._schemas.type import CustomFieldSetTypeSchema
+
+            return CustomFieldSetTypeSchema().load(data)
+        if data["name"] == "String":
+            from ._schemas.type import CustomFieldStringTypeSchema
+
+            return CustomFieldStringTypeSchema().load(data)
+        if data["name"] == "Time":
+            from ._schemas.type import CustomFieldTimeTypeSchema
+
+            return CustomFieldTimeTypeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.type import FieldTypeSchema
@@ -422,7 +513,7 @@ class Type(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     #: Identifier for the type (max.
     #: 256 characters).
-    key: "str"
+    key: str
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
     #: Defines for which resource(s) the type is valid.
@@ -432,13 +523,13 @@ class Type(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: "str",
+        key: str,
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         resource_type_ids: typing.List["ResourceTypeId"],
@@ -471,7 +562,7 @@ class Type(BaseResource):
 
 
 class TypeDraft(_BaseType):
-    key: "str"
+    key: str
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
     #: The IDs of the resources that can be customized with this type.
@@ -481,7 +572,7 @@ class TypeDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         resource_type_ids: typing.List["ResourceTypeId"],
@@ -507,19 +598,19 @@ class TypeDraft(_BaseType):
 
 
 class TypePagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Type"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Type"]
     ):
         self.limit = limit
@@ -546,7 +637,7 @@ class TypePagedQueryResponse(_BaseType):
 class TypeReference(Reference):
     obj: typing.Optional["Type"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Type"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Type"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.TYPE)
 
@@ -564,7 +655,7 @@ class TypeReference(Reference):
 
 class TypeResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.TYPE)
@@ -589,10 +680,10 @@ class TypeTextInputHint(enum.Enum):
 
 
 class TypeUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["TypeUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["TypeUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["TypeUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -610,17 +701,74 @@ class TypeUpdate(_BaseType):
 
 
 class TypeUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "TypeUpdateAction":
-        from ._schemas.type import TypeUpdateActionSchema
+        if data["action"] == "addEnumValue":
+            from ._schemas.type import TypeAddEnumValueActionSchema
 
-        return TypeUpdateActionSchema().load(data)
+            return TypeAddEnumValueActionSchema().load(data)
+        if data["action"] == "addFieldDefinition":
+            from ._schemas.type import TypeAddFieldDefinitionActionSchema
+
+            return TypeAddFieldDefinitionActionSchema().load(data)
+        if data["action"] == "addLocalizedEnumValue":
+            from ._schemas.type import TypeAddLocalizedEnumValueActionSchema
+
+            return TypeAddLocalizedEnumValueActionSchema().load(data)
+        if data["action"] == "changeEnumValueLabel":
+            from ._schemas.type import TypeChangeEnumValueLabelActionSchema
+
+            return TypeChangeEnumValueLabelActionSchema().load(data)
+        if data["action"] == "changeEnumValueOrder":
+            from ._schemas.type import TypeChangeEnumValueOrderActionSchema
+
+            return TypeChangeEnumValueOrderActionSchema().load(data)
+        if data["action"] == "changeFieldDefinitionLabel":
+            from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
+
+            return TypeChangeFieldDefinitionLabelActionSchema().load(data)
+        if data["action"] == "changeFieldDefinitionOrder":
+            from ._schemas.type import TypeChangeFieldDefinitionOrderActionSchema
+
+            return TypeChangeFieldDefinitionOrderActionSchema().load(data)
+        if data["action"] == "changeInputHint":
+            from ._schemas.type import TypeChangeInputHintActionSchema
+
+            return TypeChangeInputHintActionSchema().load(data)
+        if data["action"] == "changeKey":
+            from ._schemas.type import TypeChangeKeyActionSchema
+
+            return TypeChangeKeyActionSchema().load(data)
+        if data["action"] == "changeLabel":
+            from ._schemas.type import TypeChangeLabelActionSchema
+
+            return TypeChangeLabelActionSchema().load(data)
+        if data["action"] == "changeLocalizedEnumValueLabel":
+            from ._schemas.type import TypeChangeLocalizedEnumValueLabelActionSchema
+
+            return TypeChangeLocalizedEnumValueLabelActionSchema().load(data)
+        if data["action"] == "changeLocalizedEnumValueOrder":
+            from ._schemas.type import TypeChangeLocalizedEnumValueOrderActionSchema
+
+            return TypeChangeLocalizedEnumValueOrderActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.type import TypeChangeNameActionSchema
+
+            return TypeChangeNameActionSchema().load(data)
+        if data["action"] == "removeFieldDefinition":
+            from ._schemas.type import TypeRemoveFieldDefinitionActionSchema
+
+            return TypeRemoveFieldDefinitionActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.type import TypeSetDescriptionActionSchema
+
+            return TypeSetDescriptionActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.type import TypeUpdateActionSchema
@@ -629,10 +777,10 @@ class TypeUpdateAction(_BaseType):
 
 
 class TypeAddEnumValueAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     value: "CustomFieldEnumValue"
 
-    def __init__(self, *, field_name: "str", value: "CustomFieldEnumValue"):
+    def __init__(self, *, field_name: str, value: "CustomFieldEnumValue"):
         self.field_name = field_name
         self.value = value
         super().__init__(action="addEnumValue")
@@ -673,10 +821,10 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 
 
 class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     value: "CustomFieldLocalizedEnumValue"
 
-    def __init__(self, *, field_name: "str", value: "CustomFieldLocalizedEnumValue"):
+    def __init__(self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"):
         self.field_name = field_name
         self.value = value
         super().__init__(action="addLocalizedEnumValue")
@@ -696,10 +844,10 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
 
 
 class TypeChangeEnumValueLabelAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     value: "CustomFieldEnumValue"
 
-    def __init__(self, *, field_name: "str", value: "CustomFieldEnumValue"):
+    def __init__(self, *, field_name: str, value: "CustomFieldEnumValue"):
         self.field_name = field_name
         self.value = value
         super().__init__(action="changeEnumValueLabel")
@@ -719,10 +867,10 @@ class TypeChangeEnumValueLabelAction(TypeUpdateAction):
 
 
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     keys: typing.List["str"]
 
-    def __init__(self, *, field_name: "str", keys: typing.List["str"]):
+    def __init__(self, *, field_name: str, keys: typing.List["str"]):
         self.field_name = field_name
         self.keys = keys
         super().__init__(action="changeEnumValueOrder")
@@ -742,10 +890,10 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
 
 
 class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     label: "LocalizedString"
 
-    def __init__(self, *, field_name: "str", label: "LocalizedString"):
+    def __init__(self, *, field_name: str, label: "LocalizedString"):
         self.field_name = field_name
         self.label = label
         super().__init__(action="changeFieldDefinitionLabel")
@@ -786,10 +934,10 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 
 
 class TypeChangeInputHintAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     input_hint: "TypeTextInputHint"
 
-    def __init__(self, *, field_name: "str", input_hint: "TypeTextInputHint"):
+    def __init__(self, *, field_name: str, input_hint: "TypeTextInputHint"):
         self.field_name = field_name
         self.input_hint = input_hint
         super().__init__(action="changeInputHint")
@@ -809,9 +957,9 @@ class TypeChangeInputHintAction(TypeUpdateAction):
 
 
 class TypeChangeKeyAction(TypeUpdateAction):
-    key: "str"
+    key: str
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
         self.key = key
         super().__init__(action="changeKey")
 
@@ -828,10 +976,10 @@ class TypeChangeKeyAction(TypeUpdateAction):
 
 
 class TypeChangeLabelAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     label: "LocalizedString"
 
-    def __init__(self, *, field_name: "str", label: "LocalizedString"):
+    def __init__(self, *, field_name: str, label: "LocalizedString"):
         self.field_name = field_name
         self.label = label
         super().__init__(action="changeLabel")
@@ -849,10 +997,10 @@ class TypeChangeLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     value: "CustomFieldLocalizedEnumValue"
 
-    def __init__(self, *, field_name: "str", value: "CustomFieldLocalizedEnumValue"):
+    def __init__(self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"):
         self.field_name = field_name
         self.value = value
         super().__init__(action="changeLocalizedEnumValueLabel")
@@ -872,10 +1020,10 @@ class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
     keys: typing.List["str"]
 
-    def __init__(self, *, field_name: "str", keys: typing.List["str"]):
+    def __init__(self, *, field_name: str, keys: typing.List["str"]):
         self.field_name = field_name
         self.keys = keys
         super().__init__(action="changeLocalizedEnumValueOrder")
@@ -914,9 +1062,9 @@ class TypeChangeNameAction(TypeUpdateAction):
 
 
 class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
-    field_name: "str"
+    field_name: str
 
-    def __init__(self, *, field_name: "str"):
+    def __init__(self, *, field_name: str):
         self.field_name = field_name
         super().__init__(action="removeFieldDefinition")
 

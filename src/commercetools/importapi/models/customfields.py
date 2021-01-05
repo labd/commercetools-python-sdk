@@ -15,6 +15,34 @@ if typing.TYPE_CHECKING:
         TypeKeyReference,
     )
 
+__all__ = [
+    "BooleanField",
+    "BooleanSetField",
+    "Custom",
+    "CustomField",
+    "DateField",
+    "DateSetField",
+    "DateTimeField",
+    "DateTimeSetField",
+    "EnumField",
+    "EnumSetField",
+    "FieldContainer",
+    "LocalizedEnumField",
+    "LocalizedEnumSetField",
+    "LocalizedStringField",
+    "LocalizedStringSetField",
+    "MoneyField",
+    "MoneySetField",
+    "NumberField",
+    "NumberSetField",
+    "ReferenceField",
+    "ReferenceSetField",
+    "StringField",
+    "StringSetField",
+    "TimeField",
+    "TimeSetField",
+]
+
 
 class Custom(_BaseType):
     """The representation to be sent to the server when creating a resource with custom fields."""
@@ -54,17 +82,102 @@ class CustomField(_BaseType):
     """Provides the value for a custom field of a specific type."""
 
     #: The type of this field.
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CustomField":
-        from ._schemas.customfields import CustomFieldSchema
+        if data["type"] == "Boolean":
+            from ._schemas.customfields import BooleanFieldSchema
 
-        return CustomFieldSchema().load(data)
+            return BooleanFieldSchema().load(data)
+        if data["type"] == "String":
+            from ._schemas.customfields import StringFieldSchema
+
+            return StringFieldSchema().load(data)
+        if data["type"] == "LocalizedString":
+            from ._schemas.customfields import LocalizedStringFieldSchema
+
+            return LocalizedStringFieldSchema().load(data)
+        if data["type"] == "Enum":
+            from ._schemas.customfields import EnumFieldSchema
+
+            return EnumFieldSchema().load(data)
+        if data["type"] == "LocalizedEnum":
+            from ._schemas.customfields import LocalizedEnumFieldSchema
+
+            return LocalizedEnumFieldSchema().load(data)
+        if data["type"] == "Number":
+            from ._schemas.customfields import NumberFieldSchema
+
+            return NumberFieldSchema().load(data)
+        if data["type"] == "Money":
+            from ._schemas.customfields import MoneyFieldSchema
+
+            return MoneyFieldSchema().load(data)
+        if data["type"] == "Date":
+            from ._schemas.customfields import DateFieldSchema
+
+            return DateFieldSchema().load(data)
+        if data["type"] == "Time":
+            from ._schemas.customfields import TimeFieldSchema
+
+            return TimeFieldSchema().load(data)
+        if data["type"] == "DateTime":
+            from ._schemas.customfields import DateTimeFieldSchema
+
+            return DateTimeFieldSchema().load(data)
+        if data["type"] == "Reference":
+            from ._schemas.customfields import ReferenceFieldSchema
+
+            return ReferenceFieldSchema().load(data)
+        if data["type"] == "BooleanSet":
+            from ._schemas.customfields import BooleanSetFieldSchema
+
+            return BooleanSetFieldSchema().load(data)
+        if data["type"] == "StringSet":
+            from ._schemas.customfields import StringSetFieldSchema
+
+            return StringSetFieldSchema().load(data)
+        if data["type"] == "LocalizedStringSet":
+            from ._schemas.customfields import LocalizedStringSetFieldSchema
+
+            return LocalizedStringSetFieldSchema().load(data)
+        if data["type"] == "EnumSet":
+            from ._schemas.customfields import EnumSetFieldSchema
+
+            return EnumSetFieldSchema().load(data)
+        if data["type"] == "LocalizedEnumSet":
+            from ._schemas.customfields import LocalizedEnumSetFieldSchema
+
+            return LocalizedEnumSetFieldSchema().load(data)
+        if data["type"] == "NumberSet":
+            from ._schemas.customfields import NumberSetFieldSchema
+
+            return NumberSetFieldSchema().load(data)
+        if data["type"] == "MoneySet":
+            from ._schemas.customfields import MoneySetFieldSchema
+
+            return MoneySetFieldSchema().load(data)
+        if data["type"] == "DateSet":
+            from ._schemas.customfields import DateSetFieldSchema
+
+            return DateSetFieldSchema().load(data)
+        if data["type"] == "TimeSet":
+            from ._schemas.customfields import TimeSetFieldSchema
+
+            return TimeSetFieldSchema().load(data)
+        if data["type"] == "DateTimeSet":
+            from ._schemas.customfields import DateTimeSetFieldSchema
+
+            return DateTimeSetFieldSchema().load(data)
+        if data["type"] == "ReferenceSet":
+            from ._schemas.customfields import ReferenceSetFieldSchema
+
+            return ReferenceSetFieldSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.customfields import CustomFieldSchema
@@ -75,9 +188,9 @@ class CustomField(_BaseType):
 class BooleanField(CustomField):
     """A field with a boolean value."""
 
-    value: "bool"
+    value: bool
 
-    def __init__(self, *, value: "bool"):
+    def __init__(self, *, value: bool):
         self.value = value
         super().__init__(type="Boolean")
 
@@ -96,9 +209,9 @@ class BooleanField(CustomField):
 class StringField(CustomField):
     """A field with a string value."""
 
-    value: "str"
+    value: str
 
-    def __init__(self, *, value: "str"):
+    def __init__(self, *, value: str):
         self.value = value
         super().__init__(type="String")
 
@@ -138,9 +251,9 @@ class LocalizedStringField(CustomField):
 class EnumField(CustomField):
     """A field with a enum value."""
 
-    value: "str"
+    value: str
 
-    def __init__(self, *, value: "str"):
+    def __init__(self, *, value: str):
         self.value = value
         super().__init__(type="Enum")
 
@@ -159,9 +272,9 @@ class EnumField(CustomField):
 class LocalizedEnumField(CustomField):
     """A field with a localized enum value."""
 
-    value: "str"
+    value: str
 
-    def __init__(self, *, value: "str"):
+    def __init__(self, *, value: str):
         self.value = value
         super().__init__(type="LocalizedEnum")
 
@@ -180,9 +293,9 @@ class LocalizedEnumField(CustomField):
 class NumberField(CustomField):
     """A field with a number value."""
 
-    value: "float"
+    value: float
 
-    def __init__(self, *, value: "float"):
+    def __init__(self, *, value: float):
         self.value = value
         super().__init__(type="Number")
 
@@ -222,9 +335,9 @@ class MoneyField(CustomField):
 class DateField(CustomField):
     """A field with a date value."""
 
-    value: "datetime.date"
+    value: datetime.date
 
-    def __init__(self, *, value: "datetime.date"):
+    def __init__(self, *, value: datetime.date):
         self.value = value
         super().__init__(type="Date")
 
@@ -243,9 +356,9 @@ class DateField(CustomField):
 class TimeField(CustomField):
     """A field with a time value."""
 
-    value: "datetime.time"
+    value: datetime.time
 
-    def __init__(self, *, value: "datetime.time"):
+    def __init__(self, *, value: datetime.time):
         self.value = value
         super().__init__(type="Time")
 
@@ -264,9 +377,9 @@ class TimeField(CustomField):
 class DateTimeField(CustomField):
     """A field with a date time value."""
 
-    value: "datetime.datetime"
+    value: datetime.datetime
 
-    def __init__(self, *, value: "datetime.datetime"):
+    def __init__(self, *, value: datetime.datetime):
         self.value = value
         super().__init__(type="DateTime")
 

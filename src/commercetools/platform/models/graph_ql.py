@@ -6,18 +6,26 @@ import typing
 
 from ._abstract import _BaseType
 
+__all__ = [
+    "GraphQLError",
+    "GraphQLErrorLocation",
+    "GraphQLRequest",
+    "GraphQLResponse",
+    "GraphQLVariablesMap",
+]
+
 
 class GraphQLError(_BaseType):
-    message: "str"
+    message: str
     locations: typing.List["GraphQLErrorLocation"]
-    path: typing.List["any"]
+    path: typing.List["typing.Any"]
 
     def __init__(
         self,
         *,
-        message: "str",
+        message: str,
         locations: typing.List["GraphQLErrorLocation"],
-        path: typing.List["any"]
+        path: typing.List["typing.Any"]
     ):
         self.message = message
         self.locations = locations
@@ -37,10 +45,10 @@ class GraphQLError(_BaseType):
 
 
 class GraphQLErrorLocation(_BaseType):
-    line: "int"
-    column: "int"
+    line: int
+    column: int
 
-    def __init__(self, *, line: "int", column: "int"):
+    def __init__(self, *, line: int, column: int):
         self.line = line
         self.column = column
         super().__init__()
@@ -58,15 +66,15 @@ class GraphQLErrorLocation(_BaseType):
 
 
 class GraphQLRequest(_BaseType):
-    query: "str"
-    operation_name: typing.Optional["str"]
+    query: str
+    operation_name: typing.Optional[str]
     variables: typing.Optional["GraphQLVariablesMap"]
 
     def __init__(
         self,
         *,
-        query: "str",
-        operation_name: typing.Optional["str"] = None,
+        query: str,
+        operation_name: typing.Optional[str] = None,
         variables: typing.Optional["GraphQLVariablesMap"] = None
     ):
         self.query = query
@@ -87,13 +95,13 @@ class GraphQLRequest(_BaseType):
 
 
 class GraphQLResponse(_BaseType):
-    data: typing.Optional["any"]
+    data: typing.Optional[typing.Any]
     errors: typing.Optional[typing.List["GraphQLError"]]
 
     def __init__(
         self,
         *,
-        data: typing.Optional["any"] = None,
+        data: typing.Optional[typing.Any] = None,
         errors: typing.Optional[typing.List["GraphQLError"]] = None
     ):
         self.data = data

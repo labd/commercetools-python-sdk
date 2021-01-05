@@ -29,15 +29,50 @@ if typing.TYPE_CHECKING:
     from .prices import SubRate, TaxRate
     from .productvariants import Attribute
 
+__all__ = [
+    "CartClassificationTier",
+    "CartOrigin",
+    "CustomLineItemDraft",
+    "CustomLineItemTaxedPrice",
+    "Delivery",
+    "DeliveryItem",
+    "DiscountedLineItemPortion",
+    "DiscountedLineItemPriceDraft",
+    "ExternalTaxRateDraft",
+    "InventoryMode",
+    "ItemShippingDetailsDraft",
+    "ItemShippingTarget",
+    "ItemState",
+    "LineItemImportDraft",
+    "LineItemPrice",
+    "LineItemProductVariantImportDraft",
+    "OrderImport",
+    "OrderState",
+    "Parcel",
+    "ParcelMeasurements",
+    "PaymentState",
+    "RoundingMode",
+    "ShipmentState",
+    "ShippingInfoImportDraft",
+    "ShippingMethodState",
+    "ShippingRateDraft",
+    "ShippingRatePriceTier",
+    "ShippingRateTierType",
+    "TaxCalculationMode",
+    "TaxPortion",
+    "TaxedPrice",
+    "TrackingData",
+]
+
 
 class ItemState(_BaseType):
     """The item's state."""
 
-    quantity: "float"
+    quantity: float
     #: Maps to `ItemState.state`.
     state: "StateKeyReference"
 
-    def __init__(self, *, quantity: "float", state: "StateKeyReference"):
+    def __init__(self, *, quantity: float, state: "StateKeyReference"):
         self.quantity = quantity
         self.state = state
         super().__init__()
@@ -58,11 +93,11 @@ class ItemShippingTarget(_BaseType):
     """The item's shipping target."""
 
     #: Maps to `ItemShippingTarget.addressKey`.
-    address_key: "str"
+    address_key: str
     #: Maps to `ItemShippingTarget.quantity`.
-    quantity: "float"
+    quantity: float
 
-    def __init__(self, *, address_key: "str", quantity: "float"):
+    def __init__(self, *, address_key: str, quantity: float):
         self.address_key = address_key
         self.quantity = quantity
         super().__init__()
@@ -105,11 +140,11 @@ class LineItemPrice(_BaseType):
     #: Maps to `Price.value`.
     value: "TypedMoney"
     #: Maps to `Price.county`.
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     #: Maps to `Price.validFrom`.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: Maps to `Price.validUntil`.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
     #: References a customer group by its key.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: References a channel by its key.
@@ -125,9 +160,9 @@ class LineItemPrice(_BaseType):
         self,
         *,
         value: "TypedMoney",
-        country: typing.Optional["str"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        country: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
         channel: typing.Optional["ChannelKeyReference"] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
@@ -161,7 +196,7 @@ class LineItemProductVariantImportDraft(_BaseType):
     #: Maps to `ProductVariant.product`.
     product: typing.Optional["ProductKeyReference"]
     #: Maps to `ProductVariantImportDraft.sku`.
-    sku: typing.Optional["str"]
+    sku: typing.Optional[str]
     #: Maps to `ProductVariantImportDraft.prices`
     prices: typing.Optional[typing.List["LineItemPrice"]]
     #: Maps to `ProductVariantImportDraft.attributes`
@@ -173,7 +208,7 @@ class LineItemProductVariantImportDraft(_BaseType):
         self,
         *,
         product: typing.Optional["ProductKeyReference"] = None,
-        sku: typing.Optional["str"] = None,
+        sku: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["LineItemPrice"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None
@@ -216,7 +251,7 @@ class LineItemImportDraft(_BaseType):
     #: Maps to `LineItem.price`.
     price: "LineItemPrice"
     #: Maps to `LineItem.quantity`.
-    quantity: "float"
+    quantity: float
     state: typing.Optional[typing.List["ItemState"]]
     #: References a supply channel. Maps to `LineItem.supplyChannel`.
     #:
@@ -242,7 +277,7 @@ class LineItemImportDraft(_BaseType):
         name: "LocalizedString",
         variant: "LineItemProductVariantImportDraft",
         price: "LineItemPrice",
-        quantity: "float",
+        quantity: float,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
         distribution_channel: typing.Optional["ChannelKeyReference"] = None,
@@ -288,9 +323,10 @@ class ShippingRatePriceTier(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ShippingRatePriceTier":
-        from ._schemas.orders import ShippingRatePriceTierSchema
+        if data["type"] == "CartClassification":
+            from ._schemas.orders import CartClassificationTierSchema
 
-        return ShippingRatePriceTierSchema().load(data)
+            return CartClassificationTierSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.orders import ShippingRatePriceTierSchema
@@ -299,18 +335,18 @@ class ShippingRatePriceTier(_BaseType):
 
 
 class CartClassificationTier(ShippingRatePriceTier):
-    value: "str"
+    value: str
     price: "Money"
     tiers: typing.List["ShippingRatePriceTier"]
-    is_matching: typing.Optional["bool"]
+    is_matching: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        value: "str",
+        value: str,
         price: "Money",
         tiers: typing.List["ShippingRatePriceTier"],
-        is_matching: typing.Optional["bool"] = None
+        is_matching: typing.Optional[bool] = None
     ):
         self.value = value
         self.price = price
@@ -362,18 +398,18 @@ class ShippingRateDraft(_BaseType):
 
 
 class ParcelMeasurements(_BaseType):
-    height_in_millimeter: typing.Optional["float"]
-    length_in_millimeter: typing.Optional["float"]
-    width_in_millimeter: typing.Optional["float"]
-    weight_in_gram: typing.Optional["float"]
+    height_in_millimeter: typing.Optional[float]
+    length_in_millimeter: typing.Optional[float]
+    width_in_millimeter: typing.Optional[float]
+    weight_in_gram: typing.Optional[float]
 
     def __init__(
         self,
         *,
-        height_in_millimeter: typing.Optional["float"] = None,
-        length_in_millimeter: typing.Optional["float"] = None,
-        width_in_millimeter: typing.Optional["float"] = None,
-        weight_in_gram: typing.Optional["float"] = None
+        height_in_millimeter: typing.Optional[float] = None,
+        length_in_millimeter: typing.Optional[float] = None,
+        width_in_millimeter: typing.Optional[float] = None,
+        weight_in_gram: typing.Optional[float] = None
     ):
         self.height_in_millimeter = height_in_millimeter
         self.length_in_millimeter = length_in_millimeter
@@ -394,20 +430,20 @@ class ParcelMeasurements(_BaseType):
 
 
 class TrackingData(_BaseType):
-    tracking_id: typing.Optional["str"]
-    carrier: typing.Optional["str"]
-    provider: typing.Optional["str"]
-    provider_transaction: typing.Optional["str"]
-    is_return: typing.Optional["bool"]
+    tracking_id: typing.Optional[str]
+    carrier: typing.Optional[str]
+    provider: typing.Optional[str]
+    provider_transaction: typing.Optional[str]
+    is_return: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        tracking_id: typing.Optional["str"] = None,
-        carrier: typing.Optional["str"] = None,
-        provider: typing.Optional["str"] = None,
-        provider_transaction: typing.Optional["str"] = None,
-        is_return: typing.Optional["bool"] = None
+        tracking_id: typing.Optional[str] = None,
+        carrier: typing.Optional[str] = None,
+        provider: typing.Optional[str] = None,
+        provider_transaction: typing.Optional[str] = None,
+        is_return: typing.Optional[bool] = None
     ):
         self.tracking_id = tracking_id
         self.carrier = carrier
@@ -429,10 +465,10 @@ class TrackingData(_BaseType):
 
 
 class DeliveryItem(_BaseType):
-    id: "str"
-    quantity: "float"
+    id: str
+    quantity: float
 
-    def __init__(self, *, id: "str", quantity: "float"):
+    def __init__(self, *, id: str, quantity: float):
         self.id = id
         self.quantity = quantity
         super().__init__()
@@ -450,8 +486,8 @@ class DeliveryItem(_BaseType):
 
 
 class Parcel(_BaseType):
-    id: "str"
-    created_at: "datetime.datetime"
+    id: str
+    created_at: datetime.datetime
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     items: typing.Optional[typing.List["DeliveryItem"]]
@@ -459,8 +495,8 @@ class Parcel(_BaseType):
     def __init__(
         self,
         *,
-        id: "str",
-        created_at: "datetime.datetime",
+        id: str,
+        created_at: datetime.datetime,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None
@@ -485,8 +521,8 @@ class Parcel(_BaseType):
 
 
 class Delivery(_BaseType):
-    id: "str"
-    created_at: "datetime.datetime"
+    id: str
+    created_at: datetime.datetime
     items: typing.List["DeliveryItem"]
     parcels: typing.List["Parcel"]
     address: typing.Optional["Address"]
@@ -494,8 +530,8 @@ class Delivery(_BaseType):
     def __init__(
         self,
         *,
-        id: "str",
-        created_at: "datetime.datetime",
+        id: str,
+        created_at: datetime.datetime,
         items: typing.List["DeliveryItem"],
         parcels: typing.List["Parcel"],
         address: typing.Optional["Address"] = None
@@ -584,7 +620,7 @@ class ShippingInfoImportDraft(_BaseType):
 
     """
 
-    shipping_method_name: "str"
+    shipping_method_name: str
     price: "TypedMoney"
     shipping_rate: "ShippingRateDraft"
     tax_rate: typing.Optional["TaxRate"]
@@ -599,7 +635,7 @@ class ShippingInfoImportDraft(_BaseType):
     def __init__(
         self,
         *,
-        shipping_method_name: "str",
+        shipping_method_name: str,
         price: "TypedMoney",
         shipping_rate: "ShippingRateDraft",
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -635,22 +671,22 @@ class ShippingInfoImportDraft(_BaseType):
 
 
 class ExternalTaxRateDraft(_BaseType):
-    name: "str"
-    amount: typing.Optional["float"]
-    country: "str"
-    state: typing.Optional["str"]
+    name: str
+    amount: typing.Optional[float]
+    country: str
+    state: typing.Optional[str]
     sub_rates: typing.Optional[typing.List["SubRate"]]
-    included_in_price: typing.Optional["bool"]
+    included_in_price: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        name: "str",
-        amount: typing.Optional["float"] = None,
-        country: "str",
-        state: typing.Optional["str"] = None,
+        name: str,
+        amount: typing.Optional[float] = None,
+        country: str,
+        state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
-        included_in_price: typing.Optional["bool"] = None
+        included_in_price: typing.Optional[bool] = None
     ):
         self.name = name
         self.amount = amount
@@ -700,8 +736,8 @@ class CustomLineItemDraft(_BaseType):
     money: "TypedMoney"
     taxed_price: typing.Optional["CustomLineItemTaxedPrice"]
     total_price: "TypedMoney"
-    slug: "str"
-    quantity: "float"
+    slug: str
+    quantity: float
     state: typing.Optional[typing.List["ItemState"]]
     #: References a tax category by its key.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
@@ -719,8 +755,8 @@ class CustomLineItemDraft(_BaseType):
         money: "TypedMoney",
         taxed_price: typing.Optional["CustomLineItemTaxedPrice"] = None,
         total_price: "TypedMoney",
-        slug: "str",
-        quantity: "float",
+        slug: str,
+        quantity: float,
         state: typing.Optional[typing.List["ItemState"]] = None,
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -757,16 +793,12 @@ class CustomLineItemDraft(_BaseType):
 
 
 class TaxPortion(_BaseType):
-    name: typing.Optional["str"]
-    rate: "float"
+    name: typing.Optional[str]
+    rate: float
     amount: "TypedMoney"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional["str"] = None,
-        rate: "float",
-        amount: "TypedMoney"
+        self, *, name: typing.Optional[str] = None, rate: float, amount: "TypedMoney"
     ):
         self.name = name
         self.rate = rate
@@ -888,11 +920,11 @@ class OrderImport(ImportResource):
     """
 
     #: Maps to `Order.orderNumber`.
-    order_number: typing.Optional["str"]
+    order_number: typing.Optional[str]
     #: References a customer by its key.
     customer: typing.Optional["CustomerKeyReference"]
     #: Maps to `Order.customerEmail`.
-    customer_email: typing.Optional["str"]
+    customer_email: typing.Optional[str]
     #: Maps to `Order.lineItems`.
     line_items: typing.Optional[typing.List["LineItemImportDraft"]]
     #: Maps to `Order.customLineItems`
@@ -908,7 +940,7 @@ class OrderImport(ImportResource):
     #: Maps to `Order.customerGroup`.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: Maps to `Order.country`.
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     #: Maps to `Order.orderState`.
     order_state: typing.Optional["OrderState"]
     #: Maps to `Order.shipmentState`.
@@ -918,7 +950,7 @@ class OrderImport(ImportResource):
     #: Maps to `Order.shippingInfo`.
     shipping_info: typing.Optional["ShippingInfoImportDraft"]
     #: Maps to `Order.completedAt`.
-    completed_at: typing.Optional["datetime.datetime"]
+    completed_at: typing.Optional[datetime.datetime]
     #: Maps to `Order.custom`.
     custom: typing.Optional["Custom"]
     #: Maps to `Order.inventoryMode`.
@@ -935,10 +967,10 @@ class OrderImport(ImportResource):
     def __init__(
         self,
         *,
-        key: "str",
-        order_number: typing.Optional["str"] = None,
+        key: str,
+        order_number: typing.Optional[str] = None,
         customer: typing.Optional["CustomerKeyReference"] = None,
-        customer_email: typing.Optional["str"] = None,
+        customer_email: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["LineItemImportDraft"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]] = None,
         total_price: "TypedMoney",
@@ -946,12 +978,12 @@ class OrderImport(ImportResource):
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         order_state: typing.Optional["OrderState"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipping_info: typing.Optional["ShippingInfoImportDraft"] = None,
-        completed_at: typing.Optional["datetime.datetime"] = None,
+        completed_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["Custom"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,

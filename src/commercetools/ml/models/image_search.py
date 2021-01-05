@@ -9,25 +9,27 @@ from ._abstract import _BaseType
 if typing.TYPE_CHECKING:
     from .common import ProductVariant
 
+__all__ = ["ImageSearchResponse", "ResultItem"]
+
 
 class ImageSearchResponse(_BaseType):
     """Response format from image search endpoint."""
 
     #: The maximum number of results to return from a query.
-    count: "int"
+    count: int
     #: The offset into the results matching the query. An offset of 0 is the default value indicating that no results should be skipped.
-    offset: "float"
+    offset: float
     #: The total number of product images that were have been analyzed.
-    total: "int"
+    total: int
     #: An array of image URLs of images that are similar to the query image. If no matching images are found, results is empty.
     results: typing.List["ResultItem"]
 
     def __init__(
         self,
         *,
-        count: "int",
-        offset: "float",
-        total: "int",
+        count: int,
+        offset: float,
+        total: int,
         results: typing.List["ResultItem"]
     ):
         self.count = count
@@ -52,12 +54,12 @@ class ResultItem(_BaseType):
     """An image URL and the product variants it is contained in. If no matching images are found, ResultItem is not present."""
 
     #: The URL of the image.
-    image_url: "str"
+    image_url: str
     #: An array of product variants containing the image URL.
     product_variants: typing.List["ProductVariant"]
 
     def __init__(
-        self, *, image_url: "str", product_variants: typing.List["ProductVariant"]
+        self, *, image_url: str, product_variants: typing.List["ProductVariant"]
     ):
         self.image_url = image_url
         self.product_variants = product_variants

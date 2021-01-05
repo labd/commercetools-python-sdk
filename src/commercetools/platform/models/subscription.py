@@ -11,11 +11,42 @@ if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, Reference
     from .message import UserProvidedIdentifiers
 
+__all__ = [
+    "AzureEventGridDestination",
+    "AzureServiceBusDestination",
+    "ChangeSubscription",
+    "DeliveryCloudEventsFormat",
+    "DeliveryFormat",
+    "DeliveryPlatformFormat",
+    "Destination",
+    "GoogleCloudPubSubDestination",
+    "IronMqDestination",
+    "MessageDelivery",
+    "MessageSubscription",
+    "PayloadNotIncluded",
+    "ResourceCreatedDelivery",
+    "ResourceDeletedDelivery",
+    "ResourceUpdatedDelivery",
+    "SnsDestination",
+    "SqsDestination",
+    "Subscription",
+    "SubscriptionChangeDestinationAction",
+    "SubscriptionDelivery",
+    "SubscriptionDraft",
+    "SubscriptionHealthStatus",
+    "SubscriptionPagedQueryResponse",
+    "SubscriptionSetChangesAction",
+    "SubscriptionSetKeyAction",
+    "SubscriptionSetMessagesAction",
+    "SubscriptionUpdate",
+    "SubscriptionUpdateAction",
+]
+
 
 class ChangeSubscription(_BaseType):
-    resource_type_id: "str"
+    resource_type_id: str
 
-    def __init__(self, *, resource_type_id: "str"):
+    def __init__(self, *, resource_type_id: str):
         self.resource_type_id = resource_type_id
         super().__init__()
 
@@ -32,17 +63,22 @@ class ChangeSubscription(_BaseType):
 
 
 class DeliveryFormat(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeliveryFormat":
-        from ._schemas.subscription import DeliveryFormatSchema
+        if data["type"] == "CloudEvents":
+            from ._schemas.subscription import DeliveryCloudEventsFormatSchema
 
-        return DeliveryFormatSchema().load(data)
+            return DeliveryCloudEventsFormatSchema().load(data)
+        if data["type"] == "Platform":
+            from ._schemas.subscription import DeliveryPlatformFormatSchema
+
+            return DeliveryPlatformFormatSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.subscription import DeliveryFormatSchema
@@ -51,9 +87,9 @@ class DeliveryFormat(_BaseType):
 
 
 class DeliveryCloudEventsFormat(DeliveryFormat):
-    cloud_events_version: "str"
+    cloud_events_version: str
 
-    def __init__(self, *, cloud_events_version: "str"):
+    def __init__(self, *, cloud_events_version: str):
         self.cloud_events_version = cloud_events_version
         super().__init__(type="CloudEvents")
 
@@ -91,17 +127,38 @@ class DeliveryPlatformFormat(DeliveryFormat):
 
 
 class Destination(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Destination":
-        from ._schemas.subscription import DestinationSchema
+        if data["type"] == "EventGrid":
+            from ._schemas.subscription import AzureEventGridDestinationSchema
 
-        return DestinationSchema().load(data)
+            return AzureEventGridDestinationSchema().load(data)
+        if data["type"] == "AzureServiceBus":
+            from ._schemas.subscription import AzureServiceBusDestinationSchema
+
+            return AzureServiceBusDestinationSchema().load(data)
+        if data["type"] == "GoogleCloudPubSub":
+            from ._schemas.subscription import GoogleCloudPubSubDestinationSchema
+
+            return GoogleCloudPubSubDestinationSchema().load(data)
+        if data["type"] == "IronMQ":
+            from ._schemas.subscription import IronMqDestinationSchema
+
+            return IronMqDestinationSchema().load(data)
+        if data["type"] == "SNS":
+            from ._schemas.subscription import SnsDestinationSchema
+
+            return SnsDestinationSchema().load(data)
+        if data["type"] == "SQS":
+            from ._schemas.subscription import SqsDestinationSchema
+
+            return SqsDestinationSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.subscription import DestinationSchema
@@ -110,10 +167,10 @@ class Destination(_BaseType):
 
 
 class AzureEventGridDestination(Destination):
-    uri: "str"
-    access_key: "str"
+    uri: str
+    access_key: str
 
-    def __init__(self, *, uri: "str", access_key: "str"):
+    def __init__(self, *, uri: str, access_key: str):
         self.uri = uri
         self.access_key = access_key
         super().__init__(type="EventGrid")
@@ -133,9 +190,9 @@ class AzureEventGridDestination(Destination):
 
 
 class AzureServiceBusDestination(Destination):
-    connection_string: "str"
+    connection_string: str
 
-    def __init__(self, *, connection_string: "str"):
+    def __init__(self, *, connection_string: str):
         self.connection_string = connection_string
         super().__init__(type="AzureServiceBus")
 
@@ -154,10 +211,10 @@ class AzureServiceBusDestination(Destination):
 
 
 class GoogleCloudPubSubDestination(Destination):
-    project_id: "str"
-    topic: "str"
+    project_id: str
+    topic: str
 
-    def __init__(self, *, project_id: "str", topic: "str"):
+    def __init__(self, *, project_id: str, topic: str):
         self.project_id = project_id
         self.topic = topic
         super().__init__(type="GoogleCloudPubSub")
@@ -177,9 +234,9 @@ class GoogleCloudPubSubDestination(Destination):
 
 
 class IronMqDestination(Destination):
-    uri: "str"
+    uri: str
 
-    def __init__(self, *, uri: "str"):
+    def __init__(self, *, uri: str):
         self.uri = uri
         super().__init__(type="IronMQ")
 
@@ -196,13 +253,13 @@ class IronMqDestination(Destination):
 
 
 class MessageSubscription(_BaseType):
-    resource_type_id: "str"
+    resource_type_id: str
     types: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         *,
-        resource_type_id: "str",
+        resource_type_id: str,
         types: typing.Optional[typing.List["str"]] = None
     ):
         self.resource_type_id = resource_type_id
@@ -222,10 +279,10 @@ class MessageSubscription(_BaseType):
 
 
 class PayloadNotIncluded(_BaseType):
-    reason: "str"
-    payload_type: "str"
+    reason: str
+    payload_type: str
 
-    def __init__(self, *, reason: "str", payload_type: "str"):
+    def __init__(self, *, reason: str, payload_type: str):
         self.reason = reason
         self.payload_type = payload_type
         super().__init__()
@@ -243,11 +300,11 @@ class PayloadNotIncluded(_BaseType):
 
 
 class SnsDestination(Destination):
-    access_key: "str"
-    access_secret: "str"
-    topic_arn: "str"
+    access_key: str
+    access_secret: str
+    topic_arn: str
 
-    def __init__(self, *, access_key: "str", access_secret: "str", topic_arn: "str"):
+    def __init__(self, *, access_key: str, access_secret: str, topic_arn: str):
         self.access_key = access_key
         self.access_secret = access_secret
         self.topic_arn = topic_arn
@@ -266,18 +323,13 @@ class SnsDestination(Destination):
 
 
 class SqsDestination(Destination):
-    access_key: "str"
-    access_secret: "str"
-    queue_url: "str"
-    region: "str"
+    access_key: str
+    access_secret: str
+    queue_url: str
+    region: str
 
     def __init__(
-        self,
-        *,
-        access_key: "str",
-        access_secret: "str",
-        queue_url: "str",
-        region: "str"
+        self, *, access_key: str, access_secret: str, queue_url: str, region: str
     ):
         self.access_key = access_key
         self.access_secret = access_secret
@@ -304,7 +356,7 @@ class Subscription(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     changes: typing.List["ChangeSubscription"]
     destination: "Destination"
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     messages: typing.List["MessageSubscription"]
     format: "DeliveryFormat"
     status: "SubscriptionHealthStatus"
@@ -312,15 +364,15 @@ class Subscription(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         changes: typing.List["ChangeSubscription"],
         destination: "Destination",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         messages: typing.List["MessageSubscription"],
         format: "DeliveryFormat",
         status: "SubscriptionHealthStatus"
@@ -353,16 +405,16 @@ class Subscription(BaseResource):
 
 
 class SubscriptionDelivery(_BaseType):
-    project_key: "str"
-    notification_type: "str"
+    project_key: str
+    notification_type: str
     resource: "Reference"
     resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
     def __init__(
         self,
         *,
-        project_key: "str",
-        notification_type: "str",
+        project_key: str,
+        notification_type: str,
         resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
@@ -376,9 +428,22 @@ class SubscriptionDelivery(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SubscriptionDelivery":
-        from ._schemas.subscription import SubscriptionDeliverySchema
+        if data["notificationType"] == "Message":
+            from ._schemas.subscription import MessageDeliverySchema
 
-        return SubscriptionDeliverySchema().load(data)
+            return MessageDeliverySchema().load(data)
+        if data["notificationType"] == "ResourceCreated":
+            from ._schemas.subscription import ResourceCreatedDeliverySchema
+
+            return ResourceCreatedDeliverySchema().load(data)
+        if data["notificationType"] == "ResourceDeleted":
+            from ._schemas.subscription import ResourceDeletedDeliverySchema
+
+            return ResourceDeletedDeliverySchema().load(data)
+        if data["notificationType"] == "ResourceUpdated":
+            from ._schemas.subscription import ResourceUpdatedDeliverySchema
+
+            return ResourceUpdatedDeliverySchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.subscription import SubscriptionDeliverySchema
@@ -387,28 +452,28 @@ class SubscriptionDelivery(_BaseType):
 
 
 class MessageDelivery(SubscriptionDelivery):
-    id: "str"
-    version: "int"
-    created_at: "datetime.datetime"
-    last_modified_at: "datetime.datetime"
-    sequence_number: "int"
-    resource_version: "int"
+    id: str
+    version: int
+    created_at: datetime.datetime
+    last_modified_at: datetime.datetime
+    sequence_number: int
+    resource_version: int
     payload_not_included: "PayloadNotIncluded"
 
     def __init__(
         self,
         *,
-        project_key: "str",
+        project_key: str,
         resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
-        sequence_number: "int",
-        resource_version: "int",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource_version: int,
         payload_not_included: "PayloadNotIncluded"
     ):
         self.id = id
@@ -438,19 +503,19 @@ class MessageDelivery(SubscriptionDelivery):
 
 
 class ResourceCreatedDelivery(SubscriptionDelivery):
-    version: "int"
-    modified_at: "datetime.datetime"
+    version: int
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: "str",
+        project_key: str,
         resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        version: "int",
-        modified_at: "datetime.datetime"
+        version: int,
+        modified_at: datetime.datetime
     ):
         self.version = version
         self.modified_at = modified_at
@@ -476,21 +541,21 @@ class ResourceCreatedDelivery(SubscriptionDelivery):
 
 
 class ResourceDeletedDelivery(SubscriptionDelivery):
-    version: "int"
-    modified_at: "datetime.datetime"
-    data_erasure: typing.Optional["bool"]
+    version: int
+    modified_at: datetime.datetime
+    data_erasure: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        project_key: "str",
+        project_key: str,
         resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        version: "int",
-        modified_at: "datetime.datetime",
-        data_erasure: typing.Optional["bool"] = None
+        version: int,
+        modified_at: datetime.datetime,
+        data_erasure: typing.Optional[bool] = None
     ):
         self.version = version
         self.modified_at = modified_at
@@ -517,21 +582,21 @@ class ResourceDeletedDelivery(SubscriptionDelivery):
 
 
 class ResourceUpdatedDelivery(SubscriptionDelivery):
-    version: "int"
-    old_version: "int"
-    modified_at: "datetime.datetime"
+    version: int
+    old_version: int
+    modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        project_key: "str",
+        project_key: str,
         resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        version: "int",
-        old_version: "int",
-        modified_at: "datetime.datetime"
+        version: int,
+        old_version: int,
+        modified_at: datetime.datetime
     ):
         self.version = version
         self.old_version = old_version
@@ -560,7 +625,7 @@ class ResourceUpdatedDelivery(SubscriptionDelivery):
 class SubscriptionDraft(_BaseType):
     changes: typing.Optional[typing.List["ChangeSubscription"]]
     destination: "Destination"
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     messages: typing.Optional[typing.List["MessageSubscription"]]
     format: typing.Optional["DeliveryFormat"]
 
@@ -569,7 +634,7 @@ class SubscriptionDraft(_BaseType):
         *,
         changes: typing.Optional[typing.List["ChangeSubscription"]] = None,
         destination: "Destination",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
         format: typing.Optional["DeliveryFormat"] = None
     ):
@@ -600,19 +665,19 @@ class SubscriptionHealthStatus(enum.Enum):
 
 
 class SubscriptionPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Subscription"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Subscription"]
     ):
         self.limit = limit
@@ -637,11 +702,11 @@ class SubscriptionPagedQueryResponse(_BaseType):
 
 
 class SubscriptionUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["SubscriptionUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["SubscriptionUpdateAction"]
+        self, *, version: int, actions: typing.List["SubscriptionUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -660,9 +725,9 @@ class SubscriptionUpdate(_BaseType):
 
 
 class SubscriptionUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -670,9 +735,22 @@ class SubscriptionUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "SubscriptionUpdateAction":
-        from ._schemas.subscription import SubscriptionUpdateActionSchema
+        if data["action"] == "changeDestination":
+            from ._schemas.subscription import SubscriptionChangeDestinationActionSchema
 
-        return SubscriptionUpdateActionSchema().load(data)
+            return SubscriptionChangeDestinationActionSchema().load(data)
+        if data["action"] == "setChanges":
+            from ._schemas.subscription import SubscriptionSetChangesActionSchema
+
+            return SubscriptionSetChangesActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.subscription import SubscriptionSetKeyActionSchema
+
+            return SubscriptionSetKeyActionSchema().load(data)
+        if data["action"] == "setMessages":
+            from ._schemas.subscription import SubscriptionSetMessagesActionSchema
+
+            return SubscriptionSetMessagesActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.subscription import SubscriptionUpdateActionSchema
@@ -726,9 +804,9 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
 
 class SubscriptionSetKeyAction(SubscriptionUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 

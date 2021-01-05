@@ -14,41 +14,44 @@ from .similarities.by_project_key_similarities_request_builder import (
     ByProjectKeySimilaritiesRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ..base_client import BaseClient
+
 
 class ByProjectKeyRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def imageSearch(self) -> ByProjectKeyImageSearchRequestBuilder:
+    def image_search(self) -> ByProjectKeyImageSearchRequestBuilder:
         """Search for similar products using an image as search input."""
         return ByProjectKeyImageSearchRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def recommendations(self) -> ByProjectKeyRecommendationsRequestBuilder:
         return ByProjectKeyRecommendationsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def missingData(self) -> ByProjectKeyMissingDataRequestBuilder:
+    def missing_data(self) -> ByProjectKeyMissingDataRequestBuilder:
         return ByProjectKeyMissingDataRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def similarities(self) -> ByProjectKeySimilaritiesRequestBuilder:
         return ByProjectKeySimilaritiesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )

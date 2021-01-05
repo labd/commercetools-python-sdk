@@ -21,6 +21,7 @@ class ReviewSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -28,40 +29,62 @@ class ReviewSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     uniqueness_value = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="uniquenessValue"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="uniquenessValue",
     )
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     author_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authorName",
     )
-    title = marshmallow.fields.String(allow_none=True, missing=None)
-    text = marshmallow.fields.String(allow_none=True, missing=None)
-    target = marshmallow.fields.Raw(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    text = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    target = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     included_in_statistics = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="includedInStatistics"
     )
-    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
+    rating = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -74,35 +97,56 @@ class ReviewSchema(BaseResourceSchema):
         return models.Review(**data)
 
 
-class ReviewDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class ReviewDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     uniqueness_value = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="uniquenessValue"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="uniquenessValue",
     )
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     author_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authorName",
     )
-    title = marshmallow.fields.String(allow_none=True, missing=None)
-    text = marshmallow.fields.String(allow_none=True, missing=None)
-    target = marshmallow.fields.Raw(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    text = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    target = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
+    rating = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -115,10 +159,12 @@ class ReviewDraftSchema(marshmallow.Schema):
         return models.ReviewDraft(**data)
 
 
-class ReviewPagedQueryResponseSchema(marshmallow.Schema):
+class ReviewPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ReviewSchema"),
@@ -137,7 +183,7 @@ class ReviewPagedQueryResponseSchema(marshmallow.Schema):
         return models.ReviewPagedQueryResponse(**data)
 
 
-class ReviewRatingStatisticsSchema(marshmallow.Schema):
+class ReviewRatingStatisticsSchema(helpers.BaseSchema):
     average_rating = marshmallow.fields.Float(
         allow_none=True, missing=None, data_key="averageRating"
     )
@@ -166,6 +212,7 @@ class ReviewReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".ReviewSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -188,7 +235,7 @@ class ReviewResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.ReviewResourceIdentifier(**data)
 
 
-class ReviewUpdateSchema(marshmallow.Schema):
+class ReviewUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -231,7 +278,7 @@ class ReviewUpdateSchema(marshmallow.Schema):
         return models.ReviewUpdate(**data)
 
 
-class ReviewUpdateActionSchema(marshmallow.Schema):
+class ReviewUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -245,7 +292,10 @@ class ReviewUpdateActionSchema(marshmallow.Schema):
 
 class ReviewSetAuthorNameActionSchema(ReviewUpdateActionSchema):
     author_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="authorName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authorName",
     )
 
     class Meta:
@@ -259,7 +309,9 @@ class ReviewSetAuthorNameActionSchema(ReviewUpdateActionSchema):
 
 class ReviewSetCustomFieldActionSchema(ReviewUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -275,9 +327,12 @@ class ReviewSetCustomTypeActionSchema(ReviewUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -293,6 +348,7 @@ class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
         nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -306,7 +362,9 @@ class ReviewSetCustomerActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetKeyActionSchema(ReviewUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -318,7 +376,9 @@ class ReviewSetKeyActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetLocaleActionSchema(ReviewUpdateActionSchema):
-    locale = marshmallow.fields.String(allow_none=True, missing=None)
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -330,7 +390,9 @@ class ReviewSetLocaleActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetRatingActionSchema(ReviewUpdateActionSchema):
-    rating = marshmallow.fields.Integer(allow_none=True, missing=None)
+    rating = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -354,7 +416,9 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetTextActionSchema(ReviewUpdateActionSchema):
-    text = marshmallow.fields.String(allow_none=True, missing=None)
+    text = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -366,7 +430,9 @@ class ReviewSetTextActionSchema(ReviewUpdateActionSchema):
 
 
 class ReviewSetTitleActionSchema(ReviewUpdateActionSchema):
-    title = marshmallow.fields.String(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -384,7 +450,9 @@ class ReviewTransitionStateActionSchema(ReviewUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    force = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    force = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

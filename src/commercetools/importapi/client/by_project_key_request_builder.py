@@ -38,88 +38,93 @@ from .products.by_project_key_products_request_builder import (
     ByProjectKeyProductsRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ..base_client import BaseClient
+
 
 class ByProjectKeyRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def importSinks(self) -> ByProjectKeyImportSinksRequestBuilder:
+    def import_sinks(self) -> ByProjectKeyImportSinksRequestBuilder:
         return ByProjectKeyImportSinksRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def importSummaries(self) -> ByProjectKeyImportSummariesRequestBuilder:
+    def import_summaries(self) -> ByProjectKeyImportSummariesRequestBuilder:
         return ByProjectKeyImportSummariesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def categories(self) -> ByProjectKeyCategoriesRequestBuilder:
         return ByProjectKeyCategoriesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def prices(self) -> ByProjectKeyPricesRequestBuilder:
         return ByProjectKeyPricesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def products(self) -> ByProjectKeyProductsRequestBuilder:
         return ByProjectKeyProductsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def productDrafts(self) -> ByProjectKeyProductDraftsRequestBuilder:
+    def product_drafts(self) -> ByProjectKeyProductDraftsRequestBuilder:
         return ByProjectKeyProductDraftsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def productTypes(self) -> ByProjectKeyProductTypesRequestBuilder:
+    def product_types(self) -> ByProjectKeyProductTypesRequestBuilder:
         return ByProjectKeyProductTypesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def productVariants(self) -> ByProjectKeyProductVariantsRequestBuilder:
+    def product_variants(self) -> ByProjectKeyProductVariantsRequestBuilder:
         return ByProjectKeyProductVariantsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def productVariantPatches(self) -> ByProjectKeyProductVariantPatchesRequestBuilder:
+    def product_variant_patches(
+        self,
+    ) -> ByProjectKeyProductVariantPatchesRequestBuilder:
         return ByProjectKeyProductVariantPatchesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def orders(self) -> ByProjectKeyOrdersRequestBuilder:
         return ByProjectKeyOrdersRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def customers(self) -> ByProjectKeyCustomersRequestBuilder:
         return ByProjectKeyCustomersRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def inventories(self) -> ByProjectKeyInventoriesRequestBuilder:
         return ByProjectKeyInventoriesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )

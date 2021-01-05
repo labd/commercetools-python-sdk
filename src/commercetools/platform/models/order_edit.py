@@ -84,6 +84,100 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "OrderEdit",
+    "OrderEditAddStagedActionAction",
+    "OrderEditApplied",
+    "OrderEditApply",
+    "OrderEditDraft",
+    "OrderEditNotProcessed",
+    "OrderEditPagedQueryResponse",
+    "OrderEditPreviewFailure",
+    "OrderEditPreviewSuccess",
+    "OrderEditReference",
+    "OrderEditResourceIdentifier",
+    "OrderEditResult",
+    "OrderEditSetCommentAction",
+    "OrderEditSetCustomFieldAction",
+    "OrderEditSetCustomTypeAction",
+    "OrderEditSetKeyAction",
+    "OrderEditSetStagedActionsAction",
+    "OrderEditUpdate",
+    "OrderEditUpdateAction",
+    "OrderExcerpt",
+    "StagedOrder",
+    "StagedOrderAddCustomLineItemAction",
+    "StagedOrderAddDeliveryAction",
+    "StagedOrderAddDiscountCodeAction",
+    "StagedOrderAddItemShippingAddressAction",
+    "StagedOrderAddLineItemAction",
+    "StagedOrderAddParcelToDeliveryAction",
+    "StagedOrderAddPaymentAction",
+    "StagedOrderAddReturnInfoAction",
+    "StagedOrderAddShoppingListAction",
+    "StagedOrderChangeCustomLineItemMoneyAction",
+    "StagedOrderChangeCustomLineItemQuantityAction",
+    "StagedOrderChangeLineItemQuantityAction",
+    "StagedOrderChangeOrderStateAction",
+    "StagedOrderChangePaymentStateAction",
+    "StagedOrderChangeShipmentStateAction",
+    "StagedOrderChangeTaxCalculationModeAction",
+    "StagedOrderChangeTaxModeAction",
+    "StagedOrderChangeTaxRoundingModeAction",
+    "StagedOrderImportCustomLineItemStateAction",
+    "StagedOrderImportLineItemStateAction",
+    "StagedOrderRemoveCustomLineItemAction",
+    "StagedOrderRemoveDeliveryAction",
+    "StagedOrderRemoveDiscountCodeAction",
+    "StagedOrderRemoveItemShippingAddressAction",
+    "StagedOrderRemoveLineItemAction",
+    "StagedOrderRemoveParcelFromDeliveryAction",
+    "StagedOrderRemovePaymentAction",
+    "StagedOrderSetBillingAddressAction",
+    "StagedOrderSetCountryAction",
+    "StagedOrderSetCustomFieldAction",
+    "StagedOrderSetCustomLineItemCustomFieldAction",
+    "StagedOrderSetCustomLineItemCustomTypeAction",
+    "StagedOrderSetCustomLineItemShippingDetailsAction",
+    "StagedOrderSetCustomLineItemTaxAmountAction",
+    "StagedOrderSetCustomLineItemTaxRateAction",
+    "StagedOrderSetCustomShippingMethodAction",
+    "StagedOrderSetCustomTypeAction",
+    "StagedOrderSetCustomerEmailAction",
+    "StagedOrderSetCustomerGroupAction",
+    "StagedOrderSetCustomerIdAction",
+    "StagedOrderSetDeliveryAddressAction",
+    "StagedOrderSetDeliveryItemsAction",
+    "StagedOrderSetLineItemCustomFieldAction",
+    "StagedOrderSetLineItemCustomTypeAction",
+    "StagedOrderSetLineItemDistributionChannelAction",
+    "StagedOrderSetLineItemPriceAction",
+    "StagedOrderSetLineItemShippingDetailsAction",
+    "StagedOrderSetLineItemTaxAmountAction",
+    "StagedOrderSetLineItemTaxRateAction",
+    "StagedOrderSetLineItemTotalPriceAction",
+    "StagedOrderSetLocaleAction",
+    "StagedOrderSetOrderNumberAction",
+    "StagedOrderSetOrderTotalTaxAction",
+    "StagedOrderSetParcelItemsAction",
+    "StagedOrderSetParcelMeasurementsAction",
+    "StagedOrderSetParcelTrackingDataAction",
+    "StagedOrderSetReturnPaymentStateAction",
+    "StagedOrderSetReturnShipmentStateAction",
+    "StagedOrderSetShippingAddressAction",
+    "StagedOrderSetShippingAddressAndCustomShippingMethodAction",
+    "StagedOrderSetShippingAddressAndShippingMethodAction",
+    "StagedOrderSetShippingMethodAction",
+    "StagedOrderSetShippingMethodTaxAmountAction",
+    "StagedOrderSetShippingMethodTaxRateAction",
+    "StagedOrderSetShippingRateInputAction",
+    "StagedOrderTransitionCustomLineItemStateAction",
+    "StagedOrderTransitionLineItemStateAction",
+    "StagedOrderTransitionStateAction",
+    "StagedOrderUpdateItemShippingAddressAction",
+    "StagedOrderUpdateSyncInfoAction",
+]
+
 
 class OrderEdit(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -91,7 +185,7 @@ class OrderEdit(BaseResource):
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
     #: Unique identifier for this edit.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     #: The order to be updated with this edit.
     resource: "OrderReference"
     #: The actions to apply to the Order.
@@ -102,23 +196,23 @@ class OrderEdit(BaseResource):
     #: For applied edits, it contains the summary of the changes.
     result: "OrderEditResult"
     #: This field can be used to add textual information regarding the edit.
-    comment: typing.Optional["str"]
+    comment: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         resource: "OrderReference",
         staged_actions: typing.List["StagedOrderUpdateAction"],
         custom: typing.Optional["CustomFields"] = None,
         result: "OrderEditResult",
-        comment: typing.Optional["str"] = None
+        comment: typing.Optional[str] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -148,10 +242,10 @@ class OrderEdit(BaseResource):
 
 
 class OrderEditApply(_BaseType):
-    edit_version: "int"
-    resource_version: "int"
+    edit_version: int
+    resource_version: int
 
-    def __init__(self, *, edit_version: "int", resource_version: "int"):
+    def __init__(self, *, edit_version: int, resource_version: int):
         self.edit_version = edit_version
         self.resource_version = resource_version
         super().__init__()
@@ -170,7 +264,7 @@ class OrderEditApply(_BaseType):
 
 class OrderEditDraft(_BaseType):
     #: Unique identifier for this edit.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     #: The order to be updated with this edit.
     resource: "OrderReference"
     #: The actions to apply to `resource`.
@@ -178,19 +272,19 @@ class OrderEditDraft(_BaseType):
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
     #: This field can be used to add additional textual information regarding the edit.
-    comment: typing.Optional["str"]
+    comment: typing.Optional[str]
     #: When set to `true` the edit is applied on the Order without persisting it.
-    dry_run: typing.Optional["bool"]
+    dry_run: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         resource: "OrderReference",
         staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        comment: typing.Optional["str"] = None,
-        dry_run: typing.Optional["bool"] = None
+        comment: typing.Optional[str] = None,
+        dry_run: typing.Optional[bool] = None
     ):
         self.key = key
         self.resource = resource
@@ -213,19 +307,19 @@ class OrderEditDraft(_BaseType):
 
 
 class OrderEditPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["OrderEdit"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["OrderEdit"]
     ):
         self.limit = limit
@@ -252,7 +346,7 @@ class OrderEditPagedQueryResponse(_BaseType):
 class OrderEditReference(Reference):
     obj: typing.Optional["OrderEdit"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["OrderEdit"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["OrderEdit"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.ORDER_EDIT)
 
@@ -270,7 +364,7 @@ class OrderEditReference(Reference):
 
 class OrderEditResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ORDER_EDIT)
@@ -290,17 +384,30 @@ class OrderEditResourceIdentifier(ResourceIdentifier):
 
 
 class OrderEditResult(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderEditResult":
-        from ._schemas.order_edit import OrderEditResultSchema
+        if data["type"] == "Applied":
+            from ._schemas.order_edit import OrderEditAppliedSchema
 
-        return OrderEditResultSchema().load(data)
+            return OrderEditAppliedSchema().load(data)
+        if data["type"] == "NotProcessed":
+            from ._schemas.order_edit import OrderEditNotProcessedSchema
+
+            return OrderEditNotProcessedSchema().load(data)
+        if data["type"] == "PreviewFailure":
+            from ._schemas.order_edit import OrderEditPreviewFailureSchema
+
+            return OrderEditPreviewFailureSchema().load(data)
+        if data["type"] == "PreviewSuccess":
+            from ._schemas.order_edit import OrderEditPreviewSuccessSchema
+
+            return OrderEditPreviewSuccessSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.order_edit import OrderEditResultSchema
@@ -309,14 +416,14 @@ class OrderEditResult(_BaseType):
 
 
 class OrderEditApplied(OrderEditResult):
-    applied_at: "datetime.datetime"
+    applied_at: datetime.datetime
     excerpt_before_edit: "OrderExcerpt"
     excerpt_after_edit: "OrderExcerpt"
 
     def __init__(
         self,
         *,
-        applied_at: "datetime.datetime",
+        applied_at: datetime.datetime,
         excerpt_before_edit: "OrderExcerpt",
         excerpt_after_edit: "OrderExcerpt"
     ):
@@ -401,16 +508,16 @@ class OrderEditPreviewSuccess(OrderEditResult):
 
 
 class OrderEditUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["OrderEditUpdateAction"]
-    dry_run: typing.Optional["bool"]
+    dry_run: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        version: "int",
+        version: int,
         actions: typing.List["OrderEditUpdateAction"],
-        dry_run: typing.Optional["bool"] = None
+        dry_run: typing.Optional[bool] = None
     ):
         self.version = version
         self.actions = actions
@@ -430,17 +537,38 @@ class OrderEditUpdate(_BaseType):
 
 
 class OrderEditUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderEditUpdateAction":
-        from ._schemas.order_edit import OrderEditUpdateActionSchema
+        if data["action"] == "addStagedAction":
+            from ._schemas.order_edit import OrderEditAddStagedActionActionSchema
 
-        return OrderEditUpdateActionSchema().load(data)
+            return OrderEditAddStagedActionActionSchema().load(data)
+        if data["action"] == "setComment":
+            from ._schemas.order_edit import OrderEditSetCommentActionSchema
+
+            return OrderEditSetCommentActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.order_edit import OrderEditSetCustomFieldActionSchema
+
+            return OrderEditSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.order_edit import OrderEditSetCustomTypeActionSchema
+
+            return OrderEditSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.order_edit import OrderEditSetKeyActionSchema
+
+            return OrderEditSetKeyActionSchema().load(data)
+        if data["action"] == "setStagedActions":
+            from ._schemas.order_edit import OrderEditSetStagedActionsActionSchema
+
+            return OrderEditSetStagedActionsActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.order_edit import OrderEditUpdateActionSchema
@@ -451,14 +579,14 @@ class OrderEditUpdateAction(_BaseType):
 class OrderExcerpt(_BaseType):
     total_price: "TypedMoney"
     taxed_price: typing.Optional["TaxedPrice"]
-    version: "int"
+    version: int
 
     def __init__(
         self,
         *,
         total_price: "TypedMoney",
         taxed_price: typing.Optional["TaxedPrice"] = None,
-        version: "int"
+        version: int
     ):
         self.total_price = total_price
         self.taxed_price = taxed_price
@@ -481,17 +609,17 @@ class StagedOrder(Order):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        completed_at: typing.Optional["datetime.datetime"] = None,
-        order_number: typing.Optional["str"] = None,
-        customer_id: typing.Optional["str"] = None,
-        customer_email: typing.Optional["str"] = None,
-        anonymous_id: typing.Optional["str"] = None,
+        completed_at: typing.Optional[datetime.datetime] = None,
+        order_number: typing.Optional[str] = None,
+        customer_id: typing.Optional[str] = None,
+        customer_email: typing.Optional[str] = None,
+        anonymous_id: typing.Optional[str] = None,
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.List["LineItem"],
         custom_line_items: typing.List["CustomLineItem"],
@@ -502,7 +630,7 @@ class StagedOrder(Order):
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         order_state: "OrderState",
         state: typing.Optional["StateReference"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
@@ -511,11 +639,11 @@ class StagedOrder(Order):
         sync_info: typing.List["SyncInfo"],
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: "int",
+        last_message_sequence_number: int,
         cart: typing.Optional["CartReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
-        locale: typing.Optional["str"] = None,
+        locale: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         origin: "CartOrigin",
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
@@ -602,9 +730,9 @@ class OrderEditAddStagedActionAction(OrderEditUpdateAction):
 
 
 class OrderEditSetCommentAction(OrderEditUpdateAction):
-    comment: typing.Optional["str"]
+    comment: typing.Optional[str]
 
-    def __init__(self, *, comment: typing.Optional["str"] = None):
+    def __init__(self, *, comment: typing.Optional[str] = None):
         self.comment = comment
         super().__init__(action="setComment")
 
@@ -623,10 +751,10 @@ class OrderEditSetCommentAction(OrderEditUpdateAction):
 
 
 class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -650,13 +778,13 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
     #: If absent, the custom type and any existing custom fields are removed.
     type: typing.Optional["TypeResourceIdentifier"]
     #: If set, the custom fields are set to this new value.
-    fields: typing.Optional["any"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["any"] = None
+        fields: typing.Optional[object] = None
     ):
         self.type = type
         self.fields = fields
@@ -678,9 +806,9 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
 
 class OrderEditSetKeyAction(OrderEditUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -721,8 +849,8 @@ class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
 class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     money: "Money"
     name: "LocalizedString"
-    quantity: typing.Optional["float"]
-    slug: "str"
+    quantity: typing.Optional[float]
+    slug: str
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -732,8 +860,8 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         *,
         money: "Money",
         name: "LocalizedString",
-        quantity: typing.Optional["float"] = None,
-        slug: "str",
+        quantity: typing.Optional[float] = None,
+        slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
@@ -793,9 +921,9 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
-    code: "str"
+    code: str
 
-    def __init__(self, *, code: "str"):
+    def __init__(self, *, code: str):
         self.code = code
         super().__init__(action="addDiscountCode")
 
@@ -838,11 +966,11 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     custom: typing.Optional["CustomFieldsDraft"]
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
-    product_id: typing.Optional["str"]
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    quantity: typing.Optional["float"]
-    added_at: typing.Optional["datetime.datetime"]
+    product_id: typing.Optional[str]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    quantity: typing.Optional[float]
+    added_at: typing.Optional[datetime.datetime]
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -854,11 +982,11 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        product_id: typing.Optional["str"] = None,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        quantity: typing.Optional["float"] = None,
-        added_at: typing.Optional["datetime.datetime"] = None,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        quantity: typing.Optional[float] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -893,7 +1021,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
-    delivery_id: "str"
+    delivery_id: str
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     items: typing.Optional[typing.List["DeliveryItem"]]
@@ -901,7 +1029,7 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: "str",
+        delivery_id: str,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None
@@ -948,16 +1076,16 @@ class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
-    return_tracking_id: typing.Optional["str"]
+    return_tracking_id: typing.Optional[str]
     items: typing.List["ReturnItemDraft"]
-    return_date: typing.Optional["datetime.datetime"]
+    return_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        return_tracking_id: typing.Optional["str"] = None,
+        return_tracking_id: typing.Optional[str] = None,
         items: typing.List["ReturnItemDraft"],
-        return_date: typing.Optional["datetime.datetime"] = None
+        return_date: typing.Optional[datetime.datetime] = None
     ):
         self.return_tracking_id = return_tracking_id
         self.items = items
@@ -1010,10 +1138,10 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     money: "Money"
 
-    def __init__(self, *, custom_line_item_id: "str", money: "Money"):
+    def __init__(self, *, custom_line_item_id: str, money: "Money"):
         self.custom_line_item_id = custom_line_item_id
         self.money = money
         super().__init__(action="changeCustomLineItemMoney")
@@ -1037,10 +1165,10 @@ class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
-    quantity: "float"
+    custom_line_item_id: str
+    quantity: float
 
-    def __init__(self, *, custom_line_item_id: "str", quantity: "float"):
+    def __init__(self, *, custom_line_item_id: str, quantity: float):
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
         super().__init__(action="changeCustomLineItemQuantity")
@@ -1064,16 +1192,16 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
-    line_item_id: "str"
-    quantity: "float"
+    line_item_id: str
+    quantity: float
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
-        quantity: "float",
+        line_item_id: str,
+        quantity: float,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
@@ -1224,10 +1352,10 @@ class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     state: typing.List["ItemState"]
 
-    def __init__(self, *, custom_line_item_id: "str", state: typing.List["ItemState"]):
+    def __init__(self, *, custom_line_item_id: str, state: typing.List["ItemState"]):
         self.custom_line_item_id = custom_line_item_id
         self.state = state
         super().__init__(action="importCustomLineItemState")
@@ -1251,10 +1379,10 @@ class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     state: typing.List["ItemState"]
 
-    def __init__(self, *, line_item_id: "str", state: typing.List["ItemState"]):
+    def __init__(self, *, line_item_id: str, state: typing.List["ItemState"]):
         self.line_item_id = line_item_id
         self.state = state
         super().__init__(action="importLineItemState")
@@ -1274,9 +1402,9 @@ class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
 
-    def __init__(self, *, custom_line_item_id: "str"):
+    def __init__(self, *, custom_line_item_id: str):
         self.custom_line_item_id = custom_line_item_id
         super().__init__(action="removeCustomLineItem")
 
@@ -1295,9 +1423,9 @@ class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
-    delivery_id: "str"
+    delivery_id: str
 
-    def __init__(self, *, delivery_id: "str"):
+    def __init__(self, *, delivery_id: str):
         self.delivery_id = delivery_id
         super().__init__(action="removeDelivery")
 
@@ -1337,9 +1465,9 @@ class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
-    address_key: "str"
+    address_key: str
 
-    def __init__(self, *, address_key: "str"):
+    def __init__(self, *, address_key: str):
         self.address_key = address_key
         super().__init__(action="removeItemShippingAddress")
 
@@ -1362,8 +1490,8 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
-    line_item_id: "str"
-    quantity: typing.Optional["float"]
+    line_item_id: str
+    quantity: typing.Optional[float]
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
@@ -1371,8 +1499,8 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: "str",
-        quantity: typing.Optional["float"] = None,
+        line_item_id: str,
+        quantity: typing.Optional[float] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
@@ -1399,9 +1527,9 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
-    parcel_id: "str"
+    parcel_id: str
 
-    def __init__(self, *, parcel_id: "str"):
+    def __init__(self, *, parcel_id: str):
         self.parcel_id = parcel_id
         super().__init__(action="removeParcelFromDelivery")
 
@@ -1462,9 +1590,9 @@ class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCountryAction(StagedOrderUpdateAction):
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
 
-    def __init__(self, *, country: typing.Optional["str"] = None):
+    def __init__(self, *, country: typing.Optional[str] = None):
         self.country = country
         super().__init__(action="setCountry")
 
@@ -1483,10 +1611,10 @@ class StagedOrderSetCountryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -1506,16 +1634,16 @@ class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
-    name: "str"
-    value: typing.Optional["any"]
+    custom_line_item_id: str
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
-        name: "str",
-        value: typing.Optional["any"] = None
+        custom_line_item_id: str,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.custom_line_item_id = custom_line_item_id
         self.name = name
@@ -1541,14 +1669,14 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     type: typing.Optional["TypeResourceIdentifier"]
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
@@ -1576,13 +1704,13 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -1608,13 +1736,13 @@ class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction)
 
 
 class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -1640,13 +1768,13 @@ class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -1668,7 +1796,7 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
-    shipping_method_name: "str"
+    shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -1676,7 +1804,7 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        shipping_method_name: "str",
+        shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
@@ -1730,9 +1858,9 @@ class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
-    email: typing.Optional["str"]
+    email: typing.Optional[str]
 
-    def __init__(self, *, email: typing.Optional["str"] = None):
+    def __init__(self, *, email: typing.Optional[str] = None):
         self.email = email
         super().__init__(action="setCustomerEmail")
 
@@ -1776,9 +1904,9 @@ class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
-    customer_id: typing.Optional["str"]
+    customer_id: typing.Optional[str]
 
-    def __init__(self, *, customer_id: typing.Optional["str"] = None):
+    def __init__(self, *, customer_id: typing.Optional[str] = None):
         self.customer_id = customer_id
         super().__init__(action="setCustomerId")
 
@@ -1797,12 +1925,10 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
-    delivery_id: "str"
+    delivery_id: str
     address: typing.Optional["Address"]
 
-    def __init__(
-        self, *, delivery_id: "str", address: typing.Optional["Address"] = None
-    ):
+    def __init__(self, *, delivery_id: str, address: typing.Optional["Address"] = None):
         self.delivery_id = delivery_id
         self.address = address
         super().__init__(action="setDeliveryAddress")
@@ -1822,10 +1948,10 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
-    delivery_id: "str"
+    delivery_id: str
     items: typing.List["DeliveryItem"]
 
-    def __init__(self, *, delivery_id: "str", items: typing.List["DeliveryItem"]):
+    def __init__(self, *, delivery_id: str, items: typing.List["DeliveryItem"]):
         self.delivery_id = delivery_id
         self.items = items
         super().__init__(action="setDeliveryItems")
@@ -1845,12 +1971,12 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
-    line_item_id: "str"
-    name: "str"
-    value: typing.Optional["any"]
+    line_item_id: str
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, line_item_id: "str", name: "str", value: typing.Optional["any"] = None
+        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
     ):
         self.line_item_id = line_item_id
         self.name = name
@@ -1872,14 +1998,14 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     type: typing.Optional["TypeResourceIdentifier"]
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
@@ -1903,13 +2029,13 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.line_item_id = line_item_id
@@ -1935,11 +2061,11 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_price: typing.Optional["Money"]
 
     def __init__(
-        self, *, line_item_id: "str", external_price: typing.Optional["Money"] = None
+        self, *, line_item_id: str, external_price: typing.Optional["Money"] = None
     ):
         self.line_item_id = line_item_id
         self.external_price = external_price
@@ -1960,13 +2086,13 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
@@ -1992,13 +2118,13 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
         self.line_item_id = line_item_id
@@ -2020,13 +2146,13 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
         self.line_item_id = line_item_id
@@ -2048,13 +2174,13 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
         self.line_item_id = line_item_id
@@ -2076,9 +2202,9 @@ class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLocaleAction(StagedOrderUpdateAction):
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
 
-    def __init__(self, *, locale: typing.Optional["str"] = None):
+    def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -2097,9 +2223,9 @@ class StagedOrderSetLocaleAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
-    order_number: typing.Optional["str"]
+    order_number: typing.Optional[str]
 
-    def __init__(self, *, order_number: typing.Optional["str"] = None):
+    def __init__(self, *, order_number: typing.Optional[str] = None):
         self.order_number = order_number
         super().__init__(action="setOrderNumber")
 
@@ -2146,10 +2272,10 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
-    parcel_id: "str"
+    parcel_id: str
     items: typing.List["DeliveryItem"]
 
-    def __init__(self, *, parcel_id: "str", items: typing.List["DeliveryItem"]):
+    def __init__(self, *, parcel_id: str, items: typing.List["DeliveryItem"]):
         self.parcel_id = parcel_id
         self.items = items
         super().__init__(action="setParcelItems")
@@ -2169,13 +2295,13 @@ class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
-    parcel_id: "str"
+    parcel_id: str
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
         self,
         *,
-        parcel_id: "str",
+        parcel_id: str,
         measurements: typing.Optional["ParcelMeasurements"] = None
     ):
         self.parcel_id = parcel_id
@@ -2197,11 +2323,11 @@ class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
-    parcel_id: "str"
+    parcel_id: str
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
-        self, *, parcel_id: "str", tracking_data: typing.Optional["TrackingData"] = None
+        self, *, parcel_id: str, tracking_data: typing.Optional["TrackingData"] = None
     ):
         self.parcel_id = parcel_id
         self.tracking_data = tracking_data
@@ -2222,10 +2348,10 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
-    return_item_id: "str"
+    return_item_id: str
     payment_state: "ReturnPaymentState"
 
-    def __init__(self, *, return_item_id: "str", payment_state: "ReturnPaymentState"):
+    def __init__(self, *, return_item_id: str, payment_state: "ReturnPaymentState"):
         self.return_item_id = return_item_id
         self.payment_state = payment_state
         super().__init__(action="setReturnPaymentState")
@@ -2245,10 +2371,10 @@ class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
-    return_item_id: "str"
+    return_item_id: str
     shipment_state: "ReturnShipmentState"
 
-    def __init__(self, *, return_item_id: "str", shipment_state: "ReturnShipmentState"):
+    def __init__(self, *, return_item_id: str, shipment_state: "ReturnShipmentState"):
         self.return_item_id = return_item_id
         self.shipment_state = shipment_state
         super().__init__(action="setReturnShipmentState")
@@ -2292,7 +2418,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     StagedOrderUpdateAction
 ):
     address: "Address"
-    shipping_method_name: "str"
+    shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -2301,7 +2427,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
         self,
         *,
         address: "Address",
-        shipping_method_name: "str",
+        shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
@@ -2472,20 +2598,20 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
 
 
 class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
-    custom_line_item_id: "str"
-    quantity: "int"
+    custom_line_item_id: str
+    quantity: int
     from_state: "StateResourceIdentifier"
     to_state: "StateResourceIdentifier"
-    actual_transition_date: typing.Optional["datetime.datetime"]
+    actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
-        quantity: "int",
+        custom_line_item_id: str,
+        quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
-        actual_transition_date: typing.Optional["datetime.datetime"] = None
+        actual_transition_date: typing.Optional[datetime.datetime] = None
     ):
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
@@ -2513,20 +2639,20 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
-    line_item_id: "str"
-    quantity: "int"
+    line_item_id: str
+    quantity: int
     from_state: "StateResourceIdentifier"
     to_state: "StateResourceIdentifier"
-    actual_transition_date: typing.Optional["datetime.datetime"]
+    actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
-        quantity: "int",
+        line_item_id: str,
+        quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
-        actual_transition_date: typing.Optional["datetime.datetime"] = None
+        actual_transition_date: typing.Optional[datetime.datetime] = None
     ):
         self.line_item_id = line_item_id
         self.quantity = quantity
@@ -2551,10 +2677,10 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
 
 class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
     state: "StateResourceIdentifier"
-    force: typing.Optional["bool"]
+    force: typing.Optional[bool]
 
     def __init__(
-        self, *, state: "StateResourceIdentifier", force: typing.Optional["bool"] = None
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
     ):
         self.state = state
         self.force = force
@@ -2601,15 +2727,15 @@ class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
 
 class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
     channel: "ChannelResourceIdentifier"
-    external_id: typing.Optional["str"]
-    synced_at: typing.Optional["datetime.datetime"]
+    external_id: typing.Optional[str]
+    synced_at: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
         channel: "ChannelResourceIdentifier",
-        external_id: typing.Optional["str"] = None,
-        synced_at: typing.Optional["datetime.datetime"] = None
+        external_id: typing.Optional[str] = None,
+        synced_at: typing.Optional[datetime.datetime] = None
     ):
         self.channel = channel
         self.external_id = external_id

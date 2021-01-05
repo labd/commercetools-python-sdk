@@ -12,31 +12,59 @@ if typing.TYPE_CHECKING:
     from .prices import PriceImport
     from .productvariants import Attribute
 
+__all__ = [
+    "AccessDeniedError",
+    "ConcurrentModificationError",
+    "ContentionError",
+    "DuplicateAttributeValueError",
+    "DuplicateAttributeValuesError",
+    "DuplicateFieldError",
+    "DuplicateVariantValuesError",
+    "ErrorObject",
+    "ErrorResponse",
+    "GenericError",
+    "InsufficientScopeError",
+    "InvalidCredentialsError",
+    "InvalidFieldError",
+    "InvalidInput",
+    "InvalidJsonInput",
+    "InvalidOperation",
+    "InvalidScopeError",
+    "InvalidStateTransitionError",
+    "InvalidTokenError",
+    "RequiredFieldError",
+    "ResourceCreationError",
+    "ResourceDeletionError",
+    "ResourceNotFoundError",
+    "ResourceUpdateError",
+    "VariantValues",
+]
+
 
 class ErrorResponse(_BaseType):
     """The response in case of an error."""
 
     #: The http status code of the response.
-    status_code: "int"
+    status_code: int
     #: Describes the error.
-    message: "str"
+    message: str
     #: This property is only used for OAuth2 errors.
     #: Contains the error code.
-    error: typing.Optional["str"]
+    error: typing.Optional[str]
     #: This property is only used for OAuth2 errors.
     #: Additional information to assist the client developer in
     #: understanding the error.
-    error_description: typing.Optional["str"]
+    error_description: typing.Optional[str]
     #: The errors that caused this error response.
     errors: typing.Optional[typing.List["ErrorObject"]]
 
     def __init__(
         self,
         *,
-        status_code: "int",
-        message: "str",
-        error: typing.Optional["str"] = None,
-        error_description: typing.Optional["str"] = None,
+        status_code: int,
+        message: str,
+        error: typing.Optional[str] = None,
+        error_description: typing.Optional[str] = None,
         errors: typing.Optional[typing.List["ErrorObject"]] = None
     ):
         self.status_code = status_code
@@ -61,20 +89,105 @@ class ErrorResponse(_BaseType):
 class ErrorObject(_BaseType):
     """An error."""
 
-    code: "str"
+    code: str
     #: The error's description.
-    message: "str"
+    message: str
 
-    def __init__(self, *, code: "str", message: "str"):
+    def __init__(self, *, code: str, message: str):
         self.code = code
         self.message = message
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ErrorObject":
-        from ._schemas.errors import ErrorObjectSchema
+        if data["code"] == "access_denied":
+            from ._schemas.errors import AccessDeniedErrorSchema
 
-        return ErrorObjectSchema().load(data)
+            return AccessDeniedErrorSchema().load(data)
+        if data["code"] == "invalid_scope":
+            from ._schemas.errors import InvalidScopeErrorSchema
+
+            return InvalidScopeErrorSchema().load(data)
+        if data["code"] == "InvalidOperation":
+            from ._schemas.errors import InvalidOperationSchema
+
+            return InvalidOperationSchema().load(data)
+        if data["code"] == "DuplicateAttributeValue":
+            from ._schemas.errors import DuplicateAttributeValueErrorSchema
+
+            return DuplicateAttributeValueErrorSchema().load(data)
+        if data["code"] == "DuplicateAttributeValues":
+            from ._schemas.errors import DuplicateAttributeValuesErrorSchema
+
+            return DuplicateAttributeValuesErrorSchema().load(data)
+        if data["code"] == "DuplicateField":
+            from ._schemas.errors import DuplicateFieldErrorSchema
+
+            return DuplicateFieldErrorSchema().load(data)
+        if data["code"] == "DuplicateVariantValues":
+            from ._schemas.errors import DuplicateVariantValuesErrorSchema
+
+            return DuplicateVariantValuesErrorSchema().load(data)
+        if data["code"] == "insufficient_scope":
+            from ._schemas.errors import InsufficientScopeErrorSchema
+
+            return InsufficientScopeErrorSchema().load(data)
+        if data["code"] == "InvalidCredentials":
+            from ._schemas.errors import InvalidCredentialsErrorSchema
+
+            return InvalidCredentialsErrorSchema().load(data)
+        if data["code"] == "invalid_token":
+            from ._schemas.errors import InvalidTokenErrorSchema
+
+            return InvalidTokenErrorSchema().load(data)
+        if data["code"] == "InvalidField":
+            from ._schemas.errors import InvalidFieldErrorSchema
+
+            return InvalidFieldErrorSchema().load(data)
+        if data["code"] == "InvalidJsonInput":
+            from ._schemas.errors import InvalidJsonInputSchema
+
+            return InvalidJsonInputSchema().load(data)
+        if data["code"] == "InvalidInput":
+            from ._schemas.errors import InvalidInputSchema
+
+            return InvalidInputSchema().load(data)
+        if data["code"] == "ResourceNotFound":
+            from ._schemas.errors import ResourceNotFoundErrorSchema
+
+            return ResourceNotFoundErrorSchema().load(data)
+        if data["code"] == "ResourceCreation":
+            from ._schemas.errors import ResourceCreationErrorSchema
+
+            return ResourceCreationErrorSchema().load(data)
+        if data["code"] == "ResourceUpdate":
+            from ._schemas.errors import ResourceUpdateErrorSchema
+
+            return ResourceUpdateErrorSchema().load(data)
+        if data["code"] == "ResourceDeletion":
+            from ._schemas.errors import ResourceDeletionErrorSchema
+
+            return ResourceDeletionErrorSchema().load(data)
+        if data["code"] == "RequiredField":
+            from ._schemas.errors import RequiredFieldErrorSchema
+
+            return RequiredFieldErrorSchema().load(data)
+        if data["code"] == "InvalidTransition":
+            from ._schemas.errors import InvalidStateTransitionErrorSchema
+
+            return InvalidStateTransitionErrorSchema().load(data)
+        if data["code"] == "ConcurrentModification":
+            from ._schemas.errors import ConcurrentModificationErrorSchema
+
+            return ConcurrentModificationErrorSchema().load(data)
+        if data["code"] == "Contention":
+            from ._schemas.errors import ContentionErrorSchema
+
+            return ContentionErrorSchema().load(data)
+        if data["code"] == "Generic":
+            from ._schemas.errors import GenericErrorSchema
+
+            return GenericErrorSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.errors import ErrorObjectSchema
@@ -83,7 +196,7 @@ class ErrorObject(_BaseType):
 
 
 class AccessDeniedError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="access_denied")
 
@@ -102,7 +215,7 @@ class AccessDeniedError(ErrorObject):
 class InvalidScopeError(ErrorObject):
     """The requested scope is invalid, unknown, malformed, or exceeds the scope granted by the resource owner."""
 
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="invalid_scope")
 
@@ -124,7 +237,7 @@ class InvalidOperation(ErrorObject):
 
     """
 
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidOperation")
 
@@ -146,7 +259,7 @@ class DuplicateAttributeValueError(ErrorObject):
     #: The conflicting attribute.
     attribute: "Attribute"
 
-    def __init__(self, *, message: "str", attribute: "Attribute"):
+    def __init__(self, *, message: str, attribute: "Attribute"):
         self.attribute = attribute
         super().__init__(message=message, code="DuplicateAttributeValue")
 
@@ -169,7 +282,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 
     attributes: typing.List["Attribute"]
 
-    def __init__(self, *, message: "str", attributes: typing.List["Attribute"]):
+    def __init__(self, *, message: str, attributes: typing.List["Attribute"]):
         self.attributes = attributes
         super().__init__(message=message, code="DuplicateAttributeValues")
 
@@ -191,16 +304,16 @@ class DuplicateFieldError(ErrorObject):
     """A value for a field conflicts with an existing duplicate value."""
 
     #: The name of the field.
-    field: typing.Optional["str"]
+    field: typing.Optional[str]
     #: The offending duplicate value.
-    duplicate_value: typing.Optional["any"]
+    duplicate_value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        message: "str",
-        field: typing.Optional["str"] = None,
-        duplicate_value: typing.Optional["any"] = None
+        message: str,
+        field: typing.Optional[str] = None,
+        duplicate_value: typing.Optional[typing.Any] = None
     ):
         self.field = field
         self.duplicate_value = duplicate_value
@@ -227,7 +340,7 @@ class DuplicateVariantValuesError(ErrorObject):
     #: The offending variant values.
     variant_values: "VariantValues"
 
-    def __init__(self, *, message: "str", variant_values: "VariantValues"):
+    def __init__(self, *, message: str, variant_values: "VariantValues"):
         self.variant_values = variant_values
         super().__init__(message=message, code="DuplicateVariantValues")
 
@@ -246,14 +359,14 @@ class DuplicateVariantValuesError(ErrorObject):
 
 
 class VariantValues(_BaseType):
-    sku: typing.Optional["str"]
+    sku: typing.Optional[str]
     prices: typing.List["PriceImport"]
     attributes: typing.List["Attribute"]
 
     def __init__(
         self,
         *,
-        sku: typing.Optional["str"] = None,
+        sku: typing.Optional[str] = None,
         prices: typing.List["PriceImport"],
         attributes: typing.List["Attribute"]
     ):
@@ -275,7 +388,7 @@ class VariantValues(_BaseType):
 
 
 class InsufficientScopeError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="insufficient_scope")
 
@@ -294,7 +407,7 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidCredentials")
 
@@ -313,7 +426,7 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="invalid_token")
 
@@ -333,19 +446,19 @@ class InvalidFieldError(ErrorObject):
     """A field has an invalid value."""
 
     #: The name of the field.
-    field: "str"
+    field: str
     #: The invalid value.
-    invalid_value: "any"
+    invalid_value: typing.Any
     #: A fixed set of allowed values for the field, if any.
-    allowed_values: typing.Optional[typing.List["any"]]
+    allowed_values: typing.Optional[typing.List["typing.Any"]]
 
     def __init__(
         self,
         *,
-        message: "str",
-        field: "str",
-        invalid_value: "any",
-        allowed_values: typing.Optional[typing.List["any"]] = None
+        message: str,
+        field: str,
+        invalid_value: typing.Any,
+        allowed_values: typing.Optional[typing.List["typing.Any"]] = None
     ):
         self.field = field
         self.invalid_value = invalid_value
@@ -371,7 +484,7 @@ class InvalidJsonInput(ErrorObject):
 
     """
 
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidJsonInput")
 
@@ -393,7 +506,7 @@ class InvalidInput(ErrorObject):
 
     """
 
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidInput")
 
@@ -410,9 +523,9 @@ class InvalidInput(ErrorObject):
 
 
 class ResourceNotFoundError(ErrorObject):
-    resource: typing.Optional["any"]
+    resource: typing.Optional[typing.Any]
 
-    def __init__(self, *, message: "str", resource: typing.Optional["any"] = None):
+    def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
         super().__init__(message=message, code="ResourceNotFound")
 
@@ -429,9 +542,9 @@ class ResourceNotFoundError(ErrorObject):
 
 
 class ResourceCreationError(ErrorObject):
-    resource: typing.Optional["any"]
+    resource: typing.Optional[typing.Any]
 
-    def __init__(self, *, message: "str", resource: typing.Optional["any"] = None):
+    def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
         super().__init__(message=message, code="ResourceCreation")
 
@@ -448,9 +561,9 @@ class ResourceCreationError(ErrorObject):
 
 
 class ResourceUpdateError(ErrorObject):
-    resource: typing.Optional["any"]
+    resource: typing.Optional[typing.Any]
 
-    def __init__(self, *, message: "str", resource: typing.Optional["any"] = None):
+    def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
         super().__init__(message=message, code="ResourceUpdate")
 
@@ -467,9 +580,9 @@ class ResourceUpdateError(ErrorObject):
 
 
 class ResourceDeletionError(ErrorObject):
-    resource: typing.Optional["any"]
+    resource: typing.Optional[typing.Any]
 
-    def __init__(self, *, message: "str", resource: typing.Optional["any"] = None):
+    def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
         super().__init__(message=message, code="ResourceDeletion")
 
@@ -489,9 +602,9 @@ class RequiredFieldError(ErrorObject):
     """A required field is missing a value."""
 
     #: The name of the field.
-    field: "str"
+    field: str
 
-    def __init__(self, *, message: "str", field: "str"):
+    def __init__(self, *, message: str, field: str):
         self.field = field
         super().__init__(message=message, code="RequiredField")
 
@@ -516,7 +629,7 @@ class InvalidStateTransitionError(ErrorObject):
     def __init__(
         self,
         *,
-        message: "str",
+        message: str,
         current_state: "ProcessingState",
         new_state: "ProcessingState"
     ):
@@ -546,19 +659,19 @@ class ConcurrentModificationError(ErrorObject):
     """
 
     #: The version specified in the failed request.
-    specified_version: typing.Optional["int"]
+    specified_version: typing.Optional[int]
     #: The current version of the resource.
-    current_version: "int"
+    current_version: int
     #: The conflicted resource.
-    conflicted_resource: typing.Optional["any"]
+    conflicted_resource: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        message: "str",
-        specified_version: typing.Optional["int"] = None,
-        current_version: "int",
-        conflicted_resource: typing.Optional["any"] = None
+        message: str,
+        specified_version: typing.Optional[int] = None,
+        current_version: int,
+        conflicted_resource: typing.Optional[typing.Any] = None
     ):
         self.specified_version = specified_version
         self.current_version = current_version
@@ -580,7 +693,7 @@ class ConcurrentModificationError(ErrorObject):
 
 
 class ContentionError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="Contention")
 
@@ -597,7 +710,7 @@ class ContentionError(ErrorObject):
 
 
 class GenericError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="Generic")
 

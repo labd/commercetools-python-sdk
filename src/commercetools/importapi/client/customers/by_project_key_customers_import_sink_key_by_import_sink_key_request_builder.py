@@ -9,39 +9,42 @@ from .by_project_key_customers_import_sink_key_by_import_sink_key_resource_key_b
     ByProjectKeyCustomersImportSinkKeyByImportSinkKeyResourceKeyByResourceKeyRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyCustomersImportSinkKeyByImportSinkKeyRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _import_sink_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        importSinkKey: str,
-        client: "Client",
+        project_key: str,
+        import_sink_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._import_sink_key = importSinkKey
+        self._project_key = project_key
+        self._import_sink_key = import_sink_key
         self._client = client
 
-    def resourceKeyWithResourceKeyValue(
-        self, resourceKey: str
+    def resource_key_with_resource_key_value(
+        self, resource_key: str
     ) -> ByProjectKeyCustomersImportSinkKeyByImportSinkKeyResourceKeyByResourceKeyRequestBuilder:
         return ByProjectKeyCustomersImportSinkKeyByImportSinkKeyResourceKeyByResourceKeyRequestBuilder(
-            resourceKey=resourceKey,
-            projectKey=self._project_key,
-            importSinkKey=self._import_sink_key,
+            resource_key=resource_key,
+            project_key=self._project_key,
+            import_sink_key=self._import_sink_key,
             client=self._client,
         )
 
-    def importOperations(
+    def import_operations(
         self,
     ) -> ByProjectKeyCustomersImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder:
         return ByProjectKeyCustomersImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder(
-            projectKey=self._project_key,
-            importSinkKey=self._import_sink_key,
+            project_key=self._project_key,
+            import_sink_key=self._import_sink_key,
             client=self._client,
         )
 
@@ -49,6 +52,7 @@ class ByProjectKeyCustomersImportSinkKeyByImportSinkKeyRequestBuilder:
         self, body: "CustomerImportRequest", *, headers: typing.Dict[str, str] = None
     ) -> "ImportResponse":
         """Creates import request for creating new customers or updating existing ones."""
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/customers/importSinkKey={self._import_sink_key}",
             params={},

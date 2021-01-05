@@ -13,7 +13,7 @@ from ... import models
 
 
 # Marshmallow Schemas
-class ImageSearchResponseSchema(marshmallow.Schema):
+class ImageSearchResponseSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Float(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -34,7 +34,7 @@ class ImageSearchResponseSchema(marshmallow.Schema):
         return models.ImageSearchResponse(**data)
 
 
-class ResultItemSchema(marshmallow.Schema):
+class ResultItemSchema(helpers.BaseSchema):
     image_url = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="imageUrl"
     )

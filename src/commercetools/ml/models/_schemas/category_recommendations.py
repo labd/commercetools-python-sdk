@@ -13,7 +13,7 @@ from ... import models
 
 
 # Marshmallow Schemas
-class ProjectCategoryRecommendationSchema(marshmallow.Schema):
+class ProjectCategoryRecommendationSchema(helpers.BaseSchema):
     category = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CategoryReferenceSchema"),
         allow_none=True,
@@ -32,12 +32,18 @@ class ProjectCategoryRecommendationSchema(marshmallow.Schema):
         return models.ProjectCategoryRecommendation(**data)
 
 
-class ProjectCategoryRecommendationMetaSchema(marshmallow.Schema):
+class ProjectCategoryRecommendationMetaSchema(helpers.BaseSchema):
     product_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productName",
     )
     product_image_url = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productImageUrl"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productImageUrl",
     )
     general_category_names = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
@@ -55,7 +61,7 @@ class ProjectCategoryRecommendationMetaSchema(marshmallow.Schema):
         return models.ProjectCategoryRecommendationMeta(**data)
 
 
-class ProjectCategoryRecommendationPagedQueryResponseSchema(marshmallow.Schema):
+class ProjectCategoryRecommendationPagedQueryResponseSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)

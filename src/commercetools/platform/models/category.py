@@ -24,6 +24,38 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "Category",
+    "CategoryAddAssetAction",
+    "CategoryChangeAssetNameAction",
+    "CategoryChangeAssetOrderAction",
+    "CategoryChangeNameAction",
+    "CategoryChangeOrderHintAction",
+    "CategoryChangeParentAction",
+    "CategoryChangeSlugAction",
+    "CategoryDraft",
+    "CategoryPagedQueryResponse",
+    "CategoryReference",
+    "CategoryRemoveAssetAction",
+    "CategoryResourceIdentifier",
+    "CategorySetAssetCustomFieldAction",
+    "CategorySetAssetCustomTypeAction",
+    "CategorySetAssetDescriptionAction",
+    "CategorySetAssetKeyAction",
+    "CategorySetAssetSourcesAction",
+    "CategorySetAssetTagsAction",
+    "CategorySetCustomFieldAction",
+    "CategorySetCustomTypeAction",
+    "CategorySetDescriptionAction",
+    "CategorySetExternalIdAction",
+    "CategorySetKeyAction",
+    "CategorySetMetaDescriptionAction",
+    "CategorySetMetaKeywordsAction",
+    "CategorySetMetaTitleAction",
+    "CategoryUpdate",
+    "CategoryUpdateAction",
+]
+
 
 class Category(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -40,8 +72,8 @@ class Category(BaseResource):
     #: A category that is the parent of this category in the category tree.
     parent: typing.Optional["CategoryReference"]
     #: An attribute as base for a custom category order in one level.
-    order_hint: "str"
-    external_id: typing.Optional["str"]
+    order_hint: str
+    external_id: typing.Optional[str]
     meta_title: typing.Optional["LocalizedString"]
     meta_description: typing.Optional["LocalizedString"]
     meta_keywords: typing.Optional["LocalizedString"]
@@ -49,15 +81,15 @@ class Category(BaseResource):
     #: Can be used to store images, icons or movies related to this category.
     assets: typing.Optional[typing.List["Asset"]]
     #: User-specific unique identifier for the category.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: "LocalizedString",
@@ -65,14 +97,14 @@ class Category(BaseResource):
         description: typing.Optional["LocalizedString"] = None,
         ancestors: typing.List["CategoryReference"],
         parent: typing.Optional["CategoryReference"] = None,
-        order_hint: "str",
-        external_id: typing.Optional["str"] = None,
+        order_hint: str,
+        external_id: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         custom: typing.Optional["CustomFields"] = None,
         assets: typing.Optional[typing.List["Asset"]] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -121,8 +153,8 @@ class CategoryDraft(_BaseType):
     parent: typing.Optional["CategoryResourceIdentifier"]
     #: An attribute as base for a custom category order in one level.
     #: A random value will be assigned by API if not set.
-    order_hint: typing.Optional["str"]
-    external_id: typing.Optional["str"]
+    order_hint: typing.Optional[str]
+    external_id: typing.Optional[str]
     meta_title: typing.Optional["LocalizedString"]
     meta_description: typing.Optional["LocalizedString"]
     meta_keywords: typing.Optional["LocalizedString"]
@@ -131,7 +163,7 @@ class CategoryDraft(_BaseType):
     assets: typing.Optional[typing.List["AssetDraft"]]
     #: User-defined unique identifier for the category.
     #: Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
@@ -140,14 +172,14 @@ class CategoryDraft(_BaseType):
         slug: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         parent: typing.Optional["CategoryResourceIdentifier"] = None,
-        order_hint: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None,
+        order_hint: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         assets: typing.Optional[typing.List["AssetDraft"]] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.name = name
         self.slug = slug
@@ -176,19 +208,19 @@ class CategoryDraft(_BaseType):
 
 
 class CategoryPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Category"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Category"]
     ):
         self.limit = limit
@@ -215,7 +247,7 @@ class CategoryPagedQueryResponse(_BaseType):
 class CategoryReference(Reference):
     obj: typing.Optional["Category"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Category"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Category"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.CATEGORY)
 
@@ -233,7 +265,7 @@ class CategoryReference(Reference):
 
 class CategoryResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CATEGORY)
@@ -253,10 +285,10 @@ class CategoryResourceIdentifier(ResourceIdentifier):
 
 
 class CategoryUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["CategoryUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["CategoryUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["CategoryUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -274,17 +306,102 @@ class CategoryUpdate(_BaseType):
 
 
 class CategoryUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CategoryUpdateAction":
-        from ._schemas.category import CategoryUpdateActionSchema
+        if data["action"] == "addAsset":
+            from ._schemas.category import CategoryAddAssetActionSchema
 
-        return CategoryUpdateActionSchema().load(data)
+            return CategoryAddAssetActionSchema().load(data)
+        if data["action"] == "changeAssetName":
+            from ._schemas.category import CategoryChangeAssetNameActionSchema
+
+            return CategoryChangeAssetNameActionSchema().load(data)
+        if data["action"] == "changeAssetOrder":
+            from ._schemas.category import CategoryChangeAssetOrderActionSchema
+
+            return CategoryChangeAssetOrderActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.category import CategoryChangeNameActionSchema
+
+            return CategoryChangeNameActionSchema().load(data)
+        if data["action"] == "changeOrderHint":
+            from ._schemas.category import CategoryChangeOrderHintActionSchema
+
+            return CategoryChangeOrderHintActionSchema().load(data)
+        if data["action"] == "changeParent":
+            from ._schemas.category import CategoryChangeParentActionSchema
+
+            return CategoryChangeParentActionSchema().load(data)
+        if data["action"] == "changeSlug":
+            from ._schemas.category import CategoryChangeSlugActionSchema
+
+            return CategoryChangeSlugActionSchema().load(data)
+        if data["action"] == "removeAsset":
+            from ._schemas.category import CategoryRemoveAssetActionSchema
+
+            return CategoryRemoveAssetActionSchema().load(data)
+        if data["action"] == "setAssetCustomField":
+            from ._schemas.category import CategorySetAssetCustomFieldActionSchema
+
+            return CategorySetAssetCustomFieldActionSchema().load(data)
+        if data["action"] == "setAssetCustomType":
+            from ._schemas.category import CategorySetAssetCustomTypeActionSchema
+
+            return CategorySetAssetCustomTypeActionSchema().load(data)
+        if data["action"] == "setAssetDescription":
+            from ._schemas.category import CategorySetAssetDescriptionActionSchema
+
+            return CategorySetAssetDescriptionActionSchema().load(data)
+        if data["action"] == "setAssetKey":
+            from ._schemas.category import CategorySetAssetKeyActionSchema
+
+            return CategorySetAssetKeyActionSchema().load(data)
+        if data["action"] == "setAssetSources":
+            from ._schemas.category import CategorySetAssetSourcesActionSchema
+
+            return CategorySetAssetSourcesActionSchema().load(data)
+        if data["action"] == "setAssetTags":
+            from ._schemas.category import CategorySetAssetTagsActionSchema
+
+            return CategorySetAssetTagsActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.category import CategorySetCustomFieldActionSchema
+
+            return CategorySetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.category import CategorySetCustomTypeActionSchema
+
+            return CategorySetCustomTypeActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.category import CategorySetDescriptionActionSchema
+
+            return CategorySetDescriptionActionSchema().load(data)
+        if data["action"] == "setExternalId":
+            from ._schemas.category import CategorySetExternalIdActionSchema
+
+            return CategorySetExternalIdActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.category import CategorySetKeyActionSchema
+
+            return CategorySetKeyActionSchema().load(data)
+        if data["action"] == "setMetaDescription":
+            from ._schemas.category import CategorySetMetaDescriptionActionSchema
+
+            return CategorySetMetaDescriptionActionSchema().load(data)
+        if data["action"] == "setMetaKeywords":
+            from ._schemas.category import CategorySetMetaKeywordsActionSchema
+
+            return CategorySetMetaKeywordsActionSchema().load(data)
+        if data["action"] == "setMetaTitle":
+            from ._schemas.category import CategorySetMetaTitleActionSchema
+
+            return CategorySetMetaTitleActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.category import CategoryUpdateActionSchema
@@ -295,9 +412,9 @@ class CategoryUpdateAction(_BaseType):
 class CategoryAddAssetAction(CategoryUpdateAction):
     asset: "AssetDraft"
     #: When specified, the value might be `0` and should be lower than the total of the assets list.
-    position: typing.Optional["int"]
+    position: typing.Optional[int]
 
-    def __init__(self, *, asset: "AssetDraft", position: typing.Optional["int"] = None):
+    def __init__(self, *, asset: "AssetDraft", position: typing.Optional[int] = None):
         self.asset = asset
         self.position = position
         super().__init__(action="addAsset")
@@ -317,15 +434,15 @@ class CategoryAddAssetAction(CategoryUpdateAction):
 
 
 class CategoryChangeAssetNameAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         name: "LocalizedString"
     ):
         self.asset_id = asset_id
@@ -390,9 +507,9 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 
 
 class CategoryChangeOrderHintAction(CategoryUpdateAction):
-    order_hint: "str"
+    order_hint: str
 
-    def __init__(self, *, order_hint: "str"):
+    def __init__(self, *, order_hint: str):
         self.order_hint = order_hint
         super().__init__(action="changeOrderHint")
 
@@ -455,14 +572,14 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
 
 
 class CategoryRemoveAssetAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -483,18 +600,18 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
 
 
 class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
-    name: "str"
-    value: typing.Optional["any"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
-        name: "str",
-        value: typing.Optional["any"] = None
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -517,21 +634,21 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
 
 
 class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     #: If set, the custom type is set to this new value.
     #: If absent, the custom type and any existing custom fields are removed.
     type: typing.Optional["TypeResourceIdentifier"]
     #: If set, the custom fields are set to this new value.
-    fields: typing.Optional["any"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["any"] = None
+        fields: typing.Optional[object] = None
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -554,15 +671,15 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
 
 
 class CategorySetAssetDescriptionAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None
     ):
         self.asset_id = asset_id
@@ -585,12 +702,12 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetAssetKeyAction(CategoryUpdateAction):
-    asset_id: "str"
+    asset_id: str
     #: User-defined identifier for the asset.
     #: If left blank or set to `null`, the asset key is unset/removed.
-    asset_key: typing.Optional["str"]
+    asset_key: typing.Optional[str]
 
-    def __init__(self, *, asset_id: "str", asset_key: typing.Optional["str"] = None):
+    def __init__(self, *, asset_id: str, asset_key: typing.Optional[str] = None):
         self.asset_id = asset_id
         self.asset_key = asset_key
         super().__init__(action="setAssetKey")
@@ -610,15 +727,15 @@ class CategorySetAssetKeyAction(CategoryUpdateAction):
 
 
 class CategorySetAssetSourcesAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     sources: typing.List["AssetSource"]
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         sources: typing.List["AssetSource"]
     ):
         self.asset_id = asset_id
@@ -641,15 +758,15 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
 
 
 class CategorySetAssetTagsAction(CategoryUpdateAction):
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     tags: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         *,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         tags: typing.Optional[typing.List["str"]] = None
     ):
         self.asset_id = asset_id
@@ -672,10 +789,10 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
 
 
 class CategorySetCustomFieldAction(CategoryUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -747,9 +864,9 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
 
 class CategorySetExternalIdAction(CategoryUpdateAction):
     #: If not defined, the external ID is unset.
-    external_id: typing.Optional["str"]
+    external_id: typing.Optional[str]
 
-    def __init__(self, *, external_id: typing.Optional["str"] = None):
+    def __init__(self, *, external_id: typing.Optional[str] = None):
         self.external_id = external_id
         super().__init__(action="setExternalId")
 
@@ -771,9 +888,9 @@ class CategorySetKeyAction(CategoryUpdateAction):
     #: User-defined unique identifier for the category.
     #: Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 

@@ -19,14 +19,16 @@ class FieldContainerField(marshmallow.fields.Dict):
 
 
 # Marshmallow Schemas
-class CustomSchema(marshmallow.Schema):
+class CustomSchema(helpers.BaseSchema):
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.TypeKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -37,7 +39,7 @@ class CustomSchema(marshmallow.Schema):
         return models.Custom(**data)
 
 
-class CustomFieldSchema(marshmallow.Schema):
+class CustomFieldSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -255,7 +257,9 @@ class StringSetFieldSchema(CustomFieldSchema):
 
 
 class LocalizedStringSetFieldSchema(CustomFieldSchema):
-    value = helpers.LazyNestedField(allow_none=True, missing=None)
+    value = marshmallow.fields.List(
+        LocalizedStringField(allow_none=True), allow_none=True, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

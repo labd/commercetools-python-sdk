@@ -11,6 +11,20 @@ if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, ReferenceTypeId
     from .type import CustomFields, FieldContainer, TypeResourceIdentifier
 
+__all__ = [
+    "CustomerGroup",
+    "CustomerGroupChangeNameAction",
+    "CustomerGroupDraft",
+    "CustomerGroupPagedQueryResponse",
+    "CustomerGroupReference",
+    "CustomerGroupResourceIdentifier",
+    "CustomerGroupSetCustomFieldAction",
+    "CustomerGroupSetCustomTypeAction",
+    "CustomerGroupSetKeyAction",
+    "CustomerGroupUpdate",
+    "CustomerGroupUpdateAction",
+]
+
 
 class CustomerGroup(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -18,21 +32,21 @@ class CustomerGroup(BaseResource):
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the customer group.
-    key: typing.Optional["str"]
-    name: "str"
+    key: typing.Optional[str]
+    name: str
     custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
-        name: "str",
+        key: typing.Optional[str] = None,
+        name: str,
         custom: typing.Optional["CustomFields"] = None
     ):
         self.last_modified_by = last_modified_by
@@ -61,15 +75,15 @@ class CustomerGroup(BaseResource):
 
 class CustomerGroupDraft(_BaseType):
     #: User-specific unique identifier for the customer group.
-    key: typing.Optional["str"]
-    group_name: "str"
+    key: typing.Optional[str]
+    group_name: str
     custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
-        group_name: "str",
+        key: typing.Optional[str] = None,
+        group_name: str,
         custom: typing.Optional["CustomFields"] = None
     ):
         self.key = key
@@ -90,19 +104,19 @@ class CustomerGroupDraft(_BaseType):
 
 
 class CustomerGroupPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["CustomerGroup"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["CustomerGroup"]
     ):
         self.limit = limit
@@ -129,7 +143,7 @@ class CustomerGroupPagedQueryResponse(_BaseType):
 class CustomerGroupReference(Reference):
     obj: typing.Optional["CustomerGroup"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["CustomerGroup"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["CustomerGroup"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.CUSTOMER_GROUP)
 
@@ -149,7 +163,7 @@ class CustomerGroupReference(Reference):
 
 class CustomerGroupResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CUSTOMER_GROUP)
@@ -169,11 +183,11 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
 
 
 class CustomerGroupUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["CustomerGroupUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["CustomerGroupUpdateAction"]
+        self, *, version: int, actions: typing.List["CustomerGroupUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -192,9 +206,9 @@ class CustomerGroupUpdate(_BaseType):
 
 
 class CustomerGroupUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -202,9 +216,22 @@ class CustomerGroupUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "CustomerGroupUpdateAction":
-        from ._schemas.customer_group import CustomerGroupUpdateActionSchema
+        if data["action"] == "changeName":
+            from ._schemas.customer_group import CustomerGroupChangeNameActionSchema
 
-        return CustomerGroupUpdateActionSchema().load(data)
+            return CustomerGroupChangeNameActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.customer_group import CustomerGroupSetCustomFieldActionSchema
+
+            return CustomerGroupSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.customer_group import CustomerGroupSetCustomTypeActionSchema
+
+            return CustomerGroupSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.customer_group import CustomerGroupSetKeyActionSchema
+
+            return CustomerGroupSetKeyActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.customer_group import CustomerGroupUpdateActionSchema
@@ -213,9 +240,9 @@ class CustomerGroupUpdateAction(_BaseType):
 
 
 class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="changeName")
 
@@ -234,10 +261,10 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
 
 
 class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -289,9 +316,9 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
 
 class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
     #: User-specific unique identifier for the customer group.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 

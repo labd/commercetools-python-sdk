@@ -20,6 +20,28 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "Review",
+    "ReviewDraft",
+    "ReviewPagedQueryResponse",
+    "ReviewRatingStatistics",
+    "ReviewReference",
+    "ReviewResourceIdentifier",
+    "ReviewSetAuthorNameAction",
+    "ReviewSetCustomFieldAction",
+    "ReviewSetCustomTypeAction",
+    "ReviewSetCustomerAction",
+    "ReviewSetKeyAction",
+    "ReviewSetLocaleAction",
+    "ReviewSetRatingAction",
+    "ReviewSetTargetAction",
+    "ReviewSetTextAction",
+    "ReviewSetTitleAction",
+    "ReviewTransitionStateAction",
+    "ReviewUpdate",
+    "ReviewUpdateAction",
+]
+
 
 class Review(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -27,21 +49,21 @@ class Review(BaseResource):
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the review.
-    key: typing.Optional["str"]
-    uniqueness_value: typing.Optional["str"]
-    locale: typing.Optional["str"]
-    author_name: typing.Optional["str"]
-    title: typing.Optional["str"]
-    text: typing.Optional["str"]
+    key: typing.Optional[str]
+    uniqueness_value: typing.Optional[str]
+    locale: typing.Optional[str]
+    author_name: typing.Optional[str]
+    title: typing.Optional[str]
+    text: typing.Optional[str]
     #: Identifies the target of the review.
     #: Can be a Product or a Channel
     target: typing.Optional[typing.Union["ProductReference", "ChannelReference"]]
     #: Indicates if this review is taken into account in the ratings statistics of the target.
     #: A review is per default used in the statistics, unless the review is in a state that does not have the role `ReviewIncludedInStatistics`.
     #: If the role of a State is modified after the calculation of this field, the calculation is not updated.
-    included_in_statistics: "bool"
+    included_in_statistics: bool
     #: Number between -100 and 100 included.
-    rating: typing.Optional["int"]
+    rating: typing.Optional[int]
     state: typing.Optional["StateReference"]
     #: The customer who created the review.
     customer: typing.Optional["CustomerReference"]
@@ -50,23 +72,23 @@ class Review(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
-        uniqueness_value: typing.Optional["str"] = None,
-        locale: typing.Optional["str"] = None,
-        author_name: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        text: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
+        uniqueness_value: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
+        author_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        text: typing.Optional[str] = None,
         target: typing.Optional[
             typing.Union["ProductReference", "ChannelReference"]
         ] = None,
-        included_in_statistics: "bool",
-        rating: typing.Optional["int"] = None,
+        included_in_statistics: bool,
+        rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
         custom: typing.Optional["CustomFields"] = None
@@ -106,14 +128,14 @@ class Review(BaseResource):
 
 class ReviewDraft(_BaseType):
     #: User-specific unique identifier for the review.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     #: If set, this value must be unique among reviews.
     #: For example, if you want to have only one review per customer and per product, you can set the value to `customer's id` and `product's id`.
-    uniqueness_value: typing.Optional["str"]
-    locale: typing.Optional["str"]
-    author_name: typing.Optional["str"]
-    title: typing.Optional["str"]
-    text: typing.Optional["str"]
+    uniqueness_value: typing.Optional[str]
+    locale: typing.Optional[str]
+    author_name: typing.Optional[str]
+    title: typing.Optional[str]
+    text: typing.Optional[str]
     #: Identifies the target of the review.
     #: Can be a Product or a Channel
     target: typing.Optional[
@@ -124,7 +146,7 @@ class ReviewDraft(_BaseType):
     #: Rating of the targeted object, like a product.
     #: This rating can represent the number of stars, or a percentage, or a like (+1)/dislike (-1)
     #: A rating is used in the ratings statistics of the targeted object, unless the review is in a state that does not have the role `ReviewIncludedInStatistics`.
-    rating: typing.Optional["int"]
+    rating: typing.Optional[int]
     #: The customer who created the review.
     customer: typing.Optional["CustomerResourceIdentifier"]
     custom: typing.Optional["CustomFieldsDraft"]
@@ -132,17 +154,17 @@ class ReviewDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
-        uniqueness_value: typing.Optional["str"] = None,
-        locale: typing.Optional["str"] = None,
-        author_name: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        text: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
+        uniqueness_value: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
+        author_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        text: typing.Optional[str] = None,
         target: typing.Optional[
             typing.Union["ProductResourceIdentifier", "ChannelResourceIdentifier"]
         ] = None,
         state: typing.Optional["StateResourceIdentifier"] = None,
-        rating: typing.Optional["int"] = None,
+        rating: typing.Optional[int] = None,
         customer: typing.Optional["CustomerResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
@@ -172,19 +194,19 @@ class ReviewDraft(_BaseType):
 
 
 class ReviewPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Review"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Review"]
     ):
         self.limit = limit
@@ -211,26 +233,26 @@ class ReviewPagedQueryResponse(_BaseType):
 class ReviewRatingStatistics(_BaseType):
     #: Average rating of one target
     #: This number is rounded with 5 decimals.
-    average_rating: "float"
+    average_rating: float
     #: Highest rating of one target
-    highest_rating: "float"
+    highest_rating: float
     #: Lowest rating of one target
-    lowest_rating: "float"
+    lowest_rating: float
     #: Number of ratings taken into account
-    count: "int"
+    count: int
     #: The full distribution of the ratings.
     #: The keys are the different ratings and the values are the count of reviews having this rating.
     #: Only the used ratings appear in this object.
-    ratings_distribution: "any"
+    ratings_distribution: object
 
     def __init__(
         self,
         *,
-        average_rating: "float",
-        highest_rating: "float",
-        lowest_rating: "float",
-        count: "int",
-        ratings_distribution: "any"
+        average_rating: float,
+        highest_rating: float,
+        lowest_rating: float,
+        count: int,
+        ratings_distribution: object
     ):
         self.average_rating = average_rating
         self.highest_rating = highest_rating
@@ -256,7 +278,7 @@ class ReviewRatingStatistics(_BaseType):
 class ReviewReference(Reference):
     obj: typing.Optional["Review"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Review"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Review"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.REVIEW)
 
@@ -274,7 +296,7 @@ class ReviewReference(Reference):
 
 class ReviewResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.REVIEW)
@@ -294,10 +316,10 @@ class ReviewResourceIdentifier(ResourceIdentifier):
 
 
 class ReviewUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ReviewUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["ReviewUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["ReviewUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -315,17 +337,58 @@ class ReviewUpdate(_BaseType):
 
 
 class ReviewUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ReviewUpdateAction":
-        from ._schemas.review import ReviewUpdateActionSchema
+        if data["action"] == "setAuthorName":
+            from ._schemas.review import ReviewSetAuthorNameActionSchema
 
-        return ReviewUpdateActionSchema().load(data)
+            return ReviewSetAuthorNameActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.review import ReviewSetCustomFieldActionSchema
+
+            return ReviewSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.review import ReviewSetCustomTypeActionSchema
+
+            return ReviewSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setCustomer":
+            from ._schemas.review import ReviewSetCustomerActionSchema
+
+            return ReviewSetCustomerActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.review import ReviewSetKeyActionSchema
+
+            return ReviewSetKeyActionSchema().load(data)
+        if data["action"] == "setLocale":
+            from ._schemas.review import ReviewSetLocaleActionSchema
+
+            return ReviewSetLocaleActionSchema().load(data)
+        if data["action"] == "setRating":
+            from ._schemas.review import ReviewSetRatingActionSchema
+
+            return ReviewSetRatingActionSchema().load(data)
+        if data["action"] == "setTarget":
+            from ._schemas.review import ReviewSetTargetActionSchema
+
+            return ReviewSetTargetActionSchema().load(data)
+        if data["action"] == "setText":
+            from ._schemas.review import ReviewSetTextActionSchema
+
+            return ReviewSetTextActionSchema().load(data)
+        if data["action"] == "setTitle":
+            from ._schemas.review import ReviewSetTitleActionSchema
+
+            return ReviewSetTitleActionSchema().load(data)
+        if data["action"] == "transitionState":
+            from ._schemas.review import ReviewTransitionStateActionSchema
+
+            return ReviewTransitionStateActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.review import ReviewUpdateActionSchema
@@ -335,9 +398,9 @@ class ReviewUpdateAction(_BaseType):
 
 class ReviewSetAuthorNameAction(ReviewUpdateAction):
     #: If `authorName` is absent or `null`, this field will be removed if it exists.
-    author_name: typing.Optional["str"]
+    author_name: typing.Optional[str]
 
-    def __init__(self, *, author_name: typing.Optional["str"] = None):
+    def __init__(self, *, author_name: typing.Optional[str] = None):
         self.author_name = author_name
         super().__init__(action="setAuthorName")
 
@@ -356,10 +419,10 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomFieldAction(ReviewUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -436,9 +499,9 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
 
 class ReviewSetKeyAction(ReviewUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -456,9 +519,9 @@ class ReviewSetKeyAction(ReviewUpdateAction):
 
 class ReviewSetLocaleAction(ReviewUpdateAction):
     #: If `locale` is absent or `null`, this field will be removed if it exists.
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
 
-    def __init__(self, *, locale: typing.Optional["str"] = None):
+    def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
         super().__init__(action="setLocale")
 
@@ -477,9 +540,9 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
 class ReviewSetRatingAction(ReviewUpdateAction):
     #: Number between -100 and 100 included.
     #: If `rating` is absent or `null`, this field will be removed if it exists.
-    rating: typing.Optional["int"]
+    rating: typing.Optional[int]
 
-    def __init__(self, *, rating: typing.Optional["int"] = None):
+    def __init__(self, *, rating: typing.Optional[int] = None):
         self.rating = rating
         super().__init__(action="setRating")
 
@@ -523,9 +586,9 @@ class ReviewSetTargetAction(ReviewUpdateAction):
 
 class ReviewSetTextAction(ReviewUpdateAction):
     #: If `text` is absent or `null`, this field will be removed if it exists.
-    text: typing.Optional["str"]
+    text: typing.Optional[str]
 
-    def __init__(self, *, text: typing.Optional["str"] = None):
+    def __init__(self, *, text: typing.Optional[str] = None):
         self.text = text
         super().__init__(action="setText")
 
@@ -543,9 +606,9 @@ class ReviewSetTextAction(ReviewUpdateAction):
 
 class ReviewSetTitleAction(ReviewUpdateAction):
     #: If `title` is absent or `null`, this field will be removed if it exists.
-    title: typing.Optional["str"]
+    title: typing.Optional[str]
 
-    def __init__(self, *, title: typing.Optional["str"] = None):
+    def __init__(self, *, title: typing.Optional[str] = None):
         self.title = title
         super().__init__(action="setTitle")
 
@@ -563,10 +626,10 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
 class ReviewTransitionStateAction(ReviewUpdateAction):
     state: "StateResourceIdentifier"
-    force: typing.Optional["bool"]
+    force: typing.Optional[bool]
 
     def __init__(
-        self, *, state: "StateResourceIdentifier", force: typing.Optional["bool"] = None
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
     ):
         self.state = state
         self.force = force

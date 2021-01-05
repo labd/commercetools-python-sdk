@@ -17,6 +17,25 @@ if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
 
+__all__ = [
+    "Store",
+    "StoreDraft",
+    "StoreKeyReference",
+    "StorePagedQueryResponse",
+    "StoreReference",
+    "StoreResourceIdentifier",
+    "StoreSetLanguagesAction",
+    "StoreSetNameAction",
+    "StoreUpdate",
+    "StoreUpdateAction",
+    "StoresAddDistributionChannelsAction",
+    "StoresAddSupplyChannelsAction",
+    "StoresRemoveDistributionChannelsAction",
+    "StoresRemoveSupplyChannelsAction",
+    "StoresSetDistributionChannelsAction",
+    "StoresSetSupplyChannelsAction",
+]
+
 
 class Store(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
@@ -24,7 +43,7 @@ class Store(BaseResource):
     #: User-specific unique identifier for the store.
     #: The `key` is mandatory and immutable.
     #: It is used to reference the store.
-    key: "str"
+    key: str
     #: The name of the store
     name: typing.Optional["LocalizedString"]
     languages: typing.Optional[typing.List["str"]]
@@ -36,13 +55,13 @@ class Store(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: "str",
+        key: str,
         name: typing.Optional["LocalizedString"] = None,
         languages: typing.Optional[typing.List["str"]] = None,
         distribution_channels: typing.List["ChannelReference"],
@@ -78,7 +97,7 @@ class StoreDraft(_BaseType):
     #: User-specific unique identifier for the store.
     #: The `key` is mandatory and immutable.
     #: It is used to reference the store.
-    key: "str"
+    key: str
     #: The name of the store
     name: "LocalizedString"
     languages: typing.Optional[typing.List["str"]]
@@ -90,7 +109,7 @@ class StoreDraft(_BaseType):
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         name: "LocalizedString",
         languages: typing.Optional[typing.List["str"]] = None,
         distribution_channels: typing.Optional[
@@ -120,7 +139,7 @@ class StoreDraft(_BaseType):
 
 
 class StoreKeyReference(KeyReference):
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceTypeId.STORE)
 
@@ -137,19 +156,19 @@ class StoreKeyReference(KeyReference):
 
 
 class StorePagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Store"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Store"]
     ):
         self.limit = limit
@@ -176,7 +195,7 @@ class StorePagedQueryResponse(_BaseType):
 class StoreReference(Reference):
     obj: typing.Optional["Store"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Store"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Store"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.STORE)
 
@@ -194,7 +213,7 @@ class StoreReference(Reference):
 
 class StoreResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STORE)
@@ -214,10 +233,10 @@ class StoreResourceIdentifier(ResourceIdentifier):
 
 
 class StoreUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["StoreUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["StoreUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["StoreUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -235,17 +254,46 @@ class StoreUpdate(_BaseType):
 
 
 class StoreUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StoreUpdateAction":
-        from ._schemas.store import StoreUpdateActionSchema
+        if data["action"] == "setLanguages":
+            from ._schemas.store import StoreSetLanguagesActionSchema
 
-        return StoreUpdateActionSchema().load(data)
+            return StoreSetLanguagesActionSchema().load(data)
+        if data["action"] == "setName":
+            from ._schemas.store import StoreSetNameActionSchema
+
+            return StoreSetNameActionSchema().load(data)
+        if data["action"] == "addDistributionChannel":
+            from ._schemas.store import StoresAddDistributionChannelsActionSchema
+
+            return StoresAddDistributionChannelsActionSchema().load(data)
+        if data["action"] == "addSupplyChannel":
+            from ._schemas.store import StoresAddSupplyChannelsActionSchema
+
+            return StoresAddSupplyChannelsActionSchema().load(data)
+        if data["action"] == "removeDistributionChannel":
+            from ._schemas.store import StoresRemoveDistributionChannelsActionSchema
+
+            return StoresRemoveDistributionChannelsActionSchema().load(data)
+        if data["action"] == "removeSupplyChannel":
+            from ._schemas.store import StoresRemoveSupplyChannelsActionSchema
+
+            return StoresRemoveSupplyChannelsActionSchema().load(data)
+        if data["action"] == "setDistributionChannels":
+            from ._schemas.store import StoresSetDistributionChannelsActionSchema
+
+            return StoresSetDistributionChannelsActionSchema().load(data)
+        if data["action"] == "setSupplyChannels":
+            from ._schemas.store import StoresSetSupplyChannelsActionSchema
+
+            return StoresSetSupplyChannelsActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.store import StoreUpdateActionSchema

@@ -5,22 +5,25 @@ from ..products.by_project_key_similarities_products_request_builder import (
     ByProjectKeySimilaritiesProductsRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeySimilaritiesRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
     def products(self) -> ByProjectKeySimilaritiesProductsRequestBuilder:
         return ByProjectKeySimilaritiesProductsRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )

@@ -5,25 +5,28 @@ from .by_project_key_import_summaries_import_sink_key_by_import_sink_key_request
     ByProjectKeyImportSummariesImportSinkKeyByImportSinkKeyRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyImportSummariesRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def importSinkKeyWithImportSinkKeyValue(
-        self, importSinkKey: str
+    def import_sink_key_with_import_sink_key_value(
+        self, import_sink_key: str
     ) -> ByProjectKeyImportSummariesImportSinkKeyByImportSinkKeyRequestBuilder:
         return ByProjectKeyImportSummariesImportSinkKeyByImportSinkKeyRequestBuilder(
-            importSinkKey=importSinkKey,
-            projectKey=self._project_key,
+            import_sink_key=import_sink_key,
+            project_key=self._project_key,
             client=self._client,
         )

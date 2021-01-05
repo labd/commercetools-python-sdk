@@ -16,9 +16,11 @@ from .common import LocalizedStringField
 
 
 # Marshmallow Schemas
-class ErrorByExtensionSchema(marshmallow.Schema):
+class ErrorByExtensionSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -29,7 +31,7 @@ class ErrorByExtensionSchema(marshmallow.Schema):
         return models.ErrorByExtension(**data)
 
 
-class ErrorObjectSchema(marshmallow.Schema):
+class ErrorObjectSchema(helpers.BaseSchema):
     code = marshmallow.fields.String(allow_none=True, missing=None)
     message = marshmallow.fields.String(allow_none=True, missing=None)
 
@@ -118,7 +120,10 @@ class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
 
 class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     current_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="currentVersion"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="currentVersion",
     )
 
     class Meta:
@@ -132,20 +137,37 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
 
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
     discount_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="discountCode"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="discountCode",
     )
-    reason = marshmallow.fields.String(allow_none=True, missing=None)
+    reason = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     dicount_code_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="dicountCodeId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="dicountCodeId",
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     validity_check_time = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validityCheckTime"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validityCheckTime",
     )
 
     class Meta:
@@ -207,9 +229,14 @@ class DuplicateEnumValuesErrorSchema(ErrorObjectSchema):
 
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(allow_none=True, missing=None)
+    field = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     duplicate_value = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="duplicateValue"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="duplicateValue",
     )
     conflicting_resource = helpers.Discriminator(
         allow_none=True,
@@ -261,6 +288,7 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
             "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
             "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="conflictingResource",
     )
@@ -450,13 +478,17 @@ class EnumValuesMustMatchErrorSchema(ErrorObjectSchema):
         return models.EnumValuesMustMatchError(**data)
 
 
-class ErrorResponseSchema(marshmallow.Schema):
+class ErrorResponseSchema(helpers.BaseSchema):
     status_code = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="statusCode"
     )
     message = marshmallow.fields.String(allow_none=True, missing=None)
-    error = marshmallow.fields.String(allow_none=True, missing=None)
-    error_description = marshmallow.fields.String(allow_none=True, missing=None)
+    error = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    error_description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     errors = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -623,6 +655,7 @@ class ErrorResponseSchema(marshmallow.Schema):
             },
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -637,10 +670,16 @@ class ErrorResponseSchema(marshmallow.Schema):
 
 class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
     localized_message = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedMessage"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedMessage",
     )
     extension_extra_info = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="extensionExtraInfo"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="extensionExtraInfo",
     )
     error_by_extension = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ErrorByExtensionSchema"),
@@ -664,7 +703,10 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
         allow_none=True, missing=None, data_key="extensionId"
     )
     extension_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="extensionKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="extensionKey",
     )
 
     class Meta:
@@ -678,10 +720,16 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
 
 class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
     localized_message = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedMessage"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedMessage",
     )
     extension_extra_info = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="extensionExtraInfo"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="extensionExtraInfo",
     )
     error_by_extension = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ErrorByExtensionSchema"),
@@ -778,6 +826,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
     allowed_values = marshmallow.fields.List(
         marshmallow.fields.Raw(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="allowedValues",
     )
@@ -873,12 +922,17 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="variantId"
     )
-    currency = marshmallow.fields.String(allow_none=True, missing=None)
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    currency = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -886,6 +940,7 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -921,6 +976,7 @@ class MissingRoleOnChannelErrorSchema(ErrorObjectSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     missing_role = marshmallow_enum.EnumField(
@@ -944,8 +1000,12 @@ class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
     tax_category_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="taxCategoryId"
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
-    state = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1046,7 +1106,10 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
 
 class ProjectNotConfiguredForLanguagesErrorSchema(ErrorObjectSchema):
     languages = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -1083,6 +1146,7 @@ class ReferenceExistsErrorSchema(ErrorObjectSchema):
         ReferenceTypeId,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="referencedBy",
     )
@@ -1100,8 +1164,12 @@ class ReferencedResourceNotFoundErrorSchema(ErrorObjectSchema):
     type_id = marshmallow_enum.EnumField(
         ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
     )
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1194,8 +1262,10 @@ class SyntaxErrorErrorSchema(ErrorObjectSchema):
         return models.SyntaxErrorError(**data)
 
 
-class VariantValuesSchema(marshmallow.Schema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+class VariantValuesSchema(helpers.BaseSchema):
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
         allow_none=True,

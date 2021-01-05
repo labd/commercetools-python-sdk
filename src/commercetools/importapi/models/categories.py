@@ -11,6 +11,8 @@ if typing.TYPE_CHECKING:
     from .common import Asset, CategoryKeyReference, LocalizedString
     from .customfields import Custom
 
+__all__ = ["CategoryImport"]
+
 
 class CategoryImport(ImportResource):
     """Import representation for a category."""
@@ -28,9 +30,9 @@ class CategoryImport(ImportResource):
     #: will have an `Unresolved` state.
     parent: typing.Optional["CategoryKeyReference"]
     #: Maps to `Category.orderHint`.
-    order_hint: typing.Optional["str"]
+    order_hint: typing.Optional[str]
     #: Maps to `Category.externalId`.
-    external_id: typing.Optional["str"]
+    external_id: typing.Optional[str]
     #: Maps to `Category.metaTitle`.
     meta_title: typing.Optional["LocalizedString"]
     #: Maps to `Category.metaDescription`.
@@ -44,13 +46,13 @@ class CategoryImport(ImportResource):
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         name: "LocalizedString",
         slug: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         parent: typing.Optional["CategoryKeyReference"] = None,
-        order_hint: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None,
+        order_hint: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,

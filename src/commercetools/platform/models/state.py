@@ -10,6 +10,27 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
 
+__all__ = [
+    "State",
+    "StateAddRolesAction",
+    "StateChangeInitialAction",
+    "StateChangeKeyAction",
+    "StateChangeTypeAction",
+    "StateDraft",
+    "StatePagedQueryResponse",
+    "StateReference",
+    "StateRemoveRolesAction",
+    "StateResourceIdentifier",
+    "StateRoleEnum",
+    "StateSetDescriptionAction",
+    "StateSetNameAction",
+    "StateSetRolesAction",
+    "StateSetTransitionsAction",
+    "StateTypeEnum",
+    "StateUpdate",
+    "StateUpdateAction",
+]
+
 
 class State(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -17,7 +38,7 @@ class State(BaseResource):
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
     #: A unique identifier for the state.
-    key: "str"
+    key: str
     type: "StateTypeEnum"
     #: A human-readable name of the state.
     name: typing.Optional["LocalizedString"]
@@ -25,9 +46,9 @@ class State(BaseResource):
     description: typing.Optional["LocalizedString"]
     #: A state can be declared as an initial state for any state machine.
     #: When a workflow starts, this first state must be an `initial` state.
-    initial: "bool"
+    initial: bool
     #: Builtin states are integral parts of the project that cannot be deleted nor the key can be changed.
-    built_in: "bool"
+    built_in: bool
     roles: typing.Optional[typing.List["StateRoleEnum"]]
     #: Transitions are a way to describe possible transformations of the current state to other states of the same `type` (e.g.: _Initial_ -> _Shipped_).
     #: When performing a `transitionState` update action and `transitions` is set, the currently referenced state must have a transition to the new state.
@@ -39,18 +60,18 @@ class State(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: "str",
+        key: str,
         type: "StateTypeEnum",
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        initial: "bool",
-        built_in: "bool",
+        initial: bool,
+        built_in: bool,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
         transitions: typing.Optional[typing.List["StateReference"]] = None
     ):
@@ -84,22 +105,22 @@ class State(BaseResource):
 
 
 class StateDraft(_BaseType):
-    key: "str"
+    key: str
     type: "StateTypeEnum"
     name: typing.Optional["LocalizedString"]
     description: typing.Optional["LocalizedString"]
-    initial: typing.Optional["bool"]
+    initial: typing.Optional[bool]
     roles: typing.Optional[typing.List["StateRoleEnum"]]
     transitions: typing.Optional[typing.List["StateResourceIdentifier"]]
 
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         type: "StateTypeEnum",
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        initial: typing.Optional["bool"] = None,
+        initial: typing.Optional[bool] = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
         transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
     ):
@@ -125,19 +146,19 @@ class StateDraft(_BaseType):
 
 
 class StatePagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["State"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["State"]
     ):
         self.limit = limit
@@ -164,7 +185,7 @@ class StatePagedQueryResponse(_BaseType):
 class StateReference(Reference):
     obj: typing.Optional["State"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["State"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["State"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.STATE)
 
@@ -182,7 +203,7 @@ class StateReference(Reference):
 
 class StateResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STATE)
@@ -215,10 +236,10 @@ class StateTypeEnum(enum.Enum):
 
 
 class StateUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["StateUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["StateUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["StateUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -236,17 +257,50 @@ class StateUpdate(_BaseType):
 
 
 class StateUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StateUpdateAction":
-        from ._schemas.state import StateUpdateActionSchema
+        if data["action"] == "addRoles":
+            from ._schemas.state import StateAddRolesActionSchema
 
-        return StateUpdateActionSchema().load(data)
+            return StateAddRolesActionSchema().load(data)
+        if data["action"] == "changeInitial":
+            from ._schemas.state import StateChangeInitialActionSchema
+
+            return StateChangeInitialActionSchema().load(data)
+        if data["action"] == "changeKey":
+            from ._schemas.state import StateChangeKeyActionSchema
+
+            return StateChangeKeyActionSchema().load(data)
+        if data["action"] == "changeType":
+            from ._schemas.state import StateChangeTypeActionSchema
+
+            return StateChangeTypeActionSchema().load(data)
+        if data["action"] == "removeRoles":
+            from ._schemas.state import StateRemoveRolesActionSchema
+
+            return StateRemoveRolesActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.state import StateSetDescriptionActionSchema
+
+            return StateSetDescriptionActionSchema().load(data)
+        if data["action"] == "setName":
+            from ._schemas.state import StateSetNameActionSchema
+
+            return StateSetNameActionSchema().load(data)
+        if data["action"] == "setRoles":
+            from ._schemas.state import StateSetRolesActionSchema
+
+            return StateSetRolesActionSchema().load(data)
+        if data["action"] == "setTransitions":
+            from ._schemas.state import StateSetTransitionsActionSchema
+
+            return StateSetTransitionsActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.state import StateUpdateActionSchema
@@ -274,9 +328,9 @@ class StateAddRolesAction(StateUpdateAction):
 
 
 class StateChangeInitialAction(StateUpdateAction):
-    initial: "bool"
+    initial: bool
 
-    def __init__(self, *, initial: "bool"):
+    def __init__(self, *, initial: bool):
         self.initial = initial
         super().__init__(action="changeInitial")
 
@@ -295,9 +349,9 @@ class StateChangeInitialAction(StateUpdateAction):
 
 
 class StateChangeKeyAction(StateUpdateAction):
-    key: "str"
+    key: str
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
         self.key = key
         super().__init__(action="changeKey")
 

@@ -13,7 +13,7 @@ from ... import models
 
 
 # Marshmallow Schemas
-class GeneralCategoryRecommendationSchema(marshmallow.Schema):
+class GeneralCategoryRecommendationSchema(helpers.BaseSchema):
     category_name = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="categoryName"
     )
@@ -28,7 +28,7 @@ class GeneralCategoryRecommendationSchema(marshmallow.Schema):
         return models.GeneralCategoryRecommendation(**data)
 
 
-class GeneralCategoryRecommendationPagedQueryResponseSchema(marshmallow.Schema):
+class GeneralCategoryRecommendationPagedQueryResponseSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)

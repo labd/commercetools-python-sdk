@@ -14,7 +14,7 @@ from .common import ImportResourceSchema, LocalizedStringField
 
 
 # Marshmallow Schemas
-class SearchKeywordsSchema(marshmallow.Schema):
+class SearchKeywordsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
@@ -50,7 +50,7 @@ class SearchKeywordsSchema(marshmallow.Schema):
         return data
 
 
-class SearchKeywordSchema(marshmallow.Schema):
+class SearchKeywordSchema(helpers.BaseSchema):
     text = marshmallow.fields.String(allow_none=True, missing=None)
     suggest_tokenizer = helpers.Discriminator(
         allow_none=True,
@@ -59,6 +59,7 @@ class SearchKeywordSchema(marshmallow.Schema):
             "custom": helpers.absmod(__name__, ".CustomTokenizerSchema"),
             "whitespace": helpers.absmod(__name__, ".WhitespaceTokenizerSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="suggestTokenizer",
     )
@@ -72,7 +73,7 @@ class SearchKeywordSchema(marshmallow.Schema):
         return models.SearchKeyword(**data)
 
 
-class SuggestTokenizerSchema(marshmallow.Schema):
+class SuggestTokenizerSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -118,27 +119,40 @@ class ProductImportSchema(ImportResourceSchema):
         data_key="productType",
     )
     slug = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     categories = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CategoryKeyReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaKeywords",
     )
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.TaxCategoryKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxCategory",
     )
@@ -146,6 +160,7 @@ class ProductImportSchema(ImportResourceSchema):
         nested=helpers.absmod(__name__, ".SearchKeywordsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="searchKeywords",
     )
@@ -153,9 +168,12 @@ class ProductImportSchema(ImportResourceSchema):
         nested=helpers.absmod(__name__, ".common.StateKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
-    publish = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    publish = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

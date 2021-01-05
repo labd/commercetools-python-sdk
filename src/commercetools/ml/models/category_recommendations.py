@@ -9,18 +9,22 @@ from ._abstract import _BaseType
 if typing.TYPE_CHECKING:
     from .common import CategoryReference
 
+__all__ = [
+    "ProjectCategoryRecommendation",
+    "ProjectCategoryRecommendationMeta",
+    "ProjectCategoryRecommendationPagedQueryResponse",
+]
+
 
 class ProjectCategoryRecommendation(_BaseType):
     #: A category that is recommended for a product.
     category: "CategoryReference"
     #: Probability score for the category recommendation.
-    confidence: "float"
+    confidence: float
     #: Breadcrumb path to the recommended category. This only picks up one language, not all available languages for the category. English is prioritized, but if English data is not available, an arbitrary language is selected. Do not use this to identify a category,use the category ID from the category reference instead.
-    path: "str"
+    path: str
 
-    def __init__(
-        self, *, category: "CategoryReference", confidence: "float", path: "str"
-    ):
+    def __init__(self, *, category: "CategoryReference", confidence: float, path: str):
         self.category = category
         self.confidence = confidence
         self.path = path
@@ -46,17 +50,17 @@ class ProjectCategoryRecommendation(_BaseType):
 
 class ProjectCategoryRecommendationMeta(_BaseType):
     #: The product name that was used to generate recommendations.
-    product_name: typing.Optional["str"]
+    product_name: typing.Optional[str]
     #: The product image that was used to generate recommendations.
-    product_image_url: typing.Optional["str"]
+    product_image_url: typing.Optional[str]
     #: Top 5 general categories that were used internally to generate the project-specific categories. These category names are not related to the categories defined in the project, but they provide additional information to understand the project-specific categories in the results section.
     general_category_names: typing.List["str"]
 
     def __init__(
         self,
         *,
-        product_name: typing.Optional["str"] = None,
-        product_image_url: typing.Optional["str"] = None,
+        product_name: typing.Optional[str] = None,
+        product_image_url: typing.Optional[str] = None,
         general_category_names: typing.List["str"]
     ):
         self.product_name = product_name
@@ -83,18 +87,18 @@ class ProjectCategoryRecommendationMeta(_BaseType):
 
 
 class ProjectCategoryRecommendationPagedQueryResponse(_BaseType):
-    count: "int"
-    total: "int"
-    offset: "int"
+    count: int
+    total: int
+    offset: int
     results: typing.List["ProjectCategoryRecommendation"]
     meta: "ProjectCategoryRecommendationMeta"
 
     def __init__(
         self,
         *,
-        count: "int",
-        total: "int",
-        offset: "int",
+        count: int,
+        total: int,
+        offset: int,
         results: typing.List["ProjectCategoryRecommendation"],
         meta: "ProjectCategoryRecommendationMeta"
     ):

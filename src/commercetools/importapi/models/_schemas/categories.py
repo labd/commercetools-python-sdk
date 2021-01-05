@@ -17,39 +17,59 @@ from .common import ImportResourceSchema, LocalizedStringField
 class CategoryImportSchema(ImportResourceSchema):
     name = LocalizedStringField(allow_none=True, missing=None)
     slug = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     parent = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CategoryKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     order_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderHint"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="orderHint",
     )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
     meta_title = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaTitle"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaDescription"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
-        allow_none=True, missing=None, data_key="metaKeywords"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="metaKeywords",
     )
     assets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 

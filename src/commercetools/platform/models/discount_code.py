@@ -23,6 +23,29 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "DiscountCode",
+    "DiscountCodeChangeCartDiscountsAction",
+    "DiscountCodeChangeGroupsAction",
+    "DiscountCodeChangeIsActiveAction",
+    "DiscountCodeDraft",
+    "DiscountCodePagedQueryResponse",
+    "DiscountCodeReference",
+    "DiscountCodeResourceIdentifier",
+    "DiscountCodeSetCartPredicateAction",
+    "DiscountCodeSetCustomFieldAction",
+    "DiscountCodeSetCustomTypeAction",
+    "DiscountCodeSetDescriptionAction",
+    "DiscountCodeSetMaxApplicationsAction",
+    "DiscountCodeSetMaxApplicationsPerCustomerAction",
+    "DiscountCodeSetNameAction",
+    "DiscountCodeSetValidFromAction",
+    "DiscountCodeSetValidFromAndUntilAction",
+    "DiscountCodeSetValidUntilAction",
+    "DiscountCodeUpdate",
+    "DiscountCodeUpdateAction",
+]
+
 
 class DiscountCode(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -34,51 +57,51 @@ class DiscountCode(BaseResource):
     #: Unique identifier of this discount code.
     #: This value is added to the cart
     #: to enable the related cart discounts in the cart.
-    code: "str"
+    code: str
     #: The referenced matching cart discounts can be applied to the cart once the DiscountCode is added.
     cart_discounts: typing.List["CartDiscountReference"]
     #: The discount code can only be applied to carts that match this predicate.
-    cart_predicate: typing.Optional["str"]
-    is_active: "bool"
+    cart_predicate: typing.Optional[str]
+    is_active: bool
     #: The platform will generate this array from the cart predicate.
     #: It contains the references of all the resources that are addressed in the predicate.
     references: typing.List["Reference"]
     #: The discount code can only be applied `maxApplications` times.
-    max_applications: typing.Optional["int"]
+    max_applications: typing.Optional[int]
     #: The discount code can only be applied `maxApplicationsPerCustomer` times per customer.
-    max_applications_per_customer: typing.Optional["int"]
+    max_applications_per_customer: typing.Optional[int]
     custom: typing.Optional["CustomFields"]
     #: The groups to which this discount code belong.
     groups: typing.List["str"]
     #: The time from which the discount can be applied on a cart.
     #: Before that time the code is invalid.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: The time until the discount can be applied on a cart.
     #: After that time the code is invalid.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        code: "str",
+        code: str,
         cart_discounts: typing.List["CartDiscountReference"],
-        cart_predicate: typing.Optional["str"] = None,
-        is_active: "bool",
+        cart_predicate: typing.Optional[str] = None,
+        is_active: bool,
         references: typing.List["Reference"],
-        max_applications: typing.Optional["int"] = None,
-        max_applications_per_customer: typing.Optional["int"] = None,
+        max_applications: typing.Optional[int] = None,
+        max_applications_per_customer: typing.Optional[int] = None,
         custom: typing.Optional["CustomFields"] = None,
         groups: typing.List["str"],
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -120,40 +143,40 @@ class DiscountCodeDraft(_BaseType):
     #: Unique identifier of this discount code.
     #: This value is added to the cart
     #: to enable the related cart discounts in the cart.
-    code: "str"
+    code: str
     #: The referenced matching cart discounts can be applied to the cart once the discount code is added.
     #: The number of cart discounts in a discount code is limited to **10**.
     cart_discounts: typing.List["CartDiscountResourceIdentifier"]
     #: The discount code can only be applied to carts that match this predicate.
-    cart_predicate: typing.Optional["str"]
-    is_active: typing.Optional["bool"]
-    max_applications: typing.Optional["int"]
-    max_applications_per_customer: typing.Optional["int"]
+    cart_predicate: typing.Optional[str]
+    is_active: typing.Optional[bool]
+    max_applications: typing.Optional[int]
+    max_applications_per_customer: typing.Optional[int]
     custom: typing.Optional["CustomFieldsDraft"]
     #: The groups to which this discount code shall belong to.
     groups: typing.Optional[typing.List["str"]]
     #: The time from which the discount can be applied on a cart.
     #: Before that time the code is invalid.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: The time until the discount can be applied on a cart.
     #: After that time the code is invalid.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        code: "str",
+        code: str,
         cart_discounts: typing.List["CartDiscountResourceIdentifier"],
-        cart_predicate: typing.Optional["str"] = None,
-        is_active: typing.Optional["bool"] = None,
-        max_applications: typing.Optional["int"] = None,
-        max_applications_per_customer: typing.Optional["int"] = None,
+        cart_predicate: typing.Optional[str] = None,
+        is_active: typing.Optional[bool] = None,
+        max_applications: typing.Optional[int] = None,
+        max_applications_per_customer: typing.Optional[int] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         groups: typing.Optional[typing.List["str"]] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.name = name
         self.description = description
@@ -182,19 +205,19 @@ class DiscountCodeDraft(_BaseType):
 
 
 class DiscountCodePagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["DiscountCode"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["DiscountCode"]
     ):
         self.limit = limit
@@ -221,7 +244,7 @@ class DiscountCodePagedQueryResponse(_BaseType):
 class DiscountCodeReference(Reference):
     obj: typing.Optional["DiscountCode"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["DiscountCode"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["DiscountCode"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.DISCOUNT_CODE)
 
@@ -239,7 +262,7 @@ class DiscountCodeReference(Reference):
 
 class DiscountCodeResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.DISCOUNT_CODE)
@@ -259,11 +282,11 @@ class DiscountCodeResourceIdentifier(ResourceIdentifier):
 
 
 class DiscountCodeUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["DiscountCodeUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["DiscountCodeUpdateAction"]
+        self, *, version: int, actions: typing.List["DiscountCodeUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -282,9 +305,9 @@ class DiscountCodeUpdate(_BaseType):
 
 
 class DiscountCodeUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -292,9 +315,66 @@ class DiscountCodeUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "DiscountCodeUpdateAction":
-        from ._schemas.discount_code import DiscountCodeUpdateActionSchema
+        if data["action"] == "changeCartDiscounts":
+            from ._schemas.discount_code import (
+                DiscountCodeChangeCartDiscountsActionSchema,
+            )
 
-        return DiscountCodeUpdateActionSchema().load(data)
+            return DiscountCodeChangeCartDiscountsActionSchema().load(data)
+        if data["action"] == "changeGroups":
+            from ._schemas.discount_code import DiscountCodeChangeGroupsActionSchema
+
+            return DiscountCodeChangeGroupsActionSchema().load(data)
+        if data["action"] == "changeIsActive":
+            from ._schemas.discount_code import DiscountCodeChangeIsActiveActionSchema
+
+            return DiscountCodeChangeIsActiveActionSchema().load(data)
+        if data["action"] == "setCartPredicate":
+            from ._schemas.discount_code import DiscountCodeSetCartPredicateActionSchema
+
+            return DiscountCodeSetCartPredicateActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.discount_code import DiscountCodeSetCustomFieldActionSchema
+
+            return DiscountCodeSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.discount_code import DiscountCodeSetCustomTypeActionSchema
+
+            return DiscountCodeSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.discount_code import DiscountCodeSetDescriptionActionSchema
+
+            return DiscountCodeSetDescriptionActionSchema().load(data)
+        if data["action"] == "setMaxApplications":
+            from ._schemas.discount_code import (
+                DiscountCodeSetMaxApplicationsActionSchema,
+            )
+
+            return DiscountCodeSetMaxApplicationsActionSchema().load(data)
+        if data["action"] == "setMaxApplicationsPerCustomer":
+            from ._schemas.discount_code import (
+                DiscountCodeSetMaxApplicationsPerCustomerActionSchema,
+            )
+
+            return DiscountCodeSetMaxApplicationsPerCustomerActionSchema().load(data)
+        if data["action"] == "setName":
+            from ._schemas.discount_code import DiscountCodeSetNameActionSchema
+
+            return DiscountCodeSetNameActionSchema().load(data)
+        if data["action"] == "setValidFrom":
+            from ._schemas.discount_code import DiscountCodeSetValidFromActionSchema
+
+            return DiscountCodeSetValidFromActionSchema().load(data)
+        if data["action"] == "setValidFromAndUntil":
+            from ._schemas.discount_code import (
+                DiscountCodeSetValidFromAndUntilActionSchema,
+            )
+
+            return DiscountCodeSetValidFromAndUntilActionSchema().load(data)
+        if data["action"] == "setValidUntil":
+            from ._schemas.discount_code import DiscountCodeSetValidUntilActionSchema
+
+            return DiscountCodeSetValidUntilActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.discount_code import DiscountCodeUpdateActionSchema
@@ -349,9 +429,9 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
-    is_active: "bool"
+    is_active: bool
 
-    def __init__(self, *, is_active: "bool"):
+    def __init__(self, *, is_active: bool):
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -371,9 +451,9 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
 
 class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
     #: If the `cartPredicate` parameter is not included, the field will be emptied.
-    cart_predicate: typing.Optional["str"]
+    cart_predicate: typing.Optional[str]
 
-    def __init__(self, *, cart_predicate: typing.Optional["str"] = None):
+    def __init__(self, *, cart_predicate: typing.Optional[str] = None):
         self.cart_predicate = cart_predicate
         super().__init__(action="setCartPredicate")
 
@@ -392,10 +472,10 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -469,9 +549,9 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
 
 class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
     #: If the `maxApplications` parameter is not included, the field will be emptied.
-    max_applications: typing.Optional["int"]
+    max_applications: typing.Optional[int]
 
-    def __init__(self, *, max_applications: typing.Optional["int"] = None):
+    def __init__(self, *, max_applications: typing.Optional[int] = None):
         self.max_applications = max_applications
         super().__init__(action="setMaxApplications")
 
@@ -491,9 +571,9 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
 
 class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
     #: If the `maxApplicationsPerCustomer` parameter is not included, the field will be emptied.
-    max_applications_per_customer: typing.Optional["int"]
+    max_applications_per_customer: typing.Optional[int]
 
-    def __init__(self, *, max_applications_per_customer: typing.Optional["int"] = None):
+    def __init__(self, *, max_applications_per_customer: typing.Optional[int] = None):
         self.max_applications_per_customer = max_applications_per_customer
         super().__init__(action="setMaxApplicationsPerCustomer")
 
@@ -539,9 +619,9 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
 
 class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
 
-    def __init__(self, *, valid_from: typing.Optional["datetime.datetime"] = None):
+    def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
         self.valid_from = valid_from
         super().__init__(action="setValidFrom")
 
@@ -561,15 +641,15 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
 
 class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until
@@ -591,9 +671,9 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
 
 class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
-    def __init__(self, *, valid_until: typing.Optional["datetime.datetime"] = None):
+    def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
         self.valid_until = valid_until
         super().__init__(action="setValidUntil")
 

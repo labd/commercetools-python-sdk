@@ -19,6 +19,35 @@ if typing.TYPE_CHECKING:
         TypedMoney,
     )
 
+__all__ = [
+    "ProductDiscount",
+    "ProductDiscountChangeIsActiveAction",
+    "ProductDiscountChangeNameAction",
+    "ProductDiscountChangePredicateAction",
+    "ProductDiscountChangeSortOrderAction",
+    "ProductDiscountChangeValueAction",
+    "ProductDiscountDraft",
+    "ProductDiscountMatchQuery",
+    "ProductDiscountPagedQueryResponse",
+    "ProductDiscountReference",
+    "ProductDiscountResourceIdentifier",
+    "ProductDiscountSetDescriptionAction",
+    "ProductDiscountSetKeyAction",
+    "ProductDiscountSetValidFromAction",
+    "ProductDiscountSetValidFromAndUntilAction",
+    "ProductDiscountSetValidUntilAction",
+    "ProductDiscountUpdate",
+    "ProductDiscountUpdateAction",
+    "ProductDiscountValue",
+    "ProductDiscountValueAbsolute",
+    "ProductDiscountValueAbsoluteDraft",
+    "ProductDiscountValueDraft",
+    "ProductDiscountValueExternal",
+    "ProductDiscountValueExternalDraft",
+    "ProductDiscountValueRelative",
+    "ProductDiscountValueRelativeDraft",
+]
+
 
 class ProductDiscount(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -28,46 +57,46 @@ class ProductDiscount(BaseResource):
     name: "LocalizedString"
     #: User-specific unique identifier for a product discount.
     #: Must be unique across a project.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
     value: "ProductDiscountValue"
     #: A valid ProductDiscount Predicate.
-    predicate: "str"
+    predicate: str
     #: The string contains a number between 0 and 1.
     #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
     #: A sortOrder must be unambiguous.
-    sort_order: "str"
+    sort_order: str
     #: Only active discount will be applied to product prices.
-    is_active: "bool"
+    is_active: bool
     #: The platform will generate this array from the predicate.
     #: It contains the references of all the resources that are addressed in the predicate.
     references: typing.List["Reference"]
     #: The time from which the discount should be effective.
     #: Please take Eventual Consistency into account for calculated product discount values.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: The time from which the discount should be ineffective.
     #: Please take Eventual Consistency into account for calculated undiscounted values.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: "LocalizedString",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: "ProductDiscountValue",
-        predicate: "str",
-        sort_order: "str",
-        is_active: "bool",
+        predicate: str,
+        sort_order: str,
+        is_active: bool,
         references: typing.List["Reference"],
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -105,35 +134,35 @@ class ProductDiscountDraft(_BaseType):
     #: User-specific unique identifier for a product discount.
     #: Must be unique across a project.
     #: The field can be reset using the Set Key UpdateAction
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
     value: "ProductDiscountValueDraft"
     #: A valid ProductDiscount Predicate.
-    predicate: "str"
+    predicate: str
     #: The string must contain a decimal number between 0 and 1.
     #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
-    sort_order: "str"
+    sort_order: str
     #: If set to `true` the discount will be applied to product prices.
-    is_active: "bool"
+    is_active: bool
     #: The time from which the discount should be effective.
     #: Please take Eventual Consistency into account for calculated product discount values.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: The time from which the discount should be effective.
     #: Please take Eventual Consistency into account for calculated undiscounted values.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
         name: "LocalizedString",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: "ProductDiscountValueDraft",
-        predicate: "str",
-        sort_order: "str",
-        is_active: "bool",
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        predicate: str,
+        sort_order: str,
+        is_active: bool,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.name = name
         self.key = key
@@ -159,18 +188,13 @@ class ProductDiscountDraft(_BaseType):
 
 
 class ProductDiscountMatchQuery(_BaseType):
-    product_id: "str"
-    variant_id: "int"
-    staged: "bool"
+    product_id: str
+    variant_id: int
+    staged: bool
     price: "QueryPrice"
 
     def __init__(
-        self,
-        *,
-        product_id: "str",
-        variant_id: "int",
-        staged: "bool",
-        price: "QueryPrice"
+        self, *, product_id: str, variant_id: int, staged: bool, price: "QueryPrice"
     ):
         self.product_id = product_id
         self.variant_id = variant_id
@@ -193,19 +217,19 @@ class ProductDiscountMatchQuery(_BaseType):
 
 
 class ProductDiscountPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["ProductDiscount"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["ProductDiscount"]
     ):
         self.limit = limit
@@ -232,7 +256,7 @@ class ProductDiscountPagedQueryResponse(_BaseType):
 class ProductDiscountReference(Reference):
     obj: typing.Optional["ProductDiscount"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["ProductDiscount"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["ProductDiscount"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_DISCOUNT)
 
@@ -252,7 +276,7 @@ class ProductDiscountReference(Reference):
 
 class ProductDiscountResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_DISCOUNT)
@@ -272,11 +296,11 @@ class ProductDiscountResourceIdentifier(ResourceIdentifier):
 
 
 class ProductDiscountUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ProductDiscountUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["ProductDiscountUpdateAction"]
+        self, *, version: int, actions: typing.List["ProductDiscountUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -295,9 +319,9 @@ class ProductDiscountUpdate(_BaseType):
 
 
 class ProductDiscountUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -305,9 +329,62 @@ class ProductDiscountUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ProductDiscountUpdateAction":
-        from ._schemas.product_discount import ProductDiscountUpdateActionSchema
+        if data["action"] == "changeIsActive":
+            from ._schemas.product_discount import (
+                ProductDiscountChangeIsActiveActionSchema,
+            )
 
-        return ProductDiscountUpdateActionSchema().load(data)
+            return ProductDiscountChangeIsActiveActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.product_discount import ProductDiscountChangeNameActionSchema
+
+            return ProductDiscountChangeNameActionSchema().load(data)
+        if data["action"] == "changePredicate":
+            from ._schemas.product_discount import (
+                ProductDiscountChangePredicateActionSchema,
+            )
+
+            return ProductDiscountChangePredicateActionSchema().load(data)
+        if data["action"] == "changeSortOrder":
+            from ._schemas.product_discount import (
+                ProductDiscountChangeSortOrderActionSchema,
+            )
+
+            return ProductDiscountChangeSortOrderActionSchema().load(data)
+        if data["action"] == "changeValue":
+            from ._schemas.product_discount import (
+                ProductDiscountChangeValueActionSchema,
+            )
+
+            return ProductDiscountChangeValueActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.product_discount import (
+                ProductDiscountSetDescriptionActionSchema,
+            )
+
+            return ProductDiscountSetDescriptionActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.product_discount import ProductDiscountSetKeyActionSchema
+
+            return ProductDiscountSetKeyActionSchema().load(data)
+        if data["action"] == "setValidFrom":
+            from ._schemas.product_discount import (
+                ProductDiscountSetValidFromActionSchema,
+            )
+
+            return ProductDiscountSetValidFromActionSchema().load(data)
+        if data["action"] == "setValidFromAndUntil":
+            from ._schemas.product_discount import (
+                ProductDiscountSetValidFromAndUntilActionSchema,
+            )
+
+            return ProductDiscountSetValidFromAndUntilActionSchema().load(data)
+        if data["action"] == "setValidUntil":
+            from ._schemas.product_discount import (
+                ProductDiscountSetValidUntilActionSchema,
+            )
+
+            return ProductDiscountSetValidUntilActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product_discount import ProductDiscountUpdateActionSchema
@@ -316,17 +393,26 @@ class ProductDiscountUpdateAction(_BaseType):
 
 
 class ProductDiscountValue(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProductDiscountValue":
-        from ._schemas.product_discount import ProductDiscountValueSchema
+        if data["type"] == "absolute":
+            from ._schemas.product_discount import ProductDiscountValueAbsoluteSchema
 
-        return ProductDiscountValueSchema().load(data)
+            return ProductDiscountValueAbsoluteSchema().load(data)
+        if data["type"] == "external":
+            from ._schemas.product_discount import ProductDiscountValueExternalSchema
+
+            return ProductDiscountValueExternalSchema().load(data)
+        if data["type"] == "relative":
+            from ._schemas.product_discount import ProductDiscountValueRelativeSchema
+
+            return ProductDiscountValueRelativeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product_discount import ProductDiscountValueSchema
@@ -356,9 +442,9 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 
 
 class ProductDiscountValueDraft(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
@@ -366,9 +452,24 @@ class ProductDiscountValueDraft(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ProductDiscountValueDraft":
-        from ._schemas.product_discount import ProductDiscountValueDraftSchema
+        if data["type"] == "absolute":
+            from ._schemas.product_discount import (
+                ProductDiscountValueAbsoluteDraftSchema,
+            )
 
-        return ProductDiscountValueDraftSchema().load(data)
+            return ProductDiscountValueAbsoluteDraftSchema().load(data)
+        if data["type"] == "external":
+            from ._schemas.product_discount import (
+                ProductDiscountValueExternalDraftSchema,
+            )
+
+            return ProductDiscountValueExternalDraftSchema().load(data)
+        if data["type"] == "relative":
+            from ._schemas.product_discount import (
+                ProductDiscountValueRelativeDraftSchema,
+            )
+
+            return ProductDiscountValueRelativeDraftSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product_discount import ProductDiscountValueDraftSchema
@@ -436,9 +537,9 @@ class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueRelative(ProductDiscountValue):
-    permyriad: "int"
+    permyriad: int
 
-    def __init__(self, *, permyriad: "int"):
+    def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -457,9 +558,9 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 
 
 class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
-    permyriad: "int"
+    permyriad: int
 
-    def __init__(self, *, permyriad: "int"):
+    def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -478,9 +579,9 @@ class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
-    is_active: "bool"
+    is_active: bool
 
-    def __init__(self, *, is_active: "bool"):
+    def __init__(self, *, is_active: bool):
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -521,9 +622,9 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 
 class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
     #: A valid ProductDiscount Predicate.
-    predicate: "str"
+    predicate: str
 
-    def __init__(self, *, predicate: "str"):
+    def __init__(self, *, predicate: str):
         self.predicate = predicate
         super().__init__(action="changePredicate")
 
@@ -548,9 +649,9 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
     #: The string must contain a number between 0 and 1.
     #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
-    sort_order: "str"
+    sort_order: str
 
-    def __init__(self, *, sort_order: "str"):
+    def __init__(self, *, sort_order: str):
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -617,9 +718,9 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
 class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
     #: The key to set.
     #: If you provide a `null` value or do not set this field at all, the existing `key` field is removed.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -640,9 +741,9 @@ class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
 class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
     #: The time from which the discount should be effective.
     #: Please take Eventual Consistency into account for calculated product discount values.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
 
-    def __init__(self, *, valid_from: typing.Optional["datetime.datetime"] = None):
+    def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
         self.valid_from = valid_from
         super().__init__(action="setValidFrom")
 
@@ -661,16 +762,16 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: The timeframe for which the discount should be effective.
     #: Please take Eventual Consistency into account for calculated undiscounted values.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until
@@ -697,9 +798,9 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
 class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
     #: The time from which the discount should be ineffective.
     #: Please take Eventual Consistency into account for calculated undiscounted values.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
-    def __init__(self, *, valid_until: typing.Optional["datetime.datetime"] = None):
+    def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
         self.valid_until = valid_until
         super().__init__(action="setValidUntil")
 

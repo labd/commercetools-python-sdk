@@ -18,6 +18,35 @@ if typing.TYPE_CHECKING:
         TypedMoney,
     )
 
+__all__ = [
+    "Attribute",
+    "Attributes",
+    "BooleanAttribute",
+    "BooleanSetAttribute",
+    "DateAttribute",
+    "DateSetAttribute",
+    "DateTimeAttribute",
+    "DateTimeSetAttribute",
+    "EnumAttribute",
+    "EnumSetAttribute",
+    "LocalizableEnumAttribute",
+    "LocalizableEnumSetAttribute",
+    "LocalizableTextAttribute",
+    "LocalizableTextSetAttribute",
+    "MoneyAttribute",
+    "MoneySetAttribute",
+    "NumberAttribute",
+    "NumberSetAttribute",
+    "ProductVariantImport",
+    "ProductVariantPatch",
+    "ReferenceAttribute",
+    "ReferenceSetAttribute",
+    "TextAttribute",
+    "TextSetAttribute",
+    "TimeAttribute",
+    "TimeSetAttribute",
+]
+
 
 class Attribute(_BaseType):
     """This type represents the value of an attribute of a product variant.
@@ -28,19 +57,104 @@ class Attribute(_BaseType):
     #: The name of this attribute must match a name of the product types attribute definitions.
     #: The name is required if this type is used in a product variant and must not be set when
     #: used in a product variant patch.
-    name: typing.Optional["str"]
-    type: "str"
+    name: typing.Optional[str]
+    type: str
 
-    def __init__(self, *, name: typing.Optional["str"] = None, type: "str"):
+    def __init__(self, *, name: typing.Optional[str] = None, type: str):
         self.name = name
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Attribute":
-        from ._schemas.productvariants import AttributeSchema
+        if data["type"] == "boolean":
+            from ._schemas.productvariants import BooleanAttributeSchema
 
-        return AttributeSchema().load(data)
+            return BooleanAttributeSchema().load(data)
+        if data["type"] == "boolean-set":
+            from ._schemas.productvariants import BooleanSetAttributeSchema
+
+            return BooleanSetAttributeSchema().load(data)
+        if data["type"] == "date":
+            from ._schemas.productvariants import DateAttributeSchema
+
+            return DateAttributeSchema().load(data)
+        if data["type"] == "date-set":
+            from ._schemas.productvariants import DateSetAttributeSchema
+
+            return DateSetAttributeSchema().load(data)
+        if data["type"] == "datetime":
+            from ._schemas.productvariants import DateTimeAttributeSchema
+
+            return DateTimeAttributeSchema().load(data)
+        if data["type"] == "datetime-set":
+            from ._schemas.productvariants import DateTimeSetAttributeSchema
+
+            return DateTimeSetAttributeSchema().load(data)
+        if data["type"] == "enum":
+            from ._schemas.productvariants import EnumAttributeSchema
+
+            return EnumAttributeSchema().load(data)
+        if data["type"] == "enum-set":
+            from ._schemas.productvariants import EnumSetAttributeSchema
+
+            return EnumSetAttributeSchema().load(data)
+        if data["type"] == "lenum":
+            from ._schemas.productvariants import LocalizableEnumAttributeSchema
+
+            return LocalizableEnumAttributeSchema().load(data)
+        if data["type"] == "lenum-set":
+            from ._schemas.productvariants import LocalizableEnumSetAttributeSchema
+
+            return LocalizableEnumSetAttributeSchema().load(data)
+        if data["type"] == "ltext":
+            from ._schemas.productvariants import LocalizableTextAttributeSchema
+
+            return LocalizableTextAttributeSchema().load(data)
+        if data["type"] == "ltext-set":
+            from ._schemas.productvariants import LocalizableTextSetAttributeSchema
+
+            return LocalizableTextSetAttributeSchema().load(data)
+        if data["type"] == "money":
+            from ._schemas.productvariants import MoneyAttributeSchema
+
+            return MoneyAttributeSchema().load(data)
+        if data["type"] == "money-set":
+            from ._schemas.productvariants import MoneySetAttributeSchema
+
+            return MoneySetAttributeSchema().load(data)
+        if data["type"] == "number":
+            from ._schemas.productvariants import NumberAttributeSchema
+
+            return NumberAttributeSchema().load(data)
+        if data["type"] == "number-set":
+            from ._schemas.productvariants import NumberSetAttributeSchema
+
+            return NumberSetAttributeSchema().load(data)
+        if data["type"] == "reference":
+            from ._schemas.productvariants import ReferenceAttributeSchema
+
+            return ReferenceAttributeSchema().load(data)
+        if data["type"] == "reference-set":
+            from ._schemas.productvariants import ReferenceSetAttributeSchema
+
+            return ReferenceSetAttributeSchema().load(data)
+        if data["type"] == "text":
+            from ._schemas.productvariants import TextAttributeSchema
+
+            return TextAttributeSchema().load(data)
+        if data["type"] == "text-set":
+            from ._schemas.productvariants import TextSetAttributeSchema
+
+            return TextSetAttributeSchema().load(data)
+        if data["type"] == "time":
+            from ._schemas.productvariants import TimeAttributeSchema
+
+            return TimeAttributeSchema().load(data)
+        if data["type"] == "time-set":
+            from ._schemas.productvariants import TimeSetAttributeSchema
+
+            return TimeSetAttributeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.productvariants import AttributeSchema
@@ -51,9 +165,9 @@ class Attribute(_BaseType):
 class BooleanAttribute(Attribute):
     """This type represents an attribute which value is either "true" or "false"."""
 
-    value: "bool"
+    value: bool
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "bool"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: bool):
         self.value = value
         super().__init__(name=name, type="boolean")
 
@@ -75,7 +189,7 @@ class BooleanSetAttribute(Attribute):
     value: typing.List["bool"]
 
     def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["bool"]
+        self, *, name: typing.Optional[str] = None, value: typing.List["bool"]
     ):
         self.value = value
         super().__init__(name=name, type="boolean-set")
@@ -95,9 +209,9 @@ class BooleanSetAttribute(Attribute):
 class DateAttribute(Attribute):
     """This type represents an attribute which value is a date."""
 
-    value: "datetime.date"
+    value: datetime.date
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "datetime.date"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: datetime.date):
         self.value = value
         super().__init__(name=name, type="date")
 
@@ -119,10 +233,7 @@ class DateSetAttribute(Attribute):
     value: typing.List["datetime.date"]
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional["str"] = None,
-        value: typing.List["datetime.date"]
+        self, *, name: typing.Optional[str] = None, value: typing.List["datetime.date"]
     ):
         self.value = value
         super().__init__(name=name, type="date-set")
@@ -142,11 +253,9 @@ class DateSetAttribute(Attribute):
 class DateTimeAttribute(Attribute):
     """This type represents an attribute which value is a date with time."""
 
-    value: "datetime.datetime"
+    value: datetime.datetime
 
-    def __init__(
-        self, *, name: typing.Optional["str"] = None, value: "datetime.datetime"
-    ):
+    def __init__(self, *, name: typing.Optional[str] = None, value: datetime.datetime):
         self.value = value
         super().__init__(name=name, type="datetime")
 
@@ -170,7 +279,7 @@ class DateTimeSetAttribute(Attribute):
     def __init__(
         self,
         *,
-        name: typing.Optional["str"] = None,
+        name: typing.Optional[str] = None,
         value: typing.List["datetime.datetime"]
     ):
         self.value = value
@@ -194,9 +303,9 @@ class EnumAttribute(Attribute):
 
     """
 
-    value: "str"
+    value: str
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "str"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: str):
         self.value = value
         super().__init__(name=name, type="enum")
 
@@ -220,9 +329,7 @@ class EnumSetAttribute(Attribute):
 
     value: typing.List["str"]
 
-    def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["str"]
-    ):
+    def __init__(self, *, name: typing.Optional[str] = None, value: typing.List["str"]):
         self.value = value
         super().__init__(name=name, type="enum-set")
 
@@ -244,9 +351,9 @@ class LocalizableEnumAttribute(Attribute):
 
     """
 
-    value: "str"
+    value: str
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "str"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: str):
         self.value = value
         super().__init__(name=name, type="lenum")
 
@@ -272,9 +379,7 @@ class LocalizableEnumSetAttribute(Attribute):
 
     value: typing.List["str"]
 
-    def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["str"]
-    ):
+    def __init__(self, *, name: typing.Optional[str] = None, value: typing.List["str"]):
         self.value = value
         super().__init__(name=name, type="lenum-set")
 
@@ -297,9 +402,7 @@ class LocalizableTextAttribute(Attribute):
 
     value: "LocalizedString"
 
-    def __init__(
-        self, *, name: typing.Optional["str"] = None, value: "LocalizedString"
-    ):
+    def __init__(self, *, name: typing.Optional[str] = None, value: "LocalizedString"):
         self.value = value
         super().__init__(name=name, type="ltext")
 
@@ -325,7 +428,7 @@ class LocalizableTextSetAttribute(Attribute):
     def __init__(
         self,
         *,
-        name: typing.Optional["str"] = None,
+        name: typing.Optional[str] = None,
         value: typing.List["LocalizedString"]
     ):
         self.value = value
@@ -350,7 +453,7 @@ class MoneyAttribute(Attribute):
 
     value: "TypedMoney"
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "TypedMoney"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: "TypedMoney"):
         self.value = value
         super().__init__(name=name, type="money")
 
@@ -372,7 +475,7 @@ class MoneySetAttribute(Attribute):
     value: typing.List["TypedMoney"]
 
     def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["TypedMoney"]
+        self, *, name: typing.Optional[str] = None, value: typing.List["TypedMoney"]
     ):
         self.value = value
         super().__init__(name=name, type="money-set")
@@ -392,9 +495,9 @@ class MoneySetAttribute(Attribute):
 class NumberAttribute(Attribute):
     """This type represents an attribute which value is a number."""
 
-    value: "float"
+    value: float
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "float"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: float):
         self.value = value
         super().__init__(name=name, type="number")
 
@@ -416,7 +519,7 @@ class NumberSetAttribute(Attribute):
     value: typing.List["float"]
 
     def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["float"]
+        self, *, name: typing.Optional[str] = None, value: typing.List["float"]
     ):
         self.value = value
         super().__init__(name=name, type="number-set")
@@ -439,7 +542,7 @@ class ReferenceAttribute(Attribute):
     #: References a resource by its key.
     value: "KeyReference"
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "KeyReference"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: "KeyReference"):
         self.value = value
         super().__init__(name=name, type="reference")
 
@@ -461,7 +564,7 @@ class ReferenceSetAttribute(Attribute):
     value: typing.List["KeyReference"]
 
     def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["KeyReference"]
+        self, *, name: typing.Optional[str] = None, value: typing.List["KeyReference"]
     ):
         self.value = value
         super().__init__(name=name, type="reference-set")
@@ -481,9 +584,9 @@ class ReferenceSetAttribute(Attribute):
 class TextAttribute(Attribute):
     """This type represents an attribute which value is a string."""
 
-    value: "str"
+    value: str
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "str"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: str):
         self.value = value
         super().__init__(name=name, type="text")
 
@@ -504,9 +607,7 @@ class TextSetAttribute(Attribute):
 
     value: typing.List["str"]
 
-    def __init__(
-        self, *, name: typing.Optional["str"] = None, value: typing.List["str"]
-    ):
+    def __init__(self, *, name: typing.Optional[str] = None, value: typing.List["str"]):
         self.value = value
         super().__init__(name=name, type="text-set")
 
@@ -525,9 +626,9 @@ class TextSetAttribute(Attribute):
 class TimeAttribute(Attribute):
     """This type represents an attribute which value is a time."""
 
-    value: "datetime.time"
+    value: datetime.time
 
-    def __init__(self, *, name: typing.Optional["str"] = None, value: "datetime.time"):
+    def __init__(self, *, name: typing.Optional[str] = None, value: datetime.time):
         self.value = value
         super().__init__(name=name, type="time")
 
@@ -549,10 +650,7 @@ class TimeSetAttribute(Attribute):
     value: typing.List["datetime.time"]
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional["str"] = None,
-        value: typing.List["datetime.time"]
+        self, *, name: typing.Optional[str] = None, value: typing.List["datetime.time"]
     ):
         self.value = value
         super().__init__(name=name, type="time-set")
@@ -576,9 +674,9 @@ class ProductVariantImport(ImportResource):
     """
 
     #: Maps to `ProductVariant.sku`.
-    sku: typing.Optional["str"]
+    sku: typing.Optional[str]
     #: Maps to `ProductVariant.isMasterVariant`.
-    is_master_variant: "bool"
+    is_master_variant: bool
     #: Maps to `ProductVariant.attributes`.
     #:
     #: Each attribute referenced must be defined
@@ -590,7 +688,7 @@ class ProductVariantImport(ImportResource):
     #: Maps to `ProductVariant.assets`.
     assets: typing.Optional[typing.List["Asset"]]
     #: If there were updates, only the updates will be published to `staged` and `current` projection.
-    publish: typing.Optional["bool"]
+    publish: typing.Optional[bool]
     #: The product in which this product variant is contained. Maps to `ProductVariant.product`.
     #:
     #: The product referenced
@@ -601,13 +699,13 @@ class ProductVariantImport(ImportResource):
     def __init__(
         self,
         *,
-        key: "str",
-        sku: typing.Optional["str"] = None,
-        is_master_variant: "bool",
+        key: str,
+        sku: typing.Optional[str] = None,
+        is_master_variant: bool,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
         assets: typing.Optional[typing.List["Asset"]] = None,
-        publish: typing.Optional["bool"] = None,
+        publish: typing.Optional[bool] = None,
         product: "ProductKeyReference"
     ):
         self.sku = sku

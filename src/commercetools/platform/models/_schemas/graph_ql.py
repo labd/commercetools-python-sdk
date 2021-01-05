@@ -13,7 +13,7 @@ from ... import models
 
 
 # Marshmallow Schemas
-class GraphQLErrorSchema(marshmallow.Schema):
+class GraphQLErrorSchema(helpers.BaseSchema):
     message = marshmallow.fields.String(allow_none=True, missing=None)
     locations = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".GraphQLErrorLocationSchema"),
@@ -35,7 +35,7 @@ class GraphQLErrorSchema(marshmallow.Schema):
         return models.GraphQLError(**data)
 
 
-class GraphQLErrorLocationSchema(marshmallow.Schema):
+class GraphQLErrorLocationSchema(helpers.BaseSchema):
     line = marshmallow.fields.Integer(allow_none=True, missing=None)
     column = marshmallow.fields.Integer(allow_none=True, missing=None)
 
@@ -48,15 +48,19 @@ class GraphQLErrorLocationSchema(marshmallow.Schema):
         return models.GraphQLErrorLocation(**data)
 
 
-class GraphQLRequestSchema(marshmallow.Schema):
+class GraphQLRequestSchema(helpers.BaseSchema):
     query = marshmallow.fields.String(allow_none=True, missing=None)
     operation_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="operationName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="operationName",
     )
     variables = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".GraphQLVariablesMapSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -69,13 +73,16 @@ class GraphQLRequestSchema(marshmallow.Schema):
         return models.GraphQLRequest(**data)
 
 
-class GraphQLResponseSchema(marshmallow.Schema):
-    data = marshmallow.fields.Raw(allow_none=True, missing=None)
+class GraphQLResponseSchema(helpers.BaseSchema):
+    data = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     errors = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".GraphQLErrorSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -88,7 +95,7 @@ class GraphQLResponseSchema(marshmallow.Schema):
         return models.GraphQLResponse(**data)
 
 
-class GraphQLVariablesMapSchema(marshmallow.Schema):
+class GraphQLVariablesMapSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile(""),

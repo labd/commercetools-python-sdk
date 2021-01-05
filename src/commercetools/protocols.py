@@ -1,11 +1,14 @@
 import typing
 
-from marshmallow.base import SchemaABC
+try:
+    from typing import Protocol
+except ImportError:  # Python < 3.8
+    Protocol = object
 
 
-class Model(typing.Protocol[T]):
+class Model(Protocol):
     @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> T:
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Model":
         ...
 
     def serialize(self) -> typing.Dict[str, typing.Any]:

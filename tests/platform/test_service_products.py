@@ -5,6 +5,7 @@ import requests_mock
 from requests.exceptions import HTTPError
 
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
 def test_products_create(old_client):
@@ -133,8 +134,9 @@ def test_product_query(old_client):
     assert result.total == 2
 
 
-def test_product_query_where(old_client):
-    old_client.products.create(
+def test_product_query_where(ct_platform_client: Client):
+    product_client = ct_platform_client.withProjectKey("test").products()
+    product_client.post(
         models.ProductDraft(
             key="test-product1",
             name=models.LocalizedString(en=f"my-product-1"),
@@ -152,7 +154,7 @@ def test_product_query_where(old_client):
             ),
         )
     )
-    old_client.products.create(
+    product_client.post(
         models.ProductDraft(
             key="test-product-2",
             name=models.LocalizedString(en=f"my-product-1"),
@@ -170,7 +172,7 @@ def test_product_query_where(old_client):
             ),
         )
     )
-    old_client.products.create(
+    product_client.post(
         models.ProductDraft(
             key="test-product2",
             name=models.LocalizedString(en=f"my-product-1"),
@@ -179,19 +181,19 @@ def test_product_query_where(old_client):
         )
     )
 
-    result = old_client.products.query(
+    result = product_client.get(
         where="masterData(staged(masterVariant(prices(country='NL'))))"
     )
     assert len(result.results) == 1
     assert result.total == 1
 
-    result = old_client.products.query(
+    result = product_client.get(
         where="masterData(staged(masterVariant(prices(country='UK'))))"
     )
     assert len(result.results) == 1
     assert result.total == 1
 
-    result = old_client.products.query(
+    result = product_client.get(
         where="masterData(staged(masterVariant(prices(country='UK' or country='NL'))))"
     )
     assert len(result.results) == 2

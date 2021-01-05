@@ -235,7 +235,9 @@ def get_test_order():
         custom_line_items=[],
         cart=models.CartReference(id="some cart id"),
         payment_info=models.PaymentInfo(
-            payments=[models.PaymentReference(id="a433f3f8-5e27-406e-b2b0-d4a1f64592c4")]
+            payments=[
+                models.PaymentReference(id="a433f3f8-5e27-406e-b2b0-d4a1f64592c4")
+            ]
         ),
         custom=models.CustomFields(
             type=models.TypeReference(id="dummy"),

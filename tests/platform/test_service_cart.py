@@ -1,30 +1,32 @@
 import uuid
 
 import pytest
+from commercetools.platform.client import Client
 
 from commercetools.platform import models
 
 
-def test_cart_get_by_id(client, cart_draft):
-    cart = client.carts.create(cart_draft)
+def test_cart_get_by_id(ct_platform_client: Client, cart_draft):
+    cart = ct_platform_client.with_project_key("test").carts().post(cart_draft)
 
     assert cart.id
 
 
 @pytest.fixture
-def cart_draft(client):
-    product_1 = client.products.create(
+def cart_draft(ct_platform_client: Client):
+    client = ct_platform_client.with_project_key("test")
+    product_1 = client.products().post(
         models.ProductDraft(
-            key=f"product-1",
+            key="product-1",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
             name=models.LocalizedString(en=f"my-product-1"),
             slug=models.LocalizedString(en=f"my-product-1"),
             publish=True,
         )
     )
-    product_2 = client.products.create(
+    product_2 = client.products().post(
         models.ProductDraft(
-            key=f"product-2",
+            key="product-2",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
             name=models.LocalizedString(en=f"my-product-2"),
             slug=models.LocalizedString(en=f"my-product-2"),
@@ -51,13 +53,20 @@ def cart_draft(client):
     )
 
 
-def test_update_actions(commercetools_api, client, cart_draft):
-    cart = client.carts.create(cart_draft)
+def test_update_actions(commercetools_api, ct_platform_client, cart_draft):
+    client = ct_platform_client.with_project_key("test")
+    cart = client.carts().post(cart_draft)
+
     payment_reference = models.PaymentReference(id=str(uuid.uuid4()))
-    cart = client.carts.update_by_id(
-        cart.id,
-        cart.version,
-        actions=[models.CartAddPaymentAction(payment=payment_reference)],
+    cart = (
+        client.carts()
+        .with_id(cart.id)
+        .post(
+            models.CartUpdate(
+                version=cart.version,
+                actions=[models.CartAddPaymentAction(payment=payment_reference)],
+            )
+        )
     )
 
     type_draft = models.TypeDraft(
@@ -85,31 +94,41 @@ def test_update_actions(commercetools_api, client, cart_draft):
             ),
         ],
     )
-    custom_type = client.types.create(type_draft)
+    custom_type = client.types().post(type_draft)
     assert custom_type.id
 
     assert cart.payment_info.payments[0] == payment_reference
-    cart = client.carts.update_by_id(
-        cart.id,
-        cart.version,
-        actions=[
-            models.CartSetCustomTypeAction(
-                type=models.TypeResourceIdentifier(id=custom_type.id)
+    cart = (
+        client.carts()
+        .with_id(cart.id)
+        .post(
+            models.CartUpdate(
+                version=cart.version,
+                actions=[
+                    models.CartSetCustomTypeAction(
+                        type=models.TypeResourceIdentifier(id=custom_type.id)
+                    )
+                ],
             )
-        ],
+        )
     )
 
-    client.carts.update_by_id(
-        cart.id,
-        cart.version,
-        actions=[
-            models.CartSetCustomFieldAction(name="foo1", value="bar"),
-            models.CartSetCustomFieldAction(name="foo2", value=["bar"]),
-            models.CartSetCustomFieldAction(name="foo3", value=False),
-        ],
+    cart = (
+        client.carts()
+        .with_id(cart.id)
+        .post(
+            models.CartUpdate(
+                version=cart.version,
+                actions=[
+                    models.CartSetCustomFieldAction(name="foo1", value="bar"),
+                    models.CartSetCustomFieldAction(name="foo2", value=["bar"]),
+                    models.CartSetCustomFieldAction(name="foo3", value=False),
+                ],
+            )
+        )
     )
 
-    cart = client.carts.get_by_id(cart.id)
+    cart = client.carts().with_id(cart.id).get()
 
     assert all(key in cart.custom.fields for key in ["foo1", "foo2", "foo3"])
     assert cart.custom.fields["foo1"] == "bar"

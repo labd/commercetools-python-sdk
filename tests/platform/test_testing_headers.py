@@ -28,7 +28,9 @@ def test_correlation_id_is_set_in_exception(old_client):
             id=product.id,
             version=1,
             actions=[
-                models.ProductChangeSlugAction(slug=models.LocalizedString(nl="nl-slug3"))
+                models.ProductChangeSlugAction(
+                    slug=models.LocalizedString(nl="nl-slug3")
+                )
             ],
         )
 

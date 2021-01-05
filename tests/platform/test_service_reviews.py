@@ -18,9 +18,7 @@ def test_get_by_id(old_client):
 
 
 def test_get_by_key(old_client):
-    review = old_client.reviews.create(
-        draft=models.ReviewDraft(key="test-review")
-    )
+    review = old_client.reviews.create(draft=models.ReviewDraft(key="test-review"))
     assert review.key
 
     review = old_client.reviews.get_by_key(review.key)
@@ -47,8 +45,6 @@ def test_delete_by_id(old_client):
 
 
 def test_delete_by_key(old_client):
-    review = old_client.reviews.create(
-        draft=models.ReviewDraft(key="test-review")
-    )
+    review = old_client.reviews.create(draft=models.ReviewDraft(key="test-review"))
     assert review.key
     assert old_client.reviews.delete_by_key(review.key, version=review.version)

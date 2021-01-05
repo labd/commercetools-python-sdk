@@ -64,6 +64,8 @@ def test_channel_update(old_client):
         id=channel.id,
         version=channel.version,
         actions=[
-            models.ChannelChangeNameAction(name=models.LocalizedString(nl="nl-channel2"))
+            models.ChannelChangeNameAction(
+                name=models.LocalizedString(nl="nl-channel2")
+            )
         ],
     )

@@ -10,7 +10,7 @@ def test_create_review(client):
 
 
 def test_get_by_id(client):
-    review = client.reviews.create(draft=ReviewDraftSchema().dump({}))
+    review = client.reviews.create(draft=models.ReviewDraft())
     assert review.id
 
     review = client.reviews.get_by_id(review.id)
@@ -19,7 +19,7 @@ def test_get_by_id(client):
 
 def test_get_by_key(client):
     review = client.reviews.create(
-        draft=ReviewDraftSchema().dump({"key": "test-review"})
+        draft=models.ReviewDraft(key="test-review")
     )
     assert review.key
 
@@ -48,7 +48,7 @@ def test_delete_by_id(client):
 
 def test_delete_by_key(client):
     review = client.reviews.create(
-        draft=ReviewDraftSchema().dump({"key": "test-review"})
+        draft=models.ReviewDraft(key="test-review")
     )
     assert review.key
     assert client.reviews.delete_by_key(review.key, version=review.version)

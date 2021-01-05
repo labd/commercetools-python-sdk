@@ -8,32 +8,35 @@ from ..project_categories.by_project_key_recommendations_project_categories_requ
     ByProjectKeyRecommendationsProjectCategoriesRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyRecommendationsRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def projectCategories(
+    def project_categories(
         self,
     ) -> ByProjectKeyRecommendationsProjectCategoriesRequestBuilder:
         return ByProjectKeyRecommendationsProjectCategoriesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def generalCategories(
+    def general_categories(
         self,
     ) -> ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder:
         return ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )

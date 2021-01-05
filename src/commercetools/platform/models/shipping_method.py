@@ -19,13 +19,44 @@ if typing.TYPE_CHECKING:
     from .tax_category import TaxCategoryReference, TaxCategoryResourceIdentifier
     from .zone import ZoneReference, ZoneResourceIdentifier
 
+__all__ = [
+    "CartClassificationTier",
+    "CartScoreTier",
+    "CartValueTier",
+    "PriceFunction",
+    "ShippingMethod",
+    "ShippingMethodAddShippingRateAction",
+    "ShippingMethodAddZoneAction",
+    "ShippingMethodChangeIsDefaultAction",
+    "ShippingMethodChangeNameAction",
+    "ShippingMethodChangeTaxCategoryAction",
+    "ShippingMethodDraft",
+    "ShippingMethodPagedQueryResponse",
+    "ShippingMethodReference",
+    "ShippingMethodRemoveShippingRateAction",
+    "ShippingMethodRemoveZoneAction",
+    "ShippingMethodResourceIdentifier",
+    "ShippingMethodSetDescriptionAction",
+    "ShippingMethodSetKeyAction",
+    "ShippingMethodSetLocalizedDescriptionAction",
+    "ShippingMethodSetPredicateAction",
+    "ShippingMethodUpdate",
+    "ShippingMethodUpdateAction",
+    "ShippingRate",
+    "ShippingRateDraft",
+    "ShippingRatePriceTier",
+    "ShippingRateTierType",
+    "ZoneRate",
+    "ZoneRateDraft",
+]
+
 
 class PriceFunction(_BaseType):
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency_code: "str"
-    function: "str"
+    currency_code: str
+    function: str
 
-    def __init__(self, *, currency_code: "str", function: "str"):
+    def __init__(self, *, currency_code: str, function: str):
         self.currency_code = currency_code
         self.function = function
         super().__init__()
@@ -46,34 +77,34 @@ class ShippingMethod(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the shipping method.
-    key: typing.Optional["str"]
-    name: "str"
-    description: typing.Optional["str"]
+    key: typing.Optional[str]
+    name: str
+    description: typing.Optional[str]
     localized_description: typing.Optional["LocalizedString"]
     tax_category: "TaxCategoryReference"
     zone_rates: typing.List["ZoneRate"]
     #: One shipping method in a project can be default.
-    is_default: "bool"
+    is_default: bool
     #: A Cart predicate which can be used to more precisely select a shipping method for a cart.
-    predicate: typing.Optional["str"]
+    predicate: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
-        name: "str",
-        description: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
+        name: str,
+        description: typing.Optional[str] = None,
         localized_description: typing.Optional["LocalizedString"] = None,
         tax_category: "TaxCategoryReference",
         zone_rates: typing.List["ZoneRate"],
-        is_default: "bool",
-        predicate: typing.Optional["str"] = None
+        is_default: bool,
+        predicate: typing.Optional[str] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -105,28 +136,28 @@ class ShippingMethod(BaseResource):
 
 
 class ShippingMethodDraft(_BaseType):
-    key: typing.Optional["str"]
-    name: "str"
-    description: typing.Optional["str"]
+    key: typing.Optional[str]
+    name: str
+    description: typing.Optional[str]
     localized_description: typing.Optional["LocalizedString"]
     tax_category: "TaxCategoryResourceIdentifier"
     zone_rates: typing.List["ZoneRateDraft"]
     #: If `true` the shipping method will be the default one in a project.
-    is_default: "bool"
+    is_default: bool
     #: A Cart predicate which can be used to more precisely select a shipping method for a cart.
-    predicate: typing.Optional["str"]
+    predicate: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
-        name: "str",
-        description: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
+        name: str,
+        description: typing.Optional[str] = None,
         localized_description: typing.Optional["LocalizedString"] = None,
         tax_category: "TaxCategoryResourceIdentifier",
         zone_rates: typing.List["ZoneRateDraft"],
-        is_default: "bool",
-        predicate: typing.Optional["str"] = None
+        is_default: bool,
+        predicate: typing.Optional[str] = None
     ):
         self.key = key
         self.name = name
@@ -151,19 +182,19 @@ class ShippingMethodDraft(_BaseType):
 
 
 class ShippingMethodPagedQueryResponse(_BaseType):
-    limit: typing.Optional["int"]
-    count: "int"
-    total: typing.Optional["int"]
-    offset: typing.Optional["int"]
+    limit: typing.Optional[int]
+    count: int
+    total: typing.Optional[int]
+    offset: typing.Optional[int]
     results: typing.List["ShippingMethod"]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional["int"] = None,
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: typing.Optional["int"] = None,
+        limit: typing.Optional[int] = None,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
         results: typing.List["ShippingMethod"]
     ):
         self.limit = limit
@@ -190,7 +221,7 @@ class ShippingMethodPagedQueryResponse(_BaseType):
 class ShippingMethodReference(Reference):
     obj: typing.Optional["ShippingMethod"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["ShippingMethod"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["ShippingMethod"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.SHIPPING_METHOD)
 
@@ -210,7 +241,7 @@ class ShippingMethodReference(Reference):
 
 class ShippingMethodResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.SHIPPING_METHOD)
@@ -230,11 +261,11 @@ class ShippingMethodResourceIdentifier(ResourceIdentifier):
 
 
 class ShippingMethodUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ShippingMethodUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["ShippingMethodUpdateAction"]
+        self, *, version: int, actions: typing.List["ShippingMethodUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -253,9 +284,9 @@ class ShippingMethodUpdate(_BaseType):
 
 
 class ShippingMethodUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -263,9 +294,62 @@ class ShippingMethodUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ShippingMethodUpdateAction":
-        from ._schemas.shipping_method import ShippingMethodUpdateActionSchema
+        if data["action"] == "addShippingRate":
+            from ._schemas.shipping_method import (
+                ShippingMethodAddShippingRateActionSchema,
+            )
 
-        return ShippingMethodUpdateActionSchema().load(data)
+            return ShippingMethodAddShippingRateActionSchema().load(data)
+        if data["action"] == "addZone":
+            from ._schemas.shipping_method import ShippingMethodAddZoneActionSchema
+
+            return ShippingMethodAddZoneActionSchema().load(data)
+        if data["action"] == "changeIsDefault":
+            from ._schemas.shipping_method import (
+                ShippingMethodChangeIsDefaultActionSchema,
+            )
+
+            return ShippingMethodChangeIsDefaultActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.shipping_method import ShippingMethodChangeNameActionSchema
+
+            return ShippingMethodChangeNameActionSchema().load(data)
+        if data["action"] == "changeTaxCategory":
+            from ._schemas.shipping_method import (
+                ShippingMethodChangeTaxCategoryActionSchema,
+            )
+
+            return ShippingMethodChangeTaxCategoryActionSchema().load(data)
+        if data["action"] == "removeShippingRate":
+            from ._schemas.shipping_method import (
+                ShippingMethodRemoveShippingRateActionSchema,
+            )
+
+            return ShippingMethodRemoveShippingRateActionSchema().load(data)
+        if data["action"] == "removeZone":
+            from ._schemas.shipping_method import ShippingMethodRemoveZoneActionSchema
+
+            return ShippingMethodRemoveZoneActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.shipping_method import (
+                ShippingMethodSetDescriptionActionSchema,
+            )
+
+            return ShippingMethodSetDescriptionActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.shipping_method import ShippingMethodSetKeyActionSchema
+
+            return ShippingMethodSetKeyActionSchema().load(data)
+        if data["action"] == "setLocalizedDescription":
+            from ._schemas.shipping_method import (
+                ShippingMethodSetLocalizedDescriptionActionSchema,
+            )
+
+            return ShippingMethodSetLocalizedDescriptionActionSchema().load(data)
+        if data["action"] == "setPredicate":
+            from ._schemas.shipping_method import ShippingMethodSetPredicateActionSchema
+
+            return ShippingMethodSetPredicateActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.shipping_method import ShippingMethodUpdateActionSchema
@@ -280,7 +364,7 @@ class ShippingRate(_BaseType):
     #: Use a Cart Discount to set the shipping price to 0 to avoid providing free shipping in invalid discount scenarios.
     free_above: typing.Optional["TypedMoney"]
     #: Only appears in response to requests for shipping methods by cart or location to mark this shipping rate as one that matches the cart or location.
-    is_matching: typing.Optional["bool"]
+    is_matching: typing.Optional[bool]
     #: A list of shipping rate price tiers.
     tiers: typing.List["ShippingRatePriceTier"]
 
@@ -289,7 +373,7 @@ class ShippingRate(_BaseType):
         *,
         price: "TypedMoney",
         free_above: typing.Optional["TypedMoney"] = None,
-        is_matching: typing.Optional["bool"] = None,
+        is_matching: typing.Optional[bool] = None,
         tiers: typing.List["ShippingRatePriceTier"]
     ):
         self.price = price
@@ -352,9 +436,18 @@ class ShippingRatePriceTier(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ShippingRatePriceTier":
-        from ._schemas.shipping_method import ShippingRatePriceTierSchema
+        if data["type"] == "CartClassification":
+            from ._schemas.shipping_method import CartClassificationTierSchema
 
-        return ShippingRatePriceTierSchema().load(data)
+            return CartClassificationTierSchema().load(data)
+        if data["type"] == "CartScore":
+            from ._schemas.shipping_method import CartScoreTierSchema
+
+            return CartScoreTierSchema().load(data)
+        if data["type"] == "CartValue":
+            from ._schemas.shipping_method import CartValueTierSchema
+
+            return CartValueTierSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.shipping_method import ShippingRatePriceTierSchema
@@ -363,16 +456,12 @@ class ShippingRatePriceTier(_BaseType):
 
 
 class CartClassificationTier(ShippingRatePriceTier):
-    value: "str"
+    value: str
     price: "Money"
-    is_matching: typing.Optional["bool"]
+    is_matching: typing.Optional[bool]
 
     def __init__(
-        self,
-        *,
-        value: "str",
-        price: "Money",
-        is_matching: typing.Optional["bool"] = None
+        self, *, value: str, price: "Money", is_matching: typing.Optional[bool] = None
     ):
         self.value = value
         self.price = price
@@ -394,18 +483,18 @@ class CartClassificationTier(ShippingRatePriceTier):
 
 
 class CartScoreTier(ShippingRatePriceTier):
-    score: "float"
+    score: float
     price: typing.Optional["Money"]
     price_function: typing.Optional["PriceFunction"]
-    is_matching: typing.Optional["bool"]
+    is_matching: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        score: "float",
+        score: float,
         price: typing.Optional["Money"] = None,
         price_function: typing.Optional["PriceFunction"] = None,
-        is_matching: typing.Optional["bool"] = None
+        is_matching: typing.Optional[bool] = None
     ):
         self.score = score
         self.price = price
@@ -426,16 +515,16 @@ class CartScoreTier(ShippingRatePriceTier):
 
 
 class CartValueTier(ShippingRatePriceTier):
-    minimum_cent_amount: "int"
+    minimum_cent_amount: int
     price: "Money"
-    is_matching: typing.Optional["bool"]
+    is_matching: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        minimum_cent_amount: "int",
+        minimum_cent_amount: int,
         price: "Money",
-        is_matching: typing.Optional["bool"] = None
+        is_matching: typing.Optional[bool] = None
     ):
         self.minimum_cent_amount = minimum_cent_amount
         self.price = price
@@ -559,9 +648,9 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
 
 class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
     #: Only one ShippingMethod in a project can be default.
-    is_default: "bool"
+    is_default: bool
 
-    def __init__(self, *, is_default: "bool"):
+    def __init__(self, *, is_default: bool):
         self.is_default = is_default
         super().__init__(action="changeIsDefault")
 
@@ -580,9 +669,9 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="changeName")
 
@@ -676,9 +765,9 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
-    description: typing.Optional["str"]
+    description: typing.Optional[str]
 
-    def __init__(self, *, description: typing.Optional["str"] = None):
+    def __init__(self, *, description: typing.Optional[str] = None):
         self.description = description
         super().__init__(action="setDescription")
 
@@ -698,9 +787,9 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
 
 class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
     #: If `key` is absent or `null`, it is removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -719,9 +808,9 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
-    localized_description: typing.Optional["str"]
+    localized_description: typing.Optional[str]
 
-    def __init__(self, *, localized_description: typing.Optional["str"] = None):
+    def __init__(self, *, localized_description: typing.Optional[str] = None):
         self.localized_description = localized_description
         super().__init__(action="setLocalizedDescription")
 
@@ -746,9 +835,9 @@ class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
 class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
     #: A valid Cart predicate.
     #: If `predicate` is absent or `null`, it is removed if it exists.
-    predicate: typing.Optional["str"]
+    predicate: typing.Optional[str]
 
-    def __init__(self, *, predicate: typing.Optional["str"] = None):
+    def __init__(self, *, predicate: typing.Optional[str] = None):
         self.predicate = predicate
         super().__init__(action="setPredicate")
 

@@ -11,16 +11,18 @@ if typing.TYPE_CHECKING:
     from .common import ChannelKeyReference
     from .customfields import Custom
 
+__all__ = ["InventoryImport"]
+
 
 class InventoryImport(ImportResource):
     """Import representation for a inventory."""
 
-    sku: "str"
+    sku: str
     #: Maps to `Inventory.quantityOnStock`
-    quantity_on_stock: "float"
+    quantity_on_stock: float
     #: Maps to `Inventory.restockableInDays`
-    restockable_in_days: typing.Optional["float"]
-    expected_delivery: typing.Optional["datetime.datetime"]
+    restockable_in_days: typing.Optional[float]
+    expected_delivery: typing.Optional[datetime.datetime]
     #: References a channel by its key.
     supply_channel: typing.Optional["ChannelKeyReference"]
     #: Maps to `Inventory.custom`.
@@ -29,11 +31,11 @@ class InventoryImport(ImportResource):
     def __init__(
         self,
         *,
-        key: "str",
-        sku: "str",
-        quantity_on_stock: "float",
-        restockable_in_days: typing.Optional["float"] = None,
-        expected_delivery: typing.Optional["datetime.datetime"] = None,
+        key: str,
+        sku: str,
+        quantity_on_stock: float,
+        restockable_in_days: typing.Optional[float] = None,
+        expected_delivery: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
         custom: typing.Optional["Custom"] = None
     ):

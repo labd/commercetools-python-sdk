@@ -10,13 +10,29 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, ReferenceTypeId
 
+__all__ = [
+    "Location",
+    "Zone",
+    "ZoneAddLocationAction",
+    "ZoneChangeNameAction",
+    "ZoneDraft",
+    "ZonePagedQueryResponse",
+    "ZoneReference",
+    "ZoneRemoveLocationAction",
+    "ZoneResourceIdentifier",
+    "ZoneSetDescriptionAction",
+    "ZoneSetKeyAction",
+    "ZoneUpdate",
+    "ZoneUpdateAction",
+]
+
 
 class Location(_BaseType):
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
-    state: typing.Optional["str"]
+    country: str
+    state: typing.Optional[str]
 
-    def __init__(self, *, country: "str", state: typing.Optional["str"] = None):
+    def __init__(self, *, country: str, state: typing.Optional[str] = None):
         self.country = country
         self.state = state
         super().__init__()
@@ -39,23 +55,23 @@ class Zone(BaseResource):
     #: User-specific unique identifier for a zone.
     #: Must be unique across a project.
     #: The field can be reset using the Set Key UpdateAction.
-    key: typing.Optional["str"]
-    name: "str"
-    description: typing.Optional["str"]
+    key: typing.Optional[str]
+    name: str
+    description: typing.Optional[str]
     locations: typing.List["Location"]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
-        name: "str",
-        description: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
+        name: str,
+        description: typing.Optional[str] = None,
         locations: typing.List["Location"]
     ):
         self.last_modified_by = last_modified_by
@@ -87,17 +103,17 @@ class ZoneDraft(_BaseType):
     #: User-specific unique identifier for a zone.
     #: Must be unique across a project.
     #: The field can be reset using the Set Key UpdateAction.
-    key: typing.Optional["str"]
-    name: "str"
-    description: typing.Optional["str"]
+    key: typing.Optional[str]
+    name: str
+    description: typing.Optional[str]
     locations: typing.List["Location"]
 
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
-        name: "str",
-        description: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
+        name: str,
+        description: typing.Optional[str] = None,
         locations: typing.List["Location"]
     ):
         self.key = key
@@ -119,19 +135,19 @@ class ZoneDraft(_BaseType):
 
 
 class ZonePagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Zone"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Zone"]
     ):
         self.limit = limit
@@ -158,7 +174,7 @@ class ZonePagedQueryResponse(_BaseType):
 class ZoneReference(Reference):
     obj: typing.Optional["Zone"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Zone"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Zone"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.ZONE)
 
@@ -176,7 +192,7 @@ class ZoneReference(Reference):
 
 class ZoneResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ZONE)
@@ -196,10 +212,10 @@ class ZoneResourceIdentifier(ResourceIdentifier):
 
 
 class ZoneUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ZoneUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["ZoneUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["ZoneUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -217,17 +233,34 @@ class ZoneUpdate(_BaseType):
 
 
 class ZoneUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ZoneUpdateAction":
-        from ._schemas.zone import ZoneUpdateActionSchema
+        if data["action"] == "addLocation":
+            from ._schemas.zone import ZoneAddLocationActionSchema
 
-        return ZoneUpdateActionSchema().load(data)
+            return ZoneAddLocationActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.zone import ZoneChangeNameActionSchema
+
+            return ZoneChangeNameActionSchema().load(data)
+        if data["action"] == "removeLocation":
+            from ._schemas.zone import ZoneRemoveLocationActionSchema
+
+            return ZoneRemoveLocationActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.zone import ZoneSetDescriptionActionSchema
+
+            return ZoneSetDescriptionActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.zone import ZoneSetKeyActionSchema
+
+            return ZoneSetKeyActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.zone import ZoneUpdateActionSchema
@@ -255,9 +288,9 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 
 
 class ZoneChangeNameAction(ZoneUpdateAction):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="changeName")
 
@@ -295,9 +328,9 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
 
 
 class ZoneSetDescriptionAction(ZoneUpdateAction):
-    description: typing.Optional["str"]
+    description: typing.Optional[str]
 
-    def __init__(self, *, description: typing.Optional["str"] = None):
+    def __init__(self, *, description: typing.Optional[str] = None):
         self.description = description
         super().__init__(action="setDescription")
 
@@ -317,9 +350,9 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
 
 class ZoneSetKeyAction(ZoneUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 

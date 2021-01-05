@@ -7,44 +7,48 @@ from .by_project_key_product_drafts_import_sink_key_by_import_sink_key_import_op
     ByProjectKeyProductDraftsImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyProductDraftsImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _import_sink_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        importSinkKey: str,
-        client: "Client",
+        project_key: str,
+        import_sink_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._import_sink_key = importSinkKey
+        self._project_key = project_key
+        self._import_sink_key = import_sink_key
         self._client = client
 
-    def withIdValue(
+    def with_id_value(
         self, id: str
     ) -> ByProjectKeyProductDraftsImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder:
         return ByProjectKeyProductDraftsImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder(
             id=id,
-            projectKey=self._project_key,
-            importSinkKey=self._import_sink_key,
+            project_key=self._project_key,
+            import_sink_key=self._import_sink_key,
             client=self._client,
         )
 
     def get(
         self,
         *,
-        limit: "float" = None,
-        offset: "float" = None,
+        limit: float = None,
+        offset: float = None,
         sort: typing.List["str"] = None,
-        resource_key: "str" = None,
+        resource_key: str = None,
         state: "ProcessingState" = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ImportOperationPagedResponse":
         """Retrieves all import operations of an import sink key."""
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/product-drafts/importSinkKey={self._import_sink_key}/import-operations",
             params={

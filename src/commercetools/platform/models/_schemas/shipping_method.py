@@ -21,7 +21,7 @@ from .common import (
 
 
 # Marshmallow Schemas
-class PriceFunctionSchema(marshmallow.Schema):
+class PriceFunctionSchema(helpers.BaseSchema):
     currency_code = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="currencyCode"
     )
@@ -41,6 +41,7 @@ class ShippingMethodSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -48,14 +49,22 @@ class ShippingMethodSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     localized_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedDescription"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedDescription",
     )
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".tax_category.TaxCategoryReferenceSchema"),
@@ -75,7 +84,9 @@ class ShippingMethodSchema(BaseResourceSchema):
     is_default = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="isDefault"
     )
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -86,12 +97,19 @@ class ShippingMethodSchema(BaseResourceSchema):
         return models.ShippingMethod(**data)
 
 
-class ShippingMethodDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class ShippingMethodDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     localized_description = LocalizedStringField(
-        allow_none=True, missing=None, data_key="localizedDescription"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedDescription",
     )
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -113,7 +131,9 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
     is_default = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="isDefault"
     )
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -124,11 +144,17 @@ class ShippingMethodDraftSchema(marshmallow.Schema):
         return models.ShippingMethodDraft(**data)
 
 
-class ShippingMethodPagedQueryResponseSchema(marshmallow.Schema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+class ShippingMethodPagedQueryResponseSchema(helpers.BaseSchema):
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ShippingMethodSchema"),
         allow_none=True,
@@ -151,6 +177,7 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".ShippingMethodSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -173,7 +200,7 @@ class ShippingMethodResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.ShippingMethodResourceIdentifier(**data)
 
 
-class ShippingMethodUpdateSchema(marshmallow.Schema):
+class ShippingMethodUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -226,7 +253,7 @@ class ShippingMethodUpdateSchema(marshmallow.Schema):
         return models.ShippingMethodUpdate(**data)
 
 
-class ShippingMethodUpdateActionSchema(marshmallow.Schema):
+class ShippingMethodUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -238,7 +265,7 @@ class ShippingMethodUpdateActionSchema(marshmallow.Schema):
         return models.ShippingMethodUpdateAction(**data)
 
 
-class ShippingRateSchema(marshmallow.Schema):
+class ShippingRateSchema(helpers.BaseSchema):
     price = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -263,11 +290,15 @@ class ShippingRateSchema(marshmallow.Schema):
                 __name__, ".common.HighPrecisionMoneySchema"
             ),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="freeAbove",
     )
     is_matching = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isMatching",
     )
     tiers = marshmallow.fields.List(
         helpers.Discriminator(
@@ -294,7 +325,7 @@ class ShippingRateSchema(marshmallow.Schema):
         return models.ShippingRate(**data)
 
 
-class ShippingRateDraftSchema(marshmallow.Schema):
+class ShippingRateDraftSchema(helpers.BaseSchema):
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
@@ -305,6 +336,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="freeAbove",
     )
@@ -321,6 +353,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
             },
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -333,7 +366,7 @@ class ShippingRateDraftSchema(marshmallow.Schema):
         return models.ShippingRateDraft(**data)
 
 
-class ShippingRatePriceTierSchema(marshmallow.Schema):
+class ShippingRatePriceTierSchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
         ShippingRateTierType, by_value=True, allow_none=True, missing=None
     )
@@ -356,7 +389,10 @@ class CartClassificationTierSchema(ShippingRatePriceTierSchema):
         missing=None,
     )
     is_matching = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isMatching",
     )
 
     class Meta:
@@ -374,17 +410,22 @@ class CartScoreTierSchema(ShippingRatePriceTierSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     price_function = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PriceFunctionSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="priceFunction",
     )
     is_matching = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isMatching",
     )
 
     class Meta:
@@ -407,7 +448,10 @@ class CartValueTierSchema(ShippingRatePriceTierSchema):
         missing=None,
     )
     is_matching = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isMatching"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isMatching",
     )
 
     class Meta:
@@ -419,7 +463,7 @@ class CartValueTierSchema(ShippingRatePriceTierSchema):
         return models.CartValueTier(**data)
 
 
-class ZoneRateSchema(marshmallow.Schema):
+class ZoneRateSchema(helpers.BaseSchema):
     zone = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         allow_none=True,
@@ -444,7 +488,7 @@ class ZoneRateSchema(marshmallow.Schema):
         return models.ZoneRate(**data)
 
 
-class ZoneRateDraftSchema(marshmallow.Schema):
+class ZoneRateDraftSchema(helpers.BaseSchema):
     zone = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".zone.ZoneResourceIdentifierSchema"),
         allow_none=True,
@@ -598,7 +642,9 @@ class ShippingMethodRemoveZoneActionSchema(ShippingMethodUpdateActionSchema):
 
 
 class ShippingMethodSetDescriptionActionSchema(ShippingMethodUpdateActionSchema):
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -610,7 +656,9 @@ class ShippingMethodSetDescriptionActionSchema(ShippingMethodUpdateActionSchema)
 
 
 class ShippingMethodSetKeyActionSchema(ShippingMethodUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -625,7 +673,10 @@ class ShippingMethodSetLocalizedDescriptionActionSchema(
     ShippingMethodUpdateActionSchema
 ):
     localized_description = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="localizedDescription"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedDescription",
     )
 
     class Meta:
@@ -638,7 +689,9 @@ class ShippingMethodSetLocalizedDescriptionActionSchema(
 
 
 class ShippingMethodSetPredicateActionSchema(ShippingMethodUpdateActionSchema):
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

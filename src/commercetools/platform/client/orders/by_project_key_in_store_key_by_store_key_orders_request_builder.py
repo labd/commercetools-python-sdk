@@ -9,65 +9,74 @@ from .by_project_key_in_store_key_by_store_key_orders_order_number_by_order_numb
     ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _store_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        storeKey: str,
-        client: "Client",
+        project_key: str,
+        store_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._store_key = storeKey
+        self._project_key = project_key
+        self._store_key = store_key
         self._client = client
 
-    def withOrderNumber(
-        self, orderNumber: str
+    def with_order_number(
+        self, order_number: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder(
-            orderNumber=orderNumber,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            order_number=order_number,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def withId(
-        self, ID: str
+    def with_id(
+        self, id: str
     ) -> ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder(
-            ID=ID,
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            id=id,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
     def get(
         self,
         *,
-        expand: "str" = None,
-        sort: "str" = None,
-        limit: "int" = None,
-        offset: "int" = None,
-        with_total: "bool" = None,
-        where: "str" = None,
+        expand: str = None,
+        sort: str = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        where: str = None,
+        predicate_var: typing.Dict[str, str] = None,
         headers: typing.Dict[str, str] = None,
     ) -> "OrderPagedQueryResponse":
         """Queries orders in a specific Store. The {storeKey} path parameter maps to a Store's key."""
+        params = {
+            "expand": expand,
+            "sort": sort,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/orders",
-            params={
-                "expand": expand,
-                "sort": sort,
-                "limit": limit,
-                "offset": offset,
-                "withTotal": with_total,
-                "where": where,
-            },
+            params=params,
             response_class=OrderPagedQueryResponse,
             headers=headers,
         )
@@ -76,7 +85,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         self,
         body: "OrderFromCartDraft",
         *,
-        expand: "str" = None,
+        expand: str = None,
         headers: typing.Dict[str, str] = None,
     ) -> "Order":
         """Creates an order from a Cart from a specific Store. The {storeKey} path parameter maps to a Store's key.
@@ -85,6 +94,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         the shipping address is used for tax calculation.
 
         """
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/orders",
             params={"expand": expand},

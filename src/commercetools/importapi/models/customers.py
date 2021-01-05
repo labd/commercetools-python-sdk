@@ -11,36 +11,38 @@ if typing.TYPE_CHECKING:
     from .common import Address, CustomerGroupKeyReference
     from .customfields import Custom
 
+__all__ = ["CustomerImport"]
+
 
 class CustomerImport(ImportResource):
     """Import representation for a customer."""
 
     #: Maps to `Customer.customerNumber`.
-    customer_number: typing.Optional["str"]
+    customer_number: typing.Optional[str]
     #: Maps to `Customer.email`.
-    email: "str"
+    email: str
     #: Maps to `Customer.password`.
-    password: "str"
+    password: str
     #: Maps to `Customer.firstName`.
-    first_name: typing.Optional["str"]
+    first_name: typing.Optional[str]
     #: Maps to `Customer.lastName`.
-    last_name: typing.Optional["str"]
+    last_name: typing.Optional[str]
     #: Maps to `Customer.middleName`.
-    middle_name: typing.Optional["str"]
+    middle_name: typing.Optional[str]
     #: Maps to `Customer.title`.
-    title: typing.Optional["str"]
+    title: typing.Optional[str]
     #: Maps to `Customer.salutation`.
-    salutation: typing.Optional["str"]
+    salutation: typing.Optional[str]
     #: Maps to `Customer.externalId`.
-    external_id: typing.Optional["str"]
+    external_id: typing.Optional[str]
     #: Maps to `Customer.dateOfBirth`.
-    date_of_birth: typing.Optional["datetime.date"]
+    date_of_birth: typing.Optional[datetime.date]
     #: Maps to `Customer.companyName`.
-    company_name: typing.Optional["str"]
+    company_name: typing.Optional[str]
     #: Maps to `Customer.vatId`.
-    vat_id: typing.Optional["str"]
+    vat_id: typing.Optional[str]
     #: Maps to `Customer.isEmailVerified`.
-    is_email_verified: typing.Optional["bool"]
+    is_email_verified: typing.Optional[bool]
     #: References a customer group by its key.
     #:
     #: The customer group referenced
@@ -58,34 +60,34 @@ class CustomerImport(ImportResource):
     #: Maps to `Customer.shippingAddresses`.
     shipping_addresses: typing.Optional["Address"]
     #: Maps to `Customer.locale`.
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
     #: The custom fields for this Customer.
     custom: typing.Optional["Custom"]
 
     def __init__(
         self,
         *,
-        key: "str",
-        customer_number: typing.Optional["str"] = None,
-        email: "str",
-        password: "str",
-        first_name: typing.Optional["str"] = None,
-        last_name: typing.Optional["str"] = None,
-        middle_name: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        salutation: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None,
-        date_of_birth: typing.Optional["datetime.date"] = None,
-        company_name: typing.Optional["str"] = None,
-        vat_id: typing.Optional["str"] = None,
-        is_email_verified: typing.Optional["bool"] = None,
+        key: str,
+        customer_number: typing.Optional[str] = None,
+        email: str,
+        password: str,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        middle_name: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
+        date_of_birth: typing.Optional[datetime.date] = None,
+        company_name: typing.Optional[str] = None,
+        vat_id: typing.Optional[str] = None,
+        is_email_verified: typing.Optional[bool] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
         addresses: typing.Optional[typing.List["Address"]] = None,
         default_billing_address: typing.Optional["Address"] = None,
         billing_addresses: typing.Optional["Address"] = None,
         default_shipping_address: typing.Optional["Address"] = None,
         shipping_addresses: typing.Optional["Address"] = None,
-        locale: typing.Optional["str"] = None,
+        locale: typing.Optional[str] = None,
         custom: typing.Optional["Custom"] = None
     ):
         self.customer_number = customer_number

@@ -31,13 +31,97 @@ if typing.TYPE_CHECKING:
     from .tax_category import TaxCategoryReference, TaxCategoryResourceIdentifier
     from .type import FieldContainer, TypeResourceIdentifier
 
+__all__ = [
+    "Attribute",
+    "CategoryOrderHints",
+    "CustomTokenizer",
+    "FacetResult",
+    "FacetResultRange",
+    "FacetResultTerm",
+    "FacetResults",
+    "FacetTypes",
+    "FilteredFacetResult",
+    "Product",
+    "ProductAddAssetAction",
+    "ProductAddExternalImageAction",
+    "ProductAddPriceAction",
+    "ProductAddToCategoryAction",
+    "ProductAddVariantAction",
+    "ProductCatalogData",
+    "ProductChangeAssetNameAction",
+    "ProductChangeAssetOrderAction",
+    "ProductChangeMasterVariantAction",
+    "ProductChangeNameAction",
+    "ProductChangePriceAction",
+    "ProductChangeSlugAction",
+    "ProductData",
+    "ProductDraft",
+    "ProductLegacySetSkuAction",
+    "ProductMoveImageToPositionAction",
+    "ProductPagedQueryResponse",
+    "ProductProjection",
+    "ProductProjectionPagedQueryResponse",
+    "ProductProjectionPagedSearchResponse",
+    "ProductPublishAction",
+    "ProductReference",
+    "ProductRemoveAssetAction",
+    "ProductRemoveFromCategoryAction",
+    "ProductRemoveImageAction",
+    "ProductRemovePriceAction",
+    "ProductRemoveVariantAction",
+    "ProductResourceIdentifier",
+    "ProductRevertStagedChangesAction",
+    "ProductRevertStagedVariantChangesAction",
+    "ProductSetAssetCustomFieldAction",
+    "ProductSetAssetCustomTypeAction",
+    "ProductSetAssetDescriptionAction",
+    "ProductSetAssetKeyAction",
+    "ProductSetAssetSourcesAction",
+    "ProductSetAssetTagsAction",
+    "ProductSetAttributeAction",
+    "ProductSetAttributeInAllVariantsAction",
+    "ProductSetCategoryOrderHintAction",
+    "ProductSetDescriptionAction",
+    "ProductSetDiscountedPriceAction",
+    "ProductSetImageLabelAction",
+    "ProductSetKeyAction",
+    "ProductSetMetaDescriptionAction",
+    "ProductSetMetaKeywordsAction",
+    "ProductSetMetaTitleAction",
+    "ProductSetPricesAction",
+    "ProductSetProductPriceCustomFieldAction",
+    "ProductSetProductPriceCustomTypeAction",
+    "ProductSetProductVariantKeyAction",
+    "ProductSetSearchKeywordsAction",
+    "ProductSetSkuAction",
+    "ProductSetTaxCategoryAction",
+    "ProductTransitionStateAction",
+    "ProductUnpublishAction",
+    "ProductUpdate",
+    "ProductUpdateAction",
+    "ProductVariant",
+    "ProductVariantAvailability",
+    "ProductVariantChannelAvailability",
+    "ProductVariantChannelAvailabilityMap",
+    "ProductVariantDraft",
+    "RangeFacetResult",
+    "SearchKeyword",
+    "SearchKeywords",
+    "SuggestTokenizer",
+    "Suggestion",
+    "SuggestionResult",
+    "TermFacetResult",
+    "TermFacetResultType",
+    "WhitespaceTokenizer",
+]
+
 
 class Attribute(_BaseType):
-    name: "str"
+    name: str
     #: A valid JSON value, based on an AttributeDefinition.
-    value: "any"
+    value: typing.Any
 
-    def __init__(self, *, name: "str", value: "any"):
+    def __init__(self, *, name: str, value: typing.Any):
         self.name = name
         self.value = value
         super().__init__()
@@ -67,9 +151,18 @@ class FacetResult(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetResult":
-        from ._schemas.product import FacetResultSchema
+        if data["type"] == "filter":
+            from ._schemas.product import FilteredFacetResultSchema
 
-        return FacetResultSchema().load(data)
+            return FilteredFacetResultSchema().load(data)
+        if data["type"] == "range":
+            from ._schemas.product import RangeFacetResultSchema
+
+            return RangeFacetResultSchema().load(data)
+        if data["type"] == "terms":
+            from ._schemas.product import TermFacetResultSchema
+
+            return TermFacetResultSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product import FacetResultSchema
@@ -78,30 +171,30 @@ class FacetResult(_BaseType):
 
 
 class FacetResultRange(_BaseType):
-    from_: "float"
-    from_str: "str"
-    to: "float"
-    to_str: "str"
-    count: "int"
-    product_count: typing.Optional["int"]
-    total: "int"
-    min: "float"
-    max: "float"
-    mean: "float"
+    from_: float
+    from_str: str
+    to: float
+    to_str: str
+    count: int
+    product_count: typing.Optional[int]
+    total: int
+    min: float
+    max: float
+    mean: float
 
     def __init__(
         self,
         *,
-        from_: "float",
-        from_str: "str",
-        to: "float",
-        to_str: "str",
-        count: "int",
-        product_count: typing.Optional["int"] = None,
-        total: "int",
-        min: "float",
-        max: "float",
-        mean: "float"
+        from_: float,
+        from_str: str,
+        to: float,
+        to_str: str,
+        count: int,
+        product_count: typing.Optional[int] = None,
+        total: int,
+        min: float,
+        max: float,
+        mean: float
     ):
         self.from_ = from_
         self.from_str = from_str
@@ -128,12 +221,16 @@ class FacetResultRange(_BaseType):
 
 
 class FacetResultTerm(_BaseType):
-    term: "any"
-    count: "int"
-    product_count: typing.Optional["int"]
+    term: typing.Any
+    count: int
+    product_count: typing.Optional[int]
 
     def __init__(
-        self, *, term: "any", count: "int", product_count: typing.Optional["int"] = None
+        self,
+        *,
+        term: typing.Any,
+        count: int,
+        product_count: typing.Optional[int] = None
     ):
         self.term = term
         self.count = count
@@ -163,10 +260,10 @@ class FacetTypes(enum.Enum):
 
 
 class FilteredFacetResult(FacetResult):
-    count: "int"
-    product_count: typing.Optional["int"]
+    count: int
+    product_count: typing.Optional[int]
 
-    def __init__(self, *, count: "int", product_count: typing.Optional["int"] = None):
+    def __init__(self, *, count: int, product_count: typing.Optional[int] = None):
         self.count = count
         self.product_count = product_count
         super().__init__(type=FacetTypes.FILTER)
@@ -190,7 +287,7 @@ class Product(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the product.
     #: *Product keys are different from product variant keys.*
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     product_type: "ProductTypeReference"
     #: The product data in the master catalog.
     master_data: "ProductCatalogData"
@@ -202,13 +299,13 @@ class Product(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         product_type: "ProductTypeReference",
         master_data: "ProductCatalogData",
         tax_category: typing.Optional["TaxCategoryReference"] = None,
@@ -243,18 +340,18 @@ class Product(BaseResource):
 
 
 class ProductCatalogData(_BaseType):
-    published: "bool"
+    published: bool
     current: "ProductData"
     staged: "ProductData"
-    has_staged_changes: "bool"
+    has_staged_changes: bool
 
     def __init__(
         self,
         *,
-        published: "bool",
+        published: bool,
         current: "ProductData",
         staged: "ProductData",
-        has_staged_changes: "bool"
+        has_staged_changes: bool
     ):
         self.published = published
         self.current = current
@@ -338,7 +435,7 @@ class ProductDraft(_BaseType):
     #: Valid characters are: alphabetic characters (`A-Z, a-z`), numeric characters (`0-9`), underscores (`_`) and hyphens (`-`).
     slug: "LocalizedString"
     #: User-specific unique identifier for the product.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
     #: Categories assigned to the product.
     categories: typing.Optional[typing.List["CategoryResourceIdentifier"]]
@@ -355,7 +452,7 @@ class ProductDraft(_BaseType):
     search_keywords: typing.Optional["SearchKeywords"]
     state: typing.Optional["StateResourceIdentifier"]
     #: If `true`, the product is published immediately.
-    publish: typing.Optional["bool"]
+    publish: typing.Optional[bool]
 
     def __init__(
         self,
@@ -363,7 +460,7 @@ class ProductDraft(_BaseType):
         product_type: "ProductTypeResourceIdentifier",
         name: "LocalizedString",
         slug: "LocalizedString",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         categories: typing.Optional[typing.List["CategoryResourceIdentifier"]] = None,
         category_order_hints: typing.Optional["CategoryOrderHints"] = None,
@@ -375,7 +472,7 @@ class ProductDraft(_BaseType):
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateResourceIdentifier"] = None,
-        publish: typing.Optional["bool"] = None
+        publish: typing.Optional[bool] = None
     ):
         self.product_type = product_type
         self.name = name
@@ -408,29 +505,26 @@ class ProductDraft(_BaseType):
 
 
 class ProductPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Product"]
-    facets: typing.Optional["FacetResults"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
-        results: typing.List["Product"],
-        facets: typing.Optional["FacetResults"] = None
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
+        results: typing.List["Product"]
     ):
         self.limit = limit
         self.count = count
         self.total = total
         self.offset = offset
         self.results = results
-        self.facets = facets
         super().__init__()
 
     @classmethod
@@ -449,7 +543,7 @@ class ProductPagedQueryResponse(_BaseType):
 
 class ProductProjection(BaseResource):
     #: User-specific unique identifier of the Product.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     product_type: "ProductTypeReference"
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
@@ -461,8 +555,8 @@ class ProductProjection(BaseResource):
     meta_description: typing.Optional["LocalizedString"]
     meta_keywords: typing.Optional["LocalizedString"]
     search_keywords: typing.Optional["SearchKeywords"]
-    has_staged_changes: typing.Optional["bool"]
-    published: typing.Optional["bool"]
+    has_staged_changes: typing.Optional[bool]
+    published: typing.Optional[bool]
     master_variant: "ProductVariant"
     variants: typing.List["ProductVariant"]
     tax_category: typing.Optional["TaxCategoryReference"]
@@ -473,11 +567,11 @@ class ProductProjection(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
-        key: typing.Optional["str"] = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        key: typing.Optional[str] = None,
         product_type: "ProductTypeReference",
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
@@ -488,8 +582,8 @@ class ProductProjection(BaseResource):
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
-        has_staged_changes: typing.Optional["bool"] = None,
-        published: typing.Optional["bool"] = None,
+        has_staged_changes: typing.Optional[bool] = None,
+        published: typing.Optional[bool] = None,
         master_variant: "ProductVariant",
         variants: typing.List["ProductVariant"],
         tax_category: typing.Optional["TaxCategoryReference"] = None,
@@ -534,20 +628,20 @@ class ProductProjection(BaseResource):
 
 
 class ProductProjectionPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["ProductProjection"]
     facets: typing.Optional["FacetResults"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["ProductProjection"],
         facets: typing.Optional["FacetResults"] = None
     ):
@@ -574,20 +668,20 @@ class ProductProjectionPagedQueryResponse(_BaseType):
 
 
 class ProductProjectionPagedSearchResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["ProductProjection"]
     facets: "FacetResults"
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["ProductProjection"],
         facets: "FacetResults"
     ):
@@ -616,7 +710,7 @@ class ProductProjectionPagedSearchResponse(_BaseType):
 class ProductReference(Reference):
     obj: typing.Optional["Product"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Product"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Product"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT)
 
@@ -634,7 +728,7 @@ class ProductReference(Reference):
 
 class ProductResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT)
@@ -654,10 +748,10 @@ class ProductResourceIdentifier(ResourceIdentifier):
 
 
 class ProductUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ProductUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["ProductUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["ProductUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -675,17 +769,198 @@ class ProductUpdate(_BaseType):
 
 
 class ProductUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProductUpdateAction":
-        from ._schemas.product import ProductUpdateActionSchema
+        if data["action"] == "addAsset":
+            from ._schemas.product import ProductAddAssetActionSchema
 
-        return ProductUpdateActionSchema().load(data)
+            return ProductAddAssetActionSchema().load(data)
+        if data["action"] == "addExternalImage":
+            from ._schemas.product import ProductAddExternalImageActionSchema
+
+            return ProductAddExternalImageActionSchema().load(data)
+        if data["action"] == "addPrice":
+            from ._schemas.product import ProductAddPriceActionSchema
+
+            return ProductAddPriceActionSchema().load(data)
+        if data["action"] == "addToCategory":
+            from ._schemas.product import ProductAddToCategoryActionSchema
+
+            return ProductAddToCategoryActionSchema().load(data)
+        if data["action"] == "addVariant":
+            from ._schemas.product import ProductAddVariantActionSchema
+
+            return ProductAddVariantActionSchema().load(data)
+        if data["action"] == "changeAssetName":
+            from ._schemas.product import ProductChangeAssetNameActionSchema
+
+            return ProductChangeAssetNameActionSchema().load(data)
+        if data["action"] == "changeAssetOrder":
+            from ._schemas.product import ProductChangeAssetOrderActionSchema
+
+            return ProductChangeAssetOrderActionSchema().load(data)
+        if data["action"] == "changeMasterVariant":
+            from ._schemas.product import ProductChangeMasterVariantActionSchema
+
+            return ProductChangeMasterVariantActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.product import ProductChangeNameActionSchema
+
+            return ProductChangeNameActionSchema().load(data)
+        if data["action"] == "changePrice":
+            from ._schemas.product import ProductChangePriceActionSchema
+
+            return ProductChangePriceActionSchema().load(data)
+        if data["action"] == "changeSlug":
+            from ._schemas.product import ProductChangeSlugActionSchema
+
+            return ProductChangeSlugActionSchema().load(data)
+        if data["action"] == "legacySetSku":
+            from ._schemas.product import ProductLegacySetSkuActionSchema
+
+            return ProductLegacySetSkuActionSchema().load(data)
+        if data["action"] == "moveImageToPosition":
+            from ._schemas.product import ProductMoveImageToPositionActionSchema
+
+            return ProductMoveImageToPositionActionSchema().load(data)
+        if data["action"] == "publish":
+            from ._schemas.product import ProductPublishActionSchema
+
+            return ProductPublishActionSchema().load(data)
+        if data["action"] == "removeAsset":
+            from ._schemas.product import ProductRemoveAssetActionSchema
+
+            return ProductRemoveAssetActionSchema().load(data)
+        if data["action"] == "removeFromCategory":
+            from ._schemas.product import ProductRemoveFromCategoryActionSchema
+
+            return ProductRemoveFromCategoryActionSchema().load(data)
+        if data["action"] == "removeImage":
+            from ._schemas.product import ProductRemoveImageActionSchema
+
+            return ProductRemoveImageActionSchema().load(data)
+        if data["action"] == "removePrice":
+            from ._schemas.product import ProductRemovePriceActionSchema
+
+            return ProductRemovePriceActionSchema().load(data)
+        if data["action"] == "removeVariant":
+            from ._schemas.product import ProductRemoveVariantActionSchema
+
+            return ProductRemoveVariantActionSchema().load(data)
+        if data["action"] == "revertStagedChanges":
+            from ._schemas.product import ProductRevertStagedChangesActionSchema
+
+            return ProductRevertStagedChangesActionSchema().load(data)
+        if data["action"] == "revertStagedVariantChanges":
+            from ._schemas.product import ProductRevertStagedVariantChangesActionSchema
+
+            return ProductRevertStagedVariantChangesActionSchema().load(data)
+        if data["action"] == "setAssetCustomField":
+            from ._schemas.product import ProductSetAssetCustomFieldActionSchema
+
+            return ProductSetAssetCustomFieldActionSchema().load(data)
+        if data["action"] == "setAssetCustomType":
+            from ._schemas.product import ProductSetAssetCustomTypeActionSchema
+
+            return ProductSetAssetCustomTypeActionSchema().load(data)
+        if data["action"] == "setAssetDescription":
+            from ._schemas.product import ProductSetAssetDescriptionActionSchema
+
+            return ProductSetAssetDescriptionActionSchema().load(data)
+        if data["action"] == "setAssetKey":
+            from ._schemas.product import ProductSetAssetKeyActionSchema
+
+            return ProductSetAssetKeyActionSchema().load(data)
+        if data["action"] == "setAssetSources":
+            from ._schemas.product import ProductSetAssetSourcesActionSchema
+
+            return ProductSetAssetSourcesActionSchema().load(data)
+        if data["action"] == "setAssetTags":
+            from ._schemas.product import ProductSetAssetTagsActionSchema
+
+            return ProductSetAssetTagsActionSchema().load(data)
+        if data["action"] == "setAttribute":
+            from ._schemas.product import ProductSetAttributeActionSchema
+
+            return ProductSetAttributeActionSchema().load(data)
+        if data["action"] == "setAttributeInAllVariants":
+            from ._schemas.product import ProductSetAttributeInAllVariantsActionSchema
+
+            return ProductSetAttributeInAllVariantsActionSchema().load(data)
+        if data["action"] == "setCategoryOrderHint":
+            from ._schemas.product import ProductSetCategoryOrderHintActionSchema
+
+            return ProductSetCategoryOrderHintActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.product import ProductSetDescriptionActionSchema
+
+            return ProductSetDescriptionActionSchema().load(data)
+        if data["action"] == "setDiscountedPrice":
+            from ._schemas.product import ProductSetDiscountedPriceActionSchema
+
+            return ProductSetDiscountedPriceActionSchema().load(data)
+        if data["action"] == "setImageLabel":
+            from ._schemas.product import ProductSetImageLabelActionSchema
+
+            return ProductSetImageLabelActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.product import ProductSetKeyActionSchema
+
+            return ProductSetKeyActionSchema().load(data)
+        if data["action"] == "setMetaDescription":
+            from ._schemas.product import ProductSetMetaDescriptionActionSchema
+
+            return ProductSetMetaDescriptionActionSchema().load(data)
+        if data["action"] == "setMetaKeywords":
+            from ._schemas.product import ProductSetMetaKeywordsActionSchema
+
+            return ProductSetMetaKeywordsActionSchema().load(data)
+        if data["action"] == "setMetaTitle":
+            from ._schemas.product import ProductSetMetaTitleActionSchema
+
+            return ProductSetMetaTitleActionSchema().load(data)
+        if data["action"] == "setPrices":
+            from ._schemas.product import ProductSetPricesActionSchema
+
+            return ProductSetPricesActionSchema().load(data)
+        if data["action"] == "setProductPriceCustomField":
+            from ._schemas.product import ProductSetProductPriceCustomFieldActionSchema
+
+            return ProductSetProductPriceCustomFieldActionSchema().load(data)
+        if data["action"] == "setProductPriceCustomType":
+            from ._schemas.product import ProductSetProductPriceCustomTypeActionSchema
+
+            return ProductSetProductPriceCustomTypeActionSchema().load(data)
+        if data["action"] == "setProductVariantKey":
+            from ._schemas.product import ProductSetProductVariantKeyActionSchema
+
+            return ProductSetProductVariantKeyActionSchema().load(data)
+        if data["action"] == "setSearchKeywords":
+            from ._schemas.product import ProductSetSearchKeywordsActionSchema
+
+            return ProductSetSearchKeywordsActionSchema().load(data)
+        if data["action"] == "setSku":
+            from ._schemas.product import ProductSetSkuActionSchema
+
+            return ProductSetSkuActionSchema().load(data)
+        if data["action"] == "setTaxCategory":
+            from ._schemas.product import ProductSetTaxCategoryActionSchema
+
+            return ProductSetTaxCategoryActionSchema().load(data)
+        if data["action"] == "transitionState":
+            from ._schemas.product import ProductTransitionStateActionSchema
+
+            return ProductTransitionStateActionSchema().load(data)
+        if data["action"] == "unpublish":
+            from ._schemas.product import ProductUnpublishActionSchema
+
+            return ProductUnpublishActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product import ProductUpdateActionSchema
@@ -694,34 +969,34 @@ class ProductUpdateAction(_BaseType):
 
 
 class ProductVariant(_BaseType):
-    id: "int"
-    sku: typing.Optional["str"]
-    key: typing.Optional["str"]
+    id: int
+    sku: typing.Optional[str]
+    key: typing.Optional[str]
     prices: typing.Optional[typing.List["Price"]]
     attributes: typing.Optional[typing.List["Attribute"]]
     price: typing.Optional["Price"]
     images: typing.Optional[typing.List["Image"]]
     assets: typing.Optional[typing.List["Asset"]]
     availability: typing.Optional["ProductVariantAvailability"]
-    is_matching_variant: typing.Optional["bool"]
+    is_matching_variant: typing.Optional[bool]
     scoped_price: typing.Optional["ScopedPrice"]
-    scoped_price_discounted: typing.Optional["bool"]
+    scoped_price_discounted: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        id: "int",
-        sku: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
+        id: int,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["Price"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         price: typing.Optional["Price"] = None,
         images: typing.Optional[typing.List["Image"]] = None,
         assets: typing.Optional[typing.List["Asset"]] = None,
         availability: typing.Optional["ProductVariantAvailability"] = None,
-        is_matching_variant: typing.Optional["bool"] = None,
+        is_matching_variant: typing.Optional[bool] = None,
         scoped_price: typing.Optional["ScopedPrice"] = None,
-        scoped_price_discounted: typing.Optional["bool"] = None
+        scoped_price_discounted: typing.Optional[bool] = None
     ):
         self.id = id
         self.sku = sku
@@ -750,17 +1025,17 @@ class ProductVariant(_BaseType):
 
 
 class ProductVariantAvailability(_BaseType):
-    is_on_stock: typing.Optional["bool"]
-    restockable_in_days: typing.Optional["int"]
-    available_quantity: typing.Optional["int"]
+    is_on_stock: typing.Optional[bool]
+    restockable_in_days: typing.Optional[int]
+    available_quantity: typing.Optional[int]
     channels: typing.Optional["ProductVariantChannelAvailabilityMap"]
 
     def __init__(
         self,
         *,
-        is_on_stock: typing.Optional["bool"] = None,
-        restockable_in_days: typing.Optional["int"] = None,
-        available_quantity: typing.Optional["int"] = None,
+        is_on_stock: typing.Optional[bool] = None,
+        restockable_in_days: typing.Optional[int] = None,
+        available_quantity: typing.Optional[int] = None,
         channels: typing.Optional["ProductVariantChannelAvailabilityMap"] = None
     ):
         self.is_on_stock = is_on_stock
@@ -784,16 +1059,16 @@ class ProductVariantAvailability(_BaseType):
 
 
 class ProductVariantChannelAvailability(_BaseType):
-    is_on_stock: typing.Optional["bool"]
-    restockable_in_days: typing.Optional["int"]
-    available_quantity: typing.Optional["int"]
+    is_on_stock: typing.Optional[bool]
+    restockable_in_days: typing.Optional[int]
+    available_quantity: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        is_on_stock: typing.Optional["bool"] = None,
-        restockable_in_days: typing.Optional["int"] = None,
-        available_quantity: typing.Optional["int"] = None
+        is_on_stock: typing.Optional[bool] = None,
+        restockable_in_days: typing.Optional[int] = None,
+        available_quantity: typing.Optional[int] = None
     ):
         self.is_on_stock = is_on_stock
         self.restockable_in_days = restockable_in_days
@@ -819,8 +1094,8 @@ class ProductVariantChannelAvailabilityMap(typing.Dict[str, str]):
 
 
 class ProductVariantDraft(_BaseType):
-    sku: typing.Optional["str"]
-    key: typing.Optional["str"]
+    sku: typing.Optional[str]
+    key: typing.Optional[str]
     prices: typing.Optional[typing.List["PriceDraft"]]
     attributes: typing.Optional[typing.List["Attribute"]]
     images: typing.Optional[typing.List["Image"]]
@@ -829,8 +1104,8 @@ class ProductVariantDraft(_BaseType):
     def __init__(
         self,
         *,
-        sku: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
@@ -876,7 +1151,7 @@ class RangeFacetResult(FacetResult):
 
 
 class SearchKeyword(_BaseType):
-    text: "str"
+    text: str
     suggest_tokenizer: typing.Optional[
         typing.Union["SuggestTokenizer", "WhitespaceTokenizer", "CustomTokenizer"]
     ]
@@ -884,7 +1159,7 @@ class SearchKeyword(_BaseType):
     def __init__(
         self,
         *,
-        text: "str",
+        text: str,
         suggest_tokenizer: typing.Optional[
             typing.Union["SuggestTokenizer", "WhitespaceTokenizer", "CustomTokenizer"]
         ] = None
@@ -910,17 +1185,22 @@ class SearchKeywords(typing.Dict[str, str]):
 
 
 class SuggestTokenizer(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SuggestTokenizer":
-        from ._schemas.product import SuggestTokenizerSchema
+        if data["type"] == "custom":
+            from ._schemas.product import CustomTokenizerSchema
 
-        return SuggestTokenizerSchema().load(data)
+            return CustomTokenizerSchema().load(data)
+        if data["type"] == "whitespace":
+            from ._schemas.product import WhitespaceTokenizerSchema
+
+            return WhitespaceTokenizerSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product import SuggestTokenizerSchema
@@ -949,9 +1229,9 @@ class CustomTokenizer(SuggestTokenizer):
 
 class Suggestion(_BaseType):
     #: The suggested text.
-    text: "str"
+    text: str
 
-    def __init__(self, *, text: "str"):
+    def __init__(self, *, text: str):
         self.text = text
         super().__init__()
 
@@ -973,18 +1253,18 @@ class SuggestionResult(typing.Dict[str, str]):
 
 class TermFacetResult(FacetResult):
     data_type: "TermFacetResultType"
-    missing: "int"
-    total: "int"
-    other: "int"
+    missing: int
+    total: int
+    other: int
     terms: typing.List["FacetResultTerm"]
 
     def __init__(
         self,
         *,
         data_type: "TermFacetResultType",
-        missing: "int",
-        total: "int",
-        other: "int",
+        missing: int,
+        total: int,
+        other: int,
         terms: typing.List["FacetResultTerm"]
     ):
         self.data_type = data_type
@@ -1033,21 +1313,21 @@ class WhitespaceTokenizer(SuggestTokenizer):
 
 
 class ProductAddAssetAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
     asset: "AssetDraft"
     #: Position of the new asset inside the existing list (from `0` to the size of the list)
-    position: typing.Optional["int"]
+    position: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
         asset: "AssetDraft",
-        position: typing.Optional["int"] = None
+        position: typing.Optional[int] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1069,18 +1349,18 @@ class ProductAddAssetAction(ProductUpdateAction):
 
 
 class ProductAddExternalImageAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     image: "Image"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
         image: "Image",
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1103,18 +1383,18 @@ class ProductAddExternalImageAction(ProductUpdateAction):
 
 
 class ProductAddPriceAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     price: "PriceDraft"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
         price: "PriceDraft",
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1136,15 +1416,15 @@ class ProductAddPriceAction(ProductUpdateAction):
 
 class ProductAddToCategoryAction(ProductUpdateAction):
     category: "CategoryResourceIdentifier"
-    order_hint: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    order_hint: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         category: "CategoryResourceIdentifier",
-        order_hint: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        order_hint: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.category = category
         self.order_hint = order_hint
@@ -1166,23 +1446,23 @@ class ProductAddToCategoryAction(ProductUpdateAction):
 
 
 class ProductAddVariantAction(ProductUpdateAction):
-    sku: typing.Optional["str"]
-    key: typing.Optional["str"]
+    sku: typing.Optional[str]
+    key: typing.Optional[str]
     prices: typing.Optional[typing.List["PriceDraft"]]
     images: typing.Optional[typing.List["Image"]]
     attributes: typing.Optional[typing.List["Attribute"]]
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
     assets: typing.Optional[typing.List["Asset"]]
 
     def __init__(
         self,
         *,
-        sku: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
-        staged: typing.Optional["bool"] = None,
+        staged: typing.Optional[bool] = None,
         assets: typing.Optional[typing.List["Asset"]] = None
     ):
         self.sku = sku
@@ -1209,21 +1489,21 @@ class ProductAddVariantAction(ProductUpdateAction):
 
 
 class ProductChangeAssetNameAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     name: "LocalizedString"
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         name: "LocalizedString"
     ):
         self.variant_id = variant_id
@@ -1249,17 +1529,17 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
 
 
 class ProductChangeAssetOrderAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
     asset_order: typing.List["str"]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
         asset_order: typing.List["str"]
     ):
         self.variant_id = variant_id
@@ -1283,16 +1563,16 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
 
 
 class ProductChangeMasterVariantAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1315,10 +1595,10 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
 
 class ProductChangeNameAction(ProductUpdateAction):
     name: "LocalizedString"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
-        self, *, name: "LocalizedString", staged: typing.Optional["bool"] = None
+        self, *, name: "LocalizedString", staged: typing.Optional[bool] = None
     ):
         self.name = name
         self.staged = staged
@@ -1340,16 +1620,16 @@ class ProductChangeNameAction(ProductUpdateAction):
 
 class ProductChangePriceAction(ProductUpdateAction):
     #: ID of the [Price](#price)
-    price_id: "str"
+    price_id: str
     price: "PriceDraft"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        price_id: "str",
+        price_id: str,
         price: "PriceDraft",
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.price_id = price_id
         self.price = price
@@ -1375,10 +1655,10 @@ class ProductChangeSlugAction(ProductUpdateAction):
     #: Allowed are alphabetic, numeric, underscore (`_`) and hyphen (`-`) characters.
     #: Maximum size is `256`.
     slug: "LocalizedString"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
-        self, *, slug: "LocalizedString", staged: typing.Optional["bool"] = None
+        self, *, slug: "LocalizedString", staged: typing.Optional[bool] = None
     ):
         self.slug = slug
         self.staged = staged
@@ -1399,10 +1679,10 @@ class ProductChangeSlugAction(ProductUpdateAction):
 
 
 class ProductLegacySetSkuAction(ProductUpdateAction):
-    sku: typing.Optional["str"]
-    variant_id: "int"
+    sku: typing.Optional[str]
+    variant_id: int
 
-    def __init__(self, *, sku: typing.Optional["str"] = None, variant_id: "int"):
+    def __init__(self, *, sku: typing.Optional[str] = None, variant_id: int):
         self.sku = sku
         self.variant_id = variant_id
         super().__init__(action="legacySetSku")
@@ -1422,21 +1702,21 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
 
 
 class ProductMoveImageToPositionAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     #: The URL of the image
-    image_url: "str"
-    position: "int"
-    staged: typing.Optional["bool"]
+    image_url: str
+    position: int
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        image_url: "str",
-        position: "int",
-        staged: typing.Optional["bool"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        image_url: str,
+        position: int,
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1479,20 +1759,20 @@ class ProductPublishAction(ProductUpdateAction):
 
 
 class ProductRemoveAssetAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1517,13 +1797,13 @@ class ProductRemoveAssetAction(ProductUpdateAction):
 
 class ProductRemoveFromCategoryAction(ProductUpdateAction):
     category: "CategoryResourceIdentifier"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         category: "CategoryResourceIdentifier",
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.category = category
         self.staged = staged
@@ -1544,19 +1824,19 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
 
 
 class ProductRemoveImageAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     #: The URL of the image.
-    image_url: "str"
-    staged: typing.Optional["bool"]
+    image_url: str
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        image_url: "str",
-        staged: typing.Optional["bool"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        image_url: str,
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1580,10 +1860,10 @@ class ProductRemoveImageAction(ProductUpdateAction):
 
 class ProductRemovePriceAction(ProductUpdateAction):
     #: ID of the [Price](#price)
-    price_id: "str"
-    staged: typing.Optional["bool"]
+    price_id: str
+    staged: typing.Optional[bool]
 
-    def __init__(self, *, price_id: "str", staged: typing.Optional["bool"] = None):
+    def __init__(self, *, price_id: str, staged: typing.Optional[bool] = None):
         self.price_id = price_id
         self.staged = staged
         super().__init__(action="removePrice")
@@ -1603,16 +1883,16 @@ class ProductRemovePriceAction(ProductUpdateAction):
 
 
 class ProductRemoveVariantAction(ProductUpdateAction):
-    id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.id = id
         self.sku = sku
@@ -1653,9 +1933,9 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
 
 
 class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
-    variant_id: "int"
+    variant_id: int
 
-    def __init__(self, *, variant_id: "int"):
+    def __init__(self, *, variant_id: int):
         self.variant_id = variant_id
         super().__init__(action="revertStagedVariantChanges")
 
@@ -1674,24 +1954,24 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
 
 
 class ProductSetAssetCustomFieldAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
-    name: "str"
-    value: typing.Optional["any"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
-        name: "str",
-        value: typing.Optional["any"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1717,27 +1997,27 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
 
 
 class ProductSetAssetCustomTypeAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     #: If set, the custom type is set to this new value.
     #: If absent, the custom type and any existing custom fields are removed.
     type: typing.Optional["TypeResourceIdentifier"]
     #: If set, the custom fields are set to this new value.
-    fields: typing.Optional["any"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["any"] = None
+        fields: typing.Optional[object] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1763,21 +2043,21 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
 
 
 class ProductSetAssetDescriptionAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None
     ):
         self.variant_id = variant_id
@@ -1803,22 +2083,22 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetAssetKeyAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: "str"
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: str
     #: User-defined identifier for the asset.
     #: If left blank or set to `null`, the asset key is unset/removed.
-    asset_key: typing.Optional["str"]
+    asset_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: "str",
-        asset_key: typing.Optional["str"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: str,
+        asset_key: typing.Optional[str] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1842,21 +2122,21 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
 
 
 class ProductSetAssetSourcesAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     sources: typing.List["AssetSource"]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         sources: typing.List["AssetSource"]
     ):
         self.variant_id = variant_id
@@ -1882,21 +2162,21 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
 
 
 class ProductSetAssetTagsAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
-    asset_id: typing.Optional["str"]
-    asset_key: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
+    asset_id: typing.Optional[str]
+    asset_key: typing.Optional[str]
     tags: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None,
-        asset_id: typing.Optional["str"] = None,
-        asset_key: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None,
+        asset_id: typing.Optional[str] = None,
+        asset_key: typing.Optional[str] = None,
         tags: typing.Optional[typing.List["str"]] = None
     ):
         self.variant_id = variant_id
@@ -1922,23 +2202,23 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
 
 
 class ProductSetAttributeAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    name: "str"
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    name: str
     #: If the attribute exists and the value is omitted or set to `null`, the attribute is removed.
     #: If the attribute exists and a value is provided, the new value is applied.
     #: If the attribute does not exist and a value is provided, it is added as a new attribute.
-    value: typing.Optional["any"]
-    staged: typing.Optional["bool"]
+    value: typing.Optional[typing.Any]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        name: "str",
-        value: typing.Optional["any"] = None,
-        staged: typing.Optional["bool"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1962,17 +2242,17 @@ class ProductSetAttributeAction(ProductUpdateAction):
 
 
 class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
-    name: "str"
+    name: str
     #: The same update behavior as for Set Attribute applies.
-    value: typing.Optional["any"]
-    staged: typing.Optional["bool"]
+    value: typing.Optional[typing.Any]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        name: "str",
-        value: typing.Optional["any"] = None,
-        staged: typing.Optional["bool"] = None
+        name: str,
+        value: typing.Optional[typing.Any] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.name = name
         self.value = value
@@ -1994,16 +2274,16 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
 
 
 class ProductSetCategoryOrderHintAction(ProductUpdateAction):
-    category_id: "str"
-    order_hint: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    category_id: str
+    order_hint: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        category_id: "str",
-        order_hint: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        category_id: str,
+        order_hint: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.category_id = category_id
         self.order_hint = order_hint
@@ -2026,13 +2306,13 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
 
 class ProductSetDescriptionAction(ProductUpdateAction):
     description: typing.Optional["LocalizedString"]
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         description: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.description = description
         self.staged = staged
@@ -2053,15 +2333,15 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
-    price_id: "str"
-    staged: typing.Optional["bool"]
+    price_id: str
+    staged: typing.Optional[bool]
     discounted: typing.Optional["DiscountedPrice"]
 
     def __init__(
         self,
         *,
-        price_id: "str",
-        staged: typing.Optional["bool"] = None,
+        price_id: str,
+        staged: typing.Optional[bool] = None,
         discounted: typing.Optional["DiscountedPrice"] = None
     ):
         self.price_id = price_id
@@ -2084,23 +2364,23 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
 
 
 class ProductSetImageLabelAction(ProductUpdateAction):
-    sku: typing.Optional["str"]
-    variant_id: typing.Optional["int"]
+    sku: typing.Optional[str]
+    variant_id: typing.Optional[int]
     #: The URL of the image.
-    image_url: "str"
+    image_url: str
     #: The new image label.
     #: If left blank or set to null, the label is removed.
-    label: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    label: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        sku: typing.Optional["str"] = None,
-        variant_id: typing.Optional["int"] = None,
-        image_url: "str",
-        label: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        sku: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        image_url: str,
+        label: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.sku = sku
         self.variant_id = variant_id
@@ -2126,9 +2406,9 @@ class ProductSetImageLabelAction(ProductUpdateAction):
 class ProductSetKeyAction(ProductUpdateAction):
     #: User-specific unique identifier for the product.
     #: If left blank or set to `null`, the product key is unset/removed.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -2146,13 +2426,13 @@ class ProductSetKeyAction(ProductUpdateAction):
 
 class ProductSetMetaDescriptionAction(ProductUpdateAction):
     meta_description: typing.Optional["LocalizedString"]
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         meta_description: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.meta_description = meta_description
         self.staged = staged
@@ -2174,13 +2454,13 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
 
 class ProductSetMetaKeywordsAction(ProductUpdateAction):
     meta_keywords: typing.Optional["LocalizedString"]
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.meta_keywords = meta_keywords
         self.staged = staged
@@ -2202,13 +2482,13 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
 
 class ProductSetMetaTitleAction(ProductUpdateAction):
     meta_title: typing.Optional["LocalizedString"]
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         meta_title: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.meta_title = meta_title
         self.staged = staged
@@ -2229,18 +2509,18 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
 
 
 class ProductSetPricesAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     prices: typing.List["PriceDraft"]
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
         prices: typing.List["PriceDraft"],
-        staged: typing.Optional["bool"] = None
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2263,18 +2543,18 @@ class ProductSetPricesAction(ProductUpdateAction):
 
 
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
-    price_id: "str"
-    staged: typing.Optional["bool"]
-    name: "str"
-    value: typing.Optional["any"]
+    price_id: str
+    staged: typing.Optional[bool]
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        price_id: "str",
-        staged: typing.Optional["bool"] = None,
-        name: "str",
-        value: typing.Optional["any"] = None
+        price_id: str,
+        staged: typing.Optional[bool] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.price_id = price_id
         self.staged = staged
@@ -2297,16 +2577,16 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 
 
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
-    price_id: "str"
-    staged: typing.Optional["bool"]
+    price_id: str
+    staged: typing.Optional[bool]
     type: typing.Optional["TypeResourceIdentifier"]
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        price_id: "str",
-        staged: typing.Optional["bool"] = None,
+        price_id: str,
+        staged: typing.Optional[bool] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
@@ -2331,19 +2611,19 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
 
 
 class ProductSetProductVariantKeyAction(ProductUpdateAction):
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     #: If left blank or set to `null`, the key is unset/removed.
-    key: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    key: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2367,13 +2647,10 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
 
 class ProductSetSearchKeywordsAction(ProductUpdateAction):
     search_keywords: "SearchKeywords"
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
 
     def __init__(
-        self,
-        *,
-        search_keywords: "SearchKeywords",
-        staged: typing.Optional["bool"] = None
+        self, *, search_keywords: "SearchKeywords", staged: typing.Optional[bool] = None
     ):
         self.search_keywords = search_keywords
         self.staged = staged
@@ -2394,18 +2671,18 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 
 
 class ProductSetSkuAction(ProductUpdateAction):
-    variant_id: "int"
+    variant_id: int
     #: SKU must be unique.
     #: If left blank or set to `null`, the sku is unset/removed.
-    sku: typing.Optional["str"]
-    staged: typing.Optional["bool"]
+    sku: typing.Optional[str]
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        variant_id: "int",
-        sku: typing.Optional["str"] = None,
-        staged: typing.Optional["bool"] = None
+        variant_id: int,
+        sku: typing.Optional[str] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2450,13 +2727,13 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
 
 class ProductTransitionStateAction(ProductUpdateAction):
     state: typing.Optional["StateResourceIdentifier"]
-    force: typing.Optional["bool"]
+    force: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         state: typing.Optional["StateResourceIdentifier"] = None,
-        force: typing.Optional["bool"] = None
+        force: typing.Optional[bool] = None
     ):
         self.state = state
         self.force = force

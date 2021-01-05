@@ -9,9 +9,9 @@ class Client(BaseClient):
         kwargs.setdefault("url", "https://api.europe-west1.gcp.commercetools.com")
         super().__init__(self, **kwargs)
 
-    def withProjectKey(self, projectKey: str) -> ByProjectKeyRequestBuilder:
+    def with_project_key(self, project_key: str) -> ByProjectKeyRequestBuilder:
         """The Project endpoint is used to retrieve certain information from a project."""
         return ByProjectKeyRequestBuilder(
-            projectKey=projectKey,
+            project_key=project_key,
             client=self,
         )

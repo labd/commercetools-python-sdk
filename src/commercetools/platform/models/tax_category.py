@@ -10,12 +10,31 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, ReferenceTypeId
 
+__all__ = [
+    "SubRate",
+    "TaxCategory",
+    "TaxCategoryAddTaxRateAction",
+    "TaxCategoryChangeNameAction",
+    "TaxCategoryDraft",
+    "TaxCategoryPagedQueryResponse",
+    "TaxCategoryReference",
+    "TaxCategoryRemoveTaxRateAction",
+    "TaxCategoryReplaceTaxRateAction",
+    "TaxCategoryResourceIdentifier",
+    "TaxCategorySetDescriptionAction",
+    "TaxCategorySetKeyAction",
+    "TaxCategoryUpdate",
+    "TaxCategoryUpdateAction",
+    "TaxRate",
+    "TaxRateDraft",
+]
+
 
 class SubRate(_BaseType):
-    name: "str"
-    amount: "float"
+    name: str
+    amount: float
 
-    def __init__(self, *, name: "str", amount: "float"):
+    def __init__(self, *, name: str, amount: float):
         self.name = name
         self.amount = amount
         super().__init__()
@@ -37,26 +56,26 @@ class TaxCategory(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
-    name: "str"
-    description: typing.Optional["str"]
+    name: str
+    description: typing.Optional[str]
     #: The tax rates have unique IDs in the rates list
     rates: typing.List["TaxRate"]
     #: User-specific unique identifier for the category.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        name: "str",
-        description: typing.Optional["str"] = None,
+        name: str,
+        description: typing.Optional[str] = None,
         rates: typing.List["TaxRate"],
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -84,18 +103,18 @@ class TaxCategory(BaseResource):
 
 
 class TaxCategoryDraft(_BaseType):
-    name: "str"
-    description: typing.Optional["str"]
+    name: str
+    description: typing.Optional[str]
     rates: typing.List["TaxRateDraft"]
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        name: "str",
-        description: typing.Optional["str"] = None,
+        name: str,
+        description: typing.Optional[str] = None,
         rates: typing.List["TaxRateDraft"],
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.name = name
         self.description = description
@@ -116,19 +135,19 @@ class TaxCategoryDraft(_BaseType):
 
 
 class TaxCategoryPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["TaxCategory"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["TaxCategory"]
     ):
         self.limit = limit
@@ -155,7 +174,7 @@ class TaxCategoryPagedQueryResponse(_BaseType):
 class TaxCategoryReference(Reference):
     obj: typing.Optional["TaxCategory"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["TaxCategory"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["TaxCategory"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.TAX_CATEGORY)
 
@@ -173,7 +192,7 @@ class TaxCategoryReference(Reference):
 
 class TaxCategoryResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.TAX_CATEGORY)
@@ -193,11 +212,11 @@ class TaxCategoryResourceIdentifier(ResourceIdentifier):
 
 
 class TaxCategoryUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["TaxCategoryUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["TaxCategoryUpdateAction"]
+        self, *, version: int, actions: typing.List["TaxCategoryUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -216,9 +235,9 @@ class TaxCategoryUpdate(_BaseType):
 
 
 class TaxCategoryUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -226,9 +245,30 @@ class TaxCategoryUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "TaxCategoryUpdateAction":
-        from ._schemas.tax_category import TaxCategoryUpdateActionSchema
+        if data["action"] == "addTaxRate":
+            from ._schemas.tax_category import TaxCategoryAddTaxRateActionSchema
 
-        return TaxCategoryUpdateActionSchema().load(data)
+            return TaxCategoryAddTaxRateActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.tax_category import TaxCategoryChangeNameActionSchema
+
+            return TaxCategoryChangeNameActionSchema().load(data)
+        if data["action"] == "removeTaxRate":
+            from ._schemas.tax_category import TaxCategoryRemoveTaxRateActionSchema
+
+            return TaxCategoryRemoveTaxRateActionSchema().load(data)
+        if data["action"] == "replaceTaxRate":
+            from ._schemas.tax_category import TaxCategoryReplaceTaxRateActionSchema
+
+            return TaxCategoryReplaceTaxRateActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.tax_category import TaxCategorySetDescriptionActionSchema
+
+            return TaxCategorySetDescriptionActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.tax_category import TaxCategorySetKeyActionSchema
+
+            return TaxCategorySetKeyActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.tax_category import TaxCategoryUpdateActionSchema
@@ -240,16 +280,16 @@ class TaxRate(_BaseType):
     #: The ID is always set if the tax rate is part of a TaxCategory.
     #: The external tax rates in a
     #: Cart do not contain an `id`.
-    id: typing.Optional["str"]
-    name: "str"
+    id: typing.Optional[str]
+    name: str
     #: Percentage in the range of [0..1].
     #: The sum of the amounts of all `subRates`, if there are any.
-    amount: "float"
-    included_in_price: "bool"
+    amount: float
+    included_in_price: bool
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
+    country: str
     #: The state in the country
-    state: typing.Optional["str"]
+    state: typing.Optional[str]
     #: For countries (e.g.
     #: the US) where the total tax is a combination of multiple taxes (e.g.
     #: state and local taxes).
@@ -258,12 +298,12 @@ class TaxRate(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional["str"] = None,
-        name: "str",
-        amount: "float",
-        included_in_price: "bool",
-        country: "str",
-        state: typing.Optional["str"] = None,
+        id: typing.Optional[str] = None,
+        name: str,
+        amount: float,
+        included_in_price: bool,
+        country: str,
+        state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None
     ):
         self.id = id
@@ -288,17 +328,17 @@ class TaxRate(_BaseType):
 
 
 class TaxRateDraft(_BaseType):
-    name: "str"
+    name: str
     #: Percentage in the range of [0..1].
     #: Must be supplied if no `subRates` are specified.
     #: If `subRates` are specified
     #: then the `amount` can be omitted or it must be the sum of the amounts of all `subRates`.
-    amount: typing.Optional["float"]
-    included_in_price: "bool"
+    amount: typing.Optional[float]
+    included_in_price: bool
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
+    country: str
     #: The state in the country
-    state: typing.Optional["str"]
+    state: typing.Optional[str]
     #: For countries (e.g.
     #: the US) where the total tax is a combination of multiple taxes (e.g.
     #: state and local taxes).
@@ -307,11 +347,11 @@ class TaxRateDraft(_BaseType):
     def __init__(
         self,
         *,
-        name: "str",
-        amount: typing.Optional["float"] = None,
-        included_in_price: "bool",
-        country: "str",
-        state: typing.Optional["str"] = None,
+        name: str,
+        amount: typing.Optional[float] = None,
+        included_in_price: bool,
+        country: str,
+        state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None
     ):
         self.name = name
@@ -356,9 +396,9 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="changeName")
 
@@ -377,9 +417,9 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
-    tax_rate_id: "str"
+    tax_rate_id: str
 
-    def __init__(self, *, tax_rate_id: "str"):
+    def __init__(self, *, tax_rate_id: str):
         self.tax_rate_id = tax_rate_id
         super().__init__(action="removeTaxRate")
 
@@ -398,10 +438,10 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
-    tax_rate_id: "str"
+    tax_rate_id: str
     tax_rate: "TaxRateDraft"
 
-    def __init__(self, *, tax_rate_id: "str", tax_rate: "TaxRateDraft"):
+    def __init__(self, *, tax_rate_id: str, tax_rate: "TaxRateDraft"):
         self.tax_rate_id = tax_rate_id
         self.tax_rate = tax_rate
         super().__init__(action="replaceTaxRate")
@@ -421,9 +461,9 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
-    description: typing.Optional["str"]
+    description: typing.Optional[str]
 
-    def __init__(self, *, description: typing.Optional["str"] = None):
+    def __init__(self, *, description: typing.Optional[str] = None):
         self.description = description
         super().__init__(action="setDescription")
 
@@ -443,9 +483,9 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
 
 class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
     #: If `key` is absent or `null`, it is removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 

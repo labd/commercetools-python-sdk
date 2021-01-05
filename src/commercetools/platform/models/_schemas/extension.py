@@ -20,6 +20,7 @@ class ExtensionSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -27,10 +28,13 @@ class ExtensionSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     destination = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -50,7 +54,10 @@ class ExtensionSchema(BaseResourceSchema):
         missing=None,
     )
     timeout_in_ms = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="timeoutInMs"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="timeoutInMs",
     )
 
     class Meta:
@@ -62,7 +69,7 @@ class ExtensionSchema(BaseResourceSchema):
         return models.Extension(**data)
 
 
-class ExtensionDestinationSchema(marshmallow.Schema):
+class ExtensionDestinationSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -92,8 +99,10 @@ class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
         return models.ExtensionAWSLambdaDestination(**data)
 
 
-class ExtensionDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class ExtensionDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     destination = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -113,7 +122,10 @@ class ExtensionDraftSchema(marshmallow.Schema):
         missing=None,
     )
     timeout_in_ms = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="timeoutInMs"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="timeoutInMs",
     )
 
     class Meta:
@@ -138,6 +150,7 @@ class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
                 __name__, ".ExtensionAzureFunctionsAuthenticationSchema"
             ),
         },
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -150,7 +163,7 @@ class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
         return models.ExtensionHttpDestination(**data)
 
 
-class ExtensionHttpDestinationAuthenticationSchema(marshmallow.Schema):
+class ExtensionHttpDestinationAuthenticationSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -192,7 +205,7 @@ class ExtensionAzureFunctionsAuthenticationSchema(
         return models.ExtensionAzureFunctionsAuthentication(**data)
 
 
-class ExtensionInputSchema(marshmallow.Schema):
+class ExtensionInputSchema(helpers.BaseSchema):
     action = marshmallow_enum.EnumField(
         ExtensionAction, by_value=True, allow_none=True, missing=None
     )
@@ -258,10 +271,12 @@ class ExtensionInputSchema(marshmallow.Schema):
         return models.ExtensionInput(**data)
 
 
-class ExtensionPagedQueryResponseSchema(marshmallow.Schema):
+class ExtensionPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ExtensionSchema"),
@@ -280,7 +295,7 @@ class ExtensionPagedQueryResponseSchema(marshmallow.Schema):
         return models.ExtensionPagedQueryResponse(**data)
 
 
-class ExtensionTriggerSchema(marshmallow.Schema):
+class ExtensionTriggerSchema(helpers.BaseSchema):
     resource_type_id = marshmallow_enum.EnumField(
         ExtensionResourceTypeId,
         by_value=True,
@@ -303,7 +318,7 @@ class ExtensionTriggerSchema(marshmallow.Schema):
         return models.ExtensionTrigger(**data)
 
 
-class ExtensionUpdateSchema(marshmallow.Schema):
+class ExtensionUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -335,7 +350,7 @@ class ExtensionUpdateSchema(marshmallow.Schema):
         return models.ExtensionUpdate(**data)
 
 
-class ExtensionUpdateActionSchema(marshmallow.Schema):
+class ExtensionUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -388,7 +403,9 @@ class ExtensionChangeTriggersActionSchema(ExtensionUpdateActionSchema):
 
 
 class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -401,7 +418,10 @@ class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
 
 class ExtensionSetTimeoutInMsActionSchema(ExtensionUpdateActionSchema):
     timeout_in_ms = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="timeoutInMs"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="timeoutInMs",
     )
 
     class Meta:

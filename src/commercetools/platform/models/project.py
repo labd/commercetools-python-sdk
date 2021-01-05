@@ -12,13 +12,34 @@ if typing.TYPE_CHECKING:
     from .shipping_method import ShippingRateTierType
     from .type import CustomFieldLocalizedEnumValue
 
+__all__ = [
+    "CartClassificationType",
+    "CartScoreType",
+    "CartValueType",
+    "CartsConfiguration",
+    "ExternalOAuth",
+    "Project",
+    "ProjectChangeCountriesAction",
+    "ProjectChangeCountryTaxRateFallbackEnabledAction",
+    "ProjectChangeCurrenciesAction",
+    "ProjectChangeLanguagesAction",
+    "ProjectChangeMessagesConfigurationAction",
+    "ProjectChangeMessagesEnabledAction",
+    "ProjectChangeNameAction",
+    "ProjectSetExternalOAuthAction",
+    "ProjectSetShippingRateInputTypeAction",
+    "ProjectUpdate",
+    "ProjectUpdateAction",
+    "ShippingRateInputType",
+]
+
 
 class CartsConfiguration(_BaseType):
     #: if country - no state tax rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all tax categories of a cart line items. Default value 'false'
-    country_tax_rate_fallback_enabled: typing.Optional["bool"]
+    country_tax_rate_fallback_enabled: typing.Optional[bool]
 
     def __init__(
-        self, *, country_tax_rate_fallback_enabled: typing.Optional["bool"] = None
+        self, *, country_tax_rate_fallback_enabled: typing.Optional[bool] = None
     ):
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
         super().__init__()
@@ -36,10 +57,10 @@ class CartsConfiguration(_BaseType):
 
 
 class ExternalOAuth(_BaseType):
-    url: "str"
-    authorization_header: "str"
+    url: str
+    authorization_header: str
 
-    def __init__(self, *, url: "str", authorization_header: "str"):
+    def __init__(self, *, url: str, authorization_header: str):
         self.url = url
         self.authorization_header = authorization_header
         super().__init__()
@@ -58,19 +79,19 @@ class ExternalOAuth(_BaseType):
 
 class Project(_BaseType):
     #: The current version of the project.
-    version: "int"
+    version: int
     #: The unique key of the project.
-    key: "str"
+    key: str
     #: The name of the project.
-    name: "str"
+    name: str
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     countries: typing.List["str"]
     #: A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currencies: typing.List["str"]
     languages: typing.List["str"]
-    created_at: "datetime.datetime"
+    created_at: datetime.datetime
     #: The time is in the format Year-Month `YYYY-MM`.
-    trial_until: typing.Optional["str"]
+    trial_until: typing.Optional[str]
     messages: "MessageConfiguration"
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
     external_o_auth: typing.Optional["ExternalOAuth"]
@@ -79,14 +100,14 @@ class Project(_BaseType):
     def __init__(
         self,
         *,
-        version: "int",
-        key: "str",
-        name: "str",
+        version: int,
+        key: str,
+        name: str,
         countries: typing.List["str"],
         currencies: typing.List["str"],
         languages: typing.List["str"],
-        created_at: "datetime.datetime",
-        trial_until: typing.Optional["str"] = None,
+        created_at: datetime.datetime,
+        trial_until: typing.Optional[str] = None,
         messages: "MessageConfiguration",
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_o_auth: typing.Optional["ExternalOAuth"] = None,
@@ -119,10 +140,10 @@ class Project(_BaseType):
 
 
 class ProjectUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ProjectUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["ProjectUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["ProjectUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -140,17 +161,52 @@ class ProjectUpdate(_BaseType):
 
 
 class ProjectUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProjectUpdateAction":
-        from ._schemas.project import ProjectUpdateActionSchema
+        if data["action"] == "changeCountries":
+            from ._schemas.project import ProjectChangeCountriesActionSchema
 
-        return ProjectUpdateActionSchema().load(data)
+            return ProjectChangeCountriesActionSchema().load(data)
+        if data["action"] == "changeCountryTaxRateFallbackEnabled":
+            from ._schemas.project import (
+                ProjectChangeCountryTaxRateFallbackEnabledActionSchema,
+            )
+
+            return ProjectChangeCountryTaxRateFallbackEnabledActionSchema().load(data)
+        if data["action"] == "changeCurrencies":
+            from ._schemas.project import ProjectChangeCurrenciesActionSchema
+
+            return ProjectChangeCurrenciesActionSchema().load(data)
+        if data["action"] == "changeLanguages":
+            from ._schemas.project import ProjectChangeLanguagesActionSchema
+
+            return ProjectChangeLanguagesActionSchema().load(data)
+        if data["action"] == "changeMessagesConfiguration":
+            from ._schemas.project import ProjectChangeMessagesConfigurationActionSchema
+
+            return ProjectChangeMessagesConfigurationActionSchema().load(data)
+        if data["action"] == "changeMessagesEnabled":
+            from ._schemas.project import ProjectChangeMessagesEnabledActionSchema
+
+            return ProjectChangeMessagesEnabledActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.project import ProjectChangeNameActionSchema
+
+            return ProjectChangeNameActionSchema().load(data)
+        if data["action"] == "setExternalOAuth":
+            from ._schemas.project import ProjectSetExternalOAuthActionSchema
+
+            return ProjectSetExternalOAuthActionSchema().load(data)
+        if data["action"] == "setShippingRateInputType":
+            from ._schemas.project import ProjectSetShippingRateInputTypeActionSchema
+
+            return ProjectSetShippingRateInputTypeActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.project import ProjectUpdateActionSchema
@@ -167,9 +223,18 @@ class ShippingRateInputType(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ShippingRateInputType":
-        from ._schemas.project import ShippingRateInputTypeSchema
+        if data["type"] == "CartClassification":
+            from ._schemas.project import CartClassificationTypeSchema
 
-        return ShippingRateInputTypeSchema().load(data)
+            return CartClassificationTypeSchema().load(data)
+        if data["type"] == "CartScore":
+            from ._schemas.project import CartScoreTypeSchema
+
+            return CartScoreTypeSchema().load(data)
+        if data["type"] == "CartValue":
+            from ._schemas.project import CartValueTypeSchema
+
+            return CartValueTypeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.project import ShippingRateInputTypeSchema
@@ -256,9 +321,9 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 
 class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
     #: default value is `false`
-    country_tax_rate_fallback_enabled: "bool"
+    country_tax_rate_fallback_enabled: bool
 
-    def __init__(self, *, country_tax_rate_fallback_enabled: "bool"):
+    def __init__(self, *, country_tax_rate_fallback_enabled: bool):
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
         super().__init__(action="changeCountryTaxRateFallbackEnabled")
 
@@ -346,9 +411,9 @@ class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
 
 
 class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
-    messages_enabled: "bool"
+    messages_enabled: bool
 
-    def __init__(self, *, messages_enabled: "bool"):
+    def __init__(self, *, messages_enabled: bool):
         self.messages_enabled = messages_enabled
         super().__init__(action="changeMessagesEnabled")
 
@@ -367,9 +432,9 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 
 
 class ProjectChangeNameAction(ProjectUpdateAction):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="changeName")
 

@@ -21,6 +21,47 @@ if typing.TYPE_CHECKING:
     from .product import ProductReference, ProductResourceIdentifier
     from .type import CustomFields, TypeResourceIdentifier
 
+__all__ = [
+    "CartDiscount",
+    "CartDiscountChangeCartPredicateAction",
+    "CartDiscountChangeIsActiveAction",
+    "CartDiscountChangeNameAction",
+    "CartDiscountChangeRequiresDiscountCodeAction",
+    "CartDiscountChangeSortOrderAction",
+    "CartDiscountChangeStackingModeAction",
+    "CartDiscountChangeTargetAction",
+    "CartDiscountChangeValueAction",
+    "CartDiscountCustomLineItemsTarget",
+    "CartDiscountDraft",
+    "CartDiscountLineItemsTarget",
+    "CartDiscountPagedQueryResponse",
+    "CartDiscountReference",
+    "CartDiscountResourceIdentifier",
+    "CartDiscountSetCustomFieldAction",
+    "CartDiscountSetCustomTypeAction",
+    "CartDiscountSetDescriptionAction",
+    "CartDiscountSetKeyAction",
+    "CartDiscountSetValidFromAction",
+    "CartDiscountSetValidFromAndUntilAction",
+    "CartDiscountSetValidUntilAction",
+    "CartDiscountShippingCostTarget",
+    "CartDiscountTarget",
+    "CartDiscountUpdate",
+    "CartDiscountUpdateAction",
+    "CartDiscountValue",
+    "CartDiscountValueAbsolute",
+    "CartDiscountValueAbsoluteDraft",
+    "CartDiscountValueDraft",
+    "CartDiscountValueGiftLineItem",
+    "CartDiscountValueGiftLineItemDraft",
+    "CartDiscountValueRelative",
+    "CartDiscountValueRelativeDraft",
+    "MultiBuyCustomLineItemsTarget",
+    "MultiBuyLineItemsTarget",
+    "SelectionMode",
+    "StackingMode",
+]
+
 
 class CartDiscount(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
@@ -30,24 +71,24 @@ class CartDiscount(BaseResource):
     name: "LocalizedString"
     #: User-specific unique identifier for a cart discount.
     #: Must be unique across a project.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
     value: "CartDiscountValueDraft"
     #: A valid Cart predicate.
-    cart_predicate: "str"
+    cart_predicate: str
     #: Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
     target: typing.Optional["CartDiscountTarget"]
     #: The string must contain a number between 0 and 1.
     #: All matching cart discounts are applied to a cart in the order defined by this field.
     #: A discount with greater sort order is prioritized higher than a discount with lower sort order.
     #: The sort order is unambiguous among all cart discounts.
-    sort_order: "str"
+    sort_order: str
     #: Only active discount can be applied to the cart.
-    is_active: "bool"
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    is_active: bool
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     #: States whether the discount can only be used in a connection with a DiscountCode.
-    requires_discount_code: "bool"
+    requires_discount_code: bool
     #: The platform will generate this array from the predicate.
     #: It contains the references of all the resources that are addressed in the predicate.
     references: typing.List["Reference"]
@@ -59,23 +100,23 @@ class CartDiscount(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: "LocalizedString",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: "CartDiscountValueDraft",
-        cart_predicate: "str",
+        cart_predicate: str,
         target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: "str",
-        is_active: "bool",
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
-        requires_discount_code: "bool",
+        sort_order: str,
+        is_active: bool,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        requires_discount_code: bool,
         references: typing.List["Reference"],
         stacking_mode: "StackingMode",
         custom: typing.Optional["CustomFields"] = None
@@ -120,25 +161,25 @@ class CartDiscountDraft(_BaseType):
     #: User-specific unique identifier for a cart discount.
     #: Must be unique across a project.
     #: The field can be reset using the Set Key UpdateAction.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
     value: "CartDiscountValueDraft"
     #: A valid Cart predicate.
-    cart_predicate: "str"
+    cart_predicate: str
     #: Must not be set when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget must be set.
     target: typing.Optional["CartDiscountTarget"]
     #: The string must contain a number between 0 and 1.
     #: A discount with greater sort order is prioritized higher than a discount with lower sort order.
     #: The sort order must be unambiguous among all cart discounts.
-    sort_order: "str"
+    sort_order: str
     #: Only active discount can be applied to the cart.
     #: Defaults to `true`.
-    is_active: typing.Optional["bool"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    is_active: typing.Optional[bool]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     #: States whether the discount can only be used in a connection with a DiscountCode.
     #: Defaults to `false`.
-    requires_discount_code: "bool"
+    requires_discount_code: bool
     #: Specifies whether the application of this discount causes the following discounts to be ignored.
     #: Defaults to Stacking.
     stacking_mode: typing.Optional["StackingMode"]
@@ -148,16 +189,16 @@ class CartDiscountDraft(_BaseType):
         self,
         *,
         name: "LocalizedString",
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         value: "CartDiscountValueDraft",
-        cart_predicate: "str",
+        cart_predicate: str,
         target: typing.Optional["CartDiscountTarget"] = None,
-        sort_order: "str",
-        is_active: typing.Optional["bool"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
-        requires_discount_code: "bool",
+        sort_order: str,
+        is_active: typing.Optional[bool] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        requires_discount_code: bool,
         stacking_mode: typing.Optional["StackingMode"] = None,
         custom: typing.Optional["CustomFields"] = None
     ):
@@ -189,19 +230,19 @@ class CartDiscountDraft(_BaseType):
 
 
 class CartDiscountPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["CartDiscount"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["CartDiscount"]
     ):
         self.limit = limit
@@ -228,7 +269,7 @@ class CartDiscountPagedQueryResponse(_BaseType):
 class CartDiscountReference(Reference):
     obj: typing.Optional["CartDiscount"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["CartDiscount"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["CartDiscount"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.CART_DISCOUNT)
 
@@ -246,7 +287,7 @@ class CartDiscountReference(Reference):
 
 class CartDiscountResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CART_DISCOUNT)
@@ -266,17 +307,34 @@ class CartDiscountResourceIdentifier(ResourceIdentifier):
 
 
 class CartDiscountTarget(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CartDiscountTarget":
-        from ._schemas.cart_discount import CartDiscountTargetSchema
+        if data["type"] == "customLineItems":
+            from ._schemas.cart_discount import CartDiscountCustomLineItemsTargetSchema
 
-        return CartDiscountTargetSchema().load(data)
+            return CartDiscountCustomLineItemsTargetSchema().load(data)
+        if data["type"] == "lineItems":
+            from ._schemas.cart_discount import CartDiscountLineItemsTargetSchema
+
+            return CartDiscountLineItemsTargetSchema().load(data)
+        if data["type"] == "shipping":
+            from ._schemas.cart_discount import CartDiscountShippingCostTargetSchema
+
+            return CartDiscountShippingCostTargetSchema().load(data)
+        if data["type"] == "multiBuyCustomLineItems":
+            from ._schemas.cart_discount import MultiBuyCustomLineItemsTargetSchema
+
+            return MultiBuyCustomLineItemsTargetSchema().load(data)
+        if data["type"] == "multiBuyLineItems":
+            from ._schemas.cart_discount import MultiBuyLineItemsTargetSchema
+
+            return MultiBuyLineItemsTargetSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart_discount import CartDiscountTargetSchema
@@ -285,9 +343,9 @@ class CartDiscountTarget(_BaseType):
 
 
 class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
-    predicate: "str"
+    predicate: str
 
-    def __init__(self, *, predicate: "str"):
+    def __init__(self, *, predicate: str):
         self.predicate = predicate
         super().__init__(type="customLineItems")
 
@@ -306,9 +364,9 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
 
 
 class CartDiscountLineItemsTarget(CartDiscountTarget):
-    predicate: "str"
+    predicate: str
 
-    def __init__(self, *, predicate: "str"):
+    def __init__(self, *, predicate: str):
         self.predicate = predicate
         super().__init__(type="lineItems")
 
@@ -346,11 +404,11 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
 
 
 class CartDiscountUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["CartDiscountUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["CartDiscountUpdateAction"]
+        self, *, version: int, actions: typing.List["CartDiscountUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -369,9 +427,9 @@ class CartDiscountUpdate(_BaseType):
 
 
 class CartDiscountUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -379,9 +437,74 @@ class CartDiscountUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "CartDiscountUpdateAction":
-        from ._schemas.cart_discount import CartDiscountUpdateActionSchema
+        if data["action"] == "changeCartPredicate":
+            from ._schemas.cart_discount import (
+                CartDiscountChangeCartPredicateActionSchema,
+            )
 
-        return CartDiscountUpdateActionSchema().load(data)
+            return CartDiscountChangeCartPredicateActionSchema().load(data)
+        if data["action"] == "changeIsActive":
+            from ._schemas.cart_discount import CartDiscountChangeIsActiveActionSchema
+
+            return CartDiscountChangeIsActiveActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.cart_discount import CartDiscountChangeNameActionSchema
+
+            return CartDiscountChangeNameActionSchema().load(data)
+        if data["action"] == "changeRequiresDiscountCode":
+            from ._schemas.cart_discount import (
+                CartDiscountChangeRequiresDiscountCodeActionSchema,
+            )
+
+            return CartDiscountChangeRequiresDiscountCodeActionSchema().load(data)
+        if data["action"] == "changeSortOrder":
+            from ._schemas.cart_discount import CartDiscountChangeSortOrderActionSchema
+
+            return CartDiscountChangeSortOrderActionSchema().load(data)
+        if data["action"] == "changeStackingMode":
+            from ._schemas.cart_discount import (
+                CartDiscountChangeStackingModeActionSchema,
+            )
+
+            return CartDiscountChangeStackingModeActionSchema().load(data)
+        if data["action"] == "changeTarget":
+            from ._schemas.cart_discount import CartDiscountChangeTargetActionSchema
+
+            return CartDiscountChangeTargetActionSchema().load(data)
+        if data["action"] == "changeValue":
+            from ._schemas.cart_discount import CartDiscountChangeValueActionSchema
+
+            return CartDiscountChangeValueActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.cart_discount import CartDiscountSetCustomFieldActionSchema
+
+            return CartDiscountSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.cart_discount import CartDiscountSetCustomTypeActionSchema
+
+            return CartDiscountSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setDescription":
+            from ._schemas.cart_discount import CartDiscountSetDescriptionActionSchema
+
+            return CartDiscountSetDescriptionActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.cart_discount import CartDiscountSetKeyActionSchema
+
+            return CartDiscountSetKeyActionSchema().load(data)
+        if data["action"] == "setValidFrom":
+            from ._schemas.cart_discount import CartDiscountSetValidFromActionSchema
+
+            return CartDiscountSetValidFromActionSchema().load(data)
+        if data["action"] == "setValidFromAndUntil":
+            from ._schemas.cart_discount import (
+                CartDiscountSetValidFromAndUntilActionSchema,
+            )
+
+            return CartDiscountSetValidFromAndUntilActionSchema().load(data)
+        if data["action"] == "setValidUntil":
+            from ._schemas.cart_discount import CartDiscountSetValidUntilActionSchema
+
+            return CartDiscountSetValidUntilActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart_discount import CartDiscountUpdateActionSchema
@@ -390,17 +513,26 @@ class CartDiscountUpdateAction(_BaseType):
 
 
 class CartDiscountValue(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CartDiscountValue":
-        from ._schemas.cart_discount import CartDiscountValueSchema
+        if data["type"] == "absolute":
+            from ._schemas.cart_discount import CartDiscountValueAbsoluteSchema
 
-        return CartDiscountValueSchema().load(data)
+            return CartDiscountValueAbsoluteSchema().load(data)
+        if data["type"] == "giftLineItem":
+            from ._schemas.cart_discount import CartDiscountValueGiftLineItemSchema
+
+            return CartDiscountValueGiftLineItemSchema().load(data)
+        if data["type"] == "relative":
+            from ._schemas.cart_discount import CartDiscountValueRelativeSchema
+
+            return CartDiscountValueRelativeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart_discount import CartDiscountValueSchema
@@ -430,9 +562,9 @@ class CartDiscountValueAbsolute(CartDiscountValue):
 
 
 class CartDiscountValueDraft(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
@@ -440,9 +572,18 @@ class CartDiscountValueDraft(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "CartDiscountValueDraft":
-        from ._schemas.cart_discount import CartDiscountValueDraftSchema
+        if data["type"] == "absolute":
+            from ._schemas.cart_discount import CartDiscountValueAbsoluteDraftSchema
 
-        return CartDiscountValueDraftSchema().load(data)
+            return CartDiscountValueAbsoluteDraftSchema().load(data)
+        if data["type"] == "giftLineItem":
+            from ._schemas.cart_discount import CartDiscountValueGiftLineItemDraftSchema
+
+            return CartDiscountValueGiftLineItemDraftSchema().load(data)
+        if data["type"] == "relative":
+            from ._schemas.cart_discount import CartDiscountValueRelativeDraftSchema
+
+            return CartDiscountValueRelativeDraftSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart_discount import CartDiscountValueDraftSchema
@@ -473,7 +614,7 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
 
 class CartDiscountValueGiftLineItem(CartDiscountValue):
     product: "ProductReference"
-    variant_id: "int"
+    variant_id: int
     #: The channel must have the role `InventorySupply`
     supply_channel: typing.Optional["ChannelReference"]
     #: The channel must have the role `ProductDistribution`
@@ -483,7 +624,7 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
         self,
         *,
         product: "ProductReference",
-        variant_id: "int",
+        variant_id: int,
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None
     ):
@@ -509,7 +650,7 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 
 class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
     product: "ProductResourceIdentifier"
-    variant_id: "int"
+    variant_id: int
     #: The channel must have the role `InventorySupply`
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: The channel must have the role `ProductDistribution`
@@ -519,7 +660,7 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
         self,
         *,
         product: "ProductResourceIdentifier",
-        variant_id: "int",
+        variant_id: int,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
@@ -544,9 +685,9 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
 
 
 class CartDiscountValueRelative(CartDiscountValue):
-    permyriad: "int"
+    permyriad: int
 
-    def __init__(self, *, permyriad: "int"):
+    def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -565,9 +706,9 @@ class CartDiscountValueRelative(CartDiscountValue):
 
 
 class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
-    permyriad: "int"
+    permyriad: int
 
-    def __init__(self, *, permyriad: "int"):
+    def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
         super().__init__(type="relative")
 
@@ -588,22 +729,22 @@ class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
 class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
     #: A valid custom line item target predicate. The discount will be applied to custom line items that are
     #: matched by the predicate.
-    predicate: "str"
+    predicate: str
     #: Quantity of line items that need to be present in order to trigger an application of this discount.
-    trigger_quantity: "int"
+    trigger_quantity: int
     #: Quantity of line items that are discounted per application of this discount.
-    discounted_quantity: "int"
+    discounted_quantity: int
     #: Maximum number of applications of this discount.
-    max_occurrence: typing.Optional["int"]
+    max_occurrence: typing.Optional[int]
     selection_mode: "SelectionMode"
 
     def __init__(
         self,
         *,
-        predicate: "str",
-        trigger_quantity: "int",
-        discounted_quantity: "int",
-        max_occurrence: typing.Optional["int"] = None,
+        predicate: str,
+        trigger_quantity: int,
+        discounted_quantity: int,
+        max_occurrence: typing.Optional[int] = None,
         selection_mode: "SelectionMode"
     ):
         self.predicate = predicate
@@ -629,22 +770,22 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
 
 class MultiBuyLineItemsTarget(CartDiscountTarget):
     #: A valid line item target predicate. The discount will be applied to line items that are matched by the predicate.
-    predicate: "str"
+    predicate: str
     #: Quantity of line items that need to be present in order to trigger an application of this discount.
-    trigger_quantity: "int"
+    trigger_quantity: int
     #: Quantity of line items that are discounted per application of this discount.
-    discounted_quantity: "int"
+    discounted_quantity: int
     #: Maximum number of applications of this discount.
-    max_occurrence: typing.Optional["int"]
+    max_occurrence: typing.Optional[int]
     selection_mode: "SelectionMode"
 
     def __init__(
         self,
         *,
-        predicate: "str",
-        trigger_quantity: "int",
-        discounted_quantity: "int",
-        max_occurrence: typing.Optional["int"] = None,
+        predicate: str,
+        trigger_quantity: int,
+        discounted_quantity: int,
+        max_occurrence: typing.Optional[int] = None,
         selection_mode: "SelectionMode"
     ):
         self.predicate = predicate
@@ -680,9 +821,9 @@ class StackingMode(enum.Enum):
 
 class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
     #: A valid Cart predicate.
-    cart_predicate: "str"
+    cart_predicate: str
 
-    def __init__(self, *, cart_predicate: "str"):
+    def __init__(self, *, cart_predicate: str):
         self.cart_predicate = cart_predicate
         super().__init__(action="changeCartPredicate")
 
@@ -701,9 +842,9 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
-    is_active: "bool"
+    is_active: bool
 
-    def __init__(self, *, is_active: "bool"):
+    def __init__(self, *, is_active: bool):
         self.is_active = is_active
         super().__init__(action="changeIsActive")
 
@@ -743,9 +884,9 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
-    requires_discount_code: "bool"
+    requires_discount_code: bool
 
-    def __init__(self, *, requires_discount_code: "bool"):
+    def __init__(self, *, requires_discount_code: bool):
         self.requires_discount_code = requires_discount_code
         super().__init__(action="changeRequiresDiscountCode")
 
@@ -770,9 +911,9 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
 class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
     #: The string must contain a number between 0 and 1.
     #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
-    sort_order: "str"
+    sort_order: str
 
-    def __init__(self, *, sort_order: "str"):
+    def __init__(self, *, sort_order: str):
         self.sort_order = sort_order
         super().__init__(action="changeSortOrder")
 
@@ -854,14 +995,14 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
-    name: "str"
+    name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
     #: Trying to remove a field that does not exist will fail with an `InvalidOperation` error.
     #: If `value` is provided, set the `value` of the field defined by the `name`.
     #: The FieldDefinition determines the format for the `value` to be provided.
-    value: typing.Optional["any"]
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -885,13 +1026,13 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
     type: typing.Optional["TypeResourceIdentifier"]
     #: A valid JSON object, based on the FieldDefinitions of the Type.
     #: Sets the custom fields to this value.
-    fields: typing.Optional["any"]
+    fields: typing.Optional[object]
 
     def __init__(
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["any"] = None
+        fields: typing.Optional[object] = None
     ):
         self.type = type
         self.fields = fields
@@ -935,9 +1076,9 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
 
 class CartDiscountSetKeyAction(CartDiscountUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -957,9 +1098,9 @@ class CartDiscountSetKeyAction(CartDiscountUpdateAction):
 
 class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
 
-    def __init__(self, *, valid_from: typing.Optional["datetime.datetime"] = None):
+    def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
         self.valid_from = valid_from
         super().__init__(action="setValidFrom")
 
@@ -979,15 +1120,15 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
 
 class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until
@@ -1009,9 +1150,9 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
 
 class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
     #: If absent, the field with the value is removed in case a value was set before.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
 
-    def __init__(self, *, valid_until: typing.Optional["datetime.datetime"] = None):
+    def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
         self.valid_until = valid_until
         super().__init__(action="setValidUntil")
 

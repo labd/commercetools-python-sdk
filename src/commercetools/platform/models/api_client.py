@@ -6,34 +6,36 @@ import typing
 
 from ._abstract import _BaseType
 
+__all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
+
 
 class ApiClient(_BaseType):
     #: The unique ID of the API client.
     #: This is the OAuth2 `client_id` and can be used to obtain a token.
-    id: "str"
-    name: "str"
+    id: str
+    name: str
     #: A whitespace separated list of the OAuth scopes.
     #: This is the OAuth2 `scope` and can be used to obtain a token.
-    scope: "str"
-    created_at: typing.Optional["datetime.datetime"]
+    scope: str
+    created_at: typing.Optional[datetime.datetime]
     #: The last day this API Client was used to obtain a token.
-    last_used_at: typing.Optional["datetime.date"]
+    last_used_at: typing.Optional[datetime.date]
     #: If set, the client will be deleted on (or shortly after) this point in time.
-    delete_at: typing.Optional["datetime.datetime"]
+    delete_at: typing.Optional[datetime.datetime]
     #: The secret is only shown once in the response of creating the API Client.
     #: This is the OAuth2 `client_secret` and can be used to obtain a token.
-    secret: typing.Optional["str"]
+    secret: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
-        name: "str",
-        scope: "str",
-        created_at: typing.Optional["datetime.datetime"] = None,
-        last_used_at: typing.Optional["datetime.date"] = None,
-        delete_at: typing.Optional["datetime.datetime"] = None,
-        secret: typing.Optional["str"] = None
+        id: str,
+        name: str,
+        scope: str,
+        created_at: typing.Optional[datetime.datetime] = None,
+        last_used_at: typing.Optional[datetime.date] = None,
+        delete_at: typing.Optional[datetime.datetime] = None,
+        secret: typing.Optional[str] = None
     ):
         self.id = id
         self.name = name
@@ -57,17 +59,17 @@ class ApiClient(_BaseType):
 
 
 class ApiClientDraft(_BaseType):
-    name: "str"
-    scope: "str"
+    name: str
+    scope: str
     #: If set, the client will be deleted after the specified amount of days.
-    delete_days_after_creation: typing.Optional["int"]
+    delete_days_after_creation: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        name: "str",
-        scope: "str",
-        delete_days_after_creation: typing.Optional["int"] = None
+        name: str,
+        scope: str,
+        delete_days_after_creation: typing.Optional[int] = None
     ):
         self.name = name
         self.scope = scope
@@ -87,19 +89,19 @@ class ApiClientDraft(_BaseType):
 
 
 class ApiClientPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["ApiClient"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["ApiClient"]
     ):
         self.limit = limit

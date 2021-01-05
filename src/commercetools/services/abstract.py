@@ -3,11 +3,11 @@ import typing
 from marshmallow.base import SchemaABC
 
 if typing.TYPE_CHECKING:
-    from commercetools.protocols import ClientProtocol
+    from commercetools.client import Client
 
 
 class AbstractService:
-    def __init__(self, client: "ClientProtocol") -> None:
+    def __init__(self, client: "Client") -> None:
         self._client = client
         self._schemas: typing.Dict[str, SchemaABC] = {}
 

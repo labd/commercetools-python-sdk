@@ -20,6 +20,7 @@ class CustomObjectSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -27,6 +28,7 @@ class CustomObjectSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
@@ -43,11 +45,13 @@ class CustomObjectSchema(BaseResourceSchema):
         return models.CustomObject(**data)
 
 
-class CustomObjectDraftSchema(marshmallow.Schema):
+class CustomObjectDraftSchema(helpers.BaseSchema):
     container = marshmallow.fields.String(allow_none=True, missing=None)
     key = marshmallow.fields.String(allow_none=True, missing=None)
     value = marshmallow.fields.Raw(allow_none=True, missing=None)
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -58,10 +62,12 @@ class CustomObjectDraftSchema(marshmallow.Schema):
         return models.CustomObjectDraft(**data)
 
 
-class CustomObjectPagedQueryResponseSchema(marshmallow.Schema):
+class CustomObjectPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CustomObjectSchema"),
@@ -85,6 +91,7 @@ class CustomObjectReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".CustomObjectSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 

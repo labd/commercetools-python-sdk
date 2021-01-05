@@ -3,29 +3,33 @@ import typing
 
 from ...models.shipping_method import ShippingMethodPagedQueryResponse
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyShippingMethodsMatchingLocationRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
     def get(
         self,
         *,
-        country: "str",
-        state: "str" = None,
-        currency: "str" = None,
-        expand: "str" = None,
+        country: str,
+        state: str = None,
+        currency: str = None,
+        expand: str = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethodPagedQueryResponse":
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/shipping-methods/matching-location",
             params={

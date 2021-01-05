@@ -26,6 +26,7 @@ class StateSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -33,6 +34,7 @@ class StateSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
@@ -40,8 +42,12 @@ class StateSchema(BaseResourceSchema):
     type = marshmallow_enum.EnumField(
         StateTypeEnum, by_value=True, allow_none=True, missing=None
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     initial = marshmallow.fields.Boolean(allow_none=True, missing=None)
     built_in = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="builtIn"
@@ -49,6 +55,7 @@ class StateSchema(BaseResourceSchema):
     roles = marshmallow.fields.List(
         marshmallow_enum.EnumField(StateRoleEnum, by_value=True, allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
     transitions = helpers.LazyNestedField(
@@ -56,6 +63,7 @@ class StateSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -68,17 +76,24 @@ class StateSchema(BaseResourceSchema):
         return models.State(**data)
 
 
-class StateDraftSchema(marshmallow.Schema):
+class StateDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     type = marshmallow_enum.EnumField(
         StateTypeEnum, by_value=True, allow_none=True, missing=None
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
-    initial = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    initial = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     roles = marshmallow.fields.List(
         marshmallow_enum.EnumField(StateRoleEnum, by_value=True, allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
     )
     transitions = helpers.LazyNestedField(
@@ -86,6 +101,7 @@ class StateDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -98,10 +114,12 @@ class StateDraftSchema(marshmallow.Schema):
         return models.StateDraft(**data)
 
 
-class StatePagedQueryResponseSchema(marshmallow.Schema):
+class StatePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StateSchema"),
@@ -125,6 +143,7 @@ class StateReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".StateSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -147,7 +166,7 @@ class StateResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.StateResourceIdentifier(**data)
 
 
-class StateUpdateSchema(marshmallow.Schema):
+class StateUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -186,7 +205,7 @@ class StateUpdateSchema(marshmallow.Schema):
         return models.StateUpdate(**data)
 
 
-class StateUpdateActionSchema(marshmallow.Schema):
+class StateUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -314,6 +333,7 @@ class StateSetTransitionsActionSchema(StateUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 

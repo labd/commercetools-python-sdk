@@ -6,6 +6,14 @@ import typing
 
 from ._abstract import _BaseType
 
+__all__ = [
+    "ChangeStatusUpdateAction",
+    "ImageSearchConfigRequest",
+    "ImageSearchConfigResponse",
+    "ImageSearchConfigStatus",
+    "ImageSearchConfigUpdateAction",
+]
+
 
 class ImageSearchConfigStatus(enum.Enum):
     ON = "on"
@@ -13,9 +21,9 @@ class ImageSearchConfigStatus(enum.Enum):
 
 
 class ImageSearchConfigUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -23,9 +31,10 @@ class ImageSearchConfigUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ImageSearchConfigUpdateAction":
-        from ._schemas.image_search_config import ImageSearchConfigUpdateActionSchema
+        if data["action"] == "changeStatus":
+            from ._schemas.image_search_config import ChangeStatusUpdateActionSchema
 
-        return ImageSearchConfigUpdateActionSchema().load(data)
+            return ChangeStatusUpdateActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.image_search_config import ImageSearchConfigUpdateActionSchema
@@ -79,13 +88,10 @@ class ImageSearchConfigRequest(_BaseType):
 class ImageSearchConfigResponse(_BaseType):
     #: The image search activation status.
     status: "ImageSearchConfigStatus"
-    last_modified_at: "datetime.datetime"
+    last_modified_at: datetime.datetime
 
     def __init__(
-        self,
-        *,
-        status: "ImageSearchConfigStatus",
-        last_modified_at: "datetime.datetime"
+        self, *, status: "ImageSearchConfigStatus", last_modified_at: datetime.datetime
     ):
         self.status = status
         self.last_modified_at = last_modified_at

@@ -13,20 +13,31 @@ from ... import models
 
 
 # Marshmallow Schemas
-class ApiClientSchema(marshmallow.Schema):
+class ApiClientSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True, missing=None)
     scope = marshmallow.fields.String(allow_none=True, missing=None)
     created_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="createdAt"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="createdAt",
     )
     last_used_at = marshmallow.fields.Date(
-        allow_none=True, missing=None, data_key="lastUsedAt"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastUsedAt",
     )
     delete_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="deleteAt"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteAt",
     )
-    secret = marshmallow.fields.String(allow_none=True, missing=None)
+    secret = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -37,11 +48,14 @@ class ApiClientSchema(marshmallow.Schema):
         return models.ApiClient(**data)
 
 
-class ApiClientDraftSchema(marshmallow.Schema):
+class ApiClientDraftSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
     scope = marshmallow.fields.String(allow_none=True, missing=None)
     delete_days_after_creation = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterCreation",
     )
 
     class Meta:
@@ -53,10 +67,12 @@ class ApiClientDraftSchema(marshmallow.Schema):
         return models.ApiClientDraft(**data)
 
 
-class ApiClientPagedQueryResponseSchema(marshmallow.Schema):
+class ApiClientPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ApiClientSchema"),

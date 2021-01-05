@@ -5,25 +5,28 @@ from .by_project_key_similarities_products_status_by_task_id_request_builder imp
     ByProjectKeySimilaritiesProductsStatusByTaskIdRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeySimilaritiesProductsStatusRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def withTaskId(
-        self, taskId: str
+    def with_task_id(
+        self, task_id: str
     ) -> ByProjectKeySimilaritiesProductsStatusByTaskIdRequestBuilder:
         return ByProjectKeySimilaritiesProductsStatusByTaskIdRequestBuilder(
-            taskId=taskId,
-            projectKey=self._project_key,
+            task_id=task_id,
+            project_key=self._project_key,
             client=self._client,
         )

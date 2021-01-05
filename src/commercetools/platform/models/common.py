@@ -13,24 +13,63 @@ if typing.TYPE_CHECKING:
     from .product_discount import ProductDiscountReference
     from .type import CustomFields, CustomFieldsDraft
 
+__all__ = [
+    "Address",
+    "Asset",
+    "AssetDimensions",
+    "AssetDraft",
+    "AssetSource",
+    "BaseResource",
+    "CentPrecisionMoney",
+    "CentPrecisionMoneyDraft",
+    "ClientLogging",
+    "CreatedBy",
+    "DiscountedPrice",
+    "GeoJson",
+    "GeoJsonPoint",
+    "HighPrecisionMoney",
+    "HighPrecisionMoneyDraft",
+    "Image",
+    "ImageDimensions",
+    "KeyReference",
+    "LastModifiedBy",
+    "LocalizedString",
+    "Money",
+    "MoneyType",
+    "PagedQueryResponse",
+    "Price",
+    "PriceDraft",
+    "PriceTier",
+    "PriceTierDraft",
+    "QueryPrice",
+    "Reference",
+    "ReferenceTypeId",
+    "ResourceIdentifier",
+    "ScopedPrice",
+    "TypedMoney",
+    "TypedMoneyDraft",
+    "Update",
+    "UpdateAction",
+]
+
 
 class PagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["BaseResource"]
-    meta: typing.Optional["any"]
+    meta: typing.Optional[object]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["BaseResource"],
-        meta: typing.Optional["any"] = None
+        meta: typing.Optional[object] = None
     ):
         self.limit = limit
         self.count = count
@@ -53,10 +92,10 @@ class PagedQueryResponse(_BaseType):
 
 
 class Update(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["UpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["UpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["UpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -74,9 +113,9 @@ class Update(_BaseType):
 
 
 class UpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -93,61 +132,61 @@ class UpdateAction(_BaseType):
 
 
 class Address(_BaseType):
-    id: typing.Optional["str"]
-    key: typing.Optional["str"]
-    title: typing.Optional["str"]
-    salutation: typing.Optional["str"]
-    first_name: typing.Optional["str"]
-    last_name: typing.Optional["str"]
-    street_name: typing.Optional["str"]
-    street_number: typing.Optional["str"]
-    additional_street_info: typing.Optional["str"]
-    postal_code: typing.Optional["str"]
-    city: typing.Optional["str"]
-    region: typing.Optional["str"]
-    state: typing.Optional["str"]
+    id: typing.Optional[str]
+    key: typing.Optional[str]
+    title: typing.Optional[str]
+    salutation: typing.Optional[str]
+    first_name: typing.Optional[str]
+    last_name: typing.Optional[str]
+    street_name: typing.Optional[str]
+    street_number: typing.Optional[str]
+    additional_street_info: typing.Optional[str]
+    postal_code: typing.Optional[str]
+    city: typing.Optional[str]
+    region: typing.Optional[str]
+    state: typing.Optional[str]
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
-    company: typing.Optional["str"]
-    department: typing.Optional["str"]
-    building: typing.Optional["str"]
-    apartment: typing.Optional["str"]
-    p_o_box: typing.Optional["str"]
-    phone: typing.Optional["str"]
-    mobile: typing.Optional["str"]
-    email: typing.Optional["str"]
-    fax: typing.Optional["str"]
-    additional_address_info: typing.Optional["str"]
-    external_id: typing.Optional["str"]
+    country: str
+    company: typing.Optional[str]
+    department: typing.Optional[str]
+    building: typing.Optional[str]
+    apartment: typing.Optional[str]
+    p_o_box: typing.Optional[str]
+    phone: typing.Optional[str]
+    mobile: typing.Optional[str]
+    email: typing.Optional[str]
+    fax: typing.Optional[str]
+    additional_address_info: typing.Optional[str]
+    external_id: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None,
-        title: typing.Optional["str"] = None,
-        salutation: typing.Optional["str"] = None,
-        first_name: typing.Optional["str"] = None,
-        last_name: typing.Optional["str"] = None,
-        street_name: typing.Optional["str"] = None,
-        street_number: typing.Optional["str"] = None,
-        additional_street_info: typing.Optional["str"] = None,
-        postal_code: typing.Optional["str"] = None,
-        city: typing.Optional["str"] = None,
-        region: typing.Optional["str"] = None,
-        state: typing.Optional["str"] = None,
-        country: "str",
-        company: typing.Optional["str"] = None,
-        department: typing.Optional["str"] = None,
-        building: typing.Optional["str"] = None,
-        apartment: typing.Optional["str"] = None,
-        p_o_box: typing.Optional["str"] = None,
-        phone: typing.Optional["str"] = None,
-        mobile: typing.Optional["str"] = None,
-        email: typing.Optional["str"] = None,
-        fax: typing.Optional["str"] = None,
-        additional_address_info: typing.Optional["str"] = None,
-        external_id: typing.Optional["str"] = None
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        title: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        street_name: typing.Optional[str] = None,
+        street_number: typing.Optional[str] = None,
+        additional_street_info: typing.Optional[str] = None,
+        postal_code: typing.Optional[str] = None,
+        city: typing.Optional[str] = None,
+        region: typing.Optional[str] = None,
+        state: typing.Optional[str] = None,
+        country: str,
+        company: typing.Optional[str] = None,
+        department: typing.Optional[str] = None,
+        building: typing.Optional[str] = None,
+        apartment: typing.Optional[str] = None,
+        p_o_box: typing.Optional[str] = None,
+        phone: typing.Optional[str] = None,
+        mobile: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        fax: typing.Optional[str] = None,
+        additional_address_info: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None
     ):
         self.id = id
         self.key = key
@@ -189,24 +228,24 @@ class Address(_BaseType):
 
 
 class Asset(_BaseType):
-    id: "str"
+    id: str
     sources: typing.List["AssetSource"]
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
     tags: typing.Optional[typing.List["str"]]
     custom: typing.Optional["CustomFields"]
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        id: "str",
+        id: str,
         sources: typing.List["AssetSource"],
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List["str"]] = None,
         custom: typing.Optional["CustomFields"] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.id = id
         self.sources = sources
@@ -230,10 +269,10 @@ class Asset(_BaseType):
 
 
 class AssetDimensions(_BaseType):
-    w: "int"
-    h: "int"
+    w: int
+    h: int
 
-    def __init__(self, *, w: "int", h: "int"):
+    def __init__(self, *, w: int, h: int):
         self.w = w
         self.h = h
         super().__init__()
@@ -256,7 +295,7 @@ class AssetDraft(_BaseType):
     description: typing.Optional["LocalizedString"]
     tags: typing.Optional[typing.List["str"]]
     custom: typing.Optional["CustomFieldsDraft"]
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
     def __init__(
         self,
@@ -266,7 +305,7 @@ class AssetDraft(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List["str"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        key: typing.Optional["str"] = None
+        key: typing.Optional[str] = None
     ):
         self.sources = sources
         self.name = name
@@ -289,18 +328,18 @@ class AssetDraft(_BaseType):
 
 
 class AssetSource(_BaseType):
-    uri: "str"
-    key: typing.Optional["str"]
+    uri: str
+    key: typing.Optional[str]
     dimensions: typing.Optional["AssetDimensions"]
-    content_type: typing.Optional["str"]
+    content_type: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        uri: "str",
-        key: typing.Optional["str"] = None,
+        uri: str,
+        key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
-        content_type: typing.Optional["str"] = None
+        content_type: typing.Optional[str] = None
     ):
         self.uri = uri
         self.key = key
@@ -321,18 +360,18 @@ class AssetSource(_BaseType):
 
 
 class BaseResource(_BaseType):
-    id: "str"
-    version: "int"
-    created_at: "datetime.datetime"
-    last_modified_at: "datetime.datetime"
+    id: str
+    version: int
+    created_at: datetime.datetime
+    last_modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime"
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime
     ):
         self.id = id
         self.version = version
@@ -353,18 +392,18 @@ class BaseResource(_BaseType):
 
 
 class ClientLogging(_BaseType):
-    client_id: typing.Optional["str"]
-    external_user_id: typing.Optional["str"]
+    client_id: typing.Optional[str]
+    external_user_id: typing.Optional[str]
     customer: typing.Optional["CustomerReference"]
-    anonymous_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        client_id: typing.Optional["str"] = None,
-        external_user_id: typing.Optional["str"] = None,
+        client_id: typing.Optional[str] = None,
+        external_user_id: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
-        anonymous_id: typing.Optional["str"] = None
+        anonymous_id: typing.Optional[str] = None
     ):
         self.client_id = client_id
         self.external_user_id = external_user_id
@@ -388,10 +427,10 @@ class CreatedBy(ClientLogging):
     def __init__(
         self,
         *,
-        client_id: typing.Optional["str"] = None,
-        external_user_id: typing.Optional["str"] = None,
+        client_id: typing.Optional[str] = None,
+        external_user_id: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
-        anonymous_id: typing.Optional["str"] = None
+        anonymous_id: typing.Optional[str] = None
     ):
 
         super().__init__(
@@ -435,17 +474,18 @@ class DiscountedPrice(_BaseType):
 
 
 class GeoJson(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "GeoJson":
-        from ._schemas.common import GeoJsonSchema
+        if data["type"] == "Point":
+            from ._schemas.common import GeoJsonPointSchema
 
-        return GeoJsonSchema().load(data)
+            return GeoJsonPointSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import GeoJsonSchema
@@ -473,16 +513,16 @@ class GeoJsonPoint(GeoJson):
 
 
 class Image(_BaseType):
-    url: "str"
+    url: str
     dimensions: "ImageDimensions"
-    label: typing.Optional["str"]
+    label: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        url: "str",
+        url: str,
         dimensions: "ImageDimensions",
-        label: typing.Optional["str"] = None
+        label: typing.Optional[str] = None
     ):
         self.url = url
         self.dimensions = dimensions
@@ -502,10 +542,10 @@ class Image(_BaseType):
 
 
 class ImageDimensions(_BaseType):
-    w: "int"
-    h: "int"
+    w: int
+    h: int
 
-    def __init__(self, *, w: "int", h: "int"):
+    def __init__(self, *, w: int, h: int):
         self.w = w
         self.h = h
         super().__init__()
@@ -524,18 +564,19 @@ class ImageDimensions(_BaseType):
 
 class KeyReference(_BaseType):
     type_id: "ReferenceTypeId"
-    key: "str"
+    key: str
 
-    def __init__(self, *, type_id: "ReferenceTypeId", key: "str"):
+    def __init__(self, *, type_id: "ReferenceTypeId", key: str):
         self.type_id = type_id
         self.key = key
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "KeyReference":
-        from ._schemas.common import KeyReferenceSchema
+        if data["typeId"] == "store":
+            from ._schemas.store import StoreKeyReferenceSchema
 
-        return KeyReferenceSchema().load(data)
+            return StoreKeyReferenceSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import KeyReferenceSchema
@@ -547,10 +588,10 @@ class LastModifiedBy(ClientLogging):
     def __init__(
         self,
         *,
-        client_id: typing.Optional["str"] = None,
-        external_user_id: typing.Optional["str"] = None,
+        client_id: typing.Optional[str] = None,
+        external_user_id: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
-        anonymous_id: typing.Optional["str"] = None
+        anonymous_id: typing.Optional[str] = None
     ):
 
         super().__init__(
@@ -577,11 +618,11 @@ class LocalizedString(typing.Dict[str, str]):
 
 
 class Money(_BaseType):
-    cent_amount: "int"
+    cent_amount: int
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency_code: "str"
+    currency_code: str
 
-    def __init__(self, *, cent_amount: "int", currency_code: "str"):
+    def __init__(self, *, cent_amount: int, currency_code: str):
         self.cent_amount = cent_amount
         self.currency_code = currency_code
         super().__init__()
@@ -604,14 +645,14 @@ class MoneyType(enum.Enum):
 
 
 class Price(_BaseType):
-    id: "str"
+    id: str
     value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     discounted: typing.Optional["DiscountedPrice"]
     custom: typing.Optional["CustomFields"]
     tiers: typing.Optional[typing.List["PriceTier"]]
@@ -619,13 +660,13 @@ class Price(_BaseType):
     def __init__(
         self,
         *,
-        id: "str",
+        id: str,
         value: "TypedMoney",
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         custom: typing.Optional["CustomFields"] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None
@@ -657,11 +698,11 @@ class Price(_BaseType):
 class PriceDraft(_BaseType):
     value: "Money"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     channel: typing.Optional["ChannelResourceIdentifier"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     custom: typing.Optional["CustomFieldsDraft"]
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
     discounted: typing.Optional["DiscountedPrice"]
@@ -670,11 +711,11 @@ class PriceDraft(_BaseType):
         self,
         *,
         value: "Money",
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
         discounted: typing.Optional["DiscountedPrice"] = None
@@ -703,10 +744,10 @@ class PriceDraft(_BaseType):
 
 
 class PriceTier(_BaseType):
-    minimum_quantity: "int"
+    minimum_quantity: int
     value: "TypedMoney"
 
-    def __init__(self, *, minimum_quantity: "int", value: "TypedMoney"):
+    def __init__(self, *, minimum_quantity: int, value: "TypedMoney"):
         self.minimum_quantity = minimum_quantity
         self.value = value
         super().__init__()
@@ -724,10 +765,10 @@ class PriceTier(_BaseType):
 
 
 class PriceTierDraft(_BaseType):
-    minimum_quantity: "int"
+    minimum_quantity: int
     value: "Money"
 
-    def __init__(self, *, minimum_quantity: "int", value: "Money"):
+    def __init__(self, *, minimum_quantity: int, value: "Money"):
         self.minimum_quantity = minimum_quantity
         self.value = value
         super().__init__()
@@ -745,14 +786,14 @@ class PriceTierDraft(_BaseType):
 
 
 class QueryPrice(_BaseType):
-    id: "str"
+    id: str
     value: "Money"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     discounted: typing.Optional["DiscountedPrice"]
     custom: typing.Optional["CustomFields"]
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
@@ -760,13 +801,13 @@ class QueryPrice(_BaseType):
     def __init__(
         self,
         *,
-        id: "str",
+        id: str,
         value: "Money",
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         custom: typing.Optional["CustomFields"] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None
@@ -797,18 +838,107 @@ class QueryPrice(_BaseType):
 
 class Reference(_BaseType):
     type_id: "ReferenceTypeId"
-    id: "str"
+    id: str
 
-    def __init__(self, *, type_id: "ReferenceTypeId", id: "str"):
+    def __init__(self, *, type_id: "ReferenceTypeId", id: str):
         self.type_id = type_id
         self.id = id
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Reference":
-        from ._schemas.common import ReferenceSchema
+        if data["typeId"] == "cart-discount":
+            from ._schemas.cart_discount import CartDiscountReferenceSchema
 
-        return ReferenceSchema().load(data)
+            return CartDiscountReferenceSchema().load(data)
+        if data["typeId"] == "cart":
+            from ._schemas.cart import CartReferenceSchema
+
+            return CartReferenceSchema().load(data)
+        if data["typeId"] == "category":
+            from ._schemas.category import CategoryReferenceSchema
+
+            return CategoryReferenceSchema().load(data)
+        if data["typeId"] == "channel":
+            from ._schemas.channel import ChannelReferenceSchema
+
+            return ChannelReferenceSchema().load(data)
+        if data["typeId"] == "key-value-document":
+            from ._schemas.custom_object import CustomObjectReferenceSchema
+
+            return CustomObjectReferenceSchema().load(data)
+        if data["typeId"] == "customer-group":
+            from ._schemas.customer_group import CustomerGroupReferenceSchema
+
+            return CustomerGroupReferenceSchema().load(data)
+        if data["typeId"] == "customer":
+            from ._schemas.customer import CustomerReferenceSchema
+
+            return CustomerReferenceSchema().load(data)
+        if data["typeId"] == "discount-code":
+            from ._schemas.discount_code import DiscountCodeReferenceSchema
+
+            return DiscountCodeReferenceSchema().load(data)
+        if data["typeId"] == "inventory-entry":
+            from ._schemas.inventory import InventoryEntryReferenceSchema
+
+            return InventoryEntryReferenceSchema().load(data)
+        if data["typeId"] == "order-edit":
+            from ._schemas.order_edit import OrderEditReferenceSchema
+
+            return OrderEditReferenceSchema().load(data)
+        if data["typeId"] == "order":
+            from ._schemas.order import OrderReferenceSchema
+
+            return OrderReferenceSchema().load(data)
+        if data["typeId"] == "payment":
+            from ._schemas.payment import PaymentReferenceSchema
+
+            return PaymentReferenceSchema().load(data)
+        if data["typeId"] == "product-discount":
+            from ._schemas.product_discount import ProductDiscountReferenceSchema
+
+            return ProductDiscountReferenceSchema().load(data)
+        if data["typeId"] == "product-type":
+            from ._schemas.product_type import ProductTypeReferenceSchema
+
+            return ProductTypeReferenceSchema().load(data)
+        if data["typeId"] == "product":
+            from ._schemas.product import ProductReferenceSchema
+
+            return ProductReferenceSchema().load(data)
+        if data["typeId"] == "review":
+            from ._schemas.review import ReviewReferenceSchema
+
+            return ReviewReferenceSchema().load(data)
+        if data["typeId"] == "shipping-method":
+            from ._schemas.shipping_method import ShippingMethodReferenceSchema
+
+            return ShippingMethodReferenceSchema().load(data)
+        if data["typeId"] == "shopping-list":
+            from ._schemas.shopping_list import ShoppingListReferenceSchema
+
+            return ShoppingListReferenceSchema().load(data)
+        if data["typeId"] == "state":
+            from ._schemas.state import StateReferenceSchema
+
+            return StateReferenceSchema().load(data)
+        if data["typeId"] == "store":
+            from ._schemas.store import StoreReferenceSchema
+
+            return StoreReferenceSchema().load(data)
+        if data["typeId"] == "tax-category":
+            from ._schemas.tax_category import TaxCategoryReferenceSchema
+
+            return TaxCategoryReferenceSchema().load(data)
+        if data["typeId"] == "type":
+            from ._schemas.type import TypeReferenceSchema
+
+            return TypeReferenceSchema().load(data)
+        if data["typeId"] == "zone":
+            from ._schemas.zone import ZoneReferenceSchema
+
+            return ZoneReferenceSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import ReferenceSchema
@@ -844,15 +974,15 @@ class ReferenceTypeId(enum.Enum):
 
 class ResourceIdentifier(_BaseType):
     type_id: typing.Optional["ReferenceTypeId"]
-    id: typing.Optional["str"]
-    key: typing.Optional["str"]
+    id: typing.Optional[str]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
-        id: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
     ):
         self.type_id = type_id
         self.id = id
@@ -861,9 +991,96 @@ class ResourceIdentifier(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ResourceIdentifier":
-        from ._schemas.common import ResourceIdentifierSchema
+        if data["typeId"] == "cart-discount":
+            from ._schemas.cart_discount import CartDiscountResourceIdentifierSchema
 
-        return ResourceIdentifierSchema().load(data)
+            return CartDiscountResourceIdentifierSchema().load(data)
+        if data["typeId"] == "cart":
+            from ._schemas.cart import CartResourceIdentifierSchema
+
+            return CartResourceIdentifierSchema().load(data)
+        if data["typeId"] == "category":
+            from ._schemas.category import CategoryResourceIdentifierSchema
+
+            return CategoryResourceIdentifierSchema().load(data)
+        if data["typeId"] == "channel":
+            from ._schemas.channel import ChannelResourceIdentifierSchema
+
+            return ChannelResourceIdentifierSchema().load(data)
+        if data["typeId"] == "customer-group":
+            from ._schemas.customer_group import CustomerGroupResourceIdentifierSchema
+
+            return CustomerGroupResourceIdentifierSchema().load(data)
+        if data["typeId"] == "customer":
+            from ._schemas.customer import CustomerResourceIdentifierSchema
+
+            return CustomerResourceIdentifierSchema().load(data)
+        if data["typeId"] == "discount-code":
+            from ._schemas.discount_code import DiscountCodeResourceIdentifierSchema
+
+            return DiscountCodeResourceIdentifierSchema().load(data)
+        if data["typeId"] == "inventory-entry":
+            from ._schemas.inventory import InventoryEntryResourceIdentifierSchema
+
+            return InventoryEntryResourceIdentifierSchema().load(data)
+        if data["typeId"] == "order-edit":
+            from ._schemas.order_edit import OrderEditResourceIdentifierSchema
+
+            return OrderEditResourceIdentifierSchema().load(data)
+        if data["typeId"] == "order":
+            from ._schemas.order import OrderResourceIdentifierSchema
+
+            return OrderResourceIdentifierSchema().load(data)
+        if data["typeId"] == "payment":
+            from ._schemas.payment import PaymentResourceIdentifierSchema
+
+            return PaymentResourceIdentifierSchema().load(data)
+        if data["typeId"] == "product-discount":
+            from ._schemas.product_discount import (
+                ProductDiscountResourceIdentifierSchema,
+            )
+
+            return ProductDiscountResourceIdentifierSchema().load(data)
+        if data["typeId"] == "product-type":
+            from ._schemas.product_type import ProductTypeResourceIdentifierSchema
+
+            return ProductTypeResourceIdentifierSchema().load(data)
+        if data["typeId"] == "product":
+            from ._schemas.product import ProductResourceIdentifierSchema
+
+            return ProductResourceIdentifierSchema().load(data)
+        if data["typeId"] == "review":
+            from ._schemas.review import ReviewResourceIdentifierSchema
+
+            return ReviewResourceIdentifierSchema().load(data)
+        if data["typeId"] == "shipping-method":
+            from ._schemas.shipping_method import ShippingMethodResourceIdentifierSchema
+
+            return ShippingMethodResourceIdentifierSchema().load(data)
+        if data["typeId"] == "shopping-list":
+            from ._schemas.shopping_list import ShoppingListResourceIdentifierSchema
+
+            return ShoppingListResourceIdentifierSchema().load(data)
+        if data["typeId"] == "state":
+            from ._schemas.state import StateResourceIdentifierSchema
+
+            return StateResourceIdentifierSchema().load(data)
+        if data["typeId"] == "store":
+            from ._schemas.store import StoreResourceIdentifierSchema
+
+            return StoreResourceIdentifierSchema().load(data)
+        if data["typeId"] == "tax-category":
+            from ._schemas.tax_category import TaxCategoryResourceIdentifierSchema
+
+            return TaxCategoryResourceIdentifierSchema().load(data)
+        if data["typeId"] == "type":
+            from ._schemas.type import TypeResourceIdentifierSchema
+
+            return TypeResourceIdentifierSchema().load(data)
+        if data["typeId"] == "zone":
+            from ._schemas.zone import ZoneResourceIdentifierSchema
+
+            return ZoneResourceIdentifierSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import ResourceIdentifierSchema
@@ -872,29 +1089,29 @@ class ResourceIdentifier(_BaseType):
 
 
 class ScopedPrice(_BaseType):
-    id: "str"
+    id: str
     value: "TypedMoney"
     current_value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
     discounted: typing.Optional["DiscountedPrice"]
     custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
-        id: "str",
+        id: str,
         value: "TypedMoney",
         current_value: "TypedMoney",
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         custom: typing.Optional["CustomFields"] = None
     ):
@@ -924,18 +1141,18 @@ class ScopedPrice(_BaseType):
 
 class TypedMoney(_BaseType):
     type: "MoneyType"
-    fraction_digits: "int"
-    cent_amount: "int"
+    fraction_digits: int
+    cent_amount: int
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency_code: "str"
+    currency_code: str
 
     def __init__(
         self,
         *,
         type: "MoneyType",
-        fraction_digits: "int",
-        cent_amount: "int",
-        currency_code: "str"
+        fraction_digits: int,
+        cent_amount: int,
+        currency_code: str
     ):
         self.type = type
         self.fraction_digits = fraction_digits
@@ -945,9 +1162,14 @@ class TypedMoney(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "TypedMoney":
-        from ._schemas.common import TypedMoneySchema
+        if data["type"] == "centPrecision":
+            from ._schemas.common import CentPrecisionMoneySchema
 
-        return TypedMoneySchema().load(data)
+            return CentPrecisionMoneySchema().load(data)
+        if data["type"] == "highPrecision":
+            from ._schemas.common import HighPrecisionMoneySchema
+
+            return HighPrecisionMoneySchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import TypedMoneySchema
@@ -956,9 +1178,7 @@ class TypedMoney(_BaseType):
 
 
 class CentPrecisionMoney(TypedMoney):
-    def __init__(
-        self, *, fraction_digits: "int", cent_amount: "int", currency_code: "str"
-    ):
+    def __init__(self, *, fraction_digits: int, cent_amount: int, currency_code: str):
 
         super().__init__(
             fraction_digits=fraction_digits,
@@ -980,15 +1200,15 @@ class CentPrecisionMoney(TypedMoney):
 
 
 class HighPrecisionMoney(TypedMoney):
-    precise_amount: "int"
+    precise_amount: int
 
     def __init__(
         self,
         *,
-        fraction_digits: "int",
-        cent_amount: "int",
-        currency_code: "str",
-        precise_amount: "int"
+        fraction_digits: int,
+        cent_amount: int,
+        currency_code: str,
+        precise_amount: int
     ):
         self.precise_amount = precise_amount
         super().__init__(
@@ -1012,15 +1232,15 @@ class HighPrecisionMoney(TypedMoney):
 
 class TypedMoneyDraft(Money):
     type: "MoneyType"
-    fraction_digits: typing.Optional["int"]
+    fraction_digits: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        cent_amount: "int",
-        currency_code: "str",
+        cent_amount: int,
+        currency_code: str,
         type: "MoneyType",
-        fraction_digits: typing.Optional["int"] = None
+        fraction_digits: typing.Optional[int] = None
     ):
         self.type = type
         self.fraction_digits = fraction_digits
@@ -1028,9 +1248,14 @@ class TypedMoneyDraft(Money):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "TypedMoneyDraft":
-        from ._schemas.common import TypedMoneyDraftSchema
+        if data["type"] == "centPrecision":
+            from ._schemas.common import CentPrecisionMoneyDraftSchema
 
-        return TypedMoneyDraftSchema().load(data)
+            return CentPrecisionMoneyDraftSchema().load(data)
+        if data["type"] == "highPrecision":
+            from ._schemas.common import HighPrecisionMoneyDraftSchema
+
+            return HighPrecisionMoneyDraftSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import TypedMoneyDraftSchema
@@ -1042,9 +1267,9 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
     def __init__(
         self,
         *,
-        cent_amount: "int",
-        currency_code: "str",
-        fraction_digits: typing.Optional["int"] = None
+        cent_amount: int,
+        currency_code: str,
+        fraction_digits: typing.Optional[int] = None
     ):
 
         super().__init__(
@@ -1069,15 +1294,15 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
 
 
 class HighPrecisionMoneyDraft(TypedMoneyDraft):
-    precise_amount: "int"
+    precise_amount: int
 
     def __init__(
         self,
         *,
-        cent_amount: "int",
-        currency_code: "str",
-        fraction_digits: typing.Optional["int"] = None,
-        precise_amount: "int"
+        cent_amount: int,
+        currency_code: str,
+        fraction_digits: typing.Optional[int] = None,
+        precise_amount: int
     ):
         self.precise_amount = precise_amount
         super().__init__(

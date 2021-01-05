@@ -10,21 +10,48 @@ from .common import TaskStatusEnum
 if typing.TYPE_CHECKING:
     from .common import ProductReference, ProductTypeReference, TaskStatusEnum
 
+__all__ = [
+    "AttributeCount",
+    "AttributeCoverage",
+    "MissingAttributes",
+    "MissingAttributesDetails",
+    "MissingAttributesMeta",
+    "MissingAttributesPagedQueryResult",
+    "MissingAttributesSearchRequest",
+    "MissingDataTaskStatus",
+    "MissingImages",
+    "MissingImagesCount",
+    "MissingImagesMeta",
+    "MissingImagesPagedQueryResult",
+    "MissingImagesProductLevel",
+    "MissingImagesSearchRequest",
+    "MissingImagesTaskStatus",
+    "MissingImagesVariantLevel",
+    "MissingPrices",
+    "MissingPricesMeta",
+    "MissingPricesPagedQueryResult",
+    "MissingPricesProductCount",
+    "MissingPricesProductLevel",
+    "MissingPricesSearchRequest",
+    "MissingPricesTaskStatus",
+    "MissingPricesVariantLevel",
+]
+
 
 class AttributeCount(_BaseType):
     #: Number of attributes defined in the product type.
-    product_type_attributes: "int"
+    product_type_attributes: int
     #: Number of attributes defined in the variant.
-    variant_attributes: "int"
+    variant_attributes: int
     #: Number of attributes missing values in the variant.
-    missing_attribute_values: "int"
+    missing_attribute_values: int
 
     def __init__(
         self,
         *,
-        product_type_attributes: "int",
-        variant_attributes: "int",
-        missing_attribute_values: "int"
+        product_type_attributes: int,
+        variant_attributes: int,
+        missing_attribute_values: int
     ):
         self.product_type_attributes = product_type_attributes
         self.variant_attributes = variant_attributes
@@ -45,11 +72,11 @@ class AttributeCount(_BaseType):
 
 class AttributeCoverage(_BaseType):
     #: The percentage of attributes from the product type defined in the product variant. A value of `1.0` indicates a product variant contains all attributes defined in the product type.
-    names: "float"
+    names: float
     #: Represents the percentage of attributes in the product variant that contain values.
-    values: "float"
+    values: float
 
-    def __init__(self, *, names: "float", values: "float"):
+    def __init__(self, *, names: float, values: float):
         self.names = names
         self.values = values
         super().__init__()
@@ -68,18 +95,14 @@ class AttributeCoverage(_BaseType):
 
 class MissingAttributesDetails(_BaseType):
     #: Number of products scanned.
-    total: "int"
+    total: int
     #: Number of products missing attribute names.
-    missing_attribute_names: "int"
+    missing_attribute_names: int
     #: Number of products missing attribute values.
-    missing_attribute_values: "int"
+    missing_attribute_values: int
 
     def __init__(
-        self,
-        *,
-        total: "int",
-        missing_attribute_names: "int",
-        missing_attribute_values: "int"
+        self, *, total: int, missing_attribute_names: int, missing_attribute_values: int
     ):
         self.total = total
         self.missing_attribute_names = missing_attribute_names
@@ -104,7 +127,7 @@ class MissingAttributes(_BaseType):
     product: "ProductReference"
     product_type: "ProductTypeReference"
     #: ID of a ProductVariant.
-    variant_id: "int"
+    variant_id: int
     #: The names of the attributes of the product type that the variant is missing, sorted by attribute importance in descending order.
     missing_attribute_values: typing.List["str"]
     #: The names of the attributes of the product type that the variant is missing, sorted by attribute importance in descending order.
@@ -117,7 +140,7 @@ class MissingAttributes(_BaseType):
         *,
         product: "ProductReference",
         product_type: "ProductTypeReference",
-        variant_id: "int",
+        variant_id: int,
         missing_attribute_values: typing.List["str"],
         missing_attribute_names: typing.Optional[typing.List["str"]] = None,
         attribute_count: typing.Optional["AttributeCount"] = None,
@@ -175,23 +198,23 @@ class MissingAttributesMeta(_BaseType):
 
 
 class MissingAttributesSearchRequest(_BaseType):
-    limit: typing.Optional["int"]
-    offset: typing.Optional["int"]
+    limit: typing.Optional[int]
+    offset: typing.Optional[int]
     #: If true, searches data from staged products in addition to published products.
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
     #: Maximum number of products to scan.
-    product_set_limit: typing.Optional["int"]
+    product_set_limit: typing.Optional[int]
     #: If true, searches all product variants. If false, only searches master variants.
-    include_variants: typing.Optional["bool"]
+    include_variants: typing.Optional[bool]
     #: Minimum attribute coverage of variants to display, applied to both coverage types.
-    coverage_min: typing.Optional["float"]
+    coverage_min: typing.Optional[float]
     #: Maximum attribute coverage of variants to display, applied to both coverage types.
-    coverage_max: typing.Optional["float"]
+    coverage_max: typing.Optional[float]
     #: Default value: `coverageAttributeValues` - Allowed values: [`coverageAttributeValues`, `coverageAttributeNames`]
     #: `coverageAttributeValues` shows the product variants with the most missing attribute values first and `coverageAttributeNames` the ones with the most missing attribute names.
-    sort_by: typing.Optional["str"]
+    sort_by: typing.Optional[str]
     #: If true, the `missingAttributeNames` will be included in the results.
-    show_missing_attribute_names: typing.Optional["bool"]
+    show_missing_attribute_names: typing.Optional[bool]
     #: Filters results by the provided Product IDs.
     #: Cannot be applied in combination with any other filter.
     product_ids: typing.Optional[typing.List["str"]]
@@ -200,23 +223,23 @@ class MissingAttributesSearchRequest(_BaseType):
     product_type_ids: typing.Optional[typing.List["str"]]
     #: Filters results by the provided attribute name. If provided,  products are only checked for this attribute. Therefore, only products of product types which define the attribute name are considered. These product type IDs
     #: are then listed in `MissingAttributesMeta`. The  `attributeCount` and `attributeCoverage` fields are not part of the response when using this filter. Cannot be applied in combination with any other filter.
-    attribute_name: typing.Optional["str"]
+    attribute_name: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        limit: typing.Optional["int"] = None,
-        offset: typing.Optional["int"] = None,
-        staged: typing.Optional["bool"] = None,
-        product_set_limit: typing.Optional["int"] = None,
-        include_variants: typing.Optional["bool"] = None,
-        coverage_min: typing.Optional["float"] = None,
-        coverage_max: typing.Optional["float"] = None,
-        sort_by: typing.Optional["str"] = None,
-        show_missing_attribute_names: typing.Optional["bool"] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        staged: typing.Optional[bool] = None,
+        product_set_limit: typing.Optional[int] = None,
+        include_variants: typing.Optional[bool] = None,
+        coverage_min: typing.Optional[float] = None,
+        coverage_max: typing.Optional[float] = None,
+        sort_by: typing.Optional[str] = None,
+        show_missing_attribute_names: typing.Optional[bool] = None,
         product_ids: typing.Optional[typing.List["str"]] = None,
         product_type_ids: typing.Optional[typing.List["str"]] = None,
-        attribute_name: typing.Optional["str"] = None
+        attribute_name: typing.Optional[str] = None
     ):
         self.limit = limit
         self.offset = offset
@@ -247,18 +270,18 @@ class MissingAttributesSearchRequest(_BaseType):
 
 
 class MissingAttributesPagedQueryResult(_BaseType):
-    count: "int"
-    total: "int"
-    offset: "int"
+    count: int
+    total: int
+    offset: int
     results: typing.List["MissingAttributes"]
     meta: "MissingAttributesMeta"
 
     def __init__(
         self,
         *,
-        count: "int",
-        total: "int",
-        offset: "int",
+        count: int,
+        total: int,
+        offset: int,
         results: typing.List["MissingAttributes"],
         meta: "MissingAttributesMeta"
     ):
@@ -288,7 +311,7 @@ class MissingDataTaskStatus(_BaseType):
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.
-    expires: "datetime.datetime"
+    expires: datetime.datetime
     #: The response to an asynchronous request. The type depends on the request initiated. Only populated when the status is `SUCCESS`.
     result: "MissingAttributesPagedQueryResult"
 
@@ -296,7 +319,7 @@ class MissingDataTaskStatus(_BaseType):
         self,
         *,
         state: "TaskStatusEnum",
-        expires: "datetime.datetime",
+        expires: datetime.datetime,
         result: "MissingAttributesPagedQueryResult"
     ):
         self.state = state
@@ -319,12 +342,12 @@ class MissingDataTaskStatus(_BaseType):
 class MissingImages(_BaseType):
     product: "ProductReference"
     #: ID of the variant
-    variant_id: "int"
+    variant_id: int
     #: Number of images the variant contains.
-    image_count: "int"
+    image_count: int
 
     def __init__(
-        self, *, product: "ProductReference", variant_id: "int", image_count: "int"
+        self, *, product: "ProductReference", variant_id: int, image_count: int
     ):
         self.product = product
         self.variant_id = variant_id
@@ -344,11 +367,11 @@ class MissingImages(_BaseType):
 
 
 class MissingImagesCount(_BaseType):
-    missing_images: "int"
+    missing_images: int
     #: Number of products scanned.
-    total: "int"
+    total: int
 
-    def __init__(self, *, missing_images: "int", total: "int"):
+    def __init__(self, *, missing_images: int, total: int):
         self.missing_images = missing_images
         self.total = total
         super().__init__()
@@ -366,7 +389,7 @@ class MissingImagesCount(_BaseType):
 
 
 class MissingImagesProductLevel(MissingImagesCount):
-    def __init__(self, *, missing_images: "int", total: "int"):
+    def __init__(self, *, missing_images: int, total: int):
 
         super().__init__(missing_images=missing_images, total=total)
 
@@ -385,7 +408,7 @@ class MissingImagesProductLevel(MissingImagesCount):
 
 
 class MissingImagesVariantLevel(MissingImagesCount):
-    def __init__(self, *, missing_images: "int", total: "int"):
+    def __init__(self, *, missing_images: int, total: int):
 
         super().__init__(missing_images=missing_images, total=total)
 
@@ -407,14 +430,14 @@ class MissingImagesMeta(_BaseType):
     product_level: "MissingImagesProductLevel"
     variant_level: "MissingImagesVariantLevel"
     #: The minimum number of images a product variant must have. Anything below this value is considered a product variant with missing images.
-    threshold: "int"
+    threshold: int
 
     def __init__(
         self,
         *,
         product_level: "MissingImagesProductLevel",
         variant_level: "MissingImagesVariantLevel",
-        threshold: "int"
+        threshold: int
     ):
         self.product_level = product_level
         self.variant_level = variant_level
@@ -434,18 +457,18 @@ class MissingImagesMeta(_BaseType):
 
 
 class MissingImagesSearchRequest(_BaseType):
-    limit: typing.Optional["int"]
-    offset: typing.Optional["int"]
+    limit: typing.Optional[int]
+    offset: typing.Optional[int]
     #: If true, searches data from staged products in addition to published products.
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
     #: Maximum number of products to scan.
-    product_set_limit: typing.Optional["int"]
+    product_set_limit: typing.Optional[int]
     #: If true, searches all product variants. If false, only searches master variants.
-    include_variants: typing.Optional["bool"]
+    include_variants: typing.Optional[bool]
     #: If true, uses the median number of images per product variant as a threshold value.
-    auto_threshold: typing.Optional["bool"]
+    auto_threshold: typing.Optional[bool]
     #: The minimum number of images a product variant must have. Anything below this value is considered a product variant with missing images.
-    threshold: typing.Optional["int"]
+    threshold: typing.Optional[int]
     #: Filters results by the provided Product IDs. Cannot be applied in combination with any other filter.
     product_ids: typing.Optional[typing.List["str"]]
     #: Filters results by the provided product type IDs. It cannot be applied in combination with any other filter.
@@ -454,13 +477,13 @@ class MissingImagesSearchRequest(_BaseType):
     def __init__(
         self,
         *,
-        limit: typing.Optional["int"] = None,
-        offset: typing.Optional["int"] = None,
-        staged: typing.Optional["bool"] = None,
-        product_set_limit: typing.Optional["int"] = None,
-        include_variants: typing.Optional["bool"] = None,
-        auto_threshold: typing.Optional["bool"] = None,
-        threshold: typing.Optional["int"] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        staged: typing.Optional[bool] = None,
+        product_set_limit: typing.Optional[int] = None,
+        include_variants: typing.Optional[bool] = None,
+        auto_threshold: typing.Optional[bool] = None,
+        threshold: typing.Optional[int] = None,
         product_ids: typing.Optional[typing.List["str"]] = None,
         product_type_ids: typing.Optional[typing.List["str"]] = None
     ):
@@ -490,18 +513,18 @@ class MissingImagesSearchRequest(_BaseType):
 
 
 class MissingImagesPagedQueryResult(_BaseType):
-    count: "int"
-    total: "int"
-    offset: "int"
+    count: int
+    total: int
+    offset: int
     results: typing.List["MissingImages"]
     meta: "MissingImagesMeta"
 
     def __init__(
         self,
         *,
-        count: "int",
-        total: "int",
-        offset: "int",
+        count: int,
+        total: int,
+        offset: int,
         results: typing.List["MissingImages"],
         meta: "MissingImagesMeta"
     ):
@@ -531,7 +554,7 @@ class MissingImagesTaskStatus(_BaseType):
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.
-    expires: "datetime.datetime"
+    expires: datetime.datetime
     #: The response to an asynchronous request. The type depends on the request initiated. Only populated when the status is `SUCCESS`.
     result: "MissingImagesPagedQueryResult"
 
@@ -539,7 +562,7 @@ class MissingImagesTaskStatus(_BaseType):
         self,
         *,
         state: "TaskStatusEnum",
-        expires: "datetime.datetime",
+        expires: datetime.datetime,
         result: "MissingImagesPagedQueryResult"
     ):
         self.state = state
@@ -564,9 +587,9 @@ class MissingImagesTaskStatus(_BaseType):
 class MissingPrices(_BaseType):
     product: "ProductReference"
     #: Id of the `ProductVariant`.
-    variant_id: "int"
+    variant_id: int
 
-    def __init__(self, *, product: "ProductReference", variant_id: "int"):
+    def __init__(self, *, product: "ProductReference", variant_id: int):
         self.product = product
         self.variant_id = variant_id
         super().__init__()
@@ -584,10 +607,10 @@ class MissingPrices(_BaseType):
 
 
 class MissingPricesProductCount(_BaseType):
-    total: "int"
-    missing_prices: "int"
+    total: int
+    missing_prices: int
 
-    def __init__(self, *, total: "int", missing_prices: "int"):
+    def __init__(self, *, total: int, missing_prices: int):
         self.total = total
         self.missing_prices = missing_prices
         super().__init__()
@@ -607,7 +630,7 @@ class MissingPricesProductCount(_BaseType):
 
 
 class MissingPricesProductLevel(MissingPricesProductCount):
-    def __init__(self, *, total: "int", missing_prices: "int"):
+    def __init__(self, *, total: int, missing_prices: int):
 
         super().__init__(total=total, missing_prices=missing_prices)
 
@@ -626,7 +649,7 @@ class MissingPricesProductLevel(MissingPricesProductCount):
 
 
 class MissingPricesVariantLevel(MissingPricesProductCount):
-    def __init__(self, *, total: "int", missing_prices: "int"):
+    def __init__(self, *, total: int, missing_prices: int):
 
         super().__init__(total=total, missing_prices=missing_prices)
 
@@ -671,22 +694,22 @@ class MissingPricesMeta(_BaseType):
 
 
 class MissingPricesSearchRequest(_BaseType):
-    limit: typing.Optional["int"]
-    offset: typing.Optional["int"]
+    limit: typing.Optional[int]
+    offset: typing.Optional[int]
     #: If true, searches data from staged products in addition to published products.
-    staged: typing.Optional["bool"]
+    staged: typing.Optional[bool]
     #: Maximum number of products to scan.
-    product_set_limit: typing.Optional["int"]
+    product_set_limit: typing.Optional[int]
     #: If true, searches all product variants. If false, only searches master variants.
-    include_variants: typing.Optional["bool"]
+    include_variants: typing.Optional[bool]
     #: If used, only checks if a product variant has a price in the provided currency code.
-    currency_code: typing.Optional["str"]
+    currency_code: typing.Optional[str]
     #: If true, checks if there are prices for the specified date range and time.
-    check_date: typing.Optional["bool"]
+    check_date: typing.Optional[bool]
     #: Starting date of the range to check. If no value is given, checks prices valid at the time the search is initiated.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: Ending date of the range to check. If no value is given, it is equal to `validFrom`.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
     #: Filters results by the provided Product IDs. Cannot be applied in combination with the `productTypeIds` filter.
     product_ids: typing.Optional[typing.List["str"]]
     #: Filters results by the provided product type IDs. Cannot be applied in combination with the `productIds` filter.
@@ -695,15 +718,15 @@ class MissingPricesSearchRequest(_BaseType):
     def __init__(
         self,
         *,
-        limit: typing.Optional["int"] = None,
-        offset: typing.Optional["int"] = None,
-        staged: typing.Optional["bool"] = None,
-        product_set_limit: typing.Optional["int"] = None,
-        include_variants: typing.Optional["bool"] = None,
-        currency_code: typing.Optional["str"] = None,
-        check_date: typing.Optional["bool"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        staged: typing.Optional[bool] = None,
+        product_set_limit: typing.Optional[int] = None,
+        include_variants: typing.Optional[bool] = None,
+        currency_code: typing.Optional[str] = None,
+        check_date: typing.Optional[bool] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         product_ids: typing.Optional[typing.List["str"]] = None,
         product_type_ids: typing.Optional[typing.List["str"]] = None
     ):
@@ -735,18 +758,18 @@ class MissingPricesSearchRequest(_BaseType):
 
 
 class MissingPricesPagedQueryResult(_BaseType):
-    count: "int"
-    total: "int"
-    offset: "int"
+    count: int
+    total: int
+    offset: int
     results: typing.List["MissingPrices"]
     meta: "MissingPricesMeta"
 
     def __init__(
         self,
         *,
-        count: "int",
-        total: "int",
-        offset: "int",
+        count: int,
+        total: int,
+        offset: int,
         results: typing.List["MissingPrices"],
         meta: "MissingPricesMeta"
     ):
@@ -776,7 +799,7 @@ class MissingPricesTaskStatus(_BaseType):
 
     state: "TaskStatusEnum"
     #: The expiry date of the result. You cannot access the result after the expiry date. Default: 1 day after the result first becomes available. This is only available when the TaskStatus state is SUCCESS.
-    expires: "datetime.datetime"
+    expires: datetime.datetime
     #: The response to an asynchronous request. The type depends on the request initiated. Only populated when the status is `SUCCESS`.
     result: "MissingPricesPagedQueryResult"
 
@@ -784,7 +807,7 @@ class MissingPricesTaskStatus(_BaseType):
         self,
         *,
         state: "TaskStatusEnum",
-        expires: "datetime.datetime",
+        expires: datetime.datetime,
         result: "MissingPricesPagedQueryResult"
     ):
         self.state = state

@@ -5,31 +5,34 @@ from ..matching_cart.by_project_key_in_store_key_by_store_key_shipping_methods_m
     ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _store_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        storeKey: str,
-        client: "Client",
+        project_key: str,
+        store_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._store_key = storeKey
+        self._project_key = project_key
+        self._store_key = store_key
         self._client = client
 
-    def matchingCart(
+    def matching_cart(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder:
         """Get ShippingMethods for a cart in a store"""
         return (
             ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder(
-                projectKey=self._project_key,
-                storeKey=self._store_key,
+                project_key=self._project_key,
+                store_key=self._store_key,
                 client=self._client,
             )
         )

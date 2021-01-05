@@ -27,7 +27,7 @@ from .common import (
 # Marshmallow Schemas
 
 
-class AttributeDefinitionSchema(marshmallow.Schema):
+class AttributeDefinitionSchema(helpers.BaseSchema):
     type = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("name", "name"),
@@ -60,7 +60,12 @@ class AttributeDefinitionSchema(marshmallow.Schema):
         missing=None,
         data_key="attributeConstraint",
     )
-    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
+    input_tip = LocalizedStringField(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="inputTip",
+    )
     input_hint = marshmallow_enum.EnumField(
         TextInputHint,
         by_value=True,
@@ -81,7 +86,7 @@ class AttributeDefinitionSchema(marshmallow.Schema):
         return models.AttributeDefinition(**data)
 
 
-class AttributeDefinitionDraftSchema(marshmallow.Schema):
+class AttributeDefinitionDraftSchema(helpers.BaseSchema):
     type = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("name", "name"),
@@ -111,19 +116,29 @@ class AttributeDefinitionDraftSchema(marshmallow.Schema):
         AttributeConstraintEnum,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="attributeConstraint",
     )
-    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
+    input_tip = LocalizedStringField(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="inputTip",
+    )
     input_hint = marshmallow_enum.EnumField(
         TextInputHint,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="inputHint",
     )
     is_searchable = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isSearchable"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="isSearchable",
     )
 
     class Meta:
@@ -135,7 +150,7 @@ class AttributeDefinitionDraftSchema(marshmallow.Schema):
         return models.AttributeDefinitionDraft(**data)
 
 
-class AttributeLocalizedEnumValueSchema(marshmallow.Schema):
+class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     label = LocalizedStringField(allow_none=True, missing=None)
 
@@ -148,7 +163,7 @@ class AttributeLocalizedEnumValueSchema(marshmallow.Schema):
         return models.AttributeLocalizedEnumValue(**data)
 
 
-class AttributePlainEnumValueSchema(marshmallow.Schema):
+class AttributePlainEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     label = marshmallow.fields.String(allow_none=True, missing=None)
 
@@ -161,7 +176,7 @@ class AttributePlainEnumValueSchema(marshmallow.Schema):
         return models.AttributePlainEnumValue(**data)
 
 
-class AttributeTypeSchema(marshmallow.Schema):
+class AttributeTypeSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -362,6 +377,7 @@ class ProductTypeSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -369,10 +385,13 @@ class ProductTypeSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
     description = marshmallow.fields.String(allow_none=True, missing=None)
     attributes = helpers.LazyNestedField(
@@ -380,6 +399,7 @@ class ProductTypeSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -392,8 +412,10 @@ class ProductTypeSchema(BaseResourceSchema):
         return models.ProductType(**data)
 
 
-class ProductTypeDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class ProductTypeDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
     description = marshmallow.fields.String(allow_none=True, missing=None)
     attributes = helpers.LazyNestedField(
@@ -401,6 +423,7 @@ class ProductTypeDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -413,10 +436,12 @@ class ProductTypeDraftSchema(marshmallow.Schema):
         return models.ProductTypeDraft(**data)
 
 
-class ProductTypePagedQueryResponseSchema(marshmallow.Schema):
+class ProductTypePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductTypeSchema"),
@@ -440,6 +465,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".ProductTypeSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -462,7 +488,7 @@ class ProductTypeResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.ProductTypeResourceIdentifier(**data)
 
 
-class ProductTypeUpdateSchema(marshmallow.Schema):
+class ProductTypeUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -545,7 +571,7 @@ class ProductTypeUpdateSchema(marshmallow.Schema):
         return models.ProductTypeUpdate(**data)
 
 
-class ProductTypeUpdateActionSchema(marshmallow.Schema):
+class ProductTypeUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -899,7 +925,12 @@ class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="attributeName"
     )
-    input_tip = LocalizedStringField(allow_none=True, missing=None, data_key="inputTip")
+    input_tip = LocalizedStringField(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="inputTip",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -911,7 +942,9 @@ class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
 
 
 class ProductTypeSetKeyActionSchema(ProductTypeUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

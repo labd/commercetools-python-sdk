@@ -5,25 +5,28 @@ from .by_project_key_recommendations_project_categories_by_product_id_request_bu
     ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyRecommendationsProjectCategoriesRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def withProductId(
-        self, productId: str
+    def with_product_id(
+        self, product_id: str
     ) -> ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
         return ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder(
-            productId=productId,
-            projectKey=self._project_key,
+            product_id=product_id,
+            project_key=self._project_key,
             client=self._client,
         )

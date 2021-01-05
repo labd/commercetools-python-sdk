@@ -19,12 +19,14 @@ if typing.TYPE_CHECKING:
     )
     from .customfields import Custom
 
+__all__ = ["PriceImport", "SubRate", "TaxRate"]
+
 
 class SubRate(_BaseType):
-    name: "str"
-    amount: "float"
+    name: str
+    amount: float
 
-    def __init__(self, *, name: "str", amount: "float"):
+    def __init__(self, *, name: str, amount: float):
         self.name = name
         self.amount = amount
         super().__init__()
@@ -42,24 +44,24 @@ class SubRate(_BaseType):
 
 
 class TaxRate(_BaseType):
-    id: typing.Optional["str"]
-    name: "str"
-    amount: "float"
-    included_in_price: "bool"
+    id: typing.Optional[str]
+    name: str
+    amount: float
+    included_in_price: bool
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
-    state: typing.Optional["str"]
+    country: str
+    state: typing.Optional[str]
     sub_rates: typing.Optional[typing.List["SubRate"]]
 
     def __init__(
         self,
         *,
-        id: typing.Optional["str"] = None,
-        name: "str",
-        amount: "float",
-        included_in_price: "bool",
-        country: "str",
-        state: typing.Optional["str"] = None,
+        id: typing.Optional[str] = None,
+        name: str,
+        amount: float,
+        included_in_price: bool,
+        country: str,
+        state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None
     ):
         self.id = id
@@ -91,11 +93,11 @@ class PriceImport(ImportResource):
     #: The Import API **only** supports `centPrecision` prices.
     value: "TypedMoney"
     #: Maps to `Price.county`.
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     #: Maps to `Price.validFrom`.
-    valid_from: typing.Optional["datetime.datetime"]
+    valid_from: typing.Optional[datetime.datetime]
     #: Maps to `Price.validUntil`.
-    valid_until: typing.Optional["datetime.datetime"]
+    valid_until: typing.Optional[datetime.datetime]
     #: References a customer group by its key.
     #:
     #: The customer group referenced
@@ -111,7 +113,7 @@ class PriceImport(ImportResource):
     #: Sets a discounted price from an external service.
     discounted: typing.Optional["DiscountedPrice"]
     #: Only the Price updates will be published to `staged` and `current` projection.
-    publish: typing.Optional["bool"]
+    publish: typing.Optional[bool]
     #: The tiered prices for this price.
     tiers: typing.Optional[typing.List["PriceTier"]]
     #: The custom fields for this price.
@@ -132,15 +134,15 @@ class PriceImport(ImportResource):
     def __init__(
         self,
         *,
-        key: "str",
+        key: str,
         value: "TypedMoney",
-        country: typing.Optional["str"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
+        country: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
         channel: typing.Optional["ChannelKeyReference"] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        publish: typing.Optional["bool"] = None,
+        publish: typing.Optional[bool] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
         custom: typing.Optional["Custom"] = None,
         product_variant: "ProductVariantKeyReference",

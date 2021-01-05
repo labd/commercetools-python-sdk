@@ -22,81 +22,90 @@ from .by_project_key_shipping_methods_key_by_key_request_builder import (
     ByProjectKeyShippingMethodsKeyByKeyRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyShippingMethodsRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
-    def withKey(self, key: str) -> ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
+    def with_key(self, key: str) -> ByProjectKeyShippingMethodsKeyByKeyRequestBuilder:
         return ByProjectKeyShippingMethodsKeyByKeyRequestBuilder(
             key=key,
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def matchingCart(self) -> ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
+    def matching_cart(self) -> ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
         """Get ShippingMethods for a cart"""
         return ByProjectKeyShippingMethodsMatchingCartRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def matchingOrderedit(
+    def matching_orderedit(
         self,
     ) -> ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder:
         """Get ShippingMethods for an order edit"""
         return ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def matchingLocation(
+    def matching_location(
         self,
     ) -> ByProjectKeyShippingMethodsMatchingLocationRequestBuilder:
         """Get ShippingMethods for a location"""
         return ByProjectKeyShippingMethodsMatchingLocationRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
-    def withId(self, ID: str) -> ByProjectKeyShippingMethodsByIDRequestBuilder:
+    def with_id(self, id: str) -> ByProjectKeyShippingMethodsByIDRequestBuilder:
         return ByProjectKeyShippingMethodsByIDRequestBuilder(
-            ID=ID,
-            projectKey=self._project_key,
+            id=id,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def get(
         self,
         *,
-        expand: "str" = None,
-        sort: "str" = None,
-        limit: "int" = None,
-        offset: "int" = None,
-        with_total: "bool" = None,
-        where: "str" = None,
+        expand: str = None,
+        sort: str = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        where: str = None,
+        predicate_var: typing.Dict[str, str] = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethodPagedQueryResponse":
         """Query shipping-methods"""
+        params = {
+            "expand": expand,
+            "sort": sort,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
+        headers = {} if headers is None else headers
         return self._client._get(
             endpoint=f"/{self._project_key}/shipping-methods",
-            params={
-                "expand": expand,
-                "sort": sort,
-                "limit": limit,
-                "offset": offset,
-                "withTotal": with_total,
-                "where": where,
-            },
+            params=params,
             response_class=ShippingMethodPagedQueryResponse,
             headers=headers,
         )
@@ -105,10 +114,11 @@ class ByProjectKeyShippingMethodsRequestBuilder:
         self,
         body: "ShippingMethodDraft",
         *,
-        expand: "str" = None,
+        expand: str = None,
         headers: typing.Dict[str, str] = None,
     ) -> "ShippingMethod":
         """Create ShippingMethod"""
+        headers = {} if headers is None else headers
         return self._client._post(
             endpoint=f"/{self._project_key}/shipping-methods",
             params={"expand": expand},

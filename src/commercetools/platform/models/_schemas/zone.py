@@ -15,9 +15,11 @@ from .common import BaseResourceSchema, ReferenceSchema, ResourceIdentifierSchem
 
 
 # Marshmallow Schemas
-class LocationSchema(marshmallow.Schema):
+class LocationSchema(helpers.BaseSchema):
     country = marshmallow.fields.String(allow_none=True, missing=None)
-    state = marshmallow.fields.String(allow_none=True, missing=None)
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -33,6 +35,7 @@ class ZoneSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -40,12 +43,17 @@ class ZoneSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     locations = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".LocationSchema"),
         allow_none=True,
@@ -63,10 +71,14 @@ class ZoneSchema(BaseResourceSchema):
         return models.Zone(**data)
 
 
-class ZoneDraftSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class ZoneDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     locations = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".LocationSchema"),
         allow_none=True,
@@ -84,10 +96,12 @@ class ZoneDraftSchema(marshmallow.Schema):
         return models.ZoneDraft(**data)
 
 
-class ZonePagedQueryResponseSchema(marshmallow.Schema):
+class ZonePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ZoneSchema"),
@@ -111,6 +125,7 @@ class ZoneReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".ZoneSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -133,7 +148,7 @@ class ZoneResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.ZoneResourceIdentifier(**data)
 
 
-class ZoneUpdateSchema(marshmallow.Schema):
+class ZoneUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -164,7 +179,7 @@ class ZoneUpdateSchema(marshmallow.Schema):
         return models.ZoneUpdate(**data)
 
 
-class ZoneUpdateActionSchema(marshmallow.Schema):
+class ZoneUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -223,7 +238,9 @@ class ZoneRemoveLocationActionSchema(ZoneUpdateActionSchema):
 
 
 class ZoneSetDescriptionActionSchema(ZoneUpdateActionSchema):
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -235,7 +252,9 @@ class ZoneSetDescriptionActionSchema(ZoneUpdateActionSchema):
 
 
 class ZoneSetKeyActionSchema(ZoneUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

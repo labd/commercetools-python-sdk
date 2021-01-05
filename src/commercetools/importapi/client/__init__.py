@@ -9,8 +9,8 @@ class Client(BaseClient):
         kwargs.setdefault("url", "https://import.europe-west1.gcp.commercetools.com")
         super().__init__(self, **kwargs)
 
-    def withProjectKeyValue(self, projectKey: str) -> ByProjectKeyRequestBuilder:
+    def with_project_key_value(self, project_key: str) -> ByProjectKeyRequestBuilder:
         return ByProjectKeyRequestBuilder(
-            projectKey=projectKey,
+            project_key=project_key,
             client=self,
         )

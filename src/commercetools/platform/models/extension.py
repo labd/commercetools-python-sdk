@@ -10,32 +10,54 @@ from .common import BaseResource
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, Reference
 
+__all__ = [
+    "Extension",
+    "ExtensionAWSLambdaDestination",
+    "ExtensionAction",
+    "ExtensionAuthorizationHeaderAuthentication",
+    "ExtensionAzureFunctionsAuthentication",
+    "ExtensionChangeDestinationAction",
+    "ExtensionChangeTriggersAction",
+    "ExtensionDestination",
+    "ExtensionDraft",
+    "ExtensionHttpDestination",
+    "ExtensionHttpDestinationAuthentication",
+    "ExtensionInput",
+    "ExtensionPagedQueryResponse",
+    "ExtensionResourceTypeId",
+    "ExtensionSetKeyAction",
+    "ExtensionSetTimeoutInMsAction",
+    "ExtensionTrigger",
+    "ExtensionUpdate",
+    "ExtensionUpdateAction",
+]
+
 
 class Extension(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     destination: "ExtensionDestination"
     triggers: typing.List["ExtensionTrigger"]
     #: The maximum time the commercetools platform waits for a response from the extension.
     #: If not present, `2000` (2 seconds) is used.
-    timeout_in_ms: typing.Optional["int"]
+    timeout_in_ms: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         destination: "ExtensionDestination",
         triggers: typing.List["ExtensionTrigger"],
-        timeout_in_ms: typing.Optional["int"] = None
+        timeout_in_ms: typing.Optional[int] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -68,17 +90,22 @@ class ExtensionAction(enum.Enum):
 
 
 class ExtensionDestination(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ExtensionDestination":
-        from ._schemas.extension import ExtensionDestinationSchema
+        if data["type"] == "AWSLambda":
+            from ._schemas.extension import ExtensionAWSLambdaDestinationSchema
 
-        return ExtensionDestinationSchema().load(data)
+            return ExtensionAWSLambdaDestinationSchema().load(data)
+        if data["type"] == "HTTP":
+            from ._schemas.extension import ExtensionHttpDestinationSchema
+
+            return ExtensionHttpDestinationSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.extension import ExtensionDestinationSchema
@@ -87,11 +114,11 @@ class ExtensionDestination(_BaseType):
 
 
 class ExtensionAWSLambdaDestination(ExtensionDestination):
-    arn: "str"
-    access_key: "str"
-    access_secret: "str"
+    arn: str
+    access_key: str
+    access_secret: str
 
-    def __init__(self, *, arn: "str", access_key: "str", access_secret: "str"):
+    def __init__(self, *, arn: str, access_key: str, access_secret: str):
         self.arn = arn
         self.access_key = access_key
         self.access_secret = access_secret
@@ -113,7 +140,7 @@ class ExtensionAWSLambdaDestination(ExtensionDestination):
 
 class ExtensionDraft(_BaseType):
     #: User-specific unique identifier for the extension
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
     #: Details where the extension can be reached
     destination: "ExtensionDestination"
     #: Describes what triggers the extension
@@ -122,15 +149,15 @@ class ExtensionDraft(_BaseType):
     #: The maximum value is 2000 ms (2 seconds).
     #: This limit can be increased per project after we review the performance impact.
     #: Please contact Support via the [Support Portal](https://support.commercetools.com) and provide the region, project key and use case.
-    timeout_in_ms: typing.Optional["int"]
+    timeout_in_ms: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
+        key: typing.Optional[str] = None,
         destination: "ExtensionDestination",
         triggers: typing.List["ExtensionTrigger"],
-        timeout_in_ms: typing.Optional["int"] = None
+        timeout_in_ms: typing.Optional[int] = None
     ):
         self.key = key
         self.destination = destination
@@ -151,13 +178,13 @@ class ExtensionDraft(_BaseType):
 
 
 class ExtensionHttpDestination(ExtensionDestination):
-    url: "str"
+    url: str
     authentication: typing.Optional["ExtensionHttpDestinationAuthentication"]
 
     def __init__(
         self,
         *,
-        url: "str",
+        url: str,
         authentication: typing.Optional["ExtensionHttpDestinationAuthentication"] = None
     ):
         self.url = url
@@ -179,9 +206,9 @@ class ExtensionHttpDestination(ExtensionDestination):
 
 
 class ExtensionHttpDestinationAuthentication(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
@@ -189,9 +216,16 @@ class ExtensionHttpDestinationAuthentication(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ExtensionHttpDestinationAuthentication":
-        from ._schemas.extension import ExtensionHttpDestinationAuthenticationSchema
+        if data["type"] == "AuthorizationHeader":
+            from ._schemas.extension import (
+                ExtensionAuthorizationHeaderAuthenticationSchema,
+            )
 
-        return ExtensionHttpDestinationAuthenticationSchema().load(data)
+            return ExtensionAuthorizationHeaderAuthenticationSchema().load(data)
+        if data["type"] == "AzureFunctions":
+            from ._schemas.extension import ExtensionAzureFunctionsAuthenticationSchema
+
+            return ExtensionAzureFunctionsAuthenticationSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.extension import ExtensionHttpDestinationAuthenticationSchema
@@ -202,9 +236,9 @@ class ExtensionHttpDestinationAuthentication(_BaseType):
 class ExtensionAuthorizationHeaderAuthentication(
     ExtensionHttpDestinationAuthentication
 ):
-    header_value: "str"
+    header_value: str
 
-    def __init__(self, *, header_value: "str"):
+    def __init__(self, *, header_value: str):
         self.header_value = header_value
         super().__init__(type="AuthorizationHeader")
 
@@ -223,9 +257,9 @@ class ExtensionAuthorizationHeaderAuthentication(
 
 
 class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthentication):
-    key: "str"
+    key: str
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
         self.key = key
         super().__init__(type="AzureFunctions")
 
@@ -265,19 +299,19 @@ class ExtensionInput(_BaseType):
 
 
 class ExtensionPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Extension"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Extension"]
     ):
         self.limit = limit
@@ -335,12 +369,10 @@ class ExtensionTrigger(_BaseType):
 
 
 class ExtensionUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ExtensionUpdateAction"]
 
-    def __init__(
-        self, *, version: "int", actions: typing.List["ExtensionUpdateAction"]
-    ):
+    def __init__(self, *, version: int, actions: typing.List["ExtensionUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -358,17 +390,30 @@ class ExtensionUpdate(_BaseType):
 
 
 class ExtensionUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ExtensionUpdateAction":
-        from ._schemas.extension import ExtensionUpdateActionSchema
+        if data["action"] == "changeDestination":
+            from ._schemas.extension import ExtensionChangeDestinationActionSchema
 
-        return ExtensionUpdateActionSchema().load(data)
+            return ExtensionChangeDestinationActionSchema().load(data)
+        if data["action"] == "changeTriggers":
+            from ._schemas.extension import ExtensionChangeTriggersActionSchema
+
+            return ExtensionChangeTriggersActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.extension import ExtensionSetKeyActionSchema
+
+            return ExtensionSetKeyActionSchema().load(data)
+        if data["action"] == "setTimeoutInMs":
+            from ._schemas.extension import ExtensionSetTimeoutInMsActionSchema
+
+            return ExtensionSetTimeoutInMsActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.extension import ExtensionUpdateActionSchema
@@ -420,9 +465,9 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
 
 class ExtensionSetKeyAction(ExtensionUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 
@@ -443,9 +488,9 @@ class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
     #: The maximum value is 2000 ms (2 seconds).
     #: This limit can be increased per project after we review the performance impact.
     #: Please contact Support via the support and provide the region, project key and use case.
-    timeout_in_ms: typing.Optional["int"]
+    timeout_in_ms: typing.Optional[int]
 
-    def __init__(self, *, timeout_in_ms: typing.Optional["int"] = None):
+    def __init__(self, *, timeout_in_ms: typing.Optional[int] = None):
         self.timeout_in_ms = timeout_in_ms
         super().__init__(action="setTimeoutInMs")
 

@@ -26,7 +26,7 @@ class FieldContainerField(marshmallow.fields.Dict):
 
 
 # Marshmallow Schemas
-class CustomFieldEnumValueSchema(marshmallow.Schema):
+class CustomFieldEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     label = marshmallow.fields.String(allow_none=True, missing=None)
 
@@ -39,7 +39,7 @@ class CustomFieldEnumValueSchema(marshmallow.Schema):
         return models.CustomFieldEnumValue(**data)
 
 
-class CustomFieldLocalizedEnumValueSchema(marshmallow.Schema):
+class CustomFieldLocalizedEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     label = LocalizedStringField(allow_none=True, missing=None)
 
@@ -52,7 +52,7 @@ class CustomFieldLocalizedEnumValueSchema(marshmallow.Schema):
         return models.CustomFieldLocalizedEnumValue(**data)
 
 
-class CustomFieldsSchema(marshmallow.Schema):
+class CustomFieldsSchema(helpers.BaseSchema):
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TypeReferenceSchema"),
         allow_none=True,
@@ -70,14 +70,16 @@ class CustomFieldsSchema(marshmallow.Schema):
         return models.CustomFields(**data)
 
 
-class CustomFieldsDraftSchema(marshmallow.Schema):
+class CustomFieldsDraftSchema(helpers.BaseSchema):
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -88,7 +90,7 @@ class CustomFieldsDraftSchema(marshmallow.Schema):
         return models.CustomFieldsDraft(**data)
 
 
-class FieldDefinitionSchema(marshmallow.Schema):
+class FieldDefinitionSchema(helpers.BaseSchema):
     type = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("name", "name"),
@@ -119,6 +121,7 @@ class FieldDefinitionSchema(marshmallow.Schema):
         TypeTextInputHint,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="inputHint",
     )
@@ -132,7 +135,7 @@ class FieldDefinitionSchema(marshmallow.Schema):
         return models.FieldDefinition(**data)
 
 
-class FieldTypeSchema(marshmallow.Schema):
+class FieldTypeSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -318,6 +321,7 @@ class TypeSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -325,12 +329,15 @@ class TypeSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     resource_type_ids = marshmallow.fields.List(
         marshmallow_enum.EnumField(ResourceTypeId, by_value=True, allow_none=True),
         allow_none=True,
@@ -355,10 +362,12 @@ class TypeSchema(BaseResourceSchema):
         return models.Type(**data)
 
 
-class TypeDraftSchema(marshmallow.Schema):
+class TypeDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     resource_type_ids = marshmallow.fields.List(
         marshmallow_enum.EnumField(ResourceTypeId, by_value=True, allow_none=True),
         allow_none=True,
@@ -370,6 +379,7 @@ class TypeDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="fieldDefinitions",
     )
@@ -383,10 +393,12 @@ class TypeDraftSchema(marshmallow.Schema):
         return models.TypeDraft(**data)
 
 
-class TypePagedQueryResponseSchema(marshmallow.Schema):
+class TypePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TypeSchema"),
@@ -410,6 +422,7 @@ class TypeReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".TypeSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -432,7 +445,7 @@ class TypeResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.TypeResourceIdentifier(**data)
 
 
-class TypeUpdateSchema(marshmallow.Schema):
+class TypeUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -493,7 +506,7 @@ class TypeUpdateSchema(marshmallow.Schema):
         return models.TypeUpdate(**data)
 
 
-class TypeUpdateActionSchema(marshmallow.Schema):
+class TypeUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -744,7 +757,9 @@ class TypeRemoveFieldDefinitionActionSchema(TypeUpdateActionSchema):
 
 
 class TypeSetDescriptionActionSchema(TypeUpdateActionSchema):
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

@@ -22,6 +22,7 @@ class MessageSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -29,6 +30,7 @@ class MessageSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
@@ -95,6 +97,7 @@ class MessageSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".UserProvidedIdentifiersSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="resourceUserProvidedIdentifiers",
     )
@@ -330,12 +333,14 @@ class DeliveryAddressSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     old_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldAddress",
     )
@@ -487,10 +492,13 @@ class LineItemStateTransitionMessageSchema(MessageSchema):
         return models.LineItemStateTransitionMessage(**data)
 
 
-class MessageConfigurationSchema(marshmallow.Schema):
+class MessageConfigurationSchema(helpers.BaseSchema):
     enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
     delete_days_after_creation = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterCreation",
     )
 
     class Meta:
@@ -502,7 +510,7 @@ class MessageConfigurationSchema(marshmallow.Schema):
         return models.MessageConfiguration(**data)
 
 
-class MessageConfigurationDraftSchema(marshmallow.Schema):
+class MessageConfigurationDraftSchema(helpers.BaseSchema):
     enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
     delete_days_after_creation = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
@@ -517,10 +525,12 @@ class MessageConfigurationDraftSchema(marshmallow.Schema):
         return models.MessageConfigurationDraft(**data)
 
 
-class MessagePagedQueryResponseSchema(marshmallow.Schema):
+class MessagePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = marshmallow.fields.List(
         helpers.Discriminator(
@@ -759,12 +769,14 @@ class OrderBillingAddressSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     old_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldAddress",
     )
@@ -813,6 +825,7 @@ class OrderCustomLineItemDiscountSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".cart.TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -827,9 +840,14 @@ class OrderCustomLineItemDiscountSetMessageSchema(MessageSchema):
 
 
 class OrderCustomerEmailSetMessageSchema(MessageSchema):
-    email = marshmallow.fields.String(allow_none=True, missing=None)
+    email = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     old_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="oldEmail"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldEmail",
     )
 
     class Meta:
@@ -846,6 +864,7 @@ class OrderCustomerGroupSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -853,6 +872,7 @@ class OrderCustomerGroupSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldCustomerGroup",
     )
@@ -871,12 +891,14 @@ class OrderCustomerSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -884,6 +906,7 @@ class OrderCustomerSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldCustomer",
     )
@@ -891,6 +914,7 @@ class OrderCustomerSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldCustomerGroup",
     )
@@ -972,6 +996,7 @@ class OrderDiscountCodeStateSetMessageSchema(MessageSchema):
         DiscountCodeState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldState",
     )
@@ -1071,6 +1096,7 @@ class OrderLineItemDiscountSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".cart.TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -1096,6 +1122,7 @@ class OrderPaymentStateChangedMessageSchema(MessageSchema):
         PaymentState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldPaymentState",
     )
@@ -1160,6 +1187,7 @@ class OrderShipmentStateChangedMessageSchema(MessageSchema):
         ShipmentState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldShipmentState",
     )
@@ -1178,12 +1206,14 @@ class OrderShippingAddressSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     old_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldAddress",
     )
@@ -1202,6 +1232,7 @@ class OrderShippingInfoSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingInfo",
     )
@@ -1209,6 +1240,7 @@ class OrderShippingInfoSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldShippingInfo",
     )
@@ -1232,6 +1264,7 @@ class OrderShippingRateInputSetMessageSchema(MessageSchema):
             ),
             "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInput",
     )
@@ -1244,6 +1277,7 @@ class OrderShippingRateInputSetMessageSchema(MessageSchema):
             ),
             "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldShippingRateInput",
     )
@@ -1341,7 +1375,10 @@ class ParcelItemsUpdatedMessageSchema(MessageSchema):
         allow_none=True, missing=None, data_key="parcelId"
     )
     delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deliveryId",
     )
     items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
@@ -1379,6 +1416,7 @@ class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".order.ParcelMeasurementsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -1422,6 +1460,7 @@ class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".order.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="trackingData",
     )
@@ -1638,14 +1677,19 @@ class ProductPriceDiscountsSetMessageSchema(MessageSchema):
         return models.ProductPriceDiscountsSetMessage(**data)
 
 
-class ProductPriceDiscountsSetUpdatedPriceSchema(marshmallow.Schema):
+class ProductPriceDiscountsSetUpdatedPriceSchema(helpers.BaseSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="variantId"
     )
     variant_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="variantKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantKey",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     price_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="priceId"
     )
@@ -1653,6 +1697,7 @@ class ProductPriceDiscountsSetUpdatedPriceSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
@@ -1671,9 +1716,14 @@ class ProductPriceExternalDiscountSetMessageSchema(MessageSchema):
         allow_none=True, missing=None, data_key="variantId"
     )
     variant_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="variantKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantKey",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     price_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="priceId"
     )
@@ -1681,6 +1731,7 @@ class ProductPriceExternalDiscountSetMessageSchema(MessageSchema):
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
@@ -1856,10 +1907,16 @@ class ReviewCreatedMessageSchema(MessageSchema):
 
 class ReviewRatingSetMessageSchema(MessageSchema):
     old_rating = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="oldRating"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldRating",
     )
     new_rating = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="newRating"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="newRating",
     )
     included_in_statistics = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="includedInStatistics"
@@ -1914,6 +1971,7 @@ class ReviewRatingSetMessageSchema(MessageSchema):
             "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
             "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -2010,19 +2068,34 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
         return models.ReviewStateTransitionMessage(**data)
 
 
-class UserProvidedIdentifiersSchema(marshmallow.Schema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+class UserProvidedIdentifiersSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     external_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="externalId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="orderNumber",
     )
     customer_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customerNumber"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerNumber",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    slug = LocalizedStringField(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    slug = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2033,7 +2106,7 @@ class UserProvidedIdentifiersSchema(marshmallow.Schema):
         return models.UserProvidedIdentifiers(**data)
 
 
-class MessagePayloadSchema(marshmallow.Schema):
+class MessagePayloadSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -2267,12 +2340,14 @@ class DeliveryAddressSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     old_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldAddress",
     )
@@ -2429,12 +2504,14 @@ class OrderBillingAddressSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     old_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldAddress",
     )
@@ -2483,6 +2560,7 @@ class OrderCustomLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".cart.TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -2497,9 +2575,14 @@ class OrderCustomLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
 
 
 class OrderCustomerEmailSetMessagePayloadSchema(MessagePayloadSchema):
-    email = marshmallow.fields.String(allow_none=True, missing=None)
+    email = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     old_email = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="oldEmail"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldEmail",
     )
 
     class Meta:
@@ -2516,6 +2599,7 @@ class OrderCustomerGroupSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -2523,6 +2607,7 @@ class OrderCustomerGroupSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldCustomerGroup",
     )
@@ -2541,12 +2626,14 @@ class OrderCustomerSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="customerGroup",
     )
@@ -2554,6 +2641,7 @@ class OrderCustomerSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldCustomer",
     )
@@ -2561,6 +2649,7 @@ class OrderCustomerSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldCustomerGroup",
     )
@@ -2642,6 +2731,7 @@ class OrderDiscountCodeStateSetMessagePayloadSchema(MessagePayloadSchema):
         DiscountCodeState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldState",
     )
@@ -2741,6 +2831,7 @@ class OrderLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".cart.TaxedItemPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="taxedPrice",
     )
@@ -2766,6 +2857,7 @@ class OrderPaymentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         PaymentState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldPaymentState",
     )
@@ -2830,6 +2922,7 @@ class OrderShipmentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         ShipmentState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldShipmentState",
     )
@@ -2848,12 +2941,14 @@ class OrderShippingAddressSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     old_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldAddress",
     )
@@ -2872,6 +2967,7 @@ class OrderShippingInfoSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingInfo",
     )
@@ -2879,6 +2975,7 @@ class OrderShippingInfoSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldShippingInfo",
     )
@@ -2902,6 +2999,7 @@ class OrderShippingRateInputSetMessagePayloadSchema(MessagePayloadSchema):
             ),
             "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="shippingRateInput",
     )
@@ -2914,6 +3012,7 @@ class OrderShippingRateInputSetMessagePayloadSchema(MessagePayloadSchema):
             ),
             "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
         data_key="oldShippingRateInput",
     )
@@ -3011,7 +3110,10 @@ class ParcelItemsUpdatedMessagePayloadSchema(MessagePayloadSchema):
         allow_none=True, missing=None, data_key="parcelId"
     )
     delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deliveryId",
     )
     items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
@@ -3049,6 +3151,7 @@ class ParcelMeasurementsUpdatedMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".order.ParcelMeasurementsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -3092,6 +3195,7 @@ class ParcelTrackingDataUpdatedMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".order.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="trackingData",
     )
@@ -3313,9 +3417,14 @@ class ProductPriceExternalDiscountSetMessagePayloadSchema(MessagePayloadSchema):
         allow_none=True, missing=None, data_key="variantId"
     )
     variant_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="variantKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantKey",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     price_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="priceId"
     )
@@ -3323,6 +3432,7 @@ class ProductPriceExternalDiscountSetMessagePayloadSchema(MessagePayloadSchema):
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
@@ -3498,10 +3608,16 @@ class ReviewCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 class ReviewRatingSetMessagePayloadSchema(MessagePayloadSchema):
     old_rating = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="oldRating"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldRating",
     )
     new_rating = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="newRating"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="newRating",
     )
     included_in_statistics = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="includedInStatistics"
@@ -3556,6 +3672,7 @@ class ReviewRatingSetMessagePayloadSchema(MessagePayloadSchema):
             "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
             "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
     )
 

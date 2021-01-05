@@ -26,6 +26,7 @@ class StoreSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -33,13 +34,19 @@ class StoreSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     languages = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
     distribution_channels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
@@ -54,6 +61,7 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannels",
     )
@@ -67,17 +75,21 @@ class StoreSchema(BaseResourceSchema):
         return models.Store(**data)
 
 
-class StoreDraftSchema(marshmallow.Schema):
+class StoreDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(allow_none=True, missing=None)
     languages = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
     distribution_channels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannels",
     )
@@ -86,6 +98,7 @@ class StoreDraftSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannels",
     )
@@ -109,10 +122,12 @@ class StoreKeyReferenceSchema(KeyReferenceSchema):
         return models.StoreKeyReference(**data)
 
 
-class StorePagedQueryResponseSchema(marshmallow.Schema):
+class StorePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StoreSchema"),
@@ -136,6 +151,7 @@ class StoreReferenceSchema(ReferenceSchema):
         nested=helpers.absmod(__name__, ".StoreSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -158,7 +174,7 @@ class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.StoreResourceIdentifier(**data)
 
 
-class StoreUpdateSchema(marshmallow.Schema):
+class StoreUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -202,7 +218,7 @@ class StoreUpdateSchema(marshmallow.Schema):
         return models.StoreUpdate(**data)
 
 
-class StoreUpdateActionSchema(marshmallow.Schema):
+class StoreUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -216,7 +232,10 @@ class StoreUpdateActionSchema(marshmallow.Schema):
 
 class StoreSetLanguagesActionSchema(StoreUpdateActionSchema):
     languages = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -229,7 +248,9 @@ class StoreSetLanguagesActionSchema(StoreUpdateActionSchema):
 
 
 class StoreSetNameActionSchema(StoreUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -318,6 +339,7 @@ class StoresSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="distributionChannels",
     )
@@ -337,6 +359,7 @@ class StoresSetSupplyChannelsActionSchema(StoreUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannels",
     )

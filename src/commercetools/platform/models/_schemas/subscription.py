@@ -15,7 +15,7 @@ from .common import BaseResourceSchema
 
 
 # Marshmallow Schemas
-class ChangeSubscriptionSchema(marshmallow.Schema):
+class ChangeSubscriptionSchema(helpers.BaseSchema):
     resource_type_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="resourceTypeId"
     )
@@ -29,7 +29,7 @@ class ChangeSubscriptionSchema(marshmallow.Schema):
         return models.ChangeSubscription(**data)
 
 
-class DeliveryFormatSchema(marshmallow.Schema):
+class DeliveryFormatSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -65,7 +65,7 @@ class DeliveryPlatformFormatSchema(DeliveryFormatSchema):
         return models.DeliveryPlatformFormat(**data)
 
 
-class DestinationSchema(marshmallow.Schema):
+class DestinationSchema(helpers.BaseSchema):
     type = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -133,12 +133,15 @@ class IronMqDestinationSchema(DestinationSchema):
         return models.IronMqDestination(**data)
 
 
-class MessageSubscriptionSchema(marshmallow.Schema):
+class MessageSubscriptionSchema(helpers.BaseSchema):
     resource_type_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="resourceTypeId"
     )
     types = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -150,7 +153,7 @@ class MessageSubscriptionSchema(marshmallow.Schema):
         return models.MessageSubscription(**data)
 
 
-class PayloadNotIncludedSchema(marshmallow.Schema):
+class PayloadNotIncludedSchema(helpers.BaseSchema):
     reason = marshmallow.fields.String(allow_none=True, missing=None)
     payload_type = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="payloadType"
@@ -211,6 +214,7 @@ class SubscriptionSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
     )
@@ -218,6 +222,7 @@ class SubscriptionSchema(BaseResourceSchema):
         nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
     )
@@ -245,7 +250,9 @@ class SubscriptionSchema(BaseResourceSchema):
         },
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     messages = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MessageSubscriptionSchema"),
         allow_none=True,
@@ -275,7 +282,7 @@ class SubscriptionSchema(BaseResourceSchema):
         return models.Subscription(**data)
 
 
-class SubscriptionDeliverySchema(marshmallow.Schema):
+class SubscriptionDeliverySchema(helpers.BaseSchema):
     project_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="projectKey"
     )
@@ -338,6 +345,7 @@ class SubscriptionDeliverySchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".message.UserProvidedIdentifiersSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="resourceUserProvidedIdentifiers",
     )
@@ -404,7 +412,10 @@ class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
         allow_none=True, missing=None, data_key="modifiedAt"
     )
     data_erasure = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="dataErasure"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="dataErasure",
     )
 
     class Meta:
@@ -434,12 +445,13 @@ class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
         return models.ResourceUpdatedDelivery(**data)
 
 
-class SubscriptionDraftSchema(marshmallow.Schema):
+class SubscriptionDraftSchema(helpers.BaseSchema):
     changes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ChangeSubscriptionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     destination = helpers.Discriminator(
@@ -459,12 +471,15 @@ class SubscriptionDraftSchema(marshmallow.Schema):
         },
         missing=None,
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     messages = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MessageSubscriptionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     format = helpers.Discriminator(
@@ -474,6 +489,7 @@ class SubscriptionDraftSchema(marshmallow.Schema):
             "CloudEvents": helpers.absmod(__name__, ".DeliveryCloudEventsFormatSchema"),
             "Platform": helpers.absmod(__name__, ".DeliveryPlatformFormatSchema"),
         },
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -486,10 +502,12 @@ class SubscriptionDraftSchema(marshmallow.Schema):
         return models.SubscriptionDraft(**data)
 
 
-class SubscriptionPagedQueryResponseSchema(marshmallow.Schema):
+class SubscriptionPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SubscriptionSchema"),
@@ -508,7 +526,7 @@ class SubscriptionPagedQueryResponseSchema(marshmallow.Schema):
         return models.SubscriptionPagedQueryResponse(**data)
 
 
-class SubscriptionUpdateSchema(marshmallow.Schema):
+class SubscriptionUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
@@ -540,7 +558,7 @@ class SubscriptionUpdateSchema(marshmallow.Schema):
         return models.SubscriptionUpdate(**data)
 
 
-class SubscriptionUpdateActionSchema(marshmallow.Schema):
+class SubscriptionUpdateActionSchema(helpers.BaseSchema):
     action = marshmallow.fields.String(allow_none=True, missing=None)
 
     class Meta:
@@ -586,6 +604,7 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -599,7 +618,9 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
 
 
 class SubscriptionSetKeyActionSchema(SubscriptionUpdateActionSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -616,6 +637,7 @@ class SubscriptionSetMessagesActionSchema(SubscriptionUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 

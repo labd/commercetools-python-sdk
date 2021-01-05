@@ -6,14 +6,19 @@ import typing
 
 from ._abstract import _BaseType
 
+__all__ = [
+    "GeneralCategoryRecommendation",
+    "GeneralCategoryRecommendationPagedQueryResponse",
+]
+
 
 class GeneralCategoryRecommendation(_BaseType):
     #: An English category name that is recommended for a product.
-    category_name: "str"
+    category_name: str
     #: Probability score for the category recommendation.
-    confidence: "float"
+    confidence: float
 
-    def __init__(self, *, category_name: "str", confidence: "float"):
+    def __init__(self, *, category_name: str, confidence: float):
         self.category_name = category_name
         self.confidence = confidence
         super().__init__()
@@ -37,17 +42,17 @@ class GeneralCategoryRecommendation(_BaseType):
 
 
 class GeneralCategoryRecommendationPagedQueryResponse(_BaseType):
-    count: "int"
-    total: "int"
-    offset: "int"
+    count: int
+    total: int
+    offset: int
     results: typing.List["GeneralCategoryRecommendation"]
 
     def __init__(
         self,
         *,
-        count: "int",
-        total: "int",
-        offset: "int",
+        count: int,
+        total: int,
+        offset: int,
         results: typing.List["GeneralCategoryRecommendation"]
     ):
         self.count = count

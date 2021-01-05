@@ -3,7 +3,7 @@ import typing
 import warnings
 
 if typing.TYPE_CHECKING:
-    from commercetools.protocols import ClientProtocol
+    from commercetools.client import Client
 
     from .api_clients import ApiClientService
     from .cart_discounts import CartDiscountService
@@ -41,7 +41,7 @@ if typing.TYPE_CHECKING:
 
 class ServicesMixin:
     @property
-    def categories(self: "ClientProtocol") -> "CategoryService":
+    def categories(self: "Client") -> "CategoryService":
         if "categories" not in self.__dict__:
             from .categories import CategoryService
 
@@ -53,7 +53,7 @@ class ServicesMixin:
         return self.__dict__["categories"]
 
     @property
-    def carts(self: "ClientProtocol") -> "CartService":
+    def carts(self: "Client") -> "CartService":
         if "carts" not in self.__dict__:
             from .carts import CartService
 
@@ -65,7 +65,7 @@ class ServicesMixin:
         return self.__dict__["carts"]
 
     @property
-    def cart_discounts(self: "ClientProtocol") -> "CartDiscountService":
+    def cart_discounts(self: "Client") -> "CartDiscountService":
         if "cart_discounts" not in self.__dict__:
             from .cart_discounts import CartDiscountService
 
@@ -77,7 +77,7 @@ class ServicesMixin:
         return self.__dict__["cart_discounts"]
 
     @property
-    def channels(self: "ClientProtocol") -> "ChannelService":
+    def channels(self: "Client") -> "ChannelService":
         if "channels" not in self.__dict__:
             from .channels import ChannelService
 
@@ -89,7 +89,7 @@ class ServicesMixin:
         return self.__dict__["channels"]
 
     @property
-    def customers(self: "ClientProtocol") -> "CustomerService":
+    def customers(self: "Client") -> "CustomerService":
         if "customers" not in self.__dict__:
             from .customers import CustomerService
 
@@ -101,7 +101,7 @@ class ServicesMixin:
         return self.__dict__["customers"]
 
     @property
-    def customer_groups(self: "ClientProtocol") -> "CustomerGroupService":
+    def customer_groups(self: "Client") -> "CustomerGroupService":
         if "customer_groups" not in self.__dict__:
             from .customer_groups import CustomerGroupService
 
@@ -113,7 +113,7 @@ class ServicesMixin:
         return self.__dict__["customer_groups"]
 
     @property
-    def custom_objects(self: "ClientProtocol") -> "CustomObjectService":
+    def custom_objects(self: "Client") -> "CustomObjectService":
         if "custom_objects" not in self.__dict__:
             from .custom_objects import CustomObjectService
 
@@ -125,7 +125,7 @@ class ServicesMixin:
         return self.__dict__["custom_objects"]
 
     @property
-    def discount_codes(self: "ClientProtocol") -> "DiscountCodeService":
+    def discount_codes(self: "Client") -> "DiscountCodeService":
         if "discount_codes" not in self.__dict__:
             from .discount_codes import DiscountCodeService
 
@@ -137,7 +137,7 @@ class ServicesMixin:
         return self.__dict__["discount_codes"]
 
     @property
-    def graphqls(self: "ClientProtocol") -> "GraphqlService":
+    def graphqls(self: "Client") -> "GraphqlService":
         if "graphqls" not in self.__dict__:
             from .graphqls import GraphqlService
 
@@ -149,7 +149,7 @@ class ServicesMixin:
         return self.__dict__["graphqls"]
 
     @property
-    def inventory(self: "ClientProtocol") -> "InventoryEntryService":
+    def inventory(self: "Client") -> "InventoryEntryService":
         if "inventory" not in self.__dict__:
             from .inventory import InventoryEntryService
 
@@ -161,7 +161,7 @@ class ServicesMixin:
         return self.__dict__["inventory"]
 
     @property
-    def login(self: "ClientProtocol") -> "LoginService":
+    def login(self: "Client") -> "LoginService":
         if "login" not in self.__dict__:
             from .login import LoginService
 
@@ -173,7 +173,7 @@ class ServicesMixin:
         return self.__dict__["login"]
 
     @property
-    def messages(self: "ClientProtocol") -> "MessageService":
+    def messages(self: "Client") -> "MessageService":
         if "messages" not in self.__dict__:
             from .messages import MessageService
 
@@ -185,7 +185,7 @@ class ServicesMixin:
         return self.__dict__["messages"]
 
     @property
-    def orders(self: "ClientProtocol") -> "OrderService":
+    def orders(self: "Client") -> "OrderService":
         if "orders" not in self.__dict__:
             from .orders import OrderService
 
@@ -197,7 +197,7 @@ class ServicesMixin:
         return self.__dict__["orders"]
 
     @property
-    def payments(self: "ClientProtocol") -> "PaymentService":
+    def payments(self: "Client") -> "PaymentService":
         if "payments" not in self.__dict__:
             from .payments import PaymentService
 
@@ -209,7 +209,7 @@ class ServicesMixin:
         return self.__dict__["payments"]
 
     @property
-    def products(self: "ClientProtocol") -> "ProductService":
+    def products(self: "Client") -> "ProductService":
         if "products" not in self.__dict__:
             from .products import ProductService
 
@@ -221,7 +221,7 @@ class ServicesMixin:
         return self.__dict__["products"]
 
     @property
-    def product_discounts(self: "ClientProtocol") -> "ProductDiscountService":
+    def product_discounts(self: "Client") -> "ProductDiscountService":
         if "product_discounts" not in self.__dict__:
             from .product_discounts import ProductDiscountService
 
@@ -233,7 +233,7 @@ class ServicesMixin:
         return self.__dict__["product_discounts"]
 
     @property
-    def product_projections(self: "ClientProtocol") -> "ProductProjectionService":
+    def product_projections(self: "Client") -> "ProductProjectionService":
         if "product_projections" not in self.__dict__:
             from .product_projections import ProductProjectionService
 
@@ -245,7 +245,7 @@ class ServicesMixin:
         return self.__dict__["product_projections"]
 
     @property
-    def product_types(self: "ClientProtocol") -> "ProductTypeService":
+    def product_types(self: "Client") -> "ProductTypeService":
         if "product_types" not in self.__dict__:
             from .product_types import ProductTypeService
 
@@ -257,7 +257,7 @@ class ServicesMixin:
         return self.__dict__["product_types"]
 
     @property
-    def reviews(self: "ClientProtocol") -> "ReviewService":
+    def reviews(self: "Client") -> "ReviewService":
         if "reviews" not in self.__dict__:
             from .reviews import ReviewService
 
@@ -269,7 +269,7 @@ class ServicesMixin:
         return self.__dict__["reviews"]
 
     @property
-    def shipping_methods(self: "ClientProtocol") -> "ShippingMethodService":
+    def shipping_methods(self: "Client") -> "ShippingMethodService":
         if "shipping_methods" not in self.__dict__:
             from .shipping_methods import ShippingMethodService
 
@@ -281,7 +281,7 @@ class ServicesMixin:
         return self.__dict__["shipping_methods"]
 
     @property
-    def shopping_lists(self: "ClientProtocol") -> "ShoppingListService":
+    def shopping_lists(self: "Client") -> "ShoppingListService":
         if "shopping_lists" not in self.__dict__:
             from .shopping_lists import ShoppingListService
 
@@ -293,7 +293,7 @@ class ServicesMixin:
         return self.__dict__["shopping_lists"]
 
     @property
-    def states(self: "ClientProtocol") -> "StateService":
+    def states(self: "Client") -> "StateService":
         if "states" not in self.__dict__:
             from .states import StateService
 
@@ -305,7 +305,7 @@ class ServicesMixin:
         return self.__dict__["states"]
 
     @property
-    def subscriptions(self: "ClientProtocol") -> "SubscriptionService":
+    def subscriptions(self: "Client") -> "SubscriptionService":
         if "subscriptions" not in self.__dict__:
             from .subscriptions import SubscriptionService
 
@@ -317,7 +317,7 @@ class ServicesMixin:
         return self.__dict__["subscriptions"]
 
     @property
-    def tax_categories(self: "ClientProtocol") -> "TaxCategoryService":
+    def tax_categories(self: "Client") -> "TaxCategoryService":
         if "tax_categories" not in self.__dict__:
             from .tax_categories import TaxCategoryService
 
@@ -329,7 +329,7 @@ class ServicesMixin:
         return self.__dict__["tax_categories"]
 
     @property
-    def types(self: "ClientProtocol") -> "TypeService":
+    def types(self: "Client") -> "TypeService":
         if "types" not in self.__dict__:
             from .types import TypeService
 
@@ -341,7 +341,7 @@ class ServicesMixin:
         return self.__dict__["types"]
 
     @property
-    def zones(self: "ClientProtocol") -> "ZoneService":
+    def zones(self: "Client") -> "ZoneService":
         if "zones" not in self.__dict__:
             from .zones import ZoneService
 
@@ -353,7 +353,7 @@ class ServicesMixin:
         return self.__dict__["zones"]
 
     @property
-    def me(self: "ClientProtocol") -> "MeService":
+    def me(self: "Client") -> "MeService":
         if "me" not in self.__dict__:
             from .me import MeService
 
@@ -365,7 +365,7 @@ class ServicesMixin:
         return self.__dict__["me"]
 
     @property
-    def extensions(self: "ClientProtocol") -> "ExtensionService":
+    def extensions(self: "Client") -> "ExtensionService":
         if "extensions" not in self.__dict__:
             from .extensions import ExtensionService
 
@@ -377,7 +377,7 @@ class ServicesMixin:
         return self.__dict__["extensions"]
 
     @property
-    def api_clients(self: "ClientProtocol") -> "ApiClientService":
+    def api_clients(self: "Client") -> "ApiClientService":
         if "api_clients" not in self.__dict__:
             from .api_clients import ApiClientService
 
@@ -389,7 +389,7 @@ class ServicesMixin:
         return self.__dict__["api_clients"]
 
     @property
-    def stores(self: "ClientProtocol") -> "StoreService":
+    def stores(self: "Client") -> "StoreService":
         if "stores" not in self.__dict__:
             from .stores import StoreService
 
@@ -401,7 +401,7 @@ class ServicesMixin:
         return self.__dict__["stores"]
 
     @property
-    def in_stores(self: "ClientProtocol") -> "In_StoreService":
+    def in_stores(self: "Client") -> "In_StoreService":
         if "in_stores" not in self.__dict__:
             from .in_stores import In_StoreService
 
@@ -413,7 +413,7 @@ class ServicesMixin:
         return self.__dict__["in_stores"]
 
     @property
-    def project(self: "ClientProtocol") -> "ProjectService":
+    def project(self: "Client") -> "ProjectService":
         if "project" not in self.__dict__:
             from .project import ProjectService
 

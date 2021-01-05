@@ -20,6 +20,21 @@ if typing.TYPE_CHECKING:
     from .producttypes import ProductTypeImport
     from .productvariants import ProductVariantImport, ProductVariantPatch
 
+__all__ = [
+    "CategoryImportRequest",
+    "CustomerImportRequest",
+    "ImportRequest",
+    "ImportResponse",
+    "InventoryImportRequest",
+    "OrderImportRequest",
+    "PriceImportRequest",
+    "ProductDraftImportRequest",
+    "ProductImportRequest",
+    "ProductTypeImportRequest",
+    "ProductVariantImportRequest",
+    "ProductVariantPatchRequest",
+]
+
 
 class ImportRequest(_BaseType):
     """An import request batches multiple import resources of the same import resource type for processing by an import sink."""
@@ -33,9 +48,46 @@ class ImportRequest(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ImportRequest":
-        from ._schemas.importrequests import ImportRequestSchema
+        if data["type"] == "category":
+            from ._schemas.importrequests import CategoryImportRequestSchema
 
-        return ImportRequestSchema().load(data)
+            return CategoryImportRequestSchema().load(data)
+        if data["type"] == "product":
+            from ._schemas.importrequests import ProductImportRequestSchema
+
+            return ProductImportRequestSchema().load(data)
+        if data["type"] == "product-draft":
+            from ._schemas.importrequests import ProductDraftImportRequestSchema
+
+            return ProductDraftImportRequestSchema().load(data)
+        if data["type"] == "product-type":
+            from ._schemas.importrequests import ProductTypeImportRequestSchema
+
+            return ProductTypeImportRequestSchema().load(data)
+        if data["type"] == "product-variant":
+            from ._schemas.importrequests import ProductVariantImportRequestSchema
+
+            return ProductVariantImportRequestSchema().load(data)
+        if data["type"] == "price":
+            from ._schemas.importrequests import PriceImportRequestSchema
+
+            return PriceImportRequestSchema().load(data)
+        if data["type"] == "order":
+            from ._schemas.importrequests import OrderImportRequestSchema
+
+            return OrderImportRequestSchema().load(data)
+        if data["type"] == "product-variant-patch":
+            from ._schemas.importrequests import ProductVariantPatchRequestSchema
+
+            return ProductVariantPatchRequestSchema().load(data)
+        if data["type"] == "customer":
+            from ._schemas.importrequests import CustomerImportRequestSchema
+
+            return CustomerImportRequestSchema().load(data)
+        if data["type"] == "inventory":
+            from ._schemas.importrequests import InventoryImportRequestSchema
+
+            return InventoryImportRequestSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.importrequests import ImportRequestSchema

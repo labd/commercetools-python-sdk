@@ -20,15 +20,22 @@ class InventoryImportSchema(ImportResourceSchema):
         allow_none=True, missing=None, data_key="quantityOnStock"
     )
     restockable_in_days = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="restockableInDays"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="restockableInDays",
     )
     expected_delivery = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="expectedDelivery"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="expectedDelivery",
     )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ChannelKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -36,6 +43,7 @@ class InventoryImportSchema(ImportResourceSchema):
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 

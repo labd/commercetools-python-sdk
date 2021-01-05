@@ -15,12 +15,81 @@ if typing.TYPE_CHECKING:
     from .order_edit import OrderEditPreviewFailure
     from .product import Attribute
 
+__all__ = [
+    "AccessDeniedError",
+    "AnonymousIdAlreadyInUseError",
+    "AttributeDefinitionAlreadyExistsError",
+    "AttributeDefinitionTypeConflictError",
+    "AttributeNameDoesNotExistError",
+    "ConcurrentModificationError",
+    "DiscountCodeNonApplicableError",
+    "DuplicateAttributeValueError",
+    "DuplicateAttributeValuesError",
+    "DuplicateEnumValuesError",
+    "DuplicateFieldError",
+    "DuplicateFieldWithConflictingResourceError",
+    "DuplicatePriceScopeError",
+    "DuplicateVariantValuesError",
+    "EditPreviewFailedError",
+    "EnumKeyAlreadyExistsError",
+    "EnumKeyDoesNotExistError",
+    "EnumValueIsUsedError",
+    "EnumValuesMustMatchError",
+    "ErrorByExtension",
+    "ErrorObject",
+    "ErrorResponse",
+    "ExtensionBadResponseError",
+    "ExtensionNoResponseError",
+    "ExtensionUpdateActionsFailedError",
+    "ExternalOAuthFailedError",
+    "FeatureRemovedError",
+    "GeneralError",
+    "InsufficientScopeError",
+    "InternalConstraintViolatedError",
+    "InvalidCredentialsError",
+    "InvalidCurrentPasswordError",
+    "InvalidFieldError",
+    "InvalidInputError",
+    "InvalidItemShippingDetailsError",
+    "InvalidJsonInputError",
+    "InvalidOperationError",
+    "InvalidSubjectError",
+    "InvalidTokenError",
+    "LanguageUsedInStoresError",
+    "MatchingPriceNotFoundError",
+    "MaxResourceLimitExceededError",
+    "MissingRoleOnChannelError",
+    "MissingTaxRateForCountryError",
+    "NoMatchingProductDiscountFoundError",
+    "NotEnabledError",
+    "ObjectNotFoundError",
+    "OutOfStockError",
+    "OverCapacityError",
+    "PendingOperationError",
+    "PriceChangedError",
+    "ProjectNotConfiguredForLanguagesError",
+    "QueryComplexityLimitExceededError",
+    "QueryTimedOutError",
+    "ReferenceExistsError",
+    "ReferencedResourceNotFoundError",
+    "RequiredFieldError",
+    "ResourceNotFoundError",
+    "ResourceSizeLimitExceededError",
+    "SearchExecutionFailureError",
+    "SearchFacetPathNotFoundError",
+    "SemanticErrorError",
+    "ShippingMethodDoesNotMatchCartError",
+    "SyntaxErrorError",
+    "VariantValues",
+    "WeakPasswordError",
+]
+
 
 class ErrorByExtension(_BaseType):
-    id: "str"
-    key: typing.Optional["str"]
+    id: str
+    key: typing.Optional[str]
 
-    def __init__(self, *, id: "str", key: typing.Optional["str"] = None):
+    def __init__(self, *, id: str, key: typing.Optional[str] = None):
         self.id = id
         self.key = key
         super().__init__()
@@ -38,19 +107,264 @@ class ErrorByExtension(_BaseType):
 
 
 class ErrorObject(_BaseType):
-    code: "str"
-    message: "str"
+    code: str
+    message: str
 
-    def __init__(self, *, code: "str", message: "str"):
+    def __init__(self, *, code: str, message: str):
         self.code = code
         self.message = message
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ErrorObject":
-        from ._schemas.error import ErrorObjectSchema
+        if data["code"] == "access_denied":
+            from ._schemas.error import AccessDeniedErrorSchema
 
-        return ErrorObjectSchema().load(data)
+            return AccessDeniedErrorSchema().load(data)
+        if data["code"] == "AnonymousIdAlreadyInUse":
+            from ._schemas.error import AnonymousIdAlreadyInUseErrorSchema
+
+            return AnonymousIdAlreadyInUseErrorSchema().load(data)
+        if data["code"] == "AttributeDefinitionAlreadyExists":
+            from ._schemas.error import AttributeDefinitionAlreadyExistsErrorSchema
+
+            return AttributeDefinitionAlreadyExistsErrorSchema().load(data)
+        if data["code"] == "AttributeDefinitionTypeConflict":
+            from ._schemas.error import AttributeDefinitionTypeConflictErrorSchema
+
+            return AttributeDefinitionTypeConflictErrorSchema().load(data)
+        if data["code"] == "AttributeNameDoesNotExist":
+            from ._schemas.error import AttributeNameDoesNotExistErrorSchema
+
+            return AttributeNameDoesNotExistErrorSchema().load(data)
+        if data["code"] == "ConcurrentModification":
+            from ._schemas.error import ConcurrentModificationErrorSchema
+
+            return ConcurrentModificationErrorSchema().load(data)
+        if data["code"] == "DiscountCodeNonApplicable":
+            from ._schemas.error import DiscountCodeNonApplicableErrorSchema
+
+            return DiscountCodeNonApplicableErrorSchema().load(data)
+        if data["code"] == "DuplicateAttributeValue":
+            from ._schemas.error import DuplicateAttributeValueErrorSchema
+
+            return DuplicateAttributeValueErrorSchema().load(data)
+        if data["code"] == "DuplicateAttributeValues":
+            from ._schemas.error import DuplicateAttributeValuesErrorSchema
+
+            return DuplicateAttributeValuesErrorSchema().load(data)
+        if data["code"] == "DuplicateEnumValues":
+            from ._schemas.error import DuplicateEnumValuesErrorSchema
+
+            return DuplicateEnumValuesErrorSchema().load(data)
+        if data["code"] == "DuplicateField":
+            from ._schemas.error import DuplicateFieldErrorSchema
+
+            return DuplicateFieldErrorSchema().load(data)
+        if data["code"] == "DuplicateFieldWithConflictingResource":
+            from ._schemas.error import DuplicateFieldWithConflictingResourceErrorSchema
+
+            return DuplicateFieldWithConflictingResourceErrorSchema().load(data)
+        if data["code"] == "DuplicatePriceScope":
+            from ._schemas.error import DuplicatePriceScopeErrorSchema
+
+            return DuplicatePriceScopeErrorSchema().load(data)
+        if data["code"] == "DuplicateVariantValues":
+            from ._schemas.error import DuplicateVariantValuesErrorSchema
+
+            return DuplicateVariantValuesErrorSchema().load(data)
+        if data["code"] == "EditPreviewFailed":
+            from ._schemas.error import EditPreviewFailedErrorSchema
+
+            return EditPreviewFailedErrorSchema().load(data)
+        if data["code"] == "EnumKeyAlreadyExists":
+            from ._schemas.error import EnumKeyAlreadyExistsErrorSchema
+
+            return EnumKeyAlreadyExistsErrorSchema().load(data)
+        if data["code"] == "EnumKeyDoesNotExist":
+            from ._schemas.error import EnumKeyDoesNotExistErrorSchema
+
+            return EnumKeyDoesNotExistErrorSchema().load(data)
+        if data["code"] == "EnumValueIsUsed":
+            from ._schemas.error import EnumValueIsUsedErrorSchema
+
+            return EnumValueIsUsedErrorSchema().load(data)
+        if data["code"] == "EnumValuesMustMatch":
+            from ._schemas.error import EnumValuesMustMatchErrorSchema
+
+            return EnumValuesMustMatchErrorSchema().load(data)
+        if data["code"] == "ExtensionBadResponse":
+            from ._schemas.error import ExtensionBadResponseErrorSchema
+
+            return ExtensionBadResponseErrorSchema().load(data)
+        if data["code"] == "ExtensionNoResponse":
+            from ._schemas.error import ExtensionNoResponseErrorSchema
+
+            return ExtensionNoResponseErrorSchema().load(data)
+        if data["code"] == "ExtensionUpdateActionsFailed":
+            from ._schemas.error import ExtensionUpdateActionsFailedErrorSchema
+
+            return ExtensionUpdateActionsFailedErrorSchema().load(data)
+        if data["code"] == "ExternalOAuthFailed":
+            from ._schemas.error import ExternalOAuthFailedErrorSchema
+
+            return ExternalOAuthFailedErrorSchema().load(data)
+        if data["code"] == "FeatureRemoved":
+            from ._schemas.error import FeatureRemovedErrorSchema
+
+            return FeatureRemovedErrorSchema().load(data)
+        if data["code"] == "General":
+            from ._schemas.error import GeneralErrorSchema
+
+            return GeneralErrorSchema().load(data)
+        if data["code"] == "insufficient_scope":
+            from ._schemas.error import InsufficientScopeErrorSchema
+
+            return InsufficientScopeErrorSchema().load(data)
+        if data["code"] == "InternalConstraintViolated":
+            from ._schemas.error import InternalConstraintViolatedErrorSchema
+
+            return InternalConstraintViolatedErrorSchema().load(data)
+        if data["code"] == "InvalidCredentials":
+            from ._schemas.error import InvalidCredentialsErrorSchema
+
+            return InvalidCredentialsErrorSchema().load(data)
+        if data["code"] == "InvalidCurrentPassword":
+            from ._schemas.error import InvalidCurrentPasswordErrorSchema
+
+            return InvalidCurrentPasswordErrorSchema().load(data)
+        if data["code"] == "InvalidField":
+            from ._schemas.error import InvalidFieldErrorSchema
+
+            return InvalidFieldErrorSchema().load(data)
+        if data["code"] == "InvalidInput":
+            from ._schemas.error import InvalidInputErrorSchema
+
+            return InvalidInputErrorSchema().load(data)
+        if data["code"] == "InvalidItemShippingDetails":
+            from ._schemas.error import InvalidItemShippingDetailsErrorSchema
+
+            return InvalidItemShippingDetailsErrorSchema().load(data)
+        if data["code"] == "InvalidJsonInput":
+            from ._schemas.error import InvalidJsonInputErrorSchema
+
+            return InvalidJsonInputErrorSchema().load(data)
+        if data["code"] == "InvalidOperation":
+            from ._schemas.error import InvalidOperationErrorSchema
+
+            return InvalidOperationErrorSchema().load(data)
+        if data["code"] == "InvalidSubject":
+            from ._schemas.error import InvalidSubjectErrorSchema
+
+            return InvalidSubjectErrorSchema().load(data)
+        if data["code"] == "invalid_token":
+            from ._schemas.error import InvalidTokenErrorSchema
+
+            return InvalidTokenErrorSchema().load(data)
+        if data["code"] == "LanguageUsedInStores":
+            from ._schemas.error import LanguageUsedInStoresErrorSchema
+
+            return LanguageUsedInStoresErrorSchema().load(data)
+        if data["code"] == "MatchingPriceNotFound":
+            from ._schemas.error import MatchingPriceNotFoundErrorSchema
+
+            return MatchingPriceNotFoundErrorSchema().load(data)
+        if data["code"] == "MaxResourceLimitExceeded":
+            from ._schemas.error import MaxResourceLimitExceededErrorSchema
+
+            return MaxResourceLimitExceededErrorSchema().load(data)
+        if data["code"] == "MissingRoleOnChannel":
+            from ._schemas.error import MissingRoleOnChannelErrorSchema
+
+            return MissingRoleOnChannelErrorSchema().load(data)
+        if data["code"] == "MissingTaxRateForCountry":
+            from ._schemas.error import MissingTaxRateForCountryErrorSchema
+
+            return MissingTaxRateForCountryErrorSchema().load(data)
+        if data["code"] == "NoMatchingProductDiscountFound":
+            from ._schemas.error import NoMatchingProductDiscountFoundErrorSchema
+
+            return NoMatchingProductDiscountFoundErrorSchema().load(data)
+        if data["code"] == "NotEnabled":
+            from ._schemas.error import NotEnabledErrorSchema
+
+            return NotEnabledErrorSchema().load(data)
+        if data["code"] == "ObjectNotFound":
+            from ._schemas.error import ObjectNotFoundErrorSchema
+
+            return ObjectNotFoundErrorSchema().load(data)
+        if data["code"] == "OutOfStock":
+            from ._schemas.error import OutOfStockErrorSchema
+
+            return OutOfStockErrorSchema().load(data)
+        if data["code"] == "OverCapacity":
+            from ._schemas.error import OverCapacityErrorSchema
+
+            return OverCapacityErrorSchema().load(data)
+        if data["code"] == "PendingOperation":
+            from ._schemas.error import PendingOperationErrorSchema
+
+            return PendingOperationErrorSchema().load(data)
+        if data["code"] == "PriceChanged":
+            from ._schemas.error import PriceChangedErrorSchema
+
+            return PriceChangedErrorSchema().load(data)
+        if data["code"] == "ProjectNotConfiguredForLanguages":
+            from ._schemas.error import ProjectNotConfiguredForLanguagesErrorSchema
+
+            return ProjectNotConfiguredForLanguagesErrorSchema().load(data)
+        if data["code"] == "QueryComplexityLimitExceeded":
+            from ._schemas.error import QueryComplexityLimitExceededErrorSchema
+
+            return QueryComplexityLimitExceededErrorSchema().load(data)
+        if data["code"] == "QueryTimedOut":
+            from ._schemas.error import QueryTimedOutErrorSchema
+
+            return QueryTimedOutErrorSchema().load(data)
+        if data["code"] == "ReferenceExists":
+            from ._schemas.error import ReferenceExistsErrorSchema
+
+            return ReferenceExistsErrorSchema().load(data)
+        if data["code"] == "ReferencedResourceNotFound":
+            from ._schemas.error import ReferencedResourceNotFoundErrorSchema
+
+            return ReferencedResourceNotFoundErrorSchema().load(data)
+        if data["code"] == "RequiredField":
+            from ._schemas.error import RequiredFieldErrorSchema
+
+            return RequiredFieldErrorSchema().load(data)
+        if data["code"] == "ResourceNotFound":
+            from ._schemas.error import ResourceNotFoundErrorSchema
+
+            return ResourceNotFoundErrorSchema().load(data)
+        if data["code"] == "ResourceSizeLimitExceeded":
+            from ._schemas.error import ResourceSizeLimitExceededErrorSchema
+
+            return ResourceSizeLimitExceededErrorSchema().load(data)
+        if data["code"] == "SearchExecutionFailure":
+            from ._schemas.error import SearchExecutionFailureErrorSchema
+
+            return SearchExecutionFailureErrorSchema().load(data)
+        if data["code"] == "SearchFacetPathNotFound":
+            from ._schemas.error import SearchFacetPathNotFoundErrorSchema
+
+            return SearchFacetPathNotFoundErrorSchema().load(data)
+        if data["code"] == "SemanticError":
+            from ._schemas.error import SemanticErrorErrorSchema
+
+            return SemanticErrorErrorSchema().load(data)
+        if data["code"] == "ShippingMethodDoesNotMatchCart":
+            from ._schemas.error import ShippingMethodDoesNotMatchCartErrorSchema
+
+            return ShippingMethodDoesNotMatchCartErrorSchema().load(data)
+        if data["code"] == "SyntaxError":
+            from ._schemas.error import SyntaxErrorErrorSchema
+
+            return SyntaxErrorErrorSchema().load(data)
+        if data["code"] == "WeakPassword":
+            from ._schemas.error import WeakPasswordErrorSchema
+
+            return WeakPasswordErrorSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.error import ErrorObjectSchema
@@ -59,7 +373,7 @@ class ErrorObject(_BaseType):
 
 
 class AccessDeniedError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="access_denied")
 
@@ -76,7 +390,7 @@ class AccessDeniedError(ErrorObject):
 
 
 class AnonymousIdAlreadyInUseError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="AnonymousIdAlreadyInUse")
 
@@ -95,17 +409,17 @@ class AnonymousIdAlreadyInUseError(ErrorObject):
 
 
 class AttributeDefinitionAlreadyExistsError(ErrorObject):
-    conflicting_product_type_id: "str"
-    conflicting_product_type_name: "str"
-    conflicting_attribute_name: "str"
+    conflicting_product_type_id: str
+    conflicting_product_type_name: str
+    conflicting_attribute_name: str
 
     def __init__(
         self,
         *,
-        message: "str",
-        conflicting_product_type_id: "str",
-        conflicting_product_type_name: "str",
-        conflicting_attribute_name: "str"
+        message: str,
+        conflicting_product_type_id: str,
+        conflicting_product_type_name: str,
+        conflicting_attribute_name: str
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
@@ -127,17 +441,17 @@ class AttributeDefinitionAlreadyExistsError(ErrorObject):
 
 
 class AttributeDefinitionTypeConflictError(ErrorObject):
-    conflicting_product_type_id: "str"
-    conflicting_product_type_name: "str"
-    conflicting_attribute_name: "str"
+    conflicting_product_type_id: str
+    conflicting_product_type_name: str
+    conflicting_attribute_name: str
 
     def __init__(
         self,
         *,
-        message: "str",
-        conflicting_product_type_id: "str",
-        conflicting_product_type_name: "str",
-        conflicting_attribute_name: "str"
+        message: str,
+        conflicting_product_type_id: str,
+        conflicting_product_type_name: str,
+        conflicting_attribute_name: str
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
@@ -159,9 +473,9 @@ class AttributeDefinitionTypeConflictError(ErrorObject):
 
 
 class AttributeNameDoesNotExistError(ErrorObject):
-    invalid_attribute_name: "str"
+    invalid_attribute_name: str
 
-    def __init__(self, *, message: "str", invalid_attribute_name: "str"):
+    def __init__(self, *, message: str, invalid_attribute_name: str):
         self.invalid_attribute_name = invalid_attribute_name
         super().__init__(message=message, code="AttributeNameDoesNotExist")
 
@@ -180,11 +494,9 @@ class AttributeNameDoesNotExistError(ErrorObject):
 
 
 class ConcurrentModificationError(ErrorObject):
-    current_version: typing.Optional["int"]
+    current_version: typing.Optional[int]
 
-    def __init__(
-        self, *, message: "str", current_version: typing.Optional["int"] = None
-    ):
+    def __init__(self, *, message: str, current_version: typing.Optional[int] = None):
         self.current_version = current_version
         super().__init__(message=message, code="ConcurrentModification")
 
@@ -203,23 +515,23 @@ class ConcurrentModificationError(ErrorObject):
 
 
 class DiscountCodeNonApplicableError(ErrorObject):
-    discount_code: typing.Optional["str"]
-    reason: typing.Optional["str"]
-    dicount_code_id: typing.Optional["str"]
-    valid_from: typing.Optional["datetime.datetime"]
-    valid_until: typing.Optional["datetime.datetime"]
-    validity_check_time: typing.Optional["datetime.datetime"]
+    discount_code: typing.Optional[str]
+    reason: typing.Optional[str]
+    dicount_code_id: typing.Optional[str]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
+    validity_check_time: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        message: "str",
-        discount_code: typing.Optional["str"] = None,
-        reason: typing.Optional["str"] = None,
-        dicount_code_id: typing.Optional["str"] = None,
-        valid_from: typing.Optional["datetime.datetime"] = None,
-        valid_until: typing.Optional["datetime.datetime"] = None,
-        validity_check_time: typing.Optional["datetime.datetime"] = None
+        message: str,
+        discount_code: typing.Optional[str] = None,
+        reason: typing.Optional[str] = None,
+        dicount_code_id: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        validity_check_time: typing.Optional[datetime.datetime] = None
     ):
         self.discount_code = discount_code
         self.reason = reason
@@ -246,7 +558,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
 class DuplicateAttributeValueError(ErrorObject):
     attribute: "Attribute"
 
-    def __init__(self, *, message: "str", attribute: "Attribute"):
+    def __init__(self, *, message: str, attribute: "Attribute"):
         self.attribute = attribute
         super().__init__(message=message, code="DuplicateAttributeValue")
 
@@ -267,7 +579,7 @@ class DuplicateAttributeValueError(ErrorObject):
 class DuplicateAttributeValuesError(ErrorObject):
     attributes: typing.List["Attribute"]
 
-    def __init__(self, *, message: "str", attributes: typing.List["Attribute"]):
+    def __init__(self, *, message: str, attributes: typing.List["Attribute"]):
         self.attributes = attributes
         super().__init__(message=message, code="DuplicateAttributeValues")
 
@@ -288,7 +600,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 class DuplicateEnumValuesError(ErrorObject):
     duplicates: typing.List["str"]
 
-    def __init__(self, *, message: "str", duplicates: typing.List["str"]):
+    def __init__(self, *, message: str, duplicates: typing.List["str"]):
         self.duplicates = duplicates
         super().__init__(message=message, code="DuplicateEnumValues")
 
@@ -307,16 +619,16 @@ class DuplicateEnumValuesError(ErrorObject):
 
 
 class DuplicateFieldError(ErrorObject):
-    field: typing.Optional["str"]
-    duplicate_value: typing.Optional["any"]
+    field: typing.Optional[str]
+    duplicate_value: typing.Optional[typing.Any]
     conflicting_resource: typing.Optional["Reference"]
 
     def __init__(
         self,
         *,
-        message: "str",
-        field: typing.Optional["str"] = None,
-        duplicate_value: typing.Optional["any"] = None,
+        message: str,
+        field: typing.Optional[str] = None,
+        duplicate_value: typing.Optional[typing.Any] = None,
         conflicting_resource: typing.Optional["Reference"] = None
     ):
         self.field = field
@@ -337,16 +649,16 @@ class DuplicateFieldError(ErrorObject):
 
 
 class DuplicateFieldWithConflictingResourceError(ErrorObject):
-    field: "str"
-    duplicate_value: "any"
+    field: str
+    duplicate_value: typing.Any
     conflicting_resource: "Reference"
 
     def __init__(
         self,
         *,
-        message: "str",
-        field: "str",
-        duplicate_value: "any",
+        message: str,
+        field: str,
+        duplicate_value: typing.Any,
         conflicting_resource: "Reference"
     ):
         self.field = field
@@ -371,7 +683,7 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
 class DuplicatePriceScopeError(ErrorObject):
     conflicting_prices: typing.List["Price"]
 
-    def __init__(self, *, message: "str", conflicting_prices: typing.List["Price"]):
+    def __init__(self, *, message: str, conflicting_prices: typing.List["Price"]):
         self.conflicting_prices = conflicting_prices
         super().__init__(message=message, code="DuplicatePriceScope")
 
@@ -392,7 +704,7 @@ class DuplicatePriceScopeError(ErrorObject):
 class DuplicateVariantValuesError(ErrorObject):
     variant_values: "VariantValues"
 
-    def __init__(self, *, message: "str", variant_values: "VariantValues"):
+    def __init__(self, *, message: str, variant_values: "VariantValues"):
         self.variant_values = variant_values
         super().__init__(message=message, code="DuplicateVariantValues")
 
@@ -413,7 +725,7 @@ class DuplicateVariantValuesError(ErrorObject):
 class EditPreviewFailedError(ErrorObject):
     result: "OrderEditPreviewFailure"
 
-    def __init__(self, *, message: "str", result: "OrderEditPreviewFailure"):
+    def __init__(self, *, message: str, result: "OrderEditPreviewFailure"):
         self.result = result
         super().__init__(message=message, code="EditPreviewFailed")
 
@@ -432,15 +744,15 @@ class EditPreviewFailedError(ErrorObject):
 
 
 class EnumKeyAlreadyExistsError(ErrorObject):
-    conflicting_enum_key: "str"
-    conflicting_attribute_name: "str"
+    conflicting_enum_key: str
+    conflicting_attribute_name: str
 
     def __init__(
         self,
         *,
-        message: "str",
-        conflicting_enum_key: "str",
-        conflicting_attribute_name: "str"
+        message: str,
+        conflicting_enum_key: str,
+        conflicting_attribute_name: str
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
@@ -461,15 +773,15 @@ class EnumKeyAlreadyExistsError(ErrorObject):
 
 
 class EnumKeyDoesNotExistError(ErrorObject):
-    conflicting_enum_key: "str"
-    conflicting_attribute_name: "str"
+    conflicting_enum_key: str
+    conflicting_attribute_name: str
 
     def __init__(
         self,
         *,
-        message: "str",
-        conflicting_enum_key: "str",
-        conflicting_attribute_name: "str"
+        message: str,
+        conflicting_enum_key: str,
+        conflicting_attribute_name: str
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
@@ -490,7 +802,7 @@ class EnumKeyDoesNotExistError(ErrorObject):
 
 
 class EnumValueIsUsedError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="EnumValueIsUsed")
 
@@ -507,7 +819,7 @@ class EnumValueIsUsedError(ErrorObject):
 
 
 class EnumValuesMustMatchError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="EnumValuesMustMatch")
 
@@ -526,19 +838,19 @@ class EnumValuesMustMatchError(ErrorObject):
 
 
 class ErrorResponse(_BaseType):
-    status_code: "int"
-    message: "str"
-    error: typing.Optional["str"]
-    error_description: typing.Optional["str"]
+    status_code: int
+    message: str
+    error: typing.Optional[str]
+    error_description: typing.Optional[str]
     errors: typing.Optional[typing.List["ErrorObject"]]
 
     def __init__(
         self,
         *,
-        status_code: "int",
-        message: "str",
-        error: typing.Optional["str"] = None,
-        error_description: typing.Optional["str"] = None,
+        status_code: int,
+        message: str,
+        error: typing.Optional[str] = None,
+        error_description: typing.Optional[str] = None,
         errors: typing.Optional[typing.List["ErrorObject"]] = None
     ):
         self.status_code = status_code
@@ -562,15 +874,15 @@ class ErrorResponse(_BaseType):
 
 class ExtensionBadResponseError(ErrorObject):
     localized_message: typing.Optional["LocalizedString"]
-    extension_extra_info: typing.Optional["any"]
+    extension_extra_info: typing.Optional[object]
     error_by_extension: "ErrorByExtension"
 
     def __init__(
         self,
         *,
-        message: "str",
+        message: str,
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional["any"] = None,
+        extension_extra_info: typing.Optional[object] = None,
         error_by_extension: "ErrorByExtension"
     ):
         self.localized_message = localized_message
@@ -593,15 +905,15 @@ class ExtensionBadResponseError(ErrorObject):
 
 
 class ExtensionNoResponseError(ErrorObject):
-    extension_id: "str"
-    extension_key: typing.Optional["str"]
+    extension_id: str
+    extension_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        message: "str",
-        extension_id: "str",
-        extension_key: typing.Optional["str"] = None
+        message: str,
+        extension_id: str,
+        extension_key: typing.Optional[str] = None
     ):
         self.extension_id = extension_id
         self.extension_key = extension_key
@@ -623,15 +935,15 @@ class ExtensionNoResponseError(ErrorObject):
 
 class ExtensionUpdateActionsFailedError(ErrorObject):
     localized_message: typing.Optional["LocalizedString"]
-    extension_extra_info: typing.Optional["any"]
+    extension_extra_info: typing.Optional[object]
     error_by_extension: "ErrorByExtension"
 
     def __init__(
         self,
         *,
-        message: "str",
+        message: str,
         localized_message: typing.Optional["LocalizedString"] = None,
-        extension_extra_info: typing.Optional["any"] = None,
+        extension_extra_info: typing.Optional[object] = None,
         error_by_extension: "ErrorByExtension"
     ):
         self.localized_message = localized_message
@@ -654,7 +966,7 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
 
 
 class ExternalOAuthFailedError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="ExternalOAuthFailed")
 
@@ -673,7 +985,7 @@ class ExternalOAuthFailedError(ErrorObject):
 
 
 class FeatureRemovedError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="FeatureRemoved")
 
@@ -690,7 +1002,7 @@ class FeatureRemovedError(ErrorObject):
 
 
 class GeneralError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="General")
 
@@ -707,7 +1019,7 @@ class GeneralError(ErrorObject):
 
 
 class InsufficientScopeError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="insufficient_scope")
 
@@ -726,7 +1038,7 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InternalConstraintViolatedError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InternalConstraintViolated")
 
@@ -745,7 +1057,7 @@ class InternalConstraintViolatedError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidCredentials")
 
@@ -764,7 +1076,7 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidCurrentPasswordError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidCurrentPassword")
 
@@ -783,17 +1095,17 @@ class InvalidCurrentPasswordError(ErrorObject):
 
 
 class InvalidFieldError(ErrorObject):
-    field: "str"
-    invalid_value: "any"
-    allowed_values: typing.Optional[typing.List["any"]]
+    field: str
+    invalid_value: typing.Any
+    allowed_values: typing.Optional[typing.List["typing.Any"]]
 
     def __init__(
         self,
         *,
-        message: "str",
-        field: "str",
-        invalid_value: "any",
-        allowed_values: typing.Optional[typing.List["any"]] = None
+        message: str,
+        field: str,
+        invalid_value: typing.Any,
+        allowed_values: typing.Optional[typing.List["typing.Any"]] = None
     ):
         self.field = field
         self.invalid_value = invalid_value
@@ -813,7 +1125,7 @@ class InvalidFieldError(ErrorObject):
 
 
 class InvalidInputError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidInput")
 
@@ -830,10 +1142,10 @@ class InvalidInputError(ErrorObject):
 
 
 class InvalidItemShippingDetailsError(ErrorObject):
-    subject: "str"
-    item_id: "str"
+    subject: str
+    item_id: str
 
-    def __init__(self, *, message: "str", subject: "str", item_id: "str"):
+    def __init__(self, *, message: str, subject: str, item_id: str):
         self.subject = subject
         self.item_id = item_id
         super().__init__(message=message, code="InvalidItemShippingDetails")
@@ -853,7 +1165,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
 
 
 class InvalidJsonInputError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidJsonInput")
 
@@ -870,7 +1182,7 @@ class InvalidJsonInputError(ErrorObject):
 
 
 class InvalidOperationError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidOperation")
 
@@ -887,7 +1199,7 @@ class InvalidOperationError(ErrorObject):
 
 
 class InvalidSubjectError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidSubject")
 
@@ -904,7 +1216,7 @@ class InvalidSubjectError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="invalid_token")
 
@@ -921,7 +1233,7 @@ class InvalidTokenError(ErrorObject):
 
 
 class LanguageUsedInStoresError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="LanguageUsedInStores")
 
@@ -940,21 +1252,21 @@ class LanguageUsedInStoresError(ErrorObject):
 
 
 class MatchingPriceNotFoundError(ErrorObject):
-    product_id: "str"
-    variant_id: "int"
-    currency: typing.Optional["str"]
-    country: typing.Optional["str"]
+    product_id: str
+    variant_id: int
+    currency: typing.Optional[str]
+    country: typing.Optional[str]
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
 
     def __init__(
         self,
         *,
-        message: "str",
-        product_id: "str",
-        variant_id: "int",
-        currency: typing.Optional["str"] = None,
-        country: typing.Optional["str"] = None,
+        message: str,
+        product_id: str,
+        variant_id: int,
+        currency: typing.Optional[str] = None,
+        country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None
     ):
@@ -983,7 +1295,7 @@ class MatchingPriceNotFoundError(ErrorObject):
 class MaxResourceLimitExceededError(ErrorObject):
     exceeded_resource: "ReferenceTypeId"
 
-    def __init__(self, *, message: "str", exceeded_resource: "ReferenceTypeId"):
+    def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId"):
         self.exceeded_resource = exceeded_resource
         super().__init__(message=message, code="MaxResourceLimitExceeded")
 
@@ -1008,7 +1320,7 @@ class MissingRoleOnChannelError(ErrorObject):
     def __init__(
         self,
         *,
-        message: "str",
+        message: str,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
         missing_role: "ChannelRoleEnum"
     ):
@@ -1031,17 +1343,17 @@ class MissingRoleOnChannelError(ErrorObject):
 
 
 class MissingTaxRateForCountryError(ErrorObject):
-    tax_category_id: "str"
-    country: typing.Optional["str"]
-    state: typing.Optional["str"]
+    tax_category_id: str
+    country: typing.Optional[str]
+    state: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        message: "str",
-        tax_category_id: "str",
-        country: typing.Optional["str"] = None,
-        state: typing.Optional["str"] = None
+        message: str,
+        tax_category_id: str,
+        country: typing.Optional[str] = None,
+        state: typing.Optional[str] = None
     ):
         self.tax_category_id = tax_category_id
         self.country = country
@@ -1063,7 +1375,7 @@ class MissingTaxRateForCountryError(ErrorObject):
 
 
 class NoMatchingProductDiscountFoundError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="NoMatchingProductDiscountFound")
 
@@ -1082,7 +1394,7 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
 
 
 class NotEnabledError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="NotEnabled")
 
@@ -1099,7 +1411,7 @@ class NotEnabledError(ErrorObject):
 
 
 class ObjectNotFoundError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="ObjectNotFound")
 
@@ -1120,11 +1432,7 @@ class OutOfStockError(ErrorObject):
     skus: typing.List["str"]
 
     def __init__(
-        self,
-        *,
-        message: "str",
-        line_items: typing.List["str"],
-        skus: typing.List["str"]
+        self, *, message: str, line_items: typing.List["str"], skus: typing.List["str"]
     ):
         self.line_items = line_items
         self.skus = skus
@@ -1143,7 +1451,7 @@ class OutOfStockError(ErrorObject):
 
 
 class OverCapacityError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="OverCapacity")
 
@@ -1160,7 +1468,7 @@ class OverCapacityError(ErrorObject):
 
 
 class PendingOperationError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="PendingOperation")
 
@@ -1178,11 +1486,9 @@ class PendingOperationError(ErrorObject):
 
 class PriceChangedError(ErrorObject):
     line_items: typing.List["str"]
-    shipping: "bool"
+    shipping: bool
 
-    def __init__(
-        self, *, message: "str", line_items: typing.List["str"], shipping: "bool"
-    ):
+    def __init__(self, *, message: str, line_items: typing.List["str"], shipping: bool):
         self.line_items = line_items
         self.shipping = shipping
         super().__init__(message=message, code="PriceChanged")
@@ -1203,7 +1509,7 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
     languages: typing.Optional[typing.List["str"]]
 
     def __init__(
-        self, *, message: "str", languages: typing.Optional[typing.List["str"]] = None
+        self, *, message: str, languages: typing.Optional[typing.List["str"]] = None
     ):
         self.languages = languages
         super().__init__(message=message, code="ProjectNotConfiguredForLanguages")
@@ -1223,7 +1529,7 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
 
 
 class QueryComplexityLimitExceededError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="QueryComplexityLimitExceeded")
 
@@ -1242,7 +1548,7 @@ class QueryComplexityLimitExceededError(ErrorObject):
 
 
 class QueryTimedOutError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="QueryTimedOut")
 
@@ -1262,10 +1568,7 @@ class ReferenceExistsError(ErrorObject):
     referenced_by: typing.Optional["ReferenceTypeId"]
 
     def __init__(
-        self,
-        *,
-        message: "str",
-        referenced_by: typing.Optional["ReferenceTypeId"] = None
+        self, *, message: str, referenced_by: typing.Optional["ReferenceTypeId"] = None
     ):
         self.referenced_by = referenced_by
         super().__init__(message=message, code="ReferenceExists")
@@ -1284,16 +1587,16 @@ class ReferenceExistsError(ErrorObject):
 
 class ReferencedResourceNotFoundError(ErrorObject):
     type_id: "ReferenceTypeId"
-    id: typing.Optional["str"]
-    key: typing.Optional["str"]
+    id: typing.Optional[str]
+    key: typing.Optional[str]
 
     def __init__(
         self,
         *,
-        message: "str",
+        message: str,
         type_id: "ReferenceTypeId",
-        id: typing.Optional["str"] = None,
-        key: typing.Optional["str"] = None
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None
     ):
         self.type_id = type_id
         self.id = id
@@ -1315,9 +1618,9 @@ class ReferencedResourceNotFoundError(ErrorObject):
 
 
 class RequiredFieldError(ErrorObject):
-    field: "str"
+    field: str
 
-    def __init__(self, *, message: "str", field: "str"):
+    def __init__(self, *, message: str, field: str):
         self.field = field
         super().__init__(message=message, code="RequiredField")
 
@@ -1334,7 +1637,7 @@ class RequiredFieldError(ErrorObject):
 
 
 class ResourceNotFoundError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="ResourceNotFound")
 
@@ -1351,7 +1654,7 @@ class ResourceNotFoundError(ErrorObject):
 
 
 class ResourceSizeLimitExceededError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="ResourceSizeLimitExceeded")
 
@@ -1370,7 +1673,7 @@ class ResourceSizeLimitExceededError(ErrorObject):
 
 
 class SearchExecutionFailureError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="SearchExecutionFailure")
 
@@ -1389,7 +1692,7 @@ class SearchExecutionFailureError(ErrorObject):
 
 
 class SearchFacetPathNotFoundError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="SearchFacetPathNotFound")
 
@@ -1408,7 +1711,7 @@ class SearchFacetPathNotFoundError(ErrorObject):
 
 
 class SemanticErrorError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="SemanticError")
 
@@ -1425,7 +1728,7 @@ class SemanticErrorError(ErrorObject):
 
 
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="ShippingMethodDoesNotMatchCart")
 
@@ -1444,7 +1747,7 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
 
 
 class SyntaxErrorError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="SyntaxError")
 
@@ -1461,14 +1764,14 @@ class SyntaxErrorError(ErrorObject):
 
 
 class VariantValues(_BaseType):
-    sku: typing.Optional["str"]
+    sku: typing.Optional[str]
     prices: typing.List["PriceDraft"]
     attributes: typing.List["Attribute"]
 
     def __init__(
         self,
         *,
-        sku: typing.Optional["str"] = None,
+        sku: typing.Optional[str] = None,
         prices: typing.List["PriceDraft"],
         attributes: typing.List["Attribute"]
     ):
@@ -1490,7 +1793,7 @@ class VariantValues(_BaseType):
 
 
 class WeakPasswordError(ErrorObject):
-    def __init__(self, *, message: "str"):
+    def __init__(self, *, message: str):
 
         super().__init__(message=message, code="WeakPassword")
 

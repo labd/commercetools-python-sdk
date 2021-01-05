@@ -47,16 +47,115 @@ if typing.TYPE_CHECKING:
         TypeResourceIdentifier,
     )
 
+__all__ = [
+    "Cart",
+    "CartAddCustomLineItemAction",
+    "CartAddDiscountCodeAction",
+    "CartAddItemShippingAddressAction",
+    "CartAddLineItemAction",
+    "CartAddPaymentAction",
+    "CartAddShoppingListAction",
+    "CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction",
+    "CartApplyDeltaToLineItemShippingDetailsTargetsAction",
+    "CartChangeCustomLineItemMoneyAction",
+    "CartChangeCustomLineItemQuantityAction",
+    "CartChangeLineItemQuantityAction",
+    "CartChangeTaxCalculationModeAction",
+    "CartChangeTaxModeAction",
+    "CartChangeTaxRoundingModeAction",
+    "CartDraft",
+    "CartOrigin",
+    "CartPagedQueryResponse",
+    "CartRecalculateAction",
+    "CartReference",
+    "CartRemoveCustomLineItemAction",
+    "CartRemoveDiscountCodeAction",
+    "CartRemoveItemShippingAddressAction",
+    "CartRemoveLineItemAction",
+    "CartRemovePaymentAction",
+    "CartResourceIdentifier",
+    "CartSetAnonymousIdAction",
+    "CartSetBillingAddressAction",
+    "CartSetCartTotalTaxAction",
+    "CartSetCountryAction",
+    "CartSetCustomFieldAction",
+    "CartSetCustomLineItemCustomFieldAction",
+    "CartSetCustomLineItemCustomTypeAction",
+    "CartSetCustomLineItemShippingDetailsAction",
+    "CartSetCustomLineItemTaxAmountAction",
+    "CartSetCustomLineItemTaxRateAction",
+    "CartSetCustomShippingMethodAction",
+    "CartSetCustomTypeAction",
+    "CartSetCustomerEmailAction",
+    "CartSetCustomerGroupAction",
+    "CartSetCustomerIdAction",
+    "CartSetDeleteDaysAfterLastModificationAction",
+    "CartSetLineItemCustomFieldAction",
+    "CartSetLineItemCustomTypeAction",
+    "CartSetLineItemDistributionChannelAction",
+    "CartSetLineItemPriceAction",
+    "CartSetLineItemShippingDetailsAction",
+    "CartSetLineItemTaxAmountAction",
+    "CartSetLineItemTaxRateAction",
+    "CartSetLineItemTotalPriceAction",
+    "CartSetLocaleAction",
+    "CartSetShippingAddressAction",
+    "CartSetShippingMethodAction",
+    "CartSetShippingMethodTaxAmountAction",
+    "CartSetShippingMethodTaxRateAction",
+    "CartSetShippingRateInputAction",
+    "CartState",
+    "CartUpdate",
+    "CartUpdateAction",
+    "CartUpdateItemShippingAddressAction",
+    "ClassificationShippingRateInput",
+    "ClassificationShippingRateInputDraft",
+    "CustomLineItem",
+    "CustomLineItemDraft",
+    "DiscountCodeInfo",
+    "DiscountCodeState",
+    "DiscountedLineItemPortion",
+    "DiscountedLineItemPrice",
+    "DiscountedLineItemPriceForQuantity",
+    "ExternalLineItemTotalPrice",
+    "ExternalTaxAmountDraft",
+    "ExternalTaxRateDraft",
+    "InventoryMode",
+    "ItemShippingDetails",
+    "ItemShippingDetailsDraft",
+    "ItemShippingTarget",
+    "LineItem",
+    "LineItemDraft",
+    "LineItemMode",
+    "LineItemPriceMode",
+    "ProductPublishScope",
+    "ReplicaCartDraft",
+    "RoundingMode",
+    "ScoreShippingRateInput",
+    "ScoreShippingRateInputDraft",
+    "ShippingInfo",
+    "ShippingMethodState",
+    "ShippingRateInput",
+    "ShippingRateInputDraft",
+    "TaxCalculationMode",
+    "TaxMode",
+    "TaxPortion",
+    "TaxPortionDraft",
+    "TaxedItemPrice",
+    "TaxedPrice",
+    "TaxedPriceDraft",
+]
+
 
 class Cart(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1/02/2019 except for events not tracked.
     created_by: typing.Optional["CreatedBy"]
-    customer_id: typing.Optional["str"]
-    customer_email: typing.Optional["str"]
+    customer_id: typing.Optional[str]
+    customer_email: typing.Optional[str]
     #: Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
-    anonymous_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
     store: typing.Optional["StoreKeyReference"]
     line_items: typing.List["LineItem"]
     custom_line_items: typing.List["CustomLineItem"]
@@ -83,15 +182,15 @@ class Cart(BaseResource):
     customer_group: typing.Optional["CustomerGroupReference"]
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     #: Used for product variant price selection.
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     #: Set automatically once the ShippingMethod is set.
     shipping_info: typing.Optional["ShippingInfo"]
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
     custom: typing.Optional["CustomFields"]
     payment_info: typing.Optional["PaymentInfo"]
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
     #: The cart will be deleted automatically if it hasn't been modified for the specified amount of days and it is in the `Active` CartState.
-    delete_days_after_last_modification: typing.Optional["int"]
+    delete_days_after_last_modification: typing.Optional[int]
     #: Automatically filled when a line item with LineItemMode `GiftLineItem` is removed from the cart.
     refused_gifts: typing.List["CartDiscountReference"]
     #: The origin field indicates how this cart was created.
@@ -108,15 +207,15 @@ class Cart(BaseResource):
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        customer_id: typing.Optional["str"] = None,
-        customer_email: typing.Optional["str"] = None,
-        anonymous_id: typing.Optional["str"] = None,
+        customer_id: typing.Optional[str] = None,
+        customer_email: typing.Optional[str] = None,
+        anonymous_id: typing.Optional[str] = None,
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.List["LineItem"],
         custom_line_items: typing.List["CustomLineItem"],
@@ -130,13 +229,13 @@ class Cart(BaseResource):
         tax_rounding_mode: "RoundingMode",
         tax_calculation_mode: "TaxCalculationMode",
         customer_group: typing.Optional["CustomerGroupReference"] = None,
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
-        locale: typing.Optional["str"] = None,
-        delete_days_after_last_modification: typing.Optional["int"] = None,
+        locale: typing.Optional[str] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None,
         refused_gifts: typing.List["CartDiscountReference"],
         origin: "CartOrigin",
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
@@ -192,20 +291,20 @@ class Cart(BaseResource):
 
 class CartDraft(_BaseType):
     #: A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency: "str"
+    currency: str
     #: Id of an existing Customer.
-    customer_id: typing.Optional["str"]
-    customer_email: typing.Optional["str"]
+    customer_id: typing.Optional[str]
+    customer_email: typing.Optional[str]
     #: Will be set automatically when the `customerId` is set and the customer is a member of a customer group.
     #: Can be set explicitly when no `customerId` is present.
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     #: Assigns the new cart to an anonymous session (the customer has not signed up/in yet).
-    anonymous_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
     #: Assigns the new cart to the store.
     #: The store assignment can not be modified.
     store: typing.Optional["StoreResourceIdentifier"]
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
     #: Default inventory mode is `None`.
     inventory_mode: typing.Optional["InventoryMode"]
     #: The default tax mode is `Platform`.
@@ -225,10 +324,10 @@ class CartDraft(_BaseType):
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
     #: Must be one of the languages supported for this project
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
     #: The cart will be deleted automatically if it hasn't been modified for the specified amount of days and it is in the `Active` CartState.
     #: If a ChangeSubscription for carts exists, a `ResourceDeleted` notification will be sent.
-    delete_days_after_last_modification: typing.Optional["int"]
+    delete_days_after_last_modification: typing.Optional[int]
     #: The default origin is `Customer`.
     origin: typing.Optional["CartOrigin"]
     #: The shippingRateInput is used as an input to select a ShippingRatePriceTier.
@@ -249,13 +348,13 @@ class CartDraft(_BaseType):
     def __init__(
         self,
         *,
-        currency: "str",
-        customer_id: typing.Optional["str"] = None,
-        customer_email: typing.Optional["str"] = None,
+        currency: str,
+        customer_id: typing.Optional[str] = None,
+        customer_email: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
-        anonymous_id: typing.Optional["str"] = None,
+        anonymous_id: typing.Optional[str] = None,
         store: typing.Optional["StoreResourceIdentifier"] = None,
-        country: typing.Optional["str"] = None,
+        country: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
@@ -269,8 +368,8 @@ class CartDraft(_BaseType):
             "ExternalTaxRateDraft"
         ] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        locale: typing.Optional["str"] = None,
-        delete_days_after_last_modification: typing.Optional["int"] = None,
+        locale: typing.Optional[str] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None,
         origin: typing.Optional["CartOrigin"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
@@ -322,19 +421,19 @@ class CartOrigin(enum.Enum):
 
 
 class CartPagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["Cart"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["Cart"]
     ):
         self.limit = limit
@@ -361,7 +460,7 @@ class CartPagedQueryResponse(_BaseType):
 class CartReference(Reference):
     obj: typing.Optional["Cart"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["Cart"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["Cart"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.CART)
 
@@ -379,7 +478,7 @@ class CartReference(Reference):
 
 class CartResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CART)
@@ -405,10 +504,10 @@ class CartState(enum.Enum):
 
 
 class CartUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["CartUpdateAction"]
 
-    def __init__(self, *, version: "int", actions: typing.List["CartUpdateAction"]):
+    def __init__(self, *, version: int, actions: typing.List["CartUpdateAction"]):
         self.version = version
         self.actions = actions
         super().__init__()
@@ -426,17 +525,230 @@ class CartUpdate(_BaseType):
 
 
 class CartUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CartUpdateAction":
-        from ._schemas.cart import CartUpdateActionSchema
+        if data["action"] == "addCustomLineItem":
+            from ._schemas.cart import CartAddCustomLineItemActionSchema
 
-        return CartUpdateActionSchema().load(data)
+            return CartAddCustomLineItemActionSchema().load(data)
+        if data["action"] == "addDiscountCode":
+            from ._schemas.cart import CartAddDiscountCodeActionSchema
+
+            return CartAddDiscountCodeActionSchema().load(data)
+        if data["action"] == "addItemShippingAddress":
+            from ._schemas.cart import CartAddItemShippingAddressActionSchema
+
+            return CartAddItemShippingAddressActionSchema().load(data)
+        if data["action"] == "addLineItem":
+            from ._schemas.cart import CartAddLineItemActionSchema
+
+            return CartAddLineItemActionSchema().load(data)
+        if data["action"] == "addPayment":
+            from ._schemas.cart import CartAddPaymentActionSchema
+
+            return CartAddPaymentActionSchema().load(data)
+        if data["action"] == "addShoppingList":
+            from ._schemas.cart import CartAddShoppingListActionSchema
+
+            return CartAddShoppingListActionSchema().load(data)
+        if data["action"] == "applyDeltaToCustomLineItemShippingDetailsTargets":
+            from ._schemas.cart import (
+                CartApplyDeltaToCustomLineItemShippingDetailsTargetsActionSchema,
+            )
+
+            return (
+                CartApplyDeltaToCustomLineItemShippingDetailsTargetsActionSchema().load(
+                    data
+                )
+            )
+        if data["action"] == "applyDeltaToLineItemShippingDetailsTargets":
+            from ._schemas.cart import (
+                CartApplyDeltaToLineItemShippingDetailsTargetsActionSchema,
+            )
+
+            return CartApplyDeltaToLineItemShippingDetailsTargetsActionSchema().load(
+                data
+            )
+        if data["action"] == "changeCustomLineItemMoney":
+            from ._schemas.cart import CartChangeCustomLineItemMoneyActionSchema
+
+            return CartChangeCustomLineItemMoneyActionSchema().load(data)
+        if data["action"] == "changeCustomLineItemQuantity":
+            from ._schemas.cart import CartChangeCustomLineItemQuantityActionSchema
+
+            return CartChangeCustomLineItemQuantityActionSchema().load(data)
+        if data["action"] == "changeLineItemQuantity":
+            from ._schemas.cart import CartChangeLineItemQuantityActionSchema
+
+            return CartChangeLineItemQuantityActionSchema().load(data)
+        if data["action"] == "changeTaxCalculationMode":
+            from ._schemas.cart import CartChangeTaxCalculationModeActionSchema
+
+            return CartChangeTaxCalculationModeActionSchema().load(data)
+        if data["action"] == "changeTaxMode":
+            from ._schemas.cart import CartChangeTaxModeActionSchema
+
+            return CartChangeTaxModeActionSchema().load(data)
+        if data["action"] == "changeTaxRoundingMode":
+            from ._schemas.cart import CartChangeTaxRoundingModeActionSchema
+
+            return CartChangeTaxRoundingModeActionSchema().load(data)
+        if data["action"] == "recalculate":
+            from ._schemas.cart import CartRecalculateActionSchema
+
+            return CartRecalculateActionSchema().load(data)
+        if data["action"] == "removeCustomLineItem":
+            from ._schemas.cart import CartRemoveCustomLineItemActionSchema
+
+            return CartRemoveCustomLineItemActionSchema().load(data)
+        if data["action"] == "removeDiscountCode":
+            from ._schemas.cart import CartRemoveDiscountCodeActionSchema
+
+            return CartRemoveDiscountCodeActionSchema().load(data)
+        if data["action"] == "removeItemShippingAddress":
+            from ._schemas.cart import CartRemoveItemShippingAddressActionSchema
+
+            return CartRemoveItemShippingAddressActionSchema().load(data)
+        if data["action"] == "removeLineItem":
+            from ._schemas.cart import CartRemoveLineItemActionSchema
+
+            return CartRemoveLineItemActionSchema().load(data)
+        if data["action"] == "removePayment":
+            from ._schemas.cart import CartRemovePaymentActionSchema
+
+            return CartRemovePaymentActionSchema().load(data)
+        if data["action"] == "setAnonymousId":
+            from ._schemas.cart import CartSetAnonymousIdActionSchema
+
+            return CartSetAnonymousIdActionSchema().load(data)
+        if data["action"] == "setBillingAddress":
+            from ._schemas.cart import CartSetBillingAddressActionSchema
+
+            return CartSetBillingAddressActionSchema().load(data)
+        if data["action"] == "setCartTotalTax":
+            from ._schemas.cart import CartSetCartTotalTaxActionSchema
+
+            return CartSetCartTotalTaxActionSchema().load(data)
+        if data["action"] == "setCountry":
+            from ._schemas.cart import CartSetCountryActionSchema
+
+            return CartSetCountryActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.cart import CartSetCustomFieldActionSchema
+
+            return CartSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomLineItemCustomField":
+            from ._schemas.cart import CartSetCustomLineItemCustomFieldActionSchema
+
+            return CartSetCustomLineItemCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomLineItemCustomType":
+            from ._schemas.cart import CartSetCustomLineItemCustomTypeActionSchema
+
+            return CartSetCustomLineItemCustomTypeActionSchema().load(data)
+        if data["action"] == "setCustomLineItemShippingDetails":
+            from ._schemas.cart import CartSetCustomLineItemShippingDetailsActionSchema
+
+            return CartSetCustomLineItemShippingDetailsActionSchema().load(data)
+        if data["action"] == "setCustomLineItemTaxAmount":
+            from ._schemas.cart import CartSetCustomLineItemTaxAmountActionSchema
+
+            return CartSetCustomLineItemTaxAmountActionSchema().load(data)
+        if data["action"] == "setCustomLineItemTaxRate":
+            from ._schemas.cart import CartSetCustomLineItemTaxRateActionSchema
+
+            return CartSetCustomLineItemTaxRateActionSchema().load(data)
+        if data["action"] == "setCustomShippingMethod":
+            from ._schemas.cart import CartSetCustomShippingMethodActionSchema
+
+            return CartSetCustomShippingMethodActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.cart import CartSetCustomTypeActionSchema
+
+            return CartSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setCustomerEmail":
+            from ._schemas.cart import CartSetCustomerEmailActionSchema
+
+            return CartSetCustomerEmailActionSchema().load(data)
+        if data["action"] == "setCustomerGroup":
+            from ._schemas.cart import CartSetCustomerGroupActionSchema
+
+            return CartSetCustomerGroupActionSchema().load(data)
+        if data["action"] == "setCustomerId":
+            from ._schemas.cart import CartSetCustomerIdActionSchema
+
+            return CartSetCustomerIdActionSchema().load(data)
+        if data["action"] == "setDeleteDaysAfterLastModification":
+            from ._schemas.cart import (
+                CartSetDeleteDaysAfterLastModificationActionSchema,
+            )
+
+            return CartSetDeleteDaysAfterLastModificationActionSchema().load(data)
+        if data["action"] == "setLineItemCustomField":
+            from ._schemas.cart import CartSetLineItemCustomFieldActionSchema
+
+            return CartSetLineItemCustomFieldActionSchema().load(data)
+        if data["action"] == "setLineItemCustomType":
+            from ._schemas.cart import CartSetLineItemCustomTypeActionSchema
+
+            return CartSetLineItemCustomTypeActionSchema().load(data)
+        if data["action"] == "setLineItemDistributionChannel":
+            from ._schemas.cart import CartSetLineItemDistributionChannelActionSchema
+
+            return CartSetLineItemDistributionChannelActionSchema().load(data)
+        if data["action"] == "setLineItemPrice":
+            from ._schemas.cart import CartSetLineItemPriceActionSchema
+
+            return CartSetLineItemPriceActionSchema().load(data)
+        if data["action"] == "setLineItemShippingDetails":
+            from ._schemas.cart import CartSetLineItemShippingDetailsActionSchema
+
+            return CartSetLineItemShippingDetailsActionSchema().load(data)
+        if data["action"] == "setLineItemTaxAmount":
+            from ._schemas.cart import CartSetLineItemTaxAmountActionSchema
+
+            return CartSetLineItemTaxAmountActionSchema().load(data)
+        if data["action"] == "setLineItemTaxRate":
+            from ._schemas.cart import CartSetLineItemTaxRateActionSchema
+
+            return CartSetLineItemTaxRateActionSchema().load(data)
+        if data["action"] == "setLineItemTotalPrice":
+            from ._schemas.cart import CartSetLineItemTotalPriceActionSchema
+
+            return CartSetLineItemTotalPriceActionSchema().load(data)
+        if data["action"] == "setLocale":
+            from ._schemas.cart import CartSetLocaleActionSchema
+
+            return CartSetLocaleActionSchema().load(data)
+        if data["action"] == "setShippingAddress":
+            from ._schemas.cart import CartSetShippingAddressActionSchema
+
+            return CartSetShippingAddressActionSchema().load(data)
+        if data["action"] == "setShippingMethod":
+            from ._schemas.cart import CartSetShippingMethodActionSchema
+
+            return CartSetShippingMethodActionSchema().load(data)
+        if data["action"] == "setShippingMethodTaxAmount":
+            from ._schemas.cart import CartSetShippingMethodTaxAmountActionSchema
+
+            return CartSetShippingMethodTaxAmountActionSchema().load(data)
+        if data["action"] == "setShippingMethodTaxRate":
+            from ._schemas.cart import CartSetShippingMethodTaxRateActionSchema
+
+            return CartSetShippingMethodTaxRateActionSchema().load(data)
+        if data["action"] == "setShippingRateInput":
+            from ._schemas.cart import CartSetShippingRateInputActionSchema
+
+            return CartSetShippingRateInputActionSchema().load(data)
+        if data["action"] == "updateItemShippingAddress":
+            from ._schemas.cart import CartUpdateItemShippingAddressActionSchema
+
+            return CartUpdateItemShippingAddressActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart import CartUpdateActionSchema
@@ -446,7 +758,7 @@ class CartUpdateAction(_BaseType):
 
 class CustomLineItem(_BaseType):
     #: The unique ID of this CustomLineItem.
-    id: "str"
+    id: str
     #: The name of this CustomLineItem.
     name: "LocalizedString"
     #: The cost to add to the cart.
@@ -460,10 +772,10 @@ class CustomLineItem(_BaseType):
     #: `totalPrice` may or may not include the taxes: it depends on the taxRate.includedInPrice property.
     total_price: "TypedMoney"
     #: A unique String in the cart to identify this CustomLineItem.
-    slug: "str"
+    slug: str
     #: The amount of a CustomLineItem in the cart.
     #: Must be a positive integer.
-    quantity: "int"
+    quantity: int
     state: typing.List["ItemState"]
     tax_category: typing.Optional["TaxCategoryReference"]
     #: Will be set automatically in the `Platform` TaxMode once the shipping address is set is set.
@@ -479,13 +791,13 @@ class CustomLineItem(_BaseType):
     def __init__(
         self,
         *,
-        id: "str",
+        id: str,
         name: "LocalizedString",
         money: "TypedMoney",
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
         total_price: "TypedMoney",
-        slug: "str",
-        quantity: "int",
+        slug: str,
+        quantity: int,
         state: typing.List["ItemState"],
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -526,9 +838,9 @@ class CustomLineItemDraft(_BaseType):
     name: "LocalizedString"
     #: The amount of a CustomLineItemin the cart.
     #: Must be a positive integer.
-    quantity: "int"
+    quantity: int
     money: "Money"
-    slug: "str"
+    slug: str
     #: The given tax category will be used to select a tax rate when a cart has the TaxMode `Platform`.
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: An external tax rate can be set if the cart has the `External` TaxMode.
@@ -542,9 +854,9 @@ class CustomLineItemDraft(_BaseType):
         self,
         *,
         name: "LocalizedString",
-        quantity: "int",
+        quantity: int,
         money: "Money",
-        slug: "str",
+        slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -658,12 +970,10 @@ class DiscountedLineItemPrice(_BaseType):
 
 
 class DiscountedLineItemPriceForQuantity(_BaseType):
-    quantity: "float"
+    quantity: float
     discounted_price: "DiscountedLineItemPrice"
 
-    def __init__(
-        self, *, quantity: "float", discounted_price: "DiscountedLineItemPrice"
-    ):
+    def __init__(self, *, quantity: float, discounted_price: "DiscountedLineItemPrice"):
         self.quantity = quantity
         self.discounted_price = discounted_price
         super().__init__()
@@ -730,32 +1040,32 @@ class ExternalTaxAmountDraft(_BaseType):
 
 
 class ExternalTaxRateDraft(_BaseType):
-    name: "str"
+    name: str
     #: Percentage in the range of [0..1].
     #: Must be supplied if no `subRates` are specified.
     #: If `subRates` are specified
     #: then the `amount` can be omitted or it must be the sum of the amounts of all `subRates`.
-    amount: typing.Optional["float"]
+    amount: typing.Optional[float]
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: "str"
+    country: str
     #: The state in the country
-    state: typing.Optional["str"]
+    state: typing.Optional[str]
     #: For countries (e.g.
     #: the US) where the total tax is a combination of multiple taxes (e.g.
     #: state and local taxes).
     sub_rates: typing.Optional[typing.List["SubRate"]]
     #: The default value for `includedInPrice` is FALSE.
-    included_in_price: typing.Optional["bool"]
+    included_in_price: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        name: "str",
-        amount: typing.Optional["float"] = None,
-        country: "str",
-        state: typing.Optional["str"] = None,
+        name: str,
+        amount: typing.Optional[float] = None,
+        country: str,
+        state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
-        included_in_price: typing.Optional["bool"] = None
+        included_in_price: typing.Optional[bool] = None
     ):
         self.name = name
         self.amount = amount
@@ -790,9 +1100,9 @@ class ItemShippingDetails(_BaseType):
     #: `true` if the quantity of the (custom) line item is equal to the sum of the sub-quantities in `targets`, `false` otherwise.
     #: A cart cannot be ordered when the value is `false`.
     #: The error InvalidItemShippingDetails will be triggered.
-    valid: "bool"
+    valid: bool
 
-    def __init__(self, *, targets: typing.List["ItemShippingTarget"], valid: "bool"):
+    def __init__(self, *, targets: typing.List["ItemShippingTarget"], valid: bool):
         self.targets = targets
         self.valid = valid
         super().__init__()
@@ -836,13 +1146,13 @@ class ItemShippingDetailsDraft(_BaseType):
 
 class ItemShippingTarget(_BaseType):
     #: The key of the address in the cart's `itemShippingAddresses`
-    address_key: "str"
+    address_key: str
     #: The quantity of items that should go to the address with the specified `addressKey`.
     #: Only positive values are allowed.
     #: Using `0` as quantity is also possible in a draft object, but the element will not be present in the resulting ItemShippingDetails.
-    quantity: "float"
+    quantity: float
 
-    def __init__(self, *, address_key: "str", quantity: "float"):
+    def __init__(self, *, address_key: str, quantity: float):
         self.address_key = address_key
         self.quantity = quantity
         super().__init__()
@@ -861,8 +1171,8 @@ class ItemShippingTarget(_BaseType):
 
 class LineItem(_BaseType):
     #: The unique ID of this LineItem.
-    id: "str"
-    product_id: "str"
+    id: str
+    product_id: str
     #: The product name.
     name: "LocalizedString"
     #: The slug of a product is inserted on the fly.
@@ -886,10 +1196,10 @@ class LineItem(_BaseType):
     total_price: "TypedMoney"
     #: The amount of a LineItem in the cart.
     #: Must be a positive integer.
-    quantity: "int"
+    quantity: int
     #: When the line item was added to the cart. Optional for backwards
     #: compatibility reasons only.
-    added_at: typing.Optional["datetime.datetime"]
+    added_at: typing.Optional[datetime.datetime]
     state: typing.List["ItemState"]
     #: Will be set automatically in the `Platform` TaxMode once the shipping address is set is set.
     #: For the `External` tax mode the tax rate has to be set explicitly with the ExternalTaxRateDraft.
@@ -911,8 +1221,8 @@ class LineItem(_BaseType):
     def __init__(
         self,
         *,
-        id: "str",
-        product_id: "str",
+        id: str,
+        product_id: str,
         name: "LocalizedString",
         product_slug: typing.Optional["LocalizedString"] = None,
         product_type: "ProductTypeReference",
@@ -920,8 +1230,8 @@ class LineItem(_BaseType):
         price: "Price",
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
         total_price: "TypedMoney",
-        quantity: "int",
-        added_at: typing.Optional["datetime.datetime"] = None,
+        quantity: int,
+        added_at: typing.Optional[datetime.datetime] = None,
         state: typing.List["ItemState"],
         tax_rate: typing.Optional["TaxRate"] = None,
         supply_channel: typing.Optional["ChannelReference"] = None,
@@ -969,15 +1279,15 @@ class LineItem(_BaseType):
 
 
 class LineItemDraft(_BaseType):
-    product_id: typing.Optional["str"]
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
+    product_id: typing.Optional[str]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
     #: The amount of a `LineItem`in the cart.
     #: Must be a positive integer.
-    quantity: typing.Optional["int"]
+    quantity: typing.Optional[int]
     #: When the line item was added to the cart. Optional for backwards
     #: compatibility reasons only.
-    added_at: typing.Optional["datetime.datetime"]
+    added_at: typing.Optional[datetime.datetime]
     #: By providing supply channel information, you can unique identify
     #: inventory entries that should be reserved.
     #: The provided channel should have
@@ -1000,11 +1310,11 @@ class LineItemDraft(_BaseType):
     def __init__(
         self,
         *,
-        product_id: typing.Optional["str"] = None,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        quantity: typing.Optional["int"] = None,
-        added_at: typing.Optional["datetime.datetime"] = None,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
+        added_at: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -1076,7 +1386,7 @@ class RoundingMode(enum.Enum):
 
 
 class ShippingInfo(_BaseType):
-    shipping_method_name: "str"
+    shipping_method_name: str
     #: Determined based on the ShippingRate and its tiered prices, and either the sum of LineItem prices or the `shippingRateInput` field.
     price: "TypedMoney"
     #: The shipping rate used to determine the price.
@@ -1098,7 +1408,7 @@ class ShippingInfo(_BaseType):
     def __init__(
         self,
         *,
-        shipping_method_name: "str",
+        shipping_method_name: str,
         price: "TypedMoney",
         shipping_rate: "ShippingRate",
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
@@ -1139,17 +1449,22 @@ class ShippingMethodState(enum.Enum):
 
 
 class ShippingRateInput(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ShippingRateInput":
-        from ._schemas.cart import ShippingRateInputSchema
+        if data["type"] == "Classification":
+            from ._schemas.cart import ClassificationShippingRateInputSchema
 
-        return ShippingRateInputSchema().load(data)
+            return ClassificationShippingRateInputSchema().load(data)
+        if data["type"] == "Score":
+            from ._schemas.cart import ScoreShippingRateInputSchema
+
+            return ScoreShippingRateInputSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart import ShippingRateInputSchema
@@ -1158,10 +1473,10 @@ class ShippingRateInput(_BaseType):
 
 
 class ClassificationShippingRateInput(ShippingRateInput):
-    key: "str"
+    key: str
     label: "LocalizedString"
 
-    def __init__(self, *, key: "str", label: "LocalizedString"):
+    def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
         super().__init__(type="Classification")
@@ -1181,9 +1496,9 @@ class ClassificationShippingRateInput(ShippingRateInput):
 
 
 class ScoreShippingRateInput(ShippingRateInput):
-    score: "float"
+    score: float
 
-    def __init__(self, *, score: "float"):
+    def __init__(self, *, score: float):
         self.score = score
         super().__init__(type="Score")
 
@@ -1202,9 +1517,9 @@ class ScoreShippingRateInput(ShippingRateInput):
 
 
 class ShippingRateInputDraft(_BaseType):
-    type: "str"
+    type: str
 
-    def __init__(self, *, type: "str"):
+    def __init__(self, *, type: str):
         self.type = type
         super().__init__()
 
@@ -1212,9 +1527,14 @@ class ShippingRateInputDraft(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ShippingRateInputDraft":
-        from ._schemas.cart import ShippingRateInputDraftSchema
+        if data["type"] == "Classification":
+            from ._schemas.cart import ClassificationShippingRateInputDraftSchema
 
-        return ShippingRateInputDraftSchema().load(data)
+            return ClassificationShippingRateInputDraftSchema().load(data)
+        if data["type"] == "Score":
+            from ._schemas.cart import ScoreShippingRateInputDraftSchema
+
+            return ScoreShippingRateInputDraftSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.cart import ShippingRateInputDraftSchema
@@ -1223,9 +1543,9 @@ class ShippingRateInputDraft(_BaseType):
 
 
 class ClassificationShippingRateInputDraft(ShippingRateInputDraft):
-    key: "str"
+    key: str
 
-    def __init__(self, *, key: "str"):
+    def __init__(self, *, key: str):
         self.key = key
         super().__init__(type="Classification")
 
@@ -1244,9 +1564,9 @@ class ClassificationShippingRateInputDraft(ShippingRateInputDraft):
 
 
 class ScoreShippingRateInputDraft(ShippingRateInputDraft):
-    score: "float"
+    score: float
 
-    def __init__(self, *, score: "float"):
+    def __init__(self, *, score: float):
         self.score = score
         super().__init__(type="Score")
 
@@ -1277,17 +1597,13 @@ class TaxMode(enum.Enum):
 
 
 class TaxPortion(_BaseType):
-    name: typing.Optional["str"]
+    name: typing.Optional[str]
     #: A number in the range [0..1]
-    rate: "float"
+    rate: float
     amount: "TypedMoney"
 
     def __init__(
-        self,
-        *,
-        name: typing.Optional["str"] = None,
-        rate: "float",
-        amount: "TypedMoney"
+        self, *, name: typing.Optional[str] = None, rate: float, amount: "TypedMoney"
     ):
         self.name = name
         self.rate = rate
@@ -1307,12 +1623,12 @@ class TaxPortion(_BaseType):
 
 
 class TaxPortionDraft(_BaseType):
-    name: typing.Optional["str"]
-    rate: "float"
+    name: typing.Optional[str]
+    rate: float
     amount: "Money"
 
     def __init__(
-        self, *, name: typing.Optional["str"] = None, rate: "float", amount: "Money"
+        self, *, name: typing.Optional[str] = None, rate: float, amount: "Money"
     ):
         self.name = name
         self.rate = rate
@@ -1415,8 +1731,8 @@ class TaxedPriceDraft(_BaseType):
 class CartAddCustomLineItemAction(CartUpdateAction):
     money: "Money"
     name: "LocalizedString"
-    quantity: "int"
-    slug: "str"
+    quantity: int
+    slug: str
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -1426,8 +1742,8 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         *,
         money: "Money",
         name: "LocalizedString",
-        quantity: "int",
-        slug: "str",
+        quantity: int,
+        slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
@@ -1456,9 +1772,9 @@ class CartAddCustomLineItemAction(CartUpdateAction):
 
 
 class CartAddDiscountCodeAction(CartUpdateAction):
-    code: "str"
+    code: str
 
-    def __init__(self, *, code: "str"):
+    def __init__(self, *, code: str):
         self.code = code
         super().__init__(action="addDiscountCode")
 
@@ -1501,10 +1817,10 @@ class CartAddLineItemAction(CartUpdateAction):
     custom: typing.Optional["CustomFieldsDraft"]
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
-    product_id: typing.Optional["str"]
-    variant_id: typing.Optional["int"]
-    sku: typing.Optional["str"]
-    quantity: typing.Optional["int"]
+    product_id: typing.Optional[str]
+    variant_id: typing.Optional[int]
+    sku: typing.Optional[str]
+    quantity: typing.Optional[int]
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1516,10 +1832,10 @@ class CartAddLineItemAction(CartUpdateAction):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        product_id: typing.Optional["str"] = None,
-        variant_id: typing.Optional["int"] = None,
-        sku: typing.Optional["str"] = None,
-        quantity: typing.Optional["int"] = None,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -1601,13 +1917,13 @@ class CartAddShoppingListAction(CartUpdateAction):
 
 
 class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     targets_delta: typing.List["ItemShippingTarget"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         targets_delta: typing.List["ItemShippingTarget"]
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -1637,11 +1953,11 @@ class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateActio
 
 
 class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     targets_delta: typing.List["ItemShippingTarget"]
 
     def __init__(
-        self, *, line_item_id: "str", targets_delta: typing.List["ItemShippingTarget"]
+        self, *, line_item_id: str, targets_delta: typing.List["ItemShippingTarget"]
     ):
         self.line_item_id = line_item_id
         self.targets_delta = targets_delta
@@ -1666,10 +1982,10 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
 
 
 class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     money: "Money"
 
-    def __init__(self, *, custom_line_item_id: "str", money: "Money"):
+    def __init__(self, *, custom_line_item_id: str, money: "Money"):
         self.custom_line_item_id = custom_line_item_id
         self.money = money
         super().__init__(action="changeCustomLineItemMoney")
@@ -1689,10 +2005,10 @@ class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
 
 
 class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
-    custom_line_item_id: "str"
-    quantity: "int"
+    custom_line_item_id: str
+    quantity: int
 
-    def __init__(self, *, custom_line_item_id: "str", quantity: "int"):
+    def __init__(self, *, custom_line_item_id: str, quantity: int):
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
         super().__init__(action="changeCustomLineItemQuantity")
@@ -1712,16 +2028,16 @@ class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
 
 
 class CartChangeLineItemQuantityAction(CartUpdateAction):
-    line_item_id: "str"
-    quantity: "int"
+    line_item_id: str
+    quantity: int
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
-        quantity: "int",
+        line_item_id: str,
+        quantity: int,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
@@ -1813,9 +2129,9 @@ class CartRecalculateAction(CartUpdateAction):
     #: If set to `false`,
     #: only the prices and tax rates of the line item will be updated.
     #: The updated price of a line item may not correspond to a price in `variant.prices` anymore.
-    update_product_data: typing.Optional["bool"]
+    update_product_data: typing.Optional[bool]
 
-    def __init__(self, *, update_product_data: typing.Optional["bool"] = None):
+    def __init__(self, *, update_product_data: typing.Optional[bool] = None):
         self.update_product_data = update_product_data
         super().__init__(action="recalculate")
 
@@ -1832,9 +2148,9 @@ class CartRecalculateAction(CartUpdateAction):
 
 
 class CartRemoveCustomLineItemAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
 
-    def __init__(self, *, custom_line_item_id: "str"):
+    def __init__(self, *, custom_line_item_id: str):
         self.custom_line_item_id = custom_line_item_id
         super().__init__(action="removeCustomLineItem")
 
@@ -1874,9 +2190,9 @@ class CartRemoveDiscountCodeAction(CartUpdateAction):
 
 
 class CartRemoveItemShippingAddressAction(CartUpdateAction):
-    address_key: "str"
+    address_key: str
 
-    def __init__(self, *, address_key: "str"):
+    def __init__(self, *, address_key: str):
         self.address_key = address_key
         super().__init__(action="removeItemShippingAddress")
 
@@ -1895,8 +2211,8 @@ class CartRemoveItemShippingAddressAction(CartUpdateAction):
 
 
 class CartRemoveLineItemAction(CartUpdateAction):
-    line_item_id: "str"
-    quantity: typing.Optional["int"]
+    line_item_id: str
+    quantity: typing.Optional[int]
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
@@ -1904,8 +2220,8 @@ class CartRemoveLineItemAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: "str",
-        quantity: typing.Optional["int"] = None,
+        line_item_id: str,
+        quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
@@ -1954,9 +2270,9 @@ class CartRemovePaymentAction(CartUpdateAction):
 
 class CartSetAnonymousIdAction(CartUpdateAction):
     #: If not set, any existing anonymous ID will be removed.
-    anonymous_id: typing.Optional["str"]
+    anonymous_id: typing.Optional[str]
 
-    def __init__(self, *, anonymous_id: typing.Optional["str"] = None):
+    def __init__(self, *, anonymous_id: typing.Optional[str] = None):
         self.anonymous_id = anonymous_id
         super().__init__(action="setAnonymousId")
 
@@ -2026,9 +2342,9 @@ class CartSetCartTotalTaxAction(CartUpdateAction):
 
 class CartSetCountryAction(CartUpdateAction):
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    country: typing.Optional["str"]
+    country: typing.Optional[str]
 
-    def __init__(self, *, country: typing.Optional["str"] = None):
+    def __init__(self, *, country: typing.Optional[str] = None):
         self.country = country
         super().__init__(action="setCountry")
 
@@ -2045,10 +2361,10 @@ class CartSetCountryAction(CartUpdateAction):
 
 
 class CartSetCustomFieldAction(CartUpdateAction):
-    name: "str"
-    value: typing.Optional["any"]
+    name: str
+    value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: "str", value: typing.Optional["any"] = None):
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
         super().__init__(action="setCustomField")
@@ -2068,16 +2384,16 @@ class CartSetCustomFieldAction(CartUpdateAction):
 
 
 class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
-    custom_line_item_id: "str"
-    name: "str"
-    value: typing.Optional["any"]
+    custom_line_item_id: str
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
-        name: "str",
-        value: typing.Optional["any"] = None
+        custom_line_item_id: str,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.custom_line_item_id = custom_line_item_id
         self.name = name
@@ -2099,14 +2415,14 @@ class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
 
 
 class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     type: typing.Optional["TypeResourceIdentifier"]
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
@@ -2130,13 +2446,13 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
 
 
 class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -2158,13 +2474,13 @@ class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
 
 
 class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -2186,13 +2502,13 @@ class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
 
 
 class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
-    custom_line_item_id: "str"
+    custom_line_item_id: str
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: "str",
+        custom_line_item_id: str,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
@@ -2214,7 +2530,7 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
 
 
 class CartSetCustomShippingMethodAction(CartUpdateAction):
-    shipping_method_name: "str"
+    shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -2222,7 +2538,7 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        shipping_method_name: "str",
+        shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
@@ -2276,9 +2592,9 @@ class CartSetCustomTypeAction(CartUpdateAction):
 
 
 class CartSetCustomerEmailAction(CartUpdateAction):
-    email: "str"
+    email: str
 
-    def __init__(self, *, email: "str"):
+    def __init__(self, *, email: str):
         self.email = email
         super().__init__(action="setCustomerEmail")
 
@@ -2323,9 +2639,9 @@ class CartSetCustomerGroupAction(CartUpdateAction):
 
 class CartSetCustomerIdAction(CartUpdateAction):
     #: If set, a customer with the given ID must exist in the project.
-    customer_id: typing.Optional["str"]
+    customer_id: typing.Optional[str]
 
-    def __init__(self, *, customer_id: typing.Optional["str"] = None):
+    def __init__(self, *, customer_id: typing.Optional[str] = None):
         self.customer_id = customer_id
         super().__init__(action="setCustomerId")
 
@@ -2344,10 +2660,10 @@ class CartSetCustomerIdAction(CartUpdateAction):
 
 
 class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
-    delete_days_after_last_modification: typing.Optional["int"]
+    delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
-        self, *, delete_days_after_last_modification: typing.Optional["int"] = None
+        self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
         super().__init__(action="setDeleteDaysAfterLastModification")
@@ -2367,12 +2683,12 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
 
 
 class CartSetLineItemCustomFieldAction(CartUpdateAction):
-    line_item_id: "str"
-    name: "str"
-    value: typing.Optional["any"]
+    line_item_id: str
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, line_item_id: "str", name: "str", value: typing.Optional["any"] = None
+        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
     ):
         self.line_item_id = line_item_id
         self.name = name
@@ -2394,14 +2710,14 @@ class CartSetLineItemCustomFieldAction(CartUpdateAction):
 
 
 class CartSetLineItemCustomTypeAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     type: typing.Optional["TypeResourceIdentifier"]
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
@@ -2425,13 +2741,13 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
 
 
 class CartSetLineItemDistributionChannelAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.line_item_id = line_item_id
@@ -2453,11 +2769,11 @@ class CartSetLineItemDistributionChannelAction(CartUpdateAction):
 
 
 class CartSetLineItemPriceAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_price: typing.Optional["Money"]
 
     def __init__(
-        self, *, line_item_id: "str", external_price: typing.Optional["Money"] = None
+        self, *, line_item_id: str, external_price: typing.Optional["Money"] = None
     ):
         self.line_item_id = line_item_id
         self.external_price = external_price
@@ -2478,13 +2794,13 @@ class CartSetLineItemPriceAction(CartUpdateAction):
 
 
 class CartSetLineItemShippingDetailsAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
@@ -2506,13 +2822,13 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
 
 
 class CartSetLineItemTaxAmountAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
         self.line_item_id = line_item_id
@@ -2534,13 +2850,13 @@ class CartSetLineItemTaxAmountAction(CartUpdateAction):
 
 
 class CartSetLineItemTaxRateAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
         self.line_item_id = line_item_id
@@ -2562,13 +2878,13 @@ class CartSetLineItemTaxRateAction(CartUpdateAction):
 
 
 class CartSetLineItemTotalPriceAction(CartUpdateAction):
-    line_item_id: "str"
+    line_item_id: str
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        line_item_id: "str",
+        line_item_id: str,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
         self.line_item_id = line_item_id
@@ -2590,9 +2906,9 @@ class CartSetLineItemTotalPriceAction(CartUpdateAction):
 
 
 class CartSetLocaleAction(CartUpdateAction):
-    locale: typing.Optional["str"]
+    locale: typing.Optional[str]
 
-    def __init__(self, *, locale: typing.Optional["str"] = None):
+    def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
         super().__init__(action="setLocale")
 

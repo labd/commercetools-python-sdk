@@ -14,7 +14,7 @@ from ..common import ImportResourceType
 
 
 # Marshmallow Schemas
-class ImportRequestSchema(marshmallow.Schema):
+class ImportRequestSchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
         ImportResourceType, by_value=True, allow_none=True, missing=None
     )
@@ -28,7 +28,7 @@ class ImportRequestSchema(marshmallow.Schema):
         return models.ImportRequest(**data)
 
 
-class ImportResponseSchema(marshmallow.Schema):
+class ImportResponseSchema(helpers.BaseSchema):
     operation_status = helpers.LazyNestedField(
         nested=helpers.absmod(
             __name__, ".importoperations.ImportOperationStatusSchema"

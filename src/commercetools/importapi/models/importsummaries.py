@@ -6,6 +6,8 @@ import typing
 
 from ._abstract import _BaseType
 
+__all__ = ["ImportSummary", "OperationStates"]
+
 
 class ImportSummary(_BaseType):
     """An import summary describes the states of import resources of a given import sink.
@@ -17,9 +19,9 @@ class ImportSummary(_BaseType):
     #: The states summary for this import summary.
     states: "OperationStates"
     #: The total number of import operations received for this import group.
-    total: "int"
+    total: int
 
-    def __init__(self, *, states: "OperationStates", total: "int"):
+    def __init__(self, *, states: "OperationStates", total: int):
         self.states = states
         self.total = total
         super().__init__()
@@ -38,30 +40,30 @@ class ImportSummary(_BaseType):
 
 class OperationStates(_BaseType):
     #: The number of import operations that are in the state `ValidationFailed`.
-    validation_failed: "int"
+    validation_failed: int
     #: The number of import operations that are in the state `Unresolved`.
-    unresolved: "int"
+    unresolved: int
     #: The number of import operations that are in the state `WaitForMasterVariant`.
-    wait_for_master_variant: "int"
+    wait_for_master_variant: int
     #: The number of import operations that are in the state `Imported`.
-    imported: "int"
+    imported: int
     #: The number of import operations that are in the state `Delete`.
-    delete: "int"
+    delete: int
     #: The number of import operations that are in the state `Deleted`.
-    deleted: "int"
+    deleted: int
     #: The number of import operations that are in the state `Rejected`.
-    rejected: "int"
+    rejected: int
 
     def __init__(
         self,
         *,
-        validation_failed: "int",
-        unresolved: "int",
-        wait_for_master_variant: "int",
-        imported: "int",
-        delete: "int",
-        deleted: "int",
-        rejected: "int"
+        validation_failed: int,
+        unresolved: int,
+        wait_for_master_variant: int,
+        imported: int,
+        delete: int,
+        deleted: int,
+        rejected: int
     ):
         self.validation_failed = validation_failed
         self.unresolved = unresolved

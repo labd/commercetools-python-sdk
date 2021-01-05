@@ -11,34 +11,37 @@ from ..prices.by_project_key_missing_data_prices_request_builder import (
     ByProjectKeyMissingDataPricesRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyMissingDataRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        client: "Client",
+        project_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
+        self._project_key = project_key
         self._client = client
 
     def attributes(self) -> ByProjectKeyMissingDataAttributesRequestBuilder:
         return ByProjectKeyMissingDataAttributesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def images(self) -> ByProjectKeyMissingDataImagesRequestBuilder:
         return ByProjectKeyMissingDataImagesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )
 
     def prices(self) -> ByProjectKeyMissingDataPricesRequestBuilder:
         return ByProjectKeyMissingDataPricesRequestBuilder(
-            projectKey=self._project_key,
+            project_key=self._project_key,
             client=self._client,
         )

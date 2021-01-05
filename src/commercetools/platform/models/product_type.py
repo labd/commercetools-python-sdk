@@ -10,6 +10,58 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
 
+__all__ = [
+    "AttributeBooleanType",
+    "AttributeConstraintEnum",
+    "AttributeConstraintEnumDraft",
+    "AttributeDateTimeType",
+    "AttributeDateType",
+    "AttributeDefinition",
+    "AttributeDefinitionDraft",
+    "AttributeEnumType",
+    "AttributeLocalizableTextType",
+    "AttributeLocalizedEnumType",
+    "AttributeLocalizedEnumValue",
+    "AttributeMoneyType",
+    "AttributeNestedType",
+    "AttributeNumberType",
+    "AttributePlainEnumValue",
+    "AttributeReferenceType",
+    "AttributeSetType",
+    "AttributeTextType",
+    "AttributeTimeType",
+    "AttributeType",
+    "ProductType",
+    "ProductTypeAddAttributeDefinitionAction",
+    "ProductTypeAddLocalizedEnumValueAction",
+    "ProductTypeAddPlainEnumValueAction",
+    "ProductTypeChangeAttributeConstraintAction",
+    "ProductTypeChangeAttributeNameAction",
+    "ProductTypeChangeAttributeOrderAction",
+    "ProductTypeChangeAttributeOrderByNameAction",
+    "ProductTypeChangeDescriptionAction",
+    "ProductTypeChangeEnumKeyAction",
+    "ProductTypeChangeInputHintAction",
+    "ProductTypeChangeIsSearchableAction",
+    "ProductTypeChangeLabelAction",
+    "ProductTypeChangeLocalizedEnumValueLabelAction",
+    "ProductTypeChangeLocalizedEnumValueOrderAction",
+    "ProductTypeChangeNameAction",
+    "ProductTypeChangePlainEnumValueLabelAction",
+    "ProductTypeChangePlainEnumValueOrderAction",
+    "ProductTypeDraft",
+    "ProductTypePagedQueryResponse",
+    "ProductTypeReference",
+    "ProductTypeRemoveAttributeDefinitionAction",
+    "ProductTypeRemoveEnumValuesAction",
+    "ProductTypeResourceIdentifier",
+    "ProductTypeSetInputTipAction",
+    "ProductTypeSetKeyAction",
+    "ProductTypeUpdate",
+    "ProductTypeUpdateAction",
+    "TextInputHint",
+]
+
 
 class AttributeConstraintEnum(enum.Enum):
     NONE = "None"
@@ -29,11 +81,11 @@ class AttributeDefinition(_BaseType):
     #: The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
     #: When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types, otherwise an AttributeDefinitionAlreadyExists error code will be returned.
     #: An exception to this are the values of an `enum` or `lenum` type and sets thereof.
-    name: "str"
+    name: str
     #: A human-readable label for the attribute.
     label: "LocalizedString"
     #: Whether the attribute is required to have a value.
-    is_required: "bool"
+    is_required: bool
     #: Describes how an attribute or a set of attributes should be validated across all variants of a product.
     attribute_constraint: "AttributeConstraintEnum"
     #: Additional information about the attribute that aids content managers when setting product details.
@@ -48,19 +100,19 @@ class AttributeDefinition(_BaseType):
     #: The max size of a searchable field is **restricted to 10922 characters**.
     #: This constraint is enforced at both product creation and product update.
     #: If the length of the input exceeds the maximum size an InvalidField error is returned.
-    is_searchable: "bool"
+    is_searchable: bool
 
     def __init__(
         self,
         *,
         type: "AttributeType",
-        name: "str",
+        name: str,
         label: "LocalizedString",
-        is_required: "bool",
+        is_required: bool,
         attribute_constraint: "AttributeConstraintEnum",
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: "TextInputHint",
-        is_searchable: "bool"
+        is_searchable: bool
     ):
         self.type = type
         self.name = name
@@ -90,11 +142,11 @@ class AttributeDefinitionDraft(_BaseType):
     #: The unique name of the attribute used in the API.
     #: The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
     #: When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types.
-    name: "str"
+    name: str
     #: A human-readable label for the attribute.
     label: "LocalizedString"
     #: Whether the attribute is required to have a value.
-    is_required: "bool"
+    is_required: bool
     #: Describes how an attribute or a set of attributes should be validated across all variants of a product.
     attribute_constraint: typing.Optional["AttributeConstraintEnum"]
     #: Additional information about the attribute that aids content managers when setting product details.
@@ -105,19 +157,19 @@ class AttributeDefinitionDraft(_BaseType):
     #: Whether the attribute's values should generally be enabled in product search.
     #: This determines whether the value is stored in products for matching terms in the context of full-text search queries and can be used in facets & filters as part of product search queries.
     #: The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
-    is_searchable: typing.Optional["bool"]
+    is_searchable: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         type: "AttributeType",
-        name: "str",
+        name: str,
         label: "LocalizedString",
-        is_required: "bool",
+        is_required: bool,
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
-        is_searchable: typing.Optional["bool"] = None
+        is_searchable: typing.Optional[bool] = None
     ):
         self.type = type
         self.name = name
@@ -144,10 +196,10 @@ class AttributeDefinitionDraft(_BaseType):
 
 
 class AttributeLocalizedEnumValue(_BaseType):
-    key: "str"
+    key: str
     label: "LocalizedString"
 
-    def __init__(self, *, key: "str", label: "LocalizedString"):
+    def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
         super().__init__()
@@ -167,10 +219,10 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributePlainEnumValue(_BaseType):
-    key: "str"
-    label: "str"
+    key: str
+    label: str
 
-    def __init__(self, *, key: "str", label: "str"):
+    def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
         super().__init__()
@@ -190,17 +242,66 @@ class AttributePlainEnumValue(_BaseType):
 
 
 class AttributeType(_BaseType):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "AttributeType":
-        from ._schemas.product_type import AttributeTypeSchema
+        if data["name"] == "boolean":
+            from ._schemas.product_type import AttributeBooleanTypeSchema
 
-        return AttributeTypeSchema().load(data)
+            return AttributeBooleanTypeSchema().load(data)
+        if data["name"] == "datetime":
+            from ._schemas.product_type import AttributeDateTimeTypeSchema
+
+            return AttributeDateTimeTypeSchema().load(data)
+        if data["name"] == "date":
+            from ._schemas.product_type import AttributeDateTypeSchema
+
+            return AttributeDateTypeSchema().load(data)
+        if data["name"] == "enum":
+            from ._schemas.product_type import AttributeEnumTypeSchema
+
+            return AttributeEnumTypeSchema().load(data)
+        if data["name"] == "ltext":
+            from ._schemas.product_type import AttributeLocalizableTextTypeSchema
+
+            return AttributeLocalizableTextTypeSchema().load(data)
+        if data["name"] == "lenum":
+            from ._schemas.product_type import AttributeLocalizedEnumTypeSchema
+
+            return AttributeLocalizedEnumTypeSchema().load(data)
+        if data["name"] == "money":
+            from ._schemas.product_type import AttributeMoneyTypeSchema
+
+            return AttributeMoneyTypeSchema().load(data)
+        if data["name"] == "nested":
+            from ._schemas.product_type import AttributeNestedTypeSchema
+
+            return AttributeNestedTypeSchema().load(data)
+        if data["name"] == "number":
+            from ._schemas.product_type import AttributeNumberTypeSchema
+
+            return AttributeNumberTypeSchema().load(data)
+        if data["name"] == "reference":
+            from ._schemas.product_type import AttributeReferenceTypeSchema
+
+            return AttributeReferenceTypeSchema().load(data)
+        if data["name"] == "set":
+            from ._schemas.product_type import AttributeSetTypeSchema
+
+            return AttributeSetTypeSchema().load(data)
+        if data["name"] == "text":
+            from ._schemas.product_type import AttributeTextTypeSchema
+
+            return AttributeTextTypeSchema().load(data)
+        if data["name"] == "time":
+            from ._schemas.product_type import AttributeTimeTypeSchema
+
+            return AttributeTimeTypeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product_type import AttributeTypeSchema
@@ -452,23 +553,23 @@ class ProductType(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the product type (max.
     #: 256 characters).
-    key: typing.Optional["str"]
-    name: "str"
-    description: "str"
+    key: typing.Optional[str]
+    name: str
+    description: str
     attributes: typing.Optional[typing.List["AttributeDefinition"]]
 
     def __init__(
         self,
         *,
-        id: "str",
-        version: "int",
-        created_at: "datetime.datetime",
-        last_modified_at: "datetime.datetime",
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        key: typing.Optional["str"] = None,
-        name: "str",
-        description: "str",
+        key: typing.Optional[str] = None,
+        name: str,
+        description: str,
         attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
     ):
         self.last_modified_by = last_modified_by
@@ -500,17 +601,17 @@ class ProductTypeDraft(_BaseType):
     #: User-specific unique identifier for the product type (min.
     #: 2 and max.
     #: 256 characters).
-    key: typing.Optional["str"]
-    name: "str"
-    description: "str"
+    key: typing.Optional[str]
+    name: str
+    description: str
     attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
 
     def __init__(
         self,
         *,
-        key: typing.Optional["str"] = None,
-        name: "str",
-        description: "str",
+        key: typing.Optional[str] = None,
+        name: str,
+        description: str,
         attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None
     ):
         self.key = key
@@ -532,19 +633,19 @@ class ProductTypeDraft(_BaseType):
 
 
 class ProductTypePagedQueryResponse(_BaseType):
-    limit: "int"
-    count: "int"
-    total: typing.Optional["int"]
-    offset: "int"
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
     results: typing.List["ProductType"]
 
     def __init__(
         self,
         *,
-        limit: "int",
-        count: "int",
-        total: typing.Optional["int"] = None,
-        offset: "int",
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
         results: typing.List["ProductType"]
     ):
         self.limit = limit
@@ -571,7 +672,7 @@ class ProductTypePagedQueryResponse(_BaseType):
 class ProductTypeReference(Reference):
     obj: typing.Optional["ProductType"]
 
-    def __init__(self, *, id: "str", obj: typing.Optional["ProductType"] = None):
+    def __init__(self, *, id: str, obj: typing.Optional["ProductType"] = None):
         self.obj = obj
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_TYPE)
 
@@ -589,7 +690,7 @@ class ProductTypeReference(Reference):
 
 class ProductTypeResourceIdentifier(ResourceIdentifier):
     def __init__(
-        self, *, id: typing.Optional["str"] = None, key: typing.Optional["str"] = None
+        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
 
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_TYPE)
@@ -609,11 +710,11 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
 
 
 class ProductTypeUpdate(_BaseType):
-    version: "int"
+    version: int
     actions: typing.List["ProductTypeUpdateAction"]
 
     def __init__(
-        self, *, version: "int", actions: typing.List["ProductTypeUpdateAction"]
+        self, *, version: int, actions: typing.List["ProductTypeUpdateAction"]
     ):
         self.version = version
         self.actions = actions
@@ -632,9 +733,9 @@ class ProductTypeUpdate(_BaseType):
 
 
 class ProductTypeUpdateAction(_BaseType):
-    action: "str"
+    action: str
 
-    def __init__(self, *, action: "str"):
+    def __init__(self, *, action: str):
         self.action = action
         super().__init__()
 
@@ -642,9 +743,112 @@ class ProductTypeUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "ProductTypeUpdateAction":
-        from ._schemas.product_type import ProductTypeUpdateActionSchema
+        if data["action"] == "addAttributeDefinition":
+            from ._schemas.product_type import (
+                ProductTypeAddAttributeDefinitionActionSchema,
+            )
 
-        return ProductTypeUpdateActionSchema().load(data)
+            return ProductTypeAddAttributeDefinitionActionSchema().load(data)
+        if data["action"] == "addLocalizedEnumValue":
+            from ._schemas.product_type import (
+                ProductTypeAddLocalizedEnumValueActionSchema,
+            )
+
+            return ProductTypeAddLocalizedEnumValueActionSchema().load(data)
+        if data["action"] == "addPlainEnumValue":
+            from ._schemas.product_type import ProductTypeAddPlainEnumValueActionSchema
+
+            return ProductTypeAddPlainEnumValueActionSchema().load(data)
+        if data["action"] == "changeAttributeConstraint":
+            from ._schemas.product_type import (
+                ProductTypeChangeAttributeConstraintActionSchema,
+            )
+
+            return ProductTypeChangeAttributeConstraintActionSchema().load(data)
+        if data["action"] == "changeAttributeName":
+            from ._schemas.product_type import (
+                ProductTypeChangeAttributeNameActionSchema,
+            )
+
+            return ProductTypeChangeAttributeNameActionSchema().load(data)
+        if data["action"] == "changeAttributeOrder":
+            from ._schemas.product_type import (
+                ProductTypeChangeAttributeOrderActionSchema,
+            )
+
+            return ProductTypeChangeAttributeOrderActionSchema().load(data)
+        if data["action"] == "changeAttributeOrderByName":
+            from ._schemas.product_type import (
+                ProductTypeChangeAttributeOrderByNameActionSchema,
+            )
+
+            return ProductTypeChangeAttributeOrderByNameActionSchema().load(data)
+        if data["action"] == "changeDescription":
+            from ._schemas.product_type import ProductTypeChangeDescriptionActionSchema
+
+            return ProductTypeChangeDescriptionActionSchema().load(data)
+        if data["action"] == "changeEnumKey":
+            from ._schemas.product_type import ProductTypeChangeEnumKeyActionSchema
+
+            return ProductTypeChangeEnumKeyActionSchema().load(data)
+        if data["action"] == "changeInputHint":
+            from ._schemas.product_type import ProductTypeChangeInputHintActionSchema
+
+            return ProductTypeChangeInputHintActionSchema().load(data)
+        if data["action"] == "changeIsSearchable":
+            from ._schemas.product_type import ProductTypeChangeIsSearchableActionSchema
+
+            return ProductTypeChangeIsSearchableActionSchema().load(data)
+        if data["action"] == "changeLabel":
+            from ._schemas.product_type import ProductTypeChangeLabelActionSchema
+
+            return ProductTypeChangeLabelActionSchema().load(data)
+        if data["action"] == "changeLocalizedEnumValueLabel":
+            from ._schemas.product_type import (
+                ProductTypeChangeLocalizedEnumValueLabelActionSchema,
+            )
+
+            return ProductTypeChangeLocalizedEnumValueLabelActionSchema().load(data)
+        if data["action"] == "changeLocalizedEnumValueOrder":
+            from ._schemas.product_type import (
+                ProductTypeChangeLocalizedEnumValueOrderActionSchema,
+            )
+
+            return ProductTypeChangeLocalizedEnumValueOrderActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.product_type import ProductTypeChangeNameActionSchema
+
+            return ProductTypeChangeNameActionSchema().load(data)
+        if data["action"] == "changePlainEnumValueLabel":
+            from ._schemas.product_type import (
+                ProductTypeChangePlainEnumValueLabelActionSchema,
+            )
+
+            return ProductTypeChangePlainEnumValueLabelActionSchema().load(data)
+        if data["action"] == "changePlainEnumValueOrder":
+            from ._schemas.product_type import (
+                ProductTypeChangePlainEnumValueOrderActionSchema,
+            )
+
+            return ProductTypeChangePlainEnumValueOrderActionSchema().load(data)
+        if data["action"] == "removeAttributeDefinition":
+            from ._schemas.product_type import (
+                ProductTypeRemoveAttributeDefinitionActionSchema,
+            )
+
+            return ProductTypeRemoveAttributeDefinitionActionSchema().load(data)
+        if data["action"] == "removeEnumValues":
+            from ._schemas.product_type import ProductTypeRemoveEnumValuesActionSchema
+
+            return ProductTypeRemoveEnumValuesActionSchema().load(data)
+        if data["action"] == "setInputTip":
+            from ._schemas.product_type import ProductTypeSetInputTipActionSchema
+
+            return ProductTypeSetInputTipActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.product_type import ProductTypeSetKeyActionSchema
+
+            return ProductTypeSetKeyActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product_type import ProductTypeUpdateActionSchema
@@ -679,10 +883,10 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     value: "AttributeLocalizedEnumValue"
 
-    def __init__(self, *, attribute_name: "str", value: "AttributeLocalizedEnumValue"):
+    def __init__(self, *, attribute_name: str, value: "AttributeLocalizedEnumValue"):
         self.attribute_name = attribute_name
         self.value = value
         super().__init__(action="addLocalizedEnumValue")
@@ -702,10 +906,10 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
 
 
 class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     value: "AttributePlainEnumValue"
 
-    def __init__(self, *, attribute_name: "str", value: "AttributePlainEnumValue"):
+    def __init__(self, *, attribute_name: str, value: "AttributePlainEnumValue"):
         self.attribute_name = attribute_name
         self.value = value
         super().__init__(action="addPlainEnumValue")
@@ -725,11 +929,11 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     new_value: "AttributeConstraintEnumDraft"
 
     def __init__(
-        self, *, attribute_name: "str", new_value: "AttributeConstraintEnumDraft"
+        self, *, attribute_name: str, new_value: "AttributeConstraintEnumDraft"
     ):
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -754,10 +958,10 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
-    attribute_name: "str"
-    new_attribute_name: "str"
+    attribute_name: str
+    new_attribute_name: str
 
-    def __init__(self, *, attribute_name: "str", new_attribute_name: "str"):
+    def __init__(self, *, attribute_name: str, new_attribute_name: str):
         self.attribute_name = attribute_name
         self.new_attribute_name = new_attribute_name
         super().__init__(action="changeAttributeName")
@@ -823,9 +1027,9 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
-    description: "str"
+    description: str
 
-    def __init__(self, *, description: "str"):
+    def __init__(self, *, description: str):
         self.description = description
         super().__init__(action="changeDescription")
 
@@ -844,11 +1048,11 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
-    attribute_name: "str"
-    key: "str"
-    new_key: "str"
+    attribute_name: str
+    key: str
+    new_key: str
 
-    def __init__(self, *, attribute_name: "str", key: "str", new_key: "str"):
+    def __init__(self, *, attribute_name: str, key: str, new_key: str):
         self.attribute_name = attribute_name
         self.key = key
         self.new_key = new_key
@@ -869,10 +1073,10 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     new_value: "TextInputHint"
 
-    def __init__(self, *, attribute_name: "str", new_value: "TextInputHint"):
+    def __init__(self, *, attribute_name: str, new_value: "TextInputHint"):
         self.attribute_name = attribute_name
         self.new_value = new_value
         super().__init__(action="changeInputHint")
@@ -892,10 +1096,10 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
-    attribute_name: "str"
-    is_searchable: "bool"
+    attribute_name: str
+    is_searchable: bool
 
-    def __init__(self, *, attribute_name: "str", is_searchable: "bool"):
+    def __init__(self, *, attribute_name: str, is_searchable: bool):
         self.attribute_name = attribute_name
         self.is_searchable = is_searchable
         super().__init__(action="changeIsSearchable")
@@ -915,10 +1119,10 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     label: "LocalizedString"
 
-    def __init__(self, *, attribute_name: "str", label: "LocalizedString"):
+    def __init__(self, *, attribute_name: str, label: "LocalizedString"):
         self.attribute_name = attribute_name
         self.label = label
         super().__init__(action="changeLabel")
@@ -938,11 +1142,11 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     new_value: "AttributeLocalizedEnumValue"
 
     def __init__(
-        self, *, attribute_name: "str", new_value: "AttributeLocalizedEnumValue"
+        self, *, attribute_name: str, new_value: "AttributeLocalizedEnumValue"
     ):
         self.attribute_name = attribute_name
         self.new_value = new_value
@@ -967,14 +1171,11 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
-        self,
-        *,
-        attribute_name: "str",
-        values: typing.List["AttributeLocalizedEnumValue"]
+        self, *, attribute_name: str, values: typing.List["AttributeLocalizedEnumValue"]
     ):
         self.attribute_name = attribute_name
         self.values = values
@@ -999,9 +1200,9 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeNameAction(ProductTypeUpdateAction):
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="changeName")
 
@@ -1020,10 +1221,10 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     new_value: "AttributePlainEnumValue"
 
-    def __init__(self, *, attribute_name: "str", new_value: "AttributePlainEnumValue"):
+    def __init__(self, *, attribute_name: str, new_value: "AttributePlainEnumValue"):
         self.attribute_name = attribute_name
         self.new_value = new_value
         super().__init__(action="changePlainEnumValueLabel")
@@ -1047,11 +1248,11 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
-        self, *, attribute_name: "str", values: typing.List["AttributePlainEnumValue"]
+        self, *, attribute_name: str, values: typing.List["AttributePlainEnumValue"]
     ):
         self.attribute_name = attribute_name
         self.values = values
@@ -1077,9 +1278,9 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
 
 class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
     #: The name of the attribute to remove.
-    name: "str"
+    name: str
 
-    def __init__(self, *, name: "str"):
+    def __init__(self, *, name: str):
         self.name = name
         super().__init__(action="removeAttributeDefinition")
 
@@ -1102,10 +1303,10 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     keys: typing.List["str"]
 
-    def __init__(self, *, attribute_name: "str", keys: typing.List["str"]):
+    def __init__(self, *, attribute_name: str, keys: typing.List["str"]):
         self.attribute_name = attribute_name
         self.keys = keys
         super().__init__(action="removeEnumValues")
@@ -1125,13 +1326,13 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
 
 
 class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
-    attribute_name: "str"
+    attribute_name: str
     input_tip: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        attribute_name: "str",
+        attribute_name: str,
         input_tip: typing.Optional["LocalizedString"] = None
     ):
         self.attribute_name = attribute_name
@@ -1154,9 +1355,9 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
 
 class ProductTypeSetKeyAction(ProductTypeUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
-    key: typing.Optional["str"]
+    key: typing.Optional[str]
 
-    def __init__(self, *, key: typing.Optional["str"] = None):
+    def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
         super().__init__(action="setKey")
 

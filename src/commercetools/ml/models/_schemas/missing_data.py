@@ -14,7 +14,7 @@ from ..common import TaskStatusEnum
 
 
 # Marshmallow Schemas
-class AttributeCountSchema(marshmallow.Schema):
+class AttributeCountSchema(helpers.BaseSchema):
     product_type_attributes = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="productTypeAttributes"
     )
@@ -34,7 +34,7 @@ class AttributeCountSchema(marshmallow.Schema):
         return models.AttributeCount(**data)
 
 
-class AttributeCoverageSchema(marshmallow.Schema):
+class AttributeCoverageSchema(helpers.BaseSchema):
     names = marshmallow.fields.Float(allow_none=True, missing=None)
     values = marshmallow.fields.Float(allow_none=True, missing=None)
 
@@ -47,7 +47,7 @@ class AttributeCoverageSchema(marshmallow.Schema):
         return models.AttributeCoverage(**data)
 
 
-class MissingAttributesDetailsSchema(marshmallow.Schema):
+class MissingAttributesDetailsSchema(helpers.BaseSchema):
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     missing_attribute_names = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="missingAttributeNames"
@@ -65,7 +65,7 @@ class MissingAttributesDetailsSchema(marshmallow.Schema):
         return models.MissingAttributesDetails(**data)
 
 
-class MissingAttributesSchema(marshmallow.Schema):
+class MissingAttributesSchema(helpers.BaseSchema):
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
@@ -91,6 +91,7 @@ class MissingAttributesSchema(marshmallow.Schema):
     missing_attribute_names = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="missingAttributeNames",
     )
@@ -98,6 +99,7 @@ class MissingAttributesSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".AttributeCountSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="attributeCount",
     )
@@ -105,6 +107,7 @@ class MissingAttributesSchema(marshmallow.Schema):
         nested=helpers.absmod(__name__, ".AttributeCoverageSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="attributeCoverage",
     )
@@ -118,7 +121,7 @@ class MissingAttributesSchema(marshmallow.Schema):
         return models.MissingAttributes(**data)
 
 
-class MissingAttributesMetaSchema(marshmallow.Schema):
+class MissingAttributesMetaSchema(helpers.BaseSchema):
     product_level = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingAttributesDetailsSchema"),
         allow_none=True,
@@ -136,6 +139,7 @@ class MissingAttributesMetaSchema(marshmallow.Schema):
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productTypeIds",
     )
@@ -149,42 +153,68 @@ class MissingAttributesMetaSchema(marshmallow.Schema):
         return models.MissingAttributesMeta(**data)
 
 
-class MissingAttributesSearchRequestSchema(marshmallow.Schema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
+class MissingAttributesSearchRequestSchema(helpers.BaseSchema):
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     product_set_limit = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productSetLimit"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productSetLimit",
     )
     include_variants = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="includeVariants"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="includeVariants",
     )
     coverage_min = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="coverageMin"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="coverageMin",
     )
     coverage_max = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="coverageMax"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="coverageMax",
     )
     sort_by = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="sortBy"
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="sortBy"
     )
     show_missing_attribute_names = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="showMissingAttributeNames"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="showMissingAttributeNames",
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productTypeIds",
     )
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="attributeName",
     )
 
     class Meta:
@@ -196,7 +226,7 @@ class MissingAttributesSearchRequestSchema(marshmallow.Schema):
         return models.MissingAttributesSearchRequest(**data)
 
 
-class MissingAttributesPagedQueryResultSchema(marshmallow.Schema):
+class MissingAttributesPagedQueryResultSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -223,7 +253,7 @@ class MissingAttributesPagedQueryResultSchema(marshmallow.Schema):
         return models.MissingAttributesPagedQueryResult(**data)
 
 
-class MissingDataTaskStatusSchema(marshmallow.Schema):
+class MissingDataTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
         TaskStatusEnum, by_value=True, allow_none=True, missing=None
     )
@@ -244,7 +274,7 @@ class MissingDataTaskStatusSchema(marshmallow.Schema):
         return models.MissingDataTaskStatus(**data)
 
 
-class MissingImagesSchema(marshmallow.Schema):
+class MissingImagesSchema(helpers.BaseSchema):
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
@@ -267,7 +297,7 @@ class MissingImagesSchema(marshmallow.Schema):
         return models.MissingImages(**data)
 
 
-class MissingImagesCountSchema(marshmallow.Schema):
+class MissingImagesCountSchema(helpers.BaseSchema):
     missing_images = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="missingImages"
     )
@@ -302,7 +332,7 @@ class MissingImagesVariantLevelSchema(MissingImagesCountSchema):
         return models.MissingImagesVariantLevel(**data)
 
 
-class MissingImagesMetaSchema(marshmallow.Schema):
+class MissingImagesMetaSchema(helpers.BaseSchema):
     product_level = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingImagesProductLevelSchema"),
         allow_none=True,
@@ -328,29 +358,48 @@ class MissingImagesMetaSchema(marshmallow.Schema):
         return models.MissingImagesMeta(**data)
 
 
-class MissingImagesSearchRequestSchema(marshmallow.Schema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
+class MissingImagesSearchRequestSchema(helpers.BaseSchema):
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     product_set_limit = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productSetLimit"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productSetLimit",
     )
     include_variants = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="includeVariants"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="includeVariants",
     )
     auto_threshold = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="autoThreshold"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="autoThreshold",
     )
-    threshold = marshmallow.fields.Integer(allow_none=True, missing=None)
+    threshold = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productTypeIds",
     )
@@ -364,7 +413,7 @@ class MissingImagesSearchRequestSchema(marshmallow.Schema):
         return models.MissingImagesSearchRequest(**data)
 
 
-class MissingImagesPagedQueryResultSchema(marshmallow.Schema):
+class MissingImagesPagedQueryResultSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -391,7 +440,7 @@ class MissingImagesPagedQueryResultSchema(marshmallow.Schema):
         return models.MissingImagesPagedQueryResult(**data)
 
 
-class MissingImagesTaskStatusSchema(marshmallow.Schema):
+class MissingImagesTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
         TaskStatusEnum, by_value=True, allow_none=True, missing=None
     )
@@ -412,7 +461,7 @@ class MissingImagesTaskStatusSchema(marshmallow.Schema):
         return models.MissingImagesTaskStatus(**data)
 
 
-class MissingPricesSchema(marshmallow.Schema):
+class MissingPricesSchema(helpers.BaseSchema):
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
@@ -432,7 +481,7 @@ class MissingPricesSchema(marshmallow.Schema):
         return models.MissingPrices(**data)
 
 
-class MissingPricesProductCountSchema(marshmallow.Schema):
+class MissingPricesProductCountSchema(helpers.BaseSchema):
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     missing_prices = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="missingPrices"
@@ -467,7 +516,7 @@ class MissingPricesVariantLevelSchema(MissingPricesProductCountSchema):
         return models.MissingPricesVariantLevel(**data)
 
 
-class MissingPricesMetaSchema(marshmallow.Schema):
+class MissingPricesMetaSchema(helpers.BaseSchema):
     product_level = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingPricesProductLevelSchema"),
         allow_none=True,
@@ -492,37 +541,63 @@ class MissingPricesMetaSchema(marshmallow.Schema):
         return models.MissingPricesMeta(**data)
 
 
-class MissingPricesSearchRequestSchema(marshmallow.Schema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
+class MissingPricesSearchRequestSchema(helpers.BaseSchema):
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     product_set_limit = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productSetLimit"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productSetLimit",
     )
     include_variants = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="includeVariants"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="includeVariants",
     )
     currency_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="currencyCode"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="currencyCode",
     )
     check_date = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="checkDate"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="checkDate",
     )
     valid_from = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validFrom"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="validUntil"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productTypeIds",
     )
@@ -536,7 +611,7 @@ class MissingPricesSearchRequestSchema(marshmallow.Schema):
         return models.MissingPricesSearchRequest(**data)
 
 
-class MissingPricesPagedQueryResultSchema(marshmallow.Schema):
+class MissingPricesPagedQueryResultSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -563,7 +638,7 @@ class MissingPricesPagedQueryResultSchema(marshmallow.Schema):
         return models.MissingPricesPagedQueryResult(**data)
 
 
-class MissingPricesTaskStatusSchema(marshmallow.Schema):
+class MissingPricesTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
         TaskStatusEnum, by_value=True, allow_none=True, missing=None
     )

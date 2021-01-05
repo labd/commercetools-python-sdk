@@ -15,28 +15,38 @@ from .common import LocalizedStringField
 
 
 # Marshmallow Schemas
-class ProductSetSelectorSchema(marshmallow.Schema):
+class ProductSetSelectorSchema(helpers.BaseSchema):
     project_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="projectKey"
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productTypeIds",
     )
-    staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     include_variants = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="includeVariants"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="includeVariants",
     )
     product_set_limit = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productSetLimit"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productSetLimit",
     )
 
     class Meta:
@@ -48,14 +58,25 @@ class ProductSetSelectorSchema(marshmallow.Schema):
         return models.ProductSetSelector(**data)
 
 
-class SimilarityMeasuresSchema(marshmallow.Schema):
-    name = marshmallow.fields.Integer(allow_none=True, missing=None)
-    description = marshmallow.fields.Integer(allow_none=True, missing=None)
-    attribute = marshmallow.fields.Integer(allow_none=True, missing=None)
-    variant_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantCount"
+class SimilarityMeasuresSchema(helpers.BaseSchema):
+    name = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    price = marshmallow.fields.Integer(allow_none=True, missing=None)
+    description = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    attribute = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    variant_count = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantCount",
+    )
+    price = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -66,17 +87,27 @@ class SimilarityMeasuresSchema(marshmallow.Schema):
         return models.SimilarityMeasures(**data)
 
 
-class SimilarProductSearchRequestSchema(marshmallow.Schema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    language = marshmallow.fields.String(allow_none=True, missing=None)
+class SimilarProductSearchRequestSchema(helpers.BaseSchema):
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    language = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     currency_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="currencyCode"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="currencyCode",
     )
     similarity_measures = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarityMeasuresSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="similarityMeasures",
     )
@@ -85,14 +116,21 @@ class SimilarProductSearchRequestSchema(marshmallow.Schema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productSetSelectors",
     )
     confidence_min = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="confidenceMin"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="confidenceMin",
     )
     confidence_max = marshmallow.fields.Float(
-        allow_none=True, missing=None, data_key="confidenceMax"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="confidenceMax",
     )
 
     class Meta:
@@ -104,20 +142,25 @@ class SimilarProductSearchRequestSchema(marshmallow.Schema):
         return models.SimilarProductSearchRequest(**data)
 
 
-class SimilarProductSchema(marshmallow.Schema):
+class SimilarProductSchema(helpers.BaseSchema):
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantId",
     )
     meta = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductMetaSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -130,17 +173,25 @@ class SimilarProductSchema(marshmallow.Schema):
         return models.SimilarProduct(**data)
 
 
-class SimilarProductMetaSchema(marshmallow.Schema):
-    name = LocalizedStringField(allow_none=True, missing=None)
-    description = LocalizedStringField(allow_none=True, missing=None)
+class SimilarProductMetaSchema(helpers.BaseSchema):
+    name = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    description = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
     variant_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantCount"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantCount",
     )
 
     class Meta:
@@ -152,7 +203,7 @@ class SimilarProductMetaSchema(marshmallow.Schema):
         return models.SimilarProductMeta(**data)
 
 
-class SimilarProductPairSchema(marshmallow.Schema):
+class SimilarProductPairSchema(helpers.BaseSchema):
     confidence = marshmallow.fields.Float(allow_none=True, missing=None)
     products = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductSchema"),
@@ -171,7 +222,7 @@ class SimilarProductPairSchema(marshmallow.Schema):
         return models.SimilarProductPair(**data)
 
 
-class SimilarProductSearchRequestMetaSchema(marshmallow.Schema):
+class SimilarProductSearchRequestMetaSchema(helpers.BaseSchema):
     similarity_measures = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarityMeasuresSchema"),
         allow_none=True,
@@ -189,7 +240,7 @@ class SimilarProductSearchRequestMetaSchema(marshmallow.Schema):
         return models.SimilarProductSearchRequestMeta(**data)
 
 
-class SimilarProductsPagedQueryResultSchema(marshmallow.Schema):
+class SimilarProductsPagedQueryResultSchema(helpers.BaseSchema):
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -216,11 +267,13 @@ class SimilarProductsPagedQueryResultSchema(marshmallow.Schema):
         return models.SimilarProductsPagedQueryResult(**data)
 
 
-class SimilarProductsTaskStatusSchema(marshmallow.Schema):
+class SimilarProductsTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
         TaskStatusEnum, by_value=True, allow_none=True, missing=None
     )
-    expires = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    expires = marshmallow.fields.DateTime(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     result = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductsPagedQueryResultSchema"),
         allow_none=True,

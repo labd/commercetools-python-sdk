@@ -20,43 +20,46 @@ from ..shipping_methods.by_project_key_in_store_key_by_store_key_shipping_method
     ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder,
 )
 
+if typing.TYPE_CHECKING:
+    from ...base_client import BaseClient
+
 
 class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
 
-    _client: "Client"
+    _client: "BaseClient"
     _project_key: str
     _store_key: str
 
     def __init__(
         self,
-        projectKey: str,
-        storeKey: str,
-        client: "Client",
+        project_key: str,
+        store_key: str,
+        client: "BaseClient",
     ):
-        self._project_key = projectKey
-        self._store_key = storeKey
+        self._project_key = project_key
+        self._store_key = store_key
         self._client = client
 
     def carts(self) -> ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         """A shopping cart holds product variants and can be ordered."""
         return ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
     def orders(self) -> ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         """An order can be created from a cart, usually after a checkout process has been completed."""
         return ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
     def me(self) -> ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
@@ -66,24 +69,24 @@ class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
 
         """
         return ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
     def login(self) -> ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder:
         """Retrieves the authenticated customer."""
         return ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def shippingMethods(
+    def shipping_methods(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder(
-            projectKey=self._project_key,
-            storeKey=self._store_key,
+            project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )

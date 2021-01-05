@@ -6,6 +6,7 @@ import pytest
 import requests
 
 from commercetools import Client
+from commercetools.platform.client import Client as PlatformClient
 from commercetools.testing import backend_mocker
 from commercetools.testing.server import Server
 
@@ -21,6 +22,17 @@ def reset_token_cache():
 def commercetools_api():
     with backend_mocker() as m:
         yield m
+
+
+@pytest.fixture
+def ct_platform_client(commercetools_api) -> typing.Generator[Client, None, None]:
+    yield PlatformClient(
+        client_id="client-id",
+        client_secret="client-secret",
+        scope=[],
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
+    )
 
 
 @pytest.fixture

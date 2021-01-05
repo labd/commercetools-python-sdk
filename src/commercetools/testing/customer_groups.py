@@ -6,9 +6,8 @@ from commercetools import types
 from commercetools._schemas._customer_group import (
     CustomerGroupDraftSchema,
     CustomerGroupPagedQueryResponseSchema,
-    CustomerGroupSchema,
+    CustomerGroupSchema, CustomerGroupUpdateSchema,
 )
-from commercetools._schemas._review import ReviewUpdateSchema
 from commercetools.testing import abstract, utils
 from commercetools.testing.utils import update_attribute
 
@@ -38,7 +37,7 @@ class CustomerGroupBackend(abstract.ServiceBackend):
     model_class = CustomerGroupModel
 
     _schema_draft = CustomerGroupDraftSchema
-    _schema_update = ReviewUpdateSchema
+    _schema_update = CustomerGroupUpdateSchema
     _schema_query_response = CustomerGroupPagedQueryResponseSchema
 
     def urls(self):

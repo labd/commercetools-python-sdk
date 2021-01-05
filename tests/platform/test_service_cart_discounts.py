@@ -4,8 +4,8 @@ from requests.exceptions import HTTPError
 from commercetools.platform import models
 
 
-def test_cart_discount_get_by_id(client):
-    cart_discount = client.cart_discounts.create(
+def test_cart_discount_get_by_id(old_client):
+    cart_discount = old_client.cart_discounts.create(
         models.CartDiscountDraft(
             name=models.LocalizedString({"en": "test discount"}),
             value=models.CartDiscountValueRelative(permyriad=10),
@@ -17,15 +17,15 @@ def test_cart_discount_get_by_id(client):
 
     assert cart_discount.id
 
-    cart_discount = client.cart_discounts.get_by_id(cart_discount.id)
+    cart_discount = old_client.cart_discounts.get_by_id(cart_discount.id)
     assert cart_discount.id
 
     with pytest.raises(HTTPError):
-        client.cart_discounts.get_by_id("invalid")
+        old_client.cart_discounts.get_by_id("invalid")
 
 
-def test_cart_discount_query(client):
-    client.cart_discounts.create(
+def test_cart_discount_query(old_client):
+    old_client.cart_discounts.create(
         models.CartDiscountDraft(
             name=models.LocalizedString({"en:": "test discount"}),
             value=models.CartDiscountValueRelative(permyriad=10),
@@ -34,7 +34,7 @@ def test_cart_discount_query(client):
             requires_discount_code=False,
         )
     )
-    client.cart_discounts.create(
+    old_client.cart_discounts.create(
         models.CartDiscountDraft(
             name=models.LocalizedString({"en:": "test discount"}),
             value=models.CartDiscountValueRelative(permyriad=10),
@@ -45,18 +45,18 @@ def test_cart_discount_query(client):
     )
 
     # single sort query
-    result = client.cart_discounts.query(sort="id asc")
+    result = old_client.cart_discounts.query(sort="id asc")
     assert len(result.results) == 2
     assert result.total == 2
 
     # multiple sort queries
-    result = client.cart_discounts.query(sort=["id asc", "name asc"])
+    result = old_client.cart_discounts.query(sort=["id asc", "name asc"])
     assert len(result.results) == 2
     assert result.total == 2
 
 
-def test_cart_discount_update(client):
-    cart_discount = client.cart_discounts.create(
+def test_cart_discount_update(old_client):
+    cart_discount = old_client.cart_discounts.create(
         models.CartDiscountDraft(
             name=models.LocalizedString(en="en-cart_discount"),
             value=models.CartDiscountValueRelative(permyriad=10),
@@ -68,7 +68,7 @@ def test_cart_discount_update(client):
     )
     assert cart_discount.is_active is True
 
-    cart_discount = client.cart_discounts.update_by_id(
+    cart_discount = old_client.cart_discounts.update_by_id(
         id=cart_discount.id,
         version=cart_discount.version,
         actions=[models.CartDiscountChangeIsActiveAction(is_active=False)],

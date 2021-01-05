@@ -69,13 +69,13 @@ def test_cache_token(commercetools_api):
     assert len(commercetools_api.requests_mock.request_history) == 1
 
 
-def test_resource_update_conflict(client):
+def test_resource_update_conflict(old_client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    product = client.products.create(
+    product = old_client.products.create(
         models.ProductDraft(
             key="test-product",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
@@ -88,7 +88,7 @@ def test_resource_update_conflict(client):
     assert uuid.UUID(product.id)
     assert product.key == "test-product"
 
-    product = client.products.update_by_id(
+    product = old_client.products.update_by_id(
         id=product.id,
         version=product.version,
         actions=[
@@ -100,7 +100,7 @@ def test_resource_update_conflict(client):
 
     # This should raise a version conflict error
     with pytest.raises(CommercetoolsError) as exc:
-        product = client.products.update_by_id(
+        product = old_client.products.update_by_id(
             id=product.id,
             version=1,
             actions=[
@@ -111,7 +111,7 @@ def test_resource_update_conflict(client):
     assert exc.value.response.errors[0].current_version == 2
 
     # Force it
-    product = client.products.update_by_id(
+    product = old_client.products.update_by_id(
         id=product.id,
         version=1,
         actions=[
@@ -121,13 +121,13 @@ def test_resource_update_conflict(client):
     )
 
 
-def test_resource_delete_conflict(client):
+def test_resource_delete_conflict(old_client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    product = client.products.create(
+    product = old_client.products.create(
         models.ProductDraft(
             key="test-product",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
@@ -136,7 +136,7 @@ def test_resource_delete_conflict(client):
         )
     )
 
-    product = client.products.update_by_id(
+    product = old_client.products.update_by_id(
         id=product.id,
         version=product.version,
         actions=[
@@ -147,10 +147,10 @@ def test_resource_delete_conflict(client):
 
     # This should raise a version conflict error
     with pytest.raises(CommercetoolsError) as exc:
-        product = client.products.delete_by_id(id=product.id, version=1)
+        product = old_client.products.delete_by_id(id=product.id, version=1)
 
     assert exc.value.response.status_code == 409
     assert exc.value.response.errors[0].current_version == 2
 
     # Force it
-    client.products.delete_by_id(id=product.id, version=1, force_delete=True)
+    old_client.products.delete_by_id(id=product.id, version=1, force_delete=True)

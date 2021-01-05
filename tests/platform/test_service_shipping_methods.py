@@ -4,8 +4,8 @@ from requests.exceptions import HTTPError
 from commercetools.platform import models
 
 
-def test_shipping_method_get_by_id(client):
-    shipping_method = client.shipping_methods.create(
+def test_shipping_method_get_by_id(old_client):
+    shipping_method = old_client.shipping_methods.create(
         models.ShippingMethodDraft(
             key="test-shipping-method",
             name="test shipping method",
@@ -19,16 +19,16 @@ def test_shipping_method_get_by_id(client):
     assert shipping_method.key == "test-shipping-method"
     assert shipping_method.name == "test shipping method"
 
-    shipping_method = client.shipping_methods.get_by_id(shipping_method.id)
+    shipping_method = old_client.shipping_methods.get_by_id(shipping_method.id)
     assert shipping_method.id
     assert shipping_method.key == "test-shipping-method"
 
     with pytest.raises(HTTPError):
-        client.shipping_methods.get_by_id("invalid")
+        old_client.shipping_methods.get_by_id("invalid")
 
 
-def test_shipping_method_query(client):
-    client.shipping_methods.create(
+def test_shipping_method_query(old_client):
+    old_client.shipping_methods.create(
         models.ShippingMethodDraft(
             key="test-shipping_method1",
             name="test shipping method1",
@@ -37,7 +37,7 @@ def test_shipping_method_query(client):
             is_default=False,
         )
     )
-    client.shipping_methods.create(
+    old_client.shipping_methods.create(
         models.ShippingMethodDraft(
             key="test-shipping_method2",
             name="test shipping method2",
@@ -48,23 +48,23 @@ def test_shipping_method_query(client):
     )
 
     # single sort query
-    result = client.shipping_methods.query(sort="id asc")
+    result = old_client.shipping_methods.query(sort="id asc")
     assert len(result.results) == 2
     assert result.total == 2
 
     # multiple sort queries
-    result = client.shipping_methods.query(sort=["id asc", "name asc"])
+    result = old_client.shipping_methods.query(sort=["id asc", "name asc"])
     assert len(result.results) == 2
     assert result.total == 2
 
 
-def test_shipping_method_update(client):
+def test_shipping_method_update(old_client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    shipping_method = client.shipping_methods.create(
+    shipping_method = old_client.shipping_methods.create(
         models.ShippingMethodDraft(
             key="test-shipping-method",
             name="test shipping method",
@@ -75,7 +75,7 @@ def test_shipping_method_update(client):
     )
     assert shipping_method.key == "test-shipping-method"
 
-    shipping_method = client.shipping_methods.update_by_id(
+    shipping_method = old_client.shipping_methods.update_by_id(
         id=shipping_method.id,
         version=shipping_method.version,
         actions=[models.ShippingMethodChangeNameAction(name="shipping-method-2")],

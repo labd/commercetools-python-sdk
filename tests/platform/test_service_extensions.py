@@ -1,8 +1,8 @@
 from commercetools.platform import models
 
 
-def test_extension_create(client):
-    extension = client.extensions.create(
+def test_extension_create(old_client):
+    extension = old_client.extensions.create(
         models.ExtensionDraft(
             destination=models.ExtensionAWSLambdaDestination(
                 arn="arn:", access_key="access", access_secret="secret"
@@ -13,8 +13,8 @@ def test_extension_create(client):
     assert extension.id
 
 
-def test_extension_get_by_id(client):
-    extension = client.extensions.create(
+def test_extension_get_by_id(old_client):
+    extension = old_client.extensions.create(
         models.ExtensionDraft(
             destination=models.ExtensionAWSLambdaDestination(
                 arn="arn:", access_key="access", access_secret="secret"
@@ -24,5 +24,5 @@ def test_extension_get_by_id(client):
     )
     assert extension.id
 
-    extension = client.extensions.get_by_id(extension.id)
+    extension = old_client.extensions.get_by_id(extension.id)
     assert extension.id

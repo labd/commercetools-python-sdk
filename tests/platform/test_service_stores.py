@@ -4,12 +4,12 @@ from commercetools import CommercetoolsError
 from commercetools.platform import models
 
 
-def test_store_flow(client, store_draft):
-    store = client.stores.create(store_draft)
+def test_store_flow(old_client, store_draft):
+    store = old_client.stores.create(store_draft)
 
     assert store.id
 
-    deleted_store = client.stores.delete_by_id(store.id, version=store.version)
+    deleted_store = old_client.stores.delete_by_id(store.id, version=store.version)
 
     assert store.id == deleted_store.id
 
@@ -21,12 +21,12 @@ def store_draft():
     )
 
 
-def test_update_actions(commercetools_api, client, store_draft):
-    store = client.stores.create(store_draft)
+def test_update_actions(commercetools_api, old_client, store_draft):
+    store = old_client.stores.create(store_draft)
 
     assert store.languages is None
 
-    store = client.stores.update_by_id(
+    store = old_client.stores.update_by_id(
         store.id,
         store.version,
         actions=[models.StoreSetLanguagesAction(languages=["en-US"])],
@@ -35,18 +35,18 @@ def test_update_actions(commercetools_api, client, store_draft):
     assert store.languages == ["en-US"]
 
 
-def test_channels_are_set(commercetools_api, client, store_draft):
-    store = client.stores.create(store_draft)
+def test_channels_are_set(commercetools_api, old_client, store_draft):
+    store = old_client.stores.create(store_draft)
 
     assert store.distribution_channels == []
 
-    channel = client.channels.create(
+    channel = old_client.channels.create(
         models.ChannelDraft(
             key="FOO", roles=[models.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
         )
     )
 
-    store = client.stores.update_by_id(
+    store = old_client.stores.update_by_id(
         store.id,
         store.version,
         actions=[
@@ -59,15 +59,15 @@ def test_channels_are_set(commercetools_api, client, store_draft):
     assert store.distribution_channels[0].id == channel.id
 
 
-def test_channel_errors(commercetools_api, client, store_draft):
-    store = client.stores.create(store_draft)
+def test_channel_errors(commercetools_api, old_client, store_draft):
+    store = old_client.stores.create(store_draft)
 
-    client.channels.create(
+    old_client.channels.create(
         models.ChannelDraft(key="BAR", roles=[models.ChannelRoleEnum.INVENTORY_SUPPLY])
     )
 
     with pytest.raises(CommercetoolsError):
-        client.stores.update_by_id(
+        old_client.stores.update_by_id(
             store.id,
             store.version,
             actions=[
@@ -78,14 +78,14 @@ def test_channel_errors(commercetools_api, client, store_draft):
         )
 
 
-def test_store_channel_create(commercetools_api, client, store_draft):
-    channel = client.channels.create(
+def test_store_channel_create(commercetools_api, old_client, store_draft):
+    channel = old_client.channels.create(
         models.ChannelDraft(
             key="FOO", roles=[models.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
         )
     )
     store_draft.distribution_channels = [models.ChannelResourceIdentifier(key="FOO")]
 
-    store = client.stores.create(store_draft)
+    store = old_client.stores.create(store_draft)
 
     assert store.distribution_channels[0].id == channel.id

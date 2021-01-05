@@ -4,9 +4,9 @@ from requests.exceptions import HTTPError
 from commercetools.platform import models
 
 
-def test_product_projections_get_by_id(client):
+def test_product_projections_get_by_id(old_client):
     variant = models.ProductVariantDraft()
-    product_create = client.products.create(
+    product_create = old_client.products.create(
         models.ProductDraft(
             key="test-product",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
@@ -18,19 +18,19 @@ def test_product_projections_get_by_id(client):
         )
     )
 
-    product = client.product_projections.get_by_id(product_create.id, staged=True)
+    product = old_client.product_projections.get_by_id(product_create.id, staged=True)
     assert product.id == product_create.id
     assert product.key == product_create.key
 
 
-def test_product_projections_get_by_id_not_found(client):
+def test_product_projections_get_by_id_not_found(old_client):
     with pytest.raises(HTTPError):
-        client.products.get_by_id("invalid")
+        old_client.products.get_by_id("invalid")
 
 
-def test_product_projections_get_by_key(client):
+def test_product_projections_get_by_key(old_client):
     variant = models.ProductVariantDraft()
-    product_create = client.products.create(
+    product_create = old_client.products.create(
         models.ProductDraft(
             key="test-product",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
@@ -41,13 +41,13 @@ def test_product_projections_get_by_key(client):
             publish=False,
         )
     )
-    product = client.product_projections.get_by_key(product_create.key, staged=True)
+    product = old_client.product_projections.get_by_key(product_create.key, staged=True)
     assert product.id == product_create.id
     assert product.key == product_create.key
 
 
-def test_product_projections_query_parameters_are_passed(client, commercetools_api):
-    client.products.query(
+def test_product_projections_query_parameters_are_passed(old_client, commercetools_api):
+    old_client.products.query(
         expand="productType", price_country="GB", price_currency="GBP"
     )
 
@@ -57,15 +57,15 @@ def test_product_projections_query_parameters_are_passed(client, commercetools_a
         assert field in last_request.qs
 
 
-def test_product_projections_get_by_key_not_found(client):
+def test_product_projections_get_by_key_not_found(old_client):
     with pytest.raises(HTTPError):
-        client.products.get_by_key("invalid")
+        old_client.products.get_by_key("invalid")
 
 
-def test_product_projections_query(client):
+def test_product_projections_query(old_client):
     for key in ["product-1", "product-2"]:
         variant = models.ProductVariantDraft()
-        client.products.create(
+        old_client.products.create(
             models.ProductDraft(
                 key=key,
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
@@ -78,7 +78,7 @@ def test_product_projections_query(client):
         )
 
     key = "product-3"
-    client.products.create(
+    old_client.products.create(
         models.ProductDraft(
             key=key,
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
@@ -91,7 +91,7 @@ def test_product_projections_query(client):
     )
 
     # single sort query
-    result = client.product_projections.query(
+    result = old_client.product_projections.query(
         sort="id asc", where=[f'slug(nl-NL="product-3")'], expand=["parent.category"]
     )
     assert len(result.results) == 2
@@ -100,6 +100,6 @@ def test_product_projections_query(client):
     assert result.results[1].key == "product-2"
 
     # multiple sort queries
-    result = client.product_projections.query(sort=["id asc", "name asc"])
+    result = old_client.product_projections.query(sort=["id asc", "name asc"])
     assert len(result.results) == 2
     assert result.total == 2

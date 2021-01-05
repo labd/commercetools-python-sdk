@@ -3,9 +3,9 @@ import datetime
 from commercetools.platform import models
 
 
-def test_orders_get_by_id(client):
-    cart = client.carts.create(models.CartDraft(currency="EUR"))
-    order = client.orders.create(
+def test_orders_get_by_id(old_client):
+    cart = old_client.carts.create(models.CartDraft(currency="EUR"))
+    order = old_client.orders.create(
         models.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order")
     )
 
@@ -13,20 +13,20 @@ def test_orders_get_by_id(client):
     assert order.order_number == "test-order"
 
 
-def test_orders_query(client):
-    results = client.orders.query()
+def test_orders_query(old_client):
+    results = old_client.orders.query()
     assert results.total == 0
 
-    cart = client.carts.create(models.CartDraft(currency="EUR"))
-    order = client.orders.create(
+    cart = old_client.carts.create(models.CartDraft(currency="EUR"))
+    order = old_client.orders.create(
         models.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order")
     )
 
-    results = client.orders.query()
+    results = old_client.orders.query()
     assert results.total == 1
 
 
-def test_orders_query_filter(commercetools_api, client):
+def test_orders_query_filter(commercetools_api, old_client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
     where = [
@@ -34,31 +34,31 @@ def test_orders_query_filter(commercetools_api, client):
         'createdAt >= "2019-10-15T14:12:36.464465"',
     ]
 
-    results = client.orders.query(where=where)
+    results = old_client.orders.query(where=where)
     assert results.total == 1
 
 
-def test_orders_delete(commercetools_api, client):
+def test_orders_delete(commercetools_api, old_client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    deleted_order = client.orders.delete_by_id(order.id, order.version)
+    deleted_order = old_client.orders.delete_by_id(order.id, order.version)
     assert order.id == deleted_order.id
 
 
-def test_add_existing_order(commercetools_api, client):
+def test_add_existing_order(commercetools_api, old_client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    assert client.orders.get_by_id(order.id).order_number == order.order_number
+    assert old_client.orders.get_by_id(order.id).order_number == order.order_number
 
 
-def test_update_order_state_action(commercetools_api, client):
+def test_update_order_state_action(commercetools_api, old_client):
     order = get_test_order()
 
     commercetools_api.orders.add_existing(order)
 
-    updated_order = client.orders.update_by_id(
+    updated_order = old_client.orders.update_by_id(
         order.id,
         order.version,
         actions=[
@@ -69,12 +69,12 @@ def test_update_order_state_action(commercetools_api, client):
     assert updated_order.order_state == models.OrderState.CONFIRMED
 
 
-def test_update_order_add_delivery(commercetools_api, client):
+def test_update_order_add_delivery(commercetools_api, old_client):
     order = get_test_order()
 
     commercetools_api.orders.add_existing(order)
 
-    updated_order = client.orders.update_by_id(
+    updated_order = old_client.orders.update_by_id(
         order.id,
         order.version,
         actions=[
@@ -270,10 +270,10 @@ def get_test_order():
     return order
 
 
-def test_where_query_state(commercetools_api, client):
+def test_where_query_state(commercetools_api, old_client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    result = client.orders.query(where='orderState in ("Open")')
+    result = old_client.orders.query(where='orderState in ("Open")')
 
     assert result.results[0].id == order.id

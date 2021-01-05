@@ -3,8 +3,8 @@ import pytest
 from commercetools.platform import models
 
 
-def test_state_flow(client, state_draft):
-    state = client.states.create(state_draft)
+def test_state_flow(old_client, state_draft):
+    state = old_client.states.create(state_draft)
     assert state.id
 
     new_name = models.LocalizedString({"en": "new_name"})
@@ -17,18 +17,18 @@ def test_state_flow(client, state_draft):
             roles=[models.StateRoleEnum.REVIEW_INCLUDED_IN_STATISTICS]
         ),
     ]
-    state = client.states.update_by_id(state.id, state.version, update_actions)
+    state = old_client.states.update_by_id(state.id, state.version, update_actions)
     assert state.name == new_name
     assert state.description == new_description
     assert state.initial is True
     assert len(state.roles) == 1
 
-    state = client.states.update_by_id(
+    state = old_client.states.update_by_id(
         state.id, state.version, [models.StateSetRolesAction(roles=[])]
     )
     assert len(state.roles) == 0
 
-    deleted_state = client.states.delete_by_id(state.id, state.version)
+    deleted_state = old_client.states.delete_by_id(state.id, state.version)
     assert state.id == deleted_state.id
 
 

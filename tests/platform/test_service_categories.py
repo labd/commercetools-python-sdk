@@ -4,8 +4,8 @@ from requests.exceptions import HTTPError
 from commercetools.platform import models
 
 
-def test_category_get_by_id(client):
-    category = client.categories.create(
+def test_category_get_by_id(old_client):
+    category = old_client.categories.create(
         models.CategoryDraft(
             key="test-category",
             name=models.LocalizedString(en="category"),
@@ -16,16 +16,16 @@ def test_category_get_by_id(client):
     assert category.id
     assert category.key == "test-category"
 
-    category = client.categories.get_by_id(category.id)
+    category = old_client.categories.get_by_id(category.id)
     assert category.id
     assert category.key == "test-category"
 
     with pytest.raises(HTTPError):
-        client.categories.get_by_id("invalid")
+        old_client.categories.get_by_id("invalid")
 
 
-def test_category_get_by_key(client):
-    category = client.categories.create(
+def test_category_get_by_key(old_client):
+    category = old_client.categories.create(
         models.CategoryDraft(
             key="test-category",
             name=models.LocalizedString(en="category"),
@@ -36,23 +36,23 @@ def test_category_get_by_key(client):
     assert category.id
     assert category.key == "test-category"
 
-    category = client.categories.get_by_key("test-category")
+    category = old_client.categories.get_by_key("test-category")
     assert category.id
     assert category.key == "test-category"
 
     with pytest.raises(HTTPError):
-        client.categories.get_by_key("invalid")
+        old_client.categories.get_by_key("invalid")
 
 
-def test_category_query(client):
-    category = client.categories.create(
+def test_category_query(old_client):
+    category = old_client.categories.create(
         models.CategoryDraft(
             key="test-category1",
             name=models.LocalizedString(en="category"),
             slug=models.LocalizedString(en="something"),
         )
     )
-    category = client.categories.create(
+    category = old_client.categories.create(
         models.CategoryDraft(
             key="test-category2",
             name=models.LocalizedString(en="category"),
@@ -61,23 +61,23 @@ def test_category_query(client):
     )
 
     # single sort query
-    result = client.categories.query(sort="id asc", limit=10)
+    result = old_client.categories.query(sort="id asc", limit=10)
     assert len(result.results) == 2
     assert result.total == 2
 
     # multiple sort queries
-    result = client.categories.query(sort=["id asc", "name asc"])
+    result = old_client.categories.query(sort=["id asc", "name asc"])
     assert len(result.results) == 2
     assert result.total == 2
 
 
-def test_category_update(client):
+def test_category_update(old_client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    category = client.categories.create(
+    category = old_client.categories.create(
         models.CategoryDraft(
             key="test-category",
             slug=models.LocalizedString(nl="nl-slug"),
@@ -86,7 +86,7 @@ def test_category_update(client):
     )
     assert category.key == "test-category"
 
-    category = client.categories.update_by_id(
+    category = old_client.categories.update_by_id(
         id=category.id,
         version=category.version,
         actions=[
@@ -95,7 +95,7 @@ def test_category_update(client):
     )
     assert category.key == "test-category"
 
-    category = client.categories.update_by_key(
+    category = old_client.categories.update_by_key(
         key="test-category",
         version=category.version,
         actions=[

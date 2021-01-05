@@ -1,8 +1,8 @@
 from commercetools.platform import models
 
 
-def test_payments_get_by_id(client):
-    custom_type = client.types.create(
+def test_payments_get_by_id(old_client):
+    custom_type = old_client.types.create(
         models.TypeDraft(
             name=models.LocalizedString(en="myType"),
             key="payment-info",
@@ -18,7 +18,7 @@ def test_payments_get_by_id(client):
         )
     )
 
-    payment = client.payments.create(
+    payment = old_client.payments.create(
         models.PaymentDraft(
             key="test-payment",
             amount_planned=models.Money(cent_amount=2000, currency_code="GBP"),
@@ -60,8 +60,8 @@ def test_payments_get_by_id(client):
     assert payment.key == "test-payment"
 
 
-def test_update_actions(client):
-    custom_type = client.types.create(
+def test_update_actions(old_client):
+    custom_type = old_client.types.create(
         models.TypeDraft(
             name=models.LocalizedString(en="myType"),
             key="payment-info",
@@ -77,7 +77,7 @@ def test_update_actions(client):
         )
     )
 
-    payment = client.payments.create(
+    payment = old_client.payments.create(
         models.PaymentDraft(
             key="test-payment",
             amount_planned=models.Money(cent_amount=2000, currency_code="GBP"),
@@ -96,7 +96,7 @@ def test_update_actions(client):
 
     existing_transaction = payment.transactions[0]
 
-    payment = client.payments.update_by_id(
+    payment = old_client.payments.update_by_id(
         payment.id,
         payment.version,
         actions=[

@@ -5,5 +5,5 @@ pytest_plugins = ["commercetools.contrib.pytest"]
 
 
 @pytest.fixture
-def client(commercetools_client):
+def old_client(commercetools_client):
     return commercetools_client

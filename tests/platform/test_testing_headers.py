@@ -4,8 +4,8 @@ from commercetools import CommercetoolsError
 from commercetools.platform import models
 
 
-def test_correlation_id_is_set_in_exception(client):
-    product = client.products.create(
+def test_correlation_id_is_set_in_exception(old_client):
+    product = old_client.products.create(
         models.ProductDraft(
             key="test-product",
             name=models.LocalizedString(en=f"my-product"),
@@ -14,7 +14,7 @@ def test_correlation_id_is_set_in_exception(client):
         )
     )
 
-    product = client.products.update_by_id(
+    product = old_client.products.update_by_id(
         id=product.id,
         version=product.version,
         actions=[
@@ -24,7 +24,7 @@ def test_correlation_id_is_set_in_exception(client):
 
     # This should raise a version conflict error
     with pytest.raises(CommercetoolsError) as exc:
-        client.products.update_by_id(
+        old_client.products.update_by_id(
             id=product.id,
             version=1,
             actions=[

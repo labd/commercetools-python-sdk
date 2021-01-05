@@ -254,4 +254,7 @@ class BaseClient:
 
 
 class Client(BaseClient, ServicesMixin):
-    pass
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._base_url = f"{self._config['url']}/{self._config['project_key']}/"

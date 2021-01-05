@@ -176,7 +176,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         if return_obj:
             self.add_import_statement(
                 module_name,
-                f"commercetools.types.{return_obj.package_name}",
+                f"commercetools.platform.models.{return_obj.package_name}",
                 return_obj.name,
             )
             node.returns = ast.Name(id=return_obj.name)
@@ -236,19 +236,13 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
     def make_get_method(self, method, node, return_obj, module_name):
         """Create the `.get_*()` method"""
-        schema_name = return_obj.name + "Schema"
-        self.add_import_statement(
-            module_name,
-            f"commercetools._schemas.{return_obj.package_name}",
-            schema_name,
-        )
         node.body.append(
             ast.Return(
                 self._call_client(
                     method="_get",
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
-                    response_schema_cls=ast.Name(id=schema_name),
+                    response_class=ast.Name(id=return_obj.name),
                 )
             )
         )
@@ -258,28 +252,12 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
     def make_create_method(self, method, node, return_obj, module_name):
         """Create the `.create(self, draft, ...)` method"""
         input_obj = self._types.get(method.input_type)
-        input_schema_name = None
-
-        # Import response schema
-        response_schema_name = return_obj.name + "Schema"
-        self.add_import_statement(
-            module_name,
-            f"commercetools._schemas.{return_obj.package_name}",
-            response_schema_name,
-        )
 
         if input_obj:
-            input_schema_name = input_obj.name + "Schema"
-
             self.add_import_statement(
                 module_name,
-                f"commercetools.types.{input_obj.package_name}",
+                f"commercetools.platform.models.{input_obj.package_name}",
                 input_obj.name,
-            )
-            self.add_import_statement(
-                module_name,
-                f"commercetools._schemas.{input_obj.package_name}",
-                input_schema_name,
             )
             node.args.args.insert(
                 len(method.path_params) + 1,
@@ -293,12 +271,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
                     data_object=ast.Name("draft") if input_obj else None,
-                    request_schema_cls=ast.Name(id=input_schema_name)
-                    if input_schema_name
-                    else None,
-                    response_schema_cls=ast.Name(id=response_schema_name)
-                    if response_schema_name
-                    else None,
+                    response_class=ast.Name(id=return_obj.name) if return_obj else None,
                 )
             )
         )
@@ -306,22 +279,14 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
     def make_query_method(self, method, node, return_obj, module_name):
         """Create the `.query(self, input, ...)` method"""
-        # Import response schema
-        response_schema_name = return_obj.name + "Schema"
-        self.add_import_statement(
-            module_name,
-            f"commercetools._schemas.{return_obj.package_name}",
-            response_schema_name,
-        )
-
         node.body.append(
             ast.Return(
                 self._call_client(
                     method="_get",
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
-                    response_schema_cls=ast.Name(id=response_schema_name)
-                    if response_schema_name
+                    response_object=ast.Name(id=return_obj.name)
+                    if return_obj
                     else None,
                 )
             )
@@ -330,31 +295,19 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
 
     def make_update_method(self, method, node, return_obj, module_name):
         """Create the `.update_by_*(self, id, actions, ...)` method"""
-        response_schema_name = return_obj.name + "Schema"
-        self.add_import_statement(
-            module_name,
-            f"commercetools._schemas.{return_obj.package_name}",
-            response_schema_name,
-        )
 
         input_obj = self._types.get(method.input_type)
         if not input_obj:
             return
         action_obj = self._types.get(method.input_type + "Action")
-        input_schema_name = input_obj.name + "Schema"
 
         self.add_import_statement(
-            module_name, f"commercetools.types.{input_obj.package_name}", input_obj.name
+            module_name, f"commercetools.platform.models.{input_obj.package_name}", input_obj.name
         )
         self.add_import_statement(
             module_name,
-            f"commercetools.types.{action_obj.package_name}",
+            f"commercetools.platform.models.{action_obj.package_name}",
             action_obj.name,
-        )
-        self.add_import_statement(
-            module_name,
-            f"commercetools._schemas.{input_obj.package_name}",
-            input_schema_name,
         )
 
         node.args.args.append(
@@ -393,8 +346,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
                     data_object=ast.Name("update_action"),
-                    request_schema_cls=ast.Name(id=input_schema_name),
-                    response_schema_cls=ast.Name(id=response_schema_name),
+                    response_class=ast.Name(id=return_obj.name) if return_obj else None,
                     force_update=ast.Name(id="force_update"),
                 )
             )
@@ -408,22 +360,13 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         )
         node.args.kw_defaults.append(ast.Constant(value=False, kind=None))
 
-        response_schema_name = None
-        if return_obj:
-            response_schema_name = return_obj.name + "Schema"
-            self.add_import_statement(
-                module_name,
-                f"commercetools._schemas.{return_obj.package_name}",
-                response_schema_name,
-            )
-
         node.body.append(
             ast.Return(
                 self._call_client(
                     method="_delete",
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
-                    response_schema_cls=ast.Name(id=response_schema_name),
+                    response_class=ast.Name(id=return_obj.name) if return_obj else None,
                     force_delete=ast.Name(id="force_delete"),
                 )
             )
@@ -433,33 +376,16 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
     def make_action_method(self, method, node, return_obj, module_name):
         """Create an action method, e.g. `.replicate*(self, draft, ...)`"""
 
-        response_schema_name = None
-        if return_obj:
-            response_schema_name = return_obj.name + "Schema"
-            self.add_import_statement(
-                module_name,
-                f"commercetools._schemas.{return_obj.package_name}",
-                response_schema_name,
-            )
-
         input_obj = self._types.get(method.input_type)
         input_name = None
-        input_schema_name = None
 
         if input_obj:
             input_name = "draft" if "Draft" in input_obj.name else "action"
 
-            input_schema_name = input_obj.name + "Schema"
-
             self.add_import_statement(
                 module_name,
-                f"commercetools.types.{input_obj.package_name}",
+                f"commercetools.platform.models.{input_obj.package_name}",
                 input_obj.name,
-            )
-            self.add_import_statement(
-                module_name,
-                f"commercetools._schemas.{input_obj.package_name}",
-                input_schema_name,
             )
 
             node.args.args.insert(
@@ -477,12 +403,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
                     endpoint=_create_endpoint_fstring(method.path),
                     params=ast.Name("params"),
                     data_object=ast.Name(input_name) if input_name else None,
-                    request_schema_cls=ast.Name(id=input_schema_name)
-                    if input_schema_name
-                    else None,
-                    response_schema_cls=ast.Name(id=response_schema_name)
-                    if response_schema_name
-                    else None,
+                    response_class=ast.Name(id=return_obj.name) if return_obj else None,
                     file=ast.Name("fh") if method.is_fileupload else None,
                 )
             )
@@ -495,8 +416,7 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
         endpoint=None,
         params=None,
         data_object=None,
-        request_schema_cls=None,
-        response_schema_cls=None,
+        response_class=None,
         **kwargs,
     ):
         """Create the actual call to `self.client._get()` or `self.client._post()`"""
@@ -510,23 +430,8 @@ class ServiceModuleGenerator(AbstractModuleGenerator):
             val = data_object if data_object is not None else ast.Constant(value=None)
             keywords.append(ast.keyword(arg="data_object", value=val))
 
-        if method == "_post":
-            val = (
-                request_schema_cls
-                if request_schema_cls is not None
-                else ast.Constant(value=None)
-            )
-            keywords.append(ast.keyword(arg="request_schema_cls", value=val))
-
-        if response_schema_cls:
-            if method == "_get":
-                keywords.append(
-                    ast.keyword(arg="schema_cls", value=response_schema_cls)
-                )
-            else:
-                keywords.append(
-                    ast.keyword(arg="response_schema_cls", value=response_schema_cls)
-                )
+        if response_class:
+            keywords.append(ast.keyword(arg="response_class", value=response_class))
 
         for key, value in kwargs.items():
             if value is not None:
@@ -691,6 +596,7 @@ def _generate_init_file(services, modules):
     nodes = []
 
     nodes.append(ast.Import(names=[ast.alias(name="typing", asname=None)], level=0))
+    nodes.append(ast.Import(names=[ast.alias(name="warnings", asname=None)], level=0))
 
     # Collect all submodules
     submodules = {}
@@ -796,6 +702,26 @@ def _generate_init_file(services, modules):
         )
 
         node.body.append(if_stmt)
+
+        node.body.append(
+            ast.Expr(
+                ast.Call(
+                    func=ast.Attribute(value=ast.Name(id="warnings"), attr="warn"),
+                    args=[
+                        ast.Str(
+                            s=(
+                                "This client interface will be removed in the near " +
+                                "future, use the new request builder client " +
+                                "`commercetools.platform.client.Client()`"
+                            )
+                        ),
+                        ast.Name(id="DeprecationWarning", kind=None),
+                    ],
+                    keywords=[],
+                )
+            )
+        )
+
         node.body.append(
             ast.Return(
                 value=ast.Subscript(

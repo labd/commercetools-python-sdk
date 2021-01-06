@@ -54,7 +54,7 @@ class BaseModel:
 
         for field in self._unique_values:
             # Check if a document already exists with a duplicate unique value
-            if document[field] in [o[field] for o in self.objects.values()]:
+            if document.get(field) in [o[field] for o in self.objects.values() if field in o]:
                 value = document[field]
                 if not value:
                     continue

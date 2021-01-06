@@ -98,7 +98,7 @@ def add_delivery():
                     deliveries=[],
                 )
             )
-        elif not obj["shippingInfo"]["deliveries"]:
+        elif not obj["shippingInfo"].get("deliveries"):
             obj["shippingInfo"]["deliveries"] = []
 
         value = DeliverySchema().dump(delivery)

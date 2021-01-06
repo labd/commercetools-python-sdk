@@ -104,7 +104,7 @@ def update_attribute(dst: str, src: str):
         if isinstance(value, _BaseType):
             value = value.serialize()
 
-        if obj[dst] != value:
+        if obj.get(dst) != value:
             new = copy.deepcopy(obj)
             new[dst] = value
             return new

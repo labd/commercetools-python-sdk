@@ -66,7 +66,7 @@ def set_roles():
         if roles:
             roles = StateSetRolesActionSchema().dump(action)["roles"]
 
-        if obj["roles"] != roles:
+        if obj.get("roles") != roles:
             new = copy.deepcopy(obj)
             new["roles"] = roles
             return new

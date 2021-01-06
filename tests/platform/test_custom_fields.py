@@ -12,7 +12,7 @@ def test_serialize_field_container():
     result = CustomFieldsDraftSchema().dump(draft)
     expected = {
         "fields": {"foobar": 10},
-        "type": {"typeId": "type", "id": "foobar", "key": None},
+        "type": {"typeId": "type", "id": "foobar"},
     }
     assert expected == result
 

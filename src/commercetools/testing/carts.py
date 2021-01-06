@@ -168,7 +168,7 @@ def add_payment():
     def updater(self, obj, action):
         value = getattr(action, "payment")
         value = PaymentResourceIdentifierSchema().dump(value)
-        if not obj["paymentInfo"]:
+        if not obj.get("paymentInfo"):
             obj["paymentInfo"] = PaymentInfoSchema().dump(
                 models.PaymentInfo(payments=[])
             )

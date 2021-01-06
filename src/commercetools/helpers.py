@@ -2,7 +2,7 @@ import importlib
 import inspect
 import typing
 
-from marshmallow import class_registry, fields, missing, post_dump
+from marshmallow import class_registry, fields, missing, post_dump, Schema
 from marshmallow.exceptions import (
     RegistryError,
     StringNotCollectionError,
@@ -33,6 +33,20 @@ def absmod(source, target):
             break
     modname = ".".join(source_parts) + "." + target[i:]
     return modname
+
+class BaseSchema(Schema):
+    @post_dump
+    def remove_omit_empty(self, data, many, **kwargs):
+        omit_fields = [
+            field.data_key or field_name
+            for field_name, field in self.fields.items()
+            if field.metadata.get('omit_empty', False)
+        ]
+        for field in omit_fields:
+            if data.get(field) is None:
+                data.pop(field, None)
+
+        return data
 
 
 class OptionalList(fields.List):

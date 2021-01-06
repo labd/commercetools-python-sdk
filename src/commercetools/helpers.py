@@ -2,7 +2,7 @@ import importlib
 import inspect
 import typing
 
-from marshmallow import class_registry, fields, missing, post_dump, Schema
+from marshmallow import Schema, class_registry, fields, missing, post_dump
 from marshmallow.exceptions import (
     RegistryError,
     StringNotCollectionError,

@@ -4,8 +4,8 @@ import uuid
 import pytest
 
 from commercetools import CommercetoolsError
-from commercetools.platform import models
 from commercetools.client import Client
+from commercetools.platform import models
 
 
 @pytest.fixture()

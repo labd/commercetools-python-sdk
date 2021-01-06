@@ -34,13 +34,14 @@ def absmod(source, target):
     modname = ".".join(source_parts) + "." + target[i:]
     return modname
 
+
 class BaseSchema(Schema):
     @post_dump
     def remove_omit_empty(self, data, many, **kwargs):
         omit_fields = [
             field.data_key or field_name
             for field_name, field in self.fields.items()
-            if field.metadata.get('omit_empty', False)
+            if field.metadata.get("omit_empty", False)
         ]
         for field in omit_fields:
             if data.get(field) is None:

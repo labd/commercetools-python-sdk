@@ -140,7 +140,7 @@ class BaseClient:
         @_concurrent_retry(3 if force_update else 0)
         def remote_http_call(data):
             if isinstance(data_object, io.IOBase):
-                kwargs = {'data': data}
+                kwargs = {"data": data}
             elif form_encoded and data is not None:
                 kwargs = {"data": data}
             else:

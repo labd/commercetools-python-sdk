@@ -1,4 +1,3 @@
-
 import typing
 from .protocols import Model
 from .base_client import BaseClient

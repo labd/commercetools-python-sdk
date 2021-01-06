@@ -135,7 +135,7 @@ def test_product_query(old_client):
 
 
 def test_product_query_where(ct_platform_client: Client):
-    product_client = ct_platform_client.withProjectKey("test").products()
+    product_client = ct_platform_client.with_project_key("test").products()
     product_client.post(
         models.ProductDraft(
             key="test-product1",

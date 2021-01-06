@@ -1,6 +1,7 @@
 import typing
-from .protocols import Model
+
 from .base_client import BaseClient
+from .protocols import Model
 from .services import ServicesMixin
 
 

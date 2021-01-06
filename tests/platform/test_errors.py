@@ -1,5 +1,5 @@
-from commercetools.platform.models._schemas.error import ErrorResponseSchema
 from commercetools.platform.models import ExtensionNoResponseError, QueryTimedOutError
+from commercetools.platform.models._schemas.error import ErrorResponseSchema
 
 
 def test_extension_no_response_error():

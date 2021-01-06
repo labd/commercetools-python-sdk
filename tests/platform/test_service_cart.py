@@ -1,9 +1,9 @@
 import uuid
 
 import pytest
-from commercetools.platform.client import Client
 
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
 def test_cart_get_by_id(ct_platform_client: Client, cart_draft):

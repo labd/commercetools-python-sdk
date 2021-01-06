@@ -1,3 +1,4 @@
+import io
 import os
 import typing
 import urllib.parse
@@ -138,7 +139,9 @@ class BaseClient:
 
         @_concurrent_retry(3 if force_update else 0)
         def remote_http_call(data):
-            if form_encoded and data is not None:
+            if isinstance(data_object, io.IOBase):
+                kwargs = {'data': data}
+            elif form_encoded and data is not None:
                 kwargs = {"data": data}
             else:
                 kwargs = {"json": data}
@@ -151,28 +154,13 @@ class BaseClient:
                     return response_class.deserialize(response.json())
             return self._process_error(response)
 
-        if data_object is not None:
+        if isinstance(data_object, io.IOBase):
+            data = data_object.read()
+        elif data_object is not None:
             data = data_object.serialize()
         else:
             data = None
         return remote_http_call(data)
-
-    def _upload(
-        self,
-        endpoint: str,
-        params: typing.Dict[str, typing.Any],
-        file: typing.IO,
-        response_class: Model = None,
-    ) -> typing.Any:
-        """Retrieve a single object from the commercetools platform"""
-        response = self._http_client.post(
-            self._base_url + endpoint, data=file.read(), params=params
-        )
-
-        if response.status_code in (200, 201):
-            if response_class:
-                return response_class.deserialize(response.json())
-        return self._process_error(response)
 
     def _delete(
         self,

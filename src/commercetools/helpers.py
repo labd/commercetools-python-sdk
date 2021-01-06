@@ -121,8 +121,7 @@ class LazyNestedField(Nested):
             return super().schema
         except RegistryError:
             if isinstance(self.nested, str):
-                names = self.nested.rsplit(".", 1)
-                importlib.import_module(names[0])
+                _load_schema_by_name(self.nested)
                 return super().schema
             raise
 
@@ -155,7 +154,10 @@ class Discriminator(Field):
 
     def get_schema(self, name):
         context = getattr(self.parent, "context", {})
-        schema_class = class_registry.get_class(name)
+        try:
+            schema_class = class_registry.get_class(name)
+        except RegistryError:
+            schema_class = _load_schema_by_name(name)
 
         # Class registry can return a list if multiple classes with the same
         # name are registered. We shouldn't do that so lets assert it.
@@ -285,3 +287,9 @@ def _concurrent_retry(num):
         return _handler
 
     return _wrapper
+
+
+def _load_schema_by_name(name):
+    names = name.rsplit(".", 1)
+    importlib.import_module(names[0])
+    return class_registry.get_class(name)

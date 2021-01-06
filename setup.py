@@ -7,7 +7,7 @@ install_requires = [
     "pytz",
     "requests-oauthlib>=1.0.0",
     "requests_mock>=1.8.0",
-    "marshmallow>=3.0.0",
+    "marshmallow>=3.10.0",
     "marshmallow-enum>=1.5.1",
     "WebOb>=1.8.0",
     "Werkzeug>=0.15.2",

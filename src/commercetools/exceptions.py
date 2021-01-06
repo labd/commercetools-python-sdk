@@ -1,17 +1,17 @@
 import typing
 
-from commercetools.platform.models import ErrorResponse
+from commercetools.protocols import Model
 
 
 class CommercetoolsError(Exception):
-    response: ErrorResponse
+    response: Model
     correlation_id: typing.Optional[str]
 
     def __init__(
         self,
         message: typing.Any,
         errors: typing.List[dict],
-        response: ErrorResponse,
+        response: Model,
         correlation_id: str = None,
     ) -> None:
         super().__init__(message)

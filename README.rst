@@ -38,7 +38,6 @@ Example
     from commercetools import Client
 
     client = Client(
-        project_key="<your-project-key>",
         client_id="<your-client-id>",
         client_secret="<your-client-secret>",
         scope=["<scopes>"],
@@ -46,9 +45,13 @@ Example
         token_url="https://auth.sphere.io",
     )
 
-    product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
+    product = (
+        client
+        .with_project_key("<your-project-key>")
+        .products()
+        .with_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
+        .get())
     print(product)
-
 
 The client can also be configured by setting the following environment
 variables:

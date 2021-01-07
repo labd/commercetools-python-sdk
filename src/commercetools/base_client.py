@@ -114,7 +114,7 @@ class BaseClient:
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        response_class: Model = None,
+        response_class: typing.Type[Model] = None,
         headers: typing.Dict[str, str] = None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
@@ -130,7 +130,7 @@ class BaseClient:
         endpoint: str,
         params: typing.Dict[str, typing.Any],
         data_object: typing.Any = None,
-        response_class: Model = None,
+        response_class: typing.Type[Model] = None,
         headers: typing.Dict[str, str] = None,
         form_encoded: bool = False,
         force_update: bool = False,
@@ -166,7 +166,7 @@ class BaseClient:
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        response_class: Model = None,
+        response_class: typing.Type[Model] = None,
         headers: typing.Dict[str, str] = None,
         force_delete: bool = False,
     ) -> typing.Any:

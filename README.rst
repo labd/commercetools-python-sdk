@@ -73,7 +73,13 @@ And then constructing a client without arguments:
 
     client = Client()
 
-    product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
+    product = (
+        client
+        .with_project_key("<your-project-key>")
+        .products()
+        .with_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
+        .get())
+        
     print(product)
 
 

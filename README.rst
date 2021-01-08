@@ -35,7 +35,7 @@ Example
 
 .. code-block:: python
 
-    from commercetools import Client
+    from commercetools.platform.client import Client
 
     client = Client(
         client_id="<your-client-id>",

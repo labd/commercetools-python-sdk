@@ -2,14 +2,20 @@ import pytest
 
 from commercetools import CommercetoolsError
 from commercetools.platform import models
+from commercetools.platform.client import Client as PlatformClient
 
 
-def test_store_flow(old_client, store_draft):
-    store = old_client.stores.create(store_draft)
+def test_store_flow(ct_platform_client: PlatformClient, store_draft):
+    store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
 
     assert store.id
 
-    deleted_store = old_client.stores.delete_by_id(store.id, version=store.version)
+    deleted_store = (
+        ct_platform_client.with_project_key("foo")
+        .stores()
+        .with_id(store.id)
+        .delete(version=store.version)
+    )
 
     assert store.id == deleted_store.id
 
@@ -21,71 +27,113 @@ def store_draft():
     )
 
 
-def test_update_actions(commercetools_api, old_client, store_draft):
-    store = old_client.stores.create(store_draft)
+def test_update_actions(
+    commercetools_api, ct_platform_client: PlatformClient, store_draft
+):
+    store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
 
     assert store.languages is None
 
-    store = old_client.stores.update_by_id(
-        store.id,
-        store.version,
-        actions=[models.StoreSetLanguagesAction(languages=["en-US"])],
+    store = (
+        ct_platform_client.with_project_key("foo")
+        .stores()
+        .with_id(
+            store.id,
+        )
+        .post(
+            models.StoreUpdate(
+                version=store.version,
+                actions=[models.StoreSetLanguagesAction(languages=["en-US"])],
+            )
+        )
     )
 
     assert store.languages == ["en-US"]
 
 
-def test_channels_are_set(commercetools_api, old_client, store_draft):
-    store = old_client.stores.create(store_draft)
+def test_channels_are_set(
+    commercetools_api, ct_platform_client: PlatformClient, store_draft
+):
+    store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
 
     assert store.distribution_channels == []
 
-    channel = old_client.channels.create(
-        models.ChannelDraft(
-            key="FOO", roles=[models.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+    channel = (
+        ct_platform_client.with_project_key("foo")
+        .channels()
+        .post(
+            models.ChannelDraft(
+                key="FOO", roles=[models.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+            )
         )
     )
 
-    store = old_client.stores.update_by_id(
-        store.id,
-        store.version,
-        actions=[
-            models.StoresSetDistributionChannelsAction(
-                distribution_channels=[models.ChannelResourceIdentifier(key="FOO")]
+    store = (
+        ct_platform_client.with_project_key("foo")
+        .stores()
+        .with_id(
+            store.id,
+        )
+        .post(
+            models.StoreUpdate(
+                version=store.version,
+                actions=[
+                    models.StoreSetDistributionChannelsAction(
+                        distribution_channels=[
+                            models.ChannelResourceIdentifier(key="FOO")
+                        ]
+                    )
+                ],
             )
-        ],
+        )
     )
 
     assert store.distribution_channels[0].id == channel.id
 
 
-def test_channel_errors(commercetools_api, old_client, store_draft):
-    store = old_client.stores.create(store_draft)
+def test_channel_errors(
+    commercetools_api, ct_platform_client: PlatformClient, store_draft
+):
+    store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
 
-    old_client.channels.create(
+    ct_platform_client.with_project_key("foo").channels().post(
         models.ChannelDraft(key="BAR", roles=[models.ChannelRoleEnum.INVENTORY_SUPPLY])
     )
 
     with pytest.raises(CommercetoolsError):
-        old_client.stores.update_by_id(
-            store.id,
-            store.version,
-            actions=[
-                models.StoresSetDistributionChannelsAction(
-                    distribution_channels=[models.ChannelResourceIdentifier(key="BAR")]
+        (
+            ct_platform_client.with_project_key("foo")
+            .stores()
+            .with_id(store.id)
+            .post(
+                models.StoreUpdate(
+                    version=store.version,
+                    actions=[
+                        models.StoreSetDistributionChannelsAction(
+                            distribution_channels=[
+                                models.ChannelResourceIdentifier(key="BAR")
+                            ]
+                        )
+                    ],
                 )
-            ],
+            )
         )
 
 
-def test_store_channel_create(commercetools_api, old_client, store_draft):
-    channel = old_client.channels.create(
-        models.ChannelDraft(
-            key="FOO", roles=[models.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+def test_store_channel_create(
+    commercetools_api, ct_platform_client: PlatformClient, store_draft
+):
+    channel = (
+        ct_platform_client.with_project_key("foo")
+        .channels()
+        .post(
+            models.ChannelDraft(
+                key="FOO", roles=[models.ChannelRoleEnum.PRODUCT_DISTRIBUTION]
+            )
         )
     )
     store_draft.distribution_channels = [models.ChannelResourceIdentifier(key="FOO")]
 
-    store = old_client.stores.create(store_draft)
+    store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
 
     assert store.distribution_channels[0].id == channel.id

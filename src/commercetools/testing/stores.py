@@ -82,7 +82,7 @@ def set_languages():
 def set_distribution_channels(
     backend: "StoresBackend",
     obj: Dict,
-    action: models.StoresSetDistributionChannelsAction,
+    action: models.StoreSetDistributionChannelsAction,
 ):
     channel_references = []
     if action.distribution_channels:

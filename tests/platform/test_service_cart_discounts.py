@@ -2,26 +2,41 @@ import pytest
 from requests.exceptions import HTTPError
 
 from commercetools.platform import models
+from commercetools.platform.client import Client as PlatformClient
 
 
-def test_cart_discount_get_by_id(old_client):
-    cart_discount = old_client.cart_discounts.create(
-        models.CartDiscountDraft(
-            name=models.LocalizedString({"en": "test discount"}),
-            value=models.CartDiscountValueRelative(permyriad=10),
-            cart_predicate="",
-            sort_order="",
-            requires_discount_code=False,
+def test_cart_discount_get_by_id(ct_platform_client: PlatformClient):
+    cart_discount = (
+        ct_platform_client.with_project_key("foo")
+        .cart_discounts()
+        .post(
+            models.CartDiscountDraft(
+                name=models.LocalizedString({"en": "test discount"}),
+                value=models.CartDiscountValueRelative(permyriad=10),
+                cart_predicate="",
+                sort_order="",
+                requires_discount_code=False,
+            )
         )
     )
 
     assert cart_discount.id
 
-    cart_discount = old_client.cart_discounts.get_by_id(cart_discount.id)
+    cart_discount = (
+        ct_platform_client.with_project_key("foo")
+        .cart_discounts()
+        .with_id(cart_discount.id)
+        .get()
+    )
     assert cart_discount.id
 
-    with pytest.raises(HTTPError):
-        old_client.cart_discounts.get_by_id("invalid")
+    item = (
+        ct_platform_client.with_project_key("foo")
+        .cart_discounts()
+        .with_id("invalid")
+        .get()
+    )
+    assert item is None
 
 
 def test_cart_discount_query(old_client):

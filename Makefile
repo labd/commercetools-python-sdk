@@ -2,7 +2,7 @@
 
 
 install:
-	pip install -e .[test,codegen]
+	pip install -e .[test]
 
 generate:
 	java -jar ../rmf-codegen/rmf-gen.jar  generate ../commercetools-api-reference/api-specs/api/api.raml -o src/commercetools/platform/ -t PYTHON_CLIENT
@@ -25,8 +25,8 @@ runserver:
 	python -mcommercetools.testing.server
 
 format:
-	isort src tests codegen
-	black src/ tests/ codegen/
+	isort src tests
+	black src/ tests/
 
 release:
 	pip install twine wheel

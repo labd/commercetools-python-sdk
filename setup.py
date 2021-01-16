@@ -14,15 +14,6 @@ install_requires = [
     "wrapt>=1.10.0",
 ]
 
-codegen_requires = [
-    "astunparse==1.6.3",
-    "astor==0.8.1",
-    "attrs>=20.3.0",
-    "black==19.10b0",
-    "isort==5.6.4",
-    "PyYAML==5.3.1",
-]
-
 docs_require = [
     "Sphinx>=1.8.1",
     "sphinx-rtd-theme==0.4.2",
@@ -64,7 +55,6 @@ setup(
     extras_require={
         "docs": docs_require,
         "test": tests_require,
-        "codegen": codegen_requires,
     },
     entry_points={},
     package_dir={"": "src"},

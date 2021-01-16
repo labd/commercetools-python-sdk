@@ -12,5 +12,5 @@ multi_line_output = 3
 include_trailing_comma = true
 balanced_wrapping = true
 default_section = "THIRDPARTY"
-known_first_party = ["commercetools", "tests", "codegen"]
+known_first_party = ["commercetools", "tests"]
 use_parentheses = true

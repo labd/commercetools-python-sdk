@@ -130,6 +130,9 @@ class CategoryCreatedMessageSchema(MessageSchema):
 
 class CategorySlugChangedMessageSchema(MessageSchema):
     slug = LocalizedStringField(allow_none=True, missing=None)
+    old_slug = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -306,6 +309,18 @@ class CustomerGroupSetMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.CustomerGroupSetMessage(**data)
+
+
+class CustomerPasswordUpdatedMessageSchema(MessageSchema):
+    reset = marshmallow.fields.Boolean(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.CustomerPasswordUpdatedMessage(**data)
 
 
 class DeliveryAddedMessageSchema(MessageSchema):
@@ -572,6 +587,9 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 ),
                 "CustomerGroupSet": helpers.absmod(
                     __name__, ".CustomerGroupSetMessageSchema"
+                ),
+                "CustomerPasswordUpdated": helpers.absmod(
+                    __name__, ".CustomerPasswordUpdatedMessageSchema"
                 ),
                 "DeliveryAdded": helpers.absmod(
                     __name__, ".DeliveryAddedMessageSchema"
@@ -1809,6 +1827,9 @@ class ProductRevertedStagedChangesMessageSchema(MessageSchema):
 
 class ProductSlugChangedMessageSchema(MessageSchema):
     slug = LocalizedStringField(allow_none=True, missing=None)
+    old_slug = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2137,6 +2158,9 @@ class CategoryCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 class CategorySlugChangedMessagePayloadSchema(MessagePayloadSchema):
     slug = LocalizedStringField(allow_none=True, missing=None)
+    old_slug = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2313,6 +2337,18 @@ class CustomerGroupSetMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.CustomerGroupSetMessagePayload(**data)
+
+
+class CustomerPasswordUpdatedMessagePayloadSchema(MessagePayloadSchema):
+    reset = marshmallow.fields.Boolean(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.CustomerPasswordUpdatedMessagePayload(**data)
 
 
 class DeliveryAddedMessagePayloadSchema(MessagePayloadSchema):
@@ -3510,6 +3546,9 @@ class ProductRevertedStagedChangesMessagePayloadSchema(MessagePayloadSchema):
 
 class ProductSlugChangedMessagePayloadSchema(MessagePayloadSchema):
     slug = LocalizedStringField(allow_none=True, missing=None)
+    old_slug = LocalizedStringField(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

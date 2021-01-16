@@ -1,6 +1,7 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.errors import ErrorResponse
 from ...models.importsinks import ImportSink, ImportSinkDraft, ImportSinkPagedResponse
 from .by_project_key_import_sinks_by_import_sink_key_request_builder import (
     ByProjectKeyImportSinksByImportSinkKeyRequestBuilder,
@@ -33,30 +34,44 @@ class ByProjectKeyImportSinksRequestBuilder:
         )
 
     def post(
-        self, body: "ImportSinkDraft", *, headers: typing.Dict[str, str] = None
+        self,
+        body: "ImportSinkDraft",
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportSink":
         """Creates a new import sink."""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/import-sinks",
             params={},
-            data_object=body,
-            response_class=ImportSink,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return ImportSink.deserialize(response.json())
+        elif response.status_code == 400:
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def get(
         self,
         *,
-        limit: float = None,
-        offset: float = None,
+        limit: float,
+        offset: float,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportSinkPagedResponse":
         """Retrieves all import sinks of a project key."""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/import-sinks",
             params={"limit": limit, "offset": offset},
-            response_class=ImportSinkPagedResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ImportSinkPagedResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

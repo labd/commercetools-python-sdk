@@ -6,6 +6,7 @@ from ...models.customer import (
     CustomerPagedQueryResponse,
     CustomerSignInResult,
 )
+from ...models.error import ErrorResponse
 from ..confirm.by_project_key_customers_email_confirm_request_builder import (
     ByProjectKeyCustomersEmailConfirmRequestBuilder,
 )
@@ -128,15 +129,16 @@ class ByProjectKeyCustomersRequestBuilder:
     def get(
         self,
         *,
-        expand: str = None,
-        sort: str = None,
+        expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: str = None,
-        predicate_var: typing.Dict[str, str] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "CustomerPagedQueryResponse":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["CustomerPagedQueryResponse"]:
         """Query customers"""
         params = {
             "expand": expand,
@@ -150,30 +152,49 @@ class ByProjectKeyCustomersRequestBuilder:
             {f"var.{k}": v for k, v in predicate_var.items()}
         )
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/customers",
             params=params,
-            response_class=CustomerPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return CustomerPagedQueryResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
         self,
         body: "CustomerDraft",
         *,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "CustomerSignInResult":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["CustomerSignInResult"]:
         """Creates a customer. If an anonymous cart is passed in,
         then the cart is assigned to the created customer and the version number of the Cart will increase.
         If the ID of an anonymous session is given, all carts and orders will be assigned to the created customer.
 
         """
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/customers",
             params={"expand": expand},
-            data_object=body,
-            response_class=CustomerSignInResult,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return CustomerSignInResult.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

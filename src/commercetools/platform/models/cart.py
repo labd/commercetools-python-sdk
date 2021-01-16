@@ -90,6 +90,7 @@ __all__ = [
     "CartSetCustomerGroupAction",
     "CartSetCustomerIdAction",
     "CartSetDeleteDaysAfterLastModificationAction",
+    "CartSetKeyAction",
     "CartSetLineItemCustomFieldAction",
     "CartSetLineItemCustomTypeAction",
     "CartSetLineItemDistributionChannelAction",
@@ -112,6 +113,7 @@ __all__ = [
     "ClassificationShippingRateInputDraft",
     "CustomLineItem",
     "CustomLineItemDraft",
+    "CustomLineItemImportDraft",
     "DiscountCodeInfo",
     "DiscountCodeState",
     "DiscountedLineItemPortion",
@@ -148,6 +150,8 @@ __all__ = [
 
 
 class Cart(BaseResource):
+    #: User-specific unique identifier of the cart.
+    key: str
     #: Present on resources updated after 1/02/2019 except for events not tracked.
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1/02/2019 except for events not tracked.
@@ -211,6 +215,7 @@ class Cart(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
+        key: str,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_id: typing.Optional[str] = None,
@@ -241,6 +246,7 @@ class Cart(BaseResource):
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
     ):
+        self.key = key
         self.last_modified_by = last_modified_by
         self.created_by = created_by
         self.customer_id = customer_id
@@ -689,6 +695,10 @@ class CartUpdateAction(_BaseType):
             )
 
             return CartSetDeleteDaysAfterLastModificationActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.cart import CartSetKeyActionSchema
+
+            return CartSetKeyActionSchema().load(data)
         if data["action"] == "setLineItemCustomField":
             from ._schemas.cart import CartSetLineItemCustomFieldActionSchema
 
@@ -1217,6 +1227,10 @@ class LineItem(_BaseType):
     custom: typing.Optional["CustomFields"]
     #: Container for line item specific address(es).
     shipping_details: typing.Optional["ItemShippingDetails"]
+    #: The date when the LineItem was last modified by one of the following actions
+    #: setLineItemShippingDetails, addLineItem, removeLineItem, or changeLineItemQuantity.
+    #: Optional only for backwards compatible reasons. When the LineItem is created lastModifiedAt is set to addedAt.
+    last_modified_at: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
@@ -1242,7 +1256,8 @@ class LineItem(_BaseType):
         price_mode: "LineItemPriceMode",
         line_item_mode: "LineItemMode",
         custom: typing.Optional["CustomFields"] = None,
-        shipping_details: typing.Optional["ItemShippingDetails"] = None
+        shipping_details: typing.Optional["ItemShippingDetails"] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None
     ):
         self.id = id
         self.product_id = product_id
@@ -1264,6 +1279,7 @@ class LineItem(_BaseType):
         self.line_item_mode = line_item_mode
         self.custom = custom
         self.shipping_details = shipping_details
+        self.last_modified_at = last_modified_at
         super().__init__()
 
     @classmethod
@@ -1362,9 +1378,17 @@ class LineItemPriceMode(enum.Enum):
 
 class ReplicaCartDraft(_BaseType):
     reference: typing.Union["CartReference", "OrderReference"]
+    #: User-specific unique identifier of the cart.
+    key: typing.Optional[str]
 
-    def __init__(self, *, reference: typing.Union["CartReference", "OrderReference"]):
+    def __init__(
+        self,
+        *,
+        reference: typing.Union["CartReference", "OrderReference"],
+        key: typing.Optional[str] = None
+    ):
         self.reference = reference
+        self.key = key
         super().__init__()
 
     @classmethod
@@ -2682,6 +2706,25 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
         return CartSetDeleteDaysAfterLastModificationActionSchema().dump(self)
 
 
+class CartSetKeyAction(CartUpdateAction):
+    key: typing.Optional[str]
+
+    def __init__(self, *, key: typing.Optional[str] = None):
+        self.key = key
+        super().__init__(action="setKey")
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CartSetKeyAction":
+        from ._schemas.cart import CartSetKeyActionSchema
+
+        return CartSetKeyActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetKeyActionSchema
+
+        return CartSetKeyActionSchema().dump(self)
+
+
 class CartSetLineItemCustomFieldAction(CartUpdateAction):
     line_item_id: str
     name: str
@@ -3065,6 +3108,59 @@ class CartUpdateItemShippingAddressAction(CartUpdateAction):
         from ._schemas.cart import CartUpdateItemShippingAddressActionSchema
 
         return CartUpdateItemShippingAddressActionSchema().dump(self)
+
+
+class CustomLineItemImportDraft(_BaseType):
+    name: "LocalizedString"
+    #: The amount of a CustomLineItem in the cart.
+    #: Must be a positive integer.
+    quantity: int
+    #: The cost to add to the cart. The amount can be negative.
+    money: "Money"
+    slug: str
+    state: typing.Optional[typing.List["ItemState"]]
+    tax_rate: typing.Optional["TaxRate"]
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: The custom fields.
+    custom: typing.Optional["CustomFieldsDraft"]
+    shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+
+    def __init__(
+        self,
+        *,
+        name: "LocalizedString",
+        quantity: int,
+        money: "Money",
+        slug: str,
+        state: typing.Optional[typing.List["ItemState"]] = None,
+        tax_rate: typing.Optional["TaxRate"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+    ):
+        self.name = name
+        self.quantity = quantity
+        self.money = money
+        self.slug = slug
+        self.state = state
+        self.tax_rate = tax_rate
+        self.tax_category = tax_category
+        self.custom = custom
+        self.shipping_details = shipping_details
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomLineItemImportDraft":
+        from ._schemas.cart import CustomLineItemImportDraftSchema
+
+        return CustomLineItemImportDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CustomLineItemImportDraftSchema
+
+        return CustomLineItemImportDraftSchema().dump(self)
 
 
 class ProductPublishScope(enum.Enum):

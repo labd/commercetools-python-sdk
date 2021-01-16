@@ -1,6 +1,7 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.error import ErrorResponse
 from ...models.product_discount import ProductDiscount, ProductDiscountMatchQuery
 
 if typing.TYPE_CHECKING:
@@ -25,12 +26,21 @@ class ByProjectKeyProductDiscountsMatchingRequestBuilder:
         body: "ProductDiscountMatchQuery",
         *,
         headers: typing.Dict[str, str] = None,
-    ) -> "ProductDiscount":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["ProductDiscount"]:
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/product-discounts/matching",
             params={},
-            data_object=body,
-            response_class=ProductDiscount,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 200:
+            return ProductDiscount.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

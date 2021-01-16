@@ -34,6 +34,7 @@ from .type import FieldContainerField
 
 # Marshmallow Schemas
 class CartSchema(BaseResourceSchema):
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
@@ -599,6 +600,7 @@ class CartUpdateSchema(helpers.BaseSchema):
                 "setDeleteDaysAfterLastModification": helpers.absmod(
                     __name__, ".CartSetDeleteDaysAfterLastModificationActionSchema"
                 ),
+                "setKey": helpers.absmod(__name__, ".CartSetKeyActionSchema"),
                 "setLineItemCustomField": helpers.absmod(
                     __name__, ".CartSetLineItemCustomFieldActionSchema"
                 ),
@@ -1181,6 +1183,12 @@ class LineItemSchema(helpers.BaseSchema):
         missing=None,
         data_key="shippingDetails",
     )
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastModifiedAt",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1280,6 +1288,9 @@ class LineItemDraftSchema(helpers.BaseSchema):
 
 class ReplicaCartDraftSchema(helpers.BaseSchema):
     reference = marshmallow.fields.Raw(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2444,6 +2455,20 @@ class CartSetDeleteDaysAfterLastModificationActionSchema(CartUpdateActionSchema)
         return models.CartSetDeleteDaysAfterLastModificationAction(**data)
 
 
+class CartSetKeyActionSchema(CartUpdateActionSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetKeyAction(**data)
+
+
 class CartSetLineItemCustomFieldActionSchema(CartUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
@@ -2756,3 +2781,64 @@ class CartUpdateItemShippingAddressActionSchema(CartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.CartUpdateItemShippingAddressAction(**data)
+
+
+class CustomLineItemImportDraftSchema(helpers.BaseSchema):
+    name = LocalizedStringField(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    money = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    slug = marshmallow.fields.String(allow_none=True, missing=None)
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.ItemStateSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    tax_rate = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".tax_category.TaxRateSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="taxRate",
+    )
+    tax_category = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".tax_category.TaxCategoryResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="taxCategory",
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    shipping_details = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ItemShippingDetailsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="shippingDetails",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.CustomLineItemImportDraft(**data)

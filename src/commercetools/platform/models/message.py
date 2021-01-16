@@ -82,6 +82,8 @@ __all__ = [
     "CustomerEmailVerifiedMessagePayload",
     "CustomerGroupSetMessage",
     "CustomerGroupSetMessagePayload",
+    "CustomerPasswordUpdatedMessage",
+    "CustomerPasswordUpdatedMessagePayload",
     "DeliveryAddedMessage",
     "DeliveryAddedMessagePayload",
     "DeliveryAddressSetMessage",
@@ -302,6 +304,10 @@ class Message(BaseResource):
             from ._schemas.message import CustomerGroupSetMessageSchema
 
             return CustomerGroupSetMessageSchema().load(data)
+        if data["type"] == "CustomerPasswordUpdated":
+            from ._schemas.message import CustomerPasswordUpdatedMessageSchema
+
+            return CustomerPasswordUpdatedMessageSchema().load(data)
         if data["type"] == "DeliveryAdded":
             from ._schemas.message import DeliveryAddedMessageSchema
 
@@ -600,6 +606,7 @@ class CategoryCreatedMessage(Message):
 
 class CategorySlugChangedMessage(Message):
     slug: "LocalizedString"
+    old_slug: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
@@ -616,9 +623,11 @@ class CategorySlugChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        slug: "LocalizedString"
+        slug: "LocalizedString",
+        old_slug: typing.Optional["LocalizedString"] = None
     ):
         self.slug = slug
+        self.old_slug = old_slug
         super().__init__(
             id=id,
             version=version,
@@ -1144,6 +1153,56 @@ class CustomerGroupSetMessage(Message):
         from ._schemas.message import CustomerGroupSetMessageSchema
 
         return CustomerGroupSetMessageSchema().dump(self)
+
+
+class CustomerPasswordUpdatedMessage(Message):
+    #: true, if password has been updated during Customer's Password Reset workflow.
+    reset: bool
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        reset: bool
+    ):
+        self.reset = reset
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="CustomerPasswordUpdated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerPasswordUpdatedMessage":
+        from ._schemas.message import CustomerPasswordUpdatedMessageSchema
+
+        return CustomerPasswordUpdatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerPasswordUpdatedMessageSchema
+
+        return CustomerPasswordUpdatedMessageSchema().dump(self)
 
 
 class DeliveryAddedMessage(Message):
@@ -3984,6 +4043,7 @@ class ProductRevertedStagedChangesMessage(Message):
 
 class ProductSlugChangedMessage(Message):
     slug: "LocalizedString"
+    old_slug: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
@@ -4000,9 +4060,11 @@ class ProductSlugChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        slug: "LocalizedString"
+        slug: "LocalizedString",
+        old_slug: typing.Optional["LocalizedString"] = None
     ):
         self.slug = slug
+        self.old_slug = old_slug
         super().__init__(
             id=id,
             version=version,
@@ -4501,6 +4563,10 @@ class MessagePayload(_BaseType):
             from ._schemas.message import CustomerGroupSetMessagePayloadSchema
 
             return CustomerGroupSetMessagePayloadSchema().load(data)
+        if data["type"] == "CustomerPasswordUpdated":
+            from ._schemas.message import CustomerPasswordUpdatedMessagePayloadSchema
+
+            return CustomerPasswordUpdatedMessagePayloadSchema().load(data)
         if data["type"] == "DeliveryAdded":
             from ._schemas.message import DeliveryAddedMessagePayloadSchema
 
@@ -4785,9 +4851,16 @@ class CategoryCreatedMessagePayload(MessagePayload):
 
 class CategorySlugChangedMessagePayload(MessagePayload):
     slug: "LocalizedString"
+    old_slug: typing.Optional["LocalizedString"]
 
-    def __init__(self, *, slug: "LocalizedString"):
+    def __init__(
+        self,
+        *,
+        slug: "LocalizedString",
+        old_slug: typing.Optional["LocalizedString"] = None
+    ):
         self.slug = slug
+        self.old_slug = old_slug
         super().__init__(type="CategorySlugChanged")
 
     @classmethod
@@ -5026,6 +5099,28 @@ class CustomerGroupSetMessagePayload(MessagePayload):
         from ._schemas.message import CustomerGroupSetMessagePayloadSchema
 
         return CustomerGroupSetMessagePayloadSchema().dump(self)
+
+
+class CustomerPasswordUpdatedMessagePayload(MessagePayload):
+    #: true, if password has been updated during Customer's Password Reset workflow.
+    reset: bool
+
+    def __init__(self, *, reset: bool):
+        self.reset = reset
+        super().__init__(type="CustomerPasswordUpdated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerPasswordUpdatedMessagePayload":
+        from ._schemas.message import CustomerPasswordUpdatedMessagePayloadSchema
+
+        return CustomerPasswordUpdatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerPasswordUpdatedMessagePayloadSchema
+
+        return CustomerPasswordUpdatedMessagePayloadSchema().dump(self)
 
 
 class DeliveryAddedMessagePayload(MessagePayload):
@@ -6388,9 +6483,16 @@ class ProductRevertedStagedChangesMessagePayload(MessagePayload):
 
 class ProductSlugChangedMessagePayload(MessagePayload):
     slug: "LocalizedString"
+    old_slug: typing.Optional["LocalizedString"]
 
-    def __init__(self, *, slug: "LocalizedString"):
+    def __init__(
+        self,
+        *,
+        slug: "LocalizedString",
+        old_slug: typing.Optional["LocalizedString"] = None
+    ):
         self.slug = slug
+        self.old_slug = old_slug
         super().__init__(type="ProductSlugChanged")
 
     @classmethod

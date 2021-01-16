@@ -24,26 +24,39 @@ class ByProjectKeyImageSearchConfigRequestBuilder:
         self._client = client
 
     def get(
-        self, *, headers: typing.Dict[str, str] = None
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImageSearchConfigResponse":
         """Get the current image search config."""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/image-search/config",
             params={},
-            response_class=ImageSearchConfigResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ImageSearchConfigResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
-        self, body: "ImageSearchConfigRequest", *, headers: typing.Dict[str, str] = None
+        self,
+        body: "ImageSearchConfigRequest",
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImageSearchConfigResponse":
         """Endpoint to update the image search config."""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/image-search/config",
             params={},
-            data_object=body,
-            response_class=ImageSearchConfigResponse,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 200:
+            return ImageSearchConfigResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

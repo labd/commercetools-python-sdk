@@ -2,6 +2,7 @@
 import typing
 
 from ...models.common import Update
+from ...models.error import ErrorResponse
 from ...models.order import Order
 
 if typing.TYPE_CHECKING:
@@ -25,47 +26,77 @@ class ByProjectKeyOrdersByIDRequestBuilder:
         self._client = client
 
     def get(
-        self, *, expand: str = None, headers: typing.Dict[str, str] = None
-    ) -> "Order":
+        self,
+        *,
+        expand: typing.List["str"] = None,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Order"]:
         """Get Order by ID"""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/orders/{self._id}",
             params={"expand": expand},
-            response_class=Order,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return Order.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
         self,
         body: "Update",
         *,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "Order":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Order"]:
         """Update Order by ID"""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/orders/{self._id}",
             params={"expand": expand},
-            data_object=body,
-            response_class=Order,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 200:
+            return Order.deserialize(response.json())
+        elif response.status_code in (409, 400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def delete(
         self,
         *,
         data_erasure: bool = None,
         version: int,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "Order":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Order"]:
         """Delete Order by ID"""
         headers = {} if headers is None else headers
-        return self._client._delete(
+        response = self._client._delete(
             endpoint=f"/{self._project_key}/orders/{self._id}",
             params={"dataErasure": data_erasure, "version": version, "expand": expand},
-            response_class=Order,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return Order.deserialize(response.json())
+        elif response.status_code in (409, 400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

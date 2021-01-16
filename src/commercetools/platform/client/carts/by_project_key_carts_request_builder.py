@@ -2,6 +2,7 @@
 import typing
 
 from ...models.cart import Cart, CartDraft, CartPagedQueryResponse
+from ...models.error import ErrorResponse
 from ..replicate.by_project_key_carts_replicate_request_builder import (
     ByProjectKeyCartsReplicateRequestBuilder,
 )
@@ -10,6 +11,9 @@ from .by_project_key_carts_by_id_request_builder import (
 )
 from .by_project_key_carts_customer_id_by_customer_id_request_builder import (
     ByProjectKeyCartsCustomerIdByCustomerIdRequestBuilder,
+)
+from .by_project_key_carts_key_by_key_request_builder import (
+    ByProjectKeyCartsKeyByKeyRequestBuilder,
 )
 
 if typing.TYPE_CHECKING:
@@ -44,6 +48,13 @@ class ByProjectKeyCartsRequestBuilder:
             client=self._client,
         )
 
+    def with_key(self, key: str) -> ByProjectKeyCartsKeyByKeyRequestBuilder:
+        return ByProjectKeyCartsKeyByKeyRequestBuilder(
+            key=key,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
     def with_id(self, id: str) -> ByProjectKeyCartsByIDRequestBuilder:
         return ByProjectKeyCartsByIDRequestBuilder(
             id=id,
@@ -55,15 +66,16 @@ class ByProjectKeyCartsRequestBuilder:
         self,
         *,
         customer_id: str = None,
-        expand: str = None,
-        sort: str = None,
+        expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: str = None,
-        predicate_var: typing.Dict[str, str] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "CartPagedQueryResponse":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["CartPagedQueryResponse"]:
         """Query carts"""
         params = {
             "customerId": customer_id,
@@ -78,29 +90,48 @@ class ByProjectKeyCartsRequestBuilder:
             {f"var.{k}": v for k, v in predicate_var.items()}
         )
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/carts",
             params=params,
-            response_class=CartPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return CartPagedQueryResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
         self,
         body: "CartDraft",
         *,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "Cart":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Cart"]:
         """Creating a cart can fail with an InvalidOperation if the referenced shipping method in the
         CartDraft has a predicate which does not match the cart.
 
         """
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/carts",
             params={"expand": expand},
-            data_object=body,
-            response_class=Cart,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return Cart.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

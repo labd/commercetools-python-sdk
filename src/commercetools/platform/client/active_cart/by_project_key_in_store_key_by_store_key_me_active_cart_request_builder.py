@@ -2,6 +2,7 @@
 import typing
 
 from ...models.cart import Cart
+from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -23,11 +24,24 @@ class ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
         self._store_key = store_key
         self._client = client
 
-    def get(self, *, headers: typing.Dict[str, str] = None) -> "Cart":
+    def get(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Cart"]:
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/active-cart",
             params={},
-            response_class=Cart,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return Cart.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

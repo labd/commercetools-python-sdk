@@ -940,6 +940,9 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "CustomerGroupSet": helpers.absmod(
                     __name__, ".message.CustomerGroupSetMessagePayloadSchema"
                 ),
+                "CustomerPasswordUpdated": helpers.absmod(
+                    __name__, ".message.CustomerPasswordUpdatedMessagePayloadSchema"
+                ),
                 "DeliveryAdded": helpers.absmod(
                     __name__, ".message.DeliveryAddedMessagePayloadSchema"
                 ),

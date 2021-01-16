@@ -2,6 +2,7 @@
 import typing
 
 from ...models.cart import Cart, CartPagedQueryResponse
+from ...models.error import ErrorResponse
 from ...models.me import MyCartDraft
 from .by_project_key_in_store_key_by_store_key_me_carts_by_id_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder,
@@ -40,15 +41,16 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder:
     def get(
         self,
         *,
-        expand: str = None,
-        sort: str = None,
+        expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: str = None,
-        predicate_var: typing.Dict[str, str] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "CartPagedQueryResponse":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["CartPagedQueryResponse"]:
         """Query carts"""
         params = {
             "expand": expand,
@@ -62,26 +64,45 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder:
             {f"var.{k}": v for k, v in predicate_var.items()}
         )
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/carts",
             params=params,
-            response_class=CartPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return CartPagedQueryResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
         self,
         body: "MyCartDraft",
         *,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "Cart":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Cart"]:
         """Create Cart"""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/carts",
             params={"expand": expand},
-            data_object=body,
-            response_class=Cart,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return Cart.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

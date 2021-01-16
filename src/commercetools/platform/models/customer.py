@@ -8,6 +8,7 @@ from ._abstract import _BaseType
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
+    from .cart import CartResourceIdentifier
     from .common import Address, CreatedBy, LastModifiedBy, ReferenceTypeId
     from .customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from .store import StoreKeyReference, StoreResourceIdentifier
@@ -290,6 +291,8 @@ class CustomerDraft(_BaseType):
     title: typing.Optional[str]
     #: Identifies a single cart that will be assigned to the new customer account.
     anonymous_cart_id: typing.Optional[str]
+    #: Identifies a single cart that will be assigned to the new customer account.
+    anonymous_cart: typing.Optional["CartResourceIdentifier"]
     #: Identifies carts and orders belonging to an anonymous session that will be assigned to the new customer account.
     anonymous_id: typing.Optional[str]
     date_of_birth: typing.Optional[datetime.date]
@@ -337,6 +340,7 @@ class CustomerDraft(_BaseType):
         middle_name: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
         anonymous_cart_id: typing.Optional[str] = None,
+        anonymous_cart: typing.Optional["CartResourceIdentifier"] = None,
         anonymous_id: typing.Optional[str] = None,
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
@@ -363,6 +367,7 @@ class CustomerDraft(_BaseType):
         self.middle_name = middle_name
         self.title = title
         self.anonymous_cart_id = anonymous_cart_id
+        self.anonymous_cart = anonymous_cart
         self.anonymous_id = anonymous_id
         self.date_of_birth = date_of_birth
         self.company_name = company_name
@@ -548,6 +553,7 @@ class CustomerSignin(_BaseType):
     email: str
     password: str
     anonymous_cart_id: typing.Optional[str]
+    anonymous_cart: typing.Optional["CartResourceIdentifier"]
     anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
     anonymous_id: typing.Optional[str]
     update_product_data: typing.Optional[bool]
@@ -558,6 +564,7 @@ class CustomerSignin(_BaseType):
         email: str,
         password: str,
         anonymous_cart_id: typing.Optional[str] = None,
+        anonymous_cart: typing.Optional["CartResourceIdentifier"] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
         anonymous_id: typing.Optional[str] = None,
         update_product_data: typing.Optional[bool] = None
@@ -565,6 +572,7 @@ class CustomerSignin(_BaseType):
         self.email = email
         self.password = password
         self.anonymous_cart_id = anonymous_cart_id
+        self.anonymous_cart = anonymous_cart
         self.anonymous_cart_sign_in_mode = anonymous_cart_sign_in_mode
         self.anonymous_id = anonymous_id
         self.update_product_data = update_product_data

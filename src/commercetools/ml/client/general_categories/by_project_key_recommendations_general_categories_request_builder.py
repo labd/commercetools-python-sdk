@@ -32,10 +32,11 @@ class ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder:
         confidence_min: float = None,
         confidence_max: float = None,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "GeneralCategoryRecommendationPagedQueryResponse":
         """This endpoint takes arbitrary product names or image URLs and generates recommendations from a general set of categories, which cover a broad range of industries. The full list of supported categories can be found [here](https://docs.commercetools.com/category_recommendations_supported_categories.txt). These are independent of the categories that are actually defined in your project. The main  purpose of this API is to provide a quick way to test the behavior of the category recommendations engine for different names and images. In contrast to the [project-specific endpoint](https://docs.commercetools.com/http-api-projects-categoryrecommendations#project-specific-category-recommendations), this endpoint does not have [activation criteria](https://docs.commercetools.com/http-api-projects-categoryrecommendations#activating-the-api) and is enabled for all projects."""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/recommendations/general-categories",
             params={
                 "productImageUrl": product_image_url,
@@ -45,6 +46,11 @@ class ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder:
                 "confidenceMin": confidence_min,
                 "confidenceMax": confidence_max,
             },
-            response_class=GeneralCategoryRecommendationPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return GeneralCategoryRecommendationPagedQueryResponse.deserialize(
+                response.json()
+            )
+        raise ValueError("Unhandled status code %s", response.status_code)

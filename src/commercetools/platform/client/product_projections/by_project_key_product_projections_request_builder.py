@@ -1,6 +1,7 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.error import ErrorResponse
 from ...models.product import ProductProjectionPagedQueryResponse
 from ..search.by_project_key_product_projections_search_request_builder import (
     ByProjectKeyProductProjectionsSearchRequestBuilder,
@@ -77,15 +78,16 @@ class ByProjectKeyProductProjectionsRequestBuilder:
         price_channel: str = None,
         locale_projection: str = None,
         store_projection: str = None,
-        expand: str = None,
-        sort: str = None,
+        expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: str = None,
-        predicate_var: typing.Dict[str, str] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "ProductProjectionPagedQueryResponse":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["ProductProjectionPagedQueryResponse"]:
         """You can use the product projections query endpoint to get the current or staged representations of Products.
         When used with an API client that has the view_published_products:{projectKey} scope,
         this endpoint only returns published (current) product projections.
@@ -110,9 +112,17 @@ class ByProjectKeyProductProjectionsRequestBuilder:
             {f"var.{k}": v for k, v in predicate_var.items()}
         )
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/product-projections",
             params=params,
-            response_class=ProductProjectionPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ProductProjectionPagedQueryResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

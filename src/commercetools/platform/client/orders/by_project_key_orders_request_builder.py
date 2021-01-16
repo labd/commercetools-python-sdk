@@ -1,6 +1,7 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.error import ErrorResponse
 from ...models.order import Order, OrderFromCartDraft, OrderPagedQueryResponse
 from ..edits.by_project_key_orders_edits_request_builder import (
     ByProjectKeyOrdersEditsRequestBuilder,
@@ -64,15 +65,16 @@ class ByProjectKeyOrdersRequestBuilder:
     def get(
         self,
         *,
-        expand: str = None,
-        sort: str = None,
+        expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: str = None,
-        predicate_var: typing.Dict[str, str] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "OrderPagedQueryResponse":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["OrderPagedQueryResponse"]:
         """Query orders"""
         params = {
             "expand": expand,
@@ -86,30 +88,49 @@ class ByProjectKeyOrdersRequestBuilder:
             {f"var.{k}": v for k, v in predicate_var.items()}
         )
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/orders",
             params=params,
-            response_class=OrderPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return OrderPagedQueryResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
         self,
         body: "OrderFromCartDraft",
         *,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "Order":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Order"]:
         """Creates an order from a Cart.
         The cart must have a shipping address set before creating an order.
         When using the Platform TaxMode, the shipping address is used for tax calculation.
 
         """
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/orders",
             params={"expand": expand},
-            data_object=body,
-            response_class=Order,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return Order.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

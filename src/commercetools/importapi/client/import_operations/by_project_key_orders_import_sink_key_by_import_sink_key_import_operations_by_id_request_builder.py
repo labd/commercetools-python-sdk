@@ -1,6 +1,7 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.errors import ErrorResponse
 from ...models.importoperations import ImportOperation
 
 if typing.TYPE_CHECKING:
@@ -26,12 +27,23 @@ class ByProjectKeyOrdersImportSinkKeyByImportSinkKeyImportOperationsByIdRequestB
         self._id = id
         self._client = client
 
-    def get(self, *, headers: typing.Dict[str, str] = None) -> "ImportOperation":
+    def get(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> "ImportOperation":
         """Retrieves the import operation with the given id."""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/orders/importSinkKey={self._import_sink_key}/import-operations/{self._id}",
             params={},
-            response_class=ImportOperation,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ImportOperation.deserialize(response.json())
+        elif response.status_code in (404, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        raise ValueError("Unhandled status code %s", response.status_code)

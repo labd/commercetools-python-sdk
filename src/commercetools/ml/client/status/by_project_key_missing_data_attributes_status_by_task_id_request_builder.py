@@ -23,11 +23,19 @@ class ByProjectKeyMissingDataAttributesStatusByTaskIdRequestBuilder:
         self._task_id = task_id
         self._client = client
 
-    def get(self, *, headers: typing.Dict[str, str] = None) -> "MissingDataTaskStatus":
+    def get(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> "MissingDataTaskStatus":
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/missing-data/attributes/status/{self._task_id}",
             params={},
-            response_class=MissingDataTaskStatus,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return MissingDataTaskStatus.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

@@ -1,6 +1,7 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.error import ErrorResponse
 from ...models.subscription import (
     Subscription,
     SubscriptionDraft,
@@ -47,15 +48,16 @@ class ByProjectKeySubscriptionsRequestBuilder:
     def get(
         self,
         *,
-        expand: str = None,
-        sort: str = None,
+        expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: str = None,
-        predicate_var: typing.Dict[str, str] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "SubscriptionPagedQueryResponse":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["SubscriptionPagedQueryResponse"]:
         """Query subscriptions"""
         params = {
             "expand": expand,
@@ -69,20 +71,29 @@ class ByProjectKeySubscriptionsRequestBuilder:
             {f"var.{k}": v for k, v in predicate_var.items()}
         )
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/subscriptions",
             params=params,
-            response_class=SubscriptionPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return SubscriptionPagedQueryResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)
 
     def post(
         self,
         body: "SubscriptionDraft",
         *,
-        expand: str = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
-    ) -> "Subscription":
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["Subscription"]:
         """The creation of a Subscription is eventually consistent, it may take up to a minute before it becomes fully active.
         In order to test that the destination is correctly configured, a test message will be put into the queue.
         If the message could not be delivered, the subscription will not be created.
@@ -91,10 +102,20 @@ class ByProjectKeySubscriptionsRequestBuilder:
 
         """
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/subscriptions",
             params={"expand": expand},
-            data_object=body,
-            response_class=Subscription,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return Subscription.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
+            return None
+        raise ValueError("Unhandled status code %s", response.status_code)

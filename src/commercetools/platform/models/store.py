@@ -16,24 +16,27 @@ from .common import (
 if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
+    from .type import CustomFields, CustomFieldsDraft, TypeResourceIdentifier
 
 __all__ = [
     "Store",
+    "StoreAddDistributionChannelAction",
+    "StoreAddSupplyChannelAction",
     "StoreDraft",
     "StoreKeyReference",
     "StorePagedQueryResponse",
     "StoreReference",
+    "StoreRemoveDistributionChannelAction",
+    "StoreRemoveSupplyChannelAction",
     "StoreResourceIdentifier",
+    "StoreSetCustomFieldAction",
+    "StoreSetCustomTypeAction",
+    "StoreSetDistributionChannelsAction",
     "StoreSetLanguagesAction",
     "StoreSetNameAction",
+    "StoreSetSupplyChannelsAction",
     "StoreUpdate",
     "StoreUpdateAction",
-    "StoresAddDistributionChannelsAction",
-    "StoresAddSupplyChannelsAction",
-    "StoresRemoveDistributionChannelsAction",
-    "StoresRemoveSupplyChannelsAction",
-    "StoresSetDistributionChannelsAction",
-    "StoresSetSupplyChannelsAction",
 ]
 
 
@@ -51,6 +54,7 @@ class Store(BaseResource):
     distribution_channels: typing.List["ChannelReference"]
     #: Set of ResourceIdentifiers of Channels with `InventorySupply` role
     supply_channels: typing.Optional[typing.List["ChannelReference"]]
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
@@ -65,7 +69,8 @@ class Store(BaseResource):
         name: typing.Optional["LocalizedString"] = None,
         languages: typing.Optional[typing.List["str"]] = None,
         distribution_channels: typing.List["ChannelReference"],
-        supply_channels: typing.Optional[typing.List["ChannelReference"]] = None
+        supply_channels: typing.Optional[typing.List["ChannelReference"]] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -74,6 +79,7 @@ class Store(BaseResource):
         self.languages = languages
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
+        self.custom = custom
         super().__init__(
             id=id,
             version=version,
@@ -105,6 +111,7 @@ class StoreDraft(_BaseType):
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
     #: Set of ResourceIdentifiers of Channels with `InventorySupply` role
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -117,13 +124,15 @@ class StoreDraft(_BaseType):
         ] = None,
         supply_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
-        ] = None
+        ] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.key = key
         self.name = name
         self.languages = languages
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
+        self.custom = custom
         super().__init__()
 
     @classmethod
@@ -262,6 +271,34 @@ class StoreUpdateAction(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StoreUpdateAction":
+        if data["action"] == "addDistributionChannel":
+            from ._schemas.store import StoreAddDistributionChannelActionSchema
+
+            return StoreAddDistributionChannelActionSchema().load(data)
+        if data["action"] == "addSupplyChannel":
+            from ._schemas.store import StoreAddSupplyChannelActionSchema
+
+            return StoreAddSupplyChannelActionSchema().load(data)
+        if data["action"] == "removeDistributionChannel":
+            from ._schemas.store import StoreRemoveDistributionChannelActionSchema
+
+            return StoreRemoveDistributionChannelActionSchema().load(data)
+        if data["action"] == "removeSupplyChannel":
+            from ._schemas.store import StoreRemoveSupplyChannelActionSchema
+
+            return StoreRemoveSupplyChannelActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.store import StoreSetCustomFieldActionSchema
+
+            return StoreSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.store import StoreSetCustomTypeActionSchema
+
+            return StoreSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setDistributionChannels":
+            from ._schemas.store import StoreSetDistributionChannelsActionSchema
+
+            return StoreSetDistributionChannelsActionSchema().load(data)
         if data["action"] == "setLanguages":
             from ._schemas.store import StoreSetLanguagesActionSchema
 
@@ -270,35 +307,181 @@ class StoreUpdateAction(_BaseType):
             from ._schemas.store import StoreSetNameActionSchema
 
             return StoreSetNameActionSchema().load(data)
-        if data["action"] == "addDistributionChannel":
-            from ._schemas.store import StoresAddDistributionChannelsActionSchema
-
-            return StoresAddDistributionChannelsActionSchema().load(data)
-        if data["action"] == "addSupplyChannel":
-            from ._schemas.store import StoresAddSupplyChannelsActionSchema
-
-            return StoresAddSupplyChannelsActionSchema().load(data)
-        if data["action"] == "removeDistributionChannel":
-            from ._schemas.store import StoresRemoveDistributionChannelsActionSchema
-
-            return StoresRemoveDistributionChannelsActionSchema().load(data)
-        if data["action"] == "removeSupplyChannel":
-            from ._schemas.store import StoresRemoveSupplyChannelsActionSchema
-
-            return StoresRemoveSupplyChannelsActionSchema().load(data)
-        if data["action"] == "setDistributionChannels":
-            from ._schemas.store import StoresSetDistributionChannelsActionSchema
-
-            return StoresSetDistributionChannelsActionSchema().load(data)
         if data["action"] == "setSupplyChannels":
-            from ._schemas.store import StoresSetSupplyChannelsActionSchema
+            from ._schemas.store import StoreSetSupplyChannelsActionSchema
 
-            return StoresSetSupplyChannelsActionSchema().load(data)
+            return StoreSetSupplyChannelsActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.store import StoreUpdateActionSchema
 
         return StoreUpdateActionSchema().dump(self)
+
+
+class StoreAddDistributionChannelAction(StoreUpdateAction):
+    distribution_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
+        self.distribution_channel = distribution_channel
+        super().__init__(action="addDistributionChannel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreAddDistributionChannelAction":
+        from ._schemas.store import StoreAddDistributionChannelActionSchema
+
+        return StoreAddDistributionChannelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreAddDistributionChannelActionSchema
+
+        return StoreAddDistributionChannelActionSchema().dump(self)
+
+
+class StoreAddSupplyChannelAction(StoreUpdateAction):
+    supply_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
+        self.supply_channel = supply_channel
+        super().__init__(action="addSupplyChannel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreAddSupplyChannelAction":
+        from ._schemas.store import StoreAddSupplyChannelActionSchema
+
+        return StoreAddSupplyChannelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreAddSupplyChannelActionSchema
+
+        return StoreAddSupplyChannelActionSchema().dump(self)
+
+
+class StoreRemoveDistributionChannelAction(StoreUpdateAction):
+    distribution_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
+        self.distribution_channel = distribution_channel
+        super().__init__(action="removeDistributionChannel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreRemoveDistributionChannelAction":
+        from ._schemas.store import StoreRemoveDistributionChannelActionSchema
+
+        return StoreRemoveDistributionChannelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreRemoveDistributionChannelActionSchema
+
+        return StoreRemoveDistributionChannelActionSchema().dump(self)
+
+
+class StoreRemoveSupplyChannelAction(StoreUpdateAction):
+    supply_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
+        self.supply_channel = supply_channel
+        super().__init__(action="removeSupplyChannel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreRemoveSupplyChannelAction":
+        from ._schemas.store import StoreRemoveSupplyChannelActionSchema
+
+        return StoreRemoveSupplyChannelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreRemoveSupplyChannelActionSchema
+
+        return StoreRemoveSupplyChannelActionSchema().dump(self)
+
+
+class StoreSetCustomFieldAction(StoreUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreSetCustomFieldAction":
+        from ._schemas.store import StoreSetCustomFieldActionSchema
+
+        return StoreSetCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreSetCustomFieldActionSchema
+
+        return StoreSetCustomFieldActionSchema().dump(self)
+
+
+class StoreSetCustomTypeAction(StoreUpdateAction):
+    #: If set, the custom type is reset to this value.
+    #: If absent, the custom type and any existing custom fields are removed.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: A valid JSON object, based on the FieldDefinitions of the Type
+    #: Sets the custom field to this value.
+    fields: typing.Optional[object]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional[object] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreSetCustomTypeAction":
+        from ._schemas.store import StoreSetCustomTypeActionSchema
+
+        return StoreSetCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreSetCustomTypeActionSchema
+
+        return StoreSetCustomTypeActionSchema().dump(self)
+
+
+class StoreSetDistributionChannelsAction(StoreUpdateAction):
+    distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+
+    def __init__(
+        self,
+        *,
+        distribution_channels: typing.Optional[
+            typing.List["ChannelResourceIdentifier"]
+        ] = None
+    ):
+        self.distribution_channels = distribution_channels
+        super().__init__(action="setDistributionChannels")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreSetDistributionChannelsAction":
+        from ._schemas.store import StoreSetDistributionChannelsActionSchema
+
+        return StoreSetDistributionChannelsActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreSetDistributionChannelsActionSchema
+
+        return StoreSetDistributionChannelsActionSchema().dump(self)
 
 
 class StoreSetLanguagesAction(StoreUpdateAction):
@@ -342,118 +525,7 @@ class StoreSetNameAction(StoreUpdateAction):
         return StoreSetNameActionSchema().dump(self)
 
 
-class StoresAddDistributionChannelsAction(StoreUpdateAction):
-    distribution_channel: "ChannelResourceIdentifier"
-
-    def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
-        self.distribution_channel = distribution_channel
-        super().__init__(action="addDistributionChannel")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "StoresAddDistributionChannelsAction":
-        from ._schemas.store import StoresAddDistributionChannelsActionSchema
-
-        return StoresAddDistributionChannelsActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.store import StoresAddDistributionChannelsActionSchema
-
-        return StoresAddDistributionChannelsActionSchema().dump(self)
-
-
-class StoresAddSupplyChannelsAction(StoreUpdateAction):
-    supply_channel: "ChannelResourceIdentifier"
-
-    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
-        self.supply_channel = supply_channel
-        super().__init__(action="addSupplyChannel")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "StoresAddSupplyChannelsAction":
-        from ._schemas.store import StoresAddSupplyChannelsActionSchema
-
-        return StoresAddSupplyChannelsActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.store import StoresAddSupplyChannelsActionSchema
-
-        return StoresAddSupplyChannelsActionSchema().dump(self)
-
-
-class StoresRemoveDistributionChannelsAction(StoreUpdateAction):
-    distribution_channel: "ChannelResourceIdentifier"
-
-    def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
-        self.distribution_channel = distribution_channel
-        super().__init__(action="removeDistributionChannel")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "StoresRemoveDistributionChannelsAction":
-        from ._schemas.store import StoresRemoveDistributionChannelsActionSchema
-
-        return StoresRemoveDistributionChannelsActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.store import StoresRemoveDistributionChannelsActionSchema
-
-        return StoresRemoveDistributionChannelsActionSchema().dump(self)
-
-
-class StoresRemoveSupplyChannelsAction(StoreUpdateAction):
-    supply_channel: "ChannelResourceIdentifier"
-
-    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
-        self.supply_channel = supply_channel
-        super().__init__(action="removeSupplyChannel")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "StoresRemoveSupplyChannelsAction":
-        from ._schemas.store import StoresRemoveSupplyChannelsActionSchema
-
-        return StoresRemoveSupplyChannelsActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.store import StoresRemoveSupplyChannelsActionSchema
-
-        return StoresRemoveSupplyChannelsActionSchema().dump(self)
-
-
-class StoresSetDistributionChannelsAction(StoreUpdateAction):
-    distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
-
-    def __init__(
-        self,
-        *,
-        distribution_channels: typing.Optional[
-            typing.List["ChannelResourceIdentifier"]
-        ] = None
-    ):
-        self.distribution_channels = distribution_channels
-        super().__init__(action="setDistributionChannels")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "StoresSetDistributionChannelsAction":
-        from ._schemas.store import StoresSetDistributionChannelsActionSchema
-
-        return StoresSetDistributionChannelsActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.store import StoresSetDistributionChannelsActionSchema
-
-        return StoresSetDistributionChannelsActionSchema().dump(self)
-
-
-class StoresSetSupplyChannelsAction(StoreUpdateAction):
+class StoreSetSupplyChannelsAction(StoreUpdateAction):
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(
@@ -469,12 +541,12 @@ class StoresSetSupplyChannelsAction(StoreUpdateAction):
     @classmethod
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
-    ) -> "StoresSetSupplyChannelsAction":
-        from ._schemas.store import StoresSetSupplyChannelsActionSchema
+    ) -> "StoreSetSupplyChannelsAction":
+        from ._schemas.store import StoreSetSupplyChannelsActionSchema
 
-        return StoresSetSupplyChannelsActionSchema().load(data)
+        return StoreSetSupplyChannelsActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.store import StoresSetSupplyChannelsActionSchema
+        from ._schemas.store import StoreSetSupplyChannelsActionSchema
 
-        return StoresSetSupplyChannelsActionSchema().dump(self)
+        return StoreSetSupplyChannelsActionSchema().dump(self)

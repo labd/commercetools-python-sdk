@@ -36,13 +36,17 @@ class ByProjectKeyImageSearchRequestBuilder:
         limit: int = None,
         offset: int = None,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImageSearchResponse":
         """Accepts an image file and returns similar products from product catalogue."""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/image-search",
             params={"limit": limit, "offset": offset},
-            data_object=body,
-            response_class=ImageSearchResponse,
+            data=body.read(),
             headers={"Content-Type": "multipart/form-data", **headers},
+            options=options,
         )
+        if response.status_code == 200:
+            return ImageSearchResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

@@ -40,13 +40,17 @@ class ByProjectKeyProductVariantPatchesImportSinkKeyByImportSinkKeyRequestBuilde
         body: "ProductVariantPatchRequest",
         *,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportResponse":
         """Creates a new import request for product variant patches"""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/product-variant-patches/importSinkKey={self._import_sink_key}",
             params={},
-            data_object=body,
-            response_class=ImportResponse,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return ImportResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

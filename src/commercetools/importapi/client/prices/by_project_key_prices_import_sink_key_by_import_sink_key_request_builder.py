@@ -49,14 +49,21 @@ class ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestBuilder:
         )
 
     def post(
-        self, body: "PriceImportRequest", *, headers: typing.Dict[str, str] = None
+        self,
+        body: "PriceImportRequest",
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportResponse":
         """Creates import request for creating new prices or updating existing ones."""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/prices/importSinkKey={self._import_sink_key}",
             params={},
-            data_object=body,
-            response_class=ImportResponse,
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
+            options=options,
         )
+        if response.status_code == 201:
+            return ImportResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

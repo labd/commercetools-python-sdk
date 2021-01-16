@@ -24,12 +24,18 @@ class ByProjectKeySimilaritiesProductsStatusByTaskIdRequestBuilder:
         self._client = client
 
     def get(
-        self, *, headers: typing.Dict[str, str] = None
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "SimilarProductsTaskStatus":
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/similarities/products/status/{self._task_id}",
             params={},
-            response_class=SimilarProductsTaskStatus,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return SimilarProductsTaskStatus.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

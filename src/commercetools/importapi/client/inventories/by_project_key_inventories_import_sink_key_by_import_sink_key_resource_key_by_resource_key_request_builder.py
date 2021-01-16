@@ -27,13 +27,19 @@ class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyResourceKeyByResourceKe
         self._client = client
 
     def delete(
-        self, *, headers: typing.Dict[str, str] = None
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportOperationStatus":
         """Deletes the inventory given by the resource key."""
         headers = {} if headers is None else headers
-        return self._client._delete(
+        response = self._client._delete(
             endpoint=f"/{self._project_key}/inventories/importSinkKey={self._import_sink_key}/resourceKey={self._resource_key}",
             params={},
-            response_class=ImportOperationStatus,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ImportOperationStatus.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

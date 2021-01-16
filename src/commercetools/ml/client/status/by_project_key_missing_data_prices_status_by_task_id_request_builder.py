@@ -24,12 +24,18 @@ class ByProjectKeyMissingDataPricesStatusByTaskIdRequestBuilder:
         self._client = client
 
     def get(
-        self, *, headers: typing.Dict[str, str] = None
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "MissingPricesTaskStatus":
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/missing-data/prices/status/{self._task_id}",
             params={},
-            response_class=MissingPricesTaskStatus,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return MissingPricesTaskStatus.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

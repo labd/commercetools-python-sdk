@@ -1,14 +1,14 @@
 # Generated file, please do not change!!!
 import typing
 
+from ...models.cart import Cart, ReplicaCartDraft
 from ...models.error import ErrorResponse
-from ...models.shipping_method import ShippingMethodPagedQueryResponse
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
-class ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder:
+class ByProjectKeyInStoreKeyByStoreKeyCartsReplicateRequestBuilder:
 
     _client: "BaseClient"
     _project_key: str
@@ -24,26 +24,28 @@ class ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder:
         self._store_key = store_key
         self._client = client
 
-    def get(
+    def post(
         self,
+        body: "ReplicaCartDraft",
         *,
-        cart_id: str,
-        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["ShippingMethodPagedQueryResponse"]:
+    ) -> typing.Optional["Cart"]:
         headers = {} if headers is None else headers
-        response = self._client._get(
-            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shipping-methods/matching-cart",
-            params={"cartId": cart_id, "expand": expand},
-            headers=headers,
+        response = self._client._post(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/carts/replicate",
+            params={},
+            json=body.serialize(),
+            headers={"Content-Type": "application/json", **headers},
             options=options,
         )
-        if response.status_code == 200:
-            return ShippingMethodPagedQueryResponse.deserialize(response.json())
+        if response.status_code == 201:
+            return Cart.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
             return None
         raise ValueError("Unhandled status code %s", response.status_code)

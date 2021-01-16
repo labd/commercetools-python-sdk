@@ -502,6 +502,12 @@ class OrderSchema(BaseResourceSchema):
 
 class OrderFromCartDraftSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
+    cart = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     order_number = marshmallow.fields.String(
         allow_none=True,

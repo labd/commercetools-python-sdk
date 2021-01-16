@@ -46,10 +46,11 @@ class ByProjectKeyPricesImportSinkKeyByImportSinkKeyImportOperationsRequestBuild
         resource_key: str = None,
         state: "ProcessingState" = None,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportOperationPagedResponse":
         """Retrieves all price import operations of an import sink key."""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/prices/importSinkKey={self._import_sink_key}/import-operations",
             params={
                 "limit": limit,
@@ -58,6 +59,9 @@ class ByProjectKeyPricesImportSinkKeyByImportSinkKeyImportOperationsRequestBuild
                 "resourceKey": resource_key,
                 "state": state,
             },
-            response_class=ImportOperationPagedResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ImportOperationPagedResponse.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

@@ -65,6 +65,13 @@ class StoreSchema(BaseResourceSchema):
         missing=None,
         data_key="supplyChannels",
     )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -101,6 +108,13 @@ class StoreDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannels",
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -181,27 +195,33 @@ class StoreUpdateSchema(helpers.BaseSchema):
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "addDistributionChannel": helpers.absmod(
+                    __name__, ".StoreAddDistributionChannelActionSchema"
+                ),
+                "addSupplyChannel": helpers.absmod(
+                    __name__, ".StoreAddSupplyChannelActionSchema"
+                ),
+                "removeDistributionChannel": helpers.absmod(
+                    __name__, ".StoreRemoveDistributionChannelActionSchema"
+                ),
+                "removeSupplyChannel": helpers.absmod(
+                    __name__, ".StoreRemoveSupplyChannelActionSchema"
+                ),
+                "setCustomField": helpers.absmod(
+                    __name__, ".StoreSetCustomFieldActionSchema"
+                ),
+                "setCustomType": helpers.absmod(
+                    __name__, ".StoreSetCustomTypeActionSchema"
+                ),
+                "setDistributionChannels": helpers.absmod(
+                    __name__, ".StoreSetDistributionChannelsActionSchema"
+                ),
                 "setLanguages": helpers.absmod(
                     __name__, ".StoreSetLanguagesActionSchema"
                 ),
                 "setName": helpers.absmod(__name__, ".StoreSetNameActionSchema"),
-                "addDistributionChannel": helpers.absmod(
-                    __name__, ".StoresAddDistributionChannelsActionSchema"
-                ),
-                "addSupplyChannel": helpers.absmod(
-                    __name__, ".StoresAddSupplyChannelsActionSchema"
-                ),
-                "removeDistributionChannel": helpers.absmod(
-                    __name__, ".StoresRemoveDistributionChannelsActionSchema"
-                ),
-                "removeSupplyChannel": helpers.absmod(
-                    __name__, ".StoresRemoveSupplyChannelsActionSchema"
-                ),
-                "setDistributionChannels": helpers.absmod(
-                    __name__, ".StoresSetDistributionChannelsActionSchema"
-                ),
                 "setSupplyChannels": helpers.absmod(
-                    __name__, ".StoresSetSupplyChannelsActionSchema"
+                    __name__, ".StoreSetSupplyChannelsActionSchema"
                 ),
             },
         ),
@@ -228,6 +248,134 @@ class StoreUpdateActionSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StoreUpdateAction(**data)
+
+
+class StoreAddDistributionChannelActionSchema(StoreUpdateActionSchema):
+    distribution_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreAddDistributionChannelAction(**data)
+
+
+class StoreAddSupplyChannelActionSchema(StoreUpdateActionSchema):
+    supply_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="supplyChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreAddSupplyChannelAction(**data)
+
+
+class StoreRemoveDistributionChannelActionSchema(StoreUpdateActionSchema):
+    distribution_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreRemoveDistributionChannelAction(**data)
+
+
+class StoreRemoveSupplyChannelActionSchema(StoreUpdateActionSchema):
+    supply_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="supplyChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreRemoveSupplyChannelAction(**data)
+
+
+class StoreSetCustomFieldActionSchema(StoreUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreSetCustomFieldAction(**data)
+
+
+class StoreSetCustomTypeActionSchema(StoreUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreSetCustomTypeAction(**data)
+
+
+class StoreSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
+    distribution_channels = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="distributionChannels",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreSetDistributionChannelsAction(**data)
 
 
 class StoreSetLanguagesActionSchema(StoreUpdateActionSchema):
@@ -261,99 +409,7 @@ class StoreSetNameActionSchema(StoreUpdateActionSchema):
         return models.StoreSetNameAction(**data)
 
 
-class StoresAddDistributionChannelsActionSchema(StoreUpdateActionSchema):
-    distribution_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="distributionChannel",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.StoresAddDistributionChannelsAction(**data)
-
-
-class StoresAddSupplyChannelsActionSchema(StoreUpdateActionSchema):
-    supply_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="supplyChannel",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.StoresAddSupplyChannelsAction(**data)
-
-
-class StoresRemoveDistributionChannelsActionSchema(StoreUpdateActionSchema):
-    distribution_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="distributionChannel",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.StoresRemoveDistributionChannelsAction(**data)
-
-
-class StoresRemoveSupplyChannelsActionSchema(StoreUpdateActionSchema):
-    supply_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="supplyChannel",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.StoresRemoveSupplyChannelsAction(**data)
-
-
-class StoresSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
-    distribution_channels = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="distributionChannels",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.StoresSetDistributionChannelsAction(**data)
-
-
-class StoresSetSupplyChannelsActionSchema(StoreUpdateActionSchema):
+class StoreSetSupplyChannelsActionSchema(StoreUpdateActionSchema):
     supply_channels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
@@ -370,4 +426,4 @@ class StoresSetSupplyChannelsActionSchema(StoreUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["action"]
-        return models.StoresSetSupplyChannelsAction(**data)
+        return models.StoreSetSupplyChannelsAction(**data)

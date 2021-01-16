@@ -34,10 +34,11 @@ class ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
         confidence_min: float = None,
         confidence_max: float = None,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "ProjectCategoryRecommendationPagedQueryResponse":
         """Response Representation: PagedQueryResult with a results array of ProjectCategoryrecommendation, sorted by confidence scores in descending order and the meta information of ProjectCategoryrecommendationMeta."""
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/recommendations/project-categories/{self._product_id}",
             params={
                 "limit": limit,
@@ -46,6 +47,11 @@ class ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder:
                 "confidenceMin": confidence_min,
                 "confidenceMax": confidence_max,
             },
-            response_class=ProjectCategoryRecommendationPagedQueryResponse,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ProjectCategoryRecommendationPagedQueryResponse.deserialize(
+                response.json()
+            )
+        raise ValueError("Unhandled status code %s", response.status_code)

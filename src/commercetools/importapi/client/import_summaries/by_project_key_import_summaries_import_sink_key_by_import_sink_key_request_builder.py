@@ -23,16 +23,24 @@ class ByProjectKeyImportSummariesImportSinkKeyByImportSinkKeyRequestBuilder:
         self._import_sink_key = import_sink_key
         self._client = client
 
-    def get(self, *, headers: typing.Dict[str, str] = None) -> "ImportSummary":
+    def get(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> "ImportSummary":
         """Retrieves an import summary for the given import sink.
 
         The import summary is calculated on demand.
 
         """
         headers = {} if headers is None else headers
-        return self._client._get(
+        response = self._client._get(
             endpoint=f"/{self._project_key}/import-summaries/importSinkKey={self._import_sink_key}",
             params={},
-            response_class=ImportSummary,
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return ImportSummary.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

@@ -19,6 +19,7 @@ if typing.TYPE_CHECKING:
     from .cart import (
         CartOrigin,
         CartReference,
+        CartResourceIdentifier,
         CustomLineItem,
         CustomLineItemDraft,
         DiscountCodeInfo,
@@ -845,6 +846,8 @@ class Order(BaseResource):
 class OrderFromCartDraft(_BaseType):
     #: The unique id of the cart from which an order is created.
     id: str
+    #: ResourceIdentifier to the Cart from which this order is created.
+    cart: "CartResourceIdentifier"
     version: int
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -862,6 +865,7 @@ class OrderFromCartDraft(_BaseType):
         self,
         *,
         id: str,
+        cart: "CartResourceIdentifier",
         version: int,
         order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
@@ -870,6 +874,7 @@ class OrderFromCartDraft(_BaseType):
         state: typing.Optional["StateResourceIdentifier"] = None
     ):
         self.id = id
+        self.cart = cart
         self.version = version
         self.order_number = order_number
         self.payment_state = payment_state

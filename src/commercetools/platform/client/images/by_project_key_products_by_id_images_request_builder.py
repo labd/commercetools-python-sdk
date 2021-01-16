@@ -32,10 +32,11 @@ class ByProjectKeyProductsByIDImagesRequestBuilder:
         sku: str = None,
         staged: bool = None,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> "Product":
         """Uploads a binary image file to a given product variant. The supported image formats are JPEG, PNG and GIF."""
         headers = {} if headers is None else headers
-        return self._client._post(
+        response = self._client._post(
             endpoint=f"/{self._project_key}/products/{self._id}/images",
             params={
                 "filename": filename,
@@ -43,7 +44,10 @@ class ByProjectKeyProductsByIDImagesRequestBuilder:
                 "sku": sku,
                 "staged": staged,
             },
-            data_object=body,
-            response_class=Product,
+            data=body.read(),
             headers=headers,
+            options=options,
         )
+        if response.status_code == 200:
+            return Product.deserialize(response.json())
+        raise ValueError("Unhandled status code %s", response.status_code)

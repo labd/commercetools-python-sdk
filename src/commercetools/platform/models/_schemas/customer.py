@@ -255,6 +255,14 @@ class CustomerDraftSchema(helpers.BaseSchema):
         missing=None,
         data_key="anonymousCartId",
     )
+    anonymous_cart = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousCart",
+    )
     anonymous_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -483,6 +491,14 @@ class CustomerSigninSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="anonymousCartId",
+    )
+    anonymous_cart = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="anonymousCart",
     )
     anonymous_cart_sign_in_mode = marshmallow_enum.EnumField(
         AnonymousCartSignInMode,

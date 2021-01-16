@@ -1,3 +1,20 @@
+14.0.0 (unreleased)
+-------------------
+We moved our code generation to the code generation tool from Commercetools,
+see https://github.com/commercetools/rmf-codegen
+
+Reason for this is two-fold:
+ 1. We can now generate the code for the `imporapi` and the `ml` api
+    specifications next to the `platform` sdk.
+ 2. It makes it easier for us to keep the code generation in sync with
+    changes to the API specification.
+
+The major difference is that it now also use the request builder pattern,
+matching the SDK's for the other languages (e.g. TypeScript).
+
+The package is backwards compatible for now, although deprecation warnings are
+shown.
+
 13.0.0 (2021-01-04)
 -------------------
 - Regenerate code (fixed not being able to parse a lot of errors, so upgrading is recommended)
@@ -26,7 +43,7 @@
 
 12.0.2 (2020-11-27)
 -------------------
-- Testing backend: Fix custom object mock interface 
+- Testing backend: Fix custom object mock interface
 
 12.0.1 (2020-11-18)
 -------------------
@@ -34,7 +51,7 @@
 
 12.0.0 (2020-10-15)
 -------------------
-- Regenerate types (commercetools-api-reference 5ebb3153) 
+- Regenerate types (commercetools-api-reference 5ebb3153)
 - Removed get_by_container and replaced by query_by_container (it's a query endpoint, not a get custom object endpoint)
 
 11.0.0 (2020-09-18)

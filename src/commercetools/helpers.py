@@ -263,7 +263,7 @@ class Discriminator(Field):
         return self._load(value, data, **kwargs)
 
 
-def _concurrent_retry(num):
+def _concurrent_retry(num, source):
     """Decorator to add retry logic for concurrent modifications.
 
     The num field is used to indicate how many times it should be retried. When
@@ -276,28 +276,28 @@ def _concurrent_retry(num):
         return lambda func: func
 
     def _wrapper(func):
-        def _handler(data):
+        def _handler(*args, **kwargs):
             nonlocal num
 
             # When there is no version set we can skip the retry logic
-            if "version" not in data:
-                return func(data)
+            if not kwargs.get(source) or not kwargs[source].get("version"):
+                return func(*args, **kwargs)
 
             # Loop while we explicity either return or raise an error when the
             # num value is decreated to <= 0.
             while True:
-                try:
-                    return func(data)
-                except CommercetoolsError as exc:
-                    if num <= 0:
-                        raise
-
-                    if exc.response.status_code == 409:
-                        if exc.response.errors:
-                            data["version"] = exc.response.errors[0].current_version
+                response = func(*args, **kwargs)
+                if response.status_code == 409 and num > 0:
+                    response_data = response.json()
+                    if response_data.get("errors"):
+                        kwargs[source]["version"] = next(
+                            x.get("currentVersion") for x in response_data["errors"]
+                        )
                     else:
-                        raise
+                        return response
                     num -= 1
+                else:
+                    return response
 
         return _handler
 

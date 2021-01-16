@@ -1,5 +1,41 @@
+from commercetools.platform import models
+from commercetools.platform.client import Client as PlatformClient
 from commercetools.platform.models import ExtensionNoResponseError, QueryTimedOutError
 from commercetools.platform.models._schemas.error import ErrorResponseSchema
+
+
+def test_raises_exception(ct_platform_client: PlatformClient):
+    channel = (
+        ct_platform_client.with_project_key("foo")
+        .channels()
+        .post(
+            models.ChannelDraft(
+                key="test-channel2", roles=[models.ChannelRoleEnum.INVENTORY_SUPPLY]
+            )
+        )
+    )
+
+    result = (
+        ct_platform_client.with_project_key("foo")
+        .channels()
+        .with_id(channel.id)
+        .post(
+            models.ChannelUpdate(
+                version=4,
+                actions=[
+                    models.ChannelSetRolesAction(roles=[models.ChannelRoleEnum.PRIMARY])
+                ],
+            ),
+            options={"force_version": True},
+        )
+    )
+
+    result = (
+        ct_platform_client.with_project_key("foo")
+        .channels()
+        .with_id(channel.id)
+        .delete(version=1, options={"force_version": True})
+    )
 
 
 def test_extension_no_response_error():

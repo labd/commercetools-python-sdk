@@ -114,85 +114,67 @@ class BaseClient:
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        response_class: typing.Type[Model] = None,
         headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
-        response = self._http_client.get(self._base_url + endpoint, params=params)
-
-        if response.status_code == 200:
-            if response_class:
-                return response_class.deserialize(response.json())
-        return self._process_error(response)
+        return self._http_client.get(self._base_url + endpoint, params=params)
 
     def _post(
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        data_object: typing.Any = None,
-        response_class: typing.Type[Model] = None,
+        data: typing.Any = None,
+        json: typing.Dict[str, typing.Any] = None,
         headers: typing.Dict[str, str] = None,
-        form_encoded: bool = False,
-        force_update: bool = False,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Any:
         """Retrieve a single object from the commercetools platform"""
+        if options and options.get("force_version"):
 
-        @_concurrent_retry(3 if force_update else 0)
-        def remote_http_call(data):
-            if isinstance(data_object, io.IOBase):
-                kwargs = {"data": data}
-            elif form_encoded and data is not None:
-                kwargs = {"data": data}
-            else:
-                kwargs = {"json": data}
-            if params:
-                kwargs["params"] = params
+            @_concurrent_retry(3, "json")
+            def post(**kwargs):
+                return self._http_client.post(**kwargs)
 
-            response = self._http_client.post(self._base_url + endpoint, **kwargs)
-            if response.status_code in (200, 201):
-                if response_class:
-                    return response_class.deserialize(response.json())
-            return self._process_error(response)
-
-        if isinstance(data_object, io.IOBase):
-            data = data_object.read()
-        elif data_object is not None:
-            data = data_object.serialize()
+            return post(
+                url=self._base_url + endpoint,
+                params=params,
+                data=data,
+                json=json,
+                headers=headers,
+            )
         else:
-            data = None
-        return remote_http_call(data)
+            return self._http_client.post(
+                self._base_url + endpoint,
+                params=params,
+                data=data,
+                json=json,
+                headers=headers,
+            )
 
     def _delete(
         self,
         endpoint: str,
         params: typing.Dict[str, typing.Any],
-        response_class: typing.Type[Model] = None,
         headers: typing.Dict[str, str] = None,
-        force_delete: bool = False,
+        options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Any:
         """Delete an object from the commercetools platform"""
 
-        @_concurrent_retry(3 if force_delete else 0)
-        def remote_http_call(data):
-            response = self._http_client.delete(
-                self._base_url + endpoint, params=params
-            )
-            if response.status_code == 200:
-                if response_class:
-                    return response_class.deserialize(response.json())
-            return self._process_error(response)
+        if options and options.get("force_version"):
 
-        return remote_http_call(params)
+            @_concurrent_retry(3, "params")
+            def delete(**kwargs):
+                return self._http_client.delete(**kwargs)
 
-    def _process_error(self, response: requests.Response) -> None:
+            return delete(url=self._base_url + endpoint, params=params)
+        else:
+            return self._http_client.delete(self._base_url + endpoint, params=params)
+
+    def _create_exception(self, obj, response) -> CommercetoolsError:
         correlation_id = response.headers.get(HEADER_CORRELATION_ID)
         if not response.content:
             response.raise_for_status()
-
-        # FIXME: The error response defined in the RAML should be used
-        from commercetools.platform.models._schemas.error import ErrorResponseSchema
-
-        obj = ErrorResponseSchema().loads(response.content)
 
         # We'll fetch the 'raw' errors from the response because some of the
         # attributes are not included in the schemas.
@@ -206,7 +188,7 @@ class BaseClient:
         else:
             errors_raw = response_json.get("errors", [])
 
-        raise CommercetoolsError(obj.message, errors_raw, obj, correlation_id)
+        return CommercetoolsError(obj.message, errors_raw, obj, correlation_id)
 
     def _read_env_vars(self, config: dict) -> dict:
         if not config.get("project_key"):

@@ -5,6 +5,7 @@ import uuid
 
 import marshmallow
 from marshmallow import fields
+from requests.packages.urllib3 import response
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import CommercetoolsError
@@ -202,7 +203,9 @@ class ServiceBackend(BaseBackend):
         obj = self._schema_draft().loads(request.body)
         data = self.model.add(obj)
         expanded_data = self._expand(request, data)
-        return create_commercetools_response(request, json=expanded_data)
+        return create_commercetools_response(
+            request, json=expanded_data, status_code=201
+        )
 
     def get_by_id(self, request, id):
         obj = self.model.get_by_id(id)
@@ -349,6 +352,12 @@ class ServiceBackend(BaseBackend):
             return create_commercetools_response(request, status_code=404)
 
         update = self._schema_update().load(request.json())
+
+        if self._verify_version:
+            response = self._validate_resource_version(request, obj)
+            if response is not None:
+                return response
+
         if update.actions:
             obj, err = self._apply_update_actions(obj, update)
             if err:

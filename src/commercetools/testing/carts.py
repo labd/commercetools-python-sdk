@@ -137,6 +137,7 @@ class CartsModel(BaseModel):
         # https://docs.commercetools.com/http-api-projects-carts for a complete overview
         return models.Cart(
             id=str(object_id),
+            key=None,
             version=1,
             cart_state=models.CartState.ACTIVE,
             customer_id=draft.customer_id,

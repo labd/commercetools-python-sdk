@@ -7,7 +7,9 @@ def test_unknown_expand_terms(old_client: commercetools.Client):
     cart = old_client.carts.create(models.CartDraft(currency="EUR"))
 
     order = old_client.orders.create(
-        models.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order"),
+        models.OrderFromCartDraft(
+            id=cart.id, version=1, cart=cart, order_number="test-order"
+        ),
         expand="nonExisting",
     )
 

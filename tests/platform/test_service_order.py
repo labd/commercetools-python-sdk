@@ -6,7 +6,9 @@ from commercetools.platform import models
 def test_orders_get_by_id(old_client):
     cart = old_client.carts.create(models.CartDraft(currency="EUR"))
     order = old_client.orders.create(
-        models.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order")
+        models.OrderFromCartDraft(
+            id=cart.id, cart=cart, version=1, order_number="test-order"
+        )
     )
 
     assert order.id
@@ -19,7 +21,9 @@ def test_orders_query(old_client):
 
     cart = old_client.carts.create(models.CartDraft(currency="EUR"))
     order = old_client.orders.create(
-        models.OrderFromCartDraft(id=cart.id, version=1, order_number="test-order")
+        models.OrderFromCartDraft(
+            id=cart.id, cart=cart, version=1, order_number="test-order"
+        )
     )
 
     results = old_client.orders.query()

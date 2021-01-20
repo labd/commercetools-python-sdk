@@ -526,7 +526,7 @@ class AttributesSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile(""),
         type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, ".AttributeSchema"),
+            nested=helpers.absmod(__name__, "...None"),
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
             many=True,

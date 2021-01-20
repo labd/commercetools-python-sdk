@@ -107,7 +107,7 @@ class FacetResultsSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile("^[a-z].*$"),
         type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, "...marshmallow.fields.Raw"),
+            nested=helpers.absmod(__name__, "...None"),
             unknown=marshmallow.EXCLUDE,
             allow_none=True,
             many=True,
@@ -1058,8 +1058,13 @@ class RangeFacetResultSchema(FacetResultSchema):
 
 class SearchKeywordSchema(helpers.BaseSchema):
     text = marshmallow.fields.String(allow_none=True, missing=None)
-    suggest_tokenizer = marshmallow.fields.Raw(
+    suggest_tokenizer = helpers.Discriminator(
         allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "custom": helpers.absmod(__name__, ".CustomTokenizerSchema"),
+            "whitespace": helpers.absmod(__name__, ".WhitespaceTokenizerSchema"),
+        },
         metadata={"omit_empty": True},
         missing=None,
         data_key="suggestTokenizer",

@@ -1287,7 +1287,58 @@ class LineItemDraftSchema(helpers.BaseSchema):
 
 
 class ReplicaCartDraftSchema(helpers.BaseSchema):
-    reference = marshmallow.fields.Raw(allow_none=True, missing=None)
+    reference = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("typeId", "type_id"),
+        discriminator_schemas={
+            "cart-discount": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountReferenceSchema"
+            ),
+            "cart": helpers.absmod(__name__, ".CartReferenceSchema"),
+            "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
+            "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
+            "key-value-document": helpers.absmod(
+                __name__, ".custom_object.CustomObjectReferenceSchema"
+            ),
+            "customer-group": helpers.absmod(
+                __name__, ".customer_group.CustomerGroupReferenceSchema"
+            ),
+            "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
+            "discount-code": helpers.absmod(
+                __name__, ".discount_code.DiscountCodeReferenceSchema"
+            ),
+            "inventory-entry": helpers.absmod(
+                __name__, ".inventory.InventoryEntryReferenceSchema"
+            ),
+            "order-edit": helpers.absmod(
+                __name__, ".order_edit.OrderEditReferenceSchema"
+            ),
+            "order": helpers.absmod(__name__, ".order.OrderReferenceSchema"),
+            "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
+            "product-discount": helpers.absmod(
+                __name__, ".product_discount.ProductDiscountReferenceSchema"
+            ),
+            "product-type": helpers.absmod(
+                __name__, ".product_type.ProductTypeReferenceSchema"
+            ),
+            "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
+            "shipping-method": helpers.absmod(
+                __name__, ".shipping_method.ShippingMethodReferenceSchema"
+            ),
+            "shopping-list": helpers.absmod(
+                __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
+            "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
+            "tax-category": helpers.absmod(
+                __name__, ".tax_category.TaxCategoryReferenceSchema"
+            ),
+            "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
+            "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
+        },
+        missing=None,
+    )
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )

@@ -8,7 +8,7 @@ from marshmallow.base import SchemaABC
 from oauthlib.oauth2 import BackendApplicationClient
 from requests.adapters import HTTPAdapter
 from requests_oauthlib import OAuth2Session
-from urllib3.util.retry import Retry
+from urllib3 import Retry
 
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
@@ -37,6 +37,8 @@ class BaseClient:
      path to the token url.
     :param token_saver: optional custom token saver to store and retrieve the
      oauth2 tokens.
+    :param http_adapter: optional custom http adapter, useful for settings
+     custom timeouts, custom retries, or for testing.
 
     """
 
@@ -49,6 +51,7 @@ class BaseClient:
         url: str = None,
         token_url: str = None,
         token_saver: BaseTokenSaver = None,
+        http_adapter: HTTPAdapter = None,
     ) -> None:
 
         # Use environment variables as fallback
@@ -88,11 +91,12 @@ class BaseClient:
             token_updater=self._save_token,
         )
 
-        # Register retry handling for Connection errors and 502, 503, 504.
-        retry = Retry(status=3, connect=3, status_forcelist=[502, 503, 504])
-        adapter = HTTPAdapter(max_retries=retry)
-        self._http_client.mount("http://", adapter)
-        self._http_client.mount("https://", adapter)
+        if not http_adapter:
+            # Register retry handling for Connection errors and 502, 503, 504.
+            retry = Retry(status=3, connect=3, status_forcelist=[502, 503, 504])
+            http_adapter = HTTPAdapter(max_retries=retry)
+        self._http_client.mount("http://", http_adapter)
+        self._http_client.mount("https://", http_adapter)
 
         if token:
             self._http_client.token = token

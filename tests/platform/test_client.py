@@ -2,6 +2,7 @@ import time
 import uuid
 
 import pytest
+from requests_mock.adapter import Adapter
 
 from commercetools import CommercetoolsError
 from commercetools.client import Client
@@ -69,6 +70,24 @@ def test_cache_token(commercetools_api):
     assert len(commercetools_api.requests_mock.request_history) == 1
 
 
+def test_allows_passing_custom_http_adapter():
+    my_adapter = Adapter()
+    my_adapter.register_uri(
+        "POST",
+        "https://auth.sphere.io/oauth/token",
+        json=dict(access_token="my_mock_access_token"),
+    )
+    Client(
+        client_id="unittest",
+        client_secret="none",
+        project_key="test",
+        url="https://api.sphere.io",
+        token_url="https://auth.sphere.io/oauth/token",
+        http_adapter=my_adapter,
+    )
+    assert len(my_adapter.request_history) == 1
+
+
 def test_resource_update_conflict(old_client):
     """Test the return value of the update methods.
 
@@ -124,7 +143,7 @@ def test_resource_update_conflict(old_client):
 
 
 def test_resource_delete_conflict(old_client):
-    """Test the return value of the update methods.
+    """Test the return value of the delete methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend

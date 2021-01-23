@@ -1,6 +1,13 @@
 name: Python Tests
 
-on: [push]
+on:
+  # This should run the workflow for all non-forked pushes
+  push:
+  pull_request:
+    branches:
+    # This should run the workflow for forked PRs
+    - '**:**'
+
 
 jobs:
 

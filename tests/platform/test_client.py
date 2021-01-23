@@ -145,7 +145,7 @@ def test_resource_update_conflict(old_client):
 def test_resource_delete_conflict(old_client):
     """Test the return value of the delete methods.
 
-    It doesn't test the actual update itself.
+    It doesn't test the actual delete itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
     product = old_client.products.create(

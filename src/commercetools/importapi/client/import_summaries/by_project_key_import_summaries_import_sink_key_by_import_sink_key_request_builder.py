@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.importsummaries import ImportSummary
 
@@ -43,4 +44,4 @@ class ByProjectKeyImportSummariesImportSinkKeyByImportSinkKeyRequestBuilder:
         )
         if response.status_code == 200:
             return ImportSummary.deserialize(response.json())
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

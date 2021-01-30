@@ -20,9 +20,11 @@ class SearchKeywordsSchema(helpers.BaseSchema):
         pattern=re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
-            unknown=marshmallow.EXCLUDE,
             allow_none=True,
             many=True,
+            unknown=marshmallow.EXCLUDE,
+            missing=None,
+            data_key="/^[a-z]{2}(-[A-Z]{2})?$/",
         ),
     )
 

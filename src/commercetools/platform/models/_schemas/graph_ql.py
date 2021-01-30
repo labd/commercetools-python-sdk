@@ -99,12 +99,7 @@ class GraphQLVariablesMapSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile(""),
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, "...marshmallow.fields.Raw"),
-            unknown=marshmallow.EXCLUDE,
-            allow_none=True,
-            many=True,
-        ),
+        type=marshmallow.fields.Raw(allow_none=True, missing=None),
     )
 
     class Meta:

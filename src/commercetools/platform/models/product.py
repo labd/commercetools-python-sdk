@@ -249,7 +249,14 @@ class FacetResultTerm(_BaseType):
         return FacetResultTermSchema().dump(self)
 
 
-class FacetResults(typing.Dict[str, str]):
+class FacetResults(
+    typing.Dict[
+        str,
+        typing.Union[
+            "FacetResult", "FilteredFacetResult", "RangeFacetResult", "TermFacetResult"
+        ],
+    ]
+):
     pass
 
 
@@ -1089,7 +1096,9 @@ class ProductVariantChannelAvailability(_BaseType):
         return ProductVariantChannelAvailabilitySchema().dump(self)
 
 
-class ProductVariantChannelAvailabilityMap(typing.Dict[str, str]):
+class ProductVariantChannelAvailabilityMap(
+    typing.Dict[str, "ProductVariantChannelAvailability"]
+):
     pass
 
 
@@ -1180,7 +1189,7 @@ class SearchKeyword(_BaseType):
         return SearchKeywordSchema().dump(self)
 
 
-class SearchKeywords(typing.Dict[str, str]):
+class SearchKeywords(typing.Dict[str, typing.List["SearchKeyword"]]):
     pass
 
 
@@ -1247,7 +1256,7 @@ class Suggestion(_BaseType):
         return SuggestionSchema().dump(self)
 
 
-class SuggestionResult(typing.Dict[str, str]):
+class SuggestionResult(typing.Dict[str, typing.List["Suggestion"]]):
     pass
 
 

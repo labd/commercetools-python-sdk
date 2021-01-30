@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.importrequests import ImportResponse, ProductVariantPatchRequest
 from ..import_operations.by_project_key_product_variant_patches_import_sink_key_by_import_sink_key_import_operations_request_builder import (
@@ -51,6 +52,6 @@ class ByProjectKeyProductVariantPatchesImportSinkKeyByImportSinkKeyRequestBuilde
             headers={"Content-Type": "application/json", **headers},
             options=options,
         )
-        if response.status_code == 201:
+        if response.status_code in (201, 200):
             return ImportResponse.deserialize(response.json())
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

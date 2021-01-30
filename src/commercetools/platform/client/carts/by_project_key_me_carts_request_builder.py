@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.cart import CartPagedQueryResponse
 from ...models.error import ErrorResponse
@@ -71,7 +72,7 @@ class ByProjectKeyMeCartsRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def post(
         self,
@@ -90,7 +91,7 @@ class ByProjectKeyMeCartsRequestBuilder:
             headers={"Content-Type": "application/json", **headers},
             options=options,
         )
-        if response.status_code == 201:
+        if response.status_code in (201, 200):
             return MyCart.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
@@ -99,4 +100,4 @@ class ByProjectKeyMeCartsRequestBuilder:
             return None
         elif response.status_code == 200:
             return None
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

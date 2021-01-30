@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.errors import ErrorResponse
 from ...models.importsinks import ImportSink, ImportSinkDraft
@@ -45,7 +46,7 @@ class ByProjectKeyImportSinksByImportSinkKeyRequestBuilder:
         elif response.status_code == 409:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def get(
         self,
@@ -66,7 +67,7 @@ class ByProjectKeyImportSinksByImportSinkKeyRequestBuilder:
         elif response.status_code == 404:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def delete(
         self,
@@ -87,4 +88,4 @@ class ByProjectKeyImportSinksByImportSinkKeyRequestBuilder:
         elif response.status_code == 404:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

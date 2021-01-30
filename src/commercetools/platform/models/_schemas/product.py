@@ -106,11 +106,16 @@ class FacetResultsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile("^[a-z].*$"),
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, "...None"),
-            unknown=marshmallow.EXCLUDE,
+        type=helpers.Discriminator(
             allow_none=True,
-            many=True,
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "filter": helpers.absmod(__name__, ".FilteredFacetResultSchema"),
+                "range": helpers.absmod(__name__, ".RangeFacetResultSchema"),
+                "terms": helpers.absmod(__name__, ".TermFacetResultSchema"),
+            },
+            missing=None,
+            data_key="/^[a-z].*$/",
         ),
     )
 
@@ -959,9 +964,9 @@ class ProductVariantChannelAvailabilityMapSchema(helpers.BaseSchema):
         pattern=re.compile(""),
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".ProductVariantChannelAvailabilitySchema"),
-            unknown=marshmallow.EXCLUDE,
             allow_none=True,
-            many=True,
+            unknown=marshmallow.EXCLUDE,
+            missing=None,
         ),
     )
 
@@ -1085,9 +1090,11 @@ class SearchKeywordsSchema(helpers.BaseSchema):
         pattern=re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
-            unknown=marshmallow.EXCLUDE,
             allow_none=True,
             many=True,
+            unknown=marshmallow.EXCLUDE,
+            missing=None,
+            data_key="/^[a-z]{2}(-[A-Z]{2})?$/",
         ),
     )
 
@@ -1159,9 +1166,11 @@ class SuggestionResultSchema(helpers.BaseSchema):
         pattern=re.compile("searchKeywords.[a-z]{2}(-[A-Z]{2})?"),
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".SuggestionSchema"),
-            unknown=marshmallow.EXCLUDE,
             allow_none=True,
             many=True,
+            unknown=marshmallow.EXCLUDE,
+            missing=None,
+            data_key="/searchKeywords.[a-z]{2}(-[A-Z]{2})?/",
         ),
     )
 

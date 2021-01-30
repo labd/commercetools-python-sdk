@@ -26,7 +26,7 @@ __all__ = [
 ]
 
 
-class SearchKeywords(typing.Dict[str, str]):
+class SearchKeywords(typing.Dict[str, typing.List["SearchKeyword"]]):
     pass
 
 

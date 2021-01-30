@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from .by_project_key_recommendations_project_categories_by_product_id_request_builder import (
     ByProjectKeyRecommendationsProjectCategoriesByProductIdRequestBuilder,

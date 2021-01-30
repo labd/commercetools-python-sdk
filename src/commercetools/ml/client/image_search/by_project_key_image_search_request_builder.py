@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.image_search import ImageSearchResponse
 from ..config.by_project_key_image_search_config_request_builder import (
@@ -49,4 +50,4 @@ class ByProjectKeyImageSearchRequestBuilder:
         )
         if response.status_code == 200:
             return ImageSearchResponse.deserialize(response.json())
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.errors import ErrorResponse
 from ...models.importoperations import ImportOperation
@@ -46,4 +47,4 @@ class ByProjectKeyProductDraftsImportSinkKeyByImportSinkKeyImportOperationsByIdR
         elif response.status_code in (404, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

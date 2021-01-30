@@ -525,11 +525,40 @@ class AttributesSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
         pattern=re.compile(""),
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, "...None"),
-            unknown=marshmallow.EXCLUDE,
+        type=helpers.Discriminator(
             allow_none=True,
-            many=True,
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "boolean": helpers.absmod(__name__, ".BooleanAttributeSchema"),
+                "boolean-set": helpers.absmod(__name__, ".BooleanSetAttributeSchema"),
+                "date": helpers.absmod(__name__, ".DateAttributeSchema"),
+                "date-set": helpers.absmod(__name__, ".DateSetAttributeSchema"),
+                "datetime": helpers.absmod(__name__, ".DateTimeAttributeSchema"),
+                "datetime-set": helpers.absmod(__name__, ".DateTimeSetAttributeSchema"),
+                "enum": helpers.absmod(__name__, ".EnumAttributeSchema"),
+                "enum-set": helpers.absmod(__name__, ".EnumSetAttributeSchema"),
+                "lenum": helpers.absmod(__name__, ".LocalizableEnumAttributeSchema"),
+                "lenum-set": helpers.absmod(
+                    __name__, ".LocalizableEnumSetAttributeSchema"
+                ),
+                "ltext": helpers.absmod(__name__, ".LocalizableTextAttributeSchema"),
+                "ltext-set": helpers.absmod(
+                    __name__, ".LocalizableTextSetAttributeSchema"
+                ),
+                "money": helpers.absmod(__name__, ".MoneyAttributeSchema"),
+                "money-set": helpers.absmod(__name__, ".MoneySetAttributeSchema"),
+                "number": helpers.absmod(__name__, ".NumberAttributeSchema"),
+                "number-set": helpers.absmod(__name__, ".NumberSetAttributeSchema"),
+                "reference": helpers.absmod(__name__, ".ReferenceAttributeSchema"),
+                "reference-set": helpers.absmod(
+                    __name__, ".ReferenceSetAttributeSchema"
+                ),
+                "text": helpers.absmod(__name__, ".TextAttributeSchema"),
+                "text-set": helpers.absmod(__name__, ".TextSetAttributeSchema"),
+                "time": helpers.absmod(__name__, ".TimeAttributeSchema"),
+                "time-set": helpers.absmod(__name__, ".TimeSetAttributeSchema"),
+            },
+            missing=None,
         ),
     )
 

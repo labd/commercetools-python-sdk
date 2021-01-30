@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.missing_data import MissingImagesTaskStatus
 
@@ -38,4 +39,4 @@ class ByProjectKeyMissingDataImagesStatusByTaskIdRequestBuilder:
         )
         if response.status_code == 200:
             return MissingImagesTaskStatus.deserialize(response.json())
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

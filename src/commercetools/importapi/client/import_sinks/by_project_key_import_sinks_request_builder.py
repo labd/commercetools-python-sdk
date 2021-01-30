@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.errors import ErrorResponse
 from ...models.importsinks import ImportSink, ImportSinkDraft, ImportSinkPagedResponse
@@ -49,12 +50,12 @@ class ByProjectKeyImportSinksRequestBuilder:
             headers={"Content-Type": "application/json", **headers},
             options=options,
         )
-        if response.status_code == 201:
+        if response.status_code in (201, 200):
             return ImportSink.deserialize(response.json())
         elif response.status_code == 400:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def get(
         self,
@@ -74,4 +75,4 @@ class ByProjectKeyImportSinksRequestBuilder:
         )
         if response.status_code == 200:
             return ImportSinkPagedResponse.deserialize(response.json())
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

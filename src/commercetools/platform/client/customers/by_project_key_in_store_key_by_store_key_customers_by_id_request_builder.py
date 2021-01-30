@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.common import Update
 from ...models.customer import Customer
@@ -55,7 +56,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def post(
         self,
@@ -85,7 +86,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def delete(
         self,
@@ -111,4 +112,4 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

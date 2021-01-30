@@ -151,7 +151,7 @@ class CustomFieldsDraft(_BaseType):
         return CustomFieldsDraftSchema().dump(self)
 
 
-class FieldContainer(typing.Dict[str, str]):
+class FieldContainer(typing.Dict[str, typing.Any]):
     pass
 
 

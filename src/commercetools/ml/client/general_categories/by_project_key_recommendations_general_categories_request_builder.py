@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.general_category_recommendations import (
     GeneralCategoryRecommendationPagedQueryResponse,
@@ -53,4 +54,4 @@ class ByProjectKeyRecommendationsGeneralCategoriesRequestBuilder:
             return GeneralCategoryRecommendationPagedQueryResponse.deserialize(
                 response.json()
             )
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

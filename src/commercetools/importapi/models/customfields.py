@@ -74,7 +74,7 @@ class Custom(_BaseType):
         return CustomSchema().dump(self)
 
 
-class FieldContainer(typing.Dict[str, str]):
+class FieldContainer(typing.Dict[str, "CustomField"]):
     pass
 
 

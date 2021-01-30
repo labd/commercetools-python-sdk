@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.importoperations import ImportOperationStatus
 
@@ -42,4 +43,4 @@ class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyResourceKeyByResourceKe
         )
         if response.status_code == 200:
             return ImportOperationStatus.deserialize(response.json())
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

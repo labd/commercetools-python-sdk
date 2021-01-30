@@ -1,5 +1,6 @@
 # Generated file, please do not change!!!
 import typing
+import warnings
 
 from ...models.customer import Customer
 from ...models.error import ErrorResponse
@@ -46,4 +47,4 @@ class ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
-        raise ValueError("Unhandled status code %s", response.status_code)
+        warnings.warn("Unhandled status code %d" % response.status_code)

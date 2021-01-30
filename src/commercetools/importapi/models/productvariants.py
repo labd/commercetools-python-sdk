@@ -770,5 +770,5 @@ class ProductVariantPatch(_BaseType):
         return ProductVariantPatchSchema().dump(self)
 
 
-class Attributes(typing.Dict[str, str]):
+class Attributes(typing.Dict[str, typing.Union["Attribute", None]]):
     pass

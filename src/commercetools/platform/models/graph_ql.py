@@ -120,5 +120,5 @@ class GraphQLResponse(_BaseType):
         return GraphQLResponseSchema().dump(self)
 
 
-class GraphQLVariablesMap(typing.Dict[str, str]):
+class GraphQLVariablesMap(typing.Dict[str, typing.Any]):
     pass

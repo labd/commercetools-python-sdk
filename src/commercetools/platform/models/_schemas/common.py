@@ -194,9 +194,14 @@ class AssetSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
@@ -245,9 +250,14 @@ class AssetDraftSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),

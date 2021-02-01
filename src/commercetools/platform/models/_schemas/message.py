@@ -129,9 +129,15 @@ class CategoryCreatedMessageSchema(MessageSchema):
 
 
 class CategorySlugChangedMessageSchema(MessageSchema):
-    slug = LocalizedStringField(allow_none=True, missing=None)
+    slug = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     old_slug = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldSlug",
     )
 
     class Meta:
@@ -1826,9 +1832,15 @@ class ProductRevertedStagedChangesMessageSchema(MessageSchema):
 
 
 class ProductSlugChangedMessageSchema(MessageSchema):
-    slug = LocalizedStringField(allow_none=True, missing=None)
+    slug = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     old_slug = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldSlug",
     )
 
     class Meta:
@@ -2115,7 +2127,10 @@ class UserProvidedIdentifiersSchema(helpers.BaseSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     slug = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2157,9 +2172,15 @@ class CategoryCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class CategorySlugChangedMessagePayloadSchema(MessagePayloadSchema):
-    slug = LocalizedStringField(allow_none=True, missing=None)
+    slug = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     old_slug = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldSlug",
     )
 
     class Meta:
@@ -3545,9 +3566,15 @@ class ProductRevertedStagedChangesMessagePayloadSchema(MessagePayloadSchema):
 
 
 class ProductSlugChangedMessagePayloadSchema(MessagePayloadSchema):
-    slug = LocalizedStringField(allow_none=True, missing=None)
+    slug = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     old_slug = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="oldSlug"
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldSlug",
     )
 
     class Meta:

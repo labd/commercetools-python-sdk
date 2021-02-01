@@ -1776,7 +1776,9 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     quantity = marshmallow.fields.Float(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -2509,7 +2511,10 @@ class StagedOrderSetCustomLineItemCustomTypeActionSchema(StagedOrderUpdateAction
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2637,7 +2642,10 @@ class StagedOrderSetCustomTypeActionSchema(StagedOrderUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2773,7 +2781,10 @@ class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

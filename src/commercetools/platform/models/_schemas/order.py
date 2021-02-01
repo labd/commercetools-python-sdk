@@ -147,7 +147,9 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         missing=None,
         data_key="productId",
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductVariantImportDraftSchema"),
         allow_none=True,
@@ -1754,7 +1756,10 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -1797,7 +1802,10 @@ class OrderSetCustomTypeActionSchema(OrderUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -1912,7 +1920,10 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

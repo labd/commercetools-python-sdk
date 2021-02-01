@@ -49,7 +49,9 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
         missing=None,
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     is_required = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="isRequired"
     )
@@ -62,6 +64,7 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
     )
     input_tip = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="inputTip",
@@ -108,7 +111,9 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     is_required = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="isRequired"
     )
@@ -122,6 +127,7 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
     )
     input_tip = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="inputTip",
@@ -152,7 +158,9 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
 
 class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -781,7 +789,9 @@ class ProductTypeChangeLabelActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="attributeName"
     )
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -927,6 +937,7 @@ class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
     )
     input_tip = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="inputTip",

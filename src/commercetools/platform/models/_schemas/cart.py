@@ -673,7 +673,9 @@ class CartUpdateActionSchema(helpers.BaseSchema):
 
 class CustomLineItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     money = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -768,7 +770,9 @@ class CustomLineItemSchema(helpers.BaseSchema):
 
 
 class CustomLineItemDraftSchema(helpers.BaseSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     money = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
@@ -1063,9 +1067,12 @@ class LineItemSchema(helpers.BaseSchema):
     product_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="productId"
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     product_slug = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="productSlug",
@@ -1457,7 +1464,9 @@ class ShippingRateInputSchema(helpers.BaseSchema):
 
 class ClassificationShippingRateInputSchema(ShippingRateInputSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1691,7 +1700,9 @@ class CartAddCustomLineItemActionSchema(CartUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     slug = marshmallow.fields.String(allow_none=True, missing=None)
     tax_category = helpers.LazyNestedField(
@@ -2301,7 +2312,10 @@ class CartSetCustomLineItemCustomTypeActionSchema(CartUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2427,7 +2441,10 @@ class CartSetCustomTypeActionSchema(CartUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2550,7 +2567,10 @@ class CartSetLineItemCustomTypeActionSchema(CartUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2835,7 +2855,9 @@ class CartUpdateItemShippingAddressActionSchema(CartUpdateActionSchema):
 
 
 class CustomLineItemImportDraftSchema(helpers.BaseSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     money = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),

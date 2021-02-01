@@ -38,12 +38,17 @@ class CartDiscountSchema(BaseResourceSchema):
         missing=None,
         data_key="createdBy",
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     value = helpers.Discriminator(
         allow_none=True,
@@ -190,12 +195,17 @@ class CartDiscountSchema(BaseResourceSchema):
 
 
 class CartDiscountDraftSchema(helpers.BaseSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     value = helpers.Discriminator(
         allow_none=True,
@@ -717,7 +727,9 @@ class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountChangeNameActionSchema(CartDiscountUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -872,7 +884,10 @@ class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
 
 class CartDiscountSetDescriptionActionSchema(CartDiscountUpdateActionSchema):
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

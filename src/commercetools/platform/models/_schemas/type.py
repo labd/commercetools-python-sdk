@@ -41,7 +41,9 @@ class CustomFieldEnumValueSchema(helpers.BaseSchema):
 
 class CustomFieldLocalizedEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -59,7 +61,9 @@ class CustomFieldsSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    fields = FieldContainerField(allow_none=True, missing=None)
+    fields = FieldContainerField(
+        allow_none=True, values=marshmallow.fields.Raw(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -78,7 +82,10 @@ class CustomFieldsDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -115,7 +122,9 @@ class FieldDefinitionSchema(helpers.BaseSchema):
         missing=None,
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     required = marshmallow.fields.Boolean(allow_none=True, missing=None)
     input_hint = marshmallow_enum.EnumField(
         TypeTextInputHint,
@@ -334,9 +343,14 @@ class TypeSchema(BaseResourceSchema):
         data_key="createdBy",
     )
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     resource_type_ids = marshmallow.fields.List(
         marshmallow_enum.EnumField(ResourceTypeId, by_value=True, allow_none=True),
@@ -364,9 +378,14 @@ class TypeSchema(BaseResourceSchema):
 
 class TypeDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     resource_type_ids = marshmallow.fields.List(
         marshmallow_enum.EnumField(ResourceTypeId, by_value=True, allow_none=True),
@@ -617,7 +636,9 @@ class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
     field_name = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="fieldName"
     )
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -682,7 +703,9 @@ class TypeChangeLabelActionSchema(TypeUpdateActionSchema):
     field_name = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="fieldName"
     )
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -731,7 +754,9 @@ class TypeChangeLocalizedEnumValueOrderActionSchema(TypeUpdateActionSchema):
 
 
 class TypeChangeNameActionSchema(TypeUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -758,7 +783,10 @@ class TypeRemoveFieldDefinitionActionSchema(TypeUpdateActionSchema):
 
 class TypeSetDescriptionActionSchema(TypeUpdateActionSchema):
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

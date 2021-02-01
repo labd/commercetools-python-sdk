@@ -43,10 +43,16 @@ class StateSchema(BaseResourceSchema):
         StateTypeEnum, by_value=True, allow_none=True, missing=None
     )
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     initial = marshmallow.fields.Boolean(allow_none=True, missing=None)
     built_in = marshmallow.fields.Boolean(
@@ -82,10 +88,16 @@ class StateDraftSchema(helpers.BaseSchema):
         StateTypeEnum, by_value=True, allow_none=True, missing=None
     )
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     initial = marshmallow.fields.Boolean(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -288,7 +300,9 @@ class StateRemoveRolesActionSchema(StateUpdateActionSchema):
 
 
 class StateSetDescriptionActionSchema(StateUpdateActionSchema):
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -300,7 +314,9 @@ class StateSetDescriptionActionSchema(StateUpdateActionSchema):
 
 
 class StateSetNameActionSchema(StateUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

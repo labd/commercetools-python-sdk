@@ -40,7 +40,10 @@ class StoreSchema(BaseResourceSchema):
     )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
@@ -84,7 +87,9 @@ class StoreSchema(BaseResourceSchema):
 
 class StoreDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
@@ -397,7 +402,10 @@ class StoreSetLanguagesActionSchema(StoreUpdateActionSchema):
 
 class StoreSetNameActionSchema(StoreUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

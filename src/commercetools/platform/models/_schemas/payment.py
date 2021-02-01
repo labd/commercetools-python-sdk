@@ -305,7 +305,10 @@ class PaymentMethodInfoSchema(helpers.BaseSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -615,7 +618,10 @@ class PaymentAddInterfaceInteractionActionSchema(PaymentUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -808,7 +814,10 @@ class PaymentSetCustomTypeActionSchema(PaymentUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -911,7 +920,10 @@ class PaymentSetMethodInfoMethodActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetMethodInfoNameActionSchema(PaymentUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

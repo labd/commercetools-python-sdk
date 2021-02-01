@@ -175,10 +175,16 @@ class SimilarProductSchema(helpers.BaseSchema):
 
 class SimilarProductMetaSchema(helpers.BaseSchema):
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),

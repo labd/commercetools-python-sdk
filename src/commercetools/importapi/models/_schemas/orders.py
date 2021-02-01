@@ -272,7 +272,9 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".LineItemProductVariantImportDraftSchema"),
         allow_none=True,
@@ -782,7 +784,9 @@ class CustomLineItemTaxedPriceSchema(helpers.BaseSchema):
 
 
 class CustomLineItemDraftSchema(helpers.BaseSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     money = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),

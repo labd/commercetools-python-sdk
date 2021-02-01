@@ -28,9 +28,14 @@ class AssetSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
@@ -132,7 +137,9 @@ class EnumValueSchema(helpers.BaseSchema):
 
 class LocalizedEnumValueSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = LocalizedStringField(allow_none=True, missing=None)
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

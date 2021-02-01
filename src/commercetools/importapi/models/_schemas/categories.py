@@ -15,10 +15,17 @@ from .common import ImportResourceSchema, LocalizedStringField
 
 # Marshmallow Schemas
 class CategoryImportSchema(ImportResourceSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
-    slug = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
+    slug = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     parent = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CategoryKeyReferenceSchema"),
@@ -41,18 +48,21 @@ class CategoryImportSchema(ImportResourceSchema):
     )
     meta_title = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="metaKeywords",

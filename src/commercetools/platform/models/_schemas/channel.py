@@ -46,10 +46,16 @@ class ChannelSchema(BaseResourceSchema):
         missing=None,
     )
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
@@ -102,10 +108,16 @@ class ChannelDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
@@ -268,7 +280,9 @@ class ChannelAddRolesActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelChangeDescriptionActionSchema(ChannelUpdateActionSchema):
-    description = LocalizedStringField(allow_none=True, missing=None)
+    description = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -292,7 +306,9 @@ class ChannelChangeKeyActionSchema(ChannelUpdateActionSchema):
 
 
 class ChannelChangeNameActionSchema(ChannelUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -361,7 +377,10 @@ class ChannelSetCustomTypeActionSchema(ChannelUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

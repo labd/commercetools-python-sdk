@@ -39,10 +39,16 @@ class DiscountCodeSchema(BaseResourceSchema):
         data_key="createdBy",
     )
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     code = marshmallow.fields.String(allow_none=True, missing=None)
     cart_discounts = helpers.LazyNestedField(
@@ -167,10 +173,16 @@ class DiscountCodeSchema(BaseResourceSchema):
 
 class DiscountCodeDraftSchema(helpers.BaseSchema):
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     code = marshmallow.fields.String(allow_none=True, missing=None)
     cart_discounts = helpers.LazyNestedField(
@@ -455,7 +467,10 @@ class DiscountCodeSetCustomTypeActionSchema(DiscountCodeUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -469,7 +484,10 @@ class DiscountCodeSetCustomTypeActionSchema(DiscountCodeUpdateActionSchema):
 
 class DiscountCodeSetDescriptionActionSchema(DiscountCodeUpdateActionSchema):
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -519,7 +537,10 @@ class DiscountCodeSetMaxApplicationsPerCustomerActionSchema(
 
 class DiscountCodeSetNameActionSchema(DiscountCodeUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

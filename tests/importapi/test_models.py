@@ -1,4 +1,4 @@
-import pprint
+import datetime
 
 from commercetools.importapi import models
 
@@ -31,3 +31,31 @@ def test_serialization_optional_values():
     }
     assert expected == data
     assert expected == data_cycle
+
+
+def test_serialization_optional_values():
+    now = datetime.datetime.fromisoformat("2021-01-30T11:21:08")
+    custom = models.Custom(
+        type=models.TypeKeyReference(key="my-custom-type"),
+        fields=models.FieldContainer(
+            {
+                "foo": models.NumberField(value=1234),
+                "itemDate": models.DateTimeField(value=now),
+            }
+        ),
+    )
+    data = custom.serialize()
+    expected = {
+        "fields": {
+            "foo": {
+                "type": "Number",
+                "value": 1234,
+            },
+            "itemDate": {
+                "type": "DateTime",
+                "value": "2021-01-30T11:21:08",
+            },
+        },
+        "type": {"typeId": "type", "key": "my-custom-type"},
+    }
+    assert data == expected

@@ -671,6 +671,7 @@ class ErrorResponseSchema(helpers.BaseSchema):
 class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
     localized_message = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="localizedMessage",
@@ -721,6 +722,7 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
 class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
     localized_message = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="localizedMessage",

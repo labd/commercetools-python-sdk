@@ -1317,9 +1317,14 @@ class MyPaymentUpdateActionSchema(helpers.BaseSchema):
 
 
 class MyShoppingListDraftSchema(helpers.BaseSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     line_items = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -1889,7 +1894,10 @@ class MyCartSetCustomTypeActionSchema(MyCartUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -1948,7 +1956,10 @@ class MyCartSetLineItemCustomTypeActionSchema(MyCartUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2296,7 +2307,10 @@ class MyCustomerSetCustomTypeActionSchema(MyCustomerUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2555,7 +2569,10 @@ class MyPaymentSetMethodInfoMethodActionSchema(MyPaymentUpdateActionSchema):
 
 class MyPaymentSetMethodInfoNameActionSchema(MyPaymentUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2607,9 +2624,14 @@ class MyShoppingListAddLineItemActionSchema(MyShoppingListUpdateActionSchema):
 
 
 class MyShoppingListAddTextLineItemActionSchema(MyShoppingListUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -2669,7 +2691,9 @@ class MyShoppingListChangeLineItemsOrderActionSchema(MyShoppingListUpdateActionS
 
 
 class MyShoppingListChangeNameActionSchema(MyShoppingListUpdateActionSchema):
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2686,7 +2710,9 @@ class MyShoppingListChangeTextLineItemNameActionSchema(
     text_line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="textLineItemId"
     )
-    name = LocalizedStringField(allow_none=True, missing=None)
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2791,7 +2817,10 @@ class MyShoppingListSetCustomTypeActionSchema(MyShoppingListUpdateActionSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2824,7 +2853,10 @@ class MyShoppingListSetDeleteDaysAfterLastModificationActionSchema(
 
 class MyShoppingListSetDescriptionActionSchema(MyShoppingListUpdateActionSchema):
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2868,7 +2900,10 @@ class MyShoppingListSetLineItemCustomTypeActionSchema(MyShoppingListUpdateAction
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2914,7 +2949,10 @@ class MyShoppingListSetTextLineItemCustomTypeActionSchema(
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2933,7 +2971,10 @@ class MyShoppingListSetTextLineItemDescriptionActionSchema(
         allow_none=True, missing=None, data_key="textLineItemId"
     )
     description = LocalizedStringField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

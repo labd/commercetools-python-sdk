@@ -160,7 +160,9 @@ class LocalizableEnumSetAttributeSchema(AttributeSchema):
 
 
 class LocalizableTextAttributeSchema(AttributeSchema):
-    value = LocalizedStringField(allow_none=True, missing=None)
+    value = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -173,7 +175,11 @@ class LocalizableTextAttributeSchema(AttributeSchema):
 
 class LocalizableTextSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        LocalizedStringField(allow_none=True), allow_none=True, missing=None
+        LocalizedStringField(
+            allow_none=True, values=marshmallow.fields.String(allow_none=True)
+        ),
+        allow_none=True,
+        missing=None,
     )
 
     class Meta:

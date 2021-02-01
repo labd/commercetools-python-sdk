@@ -27,7 +27,43 @@ class CustomSchema(helpers.BaseSchema):
         missing=None,
     )
     fields = FieldContainerField(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True,
+        values=helpers.Discriminator(
+            allow_none=True,
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "Boolean": helpers.absmod(__name__, ".BooleanFieldSchema"),
+                "String": helpers.absmod(__name__, ".StringFieldSchema"),
+                "LocalizedString": helpers.absmod(
+                    __name__, ".LocalizedStringFieldSchema"
+                ),
+                "Enum": helpers.absmod(__name__, ".EnumFieldSchema"),
+                "LocalizedEnum": helpers.absmod(__name__, ".LocalizedEnumFieldSchema"),
+                "Number": helpers.absmod(__name__, ".NumberFieldSchema"),
+                "Money": helpers.absmod(__name__, ".MoneyFieldSchema"),
+                "Date": helpers.absmod(__name__, ".DateFieldSchema"),
+                "Time": helpers.absmod(__name__, ".TimeFieldSchema"),
+                "DateTime": helpers.absmod(__name__, ".DateTimeFieldSchema"),
+                "Reference": helpers.absmod(__name__, ".ReferenceFieldSchema"),
+                "BooleanSet": helpers.absmod(__name__, ".BooleanSetFieldSchema"),
+                "StringSet": helpers.absmod(__name__, ".StringSetFieldSchema"),
+                "LocalizedStringSet": helpers.absmod(
+                    __name__, ".LocalizedStringSetFieldSchema"
+                ),
+                "EnumSet": helpers.absmod(__name__, ".EnumSetFieldSchema"),
+                "LocalizedEnumSet": helpers.absmod(
+                    __name__, ".LocalizedEnumSetFieldSchema"
+                ),
+                "NumberSet": helpers.absmod(__name__, ".NumberSetFieldSchema"),
+                "MoneySet": helpers.absmod(__name__, ".MoneySetFieldSchema"),
+                "DateSet": helpers.absmod(__name__, ".DateSetFieldSchema"),
+                "TimeSet": helpers.absmod(__name__, ".TimeSetFieldSchema"),
+                "DateTimeSet": helpers.absmod(__name__, ".DateTimeSetFieldSchema"),
+                "ReferenceSet": helpers.absmod(__name__, ".ReferenceSetFieldSchema"),
+            },
+        ),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -76,7 +112,9 @@ class StringFieldSchema(CustomFieldSchema):
 
 
 class LocalizedStringFieldSchema(CustomFieldSchema):
-    value = LocalizedStringField(allow_none=True, missing=None)
+    value = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -258,7 +296,11 @@ class StringSetFieldSchema(CustomFieldSchema):
 
 class LocalizedStringSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        LocalizedStringField(allow_none=True), allow_none=True, missing=None
+        LocalizedStringField(
+            allow_none=True, values=marshmallow.fields.String(allow_none=True)
+        ),
+        allow_none=True,
+        missing=None,
     )
 
     class Meta:

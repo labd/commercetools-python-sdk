@@ -62,6 +62,7 @@ class ShippingMethodSchema(BaseResourceSchema):
     )
     localized_description = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="localizedDescription",
@@ -107,6 +108,7 @@ class ShippingMethodDraftSchema(helpers.BaseSchema):
     )
     localized_description = LocalizedStringField(
         allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
         data_key="localizedDescription",

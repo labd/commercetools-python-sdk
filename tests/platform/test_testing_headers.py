@@ -1,8 +1,8 @@
 import pytest
 
 from commercetools import CommercetoolsError
-from commercetools.platform.client import Client as PlatformClient
 from commercetools.platform import models
+from commercetools.platform.client import Client as PlatformClient
 
 
 def test_correlation_id_is_set_in_exception(ct_platform_client: PlatformClient):

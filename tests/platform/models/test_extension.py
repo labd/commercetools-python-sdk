@@ -1,9 +1,7 @@
 from commercetools.platform import models
-from commercetools.platform.models._schemas.extension import ExtensionInputSchema
-from commercetools.platform.models._schemas.project import ProjectSchema
 
 
-def test_extension_input_schema():
+def test_deserialize():
     data = {
         "action": "Create",
         "resource": {
@@ -192,36 +190,9 @@ def test_extension_input_schema():
             },
         },
     }
-    result = ExtensionInputSchema().load(data)
+    result = models.ExtensionInput.deserialize(data)
     assert result.action == models.ExtensionAction.CREATE
     assert result.resource.type_id == models.ReferenceTypeId.ORDER
 
-    data = ExtensionInputSchema().dump(result)
-
-
-def test_project_schema():
-    data = {
-        "key": "unittest",
-        "name": "SDK Test",
-        "countries": ["AT", "NL", "CH", "BE", "GB", "DE", "IT", "LU", "ES"],
-        "currencies": ["EUR", "GBP", "CHF"],
-        "languages": [
-            "en-GB",
-            "de-DE",
-            "fr-FR",
-            "nl-BE",
-            "nl-NL",
-            "fr-BE",
-            "it-IT",
-            "es-ES",
-            "pt-PT",
-        ],
-        "createdAt": "2018-10-24T08:58:22.935Z",
-        "carts": {"countryTaxRateFallbackEnabled": True},
-        "trialUntil": "2018-12",
-        "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
-        "version": 9,
-    }
-
-    result = ProjectSchema().load(data)
-    data = ProjectSchema().dump(result)
+    serialized = models.ExtensionInput.serialize(result)
+    # assert serialized == data

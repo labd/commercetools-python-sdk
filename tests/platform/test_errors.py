@@ -1,7 +1,7 @@
 from commercetools.platform import models
 from commercetools.platform.client import Client as PlatformClient
 from commercetools.platform.models import ExtensionNoResponseError, QueryTimedOutError
-from commercetools.platform.models._schemas.error import ErrorResponseSchema
+from commercetools.platform.models import ErrorResponse
 
 
 def test_raises_exception(ct_platform_client: PlatformClient):
@@ -52,7 +52,7 @@ def test_extension_no_response_error():
         "statusCode": 504,
     }
 
-    obj = ErrorResponseSchema().load(error_response)
+    obj = ErrorResponse.deserialize(error_response)
     error = obj.errors[0]
 
     assert isinstance(error, ExtensionNoResponseError)
@@ -64,7 +64,7 @@ def test_query_timeout_error():
         "message": "The query timed out.",
         "statusCode": 400,
     }
-    obj = ErrorResponseSchema().load(error_response)
+    obj = ErrorResponse.deserialize(error_response)
     error = obj.errors[0]
 
     assert isinstance(error, QueryTimedOutError)

@@ -9,12 +9,12 @@ def test_serialize_field_container():
         fields=models.FieldContainer(foobar=10),
     )
 
-    result = CustomFieldsDraftSchema().dump(draft)
+    result = draft.serialize()
     expected = {
         "fields": {"foobar": 10},
         "type": {"typeId": "type", "id": "foobar"},
     }
     assert expected == result
 
-    roundtrip = CustomFieldsDraftSchema().load(expected)
+    roundtrip = models.CustomFieldsDraft.deserialize(expected)
     assert draft == roundtrip

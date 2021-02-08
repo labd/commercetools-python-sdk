@@ -1,39 +1,60 @@
 import commercetools
 from commercetools.platform import models
+from commercetools.platform import Client as PlatformClient
 from tests.platform.test_service_order import get_test_order
 
 
-def test_unknown_expand_terms(old_client: commercetools.Client):
-    cart = old_client.carts.create(models.CartDraft(currency="EUR"))
+def test_unknown_expand_terms(ct_platform_client: PlatformClient):
+    cart = (
+        ct_platform_client.with_project_key("unittest")
+        .carts()
+        .post(models.CartDraft(currency="EUR"))
+    )
+    assert cart
 
-    order = old_client.orders.create(
-        models.OrderFromCartDraft(
-            id=cart.id, version=1, cart=cart, order_number="test-order"
-        ),
-        expand="nonExisting",
+    order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .post(
+            models.OrderFromCartDraft(
+                id=cart.id,
+                version=1,
+                cart=models.CartResourceIdentifier(id=cart.id),
+                order_number="test-order",
+            ),
+            expand=["nonExisting"],
+        )
     )
 
     assert order.id
 
 
-def test_optional_expanded_terms(old_client, commercetools_api):
+def test_optional_expanded_terms(ct_platform_client: PlatformClient, commercetools_api):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    expanded_order = old_client.orders.get_by_id(
-        order.id, expand="discountCodes[*].discountCode"
+    expanded_order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .with_id(order.id)
+        .get(expand=["discountCodes[*].discountCode"])
     )
 
     assert expanded_order.id
     assert expanded_order.discount_codes is None
 
 
-def test_unknown_reference_expand_terms(old_client, commercetools_api):
+def test_unknown_reference_expand_terms(
+    ct_platform_client: PlatformClient, commercetools_api
+):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    expanded_order = old_client.orders.get_by_id(
-        order.id, expand="shippingInfo.shippingMethod"
+    expanded_order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .with_id(order.id)
+        .get(expand=["shippingInfo.shippingMethod"])
     )
 
     assert expanded_order.id

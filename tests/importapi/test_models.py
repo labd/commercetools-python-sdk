@@ -34,7 +34,7 @@ def test_serialization_optional_values():
 
 
 def test_serialization_optional_values():
-    now = datetime.datetime.fromisoformat("2021-01-30T11:21:08")
+    now = datetime.datetime(2021, 1, 30, 11, 21, 8)
     custom = models.Custom(
         type=models.TypeKeyReference(key="my-custom-type"),
         fields=models.FieldContainer(

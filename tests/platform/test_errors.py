@@ -1,7 +1,10 @@
 from commercetools.platform import models
 from commercetools.platform.client import Client as PlatformClient
-from commercetools.platform.models import ExtensionNoResponseError, QueryTimedOutError
-from commercetools.platform.models import ErrorResponse
+from commercetools.platform.models import (
+    ErrorResponse,
+    ExtensionNoResponseError,
+    QueryTimedOutError,
+)
 
 
 def test_raises_exception(ct_platform_client: PlatformClient):

@@ -1,6 +1,6 @@
 import commercetools
-from commercetools.platform import models
 from commercetools.platform import Client as PlatformClient
+from commercetools.platform import models
 from tests.platform.test_service_order import get_test_order
 
 

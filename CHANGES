@@ -1,5 +1,5 @@
-14.0.0 (unreleased)
--------------------
+14.0.0b1 (2021-02-09)
+---------------------
 We moved our code generation to the code generation tool from Commercetools,
 see https://github.com/commercetools/rmf-codegen
 

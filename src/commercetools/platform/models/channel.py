@@ -32,6 +32,8 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "Channel",
     "ChannelAddRolesAction",
+    "ChannelAddressSetCustomFieldAction",
+    "ChannelAddressSetCustomTypeAction",
     "ChannelChangeDescriptionAction",
     "ChannelChangeKeyAction",
     "ChannelChangeNameAction",
@@ -303,6 +305,14 @@ class ChannelUpdateAction(_BaseType):
             from ._schemas.channel import ChannelSetAddressActionSchema
 
             return ChannelSetAddressActionSchema().load(data)
+        if data["action"] == "setAddressCustomType":
+            from ._schemas.channel import ChannelAddressSetCustomTypeActionSchema
+
+            return ChannelAddressSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setAddressCustomField":
+            from ._schemas.channel import ChannelAddressSetCustomFieldActionSchema
+
+            return ChannelAddressSetCustomFieldActionSchema().load(data)
         if data["action"] == "setCustomField":
             from ._schemas.channel import ChannelSetCustomFieldActionSchema
 
@@ -448,6 +458,62 @@ class ChannelSetAddressAction(ChannelUpdateAction):
         from ._schemas.channel import ChannelSetAddressActionSchema
 
         return ChannelSetAddressActionSchema().dump(self)
+
+
+class ChannelAddressSetCustomTypeAction(ChannelUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ChannelAddressSetCustomTypeAction":
+        from ._schemas.channel import ChannelAddressSetCustomTypeActionSchema
+
+        return ChannelAddressSetCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.channel import ChannelAddressSetCustomTypeActionSchema
+
+        return ChannelAddressSetCustomTypeActionSchema().dump(self)
+
+
+class ChannelAddressSetCustomFieldAction(ChannelUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ChannelAddressSetCustomFieldAction":
+        from ._schemas.channel import ChannelAddressSetCustomFieldActionSchema
+
+        return ChannelAddressSetCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.channel import ChannelAddressSetCustomFieldActionSchema
+
+        return ChannelAddressSetCustomFieldActionSchema().dump(self)
 
 
 class ChannelSetCustomFieldAction(ChannelUpdateAction):

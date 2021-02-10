@@ -163,6 +163,7 @@ class Address(_BaseType):
     fax: typing.Optional[str]
     additional_address_info: typing.Optional[str]
     external_id: typing.Optional[str]
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
@@ -191,7 +192,8 @@ class Address(_BaseType):
         email: typing.Optional[str] = None,
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None
+        external_id: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
         self.key = key
@@ -218,6 +220,7 @@ class Address(_BaseType):
         self.fax = fax
         self.additional_address_info = additional_address_info
         self.external_id = external_id
+        self.custom = custom
         super().__init__()
 
     @classmethod

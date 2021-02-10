@@ -850,9 +850,9 @@ class Order(BaseResource):
 
 class OrderFromCartDraft(_BaseType):
     #: The unique id of the cart from which an order is created.
-    id: str
+    id: typing.Optional[str]
     #: ResourceIdentifier to the Cart from which this order is created.
-    cart: "CartResourceIdentifier"
+    cart: typing.Optional["CartResourceIdentifier"]
     version: int
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -869,8 +869,8 @@ class OrderFromCartDraft(_BaseType):
     def __init__(
         self,
         *,
-        id: str,
-        cart: "CartResourceIdentifier",
+        id: typing.Optional[str] = None,
+        cart: typing.Optional["CartResourceIdentifier"] = None,
         version: int,
         order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,

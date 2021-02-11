@@ -1161,6 +1161,12 @@ class OrderEditUpdateSchema(helpers.BaseSchema):
                 "addStagedAction": helpers.absmod(
                     __name__, ".OrderEditAddStagedActionActionSchema"
                 ),
+                "setBillingAddressCustomField": helpers.absmod(
+                    __name__, ".OrderEditSetBillingAddressCustomFieldActionSchema"
+                ),
+                "setBillingAddressCustomType": helpers.absmod(
+                    __name__, ".OrderEditSetBillingAddressCustomTypeActionSchema"
+                ),
                 "setComment": helpers.absmod(
                     __name__, ".OrderEditSetCommentActionSchema"
                 ),
@@ -1170,7 +1176,25 @@ class OrderEditUpdateSchema(helpers.BaseSchema):
                 "setCustomType": helpers.absmod(
                     __name__, ".OrderEditSetCustomTypeActionSchema"
                 ),
+                "setDeliveryAddressCustomField": helpers.absmod(
+                    __name__, ".OrderEditSetDeliveryAddressCustomFieldActionSchema"
+                ),
+                "setDeliveryAddressCustomType": helpers.absmod(
+                    __name__, ".OrderEditSetDeliveryAddressCustomTypeActionSchema"
+                ),
+                "setItemShippingAddressCustomField": helpers.absmod(
+                    __name__, ".OrderEditSetItemShippingAddressCustomFieldActionSchema"
+                ),
+                "setItemShippingAddressCustomType": helpers.absmod(
+                    __name__, ".OrderEditSetItemShippingAddressCustomTypeActionSchema"
+                ),
                 "setKey": helpers.absmod(__name__, ".OrderEditSetKeyActionSchema"),
+                "setShippingAddressCustomField": helpers.absmod(
+                    __name__, ".OrderEditSetShippingAddressCustomFieldActionSchema"
+                ),
+                "setShippingAddressCustomType": helpers.absmod(
+                    __name__, ".OrderEditSetShippingAddressCustomTypeActionSchema"
+                ),
                 "setStagedActions": helpers.absmod(
                     __name__, ".OrderEditSetStagedActionsActionSchema"
                 ),
@@ -1476,6 +1500,45 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
         return models.OrderEditAddStagedActionAction(**data)
 
 
+class OrderEditSetBillingAddressCustomFieldActionSchema(OrderEditUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetBillingAddressCustomFieldAction(**data)
+
+
+class OrderEditSetBillingAddressCustomTypeActionSchema(OrderEditUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetBillingAddressCustomTypeAction(**data)
+
+
 class OrderEditSetCommentActionSchema(OrderEditUpdateActionSchema):
     comment = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -1526,6 +1589,100 @@ class OrderEditSetCustomTypeActionSchema(OrderEditUpdateActionSchema):
         return models.OrderEditSetCustomTypeAction(**data)
 
 
+class OrderEditSetDeliveryAddressCustomFieldActionSchema(OrderEditUpdateActionSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetDeliveryAddressCustomFieldAction(**data)
+
+
+class OrderEditSetDeliveryAddressCustomTypeActionSchema(OrderEditUpdateActionSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetDeliveryAddressCustomTypeAction(**data)
+
+
+class OrderEditSetItemShippingAddressCustomFieldActionSchema(
+    OrderEditUpdateActionSchema
+):
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetItemShippingAddressCustomFieldAction(**data)
+
+
+class OrderEditSetItemShippingAddressCustomTypeActionSchema(
+    OrderEditUpdateActionSchema
+):
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetItemShippingAddressCustomTypeAction(**data)
+
+
 class OrderEditSetKeyActionSchema(OrderEditUpdateActionSchema):
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -1538,6 +1695,45 @@ class OrderEditSetKeyActionSchema(OrderEditUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.OrderEditSetKeyAction(**data)
+
+
+class OrderEditSetShippingAddressCustomFieldActionSchema(OrderEditUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetShippingAddressCustomFieldAction(**data)
+
+
+class OrderEditSetShippingAddressCustomTypeActionSchema(OrderEditUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderEditSetShippingAddressCustomTypeAction(**data)
 
 
 class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):

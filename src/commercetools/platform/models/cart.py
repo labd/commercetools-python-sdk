@@ -81,6 +81,8 @@ __all__ = [
     "CartResourceIdentifier",
     "CartSetAnonymousIdAction",
     "CartSetBillingAddressAction",
+    "CartSetBillingAddressCustomFieldAction",
+    "CartSetBillingAddressCustomTypeAction",
     "CartSetCartTotalTaxAction",
     "CartSetCountryAction",
     "CartSetCustomFieldAction",
@@ -95,6 +97,10 @@ __all__ = [
     "CartSetCustomerGroupAction",
     "CartSetCustomerIdAction",
     "CartSetDeleteDaysAfterLastModificationAction",
+    "CartSetDeliveryAddressCustomFieldAction",
+    "CartSetDeliveryAddressCustomTypeAction",
+    "CartSetItemShippingAddressCustomFieldAction",
+    "CartSetItemShippingAddressCustomTypeAction",
     "CartSetKeyAction",
     "CartSetLineItemCustomFieldAction",
     "CartSetLineItemCustomTypeAction",
@@ -106,6 +112,8 @@ __all__ = [
     "CartSetLineItemTotalPriceAction",
     "CartSetLocaleAction",
     "CartSetShippingAddressAction",
+    "CartSetShippingAddressCustomFieldAction",
+    "CartSetShippingAddressCustomTypeAction",
     "CartSetShippingMethodAction",
     "CartSetShippingMethodTaxAmountAction",
     "CartSetShippingMethodTaxRateAction",
@@ -642,6 +650,14 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartSetBillingAddressActionSchema
 
             return CartSetBillingAddressActionSchema().load(data)
+        if data["action"] == "setBillingAddressCustomField":
+            from ._schemas.cart import CartSetBillingAddressCustomFieldActionSchema
+
+            return CartSetBillingAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setBillingAddressCustomType":
+            from ._schemas.cart import CartSetBillingAddressCustomTypeActionSchema
+
+            return CartSetBillingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setCartTotalTax":
             from ._schemas.cart import CartSetCartTotalTaxActionSchema
 
@@ -700,6 +716,22 @@ class CartUpdateAction(_BaseType):
             )
 
             return CartSetDeleteDaysAfterLastModificationActionSchema().load(data)
+        if data["action"] == "setDeliveryAddressCustomField":
+            from ._schemas.cart import CartSetDeliveryAddressCustomFieldActionSchema
+
+            return CartSetDeliveryAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setDeliveryAddressCustomType":
+            from ._schemas.cart import CartSetDeliveryAddressCustomTypeActionSchema
+
+            return CartSetDeliveryAddressCustomTypeActionSchema().load(data)
+        if data["action"] == "setItemShippingAddressCustomField":
+            from ._schemas.cart import CartSetItemShippingAddressCustomFieldActionSchema
+
+            return CartSetItemShippingAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setItemShippingAddressCustomType":
+            from ._schemas.cart import CartSetItemShippingAddressCustomTypeActionSchema
+
+            return CartSetItemShippingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setKey":
             from ._schemas.cart import CartSetKeyActionSchema
 
@@ -744,6 +776,14 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartSetShippingAddressActionSchema
 
             return CartSetShippingAddressActionSchema().load(data)
+        if data["action"] == "setShippingAddressCustomField":
+            from ._schemas.cart import CartSetShippingAddressCustomFieldActionSchema
+
+            return CartSetShippingAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setShippingAddressCustomType":
+            from ._schemas.cart import CartSetShippingAddressCustomTypeActionSchema
+
+            return CartSetShippingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setShippingMethod":
             from ._schemas.cart import CartSetShippingMethodActionSchema
 
@@ -2340,6 +2380,57 @@ class CartSetBillingAddressAction(CartUpdateAction):
         return CartSetBillingAddressActionSchema().dump(self)
 
 
+class CartSetBillingAddressCustomFieldAction(CartUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setBillingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetBillingAddressCustomFieldAction":
+        from ._schemas.cart import CartSetBillingAddressCustomFieldActionSchema
+
+        return CartSetBillingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetBillingAddressCustomFieldActionSchema
+
+        return CartSetBillingAddressCustomFieldActionSchema().dump(self)
+
+
+class CartSetBillingAddressCustomTypeAction(CartUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setBillingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetBillingAddressCustomTypeAction":
+        from ._schemas.cart import CartSetBillingAddressCustomTypeActionSchema
+
+        return CartSetBillingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetBillingAddressCustomTypeActionSchema
+
+        return CartSetBillingAddressCustomTypeActionSchema().dump(self)
+
+
 class CartSetCartTotalTaxAction(CartUpdateAction):
     #: The total gross amount of the cart (totalNet + taxes).
     external_total_gross: "Money"
@@ -2711,6 +2802,122 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
         return CartSetDeleteDaysAfterLastModificationActionSchema().dump(self)
 
 
+class CartSetDeliveryAddressCustomFieldAction(CartUpdateAction):
+    delivery_id: str
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        delivery_id: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.delivery_id = delivery_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setDeliveryAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetDeliveryAddressCustomFieldAction":
+        from ._schemas.cart import CartSetDeliveryAddressCustomFieldActionSchema
+
+        return CartSetDeliveryAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetDeliveryAddressCustomFieldActionSchema
+
+        return CartSetDeliveryAddressCustomFieldActionSchema().dump(self)
+
+
+class CartSetDeliveryAddressCustomTypeAction(CartUpdateAction):
+    delivery_id: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.delivery_id = delivery_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setDeliveryAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetDeliveryAddressCustomTypeAction":
+        from ._schemas.cart import CartSetDeliveryAddressCustomTypeActionSchema
+
+        return CartSetDeliveryAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetDeliveryAddressCustomTypeActionSchema
+
+        return CartSetDeliveryAddressCustomTypeActionSchema().dump(self)
+
+
+class CartSetItemShippingAddressCustomFieldAction(CartUpdateAction):
+    address_key: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, address_key: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.address_key = address_key
+        self.name = name
+        self.value = value
+        super().__init__(action="setItemShippingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetItemShippingAddressCustomFieldAction":
+        from ._schemas.cart import CartSetItemShippingAddressCustomFieldActionSchema
+
+        return CartSetItemShippingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetItemShippingAddressCustomFieldActionSchema
+
+        return CartSetItemShippingAddressCustomFieldActionSchema().dump(self)
+
+
+class CartSetItemShippingAddressCustomTypeAction(CartUpdateAction):
+    address_key: str
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        address_key: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.address_key = address_key
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setItemShippingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetItemShippingAddressCustomTypeAction":
+        from ._schemas.cart import CartSetItemShippingAddressCustomTypeActionSchema
+
+        return CartSetItemShippingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetItemShippingAddressCustomTypeActionSchema
+
+        return CartSetItemShippingAddressCustomTypeActionSchema().dump(self)
+
+
 class CartSetKeyAction(CartUpdateAction):
     key: typing.Optional[str]
 
@@ -2991,6 +3198,57 @@ class CartSetShippingAddressAction(CartUpdateAction):
         from ._schemas.cart import CartSetShippingAddressActionSchema
 
         return CartSetShippingAddressActionSchema().dump(self)
+
+
+class CartSetShippingAddressCustomFieldAction(CartUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setShippingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetShippingAddressCustomFieldAction":
+        from ._schemas.cart import CartSetShippingAddressCustomFieldActionSchema
+
+        return CartSetShippingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetShippingAddressCustomFieldActionSchema
+
+        return CartSetShippingAddressCustomFieldActionSchema().dump(self)
+
+
+class CartSetShippingAddressCustomTypeAction(CartUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setShippingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetShippingAddressCustomTypeAction":
+        from ._schemas.cart import CartSetShippingAddressCustomTypeActionSchema
+
+        return CartSetShippingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetShippingAddressCustomTypeActionSchema
+
+        return CartSetShippingAddressCustomTypeActionSchema().dump(self)
 
 
 class CartSetShippingMethodAction(CartUpdateAction):

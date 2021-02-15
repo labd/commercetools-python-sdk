@@ -565,6 +565,12 @@ class CartUpdateSchema(helpers.BaseSchema):
                 "setBillingAddress": helpers.absmod(
                     __name__, ".CartSetBillingAddressActionSchema"
                 ),
+                "setBillingAddressCustomField": helpers.absmod(
+                    __name__, ".CartSetBillingAddressCustomFieldActionSchema"
+                ),
+                "setBillingAddressCustomType": helpers.absmod(
+                    __name__, ".CartSetBillingAddressCustomTypeActionSchema"
+                ),
                 "setCartTotalTax": helpers.absmod(
                     __name__, ".CartSetCartTotalTaxActionSchema"
                 ),
@@ -605,6 +611,18 @@ class CartUpdateSchema(helpers.BaseSchema):
                 "setDeleteDaysAfterLastModification": helpers.absmod(
                     __name__, ".CartSetDeleteDaysAfterLastModificationActionSchema"
                 ),
+                "setDeliveryAddressCustomField": helpers.absmod(
+                    __name__, ".CartSetDeliveryAddressCustomFieldActionSchema"
+                ),
+                "setDeliveryAddressCustomType": helpers.absmod(
+                    __name__, ".CartSetDeliveryAddressCustomTypeActionSchema"
+                ),
+                "setItemShippingAddressCustomField": helpers.absmod(
+                    __name__, ".CartSetItemShippingAddressCustomFieldActionSchema"
+                ),
+                "setItemShippingAddressCustomType": helpers.absmod(
+                    __name__, ".CartSetItemShippingAddressCustomTypeActionSchema"
+                ),
                 "setKey": helpers.absmod(__name__, ".CartSetKeyActionSchema"),
                 "setLineItemCustomField": helpers.absmod(
                     __name__, ".CartSetLineItemCustomFieldActionSchema"
@@ -633,6 +651,12 @@ class CartUpdateSchema(helpers.BaseSchema):
                 "setLocale": helpers.absmod(__name__, ".CartSetLocaleActionSchema"),
                 "setShippingAddress": helpers.absmod(
                     __name__, ".CartSetShippingAddressActionSchema"
+                ),
+                "setShippingAddressCustomField": helpers.absmod(
+                    __name__, ".CartSetShippingAddressCustomFieldActionSchema"
+                ),
+                "setShippingAddressCustomType": helpers.absmod(
+                    __name__, ".CartSetShippingAddressCustomTypeActionSchema"
                 ),
                 "setShippingMethod": helpers.absmod(
                     __name__, ".CartSetShippingMethodActionSchema"
@@ -2231,6 +2255,45 @@ class CartSetBillingAddressActionSchema(CartUpdateActionSchema):
         return models.CartSetBillingAddressAction(**data)
 
 
+class CartSetBillingAddressCustomFieldActionSchema(CartUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetBillingAddressCustomFieldAction(**data)
+
+
+class CartSetBillingAddressCustomTypeActionSchema(CartUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetBillingAddressCustomTypeAction(**data)
+
+
 class CartSetCartTotalTaxActionSchema(CartUpdateActionSchema):
     external_total_gross = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
@@ -2528,6 +2591,96 @@ class CartSetDeleteDaysAfterLastModificationActionSchema(CartUpdateActionSchema)
         return models.CartSetDeleteDaysAfterLastModificationAction(**data)
 
 
+class CartSetDeliveryAddressCustomFieldActionSchema(CartUpdateActionSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetDeliveryAddressCustomFieldAction(**data)
+
+
+class CartSetDeliveryAddressCustomTypeActionSchema(CartUpdateActionSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetDeliveryAddressCustomTypeAction(**data)
+
+
+class CartSetItemShippingAddressCustomFieldActionSchema(CartUpdateActionSchema):
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetItemShippingAddressCustomFieldAction(**data)
+
+
+class CartSetItemShippingAddressCustomTypeActionSchema(CartUpdateActionSchema):
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetItemShippingAddressCustomTypeAction(**data)
+
+
 class CartSetKeyActionSchema(CartUpdateActionSchema):
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -2749,6 +2902,45 @@ class CartSetShippingAddressActionSchema(CartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.CartSetShippingAddressAction(**data)
+
+
+class CartSetShippingAddressCustomFieldActionSchema(CartUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetShippingAddressCustomFieldAction(**data)
+
+
+class CartSetShippingAddressCustomTypeActionSchema(CartUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetShippingAddressCustomTypeAction(**data)
 
 
 class CartSetShippingMethodActionSchema(CartUpdateActionSchema):

@@ -491,6 +491,7 @@ class CustomFieldTimeType(FieldType):
 
 
 class ResourceTypeId(enum.Enum):
+    ADDRESS = "address"
     ASSET = "asset"
     CATEGORY = "category"
     CHANNEL = "channel"

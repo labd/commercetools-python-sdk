@@ -231,6 +231,12 @@ class ChannelUpdateSchema(helpers.BaseSchema):
                 "setAddress": helpers.absmod(
                     __name__, ".ChannelSetAddressActionSchema"
                 ),
+                "setAddressCustomType": helpers.absmod(
+                    __name__, ".ChannelSetAddressCustomTypeActionSchema"
+                ),
+                "setAddressCustomField": helpers.absmod(
+                    __name__, ".ChannelSetAddressCustomFieldActionSchema"
+                ),
                 "setCustomField": helpers.absmod(
                     __name__, ".ChannelSetCustomFieldActionSchema"
                 ),
@@ -356,6 +362,45 @@ class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ChannelSetAddressAction(**data)
+
+
+class ChannelSetAddressCustomTypeActionSchema(ChannelUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ChannelSetAddressCustomTypeAction(**data)
+
+
+class ChannelSetAddressCustomFieldActionSchema(ChannelUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ChannelSetAddressCustomFieldAction(**data)
 
 
 class ChannelSetCustomFieldActionSchema(ChannelUpdateActionSchema):

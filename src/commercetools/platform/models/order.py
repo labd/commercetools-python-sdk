@@ -97,6 +97,8 @@ __all__ = [
     "OrderRemovePaymentAction",
     "OrderResourceIdentifier",
     "OrderSetBillingAddressAction",
+    "OrderSetBillingAddressCustomFieldAction",
+    "OrderSetBillingAddressCustomTypeAction",
     "OrderSetCustomFieldAction",
     "OrderSetCustomLineItemCustomFieldAction",
     "OrderSetCustomLineItemCustomTypeAction",
@@ -105,7 +107,11 @@ __all__ = [
     "OrderSetCustomerEmailAction",
     "OrderSetCustomerIdAction",
     "OrderSetDeliveryAddressAction",
+    "OrderSetDeliveryAddressCustomFieldAction",
+    "OrderSetDeliveryAddressCustomTypeAction",
     "OrderSetDeliveryItemsAction",
+    "OrderSetItemShippingAddressCustomFieldAction",
+    "OrderSetItemShippingAddressCustomTypeAction",
     "OrderSetLineItemCustomFieldAction",
     "OrderSetLineItemCustomTypeAction",
     "OrderSetLineItemShippingDetailsAction",
@@ -117,6 +123,8 @@ __all__ = [
     "OrderSetReturnPaymentStateAction",
     "OrderSetReturnShipmentStateAction",
     "OrderSetShippingAddressAction",
+    "OrderSetShippingAddressCustomFieldAction",
+    "OrderSetShippingAddressCustomTypeAction",
     "OrderSetStoreAction",
     "OrderState",
     "OrderTransitionCustomLineItemStateAction",
@@ -850,9 +858,9 @@ class Order(BaseResource):
 
 class OrderFromCartDraft(_BaseType):
     #: The unique id of the cart from which an order is created.
-    id: str
+    id: typing.Optional[str]
     #: ResourceIdentifier to the Cart from which this order is created.
-    cart: "CartResourceIdentifier"
+    cart: typing.Optional["CartResourceIdentifier"]
     version: int
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -869,8 +877,8 @@ class OrderFromCartDraft(_BaseType):
     def __init__(
         self,
         *,
-        id: str,
-        cart: "CartResourceIdentifier",
+        id: typing.Optional[str] = None,
+        cart: typing.Optional["CartResourceIdentifier"] = None,
         version: int,
         order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
@@ -1180,6 +1188,14 @@ class OrderUpdateAction(_BaseType):
             from ._schemas.order import OrderSetBillingAddressActionSchema
 
             return OrderSetBillingAddressActionSchema().load(data)
+        if data["action"] == "setBillingAddressCustomField":
+            from ._schemas.order import OrderSetBillingAddressCustomFieldActionSchema
+
+            return OrderSetBillingAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setBillingAddressCustomType":
+            from ._schemas.order import OrderSetBillingAddressCustomTypeActionSchema
+
+            return OrderSetBillingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setCustomField":
             from ._schemas.order import OrderSetCustomFieldActionSchema
 
@@ -1214,10 +1230,30 @@ class OrderUpdateAction(_BaseType):
             from ._schemas.order import OrderSetDeliveryAddressActionSchema
 
             return OrderSetDeliveryAddressActionSchema().load(data)
+        if data["action"] == "setDeliveryAddressCustomField":
+            from ._schemas.order import OrderSetDeliveryAddressCustomFieldActionSchema
+
+            return OrderSetDeliveryAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setDeliveryAddressCustomType":
+            from ._schemas.order import OrderSetDeliveryAddressCustomTypeActionSchema
+
+            return OrderSetDeliveryAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setDeliveryItems":
             from ._schemas.order import OrderSetDeliveryItemsActionSchema
 
             return OrderSetDeliveryItemsActionSchema().load(data)
+        if data["action"] == "setItemShippingAddressCustomField":
+            from ._schemas.order import (
+                OrderSetItemShippingAddressCustomFieldActionSchema,
+            )
+
+            return OrderSetItemShippingAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setItemShippingAddressCustomType":
+            from ._schemas.order import (
+                OrderSetItemShippingAddressCustomTypeActionSchema,
+            )
+
+            return OrderSetItemShippingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setLineItemCustomField":
             from ._schemas.order import OrderSetLineItemCustomFieldActionSchema
 
@@ -1262,6 +1298,14 @@ class OrderUpdateAction(_BaseType):
             from ._schemas.order import OrderSetShippingAddressActionSchema
 
             return OrderSetShippingAddressActionSchema().load(data)
+        if data["action"] == "setShippingAddressCustomField":
+            from ._schemas.order import OrderSetShippingAddressCustomFieldActionSchema
+
+            return OrderSetShippingAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setShippingAddressCustomType":
+            from ._schemas.order import OrderSetShippingAddressCustomTypeActionSchema
+
+            return OrderSetShippingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setStore":
             from ._schemas.order import OrderSetStoreActionSchema
 
@@ -2176,6 +2220,57 @@ class OrderSetBillingAddressAction(OrderUpdateAction):
         return OrderSetBillingAddressActionSchema().dump(self)
 
 
+class OrderSetBillingAddressCustomFieldAction(OrderUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setBillingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetBillingAddressCustomFieldAction":
+        from ._schemas.order import OrderSetBillingAddressCustomFieldActionSchema
+
+        return OrderSetBillingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetBillingAddressCustomFieldActionSchema
+
+        return OrderSetBillingAddressCustomFieldActionSchema().dump(self)
+
+
+class OrderSetBillingAddressCustomTypeAction(OrderUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setBillingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetBillingAddressCustomTypeAction":
+        from ._schemas.order import OrderSetBillingAddressCustomTypeActionSchema
+
+        return OrderSetBillingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetBillingAddressCustomTypeActionSchema
+
+        return OrderSetBillingAddressCustomTypeActionSchema().dump(self)
+
+
 class OrderSetCustomFieldAction(OrderUpdateAction):
     name: str
     value: typing.Optional[typing.Any]
@@ -2382,6 +2477,64 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
         return OrderSetDeliveryAddressActionSchema().dump(self)
 
 
+class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
+    delivery_id: str
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        delivery_id: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.delivery_id = delivery_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setDeliveryAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetDeliveryAddressCustomFieldAction":
+        from ._schemas.order import OrderSetDeliveryAddressCustomFieldActionSchema
+
+        return OrderSetDeliveryAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetDeliveryAddressCustomFieldActionSchema
+
+        return OrderSetDeliveryAddressCustomFieldActionSchema().dump(self)
+
+
+class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
+    delivery_id: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.delivery_id = delivery_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setDeliveryAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetDeliveryAddressCustomTypeAction":
+        from ._schemas.order import OrderSetDeliveryAddressCustomTypeActionSchema
+
+        return OrderSetDeliveryAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetDeliveryAddressCustomTypeActionSchema
+
+        return OrderSetDeliveryAddressCustomTypeActionSchema().dump(self)
+
+
 class OrderSetDeliveryItemsAction(OrderUpdateAction):
     delivery_id: str
     items: typing.List["DeliveryItem"]
@@ -2403,6 +2556,64 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
         from ._schemas.order import OrderSetDeliveryItemsActionSchema
 
         return OrderSetDeliveryItemsActionSchema().dump(self)
+
+
+class OrderSetItemShippingAddressCustomFieldAction(OrderUpdateAction):
+    address_key: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, address_key: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.address_key = address_key
+        self.name = name
+        self.value = value
+        super().__init__(action="setItemShippingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetItemShippingAddressCustomFieldAction":
+        from ._schemas.order import OrderSetItemShippingAddressCustomFieldActionSchema
+
+        return OrderSetItemShippingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetItemShippingAddressCustomFieldActionSchema
+
+        return OrderSetItemShippingAddressCustomFieldActionSchema().dump(self)
+
+
+class OrderSetItemShippingAddressCustomTypeAction(OrderUpdateAction):
+    address_key: str
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        address_key: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.address_key = address_key
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setItemShippingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetItemShippingAddressCustomTypeAction":
+        from ._schemas.order import OrderSetItemShippingAddressCustomTypeActionSchema
+
+        return OrderSetItemShippingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetItemShippingAddressCustomTypeActionSchema
+
+        return OrderSetItemShippingAddressCustomTypeActionSchema().dump(self)
 
 
 class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
@@ -2672,6 +2883,57 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
         from ._schemas.order import OrderSetShippingAddressActionSchema
 
         return OrderSetShippingAddressActionSchema().dump(self)
+
+
+class OrderSetShippingAddressCustomFieldAction(OrderUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setShippingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetShippingAddressCustomFieldAction":
+        from ._schemas.order import OrderSetShippingAddressCustomFieldActionSchema
+
+        return OrderSetShippingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetShippingAddressCustomFieldActionSchema
+
+        return OrderSetShippingAddressCustomFieldActionSchema().dump(self)
+
+
+class OrderSetShippingAddressCustomTypeAction(OrderUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setShippingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetShippingAddressCustomTypeAction":
+        from ._schemas.order import OrderSetShippingAddressCustomTypeActionSchema
+
+        return OrderSetShippingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetShippingAddressCustomTypeActionSchema
+
+        return OrderSetShippingAddressCustomTypeActionSchema().dump(self)
 
 
 class OrderSetStoreAction(OrderUpdateAction):

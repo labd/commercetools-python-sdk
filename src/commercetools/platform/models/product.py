@@ -254,14 +254,7 @@ class FacetResultTerm(_BaseType):
         return FacetResultTermSchema().dump(self)
 
 
-class FacetResults(
-    typing.Dict[
-        str,
-        typing.Union[
-            "FacetResult", "FilteredFacetResult", "RangeFacetResult", "TermFacetResult"
-        ],
-    ]
-):
+class FacetResults(typing.Dict[str, "FacetResult"]):
     pass
 
 

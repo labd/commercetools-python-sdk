@@ -31,6 +31,9 @@ from .type import FieldContainerField
 
 # Marshmallow Schemas
 class MyCartSchema(BaseResourceSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
@@ -1563,7 +1566,7 @@ class MyCartAddLineItemActionSchema(MyCartUpdateActionSchema):
     sku = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    quantity = marshmallow.fields.Float(
+    quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     supply_channel = helpers.LazyNestedField(
@@ -1656,7 +1659,7 @@ class MyCartChangeLineItemQuantityActionSchema(MyCartUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     external_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
@@ -1750,7 +1753,7 @@ class MyCartRemoveLineItemActionSchema(MyCartUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    quantity = marshmallow.fields.Float(
+    quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     external_price = helpers.LazyNestedField(

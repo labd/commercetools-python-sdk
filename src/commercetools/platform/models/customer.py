@@ -705,14 +705,14 @@ class CustomerUpdateAction(_BaseType):
             from ._schemas.customer import CustomerRemoveStoreActionSchema
 
             return CustomerRemoveStoreActionSchema().load(data)
-        if data["action"] == "setAddressCustomType":
-            from ._schemas.customer import CustomerSetAddressCustomTypeActionSchema
-
-            return CustomerSetAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setAddressCustomField":
             from ._schemas.customer import CustomerSetAddressCustomFieldActionSchema
 
             return CustomerSetAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setAddressCustomType":
+            from ._schemas.customer import CustomerSetAddressCustomTypeActionSchema
+
+            return CustomerSetAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setCompanyName":
             from ._schemas.customer import CustomerSetCompanyNameActionSchema
 
@@ -1047,6 +1047,33 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
         return CustomerRemoveStoreActionSchema().dump(self)
 
 
+class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
+    address_id: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, address_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.address_id = address_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerSetAddressCustomFieldAction":
+        from ._schemas.customer import CustomerSetAddressCustomFieldActionSchema
+
+        return CustomerSetAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import CustomerSetAddressCustomFieldActionSchema
+
+        return CustomerSetAddressCustomFieldActionSchema().dump(self)
+
+
 class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
     type: typing.Optional["TypeResourceIdentifier"]
     fields: typing.Optional["FieldContainer"]
@@ -1076,33 +1103,6 @@ class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
         from ._schemas.customer import CustomerSetAddressCustomTypeActionSchema
 
         return CustomerSetAddressCustomTypeActionSchema().dump(self)
-
-
-class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
-    address_id: str
-    name: str
-    value: typing.Optional[typing.Any]
-
-    def __init__(
-        self, *, address_id: str, name: str, value: typing.Optional[typing.Any] = None
-    ):
-        self.address_id = address_id
-        self.name = name
-        self.value = value
-        super().__init__(action="setAddressCustomField")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "CustomerSetAddressCustomFieldAction":
-        from ._schemas.customer import CustomerSetAddressCustomFieldActionSchema
-
-        return CustomerSetAddressCustomFieldActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.customer import CustomerSetAddressCustomFieldActionSchema
-
-        return CustomerSetAddressCustomFieldActionSchema().dump(self)
 
 
 class CustomerSetCompanyNameAction(CustomerUpdateAction):

@@ -39,7 +39,9 @@ from .type import FieldContainerField
 
 # Marshmallow Schemas
 class CartSchema(BaseResourceSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
@@ -260,6 +262,9 @@ class CartSchema(BaseResourceSchema):
 
 class CartDraftSchema(helpers.BaseSchema):
     currency = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},

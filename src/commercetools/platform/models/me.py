@@ -179,6 +179,8 @@ __all__ = [
 
 
 class MyCart(BaseResource):
+    #: User-specific unique identifier of the cart.
+    key: typing.Optional[str]
     last_modified_by: typing.Optional["LastModifiedBy"]
     created_by: typing.Optional["CreatedBy"]
     customer_id: typing.Optional[str]
@@ -217,6 +219,7 @@ class MyCart(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
+        key: typing.Optional[str] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_id: typing.Optional[str] = None,
@@ -247,6 +250,7 @@ class MyCart(BaseResource):
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
     ):
+        self.key = key
         self.last_modified_by = last_modified_by
         self.created_by = created_by
         self.customer_id = customer_id
@@ -1472,7 +1476,7 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
     sku: typing.Optional[str]
-    quantity: typing.Optional[float]
+    quantity: typing.Optional[int]
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1488,7 +1492,7 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        quantity: typing.Optional[float] = None,
+        quantity: typing.Optional[int] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
@@ -1575,7 +1579,7 @@ class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction)
 
 class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
     line_item_id: str
-    quantity: float
+    quantity: int
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
@@ -1583,7 +1587,7 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
         self,
         *,
         line_item_id: str,
-        quantity: float,
+        quantity: int,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
@@ -1693,7 +1697,7 @@ class MyCartRemoveItemShippingAddressAction(MyCartUpdateAction):
 
 class MyCartRemoveLineItemAction(MyCartUpdateAction):
     line_item_id: str
-    quantity: typing.Optional[float]
+    quantity: typing.Optional[int]
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
@@ -1702,7 +1706,7 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
         self,
         *,
         line_item_id: str,
-        quantity: typing.Optional[float] = None,
+        quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None

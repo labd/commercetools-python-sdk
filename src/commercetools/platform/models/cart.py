@@ -164,7 +164,7 @@ __all__ = [
 
 class Cart(BaseResource):
     #: User-specific unique identifier of the cart.
-    key: str
+    key: typing.Optional[str]
     #: Present on resources updated after 1/02/2019 except for events not tracked.
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1/02/2019 except for events not tracked.
@@ -228,7 +228,7 @@ class Cart(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
-        key: str,
+        key: typing.Optional[str] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         customer_id: typing.Optional[str] = None,
@@ -311,6 +311,8 @@ class Cart(BaseResource):
 class CartDraft(_BaseType):
     #: A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currency: str
+    #: User-specific unique identifier of the cart.
+    key: typing.Optional[str]
     #: Id of an existing Customer.
     customer_id: typing.Optional[str]
     customer_email: typing.Optional[str]
@@ -368,6 +370,7 @@ class CartDraft(_BaseType):
         self,
         *,
         currency: str,
+        key: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
@@ -395,6 +398,7 @@ class CartDraft(_BaseType):
         discount_codes: typing.Optional[typing.List["str"]] = None
     ):
         self.currency = currency
+        self.key = key
         self.customer_id = customer_id
         self.customer_email = customer_email
         self.customer_group = customer_group

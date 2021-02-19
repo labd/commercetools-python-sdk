@@ -602,11 +602,11 @@ class CustomerUpdateSchema(helpers.BaseSchema):
                 "removeStore": helpers.absmod(
                     __name__, ".CustomerRemoveStoreActionSchema"
                 ),
-                "setAddressCustomType": helpers.absmod(
-                    __name__, ".CustomerSetAddressCustomTypeActionSchema"
-                ),
                 "setAddressCustomField": helpers.absmod(
                     __name__, ".CustomerSetAddressCustomFieldActionSchema"
+                ),
+                "setAddressCustomType": helpers.absmod(
+                    __name__, ".CustomerSetAddressCustomTypeActionSchema"
                 ),
                 "setCompanyName": helpers.absmod(
                     __name__, ".CustomerSetCompanyNameActionSchema"
@@ -886,6 +886,24 @@ class CustomerRemoveStoreActionSchema(CustomerUpdateActionSchema):
         return models.CustomerRemoveStoreAction(**data)
 
 
+class CustomerSetAddressCustomFieldActionSchema(CustomerUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CustomerSetAddressCustomFieldAction(**data)
+
+
 class CustomerSetAddressCustomTypeActionSchema(CustomerUpdateActionSchema):
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
@@ -911,24 +929,6 @@ class CustomerSetAddressCustomTypeActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.CustomerSetAddressCustomTypeAction(**data)
-
-
-class CustomerSetAddressCustomFieldActionSchema(CustomerUpdateActionSchema):
-    address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
-    )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.CustomerSetAddressCustomFieldAction(**data)
 
 
 class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):

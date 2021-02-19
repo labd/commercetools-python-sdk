@@ -737,6 +737,13 @@ class CustomLineItemTaxedPrice(_BaseType):
 
 
 class CustomLineItemDraft(_BaseType):
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     name: "LocalizedString"
     money: "TypedMoney"
     taxed_price: typing.Optional["CustomLineItemTaxedPrice"]

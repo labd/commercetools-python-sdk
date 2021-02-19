@@ -235,6 +235,13 @@ class StringField(CustomField):
 class LocalizedStringField(CustomField):
     """A field with a localized string value."""
 
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     value: "LocalizedString"
 
     def __init__(self, *, value: "LocalizedString"):

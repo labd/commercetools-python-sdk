@@ -405,6 +405,13 @@ class LocalizableEnumSetAttribute(Attribute):
 class LocalizableTextAttribute(Attribute):
     """This type represents an attribute which value is a localized text."""
 
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     value: "LocalizedString"
 
     def __init__(self, *, name: typing.Optional[str] = None, value: "LocalizedString"):

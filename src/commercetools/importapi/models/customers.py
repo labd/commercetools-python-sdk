@@ -13,7 +13,7 @@ from ._abstract import _BaseType
 from .common import ImportResource
 
 if typing.TYPE_CHECKING:
-    from .common import Address, CustomerGroupKeyReference
+    from .common import Address, CustomerGroupKeyReference, StoreKeyReference
     from .customfields import Custom
 
 __all__ = ["CustomerImport"]
@@ -28,6 +28,12 @@ class CustomerImport(ImportResource):
     email: str
     #: Maps to `Customer.password`.
     password: str
+    #: References stores by its keys.
+    #:
+    #: The stores referenced
+    #: must already exist in the commercetools project, or the
+    #: import operation state is set to `Unresolved`.
+    stores: typing.Optional[typing.List["StoreKeyReference"]]
     #: Maps to `Customer.firstName`.
     first_name: typing.Optional[str]
     #: Maps to `Customer.lastName`.
@@ -56,14 +62,14 @@ class CustomerImport(ImportResource):
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: Maps to `Customer.addresses`.
     addresses: typing.Optional[typing.List["Address"]]
-    #: Maps to `Customer.defaultBillingAddress`.
-    default_billing_address: typing.Optional["Address"]
-    #: Maps to `Customer.billingAddresses`.
-    billing_addresses: typing.Optional["Address"]
-    #: Maps to `Customer.defaultShippingAddress`.
-    default_shipping_address: typing.Optional["Address"]
-    #: Maps to `Customer.shippingAddresses`.
-    shipping_addresses: typing.Optional["Address"]
+    #: The index of the address in the addresses array. The `defaultBillingAddressId` of the customer will be set to the ID of that address.
+    default_billing_address: typing.Optional[int]
+    #: The indices of the billing addresses in the addresses array. The `billingAddressIds` of the customer will be set to the IDs of that addresses.
+    billing_addresses: typing.Optional[typing.List["int"]]
+    #: The index of the address in the addresses array. The `defaultShippingAddressId` of the customer will be set to the ID of that address.
+    default_shipping_address: typing.Optional[int]
+    #: The indices of the shipping addresses in the addresses array. The `shippingAddressIds` of the customer will be set to the IDs of that addresses.
+    shipping_addresses: typing.Optional[typing.List["int"]]
     #: Maps to `Customer.locale`.
     locale: typing.Optional[str]
     #: The custom fields for this Customer.
@@ -76,6 +82,7 @@ class CustomerImport(ImportResource):
         customer_number: typing.Optional[str] = None,
         email: str,
         password: str,
+        stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -88,16 +95,17 @@ class CustomerImport(ImportResource):
         is_email_verified: typing.Optional[bool] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
         addresses: typing.Optional[typing.List["Address"]] = None,
-        default_billing_address: typing.Optional["Address"] = None,
-        billing_addresses: typing.Optional["Address"] = None,
-        default_shipping_address: typing.Optional["Address"] = None,
-        shipping_addresses: typing.Optional["Address"] = None,
+        default_billing_address: typing.Optional[int] = None,
+        billing_addresses: typing.Optional[typing.List["int"]] = None,
+        default_shipping_address: typing.Optional[int] = None,
+        shipping_addresses: typing.Optional[typing.List["int"]] = None,
         locale: typing.Optional[str] = None,
         custom: typing.Optional["Custom"] = None
     ):
         self.customer_number = customer_number
         self.email = email
         self.password = password
+        self.stores = stores
         self.first_name = first_name
         self.last_name = last_name
         self.middle_name = middle_name

@@ -28,6 +28,14 @@ class CustomerImportSchema(ImportResourceSchema):
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
     password = marshmallow.fields.String(allow_none=True, missing=None)
+    stores = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.StoreKeyReferenceSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
     first_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -95,34 +103,28 @@ class CustomerImportSchema(ImportResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    default_billing_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+    default_billing_address = marshmallow.fields.Integer(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="defaultBillingAddress",
     )
-    billing_addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+    billing_addresses = marshmallow.fields.List(
+        marshmallow.fields.Integer(allow_none=True),
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="billingAddresses",
     )
-    default_shipping_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+    default_shipping_address = marshmallow.fields.Integer(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="defaultShippingAddress",
     )
-    shipping_addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+    shipping_addresses = marshmallow.fields.List(
+        marshmallow.fields.Integer(allow_none=True),
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="shippingAddresses",

@@ -53,8 +53,29 @@ class ProductDraftImport(ImportResource):
     #: must already exist in the commercetools project, or the
     #: import operation state is set to `Unresolved`.
     categories: typing.Optional[typing.List["CategoryKeyReference"]]
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     meta_title: typing.Optional["LocalizedString"]
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     meta_description: typing.Optional["LocalizedString"]
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     meta_keywords: typing.Optional["LocalizedString"]
     #: The master product variant.
     #: Required if the `variants` array has product variants.
@@ -67,6 +88,24 @@ class ProductDraftImport(ImportResource):
     #: in the commercetools project, or the
     #: import operation state is set to `Unresolved`.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
+    #: Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
+    #: ```json
+    #: {
+    #:   "en": [
+    #:     { "text": "Multi tool" },
+    #:     { "text": "Swiss Army Knife", "suggestTokenizer": { "type": "whitespace" } }
+    #:   ],
+    #:   "de": [
+    #:     {
+    #:       "text": "Schweizer Messer",
+    #:       "suggestTokenizer": {
+    #:         "type": "custom",
+    #:         "inputs": ["schweizer messer", "offiziersmesser", "sackmesser"]
+    #:       }
+    #:     }
+    #:   ]
+    #: }
+    #: ```
     search_keywords: typing.Optional["SearchKeywords"]
     #: References a state by its key.
     #:

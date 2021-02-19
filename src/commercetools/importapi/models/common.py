@@ -57,7 +57,21 @@ class Asset(_BaseType):
     #: Asset keys are unique inside their container (a product variant or a category).
     key: str
     sources: typing.List["AssetSource"]
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     name: "LocalizedString"
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     description: typing.Optional["LocalizedString"]
     tags: typing.Optional[typing.List["str"]]
     #: The representation to be sent to the server when creating a resource with custom fields.
@@ -94,7 +108,11 @@ class Asset(_BaseType):
 
 
 class AssetDimensions(_BaseType):
+    """The width and height of the Asset Source."""
+
+    #: The width of the asset source.
     w: float
+    #: The height of the asset source.
     h: float
 
     def __init__(self, *, w: float, h: float):
@@ -115,8 +133,11 @@ class AssetDimensions(_BaseType):
 
 
 class AssetSource(_BaseType):
+    """An AssetSource is a representation of an Asset in a specific format, for example, a video in a certain encoding or an image in a certain resolution."""
+
     uri: str
     key: typing.Optional[str]
+    #: The width and height of the Asset Source.
     dimensions: typing.Optional["AssetDimensions"]
     content_type: typing.Optional[str]
 
@@ -147,8 +168,13 @@ class AssetSource(_BaseType):
 
 
 class Image(_BaseType):
+    """An Image uploaded to the commercetools platform is stored in a Content Delivery Network and it's available in several pre-defined sizes. If you already have an image stored on an external service, you can save the URL when creating a new product or adding a variant, or you can add it later."""
+
+    #: URL of the image in its original size. The URL must be unique within a single variant. It can be used to obtain the image in different sizes.
     url: str
+    #: Dimensions of the original image. This can be used by your application, for example, to determine whether the image is large enough to display a zoom view.
     dimensions: "AssetDimensions"
+    #: Custom label that can be used, for example, as an image description.
     label: typing.Optional[str]
 
     def __init__(
@@ -198,6 +224,13 @@ class EnumValue(_BaseType):
 
 class LocalizedEnumValue(_BaseType):
     key: str
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     label: "LocalizedString"
 
     def __init__(self, *, key: str, label: "LocalizedString"):

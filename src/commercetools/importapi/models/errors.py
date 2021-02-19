@@ -95,7 +95,7 @@ class ErrorObject(_BaseType):
     """An error."""
 
     code: str
-    #: The error's description.
+    #: This is a placeholder for an actual platform error message.
     message: str
 
     def __init__(self, *, code: str, message: str):

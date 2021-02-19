@@ -42,9 +42,23 @@ __all__ = [
 class AttributeDefinition(_BaseType):
     type: "AttributeType"
     name: str
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     label: "LocalizedString"
     is_required: bool
     attribute_constraint: typing.Optional["AttributeConstraintEnum"]
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     input_tip: typing.Optional["LocalizedString"]
     input_hint: typing.Optional["TextInputHint"]
     is_searchable: typing.Optional[bool]
@@ -286,6 +300,13 @@ class AttributeLocalizedEnumType(AttributeType):
 
 class AttributeLocalizedEnumValue(_BaseType):
     key: str
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
     label: "LocalizedString"
 
     def __init__(self, *, key: str, label: "LocalizedString"):

@@ -1,5 +1,7 @@
+import copy
 import uuid
 
+from commercetools.platform import models
 from commercetools.platform.models._schemas.project import (
     ProjectSchema,
     ProjectUpdateSchema,
@@ -31,7 +33,10 @@ class ProjectBackend(ServiceBackend):
             "languages": ["en", "nl", "de", "nl-BE"],
             "createdAt": "2018-10-04T11:32:12.603Z",
             "trialUntil": "2018-12",
-            "carts": {},
+            "carts": {
+                "countryTaxRateFallbackEnabled": False,
+                "deleteDaysAfterLastModification": 90,
+            },
             "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
             "externalOAuth": None,
             "version": 4,
@@ -52,6 +57,24 @@ class ProjectBackend(ServiceBackend):
         project_key = request.kwargs["project"]
         return self.update_by_key(request, project_key)
 
+    def change_messages_enabled(
+        self, obj, action: models.ProjectChangeMessagesEnabledAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["messages"]["enabled"] = action.messages_enabled
+        return new
+
+    def change_country_tax_rate_fallback_enabled(
+        self, obj, action: models.ProjectChangeCountryTaxRateFallbackEnabledAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["carts"][
+            "countryTaxRateFallbackEnabled"
+        ] = action.country_tax_rate_fallback_enabled
+        return new
+
     # Fixme: use decorator for this
     _actions = {
         "changeCountries": update_attribute("countries", "countries"),
@@ -59,4 +82,6 @@ class ProjectBackend(ServiceBackend):
         "changeName": update_attribute("name", "name"),
         "changeLanguages": update_attribute("languages", "languages"),
         "setExternalOAuth": update_attribute("externalOAuth", "external_oauth"),
+        "changeMessagesEnabled": change_messages_enabled,
+        "changeCountryTaxRateFallbackEnabled": change_country_tax_rate_fallback_enabled,
     }

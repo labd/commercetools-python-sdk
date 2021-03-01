@@ -3,8 +3,8 @@
 .. image:: https://github.com/labd/commercetools-python-sdk/workflows/Python%20Tests/badge.svg
     :target: https://github.com/labd/commercetools-python-sdk/actions
 
-.. image:: http://codecov.io/github/labd/commercetools-python-sdk/coverage.svg?branch=master
-    :target: http://codecov.io/github/labd/commercetools-python-sdk?branch=master
+.. image:: http://codecov.io/github/labd/commercetools-python-sdk/coverage.svg?branch=main
+    :target: http://codecov.io/github/labd/commercetools-python-sdk?branch=main
 
 .. image:: https://img.shields.io/pypi/v/commercetools.svg
     :target: https://pypi.python.org/pypi/commercetools/

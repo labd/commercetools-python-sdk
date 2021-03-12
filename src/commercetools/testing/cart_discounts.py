@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -64,6 +65,22 @@ class CartDiscountsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
+    def set_valid_from(
+            self, obj, action: models.CartDiscountSetValidFromAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["valid_from"] = action.valid_from.isoformat()
+        return new
+
+    def set_valid_until(
+            self, obj, action: models.CartDiscountSetValidUntilAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["valid_until"] = action.valid_until.isoformat()
+        return new
+
     _actions = {
         "setKey": update_attribute("key", "key"),
         "changeSortOrder": update_attribute("sortOrder", "sort_order"),
@@ -72,6 +89,6 @@ class CartDiscountsBackend(ServiceBackend):
         "setName": update_attribute("name", "name"),
         "setDescription": update_attribute("description", "description"),
         "setCartPredicate": update_attribute("cartPredicate", "cart_predicate"),
-        "setValidFrom": update_attribute("valid_from", "valid_from"),
-        "setValidUntil": update_attribute("valid_until", "valid_until")
+        "setValidFrom": set_valid_from,
+        "setValidUntil": set_valid_until
     }

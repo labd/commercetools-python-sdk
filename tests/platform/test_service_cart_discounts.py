@@ -114,7 +114,7 @@ def test_cart_discount_set_valid_from(old_client):
         actions=[models.CartDiscountSetValidFromAction(valid_from=datetime.now())],
     )
 
-    assert cart_discount.valid_from == datetime.now()
+    assert cart_discount.valid_from == datetime.now().isoformat()
 
 
 @pytest.mark.freeze_time("2021-03-01 12:34:56")
@@ -137,4 +137,4 @@ def test_cart_discount_set_valid_until(old_client):
         actions=[models.CartDiscountSetValidUntilAction(valid_until=datetime.now())],
     )
 
-    assert cart_discount.valid_until == datetime.now()
+    assert cart_discount.valid_until == datetime.now().isoformat()

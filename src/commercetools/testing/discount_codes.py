@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -58,6 +59,30 @@ class DiscountCodesBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
 
+    def set_valid_from(
+            self, obj, action: models.DiscountCodeSetValidFromAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["valid_from"] = action.valid_from.isoformat()
+        return new
+
+    def set_valid_until(
+            self, obj, action: models.DiscountCodeSetValidUntilAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["valid_until"] = action.valid_until.isoformat()
+        return new
+
+    def change_cart_discounts(
+            self, obj, action: models.DiscountCodeChangeCartDiscountsAction
+    ):
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        new["cart_discounts"] = [cart_discount.serialize() for cart_discount in action.cart_discounts]
+        return new
+
     _actions = {
         "changeIsActive": update_attribute("isActive", "is_active"),
         "setName": update_attribute("name", "name"),
@@ -67,6 +92,7 @@ class DiscountCodesBackend(ServiceBackend):
         "setMaxApplicationsPerCustomer": update_attribute(
             "maxApplicationsPerCustomer", "max_applications_per_customer"
         ),
-        "setValidFrom": update_attribute("valid_from", "valid_from"),
-        "setValidUntil": update_attribute("valid_until", "valid_until")
+        "setValidFrom": set_valid_from,
+        "setValidUntil": set_valid_until,
+        "changeCartDiscounts": change_cart_discounts
     }

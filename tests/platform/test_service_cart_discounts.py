@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from requests.exceptions import HTTPError
 
@@ -90,3 +92,49 @@ def test_cart_discount_update(old_client):
     )
 
     assert cart_discount.is_active is False
+
+
+@pytest.mark.freeze_time("2021-03-01 12:34:56")
+def test_cart_discount_set_valid_from(old_client):
+    cart_discount = old_client.cart_discounts.create(
+        models.CartDiscountDraft(
+            name=models.LocalizedString(en="en-cart_discount"),
+            value=models.CartDiscountValueRelative(permyriad=10),
+            is_active=True,
+            cart_predicate="",
+            sort_order="",
+            requires_discount_code=False,
+        )
+    )
+    assert cart_discount.id
+
+    cart_discount = old_client.cart_discounts.update_by_id(
+        id=cart_discount.id,
+        version=cart_discount.version,
+        actions=[models.CartDiscountSetValidFromAction(valid_from=datetime.now())],
+    )
+
+    assert cart_discount.valid_from == datetime.now()
+
+
+@pytest.mark.freeze_time("2021-03-01 12:34:56")
+def test_cart_discount_set_valid_until(old_client):
+    cart_discount = old_client.cart_discounts.create(
+        models.CartDiscountDraft(
+            name=models.LocalizedString(en="en-cart_discount"),
+            value=models.CartDiscountValueRelative(permyriad=10),
+            is_active=True,
+            cart_predicate="",
+            sort_order="",
+            requires_discount_code=False,
+        )
+    )
+    assert cart_discount.id
+
+    cart_discount = old_client.cart_discounts.update_by_id(
+        id=cart_discount.id,
+        version=cart_discount.version,
+        actions=[models.CartDiscountSetValidUntilAction(valid_until=datetime.now())],
+    )
+
+    assert cart_discount.valid_until == datetime.now()

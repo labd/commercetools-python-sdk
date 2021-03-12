@@ -10,6 +10,7 @@ from commercetools.platform.models._schemas.extension import (
     ExtensionUpdateSchema,
 )
 from commercetools.testing.abstract import BaseModel, ServiceBackend
+from commercetools.testing.utils import update_attribute
 
 
 class ExtensionsModel(BaseModel):
@@ -49,3 +50,7 @@ class ExtensionsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
+
+    _actions = {
+        "changeTriggers": update_attribute("triggers", "triggers"),
+    }

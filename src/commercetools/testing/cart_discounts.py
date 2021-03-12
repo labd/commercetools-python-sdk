@@ -72,4 +72,6 @@ class CartDiscountsBackend(ServiceBackend):
         "setName": update_attribute("name", "name"),
         "setDescription": update_attribute("description", "description"),
         "setCartPredicate": update_attribute("cartPredicate", "cart_predicate"),
+        "setValidFrom": update_attribute("valid_from", "valid_from"),
+        "setValidUntil": update_attribute("valid_until", "valid_until")
     }

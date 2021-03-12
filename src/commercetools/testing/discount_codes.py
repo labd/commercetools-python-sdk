@@ -67,4 +67,6 @@ class DiscountCodesBackend(ServiceBackend):
         "setMaxApplicationsPerCustomer": update_attribute(
             "maxApplicationsPerCustomer", "max_applications_per_customer"
         ),
+        "setValidFrom": update_attribute("valid_from", "valid_from"),
+        "setValidUntil": update_attribute("valid_until", "valid_until")
     }

@@ -7,8 +7,7 @@
 import typing
 import warnings
 
-from ...models.common import Update
-from ...models.discount_code import DiscountCode
+from ...models.discount_code import DiscountCode, DiscountCodeUpdate
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -57,7 +56,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "DiscountCodeUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

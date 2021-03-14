@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.state import State
+from ...models.state import State, StateUpdate
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -57,7 +56,7 @@ class ByProjectKeyStatesByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "StateUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

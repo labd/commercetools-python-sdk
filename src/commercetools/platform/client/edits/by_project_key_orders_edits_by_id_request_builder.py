@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.order_edit import OrderEdit
+from ...models.order_edit import OrderEdit, OrderEditUpdate
 from ..apply.by_project_key_orders_edits_by_id_apply_request_builder import (
     ByProjectKeyOrdersEditsByIDApplyRequestBuilder,
 )
@@ -67,7 +66,7 @@ class ByProjectKeyOrdersEditsByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "OrderEditUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

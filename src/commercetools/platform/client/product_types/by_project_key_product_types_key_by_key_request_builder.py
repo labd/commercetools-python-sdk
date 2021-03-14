@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.product_type import ProductType
+from ...models.product_type import ProductType, ProductTypeUpdate
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -57,7 +56,7 @@ class ByProjectKeyProductTypesKeyByKeyRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "ProductTypeUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

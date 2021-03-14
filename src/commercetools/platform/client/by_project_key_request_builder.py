@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ..models.common import Update
 from ..models.error import ErrorResponse
-from ..models.project import Project
+from ..models.project import Project, ProjectUpdate
 from .api_clients.by_project_key_api_clients_request_builder import (
     ByProjectKeyApiClientsRequestBuilder,
 )
@@ -367,7 +366,7 @@ class ByProjectKeyRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "ProjectUpdate",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,

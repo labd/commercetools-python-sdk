@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.product import Product
+from ...models.product import Product, ProductUpdate
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -71,7 +70,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "ProductUpdate",
         *,
         price_currency: str = None,
         price_country: str = None,

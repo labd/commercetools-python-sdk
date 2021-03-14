@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.me import MyCustomer
+from ...models.me import MyCustomer, MyCustomerUpdate
 from ..active_cart.by_project_key_me_active_cart_request_builder import (
     ByProjectKeyMeActiveCartRequestBuilder,
 )
@@ -155,7 +154,7 @@ class ByProjectKeyMeRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "MyCustomerUpdate",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,

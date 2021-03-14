@@ -7,8 +7,7 @@
 import typing
 import warnings
 
-from ...models.common import Update
-from ...models.customer_group import CustomerGroup
+from ...models.customer_group import CustomerGroup, CustomerGroupUpdate
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -57,7 +56,7 @@ class ByProjectKeyCustomerGroupsKeyByKeyRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "CustomerGroupUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

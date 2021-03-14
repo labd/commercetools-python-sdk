@@ -7,8 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
+from ...models.me import MyShoppingListUpdate
 from ...models.shopping_list import MyShoppingList
 
 if typing.TYPE_CHECKING:
@@ -57,7 +57,7 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "MyShoppingListUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

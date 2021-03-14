@@ -7,8 +7,7 @@
 import typing
 import warnings
 
-from ...models.cart import Cart
-from ...models.common import Update
+from ...models.cart import Cart, CartUpdate
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -66,7 +65,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "CartUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

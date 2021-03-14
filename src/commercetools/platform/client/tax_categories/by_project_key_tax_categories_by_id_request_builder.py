@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.tax_category import TaxCategory
+from ...models.tax_category import TaxCategory, TaxCategoryUpdate
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -57,7 +56,7 @@ class ByProjectKeyTaxCategoriesByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "TaxCategoryUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

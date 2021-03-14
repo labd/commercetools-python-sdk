@@ -7,8 +7,7 @@
 import typing
 import warnings
 
-from ...models.channel import Channel
-from ...models.common import Update
+from ...models.channel import Channel, ChannelUpdate
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -57,7 +56,7 @@ class ByProjectKeyChannelsByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "ChannelUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

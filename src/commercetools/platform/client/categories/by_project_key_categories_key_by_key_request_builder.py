@@ -7,8 +7,7 @@
 import typing
 import warnings
 
-from ...models.category import Category
-from ...models.common import Update
+from ...models.category import Category, CategoryUpdate
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -57,7 +56,7 @@ class ByProjectKeyCategoriesKeyByKeyRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "CategoryUpdate",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,

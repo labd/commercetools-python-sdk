@@ -7,9 +7,8 @@
 import typing
 import warnings
 
-from ...models.common import Update
 from ...models.error import ErrorResponse
-from ...models.product import Product
+from ...models.product import Product, ProductUpdate
 from ..images.by_project_key_products_by_id_images_request_builder import (
     ByProjectKeyProductsByIDImagesRequestBuilder,
 )
@@ -81,7 +80,7 @@ class ByProjectKeyProductsByIDRequestBuilder:
 
     def post(
         self,
-        body: "Update",
+        body: "ProductUpdate",
         *,
         price_currency: str = None,
         price_country: str = None,

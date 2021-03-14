@@ -778,6 +778,9 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 "ReviewStateTransition": helpers.absmod(
                     __name__, ".ReviewStateTransitionMessageSchema"
                 ),
+                "ShoppingListStoreSet": helpers.absmod(
+                    __name__, ".ShoppingListStoreSetMessageSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -2104,6 +2107,23 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.ReviewStateTransitionMessage(**data)
+
+
+class ShoppingListStoreSetMessageSchema(MessageSchema):
+    store = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ShoppingListStoreSetMessage(**data)
 
 
 class UserProvidedIdentifiersSchema(helpers.BaseSchema):
@@ -3838,3 +3858,20 @@ class ReviewStateTransitionMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.ReviewStateTransitionMessagePayload(**data)
+
+
+class ShoppingListStoreSetMessagePayloadSchema(MessagePayloadSchema):
+    store = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ShoppingListStoreSetMessagePayload(**data)

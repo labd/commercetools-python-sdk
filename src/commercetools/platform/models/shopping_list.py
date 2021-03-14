@@ -17,6 +17,7 @@ if typing.TYPE_CHECKING:
     from .customer import CustomerReference, CustomerResourceIdentifier
     from .product import ProductVariant
     from .product_type import ProductTypeReference
+    from .store import StoreResourceIdentifier
     from .type import (
         CustomFields,
         CustomFieldsDraft,
@@ -53,6 +54,7 @@ __all__ = [
     "ShoppingListSetLineItemCustomFieldAction",
     "ShoppingListSetLineItemCustomTypeAction",
     "ShoppingListSetSlugAction",
+    "ShoppingListSetStoreAction",
     "ShoppingListSetTextLineItemCustomFieldAction",
     "ShoppingListSetTextLineItemCustomTypeAction",
     "ShoppingListSetTextLineItemDescriptionAction",
@@ -562,6 +564,10 @@ class ShoppingListUpdateAction(_BaseType):
             from ._schemas.shopping_list import ShoppingListSetSlugActionSchema
 
             return ShoppingListSetSlugActionSchema().load(data)
+        if data["action"] == "setStore":
+            from ._schemas.shopping_list import ShoppingListSetStoreActionSchema
+
+            return ShoppingListSetStoreActionSchema().load(data)
         if data["action"] == "setTextLineItemCustomField":
             from ._schemas.shopping_list import (
                 ShoppingListSetTextLineItemCustomFieldActionSchema,
@@ -1193,6 +1199,27 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
         from ._schemas.shopping_list import ShoppingListSetSlugActionSchema
 
         return ShoppingListSetSlugActionSchema().dump(self)
+
+
+class ShoppingListSetStoreAction(ShoppingListUpdateAction):
+    store: typing.Optional["StoreResourceIdentifier"]
+
+    def __init__(self, *, store: typing.Optional["StoreResourceIdentifier"] = None):
+        self.store = store
+        super().__init__(action="setStore")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ShoppingListSetStoreAction":
+        from ._schemas.shopping_list import ShoppingListSetStoreActionSchema
+
+        return ShoppingListSetStoreActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.shopping_list import ShoppingListSetStoreActionSchema
+
+        return ShoppingListSetStoreActionSchema().dump(self)
 
 
 class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):

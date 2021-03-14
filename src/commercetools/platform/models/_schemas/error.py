@@ -645,11 +645,17 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "ResourceSizeLimitExceeded": helpers.absmod(
                     __name__, ".ResourceSizeLimitExceededErrorSchema"
                 ),
+                "SearchDeactivated": helpers.absmod(
+                    __name__, ".SearchDeactivatedErrorSchema"
+                ),
                 "SearchExecutionFailure": helpers.absmod(
                     __name__, ".SearchExecutionFailureErrorSchema"
                 ),
                 "SearchFacetPathNotFound": helpers.absmod(
                     __name__, ".SearchFacetPathNotFoundErrorSchema"
+                ),
+                "SearchIndexingInProgress": helpers.absmod(
+                    __name__, ".SearchIndexingInProgressErrorSchema"
                 ),
                 "SemanticError": helpers.absmod(__name__, ".SemanticErrorErrorSchema"),
                 "ShippingMethodDoesNotMatchCart": helpers.absmod(
@@ -1219,6 +1225,16 @@ class ResourceSizeLimitExceededErrorSchema(ErrorObjectSchema):
         return models.ResourceSizeLimitExceededError(**data)
 
 
+class SearchDeactivatedErrorSchema(ErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["code"]
+        return models.SearchDeactivatedError(**data)
+
+
 class SearchExecutionFailureErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1237,6 +1253,16 @@ class SearchFacetPathNotFoundErrorSchema(ErrorObjectSchema):
     def post_load(self, data, **kwargs):
         del data["code"]
         return models.SearchFacetPathNotFoundError(**data)
+
+
+class SearchIndexingInProgressErrorSchema(ErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["code"]
+        return models.SearchIndexingInProgressError(**data)
 
 
 class SemanticErrorErrorSchema(ErrorObjectSchema):

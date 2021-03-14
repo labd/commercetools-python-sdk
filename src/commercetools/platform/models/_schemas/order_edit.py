@@ -863,11 +863,17 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "ResourceSizeLimitExceeded": helpers.absmod(
                     __name__, ".error.ResourceSizeLimitExceededErrorSchema"
                 ),
+                "SearchDeactivated": helpers.absmod(
+                    __name__, ".error.SearchDeactivatedErrorSchema"
+                ),
                 "SearchExecutionFailure": helpers.absmod(
                     __name__, ".error.SearchExecutionFailureErrorSchema"
                 ),
                 "SearchFacetPathNotFound": helpers.absmod(
                     __name__, ".error.SearchFacetPathNotFoundErrorSchema"
+                ),
+                "SearchIndexingInProgress": helpers.absmod(
+                    __name__, ".error.SearchIndexingInProgressErrorSchema"
                 ),
                 "SemanticError": helpers.absmod(
                     __name__, ".error.SemanticErrorErrorSchema"
@@ -1134,6 +1140,9 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 ),
                 "ReviewStateTransition": helpers.absmod(
                     __name__, ".message.ReviewStateTransitionMessagePayloadSchema"
+                ),
+                "ShoppingListStoreSet": helpers.absmod(
+                    __name__, ".message.ShoppingListStoreSetMessagePayloadSchema"
                 ),
             },
         ),

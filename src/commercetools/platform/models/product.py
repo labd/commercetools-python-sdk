@@ -182,7 +182,7 @@ class FacetResultRange(_BaseType):
     to_str: str
     count: int
     product_count: typing.Optional[int]
-    total: int
+    total: float
     min: float
     max: float
     mean: float
@@ -196,7 +196,7 @@ class FacetResultRange(_BaseType):
         to_str: str,
         count: int,
         product_count: typing.Optional[int] = None,
-        total: int,
+        total: float,
         min: float,
         max: float,
         mean: float

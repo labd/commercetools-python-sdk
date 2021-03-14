@@ -80,8 +80,10 @@ __all__ = [
     "RequiredFieldError",
     "ResourceNotFoundError",
     "ResourceSizeLimitExceededError",
+    "SearchDeactivatedError",
     "SearchExecutionFailureError",
     "SearchFacetPathNotFoundError",
+    "SearchIndexingInProgressError",
     "SemanticErrorError",
     "ShippingMethodDoesNotMatchCartError",
     "SyntaxErrorError",
@@ -346,6 +348,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import ResourceSizeLimitExceededErrorSchema
 
             return ResourceSizeLimitExceededErrorSchema().load(data)
+        if data["code"] == "SearchDeactivated":
+            from ._schemas.error import SearchDeactivatedErrorSchema
+
+            return SearchDeactivatedErrorSchema().load(data)
         if data["code"] == "SearchExecutionFailure":
             from ._schemas.error import SearchExecutionFailureErrorSchema
 
@@ -354,6 +360,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import SearchFacetPathNotFoundErrorSchema
 
             return SearchFacetPathNotFoundErrorSchema().load(data)
+        if data["code"] == "SearchIndexingInProgress":
+            from ._schemas.error import SearchIndexingInProgressErrorSchema
+
+            return SearchIndexingInProgressErrorSchema().load(data)
         if data["code"] == "SemanticError":
             from ._schemas.error import SemanticErrorErrorSchema
 
@@ -1677,6 +1687,25 @@ class ResourceSizeLimitExceededError(ErrorObject):
         return ResourceSizeLimitExceededErrorSchema().dump(self)
 
 
+class SearchDeactivatedError(ErrorObject):
+    def __init__(self, *, message: str):
+
+        super().__init__(message=message, code="SearchDeactivated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "SearchDeactivatedError":
+        from ._schemas.error import SearchDeactivatedErrorSchema
+
+        return SearchDeactivatedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import SearchDeactivatedErrorSchema
+
+        return SearchDeactivatedErrorSchema().dump(self)
+
+
 class SearchExecutionFailureError(ErrorObject):
     def __init__(self, *, message: str):
 
@@ -1713,6 +1742,25 @@ class SearchFacetPathNotFoundError(ErrorObject):
         from ._schemas.error import SearchFacetPathNotFoundErrorSchema
 
         return SearchFacetPathNotFoundErrorSchema().dump(self)
+
+
+class SearchIndexingInProgressError(ErrorObject):
+    def __init__(self, *, message: str):
+
+        super().__init__(message=message, code="SearchIndexingInProgress")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "SearchIndexingInProgressError":
+        from ._schemas.error import SearchIndexingInProgressErrorSchema
+
+        return SearchIndexingInProgressErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import SearchIndexingInProgressErrorSchema
+
+        return SearchIndexingInProgressErrorSchema().dump(self)
 
 
 class SemanticErrorError(ErrorObject):

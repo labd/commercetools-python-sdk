@@ -62,6 +62,7 @@ class CartDiscountSchema(BaseResourceSchema):
             "absolute": helpers.absmod(
                 __name__, ".CartDiscountValueAbsoluteDraftSchema"
             ),
+            "fixed": helpers.absmod(__name__, ".CartDiscountValueFixedDraftSchema"),
             "giftLineItem": helpers.absmod(
                 __name__, ".CartDiscountValueGiftLineItemDraftSchema"
             ),
@@ -219,6 +220,7 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
             "absolute": helpers.absmod(
                 __name__, ".CartDiscountValueAbsoluteDraftSchema"
             ),
+            "fixed": helpers.absmod(__name__, ".CartDiscountValueFixedDraftSchema"),
             "giftLineItem": helpers.absmod(
                 __name__, ".CartDiscountValueGiftLineItemDraftSchema"
             ),
@@ -545,6 +547,51 @@ class CartDiscountValueAbsoluteDraftSchema(CartDiscountValueDraftSchema):
         return models.CartDiscountValueAbsoluteDraft(**data)
 
 
+class CartDiscountValueFixedSchema(CartDiscountValueSchema):
+    money = marshmallow.fields.List(
+        helpers.Discriminator(
+            allow_none=True,
+            discriminator_field=("type", "type"),
+            discriminator_schemas={
+                "centPrecision": helpers.absmod(
+                    __name__, ".common.CentPrecisionMoneySchema"
+                ),
+                "highPrecision": helpers.absmod(
+                    __name__, ".common.HighPrecisionMoneySchema"
+                ),
+            },
+        ),
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.CartDiscountValueFixed(**data)
+
+
+class CartDiscountValueFixedDraftSchema(CartDiscountValueDraftSchema):
+    money = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.CartDiscountValueFixedDraft(**data)
+
+
 class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
@@ -832,6 +879,7 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
             "absolute": helpers.absmod(
                 __name__, ".CartDiscountValueAbsoluteDraftSchema"
             ),
+            "fixed": helpers.absmod(__name__, ".CartDiscountValueFixedDraftSchema"),
             "giftLineItem": helpers.absmod(
                 __name__, ".CartDiscountValueGiftLineItemDraftSchema"
             ),

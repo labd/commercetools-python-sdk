@@ -57,6 +57,8 @@ __all__ = [
     "CartDiscountValueAbsolute",
     "CartDiscountValueAbsoluteDraft",
     "CartDiscountValueDraft",
+    "CartDiscountValueFixed",
+    "CartDiscountValueFixedDraft",
     "CartDiscountValueGiftLineItem",
     "CartDiscountValueGiftLineItemDraft",
     "CartDiscountValueRelative",
@@ -530,6 +532,10 @@ class CartDiscountValue(_BaseType):
             from ._schemas.cart_discount import CartDiscountValueAbsoluteSchema
 
             return CartDiscountValueAbsoluteSchema().load(data)
+        if data["type"] == "fixed":
+            from ._schemas.cart_discount import CartDiscountValueFixedSchema
+
+            return CartDiscountValueFixedSchema().load(data)
         if data["type"] == "giftLineItem":
             from ._schemas.cart_discount import CartDiscountValueGiftLineItemSchema
 
@@ -581,6 +587,10 @@ class CartDiscountValueDraft(_BaseType):
             from ._schemas.cart_discount import CartDiscountValueAbsoluteDraftSchema
 
             return CartDiscountValueAbsoluteDraftSchema().load(data)
+        if data["type"] == "fixed":
+            from ._schemas.cart_discount import CartDiscountValueFixedDraftSchema
+
+            return CartDiscountValueFixedDraftSchema().load(data)
         if data["type"] == "giftLineItem":
             from ._schemas.cart_discount import CartDiscountValueGiftLineItemDraftSchema
 
@@ -615,6 +625,48 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
         from ._schemas.cart_discount import CartDiscountValueAbsoluteDraftSchema
 
         return CartDiscountValueAbsoluteDraftSchema().dump(self)
+
+
+class CartDiscountValueFixed(CartDiscountValue):
+    money: typing.List["TypedMoney"]
+
+    def __init__(self, *, money: typing.List["TypedMoney"]):
+        self.money = money
+        super().__init__(type="fixed")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartDiscountValueFixed":
+        from ._schemas.cart_discount import CartDiscountValueFixedSchema
+
+        return CartDiscountValueFixedSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart_discount import CartDiscountValueFixedSchema
+
+        return CartDiscountValueFixedSchema().dump(self)
+
+
+class CartDiscountValueFixedDraft(CartDiscountValueDraft):
+    money: typing.List["Money"]
+
+    def __init__(self, *, money: typing.List["Money"]):
+        self.money = money
+        super().__init__(type="fixed")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartDiscountValueFixedDraft":
+        from ._schemas.cart_discount import CartDiscountValueFixedDraftSchema
+
+        return CartDiscountValueFixedDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart_discount import CartDiscountValueFixedDraftSchema
+
+        return CartDiscountValueFixedDraftSchema().dump(self)
 
 
 class CartDiscountValueGiftLineItem(CartDiscountValue):

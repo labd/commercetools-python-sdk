@@ -7,44 +7,56 @@
 import typing
 import warnings
 
-from ...models.cart import CartPagedQueryResponse
 from ...models.error import ErrorResponse
-from ...models.me import MyCart, MyCartDraft
-from .by_project_key_me_carts_by_id_request_builder import (
-    ByProjectKeyMeCartsByIDRequestBuilder,
+from ...models.shopping_list import (
+    ShoppingList,
+    ShoppingListDraft,
+    ShoppingListPagedQueryResponse,
 )
-from .by_project_key_me_carts_key_by_key_request_builder import (
-    ByProjectKeyMeCartsKeyByKeyRequestBuilder,
+from .by_project_key_in_store_key_by_store_key_shopping_lists_by_id_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder,
+)
+from .by_project_key_in_store_key_by_store_key_shopping_lists_key_by_key_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder,
 )
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
-class ByProjectKeyMeCartsRequestBuilder:
+class ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder:
 
     _client: "BaseClient"
     _project_key: str
+    _store_key: str
 
     def __init__(
         self,
         project_key: str,
+        store_key: str,
         client: "BaseClient",
     ):
         self._project_key = project_key
+        self._store_key = store_key
         self._client = client
 
-    def with_key(self, key: str) -> ByProjectKeyMeCartsKeyByKeyRequestBuilder:
-        return ByProjectKeyMeCartsKeyByKeyRequestBuilder(
+    def with_key(
+        self, key: str
+    ) -> ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder(
             key=key,
             project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def with_id(self, id: str) -> ByProjectKeyMeCartsByIDRequestBuilder:
-        return ByProjectKeyMeCartsByIDRequestBuilder(
+    def with_id(
+        self, id: str
+    ) -> ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder(
             id=id,
             project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
@@ -60,8 +72,8 @@ class ByProjectKeyMeCartsRequestBuilder:
         predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["CartPagedQueryResponse"]:
-        """Query carts"""
+    ) -> typing.Optional["ShoppingListPagedQueryResponse"]:
+        """Query shopping-lists"""
         params = {
             "expand": expand,
             "sort": sort,
@@ -75,13 +87,13 @@ class ByProjectKeyMeCartsRequestBuilder:
         )
         headers = {} if headers is None else headers
         response = self._client._get(
-            endpoint=f"/{self._project_key}/me/carts",
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists",
             params=params,
             headers=headers,
             options=options,
         )
         if response.status_code == 200:
-            return CartPagedQueryResponse.deserialize(response.json())
+            return ShoppingListPagedQueryResponse.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -91,23 +103,23 @@ class ByProjectKeyMeCartsRequestBuilder:
 
     def post(
         self,
-        body: "MyCartDraft",
+        body: "ShoppingListDraft",
         *,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCart"]:
-        """Create MyCart"""
+    ) -> typing.Optional["ShoppingList"]:
+        """Create ShoppingList"""
         headers = {} if headers is None else headers
         response = self._client._post(
-            endpoint=f"/{self._project_key}/me/carts",
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists",
             params={"expand": expand},
             json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
             options=options,
         )
         if response.status_code in (201, 200):
-            return MyCart.deserialize(response.json())
+            return ShoppingList.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

@@ -74,7 +74,7 @@ class FacetResultRangeSchema(helpers.BaseSchema):
         missing=None,
         data_key="productCount",
     )
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Float(allow_none=True, missing=None)
     min = marshmallow.fields.Float(allow_none=True, missing=None)
     max = marshmallow.fields.Float(allow_none=True, missing=None)
     mean = marshmallow.fields.Float(allow_none=True, missing=None)

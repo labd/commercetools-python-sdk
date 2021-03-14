@@ -25,6 +25,9 @@ from ..orders.by_project_key_in_store_key_by_store_key_orders_request_builder im
 from ..shipping_methods.by_project_key_in_store_key_by_store_key_shipping_methods_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder,
 )
+from ..shopping_lists.by_project_key_in_store_key_by_store_key_shopping_lists_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -92,6 +95,16 @@ class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def shopping_lists(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder:
+        """shopping-lists e.g. for wishlist support"""
+        return ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder(
             project_key=self._project_key,
             store_key=self._store_key,
             client=self._client,

@@ -31,10 +31,13 @@ __all__ = [
     "ProjectChangeMessagesConfigurationAction",
     "ProjectChangeMessagesEnabledAction",
     "ProjectChangeNameAction",
+    "ProjectChangeProductSearchIndexingEnabledAction",
     "ProjectSetExternalOAuthAction",
     "ProjectSetShippingRateInputTypeAction",
     "ProjectUpdate",
     "ProjectUpdateAction",
+    "SearchIndexingConfiguration",
+    "SearchIndexingConfigurationValues",
     "ShippingRateInputType",
 ]
 
@@ -101,6 +104,7 @@ class Project(_BaseType):
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
     external_o_auth: typing.Optional["ExternalOAuth"]
     carts: "CartsConfiguration"
+    search_indexing: typing.Optional["SearchIndexingConfiguration"]
 
     def __init__(
         self,
@@ -116,7 +120,8 @@ class Project(_BaseType):
         messages: "MessageConfiguration",
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_o_auth: typing.Optional["ExternalOAuth"] = None,
-        carts: "CartsConfiguration"
+        carts: "CartsConfiguration",
+        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None
     ):
         self.version = version
         self.key = key
@@ -130,6 +135,7 @@ class Project(_BaseType):
         self.shipping_rate_input_type = shipping_rate_input_type
         self.external_o_auth = external_o_auth
         self.carts = carts
+        self.search_indexing = search_indexing
         super().__init__()
 
     @classmethod
@@ -204,6 +210,12 @@ class ProjectUpdateAction(_BaseType):
             from ._schemas.project import ProjectChangeNameActionSchema
 
             return ProjectChangeNameActionSchema().load(data)
+        if data["action"] == "changeProductSearchIndexingEnabled":
+            from ._schemas.project import (
+                ProjectChangeProductSearchIndexingEnabledActionSchema,
+            )
+
+            return ProjectChangeProductSearchIndexingEnabledActionSchema().load(data)
         if data["action"] == "setExternalOAuth":
             from ._schemas.project import ProjectSetExternalOAuthActionSchema
 
@@ -217,6 +229,51 @@ class ProjectUpdateAction(_BaseType):
         from ._schemas.project import ProjectUpdateActionSchema
 
         return ProjectUpdateActionSchema().dump(self)
+
+
+class SearchIndexingConfiguration(_BaseType):
+    products: typing.Optional["SearchIndexingConfigurationValues"]
+
+    def __init__(
+        self, *, products: typing.Optional["SearchIndexingConfigurationValues"] = None
+    ):
+        self.products = products
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "SearchIndexingConfiguration":
+        from ._schemas.project import SearchIndexingConfigurationSchema
+
+        return SearchIndexingConfigurationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import SearchIndexingConfigurationSchema
+
+        return SearchIndexingConfigurationSchema().dump(self)
+
+
+class SearchIndexingConfigurationValues(_BaseType):
+    #: Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built.
+    status: typing.Optional[str]
+
+    def __init__(self, *, status: typing.Optional[str] = None):
+        self.status = status
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "SearchIndexingConfigurationValues":
+        from ._schemas.project import SearchIndexingConfigurationValuesSchema
+
+        return SearchIndexingConfigurationValuesSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import SearchIndexingConfigurationValuesSchema
+
+        return SearchIndexingConfigurationValuesSchema().dump(self)
 
 
 class ShippingRateInputType(_BaseType):
@@ -455,6 +512,31 @@ class ProjectChangeNameAction(ProjectUpdateAction):
         from ._schemas.project import ProjectChangeNameActionSchema
 
         return ProjectChangeNameActionSchema().dump(self)
+
+
+class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
+    enabled: bool
+
+    def __init__(self, *, enabled: bool):
+        self.enabled = enabled
+        super().__init__(action="changeProductSearchIndexingEnabled")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProjectChangeProductSearchIndexingEnabledAction":
+        from ._schemas.project import (
+            ProjectChangeProductSearchIndexingEnabledActionSchema,
+        )
+
+        return ProjectChangeProductSearchIndexingEnabledActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import (
+            ProjectChangeProductSearchIndexingEnabledActionSchema,
+        )
+
+        return ProjectChangeProductSearchIndexingEnabledActionSchema().dump(self)
 
 
 class ProjectSetExternalOAuthAction(ProjectUpdateAction):

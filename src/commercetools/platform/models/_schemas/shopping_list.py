@@ -494,6 +494,9 @@ class ShoppingListUpdateSchema(helpers.BaseSchema):
                     __name__, ".ShoppingListSetLineItemCustomTypeActionSchema"
                 ),
                 "setSlug": helpers.absmod(__name__, ".ShoppingListSetSlugActionSchema"),
+                "setStore": helpers.absmod(
+                    __name__, ".ShoppingListSetStoreActionSchema"
+                ),
                 "setTextLineItemCustomField": helpers.absmod(
                     __name__, ".ShoppingListSetTextLineItemCustomFieldActionSchema"
                 ),
@@ -982,6 +985,24 @@ class ShoppingListSetSlugActionSchema(ShoppingListUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ShoppingListSetSlugAction(**data)
+
+
+class ShoppingListSetStoreActionSchema(ShoppingListUpdateActionSchema):
+    store = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ShoppingListSetStoreAction(**data)
 
 
 class ShoppingListSetTextLineItemCustomFieldActionSchema(

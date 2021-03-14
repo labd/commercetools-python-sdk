@@ -107,6 +107,14 @@ class ProjectSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
+    search_indexing = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".SearchIndexingConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="searchIndexing",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -145,6 +153,9 @@ class ProjectUpdateSchema(helpers.BaseSchema):
                 "changeName": helpers.absmod(
                     __name__, ".ProjectChangeNameActionSchema"
                 ),
+                "changeProductSearchIndexingEnabled": helpers.absmod(
+                    __name__, ".ProjectChangeProductSearchIndexingEnabledActionSchema"
+                ),
                 "setExternalOAuth": helpers.absmod(
                     __name__, ".ProjectSetExternalOAuthActionSchema"
                 ),
@@ -176,6 +187,38 @@ class ProjectUpdateActionSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ProjectUpdateAction(**data)
+
+
+class SearchIndexingConfigurationSchema(helpers.BaseSchema):
+    products = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".SearchIndexingConfigurationValuesSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.SearchIndexingConfiguration(**data)
+
+
+class SearchIndexingConfigurationValuesSchema(helpers.BaseSchema):
+    status = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.SearchIndexingConfigurationValues(**data)
 
 
 class ShippingRateInputTypeSchema(helpers.BaseSchema):
@@ -328,6 +371,18 @@ class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ProjectChangeNameAction(**data)
+
+
+class ProjectChangeProductSearchIndexingEnabledActionSchema(ProjectUpdateActionSchema):
+    enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProjectChangeProductSearchIndexingEnabledAction(**data)
 
 
 class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):

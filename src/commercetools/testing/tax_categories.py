@@ -93,10 +93,10 @@ class TaxCategoryBackend(ServiceBackend):
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
-            ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
-            ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
+            ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
+            ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 

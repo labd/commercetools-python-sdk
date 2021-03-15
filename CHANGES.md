@@ -1,5 +1,26 @@
-14.0.0b1 (2021-02-09)
----------------------
+14.0.0 (unreleased)
+-------------------
+
+- Update the request builder pattern to match the commercetools SDK's for other languages.
+  This means that the old pattern:
+  ```python
+  product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
+  ```
+  is replaced with the new pattern:
+  ```python
+  product = (
+    client
+    .with_project_key("<your-project-key>")
+    .products()
+    .with_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
+    .get())
+  ```
+  The old pattern is depracted but will remain backwards compatible for now
+- Allow passing custom HTTP adapter to BaseClient (@lime-green)
+- Add support for custom address fields and update actions
+- Testing: fixed issues with `get_by_key` lookups in certain testing backends
+  
+## Notes on code generation
 We moved our code generation to the code generation tool from Commercetools,
 see https://github.com/commercetools/rmf-codegen
 
@@ -17,7 +38,7 @@ shown.
 
 13.0.0 (2021-01-04)
 -------------------
-- Regenerate code (fixed not being able to parse a lot of errors, so upgrading is recommended)
+- Regenerated code. This addresses errors not being able to be parsed, so upgrading is recommended.
   - Cart:
     - CartDiscountValueGiftLineItemDraft channel variables type changed ChannelReference -> ChannelResourceIdentifier
     - CartDiscount value field type changed CartDiscountValue -> CartDiscountValueDraft
@@ -37,22 +58,21 @@ shown.
     - Change supply_channels from ChannelResourceIdentifier to ChannelReference
   - Subscription:
     - ResourceDeletedDeliverySchema added data_erasure
-- Minimum required dependencies now require requests_mock>=1.8.0 (it already didn't work without it)
-- Testing customer group added changeName and setKey actions
-- Use Black 19 for formatting generated code
+- Require requests_mock 1.8.0 or up
+- Testing: Added `changeName` and `setKey` actions to CustomerGroupBackend
 
 12.0.2 (2020-11-27)
 -------------------
-- Testing backend: Fix custom object mock interface
+- Testing: Fix custom object mock interface
 
 12.0.1 (2020-11-18)
 -------------------
-- Testing backend: support 'in' for single values, f.e. 'orderState in ("Open")'
+- Testing: Support `in` for single values, f.e. `'orderState in ("Open")'`
 
 12.0.0 (2020-10-15)
 -------------------
 - Regenerate types (commercetools-api-reference 5ebb3153)
-- Removed get_by_container and replaced by query_by_container (it's a query endpoint, not a get custom object endpoint)
+- Removed `get_by_container` and replaced by `query_by_container`: It's a query endpoint, not a get custom object endpoint.
 
 11.0.0 (2020-09-18)
 -------------------
@@ -62,7 +82,7 @@ shown.
 
 10.0.2 (2020-09-08)
 -------------------
-- Testing predicates now support 'in' syntax
+- Testing: Predicates now support 'in' syntax
 
 10.0.1 (2020-09-04)
 -------------------
@@ -89,7 +109,7 @@ Note this release has some breaking changes regarding imports and a lot of code 
 
 8.3.0 (2020-07-21)
 ------------------
-- Testing backend request mock parameters were case insensitive, causing expanding to fail in some cases
+- Testing: backend request mock parameters were case insensitive, causing expanding to fail in some cases
 
 8.2.0 (2020-07-20)
 ------------------

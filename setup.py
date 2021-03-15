@@ -18,6 +18,7 @@ docs_require = [
     "Sphinx>=1.8.1",
     "sphinx-rtd-theme==0.4.2",
     "sphinx-autodoc-typehints==1.6.0",
+    "m2r2==0.16",
 ]
 
 tests_require = [

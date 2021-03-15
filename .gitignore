@@ -14,6 +14,7 @@ pip-wheel-metadata/
 # Dist files
 /build/
 /dist/
+/docs/_build/
 
 
 # Local test files

@@ -107,6 +107,7 @@ def test_cart_discount_set_valid_from(old_client):
         )
     )
     assert cart_discount.id
+    assert cart_discount.valid_from is None
 
     cart_discount = old_client.cart_discounts.update_by_id(
         id=cart_discount.id,
@@ -130,6 +131,7 @@ def test_cart_discount_set_valid_until(old_client):
         )
     )
     assert cart_discount.id
+    assert cart_discount.valid_until is None
 
     cart_discount = old_client.cart_discounts.update_by_id(
         id=cart_discount.id,

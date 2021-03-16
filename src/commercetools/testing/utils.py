@@ -121,7 +121,7 @@ def update_datetime_attribute(dst: str, src: str):
         if not isinstance(value, datetime):
             raise TypeError(f"Unsupported datetime object type: f{type(value)}")
 
-        if obj.get(dst) != value:
+        if obj.get(dst) != value.isoformat():
             new = copy.deepcopy(obj)
             new[dst] = value.isoformat()
             return new
@@ -134,7 +134,7 @@ def update_nested_object_attribute(dst: str, src: str):
     def updater(self, obj, action):
         values = getattr(action, src)
 
-        if not isinstance(values, typing.List):
+        if not isinstance(values, list):
             raise TypeError(f"Unsupported nested object type: f{type(values)}")
 
         if obj.get(dst) != values:

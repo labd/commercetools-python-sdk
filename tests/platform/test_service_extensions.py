@@ -29,7 +29,8 @@ def test_extension_get_by_id(old_client):
 
 
 def test_extension_update_change_triggers(old_client):
-    extension = old_client.extensions.create(models.ExtensionDraft(
+    extension = old_client.extensions.create(
+        models.ExtensionDraft(
             destination=models.ExtensionAWSLambdaDestination(
                 arn="arn:", access_key="access", access_secret="secret"
             ),
@@ -44,13 +45,21 @@ def test_extension_update_change_triggers(old_client):
         version=extension.version,
         actions=[
             models.ExtensionChangeTriggersAction(
-                triggers=[models.ExtensionTrigger(
-                    resource_type_id=models.ExtensionResourceTypeId.CART,
-                    actions=[models.ExtensionAction.CREATE, models.ExtensionAction.UPDATE]
-                )]
+                triggers=[
+                    models.ExtensionTrigger(
+                        resource_type_id=models.ExtensionResourceTypeId.CART,
+                        actions=[
+                            models.ExtensionAction.CREATE,
+                            models.ExtensionAction.UPDATE,
+                        ],
+                    )
+                ]
+            )
+        ],
+    )
+    assert extension.triggers == [
+        models.ExtensionTrigger(
+            resource_type_id=models.ExtensionResourceTypeId.CART,
+            actions=[models.ExtensionAction.CREATE, models.ExtensionAction.UPDATE],
         )
-    ])
-    assert extension.triggers == [models.ExtensionTrigger(
-                resource_type_id=models.ExtensionResourceTypeId.CART,
-                actions=[models.ExtensionAction.CREATE, models.ExtensionAction.UPDATE]
-            )]
+    ]

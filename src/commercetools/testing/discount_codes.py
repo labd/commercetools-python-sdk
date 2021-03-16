@@ -59,28 +59,26 @@ class DiscountCodesBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
 
-    def set_valid_from(
-            self, obj, action: models.DiscountCodeSetValidFromAction
-    ):
+    def set_valid_from(self, obj, action: models.DiscountCodeSetValidFromAction):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
         new["validFrom"] = action.valid_from.isoformat()
         return new
 
-    def set_valid_until(
-            self, obj, action: models.DiscountCodeSetValidUntilAction
-    ):
+    def set_valid_until(self, obj, action: models.DiscountCodeSetValidUntilAction):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
         new["validUntil"] = action.valid_until.isoformat()
         return new
 
     def change_cart_discounts(
-            self, obj, action: models.DiscountCodeChangeCartDiscountsAction
+        self, obj, action: models.DiscountCodeChangeCartDiscountsAction
     ):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
-        new["cartDiscounts"] = [cart_discount.serialize() for cart_discount in action.cart_discounts]
+        new["cartDiscounts"] = [
+            cart_discount.serialize() for cart_discount in action.cart_discounts
+        ]
         return new
 
     _actions = {
@@ -94,5 +92,5 @@ class DiscountCodesBackend(ServiceBackend):
         ),
         "setValidFrom": set_valid_from,
         "setValidUntil": set_valid_until,
-        "changeCartDiscounts": change_cart_discounts
+        "changeCartDiscounts": change_cart_discounts,
     }

@@ -144,10 +144,16 @@ def test_discount_code_change_cart_discounts(old_client):
     discount_code = old_client.discount_codes.update_by_id(
         id=discount_code.id,
         version=discount_code.version,
-        actions=[models.DiscountCodeChangeCartDiscountsAction(
-            cart_discounts=[models.CartDiscountResourceIdentifier(id=cart_discount.id)]
-        )],
+        actions=[
+            models.DiscountCodeChangeCartDiscountsAction(
+                cart_discounts=[
+                    models.CartDiscountResourceIdentifier(id=cart_discount.id)
+                ]
+            )
+        ],
     )
 
     assert discount_code.version == 2
-    assert discount_code.cart_discounts == [models.CartDiscountReference(id=cart_discount.id)]
+    assert discount_code.cart_discounts == [
+        models.CartDiscountReference(id=cart_discount.id)
+    ]

@@ -65,17 +65,13 @@ class CartDiscountsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
-    def set_valid_from(
-            self, obj, action: models.CartDiscountSetValidFromAction
-    ):
+    def set_valid_from(self, obj, action: models.CartDiscountSetValidFromAction):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
         new["validFrom"] = action.valid_from.isoformat()
         return new
 
-    def set_valid_until(
-            self, obj, action: models.CartDiscountSetValidUntilAction
-    ):
+    def set_valid_until(self, obj, action: models.CartDiscountSetValidUntilAction):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
         new["validUntil"] = action.valid_until.isoformat()
@@ -90,5 +86,5 @@ class CartDiscountsBackend(ServiceBackend):
         "setDescription": update_attribute("description", "description"),
         "setCartPredicate": update_attribute("cartPredicate", "cart_predicate"),
         "setValidFrom": set_valid_from,
-        "setValidUntil": set_valid_until
+        "setValidUntil": set_valid_until,
     }

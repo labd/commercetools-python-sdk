@@ -137,10 +137,12 @@ def update_nested_object_attribute(dst: str, src: str):
         if not isinstance(values, list):
             raise TypeError(f"Unsupported nested object type: f{type(values)}")
 
-        if obj.get(dst) != values:
+        items = [item.serialize() for item in values]
+        if items != obj.get(dst):
             new = copy.deepcopy(obj)
-            new[dst] = [item.serialize() for item in values]
+            new[dst] = items
             return new
+
         return obj
 
     return updater

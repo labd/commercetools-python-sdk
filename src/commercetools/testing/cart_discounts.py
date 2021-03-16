@@ -12,8 +12,11 @@ from commercetools.platform.models._schemas.cart_discount import (
 )
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, update_enum_attribute, \
-    update_datetime_attribute
+from commercetools.testing.utils import (
+    update_attribute,
+    update_datetime_attribute,
+    update_enum_attribute,
+)
 
 
 class CartDiscountsModel(BaseModel):

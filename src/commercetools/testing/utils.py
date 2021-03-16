@@ -145,6 +145,7 @@ def update_nested_object_attribute(dst: str, src: str):
 
     return updater
 
+
 def update_enum_attribute(dst: str, src: str):
     def updater(self, obj, action):
         value = getattr(action, src).value

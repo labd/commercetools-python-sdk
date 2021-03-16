@@ -64,7 +64,7 @@ class DiscountCodesBackend(ServiceBackend):
     ):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
-        new["valid_from"] = action.valid_from.isoformat()
+        new["validFrom"] = action.valid_from.isoformat()
         return new
 
     def set_valid_until(
@@ -72,7 +72,7 @@ class DiscountCodesBackend(ServiceBackend):
     ):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
-        new["valid_until"] = action.valid_until.isoformat()
+        new["validUntil"] = action.valid_until.isoformat()
         return new
 
     def change_cart_discounts(
@@ -80,7 +80,7 @@ class DiscountCodesBackend(ServiceBackend):
     ):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
-        new["cart_discounts"] = [cart_discount.serialize() for cart_discount in action.cart_discounts]
+        new["cartDiscounts"] = [cart_discount.serialize() for cart_discount in action.cart_discounts]
         return new
 
     _actions = {

@@ -73,7 +73,7 @@ def test_discount_code_update(old_client):
     assert discount_code.is_active is False
 
 
-@pytest.mark.freeze_time("2021-03-01")
+@pytest.mark.freeze_time("2021-03-01 12:34:56")
 def test_discount_code_set_valid_from(old_client):
     discount_code = old_client.discount_codes.create(
         models.DiscountCodeDraft(
@@ -95,7 +95,7 @@ def test_discount_code_set_valid_from(old_client):
     assert discount_code.valid_from == datetime.now()
 
 
-@pytest.mark.freeze_time("2021-03-01")
+@pytest.mark.freeze_time("2021-03-01 12:34:56")
 def test_discount_code_set_valid_until(old_client):
     discount_code = old_client.discount_codes.create(
         models.DiscountCodeDraft(
@@ -115,7 +115,7 @@ def test_discount_code_set_valid_until(old_client):
     )
 
     assert discount_code.version == 2
-    assert discount_code.valid_until == datetime.now().isoformat()
+    assert discount_code.valid_until == datetime.now()
 
 
 def test_discount_code_change_cart_discounts(old_client):
@@ -150,4 +150,4 @@ def test_discount_code_change_cart_discounts(old_client):
     )
 
     assert discount_code.version == 2
-    assert discount_code.cart_discounts == cart_discount
+    assert discount_code.cart_discounts == [models.CartDiscountReference(id=cart_discount.id)]

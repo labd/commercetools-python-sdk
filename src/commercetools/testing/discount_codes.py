@@ -12,7 +12,8 @@ from commercetools.platform.models._schemas.discount_code import (
 )
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute
+from commercetools.testing.utils import update_attribute, update_datetime_attribute, \
+    update_nested_object_attribute
 
 
 class DiscountCodesModel(BaseModel):
@@ -59,28 +60,6 @@ class DiscountCodesBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
         ]
 
-    def set_valid_from(self, obj, action: models.DiscountCodeSetValidFromAction):
-        # real API always increments version, so always apply new value.
-        new = copy.deepcopy(obj)
-        new["validFrom"] = action.valid_from.isoformat()
-        return new
-
-    def set_valid_until(self, obj, action: models.DiscountCodeSetValidUntilAction):
-        # real API always increments version, so always apply new value.
-        new = copy.deepcopy(obj)
-        new["validUntil"] = action.valid_until.isoformat()
-        return new
-
-    def change_cart_discounts(
-        self, obj, action: models.DiscountCodeChangeCartDiscountsAction
-    ):
-        # real API always increments version, so always apply new value.
-        new = copy.deepcopy(obj)
-        new["cartDiscounts"] = [
-            cart_discount.serialize() for cart_discount in action.cart_discounts
-        ]
-        return new
-
     _actions = {
         "changeIsActive": update_attribute("isActive", "is_active"),
         "setName": update_attribute("name", "name"),
@@ -90,7 +69,7 @@ class DiscountCodesBackend(ServiceBackend):
         "setMaxApplicationsPerCustomer": update_attribute(
             "maxApplicationsPerCustomer", "max_applications_per_customer"
         ),
-        "setValidFrom": set_valid_from,
-        "setValidUntil": set_valid_until,
-        "changeCartDiscounts": change_cart_discounts,
+        "setValidFrom": update_datetime_attribute("validFrom", "valid_from"),
+        "setValidUntil": update_datetime_attribute("validUntil", "valid_until"),
+        "changeCartDiscounts": update_nested_object_attribute("cartDiscounts", "cart_discounts"),
     }

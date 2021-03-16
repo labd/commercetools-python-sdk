@@ -12,7 +12,8 @@ from commercetools.platform.models._schemas.cart_discount import (
 )
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, update_enum_attribute
+from commercetools.testing.utils import update_attribute, update_enum_attribute, \
+    update_datetime_attribute
 
 
 class CartDiscountsModel(BaseModel):
@@ -65,18 +66,6 @@ class CartDiscountsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
-    def set_valid_from(self, obj, action: models.CartDiscountSetValidFromAction):
-        # real API always increments version, so always apply new value.
-        new = copy.deepcopy(obj)
-        new["validFrom"] = action.valid_from.isoformat()
-        return new
-
-    def set_valid_until(self, obj, action: models.CartDiscountSetValidUntilAction):
-        # real API always increments version, so always apply new value.
-        new = copy.deepcopy(obj)
-        new["validUntil"] = action.valid_until.isoformat()
-        return new
-
     _actions = {
         "setKey": update_attribute("key", "key"),
         "changeSortOrder": update_attribute("sortOrder", "sort_order"),
@@ -85,6 +74,6 @@ class CartDiscountsBackend(ServiceBackend):
         "setName": update_attribute("name", "name"),
         "setDescription": update_attribute("description", "description"),
         "setCartPredicate": update_attribute("cartPredicate", "cart_predicate"),
-        "setValidFrom": set_valid_from,
-        "setValidUntil": set_valid_until,
+        "setValidFrom": update_datetime_attribute("validFrom", "valid_from"),
+        "setValidUntil": update_datetime_attribute("validUntil", "valid_until"),
     }

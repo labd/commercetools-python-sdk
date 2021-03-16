@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+from freezegun import freeze_time
 from requests.exceptions import HTTPError
 
 from commercetools.platform import models
@@ -94,7 +95,7 @@ def test_cart_discount_update(old_client):
     assert cart_discount.is_active is False
 
 
-@pytest.mark.freeze_time("2021-03-01 12:34:56")
+@freeze_time("2021-03-01 12:34:56")
 def test_cart_discount_set_valid_from(old_client):
     cart_discount = old_client.cart_discounts.create(
         models.CartDiscountDraft(
@@ -118,7 +119,7 @@ def test_cart_discount_set_valid_from(old_client):
     assert cart_discount.valid_from == datetime.now()
 
 
-@pytest.mark.freeze_time("2021-03-01 12:34:56")
+@freeze_time("2021-03-01 12:34:56")
 def test_cart_discount_set_valid_until(old_client):
     cart_discount = old_client.cart_discounts.create(
         models.CartDiscountDraft(

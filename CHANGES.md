@@ -15,7 +15,7 @@
     .with_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
     .get())
   ```
-  The old pattern is depracted but will remain backwards compatible for now
+  The old pattern is deprecated but will remain backwards compatible for now
 - Allow passing custom HTTP adapter to BaseClient (@lime-green)
 - Add support for custom address fields and update actions
 - Testing: fixed issues with `get_by_key` lookups in certain testing backends

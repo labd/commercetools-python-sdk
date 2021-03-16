@@ -52,12 +52,6 @@ class ExtensionsBackend(ServiceBackend):
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
         ]
 
-    def change_triggers(self, obj, action: models.ExtensionChangeTriggersAction):
-        # real API always increments version, so always apply new value.
-        new = copy.deepcopy(obj)
-        new["triggers"] = [trigger.serialize() for trigger in action.triggers]
-        return new
-
     _actions = {
         "changeTriggers": update_nested_object_attribute("triggers", "triggers"),
     }

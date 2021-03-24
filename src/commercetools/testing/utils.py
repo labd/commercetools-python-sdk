@@ -3,6 +3,7 @@ import importlib
 import json
 import typing
 import uuid
+from datetime import datetime
 
 from marshmallow import Schema
 from requests_mock import create_response
@@ -108,6 +109,40 @@ def update_attribute(dst: str, src: str):
             new = copy.deepcopy(obj)
             new[dst] = value
             return new
+        return obj
+
+    return updater
+
+
+def update_datetime_attribute(dst: str, src: str):
+    def updater(self, obj, action):
+        value = getattr(action, src)
+
+        if not isinstance(value, datetime):
+            raise TypeError(f"Unsupported datetime object type: f{type(value)}")
+
+        if obj.get(dst) != value.isoformat():
+            new = copy.deepcopy(obj)
+            new[dst] = value.isoformat()
+            return new
+        return obj
+
+    return updater
+
+
+def update_nested_object_attribute(dst: str, src: str):
+    def updater(self, obj, action):
+        values = getattr(action, src)
+
+        if not isinstance(values, list):
+            raise TypeError(f"Unsupported nested object type: f{type(values)}")
+
+        items = [item.serialize() for item in values]
+        if items != obj.get(dst):
+            new = copy.deepcopy(obj)
+            new[dst] = items
+            return new
+
         return obj
 
     return updater

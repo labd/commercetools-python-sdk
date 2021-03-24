@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -11,7 +12,11 @@ from commercetools.platform.models._schemas.cart_discount import (
 )
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, update_enum_attribute
+from commercetools.testing.utils import (
+    update_attribute,
+    update_datetime_attribute,
+    update_enum_attribute,
+)
 
 
 class CartDiscountsModel(BaseModel):
@@ -72,4 +77,6 @@ class CartDiscountsBackend(ServiceBackend):
         "setName": update_attribute("name", "name"),
         "setDescription": update_attribute("description", "description"),
         "setCartPredicate": update_attribute("cartPredicate", "cart_predicate"),
+        "setValidFrom": update_datetime_attribute("validFrom", "valid_from"),
+        "setValidUntil": update_datetime_attribute("validUntil", "valid_until"),
     }

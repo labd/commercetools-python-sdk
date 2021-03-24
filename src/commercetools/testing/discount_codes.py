@@ -1,3 +1,4 @@
+import copy
 import datetime
 import typing
 import uuid
@@ -11,7 +12,11 @@ from commercetools.platform.models._schemas.discount_code import (
 )
 from commercetools.testing import utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute
+from commercetools.testing.utils import (
+    update_attribute,
+    update_datetime_attribute,
+    update_nested_object_attribute,
+)
 
 
 class DiscountCodesModel(BaseModel):
@@ -66,5 +71,10 @@ class DiscountCodesBackend(ServiceBackend):
         "setMaxApplications": update_attribute("maxApplications", "max_applications"),
         "setMaxApplicationsPerCustomer": update_attribute(
             "maxApplicationsPerCustomer", "max_applications_per_customer"
+        ),
+        "setValidFrom": update_datetime_attribute("validFrom", "valid_from"),
+        "setValidUntil": update_datetime_attribute("validUntil", "valid_until"),
+        "changeCartDiscounts": update_nested_object_attribute(
+            "cartDiscounts", "cart_discounts"
         ),
     }

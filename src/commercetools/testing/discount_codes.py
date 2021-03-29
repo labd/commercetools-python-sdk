@@ -1,4 +1,3 @@
-import copy
 import datetime
 import typing
 import uuid
@@ -61,6 +60,7 @@ class DiscountCodesBackend(ServiceBackend):
             ("^$", "POST", self.create),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
+            ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
 
     _actions = {

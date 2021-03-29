@@ -74,6 +74,28 @@ def test_discount_code_update(old_client):
     assert discount_code.is_active is False
 
 
+def test_discount_code_delete(old_client):
+    discount_code = old_client.discount_codes.create(
+        models.DiscountCodeDraft(
+            name=models.LocalizedString(en="en-discount_code"),
+            code="1337",
+            is_active=True,
+            cart_discounts=[],
+        )
+    )
+    assert discount_code.code == "1337"
+
+    discount_code = old_client.discount_codes.delete_by_id(
+        id=discount_code.id,
+        version=discount_code.version,
+    )
+
+    assert discount_code.code == "1337"
+
+    result = old_client.discount_codes.query()
+    assert len(result.results) == 0
+
+
 @freeze_time("2021-03-01 12:34:56")
 def test_discount_code_set_valid_from(old_client):
     discount_code = old_client.discount_codes.create(

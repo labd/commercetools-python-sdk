@@ -20,6 +20,7 @@
 - Add support for custom address fields and update actions
 - Testing: fixed issues with `get_by_key` lookups in certain testing backends
 - Testing: Added missing actions for Cart Discounts, Discount Codes and Extensions
+- Testing: Add `datetime` and `list` updater utils
   
 ## Notes on code generation
 We moved our code generation to the code generation tool from Commercetools,

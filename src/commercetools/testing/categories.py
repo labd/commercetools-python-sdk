@@ -34,7 +34,7 @@ class CategoriesModel(BaseModel):
             ancestors=[],
             order_hint=draft.order_hint,
             custom=utils.create_from_draft(draft.custom),
-            parent=draft.parent
+            parent=draft.parent,
         )
 
 

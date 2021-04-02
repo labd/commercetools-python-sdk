@@ -32,8 +32,9 @@ class CategoriesModel(BaseModel):
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             ancestors=[],
-            order_hint="",
+            order_hint=draft.order_hint,
             custom=utils.create_from_draft(draft.custom),
+            parent=draft.parent
         )
 
 
@@ -50,6 +51,12 @@ class CategoriesBackend(ServiceBackend):
             ("^$", "POST", self.create),
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
+            ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
+            ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
+
+    _actions = {
+        "setDescription": utils.update_attribute("description", "description"),
+    }

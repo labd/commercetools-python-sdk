@@ -77,23 +77,40 @@ def test_category_update(old_client):
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
+    parent_category = old_client.categories.create(
+        models.CategoryDraft(
+            key="parent-test-category",
+            slug=models.LocalizedString(nl="nl-slug-parent"),
+            name=models.LocalizedString(nl="parent-category"),
+        )
+    )
+
     category = old_client.categories.create(
         models.CategoryDraft(
             key="test-category",
             slug=models.LocalizedString(nl="nl-slug"),
             name=models.LocalizedString(nl="category"),
+            parent=models.CategoryResourceIdentifier(id=parent_category.id),
+            order_hint="0.00001",
+            description=models.LocalizedString(nl="description-nl"),
         )
     )
     assert category.key == "test-category"
+    assert category.order_hint == "0.00001"
+    assert getattr(category.parent, "id") == parent_category.id
 
     category = old_client.categories.update_by_id(
         id=category.id,
         version=category.version,
         actions=[
-            models.CategoryChangeSlugAction(slug=models.LocalizedString(nl="nl-slug2"))
+            models.CategoryChangeSlugAction(slug=models.LocalizedString(nl="nl-slug2")),
+            models.CategorySetDescriptionAction(
+                description=models.LocalizedString(nl="updated-description-nl")
+            ),
         ],
     )
     assert category.key == "test-category"
+    assert category.description == models.LocalizedString(nl="updated-description-nl")
 
     category = old_client.categories.update_by_key(
         key="test-category",

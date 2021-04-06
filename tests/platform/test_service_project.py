@@ -30,3 +30,42 @@ def test_project_update_change_country_tax_rate_fallback_enabled(old_client):
         version=project.version,
     )
     assert project.carts.country_tax_rate_fallback_enabled is True
+
+
+def test_project_update_set_shipping_rate_input_type(old_client):
+    project = old_client.project.get()
+    assert project.shipping_rate_input_type is None
+
+    project = old_client.project.update(
+        actions=[
+            models.ProjectSetShippingRateInputTypeAction(
+                shipping_rate_input_type=models.ShippingRateInputType(
+                    type=models.ShippingRateTierType.CART_VALUE
+                )
+            )
+        ],
+        version=project.version,
+    )
+    assert project.shipping_rate_input_type == models.CartValueType()
+
+    project = old_client.project.update(
+        actions=[
+            models.ProjectSetShippingRateInputTypeAction(
+                shipping_rate_input_type=models.CartClassificationType(
+                    values=[
+                        models.CustomFieldLocalizedEnumValue(
+                            key="test", label=models.LocalizedString({"en": "test"})
+                        )
+                    ]
+                )
+            )
+        ],
+        version=project.version,
+    )
+    assert project.shipping_rate_input_type == models.CartClassificationType(
+        values=[
+            models.CustomFieldLocalizedEnumValue(
+                key="test", label=models.LocalizedString({"en": "test"})
+            )
+        ]
+    )

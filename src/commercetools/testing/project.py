@@ -38,6 +38,7 @@ class ProjectBackend(ServiceBackend):
                 "deleteDaysAfterLastModification": 90,
             },
             "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
+            "shippingRateInputType": "",
             "externalOAuth": None,
             "version": 4,
         }
@@ -82,6 +83,9 @@ class ProjectBackend(ServiceBackend):
         "changeName": update_attribute("name", "name"),
         "changeLanguages": update_attribute("languages", "languages"),
         "setExternalOAuth": update_attribute("externalOAuth", "external_o_auth"),
+        "setShippingRateInputType": update_attribute(
+            "shippingRateInputType", "shipping_rate_input_type"
+        ),
         "changeMessagesEnabled": change_messages_enabled,
         "changeCountryTaxRateFallbackEnabled": change_country_tax_rate_fallback_enabled,
     }

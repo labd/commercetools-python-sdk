@@ -1,6 +1,16 @@
 14.0.0 (unreleased)
 -------------------
-
+- Regenerated Code:
+  - Import API: 
+    - Removed `retry_count`
+    - removed delete and deleted from importsummary
+  - Project:  
+    - Add `delete_days_after_last_modification` field
+    - Change `SearchIndexingConfigurationValuesSchema` field status to type Enum
+    - Add `last_modified_at` and `last_modified_by` fields to SearchIndexingConfigurationValuesSchema
+    - Add `ProjectChangeCartsConfigurationSchema`
+  - Shipping Method:  
+    - Change `localized_description` field to `LocalizedStringField` type
 - Update the request builder pattern to match the commercetools SDK's for other languages.
   This means that the old pattern:
   ```python
@@ -21,6 +31,8 @@
 - Testing: fixed issues with `get_by_key` lookups in certain testing backends
 - Testing: Added missing actions for Cart Discounts, Discount Codes and Extensions
 - Testing: Add `datetime` and `list` updater utils
+- Testing: Add `setLocalizedDescription` action for shipping_method
+
   
 ## Notes on code generation
 We moved our code generation to the code generation tool from Commercetools,

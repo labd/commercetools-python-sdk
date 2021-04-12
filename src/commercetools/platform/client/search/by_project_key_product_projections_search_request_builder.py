@@ -29,6 +29,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
 
     def post(
         self,
+        body: str,
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -38,7 +39,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         response = self._client._post(
             endpoint=f"/{self._project_key}/product-projections/search",
             params={},
-            headers=headers,
+            headers={"Content-Type": "application/x-www-form-urlencoded", **headers},
             options=options,
         )
         if response.status_code in (400, 401, 403, 500, 503):

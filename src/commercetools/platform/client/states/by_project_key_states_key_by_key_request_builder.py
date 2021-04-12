@@ -37,7 +37,7 @@ class ByProjectKeyStatesKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["State"]:
-        """Get State by Key"""
+        """Get State by key"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/states/key={self._key}",
@@ -62,7 +62,7 @@ class ByProjectKeyStatesKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["State"]:
-        """Update State by Key"""
+        """Update State by key"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/states/key={self._key}",
@@ -88,7 +88,7 @@ class ByProjectKeyStatesKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["State"]:
-        """Delete State by Key"""
+        """Delete State by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/states/key={self._key}",

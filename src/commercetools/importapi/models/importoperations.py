@@ -39,8 +39,6 @@ class ImportOperation(_BaseType):
     state: "ProcessingState"
     #: When the resource is successfully imported, this represents the imported resource version
     resource_version: typing.Optional[int]
-    #: The number of request retries for processing the import resource.
-    retry_count: int
     #: If an import resource does not import correctly, the state is set to `Rejected` or `ValidationFailed`
     #: and this property contains the errors.
     errors: typing.Optional[typing.List["ErrorObject"]]
@@ -60,7 +58,6 @@ class ImportOperation(_BaseType):
         id: str,
         state: "ProcessingState",
         resource_version: typing.Optional[int] = None,
-        retry_count: int,
         errors: typing.Optional[typing.List["ErrorObject"]] = None,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
@@ -72,7 +69,6 @@ class ImportOperation(_BaseType):
         self.id = id
         self.state = state
         self.resource_version = resource_version
-        self.retry_count = retry_count
         self.errors = errors
         self.created_at = created_at
         self.last_modified_at = last_modified_at
@@ -136,7 +132,6 @@ class ImportOperationState(enum.Enum):
 
     UNRESOLVED = "Unresolved"
     VALIDATION_FAILED = "ValidationFailed"
-    DELETE = "Delete"
 
 
 class ImportOperationStatus(_BaseType):

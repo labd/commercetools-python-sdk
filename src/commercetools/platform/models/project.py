@@ -13,6 +13,7 @@ from ._abstract import _BaseType
 from .shipping_method import ShippingRateTierType
 
 if typing.TYPE_CHECKING:
+    from .common import LastModifiedBy
     from .message import MessageConfiguration, MessageConfigurationDraft
     from .shipping_method import ShippingRateTierType
     from .type import CustomFieldLocalizedEnumValue
@@ -24,6 +25,7 @@ __all__ = [
     "CartsConfiguration",
     "ExternalOAuth",
     "Project",
+    "ProjectChangeCartsConfiguration",
     "ProjectChangeCountriesAction",
     "ProjectChangeCountryTaxRateFallbackEnabledAction",
     "ProjectChangeCurrenciesAction",
@@ -37,6 +39,7 @@ __all__ = [
     "ProjectUpdate",
     "ProjectUpdateAction",
     "SearchIndexingConfiguration",
+    "SearchIndexingConfigurationStatus",
     "SearchIndexingConfigurationValues",
     "ShippingRateInputType",
 ]
@@ -45,11 +48,17 @@ __all__ = [
 class CartsConfiguration(_BaseType):
     #: if country - no state tax rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all tax categories of a cart line items. Default value 'false'
     country_tax_rate_fallback_enabled: typing.Optional[bool]
+    #: The default value for the deleteDaysAfterLastModification parameter of the CartDraft. Initially set to 90 for projects created after December 2019.
+    delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
-        self, *, country_tax_rate_fallback_enabled: typing.Optional[bool] = None
+        self,
+        *,
+        country_tax_rate_fallback_enabled: typing.Optional[bool] = None,
+        delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
+        self.delete_days_after_last_modification = delete_days_after_last_modification
         super().__init__()
 
     @classmethod
@@ -180,6 +189,10 @@ class ProjectUpdateAction(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProjectUpdateAction":
+        if data["action"] == "changeCartsConfiguration":
+            from ._schemas.project import ProjectChangeCartsConfigurationSchema
+
+            return ProjectChangeCartsConfigurationSchema().load(data)
         if data["action"] == "changeCountries":
             from ._schemas.project import ProjectChangeCountriesActionSchema
 
@@ -254,12 +267,30 @@ class SearchIndexingConfiguration(_BaseType):
         return SearchIndexingConfigurationSchema().dump(self)
 
 
+class SearchIndexingConfigurationStatus(enum.Enum):
+    """Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built."""
+
+    ACTIVATED = "Activated"
+    DEACTIVATED = "Deactivated"
+    INDEXING = "Indexing"
+
+
 class SearchIndexingConfigurationValues(_BaseType):
     #: Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built.
-    status: typing.Optional[str]
+    status: typing.Optional["SearchIndexingConfigurationStatus"]
+    last_modified_at: typing.Optional[datetime.datetime]
+    last_modified_by: typing.Optional["LastModifiedBy"]
 
-    def __init__(self, *, status: typing.Optional[str] = None):
+    def __init__(
+        self,
+        *,
+        status: typing.Optional["SearchIndexingConfigurationStatus"] = None,
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None
+    ):
         self.status = status
+        self.last_modified_at = last_modified_at
+        self.last_modified_by = last_modified_by
         super().__init__()
 
     @classmethod
@@ -357,6 +388,29 @@ class CartValueType(ShippingRateInputType):
         from ._schemas.project import CartValueTypeSchema
 
         return CartValueTypeSchema().dump(self)
+
+
+class ProjectChangeCartsConfiguration(ProjectUpdateAction):
+    carts_configuration: typing.Optional["CartsConfiguration"]
+
+    def __init__(
+        self, *, carts_configuration: typing.Optional["CartsConfiguration"] = None
+    ):
+        self.carts_configuration = carts_configuration
+        super().__init__(action="changeCartsConfiguration")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProjectChangeCartsConfiguration":
+        from ._schemas.project import ProjectChangeCartsConfigurationSchema
+
+        return ProjectChangeCartsConfigurationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import ProjectChangeCartsConfigurationSchema
+
+        return ProjectChangeCartsConfigurationSchema().dump(self)
 
 
 class ProjectChangeCountriesAction(ProjectUpdateAction):

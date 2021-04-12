@@ -49,12 +49,6 @@ class OperationStatesSchema(helpers.BaseSchema):
     imported = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="Imported"
     )
-    delete = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="Delete"
-    )
-    deleted = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="Deleted"
-    )
     rejected = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="Rejected"
     )

@@ -101,8 +101,13 @@ def test_shipping_method_update(old_client):
     shipping_method = old_client.shipping_methods.update_by_id(
         id=shipping_method.id,
         version=shipping_method.version,
-        actions=[models.ShippingMethodSetLocalizedDescriptionAction(
-            localized_description=models.LocalizedString({"en": "a new lstring"}))],
+        actions=[
+            models.ShippingMethodSetLocalizedDescriptionAction(
+                localized_description=models.LocalizedString({"en": "a new lstring"})
+            )
+        ],
     )
 
-    assert shipping_method.localized_description == models.LocalizedString({"en": "a new lstring"})
+    assert shipping_method.localized_description == models.LocalizedString(
+        {"en": "a new lstring"}
+    )

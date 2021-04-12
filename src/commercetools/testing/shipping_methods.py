@@ -234,7 +234,9 @@ class ShippingMethodsBackend(ServiceBackend):
         "removeShippingRate": remove_shipping_rate,
         "removeZone": remove_shipping_zone,
         "setDescription": update_attribute("description", "description"),
-        "setLocalizedDescription": update_attribute("localizedDescription", "localized_description"),
+        "setLocalizedDescription": update_attribute(
+            "localizedDescription", "localized_description"
+        ),
         "setKey": update_attribute("key", "key"),
         "setPredicate": update_attribute("predicate", "predicate"),
     }

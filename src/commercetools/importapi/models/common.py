@@ -851,8 +851,6 @@ class ProcessingState(enum.Enum):
     UNRESOLVED = "Unresolved"
     WAIT_FOR_MASTER_VARIANT = "WaitForMasterVariant"
     IMPORTED = "Imported"
-    DELETE = "Delete"
-    DELETED = "Deleted"
     REJECTED = "Rejected"
 
 

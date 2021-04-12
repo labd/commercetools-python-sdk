@@ -13,6 +13,7 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
+from ..project import SearchIndexingConfigurationStatus
 from ..shipping_method import ShippingRateTierType
 
 # Fields
@@ -25,6 +26,12 @@ class CartsConfigurationSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="countryTaxRateFallbackEnabled",
+    )
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterLastModification",
     )
 
     class Meta:
@@ -132,6 +139,9 @@ class ProjectUpdateSchema(helpers.BaseSchema):
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "changeCartsConfiguration": helpers.absmod(
+                    __name__, ".ProjectChangeCartsConfigurationSchema"
+                ),
                 "changeCountries": helpers.absmod(
                     __name__, ".ProjectChangeCountriesActionSchema"
                 ),
@@ -208,8 +218,26 @@ class SearchIndexingConfigurationSchema(helpers.BaseSchema):
 
 
 class SearchIndexingConfigurationValuesSchema(helpers.BaseSchema):
-    status = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+    status = marshmallow_enum.EnumField(
+        SearchIndexingConfigurationStatus,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastModifiedAt",
+    )
+    last_modified_by = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastModifiedBy",
     )
 
     class Meta:
@@ -271,6 +299,25 @@ class CartValueTypeSchema(ShippingRateInputTypeSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.CartValueType(**data)
+
+
+class ProjectChangeCartsConfigurationSchema(ProjectUpdateActionSchema):
+    carts_configuration = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".CartsConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="cartsConfiguration",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProjectChangeCartsConfiguration(**data)
 
 
 class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):

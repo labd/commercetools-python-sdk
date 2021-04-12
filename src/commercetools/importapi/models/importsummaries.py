@@ -52,10 +52,6 @@ class OperationStates(_BaseType):
     wait_for_master_variant: int
     #: The number of import operations that are in the state `Imported`.
     imported: int
-    #: The number of import operations that are in the state `Delete`.
-    delete: int
-    #: The number of import operations that are in the state `Deleted`.
-    deleted: int
     #: The number of import operations that are in the state `Rejected`.
     rejected: int
 
@@ -66,16 +62,12 @@ class OperationStates(_BaseType):
         unresolved: int,
         wait_for_master_variant: int,
         imported: int,
-        delete: int,
-        deleted: int,
         rejected: int
     ):
         self.validation_failed = validation_failed
         self.unresolved = unresolved
         self.wait_for_master_variant = wait_for_master_variant
         self.imported = imported
-        self.delete = delete
-        self.deleted = deleted
         self.rejected = rejected
         super().__init__()
 

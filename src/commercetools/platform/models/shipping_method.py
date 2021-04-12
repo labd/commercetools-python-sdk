@@ -890,9 +890,11 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
-    localized_description: typing.Optional[str]
+    localized_description: typing.Optional["LocalizedString"]
 
-    def __init__(self, *, localized_description: typing.Optional[str] = None):
+    def __init__(
+        self, *, localized_description: typing.Optional["LocalizedString"] = None
+    ):
         self.localized_description = localized_description
         super().__init__(action="setLocalizedDescription")
 

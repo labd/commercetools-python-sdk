@@ -38,9 +38,6 @@ class ImportOperationSchema(helpers.BaseSchema):
         missing=None,
         data_key="resourceVersion",
     )
-    retry_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="retryCount"
-    )
     errors = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,

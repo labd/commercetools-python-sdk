@@ -82,3 +82,27 @@ def test_shipping_method_update(old_client):
     )
 
     assert shipping_method.key == "test-shipping-method"
+
+
+def test_shipping_method_update(old_client):
+    shipping_method = old_client.shipping_methods.create(
+        models.ShippingMethodDraft(
+            key="test-shipping-method",
+            name="test shipping method",
+            tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
+            zone_rates=[],
+            is_default=False,
+        )
+    )
+
+    assert shipping_method.id
+    assert shipping_method.localized_description is None
+
+    shipping_method = old_client.shipping_methods.update_by_id(
+        id=shipping_method.id,
+        version=shipping_method.version,
+        actions=[models.ShippingMethodSetLocalizedDescriptionAction(
+            localized_description=models.LocalizedString({"en": "a new lstring"}))],
+    )
+
+    assert shipping_method.localized_description == models.LocalizedString({"en": "a new lstring"})

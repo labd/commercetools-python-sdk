@@ -38,7 +38,7 @@ class ProjectBackend(ServiceBackend):
                 "deleteDaysAfterLastModification": 90,
             },
             "messages": {"enabled": False, "deleteDaysAfterCreation": 15},
-            "shippingRateInputType": "",
+            "shippingRateInputType": None,
             "externalOAuth": None,
             "version": 4,
         }

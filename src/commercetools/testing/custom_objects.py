@@ -8,7 +8,6 @@ from commercetools.platform.models._schemas.custom_object import (
     CustomObjectPagedQueryResponseSchema,
     CustomObjectSchema,
 )
-from commercetools.platform.models._schemas.error import ErrorResponseSchema
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
 
@@ -79,6 +78,16 @@ class CustomObjectsBackend(ServiceBackend):
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
             ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
+            (
+                "^(?P<container>[^/]+)/(?P<key>[^/]+)$",
+                "POST",
+                self.get_by_container_key,
+            ),
+            (
+                "^(?P<container>[^/]+)/(?P<key>[^/]+)$",
+                "DELETE",
+                self.get_by_container_key,
+            ),
             ("^(?P<container>[^/]+)$", "GET", self.query_by_container),
         ]
 

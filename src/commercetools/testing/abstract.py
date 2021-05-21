@@ -118,15 +118,10 @@ class BaseModel:
             if obj["key"] == key:
                 return self.objects.pop(obj_id)
 
-    def delete_by_container_key(self, container, key):
-        return next(
-            (
-                obj
-                for obj in self.objects.values()
-                if obj["container"] == container and obj["key"] == key
-            ),
-            None,
-        )
+    def delete_by_container_and_key(self, container, key):
+        for obj in self.objects.values():
+            if obj["container"] == container and obj["key"] == key:
+                return obj
 
     def save(self, obj):
         assert obj["id"]
@@ -287,7 +282,7 @@ class ServiceBackend(BaseBackend):
             return create_commercetools_response(request, json=obj)
         return create_commercetools_response(request, status_code=404)
 
-    def delete_by_container_key(self, request, container, key):
+    def delete_by_container_and_key(self, request, container, key):
         obj = self.model.get_by_container_key(container, key)
         if obj:
             if self._verify_version:
@@ -295,7 +290,7 @@ class ServiceBackend(BaseBackend):
                 if response is not None:
                     return response
 
-            obj = self.model.delete_by_container_key(key)
+            obj = self.model.delete_by_container_and_key(key)
             return create_commercetools_response(request, json=obj)
         return create_commercetools_response(request, status_code=404)
 

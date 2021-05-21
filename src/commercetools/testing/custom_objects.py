@@ -86,7 +86,7 @@ class CustomObjectsBackend(ServiceBackend):
             (
                 "^(?P<container>[^/]+)/(?P<key>[^/]+)$",
                 "DELETE",
-                self.delete_by_container_key,
+                self.delete_by_container_and_key,
             ),
             ("^(?P<container>[^/]+)$", "GET", self.query_by_container),
         ]
@@ -104,21 +104,17 @@ class CustomObjectsBackend(ServiceBackend):
         item = self.model._get_by_container_key(container, key)
         if item:
             return create_commercetools_response(request, json=item)
-        else:
-            return create_commercetools_response(request, status_code=404)
+
+        return create_commercetools_response(request, status_code=404)
 
     def update_by_container_key(self, request, container: str, key: str):
         item = self.model._get_by_container_key(container, key)
         return self._update(request, item)
 
-    def delete_by_container_key(self, request, container: str, key: str):
+    def delete_by_container_and_key(self, request, container: str, key: str):
         item = self.model._get_by_container_key(container, key)
         if item:
-            if self._verify_version:
-                response = self._validate_resource_version(request, item)
-                if response is not None:
-                    return response
-
-            obj = self.model.delete_by_container_key(container, key)
+            obj = self.model.delete_by_container_and_key(container, key)
             return create_commercetools_response(request, json=obj)
+
         return create_commercetools_response(request, status_code=404)

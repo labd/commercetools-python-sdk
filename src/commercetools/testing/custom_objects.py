@@ -26,7 +26,7 @@ class CustomObjectsModel(BaseModel):
         version matches. otherwise create a new item
         """
         new_obj = self._create_from_draft(draft, id)
-        current_obj = self._get_by_container_key(new_obj.container, new_obj.key)
+        current_obj = self._get_by_container_and_key(new_obj.container, new_obj.key)
 
         if current_obj:
             if current_obj["version"] != new_obj.version:
@@ -54,7 +54,7 @@ class CustomObjectsModel(BaseModel):
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
         )
 
-    def _get_by_container_key(
+    def _get_by_container_and_key(
         self, container: str, key: str
     ) -> typing.Optional[typing.Dict]:
         return next(
@@ -77,11 +77,15 @@ class CustomObjectsBackend(ServiceBackend):
         return [
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
-            ("^(?P<container>[^/]+)/(?P<key>[^/]+)$", "GET", self.get_by_container_key),
+            (
+                "^(?P<container>[^/]+)/(?P<key>[^/]+)$",
+                "GET",
+                self.get_by_container_and_key,
+            ),
             (
                 "^(?P<container>[^/]+)/(?P<key>[^/]+)$",
                 "POST",
-                self.update_by_container_key,
+                self.update_by_container_and_key,
             ),
             (
                 "^(?P<container>[^/]+)/(?P<key>[^/]+)$",
@@ -100,19 +104,19 @@ class CustomObjectsBackend(ServiceBackend):
 
         return self.query(request)
 
-    def get_by_container_key(self, request, container: str, key: str):
-        item = self.model._get_by_container_key(container, key)
+    def get_by_container_and_key(self, request, container: str, key: str):
+        item = self.model._get_by_container_and_key(container, key)
         if item:
             return create_commercetools_response(request, json=item)
 
         return create_commercetools_response(request, status_code=404)
 
-    def update_by_container_key(self, request, container: str, key: str):
-        item = self.model._get_by_container_key(container, key)
+    def update_by_container_and_key(self, request, container: str, key: str):
+        item = self.model._get_by_container_and_key(container, key)
         return self._update(request, item)
 
     def delete_by_container_and_key(self, request, container: str, key: str):
-        item = self.model._get_by_container_key(container, key)
+        item = self.model._get_by_container_and_key(container, key)
         if item:
             obj = self.model.delete_by_container_and_key(container, key)
             return create_commercetools_response(request, json=obj)

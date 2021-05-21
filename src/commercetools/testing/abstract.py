@@ -283,7 +283,7 @@ class ServiceBackend(BaseBackend):
         return create_commercetools_response(request, status_code=404)
 
     def delete_by_container_and_key(self, request, container, key):
-        obj = self.model.get_by_container_key(container, key)
+        obj = self.model.get_by_container_and_key(container, key)
         if obj:
             if self._verify_version:
                 response = self._validate_resource_version(request, obj)

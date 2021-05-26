@@ -92,10 +92,7 @@ class ErrorResponse(_BaseType):
 
 
 class ErrorObject(_BaseType):
-    """An error."""
-
     code: str
-    #: This is a placeholder for an actual platform error message.
     message: str
 
     def __init__(self, *, code: str, message: str):
@@ -201,6 +198,8 @@ class ErrorObject(_BaseType):
 
 
 class AccessDeniedError(ErrorObject):
+    """This is the generic error code for access denied. In case of a wrong scope, an [InvalidScopeError](#invalidscopeerror) will be returned."""
+
     def __init__(self, *, message: str):
 
         super().__init__(message=message, code="access_denied")
@@ -237,8 +236,8 @@ class InvalidScopeError(ErrorObject):
 
 
 class InvalidOperation(ErrorObject):
-    """The resources involved in the request are not in a valid state for the operation.
-    The client application should validate the constraints described in the error message before sending the request.
+    """The resources in the request are not in the valid state for the operation.
+    The client application should validate the constraints described in the error message before sending the request again.
 
     """
 
@@ -259,9 +258,9 @@ class InvalidOperation(ErrorObject):
 
 
 class DuplicateAttributeValueError(ErrorObject):
-    """The Unique AttributeConstraint was violated."""
+    """The `Unique` [Attribute Constraint](/../api/projects/productTypes#attributeconstraint-enum) was violated."""
 
-    #: The conflicting attribute.
+    #: The attribute in conflict.
     attribute: "Attribute"
 
     def __init__(self, *, message: str, attribute: "Attribute"):
@@ -283,7 +282,7 @@ class DuplicateAttributeValueError(ErrorObject):
 
 
 class DuplicateAttributeValuesError(ErrorObject):
-    """The CombinationUnique AttributeConstraint was violated."""
+    """The `CombinationUnique` [Attribute Constraint](/../api/projects/productTypes#attributeconstraint-enum) was violated."""
 
     attributes: typing.List["Attribute"]
 
@@ -306,7 +305,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 
 
 class DuplicateFieldError(ErrorObject):
-    """A value for a field conflicts with an existing duplicate value."""
+    """The given value already exists for a field that is checked for unique values."""
 
     #: The name of the field.
     field: typing.Optional[str]
@@ -337,8 +336,8 @@ class DuplicateFieldError(ErrorObject):
 
 
 class DuplicateVariantValuesError(ErrorObject):
-    """A given combination of variant values conflicts with an existing one.
-    Every product variant must have a distinct combination of SKU, prices, and custom attribute values.
+    """The given combination of values of a [Product Variant](/../api/projects/products#productvariant) conflicts with an existing one.
+    Every [Product Variant](/../api/projects/products#productvariant) must have a distinct combination of SKU, prices, and custom attribute values.
 
     """
 
@@ -448,13 +447,16 @@ class InvalidTokenError(ErrorObject):
 
 
 class InvalidFieldError(ErrorObject):
-    """A field has an invalid value."""
+    """A given field is not supported.
+    This error occurs, for example, if the field `variants`, which is not supported by [Product Import](/product#productimport), is sent to the Product Import endpoint.
+
+    """
 
     #: The name of the field.
     field: str
     #: The invalid value.
     invalid_value: typing.Any
-    #: A fixed set of allowed values for the field, if any.
+    #: The set of allowed values for the field, if any.
     allowed_values: typing.Optional[typing.List["typing.Any"]]
 
     def __init__(
@@ -483,9 +485,9 @@ class InvalidFieldError(ErrorObject):
 
 
 class InvalidJsonInput(ErrorObject):
-    """Invalid JSON input has been sent to the service. Either the JSON is syntactically not correct, or the JSON does not
-    conform to the expected shape (e.g. is missing a required field). The client application should validate the input
-    according to the constraints described in the error message before sending the request.
+    """An invalid JSON input has been sent to the service.
+    Either the JSON is syntactically incorrect or the JSON has an unexpected shape, for example, a required field is missing.
+    The client application should validate the input according to the constraints described in the error message before sending the request again.
 
     """
 
@@ -506,8 +508,8 @@ class InvalidJsonInput(ErrorObject):
 
 
 class InvalidInput(ErrorObject):
-    """Invalid input has been sent to the service. The client application should validate the input according to the
-    constraints described in the error message before sending the request.
+    """An invalid input has been sent to the service. The client application should validate the input according to the
+    constraints described in the error message before sending the request again.
 
     """
 
@@ -657,9 +659,9 @@ class InvalidStateTransitionError(ErrorObject):
 
 
 class ConcurrentModificationError(ErrorObject):
-    """The request conflicts with the current state of the involved resource(s). Typically, the request attempts to modify a resource
-    that is out of date, i.e. that has been modified by another client since the last time it was retrieved.
-    The client application should resolve the conflict (with or without involving the end-user) before retrying the request
+    """The request conflicts with the current state of the involved resources.
+    This error typically occurs when the request attempts to modify a resource that is out of date, that is, it has been modified by another client since the last time it was retrieved by the system attempting to update it.
+    The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
 
     """
 
@@ -667,7 +669,7 @@ class ConcurrentModificationError(ErrorObject):
     specified_version: typing.Optional[int]
     #: The current version of the resource.
     current_version: int
-    #: The conflicted resource.
+    #: The resource in conflict.
     conflicted_resource: typing.Optional[typing.Any]
 
     def __init__(

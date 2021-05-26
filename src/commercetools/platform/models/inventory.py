@@ -13,7 +13,7 @@ from ._abstract import _BaseType
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
-    from .channel import ChannelResourceIdentifier
+    from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import CreatedBy, LastModifiedBy, ReferenceTypeId
     from .type import (
         CustomFields,
@@ -48,7 +48,7 @@ class InventoryEntry(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     sku: str
     #: Optional connection to a particular supplier.
-    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    supply_channel: typing.Optional["ChannelReference"]
     #: Overall amount of stock.
     #: (available + reserved)
     quantity_on_stock: int
@@ -71,7 +71,7 @@ class InventoryEntry(BaseResource):
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         sku: str,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        supply_channel: typing.Optional["ChannelReference"] = None,
         quantity_on_stock: int,
         available_quantity: int,
         restockable_in_days: typing.Optional[int] = None,

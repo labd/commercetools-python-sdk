@@ -215,7 +215,6 @@ __all__ = [
     "ReviewRatingSetMessagePayload",
     "ReviewStateTransitionMessage",
     "ReviewStateTransitionMessagePayload",
-    "ShoppingListStoreSetMessage",
     "ShoppingListStoreSetMessagePayload",
     "UserProvidedIdentifiers",
 ]
@@ -555,10 +554,6 @@ class Message(BaseResource):
             from ._schemas.message import ReviewStateTransitionMessageSchema
 
             return ReviewStateTransitionMessageSchema().load(data)
-        if data["type"] == "ShoppingListStoreSet":
-            from ._schemas.message import ShoppingListStoreSetMessageSchema
-
-            return ShoppingListStoreSetMessageSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.message import MessageSchema
@@ -2869,6 +2864,7 @@ class OrderStateChangedMessage(Message):
 
 class OrderStateTransitionMessage(Message):
     state: "StateReference"
+    old_state: typing.Optional["StateReference"]
     force: bool
 
     def __init__(
@@ -2887,9 +2883,11 @@ class OrderStateTransitionMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         state: "StateReference",
+        old_state: typing.Optional["StateReference"] = None,
         force: bool
     ):
         self.state = state
+        self.old_state = old_state
         self.force = force
         super().__init__(
             id=id,
@@ -4473,55 +4471,6 @@ class ReviewStateTransitionMessage(Message):
         from ._schemas.message import ReviewStateTransitionMessageSchema
 
         return ReviewStateTransitionMessageSchema().dump(self)
-
-
-class ShoppingListStoreSetMessage(Message):
-    store: "StoreKeyReference"
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int,
-        resource: "Reference",
-        resource_version: int,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        store: "StoreKeyReference"
-    ):
-        self.store = store
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            type="ShoppingListStoreSet",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ShoppingListStoreSetMessage":
-        from ._schemas.message import ShoppingListStoreSetMessageSchema
-
-        return ShoppingListStoreSetMessageSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import ShoppingListStoreSetMessageSchema
-
-        return ShoppingListStoreSetMessageSchema().dump(self)
 
 
 class UserProvidedIdentifiers(_BaseType):

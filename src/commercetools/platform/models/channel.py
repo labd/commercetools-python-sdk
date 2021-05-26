@@ -15,6 +15,7 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .common import (
         Address,
+        BaseAddress,
         CreatedBy,
         GeoJson,
         LastModifiedBy,
@@ -129,7 +130,7 @@ class ChannelDraft(_BaseType):
     roles: typing.Optional[typing.List["ChannelRoleEnum"]]
     name: typing.Optional["LocalizedString"]
     description: typing.Optional["LocalizedString"]
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
     geo_location: typing.Optional["GeoJson"]
@@ -141,7 +142,7 @@ class ChannelDraft(_BaseType):
         roles: typing.Optional[typing.List["ChannelRoleEnum"]] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
-        address: typing.Optional["Address"] = None,
+        address: typing.Optional["BaseAddress"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         geo_location: typing.Optional["GeoJson"] = None
     ):
@@ -440,9 +441,9 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
 
 
 class ChannelSetAddressAction(ChannelUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setAddress")
 

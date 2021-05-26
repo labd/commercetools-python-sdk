@@ -16,6 +16,9 @@ from ..carts.by_project_key_in_store_key_by_store_key_me_carts_request_builder i
 from ..orders.by_project_key_in_store_key_by_store_key_me_orders_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder,
 )
+from ..shopping_lists.by_project_key_in_store_key_by_store_key_me_shopping_lists_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -55,6 +58,16 @@ class ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
 
     def active_cart(self) -> ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def shopping_lists(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestBuilder:
+        """shopping-lists e.g. for wishlist support"""
+        return ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestBuilder(
             project_key=self._project_key,
             store_key=self._store_key,
             client=self._client,

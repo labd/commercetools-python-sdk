@@ -7,8 +7,9 @@
 import typing
 import warnings
 
+from ...models.customer import Customer
 from ...models.error import ErrorResponse
-from ...models.me import MyCustomer, MyCustomerUpdate
+from ...models.me import MyCustomerUpdate
 from ..active_cart.by_project_key_me_active_cart_request_builder import (
     ByProjectKeyMeActiveCartRequestBuilder,
 )
@@ -124,7 +125,7 @@ class ByProjectKeyMeRequestBuilder:
         predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCustomer"]:
+    ) -> typing.Optional["Customer"]:
         params = {
             "sort": sort,
             "limit": limit,
@@ -144,7 +145,7 @@ class ByProjectKeyMeRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCustomer.deserialize(response.json())
+            return Customer.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -158,7 +159,7 @@ class ByProjectKeyMeRequestBuilder:
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCustomer"]:
+    ) -> typing.Optional["Customer"]:
         """Update my customer"""
         headers = {} if headers is None else headers
         response = self._client._post(
@@ -169,7 +170,7 @@ class ByProjectKeyMeRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCustomer.deserialize(response.json())
+            return Customer.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -183,7 +184,7 @@ class ByProjectKeyMeRequestBuilder:
         version: int,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCustomer"]:
+    ) -> typing.Optional["Customer"]:
         """Delete my Customer"""
         headers = {} if headers is None else headers
         response = self._client._delete(
@@ -193,7 +194,7 @@ class ByProjectKeyMeRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCustomer.deserialize(response.json())
+            return Customer.deserialize(response.json())
         elif response.status_code in (409, 400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

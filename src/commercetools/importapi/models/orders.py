@@ -10,7 +10,6 @@ import enum
 import typing
 
 from ._abstract import _BaseType
-from .common import ImportResource
 
 if typing.TYPE_CHECKING:
     from .common import (
@@ -920,7 +919,7 @@ class CartOrigin(enum.Enum):
     MERCHANT = "Merchant"
 
 
-class OrderImport(ImportResource):
+class OrderImport(_BaseType):
     """Import representation for an order.
 
     In commercetools, you can import an order using the
@@ -931,8 +930,8 @@ class OrderImport(ImportResource):
 
     """
 
-    #: Maps to `Order.orderNumber`.
-    order_number: typing.Optional[str]
+    #: Maps to `Order.orderNumber`. A string that identifies an Order. Must be unique across a Project. Once it is set, it cannot be changed.
+    order_number: str
     #: References a customer by its key.
     customer: typing.Optional["CustomerKeyReference"]
     #: Maps to `Order.customerEmail`.
@@ -979,8 +978,7 @@ class OrderImport(ImportResource):
     def __init__(
         self,
         *,
-        key: str,
-        order_number: typing.Optional[str] = None,
+        order_number: str,
         customer: typing.Optional["CustomerKeyReference"] = None,
         customer_email: typing.Optional[str] = None,
         line_items: typing.Optional[typing.List["LineItemImportDraft"]] = None,
@@ -1025,7 +1023,7 @@ class OrderImport(ImportResource):
         self.tax_calculation_mode = tax_calculation_mode
         self.origin = origin
         self.item_shipping_addresses = item_shipping_addresses
-        super().__init__(key=key)
+        super().__init__()
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderImport":

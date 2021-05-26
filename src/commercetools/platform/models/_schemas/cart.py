@@ -354,7 +354,7 @@ class CartDraftSchema(helpers.BaseSchema):
         data_key="customLineItems",
     )
     shipping_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -362,7 +362,7 @@ class CartDraftSchema(helpers.BaseSchema):
         data_key="shippingAddress",
     )
     billing_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -424,7 +424,7 @@ class CartDraftSchema(helpers.BaseSchema):
         data_key="shippingRateInput",
     )
     item_shipping_addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
@@ -1788,7 +1788,7 @@ class CartAddDiscountCodeActionSchema(CartUpdateActionSchema):
 
 class CartAddItemShippingAddressActionSchema(CartUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
@@ -2244,7 +2244,7 @@ class CartSetAnonymousIdActionSchema(CartUpdateActionSchema):
 
 class CartSetBillingAddressActionSchema(CartUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -2893,7 +2893,7 @@ class CartSetLocaleActionSchema(CartUpdateActionSchema):
 
 class CartSetShippingAddressActionSchema(CartUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -3041,7 +3041,7 @@ class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
 
 class CartUpdateItemShippingAddressActionSchema(CartUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,

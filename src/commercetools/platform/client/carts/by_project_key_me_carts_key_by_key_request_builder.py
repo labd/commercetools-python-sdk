@@ -7,8 +7,9 @@
 import typing
 import warnings
 
+from ...models.cart import Cart
 from ...models.error import ErrorResponse
-from ...models.me import MyCart, MyCartUpdate
+from ...models.me import MyCartUpdate
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -36,8 +37,8 @@ class ByProjectKeyMeCartsKeyByKeyRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCart"]:
-        """Get MyCart by key"""
+    ) -> typing.Optional["Cart"]:
+        """Get Cart by key"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/me/carts/key={self._key}",
@@ -46,7 +47,7 @@ class ByProjectKeyMeCartsKeyByKeyRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCart.deserialize(response.json())
+            return Cart.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -61,8 +62,8 @@ class ByProjectKeyMeCartsKeyByKeyRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCart"]:
-        """Update MyCart by key"""
+    ) -> typing.Optional["Cart"]:
+        """Update Cart by key"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/carts/key={self._key}",
@@ -72,7 +73,7 @@ class ByProjectKeyMeCartsKeyByKeyRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCart.deserialize(response.json())
+            return Cart.deserialize(response.json())
         elif response.status_code in (409, 400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -87,8 +88,8 @@ class ByProjectKeyMeCartsKeyByKeyRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCart"]:
-        """Delete MyCart by key"""
+    ) -> typing.Optional["Cart"]:
+        """Delete Cart by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/me/carts/key={self._key}",
@@ -97,7 +98,7 @@ class ByProjectKeyMeCartsKeyByKeyRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCart.deserialize(response.json())
+            return Cart.deserialize(response.json())
         elif response.status_code in (409, 400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

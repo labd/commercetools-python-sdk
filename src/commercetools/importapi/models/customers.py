@@ -13,10 +13,107 @@ from ._abstract import _BaseType
 from .common import ImportResource
 
 if typing.TYPE_CHECKING:
-    from .common import Address, CustomerGroupKeyReference, StoreKeyReference
+    from .common import CustomerGroupKeyReference, StoreKeyReference
     from .customfields import Custom
 
-__all__ = ["CustomerImport"]
+__all__ = ["CustomerAddress", "CustomerImport"]
+
+
+class CustomerAddress(_BaseType):
+    """Different from Address in that `key` is required and `id` is not supported."""
+
+    #: User-defined identifier for the address.
+    #: It must follow the pattern [a-zA-Z0-9_\-]{2,256}, and unique per customer.
+    key: str
+    title: typing.Optional[str]
+    salutation: typing.Optional[str]
+    first_name: typing.Optional[str]
+    last_name: typing.Optional[str]
+    street_name: typing.Optional[str]
+    street_number: typing.Optional[str]
+    additional_street_info: typing.Optional[str]
+    postal_code: typing.Optional[str]
+    city: typing.Optional[str]
+    region: typing.Optional[str]
+    state: typing.Optional[str]
+    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    country: str
+    company: typing.Optional[str]
+    department: typing.Optional[str]
+    building: typing.Optional[str]
+    apartment: typing.Optional[str]
+    p_o_box: typing.Optional[str]
+    phone: typing.Optional[str]
+    mobile: typing.Optional[str]
+    email: typing.Optional[str]
+    fax: typing.Optional[str]
+    additional_address_info: typing.Optional[str]
+    external_id: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        key: str,
+        title: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
+        first_name: typing.Optional[str] = None,
+        last_name: typing.Optional[str] = None,
+        street_name: typing.Optional[str] = None,
+        street_number: typing.Optional[str] = None,
+        additional_street_info: typing.Optional[str] = None,
+        postal_code: typing.Optional[str] = None,
+        city: typing.Optional[str] = None,
+        region: typing.Optional[str] = None,
+        state: typing.Optional[str] = None,
+        country: str,
+        company: typing.Optional[str] = None,
+        department: typing.Optional[str] = None,
+        building: typing.Optional[str] = None,
+        apartment: typing.Optional[str] = None,
+        p_o_box: typing.Optional[str] = None,
+        phone: typing.Optional[str] = None,
+        mobile: typing.Optional[str] = None,
+        email: typing.Optional[str] = None,
+        fax: typing.Optional[str] = None,
+        additional_address_info: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None
+    ):
+        self.key = key
+        self.title = title
+        self.salutation = salutation
+        self.first_name = first_name
+        self.last_name = last_name
+        self.street_name = street_name
+        self.street_number = street_number
+        self.additional_street_info = additional_street_info
+        self.postal_code = postal_code
+        self.city = city
+        self.region = region
+        self.state = state
+        self.country = country
+        self.company = company
+        self.department = department
+        self.building = building
+        self.apartment = apartment
+        self.p_o_box = p_o_box
+        self.phone = phone
+        self.mobile = mobile
+        self.email = email
+        self.fax = fax
+        self.additional_address_info = additional_address_info
+        self.external_id = external_id
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CustomerAddress":
+        from ._schemas.customers import CustomerAddressSchema
+
+        return CustomerAddressSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customers import CustomerAddressSchema
+
+        return CustomerAddressSchema().dump(self)
 
 
 class CustomerImport(ImportResource):
@@ -61,7 +158,7 @@ class CustomerImport(ImportResource):
     #: import operation state is set to `Unresolved`.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: Maps to `Customer.addresses`.
-    addresses: typing.Optional[typing.List["Address"]]
+    addresses: typing.List["CustomerAddress"]
     #: The index of the address in the addresses array. The `defaultBillingAddressId` of the customer will be set to the ID of that address.
     default_billing_address: typing.Optional[int]
     #: The indices of the billing addresses in the addresses array. The `billingAddressIds` of the customer will be set to the IDs of that addresses.
@@ -94,7 +191,7 @@ class CustomerImport(ImportResource):
         vat_id: typing.Optional[str] = None,
         is_email_verified: typing.Optional[bool] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
-        addresses: typing.Optional[typing.List["Address"]] = None,
+        addresses: typing.List["CustomerAddress"],
         default_billing_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_shipping_address: typing.Optional[int] = None,

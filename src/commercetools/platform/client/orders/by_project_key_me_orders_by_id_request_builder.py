@@ -8,7 +8,7 @@ import typing
 import warnings
 
 from ...models.error import ErrorResponse
-from ...models.me import MyOrder
+from ...models.order import Order
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -36,8 +36,8 @@ class ByProjectKeyMeOrdersByIDRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyOrder"]:
-        """Get MyOrder by ID"""
+    ) -> typing.Optional["Order"]:
+        """Get Order by ID"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/me/orders/{self._id}",
@@ -46,7 +46,7 @@ class ByProjectKeyMeOrdersByIDRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyOrder.deserialize(response.json())
+            return Order.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

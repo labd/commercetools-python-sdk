@@ -8,8 +8,8 @@ import typing
 import warnings
 
 from ...models.error import ErrorResponse
-from ...models.me import MyOrder, MyOrderFromCartDraft
-from ...models.order import OrderPagedQueryResponse
+from ...models.me import MyOrderFromCartDraft
+from ...models.order import Order, OrderPagedQueryResponse
 from .by_project_key_me_orders_by_id_request_builder import (
     ByProjectKeyMeOrdersByIDRequestBuilder,
 )
@@ -86,8 +86,8 @@ class ByProjectKeyMeOrdersRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyOrder"]:
-        """Create MyOrder"""
+    ) -> typing.Optional["Order"]:
+        """Create Order"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/orders",
@@ -97,7 +97,7 @@ class ByProjectKeyMeOrdersRequestBuilder:
             options=options,
         )
         if response.status_code in (201, 200):
-            return MyOrder.deserialize(response.json())
+            return Order.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

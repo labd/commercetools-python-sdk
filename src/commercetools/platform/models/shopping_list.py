@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
     from .customer import CustomerReference, CustomerResourceIdentifier
     from .product import ProductVariant
     from .product_type import ProductTypeReference
-    from .store import StoreResourceIdentifier
+    from .store import StoreKeyReference, StoreResourceIdentifier
     from .type import (
         CustomFields,
         CustomFieldsDraft,
@@ -26,7 +26,6 @@ if typing.TYPE_CHECKING:
     )
 
 __all__ = [
-    "MyShoppingList",
     "ShoppingList",
     "ShoppingListAddLineItemAction",
     "ShoppingListAddTextLineItemAction",
@@ -65,71 +64,6 @@ __all__ = [
 ]
 
 
-class MyShoppingList(BaseResource):
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    created_by: typing.Optional["CreatedBy"]
-    custom: typing.Optional["CustomFields"]
-    customer: typing.Optional["CustomerReference"]
-    delete_days_after_last_modification: typing.Optional[int]
-    description: typing.Optional["LocalizedString"]
-    key: typing.Optional[str]
-    line_items: typing.Optional[typing.List["ShoppingListLineItem"]]
-    name: "LocalizedString"
-    slug: typing.Optional["LocalizedString"]
-    text_line_items: typing.Optional[typing.List["TextLineItem"]]
-    anonymous_id: typing.Optional[str]
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        custom: typing.Optional["CustomFields"] = None,
-        customer: typing.Optional["CustomerReference"] = None,
-        delete_days_after_last_modification: typing.Optional[int] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        key: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["ShoppingListLineItem"]] = None,
-        name: "LocalizedString",
-        slug: typing.Optional["LocalizedString"] = None,
-        text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
-        anonymous_id: typing.Optional[str] = None
-    ):
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
-        self.custom = custom
-        self.customer = customer
-        self.delete_days_after_last_modification = delete_days_after_last_modification
-        self.description = description
-        self.key = key
-        self.line_items = line_items
-        self.name = name
-        self.slug = slug
-        self.text_line_items = text_line_items
-        self.anonymous_id = anonymous_id
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-        )
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyShoppingList":
-        from ._schemas.shopping_list import MyShoppingListSchema
-
-        return MyShoppingListSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.shopping_list import MyShoppingListSchema
-
-        return MyShoppingListSchema().dump(self)
-
-
 class ShoppingList(BaseResource):
     #: Present on resources updated after 1/02/2019 except for events not tracked.
     last_modified_by: typing.Optional["LastModifiedBy"]
@@ -151,6 +85,7 @@ class ShoppingList(BaseResource):
     text_line_items: typing.Optional[typing.List["TextLineItem"]]
     #: Identifies shopping lists belonging to an anonymous session (the customer has not signed up/in yet).
     anonymous_id: typing.Optional[str]
+    store: typing.Optional["StoreKeyReference"]
 
     def __init__(
         self,
@@ -170,7 +105,8 @@ class ShoppingList(BaseResource):
         name: "LocalizedString",
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
-        anonymous_id: typing.Optional[str] = None
+        anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreKeyReference"] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -184,6 +120,7 @@ class ShoppingList(BaseResource):
         self.slug = slug
         self.text_line_items = text_line_items
         self.anonymous_id = anonymous_id
+        self.store = store
         super().__init__(
             id=id,
             version=version,
@@ -221,6 +158,7 @@ class ShoppingListDraft(_BaseType):
     text_line_items: typing.Optional[typing.List["TextLineItemDraft"]]
     #: Identifies shopping lists belonging to an anonymous session (the customer has not signed up/in yet).
     anonymous_id: typing.Optional[str]
+    store: typing.Optional["StoreResourceIdentifier"]
 
     def __init__(
         self,
@@ -234,7 +172,8 @@ class ShoppingListDraft(_BaseType):
         name: "LocalizedString",
         slug: typing.Optional["LocalizedString"] = None,
         text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
-        anonymous_id: typing.Optional[str] = None
+        anonymous_id: typing.Optional[str] = None,
+        store: typing.Optional["StoreResourceIdentifier"] = None
     ):
         self.custom = custom
         self.customer = customer
@@ -246,6 +185,7 @@ class ShoppingListDraft(_BaseType):
         self.slug = slug
         self.text_line_items = text_line_items
         self.anonymous_id = anonymous_id
+        self.store = store
         super().__init__()
 
     @classmethod

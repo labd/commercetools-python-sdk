@@ -47,6 +47,7 @@ if typing.TYPE_CHECKING:
     from .channel import ChannelResourceIdentifier
     from .common import (
         Address,
+        BaseAddress,
         CreatedBy,
         LastModifiedBy,
         LocalizedString,
@@ -1202,14 +1203,14 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
 
 class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
     items: typing.Optional[typing.List["DeliveryItem"]]
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
 
     def __init__(
         self,
         *,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        address: typing.Optional["Address"] = None,
+        address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None
     ):
         self.items = items
@@ -1253,9 +1254,9 @@ class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -1880,9 +1881,9 @@ class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setBillingAddress")
 
@@ -2237,9 +2238,11 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
 
 class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
     delivery_id: str
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, delivery_id: str, address: typing.Optional["Address"] = None):
+    def __init__(
+        self, *, delivery_id: str, address: typing.Optional["BaseAddress"] = None
+    ):
         self.delivery_id = delivery_id
         self.address = address
         super().__init__(action="setDeliveryAddress")
@@ -2705,9 +2708,9 @@ class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setShippingAddress")
 
@@ -2728,7 +2731,7 @@ class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     StagedOrderUpdateAction
 ):
-    address: "Address"
+    address: "BaseAddress"
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
@@ -2737,7 +2740,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     def __init__(
         self,
         *,
-        address: "Address",
+        address: "BaseAddress",
         shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
@@ -2773,14 +2776,14 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
 
 
 class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
         self,
         *,
-        address: "Address",
+        address: "BaseAddress",
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
@@ -3012,9 +3015,9 @@ class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 

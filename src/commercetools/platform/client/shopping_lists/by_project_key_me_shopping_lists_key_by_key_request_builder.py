@@ -9,7 +9,7 @@ import warnings
 
 from ...models.error import ErrorResponse
 from ...models.me import MyShoppingListUpdate
-from ...models.shopping_list import MyShoppingList
+from ...models.shopping_list import ShoppingList
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -37,8 +37,8 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyShoppingList"]:
-        """Get MyShoppingList by key"""
+    ) -> typing.Optional["ShoppingList"]:
+        """Get ShoppingList by key"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/me/shopping-lists/key={self._key}",
@@ -47,7 +47,7 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyShoppingList.deserialize(response.json())
+            return ShoppingList.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -62,8 +62,8 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyShoppingList"]:
-        """Update MyShoppingList by key"""
+    ) -> typing.Optional["ShoppingList"]:
+        """Update ShoppingList by key"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/shopping-lists/key={self._key}",
@@ -73,7 +73,7 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyShoppingList.deserialize(response.json())
+            return ShoppingList.deserialize(response.json())
         elif response.status_code in (409, 400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -88,8 +88,8 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyShoppingList"]:
-        """Delete MyShoppingList by key"""
+    ) -> typing.Optional["ShoppingList"]:
+        """Delete ShoppingList by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/me/shopping-lists/key={self._key}",
@@ -98,7 +98,7 @@ class ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyShoppingList.deserialize(response.json())
+            return ShoppingList.deserialize(response.json())
         elif response.status_code in (409, 400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

@@ -24,7 +24,7 @@ from ..orders import (
     ShippingRateTierType,
     TaxCalculationMode,
 )
-from .common import ImportResourceSchema, LocalizedStringField
+from .common import LocalizedStringField
 
 # Fields
 
@@ -943,12 +943,9 @@ class TaxedPriceSchema(helpers.BaseSchema):
         return models.TaxedPrice(**data)
 
 
-class OrderImportSchema(ImportResourceSchema):
+class OrderImportSchema(helpers.BaseSchema):
     order_number = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="orderNumber",
+        allow_none=True, missing=None, data_key="orderNumber"
     )
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CustomerKeyReferenceSchema"),

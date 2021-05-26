@@ -17,6 +17,7 @@ if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import (
         Address,
+        BaseAddress,
         CreatedBy,
         LastModifiedBy,
         LocalizedString,
@@ -337,8 +338,8 @@ class CartDraft(_BaseType):
     line_items: typing.Optional[typing.List["LineItemDraft"]]
     custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]]
     #: The shipping address is used to determine the eligible shipping methods and rates as well as the tax rate of the line items.
-    shipping_address: typing.Optional["Address"]
-    billing_address: typing.Optional["Address"]
+    shipping_address: typing.Optional["BaseAddress"]
+    billing_address: typing.Optional["BaseAddress"]
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     #: An external tax rate can be set for the `shippingMethod` if the cart has the `External` TaxMode.
     external_tax_rate_for_shipping_method: typing.Optional["ExternalTaxRateDraft"]
@@ -362,7 +363,7 @@ class CartDraft(_BaseType):
     #: Line items will use these keys to reference the addresses under their `shippingDetails`.
     #: The addresses captured here are not used to determine eligible shipping methods or the applicable tax rate.
     #: Only the cart's `shippingAddress` is used for this.
-    item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
     #: The code of existing DiscountCodes.
     discount_codes: typing.Optional[typing.List["str"]]
 
@@ -383,8 +384,8 @@ class CartDraft(_BaseType):
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         line_items: typing.Optional[typing.List["LineItemDraft"]] = None,
         custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]] = None,
-        shipping_address: typing.Optional["Address"] = None,
-        billing_address: typing.Optional["Address"] = None,
+        shipping_address: typing.Optional["BaseAddress"] = None,
+        billing_address: typing.Optional["BaseAddress"] = None,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         external_tax_rate_for_shipping_method: typing.Optional[
             "ExternalTaxRateDraft"
@@ -394,7 +395,7 @@ class CartDraft(_BaseType):
         delete_days_after_last_modification: typing.Optional[int] = None,
         origin: typing.Optional["CartOrigin"] = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         discount_codes: typing.Optional[typing.List["str"]] = None
     ):
         self.currency = currency
@@ -1866,9 +1867,9 @@ class CartAddDiscountCodeAction(CartUpdateAction):
 
 
 class CartAddItemShippingAddressAction(CartUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -2364,9 +2365,9 @@ class CartSetAnonymousIdAction(CartUpdateAction):
 
 
 class CartSetBillingAddressAction(CartUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setBillingAddress")
 
@@ -3184,9 +3185,9 @@ class CartSetLocaleAction(CartUpdateAction):
 
 
 class CartSetShippingAddressAction(CartUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setShippingAddress")
 
@@ -3357,9 +3358,9 @@ class CartSetShippingRateInputAction(CartUpdateAction):
 
 
 class CartUpdateItemShippingAddressAction(CartUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 

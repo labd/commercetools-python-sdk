@@ -14,7 +14,7 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
     from .cart import Cart, CartResourceIdentifier
-    from .common import Address, CreatedBy, LastModifiedBy, ReferenceTypeId
+    from .common import Address, BaseAddress, CreatedBy, LastModifiedBy, ReferenceTypeId
     from .customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from .store import StoreKeyReference, StoreResourceIdentifier
     from .type import (
@@ -306,7 +306,7 @@ class CustomerDraft(_BaseType):
     company_name: typing.Optional[str]
     vat_id: typing.Optional[str]
     #: Sets the ID of each address to be unique in the addresses list.
-    addresses: typing.Optional[typing.List["Address"]]
+    addresses: typing.Optional[typing.List["BaseAddress"]]
     #: The index of the address in the addresses array.
     #: The `defaultShippingAddressId` of the customer will be set to the ID of that address.
     default_shipping_address: typing.Optional[int]
@@ -352,7 +352,7 @@ class CustomerDraft(_BaseType):
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
         vat_id: typing.Optional[str] = None,
-        addresses: typing.Optional[typing.List["Address"]] = None,
+        addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         default_shipping_address: typing.Optional[int] = None,
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
@@ -793,9 +793,9 @@ class CustomerUpdateAction(_BaseType):
 
 
 class CustomerAddAddressAction(CustomerUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="addAddress")
 
@@ -893,14 +893,14 @@ class CustomerAddStoreAction(CustomerUpdateAction):
 class CustomerChangeAddressAction(CustomerUpdateAction):
     address_id: typing.Optional[str]
     address_key: typing.Optional[str]
-    address: "Address"
+    address: "BaseAddress"
 
     def __init__(
         self,
         *,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
-        address: "Address"
+        address: "BaseAddress"
     ):
         self.address_id = address_id
         self.address_key = address_key

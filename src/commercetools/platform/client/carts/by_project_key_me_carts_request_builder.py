@@ -7,9 +7,9 @@
 import typing
 import warnings
 
-from ...models.cart import CartPagedQueryResponse
+from ...models.cart import Cart, CartPagedQueryResponse
 from ...models.error import ErrorResponse
-from ...models.me import MyCart, MyCartDraft
+from ...models.me import MyCartDraft
 from .by_project_key_me_carts_by_id_request_builder import (
     ByProjectKeyMeCartsByIDRequestBuilder,
 )
@@ -96,8 +96,8 @@ class ByProjectKeyMeCartsRequestBuilder:
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCart"]:
-        """Create MyCart"""
+    ) -> typing.Optional["Cart"]:
+        """Create Cart"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/carts",
@@ -107,7 +107,7 @@ class ByProjectKeyMeCartsRequestBuilder:
             options=options,
         )
         if response.status_code in (201, 200):
-            return MyCart.deserialize(response.json())
+            return Cart.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

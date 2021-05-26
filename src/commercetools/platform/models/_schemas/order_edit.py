@@ -2038,7 +2038,7 @@ class StagedOrderAddDeliveryActionSchema(StagedOrderUpdateActionSchema):
         missing=None,
     )
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -2076,7 +2076,7 @@ class StagedOrderAddDiscountCodeActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderAddItemShippingAddressActionSchema(StagedOrderUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
@@ -2644,7 +2644,7 @@ class StagedOrderRemovePaymentActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetBillingAddressActionSchema(StagedOrderUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -2924,7 +2924,7 @@ class StagedOrderSetDeliveryAddressActionSchema(StagedOrderUpdateActionSchema):
         allow_none=True, missing=None, data_key="deliveryId"
     )
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -3306,7 +3306,7 @@ class StagedOrderSetReturnShipmentStateActionSchema(StagedOrderUpdateActionSchem
 
 class StagedOrderSetShippingAddressActionSchema(StagedOrderUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -3326,7 +3326,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodActionSchema(
     StagedOrderUpdateActionSchema
 ):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
@@ -3373,7 +3373,7 @@ class StagedOrderSetShippingAddressAndShippingMethodActionSchema(
     StagedOrderUpdateActionSchema
 ):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
@@ -3593,7 +3593,7 @@ class StagedOrderTransitionStateActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderUpdateItemShippingAddressActionSchema(StagedOrderUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,

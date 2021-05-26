@@ -290,7 +290,7 @@ class CustomerDraftSchema(helpers.BaseSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="vatId"
     )
     addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
@@ -681,7 +681,7 @@ class CustomerUpdateActionSchema(helpers.BaseSchema):
 
 class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
@@ -773,7 +773,7 @@ class CustomerChangeAddressActionSchema(CustomerUpdateActionSchema):
         data_key="addressKey",
     )
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,

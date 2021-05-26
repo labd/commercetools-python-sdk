@@ -10,41 +10,50 @@ import warnings
 from ...models.error import ErrorResponse
 from ...models.me import MyShoppingListDraft
 from ...models.shopping_list import ShoppingList, ShoppingListPagedQueryResponse
-from .by_project_key_me_shopping_lists_by_id_request_builder import (
-    ByProjectKeyMeShoppingListsByIDRequestBuilder,
+from .by_project_key_in_store_key_by_store_key_me_shopping_lists_by_id_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder,
 )
-from .by_project_key_me_shopping_lists_key_by_key_request_builder import (
-    ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder,
+from .by_project_key_in_store_key_by_store_key_me_shopping_lists_key_by_key_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder,
 )
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
-class ByProjectKeyMeShoppingListsRequestBuilder:
+class ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestBuilder:
 
     _client: "BaseClient"
     _project_key: str
+    _store_key: str
 
     def __init__(
         self,
         project_key: str,
+        store_key: str,
         client: "BaseClient",
     ):
         self._project_key = project_key
+        self._store_key = store_key
         self._client = client
 
-    def with_id(self, id: str) -> ByProjectKeyMeShoppingListsByIDRequestBuilder:
-        return ByProjectKeyMeShoppingListsByIDRequestBuilder(
-            id=id,
+    def with_key(
+        self, key: str
+    ) -> ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder(
+            key=key,
             project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
-    def with_key(self, key: str) -> ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder:
-        return ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder(
-            key=key,
+    def with_id(
+        self, id: str
+    ) -> ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder(
+            id=id,
             project_key=self._project_key,
+            store_key=self._store_key,
             client=self._client,
         )
 
@@ -75,7 +84,7 @@ class ByProjectKeyMeShoppingListsRequestBuilder:
         )
         headers = {} if headers is None else headers
         response = self._client._get(
-            endpoint=f"/{self._project_key}/me/shopping-lists",
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/shopping-lists",
             params=params,
             headers=headers,
             options=options,
@@ -100,7 +109,7 @@ class ByProjectKeyMeShoppingListsRequestBuilder:
         """Create ShoppingList"""
         headers = {} if headers is None else headers
         response = self._client._post(
-            endpoint=f"/{self._project_key}/me/shopping-lists",
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/shopping-lists",
             params={"expand": expand},
             json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},

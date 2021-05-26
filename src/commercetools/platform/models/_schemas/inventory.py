@@ -40,7 +40,7 @@ class InventoryEntrySchema(BaseResourceSchema):
     )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     supply_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},

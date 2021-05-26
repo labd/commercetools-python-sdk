@@ -19,6 +19,109 @@ from .common import ImportResourceSchema
 
 
 # Marshmallow Schemas
+class CustomerAddressSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    title = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    salutation = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    first_name = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="firstName",
+    )
+    last_name = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastName",
+    )
+    street_name = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="streetName",
+    )
+    street_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="streetNumber",
+    )
+    additional_street_info = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="additionalStreetInfo",
+    )
+    postal_code = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="postalCode",
+    )
+    city = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    region = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    country = marshmallow.fields.String(allow_none=True, missing=None)
+    company = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    department = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    building = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    apartment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    p_o_box = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="pOBox"
+    )
+    phone = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    mobile = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    email = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    fax = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    additional_address_info = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="additionalAddressInfo",
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.CustomerAddress(**data)
+
+
 class CustomerImportSchema(ImportResourceSchema):
     customer_number = marshmallow.fields.String(
         allow_none=True,
@@ -96,11 +199,10 @@ class CustomerImportSchema(ImportResourceSchema):
         data_key="customerGroup",
     )
     addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".CustomerAddressSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
     )
     default_billing_address = marshmallow.fields.Integer(

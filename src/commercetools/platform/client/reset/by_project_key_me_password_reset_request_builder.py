@@ -7,8 +7,8 @@
 import typing
 import warnings
 
+from ...models.customer import Customer
 from ...models.error import ErrorResponse
-from ...models.me import MyCustomer
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -32,7 +32,7 @@ class ByProjectKeyMePasswordResetRequestBuilder:
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["MyCustomer"]:
+    ) -> typing.Optional["Customer"]:
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/password/reset",
@@ -41,7 +41,7 @@ class ByProjectKeyMePasswordResetRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return MyCustomer.deserialize(response.json())
+            return Customer.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

@@ -125,7 +125,7 @@ class ChannelDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -348,7 +348,7 @@ class ChannelRemoveRolesActionSchema(ChannelUpdateActionSchema):
 
 class ChannelSetAddressActionSchema(ChannelUpdateActionSchema):
     address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},

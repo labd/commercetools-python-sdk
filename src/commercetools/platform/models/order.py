@@ -45,6 +45,7 @@ if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import (
         Address,
+        BaseAddress,
         CreatedBy,
         Image,
         LastModifiedBy,
@@ -925,8 +926,8 @@ class OrderImportDraft(_BaseType):
     #: Order Import does not support calculation of taxes.
     #: When setting the draft the taxedPrice is to be provided.
     taxed_price: typing.Optional["TaxedPriceDraft"]
-    shipping_address: typing.Optional["Address"]
-    billing_address: typing.Optional["Address"]
+    shipping_address: typing.Optional["BaseAddress"]
+    billing_address: typing.Optional["BaseAddress"]
     #: Set when the customer is set and the customer is a member of a customer group.
     #: Used for product variant price selection.
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
@@ -947,7 +948,7 @@ class OrderImportDraft(_BaseType):
     #: If not given the tax rounding mode `HalfEven` will be assigned by default.
     tax_rounding_mode: typing.Optional["RoundingMode"]
     #: Contains addresses for orders with multiple shipping addresses.
-    item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
     store: typing.Optional["StoreResourceIdentifier"]
     #: The default origin is `Customer`.
     origin: typing.Optional["CartOrigin"]
@@ -962,8 +963,8 @@ class OrderImportDraft(_BaseType):
         custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]] = None,
         total_price: "Money",
         taxed_price: typing.Optional["TaxedPriceDraft"] = None,
-        shipping_address: typing.Optional["Address"] = None,
-        billing_address: typing.Optional["Address"] = None,
+        shipping_address: typing.Optional["BaseAddress"] = None,
+        billing_address: typing.Optional["BaseAddress"] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         country: typing.Optional[str] = None,
         order_state: typing.Optional["OrderState"] = None,
@@ -974,7 +975,7 @@ class OrderImportDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         store: typing.Optional["StoreResourceIdentifier"] = None,
         origin: typing.Optional["CartOrigin"] = None
     ):
@@ -1872,14 +1873,14 @@ class TrackingData(_BaseType):
 
 class OrderAddDeliveryAction(OrderUpdateAction):
     items: typing.Optional[typing.List["DeliveryItem"]]
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
 
     def __init__(
         self,
         *,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        address: typing.Optional["Address"] = None,
+        address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None
     ):
         self.items = items
@@ -1902,9 +1903,9 @@ class OrderAddDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddItemShippingAddressAction(OrderUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="addItemShippingAddress")
 
@@ -2200,9 +2201,9 @@ class OrderRemovePaymentAction(OrderUpdateAction):
 
 
 class OrderSetBillingAddressAction(OrderUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setBillingAddress")
 
@@ -2456,9 +2457,11 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 
 class OrderSetDeliveryAddressAction(OrderUpdateAction):
     delivery_id: str
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, delivery_id: str, address: typing.Optional["Address"] = None):
+    def __init__(
+        self, *, delivery_id: str, address: typing.Optional["BaseAddress"] = None
+    ):
         self.delivery_id = delivery_id
         self.address = address
         super().__init__(action="setDeliveryAddress")
@@ -2865,9 +2868,9 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
 
 
 class OrderSetShippingAddressAction(OrderUpdateAction):
-    address: typing.Optional["Address"]
+    address: typing.Optional["BaseAddress"]
 
-    def __init__(self, *, address: typing.Optional["Address"] = None):
+    def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
         super().__init__(action="setShippingAddress")
 
@@ -3055,9 +3058,9 @@ class OrderTransitionStateAction(OrderUpdateAction):
 
 
 class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
-    address: "Address"
+    address: "BaseAddress"
 
-    def __init__(self, *, address: "Address"):
+    def __init__(self, *, address: "BaseAddress"):
         self.address = address
         super().__init__(action="updateItemShippingAddress")
 

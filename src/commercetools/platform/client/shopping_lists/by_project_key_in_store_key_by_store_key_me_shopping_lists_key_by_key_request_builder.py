@@ -15,20 +15,23 @@ if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
-class ByProjectKeyMeShoppingListsByIDRequestBuilder:
+class ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder:
 
     _client: "BaseClient"
     _project_key: str
-    _id: str
+    _store_key: str
+    _key: str
 
     def __init__(
         self,
         project_key: str,
-        id: str,
+        store_key: str,
+        key: str,
         client: "BaseClient",
     ):
         self._project_key = project_key
-        self._id = id
+        self._store_key = store_key
+        self._key = key
         self._client = client
 
     def get(
@@ -38,10 +41,10 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Get ShoppingList by ID"""
+        """Gets a shopping list by Key."""
         headers = {} if headers is None else headers
         response = self._client._get(
-            endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/shopping-lists/key={self._key}",
             params={"expand": expand},
             headers=headers,
             options=options,
@@ -63,10 +66,10 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Update ShoppingList by ID"""
+        """Update a shopping list found by its Key."""
         headers = {} if headers is None else headers
         response = self._client._post(
-            endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/shopping-lists/key={self._key}",
             params={"expand": expand},
             json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
@@ -84,16 +87,17 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
     def delete(
         self,
         *,
+        data_erasure: bool = None,
         version: int,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Delete ShoppingList by ID"""
+        """Delete ShoppingList by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
-            endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
-            params={"version": version, "expand": expand},
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/shopping-lists/key={self._key}",
+            params={"dataErasure": data_erasure, "version": version, "expand": expand},
             headers=headers,
             options=options,
         )

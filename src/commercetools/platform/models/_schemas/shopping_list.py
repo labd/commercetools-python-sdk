@@ -26,95 +26,6 @@ from .type import FieldContainerField
 
 
 # Marshmallow Schemas
-class MyShoppingListSchema(BaseResourceSchema):
-    last_modified_by = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="createdBy",
-    )
-    custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    customer = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    delete_days_after_last_modification = marshmallow.fields.Integer(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="deleteDaysAfterLastModification",
-    )
-    description = LocalizedStringField(
-        allow_none=True,
-        values=marshmallow.fields.String(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-    line_items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ShoppingListLineItemSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="lineItems",
-    )
-    name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
-    )
-    slug = LocalizedStringField(
-        allow_none=True,
-        values=marshmallow.fields.String(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    text_line_items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".TextLineItemSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="textLineItems",
-    )
-    anonymous_id = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="anonymousId",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-
-        return models.MyShoppingList(**data)
-
-
 class ShoppingListSchema(BaseResourceSchema):
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
@@ -194,6 +105,13 @@ class ShoppingListSchema(BaseResourceSchema):
         missing=None,
         data_key="anonymousId",
     )
+    store = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -266,6 +184,13 @@ class ShoppingListDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="anonymousId",
+    )
+    store = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

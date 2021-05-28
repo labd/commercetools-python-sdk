@@ -119,9 +119,9 @@ class BaseModel:
                 return self.objects.pop(obj_id)
 
     def delete_by_container_and_key(self, container, key):
-        for obj in self.objects.values():
+        for obj_id, obj in self.objects.items():
             if obj["container"] == container and obj["key"] == key:
-                return obj
+                return self.objects.pop(obj_id)
 
     def save(self, obj):
         assert obj["id"]

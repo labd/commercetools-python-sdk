@@ -95,6 +95,13 @@ def test_delete_by_container_and_key(old_client):
     )
     assert custom_object.id
     assert custom_object.key == "test-object-1"
-    assert old_client.custom_objects.delete_by_container_and_key(
+    deleted_object = old_client.custom_objects.delete_by_container_and_key(
         container=custom_object.container, key=custom_object.key
     )
+
+    assert deleted_object.key == "test-object-1"
+
+    with pytest.raises(HTTPError):
+        old_client.custom_objects.delete_by_container_and_key(
+            container=custom_object.container, key=custom_object.key
+        )

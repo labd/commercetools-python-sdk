@@ -428,7 +428,7 @@ class PredicateFilter:
         self.schema = schema
         ast_node = self.parse(predicate)
         self._code = compile(ast_node, "internal.py", mode="eval")
-        logger.info("Compiled python code:", ast.dump(ast_node))
+        logger.info("Compiled python code: %s", ast.dump(ast_node))
 
     def match(self, obj):
         try:

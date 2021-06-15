@@ -32,6 +32,7 @@
 - Testing: Added missing actions for Cart Discounts, Discount Codes and Extensions
 - Testing: Add `datetime` and `list` updater utils
 - Testing: Add `setLocalizedDescription` action for shipping_method
+- Testing: Add `changeAttributeConstraint` action for product_type
 
   
 ## Notes on code generation

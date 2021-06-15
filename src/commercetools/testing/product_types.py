@@ -6,6 +6,7 @@ import uuid
 from commercetools.platform import models
 from commercetools.platform.models._schemas.product_type import (
     AttributeDefinitionSchema,
+    ProductTypeChangeAttributeConstraintActionSchema,
     ProductTypeDraftSchema,
     ProductTypePagedQueryResponseSchema,
     ProductTypeSchema,
@@ -124,6 +125,19 @@ def add_attribute_definition_action():
     return updater
 
 
+def change_attribute_constraint_action(
+    self, obj: typing.Dict, action: models.ProductTypeChangeAttributeConstraintAction
+):
+    new = copy.deepcopy(obj)
+
+    for attribute in new["attributes"]:
+        if attribute["name"] == action.attribute_name:
+            attribute["attributeConstraint"] = action.new_value.value
+            return new
+
+    raise InternalUpdateError("No attribute found with name %r" % action.attribute_name)
+
+
 class ProductTypesBackend(ServiceBackend):
     service_path = "product-types"
     model_class = ProductTypesModel
@@ -149,4 +163,5 @@ class ProductTypesBackend(ServiceBackend):
         "changeLabel": change_label_action(),
         "changeLocalizedEnumValueLabel": change_localized_enum_value_label(),
         "addAttributeDefinition": add_attribute_definition_action(),
+        "changeAttributeConstraint": change_attribute_constraint_action,
     }

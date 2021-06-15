@@ -1,5 +1,4 @@
 import pytest
-import requests_mock
 from requests.exceptions import HTTPError
 
 from commercetools.platform import models
@@ -42,12 +41,12 @@ def test_product_types_get_by_key(old_client):
 
 
 def test_product_type_query(old_client):
-    product_type = old_client.product_types.create(
+    old_client.product_types.create(
         models.ProductTypeDraft(
             key="test-product-type1", name="test-1", description="something"
         )
     )
-    product_type = old_client.product_types.create(
+    old_client.product_types.create(
         models.ProductTypeDraft(
             key="test-product-type2", name="test-2", description="something"
         )
@@ -88,3 +87,47 @@ def test_product_update(old_client):
         key="test-product-type", version=product_type.version, actions=[]
     )
     assert product_type.key == "test-product-type"
+
+
+def test_product_update_attribute_constraint_change(old_client):
+    attribute_name = "testConstraint"
+    product_type = old_client.product_types.create(
+        models.ProductTypeDraft(
+            key="test-product-type",
+            name="test",
+            description="something",
+            attributes=[
+                models.AttributeDefinitionDraft(
+                    type=models.AttributeTextType(),
+                    name=attribute_name,
+                    label=models.LocalizedString({"en": "testConstraint"}),
+                    is_required=False,
+                    attribute_constraint=models.AttributeConstraintEnum.SAME_FOR_ALL,
+                )
+            ],
+        )
+    )
+
+    assert product_type.id
+    assert product_type.key == "test-product-type"
+    assert (
+        product_type.attributes[0].attribute_constraint
+        == models.AttributeConstraintEnum.SAME_FOR_ALL
+    )
+
+    product_type = old_client.product_types.update_by_id(
+        id=product_type.id,
+        version=product_type.version,
+        actions=[
+            models.ProductTypeChangeAttributeConstraintAction(
+                attribute_name=attribute_name,
+                new_value=models.AttributeConstraintEnumDraft.NONE,
+            )
+        ],
+    )
+
+    assert product_type.key == "test-product-type"
+    assert (
+        product_type.attributes[0].attribute_constraint
+        == models.AttributeConstraintEnum.NONE
+    )

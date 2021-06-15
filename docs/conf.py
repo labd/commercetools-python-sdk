@@ -26,7 +26,7 @@ author = "Lab Digital"
 # The short X.Y version
 version = ""
 # The full version, including alpha/beta/rc tags
-release = "14.0.0b8"
+release = "14.0.0b9"
 
 
 # -- General configuration ---------------------------------------------------

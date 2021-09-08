@@ -17,6 +17,8 @@ from commercetools.platform.models import (
 )
 from commercetools.platform.models._abstract import _BaseType
 from commercetools.platform.models._schemas.product import ProductSchema
+from commercetools.platform.models.cart import Cart, CartSetLineItemCustomFieldAction
+from commercetools.platform.models.order import Order, OrderSetLineItemCustomFieldAction
 
 
 class InternalUpdateError(ValueError):
@@ -223,6 +225,12 @@ def set_custom_field():
         obj,
         action: typing.Union[OrderSetCustomFieldAction, CartSetCustomFieldAction],
     ):
+        if not obj["custom"]:
+            raise ValueError(
+                "This resource has no custom type set - please use "
+                "setCustomType first to set the type of the custom fields"
+            )
+
         name = action.name
         value = action.value
 
@@ -231,6 +239,36 @@ def set_custom_field():
         if not new["custom"]:
             new["custom"] = {"fields": {}}
         new["custom"]["fields"][name] = value
+        return new
+
+    return updater
+
+
+def set_line_item_custom_field():
+    """Set custom field of a line item.
+    Note it always sets the type now, instead of type checking the custom field type!
+    """
+
+    def updater(
+        self,
+        obj,
+        action: typing.Union[
+            OrderSetLineItemCustomFieldAction, CartSetLineItemCustomFieldAction
+        ],
+    ):
+        line_item_id = action.line_item_id
+        name = action.name
+        value = action.value
+
+        # real API always increments version, so always apply new value.
+        new = copy.deepcopy(obj)
+        for line in new["lineItems"]:
+            if line["id"] != line_item_id:
+                continue
+
+            if not line["custom"]:
+                line["custom"] = {"fields": {}}
+            line["custom"]["fields"][name] = value
         return new
 
     return updater

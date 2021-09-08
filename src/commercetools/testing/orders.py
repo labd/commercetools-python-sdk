@@ -17,6 +17,7 @@ from commercetools.platform.models._schemas.payment import PaymentReferenceSchem
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     set_custom_field,
+    set_line_item_custom_field,
     update_attribute,
     update_enum_attribute,
 )
@@ -154,5 +155,6 @@ class OrdersBackend(ServiceBackend):
         "setBillingAddress": update_attribute("billingAddress", "address"),
         "setCustomerEmail": update_attribute("customerEmail", "email"),
         "setCustomField": set_custom_field(),
+        "setLineItemCustomField": set_line_item_custom_field(),
         "addPayment": add_payment(),
     }

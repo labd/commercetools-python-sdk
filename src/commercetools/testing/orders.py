@@ -9,13 +9,18 @@ from commercetools.platform.models._schemas.cart import CartSchema, ShippingInfo
 from commercetools.platform.models._schemas.order import (
     DeliverySchema,
     OrderFromCartDraftSchema,
+    OrderImportDraftSchema,
     OrderPagedQueryResponseSchema,
     OrderSchema,
     OrderUpdateSchema,
 )
 from commercetools.platform.models._schemas.payment import PaymentReferenceSchema
+from commercetools.platform.models.common import CentPrecisionMoney
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
+    create_commercetools_response,
+    create_from_draft,
+    money_to_typed,
     set_custom_field,
     set_line_item_custom_field,
     update_attribute,
@@ -28,30 +33,65 @@ class OrdersModel(BaseModel):
     _resource_schema = OrderSchema
 
     def _create_from_draft(
-        self, draft: models.OrderFromCartDraft, id: typing.Optional[str] = None
+        self,
+        draft: typing.Union[models.OrderFromCartDraft, models.OrderImportDraft],
+        id: typing.Optional[str] = None,
     ) -> models.Order:
         """
         Note this implementation needs further refinement. For example:
          - Copying fields from an existing cart
          - Setting custom type fields?
         """
+        id = str(id if id is not None else uuid.uuid4())
 
-        object_id = str(uuid.UUID(id) if id is not None else uuid.uuid4())
+        if isinstance(draft, models.OrderFromCartDraft):
+            return self._create_from_cart_draft(draft, id)
+        elif isinstance(draft, models.OrderImportDraft):
+            return self._create_from_import_draft(draft, id)
+
+    def _create_from_cart_draft(self, draft: models.OrderFromCartDraft, id: str):
+        """
+        Note this implementation needs further refinement. For example:
+         - Copying fields from an existing cart
+         - Setting custom type fields?
+        """
         cart_identifier = models.CartResourceIdentifier(id=draft.id)
 
         cart_data = self._storage.get_by_resource_identifier(cart_identifier)
         cart = None
+        total_price = None
         if cart_data:
             cart: models.Cart = CartSchema().load(cart_data)
+            total_price = copy.deepcopy(cart.total_price)
 
         order = models.Order(
-            id=str(object_id),
+            id=id,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             line_items=[],
             custom_line_items=[],
-            total_price=copy.deepcopy(cart.total_price),
+            total_price=total_price,
+            sync_info=[],
+            last_message_sequence_number=0,
+            refused_gifts=[],
+            order_number=draft.order_number,
+            payment_state=draft.payment_state,
+            order_state=OrderState.OPEN,
+            origin=CartOrigin.CUSTOMER,
+        )
+        return order
+
+    def _create_from_import_draft(self, draft: models.OrderImportDraft, id: str):
+        order = models.Order(
+            id=id,
+            version=1,
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            last_modified_at=datetime.datetime.now(datetime.timezone.utc),
+            line_items=[],
+            custom_line_items=[],
+            total_price=money_to_typed(draft.total_price),
+            taxed_price=create_from_draft(draft.taxed_price),
             sync_info=[],
             last_message_sequence_number=0,
             refused_gifts=[],
@@ -138,6 +178,7 @@ class OrdersBackend(ServiceBackend):
         return [
             ("^$", "GET", self.query),
             ("^$", "POST", self.create),
+            ("^import$", "POST", self.import_),
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^key=(?P<key>[^/]+)$", "POST", self.update_by_key),
             ("^key=(?P<key>[^/]+)$", "DELETE", self.delete_by_key),
@@ -145,6 +186,14 @@ class OrdersBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
         ]
+
+    def import_(self, request):
+        obj = OrderImportDraftSchema().loads(request.body)
+        data = self.model.add(obj)
+        expanded_data = self._expand(request, data)
+        return create_commercetools_response(
+            request, json=expanded_data, status_code=201
+        )
 
     _actions = {
         "changeOrderState": update_enum_attribute("orderState", "order_state"),

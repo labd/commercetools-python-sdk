@@ -293,7 +293,7 @@ def convert_draft_price(
         id=price_id or str(uuid.uuid4()),
         country=price_draft.country,
         channel=price_draft.channel,
-        value=utils._money_to_typed(price_draft.value),
+        value=utils.money_to_typed(price_draft.value),
         valid_from=price_draft.valid_from,
         valid_until=price_draft.valid_until,
         discounted=price_draft.discounted,

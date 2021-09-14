@@ -90,7 +90,7 @@ class BaseModel:
     def _create_from_draft(self, draft, id=None):
         raise NotImplementedError()
 
-    def query(self, where):
+    def query(self, where=None):
         objects = list(self.objects.values())
         if not where:
             return objects

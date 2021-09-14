@@ -28,6 +28,7 @@
   The old pattern is deprecated but will remain backwards compatible for now
 - Allow passing custom HTTP adapter to BaseClient (@lime-green)
 - Add support for custom address fields and update actions
+- Testing: Add support for `Order` imports
 - Testing: fixed issues with `get_by_key` lookups in certain testing backends
 - Testing: Added missing actions for Cart Discounts, Discount Codes and Extensions
 - Testing: Add `datetime` and `list` updater utils

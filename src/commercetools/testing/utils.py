@@ -17,7 +17,11 @@ from commercetools.platform.models import (
 )
 from commercetools.platform.models._abstract import _BaseType
 from commercetools.platform.models._schemas.product import ProductSchema
-from commercetools.platform.models.cart import Cart, CartSetLineItemCustomFieldAction
+from commercetools.platform.models.cart import (
+    Cart,
+    CartSetLineItemCustomFieldAction,
+    TaxPortion,
+)
 from commercetools.platform.models.order import Order, OrderSetLineItemCustomFieldAction
 
 
@@ -49,7 +53,7 @@ def get_product_variants(product_catalog_data: dict) -> typing.List[dict]:
     return variants
 
 
-def create_from_draft(draft):
+def create_from_draft(draft: typing.Optional[_BaseType]):
     """Utility method to create normal objects out of draft objects.
 
     This is used for non-resource objects. For the resources themselves (which contain)
@@ -65,12 +69,25 @@ def create_from_draft(draft):
     if isinstance(draft, models.PriceTierDraft):
         return models.PriceTier(
             minimum_quantity=draft.minimum_quantity,
-            value=_money_to_typed(
+            value=money_to_typed(
                 models.Money(
                     cent_amount=draft.value.cent_amount,
                     currency_code=draft.value.currency_code,
                 )
             ),
+        )
+    if isinstance(draft, models.TaxedPriceDraft):
+        return models.TaxedPrice(
+            total_net=money_to_typed(draft.total_net),
+            total_gross=money_to_typed(draft.total_gross),
+            tax_portions=[
+                models.TaxPortion(
+                    name=portion.name,
+                    rate=portion.rate,
+                    amount=money_to_typed(portion.amount),
+                )
+                for portion in draft.tax_portions
+            ],
         )
 
     raise ValueError(f"Unsupported type {draft.__class__}")
@@ -87,17 +104,18 @@ def custom_fields_from_draft(
     )
 
 
-def _money_to_typed(
+def money_to_typed(
     money: typing.Optional[models.Money],
 ) -> typing.Optional[models.TypedMoney]:
-    if money is not None:
-        return models.TypedMoney(
-            cent_amount=money.cent_amount,
-            currency_code=money.currency_code,
-            type=models.MoneyType.CENT_PRECISION,
-            fraction_digits=2,
-        )
-    return None
+    if money is None:
+        return None
+
+    return models.TypedMoney(
+        cent_amount=money.cent_amount,
+        currency_code=money.currency_code,
+        type=models.MoneyType.CENT_PRECISION,
+        fraction_digits=2,
+    )
 
 
 def update_attribute(dst: str, src: str):

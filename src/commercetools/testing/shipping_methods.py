@@ -36,8 +36,8 @@ class ShippingMethodsModel(BaseModel):
             shipping_rates: typing.List[models.ShippingRate] = []
             for shipping_rate_draft in rate_draft.shipping_rates or []:
                 shipping_rate = models.ShippingRate(
-                    price=utils._money_to_typed(shipping_rate_draft.price),
-                    free_above=utils._money_to_typed(shipping_rate_draft.free_above),
+                    price=utils.money_to_typed(shipping_rate_draft.price),
+                    free_above=utils.money_to_typed(shipping_rate_draft.free_above),
                     tiers=copy.deepcopy(shipping_rate_draft.tiers),
                 )
                 shipping_rates.append(shipping_rate)

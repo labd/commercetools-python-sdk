@@ -58,11 +58,16 @@ class OrdersModel(BaseModel):
         cart_identifier = models.CartResourceIdentifier(id=draft.id)
 
         cart_data = self._storage.get_by_resource_identifier(cart_identifier)
-        cart = None
-        total_price = None
-        if cart_data:
-            cart: models.Cart = CartSchema().load(cart_data)
-            total_price = copy.deepcopy(cart.total_price)
+        if not cart_data:
+            raise ValueError(f"Unknown cart {draft.id}")
+
+        cart: models.Cart = CartSchema().load(cart_data)
+        total_price = copy.deepcopy(cart.total_price)
+
+        custom_line_items = [
+            self._create_custom_line_item_from_draft(line)
+            for line in cart.custom_line_items
+        ]
 
         order = models.Order(
             id=id,
@@ -70,7 +75,7 @@ class OrdersModel(BaseModel):
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             line_items=[],
-            custom_line_items=[],
+            custom_line_items=custom_line_items,
             total_price=total_price,
             sync_info=[],
             last_message_sequence_number=0,
@@ -83,13 +88,18 @@ class OrdersModel(BaseModel):
         return order
 
     def _create_from_import_draft(self, draft: models.OrderImportDraft, id: str):
+        custom_line_items = [
+            self._create_custom_line_item_from_draft(line)
+            for line in draft.custom_line_items
+        ]
+
         order = models.Order(
             id=id,
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             line_items=[],
-            custom_line_items=[],
+            custom_line_items=custom_line_items,
             total_price=money_to_typed(draft.total_price),
             taxed_price=create_from_draft(draft.taxed_price),
             sync_info=[],
@@ -99,8 +109,31 @@ class OrdersModel(BaseModel):
             payment_state=draft.payment_state,
             order_state=OrderState.OPEN,
             origin=CartOrigin.CUSTOMER,
+            custom=create_from_draft(draft.custom),
         )
         return order
+
+    def _create_custom_line_item_from_draft(self, draft: models.CustomLineItemDraft):
+        total_net_cents = draft.money.cent_amount * draft.quantity
+        total_net = money_to_typed(
+            models.Money(
+                cent_amount=total_net_cents, currency_code=draft.money.currency_code
+            )
+        )
+        return models.CustomLineItem(
+            id=str(uuid.uuid4()),
+            name=draft.name,
+            quantity=draft.quantity,
+            money=money_to_typed(draft.money),
+            total_price=total_net,
+            slug=draft.slug,
+            state=[],
+            discounted_price_per_quantity=[],
+            tax_category=draft.tax_category,
+            tax_rate=create_from_draft(draft.external_tax_rate),
+            custom=create_from_draft(draft.custom),
+            shipping_details=create_from_draft(draft.shipping_details),
+        )
 
 
 def add_delivery():

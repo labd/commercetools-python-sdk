@@ -608,10 +608,10 @@ class DiscountedLineItemPriceDraft(_BaseType):
 
 
 class ItemState(_BaseType):
-    quantity: float
+    quantity: int
     state: "StateReference"
 
-    def __init__(self, *, quantity: float, state: "StateReference"):
+    def __init__(self, *, quantity: int, state: "StateReference"):
         self.quantity = quantity
         self.state = state
         super().__init__()
@@ -636,7 +636,7 @@ class LineItemImportDraft(_BaseType):
     name: "LocalizedString"
     variant: "ProductVariantImportDraft"
     price: "PriceDraft"
-    quantity: float
+    quantity: int
     state: typing.Optional[typing.List["ItemState"]]
     #: Optional connection to a particular supplier.
     #: By providing supply channel information, you can uniquely identify
@@ -659,7 +659,7 @@ class LineItemImportDraft(_BaseType):
         name: "LocalizedString",
         variant: "ProductVariantImportDraft",
         price: "PriceDraft",
-        quantity: float,
+        quantity: int,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,

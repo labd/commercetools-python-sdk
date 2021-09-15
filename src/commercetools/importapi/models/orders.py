@@ -72,11 +72,11 @@ __all__ = [
 class ItemState(_BaseType):
     """The item's state."""
 
-    quantity: float
+    quantity: int
     #: Maps to `ItemState.state`.
     state: "StateKeyReference"
 
-    def __init__(self, *, quantity: float, state: "StateKeyReference"):
+    def __init__(self, *, quantity: int, state: "StateKeyReference"):
         self.quantity = quantity
         self.state = state
         super().__init__()
@@ -99,9 +99,9 @@ class ItemShippingTarget(_BaseType):
     #: Maps to `ItemShippingTarget.addressKey`.
     address_key: str
     #: Maps to `ItemShippingTarget.quantity`.
-    quantity: float
+    quantity: int
 
-    def __init__(self, *, address_key: str, quantity: float):
+    def __init__(self, *, address_key: str, quantity: int):
         self.address_key = address_key
         self.quantity = quantity
         super().__init__()
@@ -255,7 +255,7 @@ class LineItemImportDraft(_BaseType):
     #: Maps to `LineItem.price`.
     price: "LineItemPrice"
     #: Maps to `LineItem.quantity`.
-    quantity: float
+    quantity: int
     state: typing.Optional[typing.List["ItemState"]]
     #: References a supply channel. Maps to `LineItem.supplyChannel`.
     #:
@@ -281,7 +281,7 @@ class LineItemImportDraft(_BaseType):
         name: "LocalizedString",
         variant: "LineItemProductVariantImportDraft",
         price: "LineItemPrice",
-        quantity: float,
+        quantity: int,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
         distribution_channel: typing.Optional["ChannelKeyReference"] = None,
@@ -470,9 +470,9 @@ class TrackingData(_BaseType):
 
 class DeliveryItem(_BaseType):
     id: str
-    quantity: float
+    quantity: int
 
-    def __init__(self, *, id: str, quantity: float):
+    def __init__(self, *, id: str, quantity: int):
         self.id = id
         self.quantity = quantity
         super().__init__()
@@ -748,7 +748,7 @@ class CustomLineItemDraft(_BaseType):
     taxed_price: typing.Optional["CustomLineItemTaxedPrice"]
     total_price: "TypedMoney"
     slug: str
-    quantity: float
+    quantity: int
     state: typing.Optional[typing.List["ItemState"]]
     #: References a tax category by its key.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
@@ -767,7 +767,7 @@ class CustomLineItemDraft(_BaseType):
         taxed_price: typing.Optional["CustomLineItemTaxedPrice"] = None,
         total_price: "TypedMoney",
         slug: str,
-        quantity: float,
+        quantity: int,
         state: typing.Optional[typing.List["ItemState"]] = None,
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,

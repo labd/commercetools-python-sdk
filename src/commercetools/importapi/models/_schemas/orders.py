@@ -31,7 +31,7 @@ from .common import LocalizedStringField
 
 # Marshmallow Schemas
 class ItemStateSchema(helpers.BaseSchema):
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.StateKeyReferenceSchema"),
         allow_none=True,
@@ -52,7 +52,7 @@ class ItemShippingTargetSchema(helpers.BaseSchema):
     address_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="addressKey"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -292,7 +292,7 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
         allow_none=True,
@@ -505,7 +505,7 @@ class TrackingDataSchema(helpers.BaseSchema):
 
 class DeliveryItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -824,7 +824,7 @@ class CustomLineItemDraftSchema(helpers.BaseSchema):
         data_key="totalPrice",
     )
     slug = marshmallow.fields.String(allow_none=True, missing=None)
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
         allow_none=True,

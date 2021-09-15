@@ -128,7 +128,7 @@ class DiscountedLineItemPriceDraftSchema(helpers.BaseSchema):
 
 
 class ItemStateSchema(helpers.BaseSchema):
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
@@ -167,7 +167,7 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
         allow_none=True,

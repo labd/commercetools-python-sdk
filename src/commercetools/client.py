@@ -3,6 +3,7 @@ import typing
 import warnings
 
 import requests
+from marshmallow.exceptions import ValidationError
 
 from commercetools.helpers import _concurrent_retry
 
@@ -102,7 +103,10 @@ class Client(BaseClient, ServicesMixin):
         # FIXME: The error response defined in the RAML should be used
         from commercetools.platform.models._schemas.error import ErrorResponseSchema
 
-        obj = ErrorResponseSchema().loads(response.content)
+        try:
+            obj = ErrorResponseSchema().loads(response.content)
+        except ValidationError:
+            raise Exception(f"Could not parse error response: {response.content}")
 
         # We'll fetch the 'raw' errors from the response because some of the
         # attributes are not included in the schemas.

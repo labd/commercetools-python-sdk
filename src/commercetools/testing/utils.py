@@ -89,6 +89,16 @@ def create_from_draft(draft: typing.Optional[_BaseType]):
                 for portion in draft.tax_portions
             ],
         )
+    if isinstance(draft, models.ExternalTaxRateDraft):
+        return models.TaxRate(
+            id=str(uuid.uuid4()),
+            name=draft.name,
+            amount=draft.amount,
+            included_in_price=draft.included_in_price,
+            country=draft.country,
+            state=draft.state,
+            sub_rates=draft.sub_rates,
+        )
 
     raise ValueError(f"Unsupported type {draft.__class__}")
 

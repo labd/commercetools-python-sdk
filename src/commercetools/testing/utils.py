@@ -1,5 +1,4 @@
 import copy
-import importlib
 import json
 import typing
 import uuid
@@ -17,12 +16,11 @@ from commercetools.platform.models import (
 )
 from commercetools.platform.models._abstract import _BaseType
 from commercetools.platform.models._schemas.product import ProductSchema
-from commercetools.platform.models.cart import (
-    Cart,
-    CartSetLineItemCustomFieldAction,
-    TaxPortion,
-)
-from commercetools.platform.models.order import Order, OrderSetLineItemCustomFieldAction
+from commercetools.platform.models.cart import CartSetLineItemCustomFieldAction
+from commercetools.platform.models.order import OrderSetLineItemCustomFieldAction
+
+if typing.TYPE_CHECKING:
+    from commercetools.testing import Storage  # NOQA
 
 
 class InternalUpdateError(ValueError):
@@ -98,6 +96,21 @@ def create_from_draft(draft: typing.Optional[_BaseType]):
             country=draft.country,
             state=draft.state,
             sub_rates=draft.sub_rates,
+        )
+    if isinstance(draft, models.PriceDraft):
+        return models.Price(
+            id=str(uuid.uuid4()),
+            value=money_to_typed(draft.value),
+            country=draft.country,
+            customer_group=draft.customer_group,
+            channel=draft.channel,
+            valid_from=draft.valid_from,
+            valid_until=draft.valid_until,
+            discounted=draft.discounted,
+            custom=create_from_draft(draft.custom),
+            tiers=None
+            if draft.tiers is None
+            else [create_from_draft(t) for t in draft.tiers],
         )
 
     raise ValueError(f"Unsupported type {draft.__class__}")
@@ -303,14 +316,16 @@ def set_line_item_custom_field():
 
 
 def get_product_from_storage(
-    storage: "commercetools.testing.Storage",
-    product_id: uuid.UUID = None,
+    storage: "Storage",
+    product_id: typing.Union[str, uuid.UUID] = None,
     sku: str = None,
 ) -> typing.Optional[models.Product]:
     product = None
     product_store = storage._stores["product"]
 
     if product_id:
+        if isinstance(product_id, str):
+            product_id = uuid.UUID(product_id)
         product = ProductSchema().load(product_store[product_id])
     elif sku:
         for product_data in product_store.values():

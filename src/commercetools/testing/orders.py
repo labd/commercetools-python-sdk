@@ -20,6 +20,7 @@ from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     create_commercetools_response,
     create_from_draft,
+    get_product_from_storage,
     money_to_typed,
     set_custom_field,
     set_line_item_custom_field,
@@ -88,6 +89,9 @@ class OrdersModel(BaseModel):
         return order
 
     def _create_from_import_draft(self, draft: models.OrderImportDraft, id: str):
+        line_items = [
+            self._create_line_item_from_draft(line) for line in draft.line_items
+        ]
         custom_line_items = [
             self._create_custom_line_item_from_draft(line)
             for line in draft.custom_line_items
@@ -98,7 +102,7 @@ class OrdersModel(BaseModel):
             version=1,
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
-            line_items=[],
+            line_items=line_items,
             custom_line_items=custom_line_items,
             total_price=money_to_typed(draft.total_price),
             taxed_price=create_from_draft(draft.taxed_price),
@@ -113,13 +117,98 @@ class OrdersModel(BaseModel):
         )
         return order
 
+    def _create_line_item_from_draft(self, draft: models.LineItemImportDraft):
+        tax_rate = 0
+        tax_included = False
+
+        if draft.tax_rate:
+            tax_rate = draft.tax_rate.amount
+            tax_included = draft.tax_rate.included_in_price
+
+        currency_code = draft.price.value.currency_code
+        total_net_cents = draft.price.value.cent_amount * draft.quantity
+        total_gross_cents = total_net_cents
+
+        if tax_rate:
+            if tax_included:
+                total_net_cents = total_gross_cents / (1 + tax_rate)
+            else:
+                total_gross_cents = total_net_cents * (1 + tax_rate)
+
+        total_net = money_to_typed(
+            models.Money(cent_amount=total_net_cents, currency_code=currency_code)
+        )
+        total_gross = money_to_typed(
+            models.Money(cent_amount=total_gross_cents, currency_code=currency_code)
+        )
+        taxed_price = None
+        if tax_rate:
+            taxed_price = models.TaxedItemPrice(
+                total_net=total_net,
+                total_gross=total_gross,
+            )
+
+        product = get_product_from_storage(
+            self._storage, product_id=draft.product_id, sku=draft.variant.sku
+        )
+
+        current = product.master_data.current
+        variant = current.master_variant
+
+        return models.LineItem(
+            id=str(uuid.uuid4()),
+            product_id=draft.product_id,
+            product_slug=current.slug,
+            product_type=product.product_type,
+            variant=variant,
+            name=current.name,
+            quantity=draft.quantity,
+            price_mode=models.LineItemPriceMode.PLATFORM,
+            line_item_mode=models.LineItemMode.STANDARD,
+            price=create_from_draft(draft.price),
+            total_price=total_net,
+            state=[],
+            discounted_price_per_quantity=[],
+            tax_rate=draft.tax_rate,
+            taxed_price=taxed_price,
+            custom=create_from_draft(draft.custom),
+            shipping_details=create_from_draft(draft.shipping_details),
+        )
+
     def _create_custom_line_item_from_draft(self, draft: models.CustomLineItemDraft):
+        tax_rate = 0
+        tax_included = False
+
+        if draft.external_tax_rate:
+            tax_rate = draft.external_tax_rate.amount
+            tax_included = draft.external_tax_rate.included_in_price
+
         total_net_cents = draft.money.cent_amount * draft.quantity
+        total_gross_cents = total_net_cents
+
+        if tax_rate:
+            if tax_included:
+                total_net_cents = total_gross_cents / (1 + tax_rate)
+            else:
+                total_gross_cents = total_net_cents * (1 + tax_rate)
+
         total_net = money_to_typed(
             models.Money(
                 cent_amount=total_net_cents, currency_code=draft.money.currency_code
             )
         )
+        total_gross = money_to_typed(
+            models.Money(
+                cent_amount=total_gross_cents, currency_code=draft.money.currency_code
+            )
+        )
+        taxed_price = None
+        if tax_rate:
+            taxed_price = models.TaxedItemPrice(
+                total_net=total_net,
+                total_gross=total_gross,
+            )
+
         return models.CustomLineItem(
             id=str(uuid.uuid4()),
             name=draft.name,
@@ -131,6 +220,7 @@ class OrdersModel(BaseModel):
             discounted_price_per_quantity=[],
             tax_category=draft.tax_category,
             tax_rate=create_from_draft(draft.external_tax_rate),
+            taxed_price=taxed_price,
             custom=create_from_draft(draft.custom),
             shipping_details=create_from_draft(draft.shipping_details),
         )

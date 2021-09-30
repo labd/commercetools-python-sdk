@@ -195,7 +195,7 @@ def update_nested_object_attribute(dst: str, src: str):
 def update_enum_attribute(dst: str, src: str):
     def updater(self, obj, action):
         value = getattr(action, src).value
-        if obj[dst] != value:
+        if obj.get(dst) != value:
             new = copy.deepcopy(obj)
             new[dst] = value
             return new

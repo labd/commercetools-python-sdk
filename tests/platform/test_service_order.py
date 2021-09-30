@@ -73,6 +73,23 @@ def test_update_order_state_action(commercetools_api, old_client):
     assert updated_order.order_state == models.OrderState.CONFIRMED
 
 
+def test_update_payment_state_action(commercetools_api, old_client):
+    order = get_test_order()
+    order.payment_state = None
+
+    commercetools_api.orders.add_existing(order)
+
+    updated_order = old_client.orders.update_by_id(
+        order.id,
+        order.version,
+        actions=[
+            models.OrderChangePaymentStateAction(payment_state=models.PaymentState.PAID)
+        ],
+    )
+
+    assert updated_order.payment_state == models.PaymentState.PAID
+
+
 def test_update_order_add_delivery(commercetools_api, old_client):
     order = get_test_order()
 

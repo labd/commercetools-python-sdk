@@ -35,6 +35,7 @@
 - Testing: Add `setLocalizedDescription` action for shipping_method
 - Testing: Add `changeAttributeConstraint` action for product_type
 - Testing: Add `setLineItemCustomField` action for cart and order
+- Testing: Fix helper function to set enum fields giving an error on fields that have no value
 
   
 ## Notes on code generation

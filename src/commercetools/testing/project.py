@@ -48,7 +48,7 @@ class ProjectBackend(ServiceBackend):
 
     @property
     def path_prefix(self):
-        return r"/(?P<project>[^/]+)/$"
+        return r"/(?P<project>[^/]+)/?$"
 
     def get(self, request):
         project_key = request.kwargs["project"]

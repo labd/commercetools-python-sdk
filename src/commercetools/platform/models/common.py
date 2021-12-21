@@ -32,6 +32,7 @@ __all__ = [
     "ClientLogging",
     "CreatedBy",
     "DiscountedPrice",
+    "DiscountedPriceDraft",
     "GeoJson",
     "GeoJsonPoint",
     "HighPrecisionMoney",
@@ -608,10 +609,10 @@ class CreatedBy(ClientLogging):
 
 
 class DiscountedPrice(_BaseType):
-    value: "Money"
+    value: "TypedMoney"
     discount: "ProductDiscountReference"
 
-    def __init__(self, *, value: "Money", discount: "ProductDiscountReference"):
+    def __init__(self, *, value: "TypedMoney", discount: "ProductDiscountReference"):
         self.value = value
         self.discount = discount
         super().__init__()
@@ -626,6 +627,27 @@ class DiscountedPrice(_BaseType):
         from ._schemas.common import DiscountedPriceSchema
 
         return DiscountedPriceSchema().dump(self)
+
+
+class DiscountedPriceDraft(_BaseType):
+    value: "Money"
+    discount: "ProductDiscountReference"
+
+    def __init__(self, *, value: "Money", discount: "ProductDiscountReference"):
+        self.value = value
+        self.discount = discount
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DiscountedPriceDraft":
+        from ._schemas.common import DiscountedPriceDraftSchema
+
+        return DiscountedPriceDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import DiscountedPriceDraftSchema
+
+        return DiscountedPriceDraftSchema().dump(self)
 
 
 class GeoJson(_BaseType):
@@ -804,6 +826,7 @@ class Price(_BaseType):
     value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]
@@ -854,13 +877,14 @@ class PriceDraft(_BaseType):
     value: "Money"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     channel: typing.Optional["ChannelResourceIdentifier"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
     custom: typing.Optional["CustomFieldsDraft"]
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
-    discounted: typing.Optional["DiscountedPrice"]
+    discounted: typing.Optional["DiscountedPriceDraft"]
 
     def __init__(
         self,
@@ -873,7 +897,7 @@ class PriceDraft(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
-        discounted: typing.Optional["DiscountedPrice"] = None
+        discounted: typing.Optional["DiscountedPriceDraft"] = None
     ):
         self.value = value
         self.country = country
@@ -945,11 +969,12 @@ class QueryPrice(_BaseType):
     value: "Money"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
-    discounted: typing.Optional["DiscountedPrice"]
+    discounted: typing.Optional["DiscountedPriceDraft"]
     custom: typing.Optional["CustomFields"]
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
 
@@ -963,7 +988,7 @@ class QueryPrice(_BaseType):
         channel: typing.Optional["ChannelReference"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        discounted: typing.Optional["DiscountedPrice"] = None,
+        discounted: typing.Optional["DiscountedPriceDraft"] = None,
         custom: typing.Optional["CustomFields"] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None
     ):
@@ -993,6 +1018,7 @@ class QueryPrice(_BaseType):
 
 class Reference(_BaseType):
     type_id: "ReferenceTypeId"
+    #: Unique ID of the referenced resource.
     id: str
 
     def __init__(self, *, type_id: "ReferenceTypeId", id: str):
@@ -1133,7 +1159,9 @@ class ReferenceTypeId(enum.Enum):
 
 class ResourceIdentifier(_BaseType):
     type_id: typing.Optional["ReferenceTypeId"]
+    #: Unique ID of the referenced resource. Either `id` or `key` is required.
     id: typing.Optional[str]
+    #: Unique key of the referenced resource. Either `id` or `key` is required.
     key: typing.Optional[str]
 
     def __init__(
@@ -1253,6 +1281,7 @@ class ScopedPrice(_BaseType):
     current_value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]

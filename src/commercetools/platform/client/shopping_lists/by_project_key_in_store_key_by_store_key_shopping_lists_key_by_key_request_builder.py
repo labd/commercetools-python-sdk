@@ -50,7 +50,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return ShoppingList.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -76,7 +76,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return ShoppingList.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -92,7 +92,6 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Delete ShoppingList by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists/key={self._key}",
@@ -102,7 +101,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return ShoppingList.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

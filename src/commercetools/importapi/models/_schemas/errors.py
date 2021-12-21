@@ -478,6 +478,12 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
         missing=None,
         data_key="allowedValues",
     )
+    resource_index = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="resourceIndex",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

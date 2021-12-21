@@ -37,7 +37,6 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
-        """Get DiscountCode by ID"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
@@ -47,7 +46,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         )
         if response.status_code == 200:
             return DiscountCode.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -62,7 +61,6 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
-        """Update DiscountCode by ID"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
@@ -73,7 +71,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         )
         if response.status_code == 200:
             return DiscountCode.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -89,7 +87,6 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
-        """Delete DiscountCode by ID"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
@@ -99,7 +96,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         )
         if response.status_code == 200:
             return DiscountCode.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

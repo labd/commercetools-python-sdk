@@ -22,11 +22,8 @@ class ApiClientSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     name = marshmallow.fields.String(allow_none=True, missing=None)
     scope = marshmallow.fields.String(allow_none=True, missing=None)
-    created_at = marshmallow.fields.DateTime(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="createdAt",
+    secret = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     last_used_at = marshmallow.fields.Date(
         allow_none=True,
@@ -40,8 +37,11 @@ class ApiClientSchema(helpers.BaseSchema):
         missing=None,
         data_key="deleteAt",
     )
-    secret = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+    created_at = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="createdAt",
     )
 
     class Meta:
@@ -74,11 +74,11 @@ class ApiClientDraftSchema(helpers.BaseSchema):
 
 class ApiClientPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ApiClientSchema"),
         allow_none=True,

@@ -34,7 +34,7 @@ class ByProjectKeyProductsByIDImagesRequestBuilder:
         body: typing.BinaryIO,
         *,
         filename: str = None,
-        variant: float = None,
+        variant: int = None,
         sku: str = None,
         staged: bool = None,
         headers: typing.Dict[str, str] = None,

@@ -46,7 +46,9 @@ __all__ = [
 
 
 class Store(BaseResource):
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the store.
     #: The `key` is mandatory and immutable.
@@ -110,7 +112,7 @@ class StoreDraft(_BaseType):
     #: It is used to reference the store.
     key: str
     #: The name of the store
-    name: "LocalizedString"
+    name: typing.Optional["LocalizedString"]
     languages: typing.Optional[typing.List["str"]]
     #: Set of ResourceIdentifiers to a Channel with `ProductDistribution` role
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
@@ -122,7 +124,7 @@ class StoreDraft(_BaseType):
         self,
         *,
         key: str,
-        name: "LocalizedString",
+        name: typing.Optional["LocalizedString"] = None,
         languages: typing.Optional[typing.List["str"]] = None,
         distribution_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
@@ -345,9 +347,11 @@ class StoreAddDistributionChannelAction(StoreUpdateAction):
 
 
 class StoreAddSupplyChannelAction(StoreUpdateAction):
-    supply_channel: "ChannelResourceIdentifier"
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
-    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
+    def __init__(
+        self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ):
         self.supply_channel = supply_channel
         super().__init__(action="addSupplyChannel")
 
@@ -387,9 +391,11 @@ class StoreRemoveDistributionChannelAction(StoreUpdateAction):
 
 
 class StoreRemoveSupplyChannelAction(StoreUpdateAction):
-    supply_channel: "ChannelResourceIdentifier"
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
-    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
+    def __init__(
+        self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ):
         self.supply_channel = supply_channel
         super().__init__(action="removeSupplyChannel")
 

@@ -69,6 +69,7 @@ if typing.TYPE_CHECKING:
         PaymentInfo,
         PaymentState,
         ReturnInfo,
+        ReturnInfoDraft,
         ReturnItemDraft,
         ReturnPaymentState,
         ReturnShipmentState,
@@ -103,18 +104,10 @@ __all__ = [
     "OrderEditReference",
     "OrderEditResourceIdentifier",
     "OrderEditResult",
-    "OrderEditSetBillingAddressCustomFieldAction",
-    "OrderEditSetBillingAddressCustomTypeAction",
     "OrderEditSetCommentAction",
     "OrderEditSetCustomFieldAction",
     "OrderEditSetCustomTypeAction",
-    "OrderEditSetDeliveryAddressCustomFieldAction",
-    "OrderEditSetDeliveryAddressCustomTypeAction",
-    "OrderEditSetItemShippingAddressCustomFieldAction",
-    "OrderEditSetItemShippingAddressCustomTypeAction",
     "OrderEditSetKeyAction",
-    "OrderEditSetShippingAddressCustomFieldAction",
-    "OrderEditSetShippingAddressCustomTypeAction",
     "OrderEditSetStagedActionsAction",
     "OrderEditUpdate",
     "OrderEditUpdateAction",
@@ -148,6 +141,8 @@ __all__ = [
     "StagedOrderRemoveParcelFromDeliveryAction",
     "StagedOrderRemovePaymentAction",
     "StagedOrderSetBillingAddressAction",
+    "StagedOrderSetBillingAddressCustomFieldAction",
+    "StagedOrderSetBillingAddressCustomTypeAction",
     "StagedOrderSetCountryAction",
     "StagedOrderSetCustomFieldAction",
     "StagedOrderSetCustomLineItemCustomFieldAction",
@@ -161,7 +156,13 @@ __all__ = [
     "StagedOrderSetCustomerGroupAction",
     "StagedOrderSetCustomerIdAction",
     "StagedOrderSetDeliveryAddressAction",
+    "StagedOrderSetDeliveryAddressCustomFieldAction",
+    "StagedOrderSetDeliveryAddressCustomTypeAction",
+    "StagedOrderSetDeliveryCustomFieldAction",
+    "StagedOrderSetDeliveryCustomTypeAction",
     "StagedOrderSetDeliveryItemsAction",
+    "StagedOrderSetItemShippingAddressCustomFieldAction",
+    "StagedOrderSetItemShippingAddressCustomTypeAction",
     "StagedOrderSetLineItemCustomFieldAction",
     "StagedOrderSetLineItemCustomTypeAction",
     "StagedOrderSetLineItemDistributionChannelAction",
@@ -176,11 +177,14 @@ __all__ = [
     "StagedOrderSetParcelItemsAction",
     "StagedOrderSetParcelMeasurementsAction",
     "StagedOrderSetParcelTrackingDataAction",
+    "StagedOrderSetReturnInfoAction",
     "StagedOrderSetReturnPaymentStateAction",
     "StagedOrderSetReturnShipmentStateAction",
     "StagedOrderSetShippingAddressAction",
     "StagedOrderSetShippingAddressAndCustomShippingMethodAction",
     "StagedOrderSetShippingAddressAndShippingMethodAction",
+    "StagedOrderSetShippingAddressCustomFieldAction",
+    "StagedOrderSetShippingAddressCustomTypeAction",
     "StagedOrderSetShippingMethodAction",
     "StagedOrderSetShippingMethodTaxAmountAction",
     "StagedOrderSetShippingMethodTaxRateAction",
@@ -194,9 +198,9 @@ __all__ = [
 
 
 class OrderEdit(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Unique identifier for this edit.
     key: typing.Optional[str]
@@ -563,18 +567,6 @@ class OrderEditUpdateAction(_BaseType):
             from ._schemas.order_edit import OrderEditAddStagedActionActionSchema
 
             return OrderEditAddStagedActionActionSchema().load(data)
-        if data["action"] == "setBillingAddressCustomField":
-            from ._schemas.order_edit import (
-                OrderEditSetBillingAddressCustomFieldActionSchema,
-            )
-
-            return OrderEditSetBillingAddressCustomFieldActionSchema().load(data)
-        if data["action"] == "setBillingAddressCustomType":
-            from ._schemas.order_edit import (
-                OrderEditSetBillingAddressCustomTypeActionSchema,
-            )
-
-            return OrderEditSetBillingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setComment":
             from ._schemas.order_edit import OrderEditSetCommentActionSchema
 
@@ -587,46 +579,10 @@ class OrderEditUpdateAction(_BaseType):
             from ._schemas.order_edit import OrderEditSetCustomTypeActionSchema
 
             return OrderEditSetCustomTypeActionSchema().load(data)
-        if data["action"] == "setDeliveryAddressCustomField":
-            from ._schemas.order_edit import (
-                OrderEditSetDeliveryAddressCustomFieldActionSchema,
-            )
-
-            return OrderEditSetDeliveryAddressCustomFieldActionSchema().load(data)
-        if data["action"] == "setDeliveryAddressCustomType":
-            from ._schemas.order_edit import (
-                OrderEditSetDeliveryAddressCustomTypeActionSchema,
-            )
-
-            return OrderEditSetDeliveryAddressCustomTypeActionSchema().load(data)
-        if data["action"] == "setItemShippingAddressCustomField":
-            from ._schemas.order_edit import (
-                OrderEditSetItemShippingAddressCustomFieldActionSchema,
-            )
-
-            return OrderEditSetItemShippingAddressCustomFieldActionSchema().load(data)
-        if data["action"] == "setItemShippingAddressCustomType":
-            from ._schemas.order_edit import (
-                OrderEditSetItemShippingAddressCustomTypeActionSchema,
-            )
-
-            return OrderEditSetItemShippingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setKey":
             from ._schemas.order_edit import OrderEditSetKeyActionSchema
 
             return OrderEditSetKeyActionSchema().load(data)
-        if data["action"] == "setShippingAddressCustomField":
-            from ._schemas.order_edit import (
-                OrderEditSetShippingAddressCustomFieldActionSchema,
-            )
-
-            return OrderEditSetShippingAddressCustomFieldActionSchema().load(data)
-        if data["action"] == "setShippingAddressCustomType":
-            from ._schemas.order_edit import (
-                OrderEditSetShippingAddressCustomTypeActionSchema,
-            )
-
-            return OrderEditSetShippingAddressCustomTypeActionSchema().load(data)
         if data["action"] == "setStagedActions":
             from ._schemas.order_edit import OrderEditSetStagedActionsActionSchema
 
@@ -791,65 +747,6 @@ class OrderEditAddStagedActionAction(OrderEditUpdateAction):
         return OrderEditAddStagedActionActionSchema().dump(self)
 
 
-class OrderEditSetBillingAddressCustomFieldAction(OrderEditUpdateAction):
-    name: str
-    value: typing.Optional[typing.Any]
-
-    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
-        self.name = name
-        self.value = value
-        super().__init__(action="setBillingAddressCustomField")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetBillingAddressCustomFieldAction":
-        from ._schemas.order_edit import (
-            OrderEditSetBillingAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetBillingAddressCustomFieldActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetBillingAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetBillingAddressCustomFieldActionSchema().dump(self)
-
-
-class OrderEditSetBillingAddressCustomTypeAction(OrderEditUpdateAction):
-    type: typing.Optional["TypeResourceIdentifier"]
-    fields: typing.Optional["FieldContainer"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
-    ):
-        self.type = type
-        self.fields = fields
-        super().__init__(action="setBillingAddressCustomType")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetBillingAddressCustomTypeAction":
-        from ._schemas.order_edit import (
-            OrderEditSetBillingAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetBillingAddressCustomTypeActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetBillingAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetBillingAddressCustomTypeActionSchema().dump(self)
-
-
 class OrderEditSetCommentAction(OrderEditUpdateAction):
     comment: typing.Optional[str]
 
@@ -925,138 +822,6 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
         return OrderEditSetCustomTypeActionSchema().dump(self)
 
 
-class OrderEditSetDeliveryAddressCustomFieldAction(OrderEditUpdateAction):
-    delivery_id: str
-    type: typing.Optional["TypeResourceIdentifier"]
-    fields: typing.Optional["FieldContainer"]
-
-    def __init__(
-        self,
-        *,
-        delivery_id: str,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
-    ):
-        self.delivery_id = delivery_id
-        self.type = type
-        self.fields = fields
-        super().__init__(action="setDeliveryAddressCustomField")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetDeliveryAddressCustomFieldAction":
-        from ._schemas.order_edit import (
-            OrderEditSetDeliveryAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetDeliveryAddressCustomFieldActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetDeliveryAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetDeliveryAddressCustomFieldActionSchema().dump(self)
-
-
-class OrderEditSetDeliveryAddressCustomTypeAction(OrderEditUpdateAction):
-    delivery_id: str
-    name: str
-    value: typing.Optional[typing.Any]
-
-    def __init__(
-        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
-    ):
-        self.delivery_id = delivery_id
-        self.name = name
-        self.value = value
-        super().__init__(action="setDeliveryAddressCustomType")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetDeliveryAddressCustomTypeAction":
-        from ._schemas.order_edit import (
-            OrderEditSetDeliveryAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetDeliveryAddressCustomTypeActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetDeliveryAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetDeliveryAddressCustomTypeActionSchema().dump(self)
-
-
-class OrderEditSetItemShippingAddressCustomFieldAction(OrderEditUpdateAction):
-    address_key: str
-    name: str
-    value: typing.Optional[typing.Any]
-
-    def __init__(
-        self, *, address_key: str, name: str, value: typing.Optional[typing.Any] = None
-    ):
-        self.address_key = address_key
-        self.name = name
-        self.value = value
-        super().__init__(action="setItemShippingAddressCustomField")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetItemShippingAddressCustomFieldAction":
-        from ._schemas.order_edit import (
-            OrderEditSetItemShippingAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetItemShippingAddressCustomFieldActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetItemShippingAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetItemShippingAddressCustomFieldActionSchema().dump(self)
-
-
-class OrderEditSetItemShippingAddressCustomTypeAction(OrderEditUpdateAction):
-    address_key: str
-    type: typing.Optional["TypeResourceIdentifier"]
-    fields: typing.Optional["FieldContainer"]
-
-    def __init__(
-        self,
-        *,
-        address_key: str,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
-    ):
-        self.address_key = address_key
-        self.type = type
-        self.fields = fields
-        super().__init__(action="setItemShippingAddressCustomType")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetItemShippingAddressCustomTypeAction":
-        from ._schemas.order_edit import (
-            OrderEditSetItemShippingAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetItemShippingAddressCustomTypeActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetItemShippingAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetItemShippingAddressCustomTypeActionSchema().dump(self)
-
-
 class OrderEditSetKeyAction(OrderEditUpdateAction):
     #: If `key` is absent or `null`, this field will be removed if it exists.
     key: typing.Optional[str]
@@ -1075,65 +840,6 @@ class OrderEditSetKeyAction(OrderEditUpdateAction):
         from ._schemas.order_edit import OrderEditSetKeyActionSchema
 
         return OrderEditSetKeyActionSchema().dump(self)
-
-
-class OrderEditSetShippingAddressCustomFieldAction(OrderEditUpdateAction):
-    name: str
-    value: typing.Optional[typing.Any]
-
-    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
-        self.name = name
-        self.value = value
-        super().__init__(action="setShippingAddressCustomField")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetShippingAddressCustomFieldAction":
-        from ._schemas.order_edit import (
-            OrderEditSetShippingAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetShippingAddressCustomFieldActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetShippingAddressCustomFieldActionSchema,
-        )
-
-        return OrderEditSetShippingAddressCustomFieldActionSchema().dump(self)
-
-
-class OrderEditSetShippingAddressCustomTypeAction(OrderEditUpdateAction):
-    type: typing.Optional["TypeResourceIdentifier"]
-    fields: typing.Optional["FieldContainer"]
-
-    def __init__(
-        self,
-        *,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
-    ):
-        self.type = type
-        self.fields = fields
-        super().__init__(action="setShippingAddressCustomType")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderEditSetShippingAddressCustomTypeAction":
-        from ._schemas.order_edit import (
-            OrderEditSetShippingAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetShippingAddressCustomTypeActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order_edit import (
-            OrderEditSetShippingAddressCustomTypeActionSchema,
-        )
-
-        return OrderEditSetShippingAddressCustomTypeActionSchema().dump(self)
 
 
 class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
@@ -1163,6 +869,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     name: "LocalizedString"
     quantity: typing.Optional[float]
     slug: str
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -1205,17 +912,21 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
     items: typing.Optional[typing.List["DeliveryItem"]]
     address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
+    #: Custom Fields for the Transaction.
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
         *,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["BaseAddress"] = None,
-        parcels: typing.Optional[typing.List["ParcelDraft"]] = None
+        parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.items = items
         self.address = address
         self.parcels = parcels
+        self.custom = custom
         super().__init__(action="addDelivery")
 
     @classmethod
@@ -1901,6 +1612,65 @@ class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
         return StagedOrderSetBillingAddressActionSchema().dump(self)
 
 
+class StagedOrderSetBillingAddressCustomFieldAction(StagedOrderUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setBillingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetBillingAddressCustomFieldAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetBillingAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetBillingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetBillingAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetBillingAddressCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetBillingAddressCustomTypeAction(StagedOrderUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setBillingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetBillingAddressCustomTypeAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetBillingAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetBillingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetBillingAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetBillingAddressCustomTypeActionSchema().dump(self)
+
+
 class StagedOrderSetCountryAction(StagedOrderUpdateAction):
     country: typing.Optional[str]
 
@@ -2110,6 +1880,7 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2191,6 +1962,7 @@ class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
     def __init__(
@@ -2261,6 +2033,126 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
         return StagedOrderSetDeliveryAddressActionSchema().dump(self)
 
 
+class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
+    delivery_id: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.delivery_id = delivery_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setDeliveryAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetDeliveryAddressCustomFieldAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetDeliveryAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetDeliveryAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetDeliveryAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetDeliveryAddressCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
+    delivery_id: str
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        delivery_id: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.delivery_id = delivery_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setDeliveryAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetDeliveryAddressCustomTypeAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetDeliveryAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetDeliveryAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetDeliveryAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetDeliveryAddressCustomTypeActionSchema().dump(self)
+
+
+class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setDeliveryCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetDeliveryCustomFieldAction":
+        from ._schemas.order_edit import StagedOrderSetDeliveryCustomFieldActionSchema
+
+        return StagedOrderSetDeliveryCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetDeliveryCustomFieldActionSchema
+
+        return StagedOrderSetDeliveryCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
+    #: If set, the custom type is set to this new value.
+    #: If absent, the custom type and any existing custom fields are removed.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: If set, the custom fields are set to this new value.
+    fields: typing.Optional[object]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional[object] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setDeliveryCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetDeliveryCustomTypeAction":
+        from ._schemas.order_edit import StagedOrderSetDeliveryCustomTypeActionSchema
+
+        return StagedOrderSetDeliveryCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetDeliveryCustomTypeActionSchema
+
+        return StagedOrderSetDeliveryCustomTypeActionSchema().dump(self)
+
+
 class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
     delivery_id: str
     items: typing.List["DeliveryItem"]
@@ -2282,6 +2174,72 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
         from ._schemas.order_edit import StagedOrderSetDeliveryItemsActionSchema
 
         return StagedOrderSetDeliveryItemsActionSchema().dump(self)
+
+
+class StagedOrderSetItemShippingAddressCustomFieldAction(StagedOrderUpdateAction):
+    address_key: str
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, address_key: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.address_key = address_key
+        self.name = name
+        self.value = value
+        super().__init__(action="setItemShippingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetItemShippingAddressCustomFieldAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetItemShippingAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetItemShippingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetItemShippingAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetItemShippingAddressCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetItemShippingAddressCustomTypeAction(StagedOrderUpdateAction):
+    address_key: str
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        address_key: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.address_key = address_key
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setItemShippingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetItemShippingAddressCustomTypeAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetItemShippingAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetItemShippingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetItemShippingAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetItemShippingAddressCustomTypeActionSchema().dump(self)
 
 
 class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
@@ -2661,6 +2619,29 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
         return StagedOrderSetParcelTrackingDataActionSchema().dump(self)
 
 
+class StagedOrderSetReturnInfoAction(StagedOrderUpdateAction):
+    items: typing.Optional[typing.List["ReturnInfoDraft"]]
+
+    def __init__(
+        self, *, items: typing.Optional[typing.List["ReturnInfoDraft"]] = None
+    ):
+        self.items = items
+        super().__init__(action="setReturnInfo")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetReturnInfoAction":
+        from ._schemas.order_edit import StagedOrderSetReturnInfoActionSchema
+
+        return StagedOrderSetReturnInfoActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetReturnInfoActionSchema
+
+        return StagedOrderSetReturnInfoActionSchema().dump(self)
+
+
 class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
     return_item_id: str
     payment_state: "ReturnPaymentState"
@@ -2734,6 +2715,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     address: "BaseAddress"
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2808,6 +2790,65 @@ class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateActi
         )
 
         return StagedOrderSetShippingAddressAndShippingMethodActionSchema().dump(self)
+
+
+class StagedOrderSetShippingAddressCustomFieldAction(StagedOrderUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setShippingAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetShippingAddressCustomFieldAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetShippingAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetShippingAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetShippingAddressCustomFieldActionSchema,
+        )
+
+        return StagedOrderSetShippingAddressCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetShippingAddressCustomTypeAction(StagedOrderUpdateAction):
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setShippingAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetShippingAddressCustomTypeAction":
+        from ._schemas.order_edit import (
+            StagedOrderSetShippingAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetShippingAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import (
+            StagedOrderSetShippingAddressCustomTypeActionSchema,
+        )
+
+        return StagedOrderSetShippingAddressCustomTypeActionSchema().dump(self)
 
 
 class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):

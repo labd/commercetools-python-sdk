@@ -66,8 +66,8 @@ class AssetSchema(helpers.BaseSchema):
 
 
 class AssetDimensionsSchema(helpers.BaseSchema):
-    w = marshmallow.fields.Float(allow_none=True, missing=None)
-    h = marshmallow.fields.Float(allow_none=True, missing=None)
+    w = marshmallow.fields.Integer(allow_none=True, missing=None)
+    h = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -182,6 +182,16 @@ class KeyReferenceSchema(helpers.BaseSchema):
         return models.KeyReference(**data)
 
 
+class CartKeyReferenceSchema(KeyReferenceSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.CartKeyReference(**data)
+
+
 class CartDiscountKeyReferenceSchema(KeyReferenceSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -230,6 +240,36 @@ class CustomerGroupKeyReferenceSchema(KeyReferenceSchema):
     def post_load(self, data, **kwargs):
         del data["type_id"]
         return models.CustomerGroupKeyReference(**data)
+
+
+class DiscountCodeKeyReferenceSchema(KeyReferenceSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.DiscountCodeKeyReference(**data)
+
+
+class OrderKeyReferenceSchema(KeyReferenceSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.OrderKeyReference(**data)
+
+
+class PaymentKeyReferenceSchema(KeyReferenceSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.PaymentKeyReference(**data)
 
 
 class PriceKeyReferenceSchema(KeyReferenceSchema):
@@ -330,6 +370,33 @@ class TypeKeyReferenceSchema(KeyReferenceSchema):
     def post_load(self, data, **kwargs):
         del data["type_id"]
         return models.TypeKeyReference(**data)
+
+
+class CustomObjectKeyReferenceSchema(KeyReferenceSchema):
+    container = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.CustomObjectKeyReference(**data)
+
+
+class UnresolvedReferencesSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    type_id = marshmallow_enum.EnumField(
+        ReferenceType, by_value=True, allow_none=True, missing=None, data_key="typeId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.UnresolvedReferences(**data)
 
 
 class TypedMoneySchema(helpers.BaseSchema):

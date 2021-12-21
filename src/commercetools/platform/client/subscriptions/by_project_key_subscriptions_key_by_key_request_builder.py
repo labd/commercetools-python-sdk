@@ -47,7 +47,7 @@ class ByProjectKeySubscriptionsKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return Subscription.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -62,7 +62,6 @@ class ByProjectKeySubscriptionsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Subscription"]:
-        """Update Subscription by key"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/subscriptions/key={self._key}",
@@ -73,7 +72,7 @@ class ByProjectKeySubscriptionsKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return Subscription.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -88,7 +87,6 @@ class ByProjectKeySubscriptionsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Subscription"]:
-        """Delete Subscription by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/subscriptions/key={self._key}",
@@ -98,7 +96,7 @@ class ByProjectKeySubscriptionsKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return Subscription.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

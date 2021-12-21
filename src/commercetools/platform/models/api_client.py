@@ -15,21 +15,22 @@ __all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
 
 
 class ApiClient(_BaseType):
-    #: The unique ID of the API client.
-    #: This is the OAuth2 `client_id` and can be used to obtain a token.
+    #: Unique ID of the API client.
+    #: This is the OAuth2 `client_id` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     id: str
+    #: Name of the API Client.
     name: str
-    #: A whitespace separated list of the OAuth scopes.
-    #: This is the OAuth2 `scope` and can be used to obtain a token.
+    #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     scope: str
-    created_at: typing.Optional[datetime.datetime]
-    #: The last day this API Client was used to obtain a token.
+    #: Only shown once in the response of creating the API Client.
+    #: This is the OAuth2 `client_secret` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
+    secret: typing.Optional[str]
+    #: Date of the last day this API Client was used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     last_used_at: typing.Optional[datetime.date]
     #: If set, the client will be deleted on (or shortly after) this point in time.
     delete_at: typing.Optional[datetime.datetime]
-    #: The secret is only shown once in the response of creating the API Client.
-    #: This is the OAuth2 `client_secret` and can be used to obtain a token.
-    secret: typing.Optional[str]
+    #: Date and time (UTC) the API Client was initially created.
+    created_at: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
@@ -37,18 +38,18 @@ class ApiClient(_BaseType):
         id: str,
         name: str,
         scope: str,
-        created_at: typing.Optional[datetime.datetime] = None,
+        secret: typing.Optional[str] = None,
         last_used_at: typing.Optional[datetime.date] = None,
         delete_at: typing.Optional[datetime.datetime] = None,
-        secret: typing.Optional[str] = None
+        created_at: typing.Optional[datetime.datetime] = None
     ):
         self.id = id
         self.name = name
         self.scope = scope
-        self.created_at = created_at
+        self.secret = secret
         self.last_used_at = last_used_at
         self.delete_at = delete_at
-        self.secret = secret
+        self.created_at = created_at
         super().__init__()
 
     @classmethod
@@ -64,7 +65,9 @@ class ApiClient(_BaseType):
 
 
 class ApiClientDraft(_BaseType):
+    #: Name of the API Client.
     name: str
+    #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     scope: str
     #: If set, the client will be deleted after the specified amount of days.
     delete_days_after_creation: typing.Optional[int]
@@ -94,25 +97,37 @@ class ApiClientDraft(_BaseType):
 
 
 class ApiClientPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [APIClient](ctp:api:type:ApiClient)."""
+
+    #: Number of results requested in the query request.
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Offset supplied by the client or server default.
+    #: It is the number of elements skipped, not a page number.
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: API Clients matching the query.
     results: typing.List["ApiClient"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["ApiClient"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         super().__init__()
 

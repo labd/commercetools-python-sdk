@@ -60,7 +60,6 @@ class ByProjectKeyStoresRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["StorePagedQueryResponse"]:
-        """Query stores"""
         params = {
             "expand": expand,
             "sort": sort,
@@ -81,7 +80,7 @@ class ByProjectKeyStoresRequestBuilder:
         )
         if response.status_code == 200:
             return StorePagedQueryResponse.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -96,7 +95,6 @@ class ByProjectKeyStoresRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Store"]:
-        """Create Store"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/stores",
@@ -107,11 +105,9 @@ class ByProjectKeyStoresRequestBuilder:
         )
         if response.status_code in (201, 200):
             return Store.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
-        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)

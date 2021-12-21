@@ -62,11 +62,13 @@ __all__ = [
     "MyCartSetCountryAction",
     "MyCartSetCustomFieldAction",
     "MyCartSetCustomTypeAction",
+    "MyCartSetCustomerEmailAction",
     "MyCartSetDeleteDaysAfterLastModificationAction",
     "MyCartSetLineItemCustomFieldAction",
     "MyCartSetLineItemCustomTypeAction",
     "MyCartSetLineItemDistributionChannelAction",
     "MyCartSetLineItemShippingDetailsAction",
+    "MyCartSetLineItemSupplyChannelAction",
     "MyCartSetLocaleAction",
     "MyCartSetShippingAddressAction",
     "MyCartSetShippingMethodAction",
@@ -108,6 +110,7 @@ __all__ = [
     "MyPaymentSetMethodInfoInterfaceAction",
     "MyPaymentSetMethodInfoMethodAction",
     "MyPaymentSetMethodInfoNameAction",
+    "MyPaymentSetTransactionCustomFieldAction",
     "MyPaymentUpdate",
     "MyPaymentUpdateAction",
     "MyShoppingListAddLineItemAction",
@@ -308,6 +311,10 @@ class MyCartUpdateAction(_BaseType):
             from ._schemas.me import MyCartSetCustomTypeActionSchema
 
             return MyCartSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setCustomerEmail":
+            from ._schemas.me import MyCartSetCustomerEmailActionSchema
+
+            return MyCartSetCustomerEmailActionSchema().load(data)
         if data["action"] == "setDeleteDaysAfterLastModification":
             from ._schemas.me import (
                 MyCartSetDeleteDaysAfterLastModificationActionSchema,
@@ -330,6 +337,10 @@ class MyCartUpdateAction(_BaseType):
             from ._schemas.me import MyCartSetLineItemShippingDetailsActionSchema
 
             return MyCartSetLineItemShippingDetailsActionSchema().load(data)
+        if data["action"] == "setLineItemSupplyChannel":
+            from ._schemas.me import MyCartSetLineItemSupplyChannelActionSchema
+
+            return MyCartSetLineItemSupplyChannelActionSchema().load(data)
         if data["action"] == "setLocale":
             from ._schemas.me import MyCartSetLocaleActionSchema
 
@@ -802,6 +813,10 @@ class MyPaymentUpdateAction(_BaseType):
             from ._schemas.me import MyPaymentSetMethodInfoNameActionSchema
 
             return MyPaymentSetMethodInfoNameActionSchema().load(data)
+        if data["action"] == "setTransactionCustomField":
+            from ._schemas.me import MyPaymentSetTransactionCustomFieldActionSchema
+
+            return MyPaymentSetTransactionCustomFieldActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.me import MyPaymentUpdateActionSchema
@@ -992,6 +1007,8 @@ class MyTransactionDraft(_BaseType):
     #: the corresponding interaction should be findable with this ID.
     #: The `state` is set to the `Initial` TransactionState.
     interaction_id: typing.Optional[str]
+    #: Custom Fields for the Transaction.
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
@@ -999,12 +1016,14 @@ class MyTransactionDraft(_BaseType):
         timestamp: typing.Optional[datetime.datetime] = None,
         type: "TransactionType",
         amount: "Money",
-        interaction_id: typing.Optional[str] = None
+        interaction_id: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.timestamp = timestamp
         self.type = type
         self.amount = amount
         self.interaction_id = interaction_id
+        self.custom = custom
         super().__init__()
 
     @classmethod
@@ -1439,6 +1458,27 @@ class MyCartSetCustomTypeAction(MyCartUpdateAction):
         return MyCartSetCustomTypeActionSchema().dump(self)
 
 
+class MyCartSetCustomerEmailAction(MyCartUpdateAction):
+    email: typing.Optional[str]
+
+    def __init__(self, *, email: typing.Optional[str] = None):
+        self.email = email
+        super().__init__(action="setCustomerEmail")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyCartSetCustomerEmailAction":
+        from ._schemas.me import MyCartSetCustomerEmailActionSchema
+
+        return MyCartSetCustomerEmailActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyCartSetCustomerEmailActionSchema
+
+        return MyCartSetCustomerEmailActionSchema().dump(self)
+
+
 class MyCartSetDeleteDaysAfterLastModificationAction(MyCartUpdateAction):
     delete_days_after_last_modification: typing.Optional[int]
 
@@ -1574,6 +1614,34 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
         from ._schemas.me import MyCartSetLineItemShippingDetailsActionSchema
 
         return MyCartSetLineItemShippingDetailsActionSchema().dump(self)
+
+
+class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
+    line_item_id: str
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        line_item_id: str,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ):
+        self.line_item_id = line_item_id
+        self.distribution_channel = distribution_channel
+        super().__init__(action="setLineItemSupplyChannel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyCartSetLineItemSupplyChannelAction":
+        from ._schemas.me import MyCartSetLineItemSupplyChannelActionSchema
+
+        return MyCartSetLineItemSupplyChannelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyCartSetLineItemSupplyChannelActionSchema
+
+        return MyCartSetLineItemSupplyChannelActionSchema().dump(self)
 
 
 class MyCartSetLocaleAction(MyCartUpdateAction):
@@ -2300,6 +2368,29 @@ class MyPaymentSetMethodInfoNameAction(MyPaymentUpdateAction):
         from ._schemas.me import MyPaymentSetMethodInfoNameActionSchema
 
         return MyPaymentSetMethodInfoNameActionSchema().dump(self)
+
+
+class MyPaymentSetTransactionCustomFieldAction(MyPaymentUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setTransactionCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyPaymentSetTransactionCustomFieldAction":
+        from ._schemas.me import MyPaymentSetTransactionCustomFieldActionSchema
+
+        return MyPaymentSetTransactionCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyPaymentSetTransactionCustomFieldActionSchema
+
+        return MyPaymentSetTransactionCustomFieldActionSchema().dump(self)
 
 
 class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):

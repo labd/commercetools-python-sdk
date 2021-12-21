@@ -58,6 +58,8 @@ __all__ = [
     "PaymentSetMethodInfoNameAction",
     "PaymentSetStatusInterfaceCodeAction",
     "PaymentSetStatusInterfaceTextAction",
+    "PaymentSetTransactionCustomFieldAction",
+    "PaymentSetTransactionCustomTypeAction",
     "PaymentStatus",
     "PaymentStatusDraft",
     "PaymentTransitionStateAction",
@@ -71,9 +73,9 @@ __all__ = [
 
 
 class Payment(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: A reference to the customer this payment belongs to.
     customer: typing.Optional["CustomerReference"]
@@ -537,6 +539,14 @@ class PaymentUpdateAction(_BaseType):
             from ._schemas.payment import PaymentSetStatusInterfaceTextActionSchema
 
             return PaymentSetStatusInterfaceTextActionSchema().load(data)
+        if data["action"] == "setTransactionCustomField":
+            from ._schemas.payment import PaymentSetTransactionCustomFieldActionSchema
+
+            return PaymentSetTransactionCustomFieldActionSchema().load(data)
+        if data["action"] == "setTransactionCustomType":
+            from ._schemas.payment import PaymentSetTransactionCustomTypeActionSchema
+
+            return PaymentSetTransactionCustomTypeActionSchema().load(data)
         if data["action"] == "transitionState":
             from ._schemas.payment import PaymentTransitionStateActionSchema
 
@@ -561,6 +571,8 @@ class Transaction(_BaseType):
     interaction_id: typing.Optional[str]
     #: The state of this transaction.
     state: typing.Optional["TransactionState"]
+    #: Custom Fields for the Transaction.
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
@@ -570,7 +582,8 @@ class Transaction(_BaseType):
         type: "TransactionType",
         amount: "TypedMoney",
         interaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None
+        state: typing.Optional["TransactionState"] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
         self.timestamp = timestamp
@@ -578,6 +591,7 @@ class Transaction(_BaseType):
         self.amount = amount
         self.interaction_id = interaction_id
         self.state = state
+        self.custom = custom
         super().__init__()
 
     @classmethod
@@ -604,6 +618,8 @@ class TransactionDraft(_BaseType):
     #: The state of this transaction.
     #: If not set, defaults to `Initial`.
     state: typing.Optional["TransactionState"]
+    #: Custom Fields for the Transaction.
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
@@ -612,13 +628,15 @@ class TransactionDraft(_BaseType):
         type: "TransactionType",
         amount: "Money",
         interaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None
+        state: typing.Optional["TransactionState"] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.timestamp = timestamp
         self.type = type
         self.amount = amount
         self.interaction_id = interaction_id
         self.state = state
+        self.custom = custom
         super().__init__()
 
     @classmethod
@@ -1127,6 +1145,60 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
         from ._schemas.payment import PaymentSetStatusInterfaceTextActionSchema
 
         return PaymentSetStatusInterfaceTextActionSchema().dump(self)
+
+
+class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
+    name: str
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+        super().__init__(action="setTransactionCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "PaymentSetTransactionCustomFieldAction":
+        from ._schemas.payment import PaymentSetTransactionCustomFieldActionSchema
+
+        return PaymentSetTransactionCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.payment import PaymentSetTransactionCustomFieldActionSchema
+
+        return PaymentSetTransactionCustomFieldActionSchema().dump(self)
+
+
+class PaymentSetTransactionCustomTypeAction(PaymentUpdateAction):
+    #: If set, the custom type is set to this new value.
+    #: If absent, the custom type and any existing custom fields are removed.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the custom fields to this value.
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setTransactionCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "PaymentSetTransactionCustomTypeAction":
+        from ._schemas.payment import PaymentSetTransactionCustomTypeActionSchema
+
+        return PaymentSetTransactionCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.payment import PaymentSetTransactionCustomTypeActionSchema
+
+        return PaymentSetTransactionCustomTypeActionSchema().dump(self)
 
 
 class PaymentTransitionStateAction(PaymentUpdateAction):

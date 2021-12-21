@@ -18,12 +18,14 @@ if typing.TYPE_CHECKING:
         ChannelKeyReference,
         CustomerGroupKeyReference,
         CustomerKeyReference,
+        DiscountCodeKeyReference,
         DiscountedPrice,
         Image,
         LocalizedString,
         Money,
         PriceTier,
         ProductKeyReference,
+        ProductVariantKeyReference,
         ShippingMethodKeyReference,
         StateKeyReference,
         TaxCategoryKeyReference,
@@ -36,10 +38,13 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "CartClassificationTier",
     "CartOrigin",
+    "ClassificationShippingRateInput",
     "CustomLineItemDraft",
     "CustomLineItemTaxedPrice",
     "Delivery",
     "DeliveryItem",
+    "DiscountCodeInfo",
+    "DiscountCodeState",
     "DiscountedLineItemPortion",
     "DiscountedLineItemPriceDraft",
     "ExternalTaxRateDraft",
@@ -56,13 +61,18 @@ __all__ = [
     "ParcelMeasurements",
     "PaymentState",
     "RoundingMode",
+    "ScoreShippingRateInput",
     "ShipmentState",
     "ShippingInfoImportDraft",
     "ShippingMethodState",
     "ShippingRateDraft",
+    "ShippingRateInput",
+    "ShippingRateInputType",
     "ShippingRatePriceTier",
     "ShippingRateTierType",
+    "SyncInfo",
     "TaxCalculationMode",
+    "TaxMode",
     "TaxPortion",
     "TaxedPrice",
     "TrackingData",
@@ -72,11 +82,11 @@ __all__ = [
 class ItemState(_BaseType):
     """The item's state."""
 
-    quantity: int
+    quantity: float
     #: Maps to `ItemState.state`.
     state: "StateKeyReference"
 
-    def __init__(self, *, quantity: int, state: "StateKeyReference"):
+    def __init__(self, *, quantity: float, state: "StateKeyReference"):
         self.quantity = quantity
         self.state = state
         super().__init__()
@@ -99,9 +109,9 @@ class ItemShippingTarget(_BaseType):
     #: Maps to `ItemShippingTarget.addressKey`.
     address_key: str
     #: Maps to `ItemShippingTarget.quantity`.
-    quantity: int
+    quantity: float
 
-    def __init__(self, *, address_key: str, quantity: int):
+    def __init__(self, *, address_key: str, quantity: float):
         self.address_key = address_key
         self.quantity = quantity
         super().__init__()
@@ -141,7 +151,7 @@ class ItemShippingDetailsDraft(_BaseType):
 
 
 class LineItemPrice(_BaseType):
-    #: Maps to `Price.value`.
+    #: Maps to `Price.value`. TypedMoney is what is called BaseMoney in the HTTP API.
     value: "TypedMoney"
     #: Maps to `Price.county`.
     country: typing.Optional[str]
@@ -149,9 +159,9 @@ class LineItemPrice(_BaseType):
     valid_from: typing.Optional[datetime.datetime]
     #: Maps to `Price.validUntil`.
     valid_until: typing.Optional[datetime.datetime]
-    #: References a customer group by its key.
+    #: References a customer group by key.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
-    #: References a channel by its key.
+    #: References a channel by key.
     channel: typing.Optional["ChannelKeyReference"]
     #: Sets a discounted price from an external service.
     discounted: typing.Optional["DiscountedPrice"]
@@ -198,7 +208,7 @@ class LineItemPrice(_BaseType):
 
 class LineItemProductVariantImportDraft(_BaseType):
     #: Maps to `ProductVariant.product`.
-    product: typing.Optional["ProductKeyReference"]
+    product_variant: typing.Optional["ProductVariantKeyReference"]
     #: Maps to `ProductVariantImportDraft.sku`.
     sku: typing.Optional[str]
     #: Maps to `ProductVariantImportDraft.prices`
@@ -211,13 +221,13 @@ class LineItemProductVariantImportDraft(_BaseType):
     def __init__(
         self,
         *,
-        product: typing.Optional["ProductKeyReference"] = None,
+        product_variant: typing.Optional["ProductVariantKeyReference"] = None,
         sku: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["LineItemPrice"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None
     ):
-        self.product = product
+        self.product_variant = product_variant
         self.sku = sku
         self.prices = prices
         self.attributes = attributes
@@ -239,10 +249,10 @@ class LineItemProductVariantImportDraft(_BaseType):
 
 
 class LineItemImportDraft(_BaseType):
-    """Represents an individual line item in an Order. A line item is a snapshot of a product at the time it was added to the order.
+    """Represents an individual Line Item in an Order. A line item is a snapshot of a product at the time it was added to the order.
 
-    You cannot create an order which includes line operations that do not exist in the project or have been deleted.
-    Products and variants referenced by a line item must already exist in the commercetools project.
+    You cannot create an Order that includes line item operations that do not exist in the Project or have been deleted.
+    Products and Product Variants referenced by a line item must already exist in the commercetools Project.
 
     """
 
@@ -255,19 +265,15 @@ class LineItemImportDraft(_BaseType):
     #: Maps to `LineItem.price`.
     price: "LineItemPrice"
     #: Maps to `LineItem.quantity`.
-    quantity: int
+    quantity: float
     state: typing.Optional[typing.List["ItemState"]]
-    #: References a supply channel. Maps to `LineItem.supplyChannel`.
-    #:
-    #: The supply channel referenced must already exist
-    #: in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: Maps to `LineItem.supplyChannel`.
+    #: The Reference to the Supply [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
+    #: If referenced Supply Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Supply Channel is created.
     supply_channel: typing.Optional["ChannelKeyReference"]
-    #: References a distribution channel. Maps to `LineItem.distributionChannel`.
-    #:
-    #: The distribution channel referenced must already exist
-    #: in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: Maps to `LineItem.distributionChannel`.
+    #: The Reference to the Distribution [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
+    #: If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Distribution Channel is created.
     distribution_channel: typing.Optional["ChannelKeyReference"]
     #: Maps to `LineItem.taxRate`.
     tax_rate: typing.Optional["TaxRate"]
@@ -281,7 +287,7 @@ class LineItemImportDraft(_BaseType):
         name: "LocalizedString",
         variant: "LineItemProductVariantImportDraft",
         price: "LineItemPrice",
-        quantity: int,
+        quantity: float,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
         distribution_channel: typing.Optional["ChannelKeyReference"] = None,
@@ -470,9 +476,9 @@ class TrackingData(_BaseType):
 
 class DeliveryItem(_BaseType):
     id: str
-    quantity: int
+    quantity: float
 
-    def __init__(self, *, id: str, quantity: int):
+    def __init__(self, *, id: str, quantity: float):
         self.id = id
         self.quantity = quantity
         super().__init__()
@@ -560,7 +566,7 @@ class Delivery(_BaseType):
 
 
 class DiscountedLineItemPortion(_BaseType):
-    #: References a cart discount by its key.
+    #: References a cart discount by key.
     discount: "CartDiscountKeyReference"
     discounted_amount: "Money"
 
@@ -625,13 +631,15 @@ class ShippingInfoImportDraft(_BaseType):
     """
 
     shipping_method_name: str
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     price: "TypedMoney"
     shipping_rate: "ShippingRateDraft"
     tax_rate: typing.Optional["TaxRate"]
-    #: References a tax category by its key.
+    #: References a tax category by key.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
-    #: References a shipping method by its key.
+    #: References a shipping method by key.
     shipping_method: typing.Optional["ShippingMethodKeyReference"]
+    #: Note that you can not add a `DeliveryItem` on import, as `LineItems` and `CustomLineItems` are not yet referencable by an `id`.
     deliveries: typing.Optional[typing.List["Delivery"]]
     discounted_price: typing.Optional["DiscountedLineItemPriceDraft"]
     shipping_method_state: typing.Optional["ShippingMethodState"]
@@ -713,7 +721,9 @@ class ExternalTaxRateDraft(_BaseType):
 
 
 class CustomLineItemTaxedPrice(_BaseType):
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     total_net: "TypedMoney"
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     total_gross: "TypedMoney"
 
     def __init__(self, *, total_net: "TypedMoney", total_gross: "TypedMoney"):
@@ -744,13 +754,15 @@ class CustomLineItemDraft(_BaseType):
     #: }
     #: ```
     name: "LocalizedString"
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     money: "TypedMoney"
     taxed_price: typing.Optional["CustomLineItemTaxedPrice"]
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     total_price: "TypedMoney"
     slug: str
-    quantity: int
+    quantity: float
     state: typing.Optional[typing.List["ItemState"]]
-    #: References a tax category by its key.
+    #: References a tax category by key.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
     tax_rate: typing.Optional["TaxRate"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -767,7 +779,7 @@ class CustomLineItemDraft(_BaseType):
         taxed_price: typing.Optional["CustomLineItemTaxedPrice"] = None,
         total_price: "TypedMoney",
         slug: str,
-        quantity: int,
+        quantity: float,
         state: typing.Optional[typing.List["ItemState"]] = None,
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -806,6 +818,7 @@ class CustomLineItemDraft(_BaseType):
 class TaxPortion(_BaseType):
     name: typing.Optional[str]
     rate: float
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     amount: "TypedMoney"
 
     def __init__(
@@ -858,6 +871,15 @@ class TaxedPrice(_BaseType):
         from ._schemas.orders import TaxedPriceSchema
 
         return TaxedPriceSchema().dump(self)
+
+
+class TaxMode(enum.Enum):
+    """Maps to `Order.taxMode`"""
+
+    PLATFORM = "Platform"
+    EXTERNAL = "External"
+    EXTERNAL_AMOUNT = "ExternalAmount"
+    DISABLED = "Disabled"
 
 
 class OrderState(enum.Enum):
@@ -919,20 +941,170 @@ class CartOrigin(enum.Enum):
     MERCHANT = "Merchant"
 
 
+class SyncInfo(_BaseType):
+    #: Maps to `SyncInfo.channel`
+    channel: "ChannelKeyReference"
+    #: Maps to `SyncInfo.externalId`
+    external_id: typing.Optional[str]
+    #: Maps to `SyncInfo.syncedAt`
+    synced_at: datetime.datetime
+
+    def __init__(
+        self,
+        *,
+        channel: "ChannelKeyReference",
+        external_id: typing.Optional[str] = None,
+        synced_at: datetime.datetime
+    ):
+        self.channel = channel
+        self.external_id = external_id
+        self.synced_at = synced_at
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SyncInfo":
+        from ._schemas.orders import SyncInfoSchema
+
+        return SyncInfoSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.orders import SyncInfoSchema
+
+        return SyncInfoSchema().dump(self)
+
+
+class DiscountCodeState(enum.Enum):
+    """Maps to `DiscountCodeInfo.state`"""
+
+    NOT_ACTIVE = "NotActive"
+    NOT_VALID = "NotValid"
+    DOES_NOT_MATCH_CART = "DoesNotMatchCart"
+    MATCHES_CART = "MatchesCart"
+    MAX_APPLICATION_REACHED = "MaxApplicationReached"
+    APPLICATION_STOPPED_BY_PREVIOUS_DISCOUNT = "ApplicationStoppedByPreviousDiscount"
+
+
+class DiscountCodeInfo(_BaseType):
+    #: References a discount code by key.
+    discount_code: "DiscountCodeKeyReference"
+    #: Maps to `DiscountCodeInfo.state`
+    state: typing.Optional["DiscountCodeState"]
+
+    def __init__(
+        self,
+        *,
+        discount_code: "DiscountCodeKeyReference",
+        state: typing.Optional["DiscountCodeState"] = None
+    ):
+        self.discount_code = discount_code
+        self.state = state
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DiscountCodeInfo":
+        from ._schemas.orders import DiscountCodeInfoSchema
+
+        return DiscountCodeInfoSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.orders import DiscountCodeInfoSchema
+
+        return DiscountCodeInfoSchema().dump(self)
+
+
+class ShippingRateInputType(enum.Enum):
+    CLASSIFICATION = "Classification"
+    SCORE = "Score"
+
+
+class ShippingRateInput(_BaseType):
+    type: "ShippingRateInputType"
+
+    def __init__(self, *, type: "ShippingRateInputType"):
+        self.type = type
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ShippingRateInput":
+        if data["type"] == "Classification":
+            from ._schemas.orders import ClassificationShippingRateInputSchema
+
+            return ClassificationShippingRateInputSchema().load(data)
+        if data["type"] == "Score":
+            from ._schemas.orders import ScoreShippingRateInputSchema
+
+            return ScoreShippingRateInputSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.orders import ShippingRateInputSchema
+
+        return ShippingRateInputSchema().dump(self)
+
+
+class ClassificationShippingRateInput(ShippingRateInput):
+    key: str
+    #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+    #: ```json
+    #: {
+    #:   "de": "Hundefutter",
+    #:   "en": "dog food"
+    #: }
+    #: ```
+    label: "LocalizedString"
+
+    def __init__(self, *, key: str, label: "LocalizedString"):
+        self.key = key
+        self.label = label
+        super().__init__(type=ShippingRateInputType.CLASSIFICATION)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ClassificationShippingRateInput":
+        from ._schemas.orders import ClassificationShippingRateInputSchema
+
+        return ClassificationShippingRateInputSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.orders import ClassificationShippingRateInputSchema
+
+        return ClassificationShippingRateInputSchema().dump(self)
+
+
+class ScoreShippingRateInput(ShippingRateInput):
+    score: float
+
+    def __init__(self, *, score: float):
+        self.score = score
+        super().__init__(type=ShippingRateInputType.SCORE)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ScoreShippingRateInput":
+        from ._schemas.orders import ScoreShippingRateInputSchema
+
+        return ScoreShippingRateInputSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.orders import ScoreShippingRateInputSchema
+
+        return ScoreShippingRateInputSchema().dump(self)
+
+
 class OrderImport(_BaseType):
-    """Import representation for an order.
+    """The data representation for an Order to be imported that is persisted as an [Order](/../api/projects/orders#top) in the Project.
 
-    In commercetools, you can import an order using the
+    In commercetools, you can import an Order using the
     [Create Order by Import](https://docs.commercetools.com/http-api-projects-orders-import.html#create-an-order-by-import)
-    endpoint method instead of creating it from a cart.
+    endpoint method instead of creating it from a Cart.
 
-    The order import draft is a snapshot of an order at the time it was imported.
+    An OrderImport is a snapshot of an order at the time it was imported.
 
     """
 
-    #: Maps to `Order.orderNumber`. A string that identifies an Order. Must be unique across a Project. Once it is set, it cannot be changed.
+    #: Maps to `Order.orderNumber`, String that uniquely identifies an order. It should be unique across a project. Once it's set it cannot be changed.
     order_number: str
-    #: References a customer by its key.
     customer: typing.Optional["CustomerKeyReference"]
     #: Maps to `Order.customerEmail`.
     customer_email: typing.Optional[str]
@@ -940,7 +1112,7 @@ class OrderImport(_BaseType):
     line_items: typing.Optional[typing.List["LineItemImportDraft"]]
     #: Maps to `Order.customLineItems`
     custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]]
-    #: Maps to `Order.totalPrice`.
+    #: Maps to `Order.totalPrice`. TypedMoney is what is called BaseMoney in the HTTP API.
     total_price: "TypedMoney"
     #: Maps to `Order.taxedPrice`.
     taxed_price: typing.Optional["TaxedPrice"]

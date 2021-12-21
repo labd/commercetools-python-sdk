@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.customer import Customer
+from ...models.customer import Customer, MyCustomerChangePassword
 from ...models.error import ErrorResponse
 from ..reset.by_project_key_me_password_reset_request_builder import (
     ByProjectKeyMePasswordResetRequestBuilder,
@@ -38,7 +38,7 @@ class ByProjectKeyMePasswordRequestBuilder:
 
     def post(
         self,
-        body: None,
+        body: "MyCustomerChangePassword",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -47,12 +47,13 @@ class ByProjectKeyMePasswordRequestBuilder:
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/password",
             params={},
+            json=body.serialize(),
             headers={"Content-Type": "application/json", **headers},
             options=options,
         )
         if response.status_code == 200:
             return Customer.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

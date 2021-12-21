@@ -491,9 +491,6 @@ class TypeUpdateSchema(helpers.BaseSchema):
                 "changeEnumValueOrder": helpers.absmod(
                     __name__, ".TypeChangeEnumValueOrderActionSchema"
                 ),
-                "changeFieldDefinitionLabel": helpers.absmod(
-                    __name__, ".TypeChangeFieldDefinitionLabelActionSchema"
-                ),
                 "changeFieldDefinitionOrder": helpers.absmod(
                     __name__, ".TypeChangeFieldDefinitionOrderActionSchema"
                 ),
@@ -635,23 +632,6 @@ class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.TypeChangeEnumValueOrderAction(**data)
-
-
-class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
-    field_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="fieldName"
-    )
-    label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.TypeChangeFieldDefinitionLabelAction(**data)
 
 
 class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):

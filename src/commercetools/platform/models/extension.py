@@ -39,9 +39,9 @@ __all__ = [
 
 
 class Extension(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     key: typing.Optional[str]
     destination: "ExtensionDestination"

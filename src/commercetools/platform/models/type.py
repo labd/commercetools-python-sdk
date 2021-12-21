@@ -42,7 +42,6 @@ __all__ = [
     "TypeAddLocalizedEnumValueAction",
     "TypeChangeEnumValueLabelAction",
     "TypeChangeEnumValueOrderAction",
-    "TypeChangeFieldDefinitionLabelAction",
     "TypeChangeFieldDefinitionOrderAction",
     "TypeChangeInputHintAction",
     "TypeChangeKeyAction",
@@ -511,12 +510,13 @@ class ResourceTypeId(enum.Enum):
     DISCOUNT_CODE = "discount-code"
     CART_DISCOUNT = "cart-discount"
     CUSTOMER_GROUP = "customer-group"
+    STORE = "store"
 
 
 class Type(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Identifier for the type (max.
     #: 256 characters).
@@ -736,10 +736,6 @@ class TypeUpdateAction(_BaseType):
             from ._schemas.type import TypeChangeEnumValueOrderActionSchema
 
             return TypeChangeEnumValueOrderActionSchema().load(data)
-        if data["action"] == "changeFieldDefinitionLabel":
-            from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
-
-            return TypeChangeFieldDefinitionLabelActionSchema().load(data)
         if data["action"] == "changeFieldDefinitionOrder":
             from ._schemas.type import TypeChangeFieldDefinitionOrderActionSchema
 
@@ -894,29 +890,6 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
         from ._schemas.type import TypeChangeEnumValueOrderActionSchema
 
         return TypeChangeEnumValueOrderActionSchema().dump(self)
-
-
-class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
-    field_name: str
-    label: "LocalizedString"
-
-    def __init__(self, *, field_name: str, label: "LocalizedString"):
-        self.field_name = field_name
-        self.label = label
-        super().__init__(action="changeFieldDefinitionLabel")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "TypeChangeFieldDefinitionLabelAction":
-        from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
-
-        return TypeChangeFieldDefinitionLabelActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
-
-        return TypeChangeFieldDefinitionLabelActionSchema().dump(self)
 
 
 class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):

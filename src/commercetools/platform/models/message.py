@@ -19,6 +19,7 @@ if typing.TYPE_CHECKING:
     from .cart import (
         DiscountCodeState,
         DiscountedLineItemPriceForQuantity,
+        ItemShippingDetails,
         LineItem,
         ProductPublishScope,
         ShippingInfo,
@@ -35,7 +36,9 @@ if typing.TYPE_CHECKING:
         LastModifiedBy,
         LocalizedString,
         Money,
+        Price,
         Reference,
+        TypedMoney,
     )
     from .customer import Customer, CustomerReference
     from .customer_group import CustomerGroupReference
@@ -44,6 +47,7 @@ if typing.TYPE_CHECKING:
     from .order import (
         Delivery,
         DeliveryItem,
+        ItemState,
         Order,
         OrderState,
         Parcel,
@@ -67,6 +71,7 @@ __all__ = [
     "CategoryCreatedMessagePayload",
     "CategorySlugChangedMessage",
     "CategorySlugChangedMessagePayload",
+    "ContainerAndKey",
     "CustomLineItemStateTransitionMessage",
     "CustomLineItemStateTransitionMessagePayload",
     "CustomerAddressAddedMessage",
@@ -81,14 +86,22 @@ __all__ = [
     "CustomerCreatedMessagePayload",
     "CustomerDateOfBirthSetMessage",
     "CustomerDateOfBirthSetMessagePayload",
+    "CustomerDeletedMessage",
+    "CustomerDeletedMessagePayload",
     "CustomerEmailChangedMessage",
     "CustomerEmailChangedMessagePayload",
     "CustomerEmailVerifiedMessage",
     "CustomerEmailVerifiedMessagePayload",
+    "CustomerFirstNameSetMessage",
+    "CustomerFirstNameSetMessagePayload",
     "CustomerGroupSetMessage",
     "CustomerGroupSetMessagePayload",
+    "CustomerLastNameSetMessage",
+    "CustomerLastNameSetMessagePayload",
     "CustomerPasswordUpdatedMessage",
     "CustomerPasswordUpdatedMessagePayload",
+    "CustomerTitleSetMessage",
+    "CustomerTitleSetMessagePayload",
     "DeliveryAddedMessage",
     "DeliveryAddedMessagePayload",
     "DeliveryAddressSetMessage",
@@ -138,10 +151,16 @@ __all__ = [
     "OrderLineItemAddedMessagePayload",
     "OrderLineItemDiscountSetMessage",
     "OrderLineItemDiscountSetMessagePayload",
+    "OrderLineItemDistributionChannelSetMessage",
+    "OrderLineItemDistributionChannelSetMessagePayload",
+    "OrderLineItemRemovedMessage",
+    "OrderLineItemRemovedMessagePayload",
     "OrderPaymentStateChangedMessage",
     "OrderPaymentStateChangedMessagePayload",
     "OrderReturnInfoAddedMessage",
     "OrderReturnInfoAddedMessagePayload",
+    "OrderReturnInfoSetMessage",
+    "OrderReturnInfoSetMessagePayload",
     "OrderReturnShipmentStateChangedMessage",
     "OrderReturnShipmentStateChangedMessagePayload",
     "OrderShipmentStateChangedMessage",
@@ -216,12 +235,43 @@ __all__ = [
     "ReviewStateTransitionMessage",
     "ReviewStateTransitionMessagePayload",
     "ShoppingListStoreSetMessagePayload",
+    "StoreCreatedMessage",
+    "StoreCreatedMessagePayload",
+    "StoreDeletedMessage",
+    "StoreDeletedMessagePayload",
     "UserProvidedIdentifiers",
 ]
 
 
+class ContainerAndKey(_BaseType):
+    """Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources."""
+
+    #: User-defined identifier that is unique within the given container.
+    key: str
+    #: Namespace to group Custom Objects.
+    container: str
+
+    def __init__(self, *, key: str, container: str):
+        self.key = key
+        self.container = container
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ContainerAndKey":
+        from ._schemas.message import ContainerAndKeySchema
+
+        return ContainerAndKeySchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ContainerAndKeySchema
+
+        return ContainerAndKeySchema().dump(self)
+
+
 class Message(BaseResource):
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     sequence_number: int
     resource: "Reference"
@@ -298,6 +348,10 @@ class Message(BaseResource):
             from ._schemas.message import CustomerDateOfBirthSetMessageSchema
 
             return CustomerDateOfBirthSetMessageSchema().load(data)
+        if data["type"] == "CustomerDeleted":
+            from ._schemas.message import CustomerDeletedMessageSchema
+
+            return CustomerDeletedMessageSchema().load(data)
         if data["type"] == "CustomerEmailChanged":
             from ._schemas.message import CustomerEmailChangedMessageSchema
 
@@ -306,14 +360,26 @@ class Message(BaseResource):
             from ._schemas.message import CustomerEmailVerifiedMessageSchema
 
             return CustomerEmailVerifiedMessageSchema().load(data)
+        if data["type"] == "CustomerFirstNameSet":
+            from ._schemas.message import CustomerFirstNameSetMessageSchema
+
+            return CustomerFirstNameSetMessageSchema().load(data)
         if data["type"] == "CustomerGroupSet":
             from ._schemas.message import CustomerGroupSetMessageSchema
 
             return CustomerGroupSetMessageSchema().load(data)
+        if data["type"] == "CustomerLastNameSet":
+            from ._schemas.message import CustomerLastNameSetMessageSchema
+
+            return CustomerLastNameSetMessageSchema().load(data)
         if data["type"] == "CustomerPasswordUpdated":
             from ._schemas.message import CustomerPasswordUpdatedMessageSchema
 
             return CustomerPasswordUpdatedMessageSchema().load(data)
+        if data["type"] == "CustomerTitleSet":
+            from ._schemas.message import CustomerTitleSetMessageSchema
+
+            return CustomerTitleSetMessageSchema().load(data)
         if data["type"] == "DeliveryAdded":
             from ._schemas.message import DeliveryAddedMessageSchema
 
@@ -402,6 +468,16 @@ class Message(BaseResource):
             from ._schemas.message import OrderLineItemDiscountSetMessageSchema
 
             return OrderLineItemDiscountSetMessageSchema().load(data)
+        if data["type"] == "OrderLineItemDistributionChannelSet":
+            from ._schemas.message import (
+                OrderLineItemDistributionChannelSetMessageSchema,
+            )
+
+            return OrderLineItemDistributionChannelSetMessageSchema().load(data)
+        if data["type"] == "OrderLineItemRemoved":
+            from ._schemas.message import OrderLineItemRemovedMessageSchema
+
+            return OrderLineItemRemovedMessageSchema().load(data)
         if data["type"] == "OrderPaymentStateChanged":
             from ._schemas.message import OrderPaymentStateChangedMessageSchema
 
@@ -410,6 +486,10 @@ class Message(BaseResource):
             from ._schemas.message import OrderReturnInfoAddedMessageSchema
 
             return OrderReturnInfoAddedMessageSchema().load(data)
+        if data["type"] == "ReturnInfoSet":
+            from ._schemas.message import OrderReturnInfoSetMessageSchema
+
+            return OrderReturnInfoSetMessageSchema().load(data)
         if data["type"] == "OrderReturnShipmentStateChanged":
             from ._schemas.message import OrderReturnShipmentStateChangedMessageSchema
 
@@ -554,6 +634,14 @@ class Message(BaseResource):
             from ._schemas.message import ReviewStateTransitionMessageSchema
 
             return ReviewStateTransitionMessageSchema().load(data)
+        if data["type"] == "StoreCreated":
+            from ._schemas.message import StoreCreatedMessageSchema
+
+            return StoreCreatedMessageSchema().load(data)
+        if data["type"] == "StoreDeleted":
+            from ._schemas.message import StoreDeletedMessageSchema
+
+            return StoreDeletedMessageSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.message import MessageSchema
@@ -871,7 +959,7 @@ class CustomerAddressRemovedMessage(Message):
 
 
 class CustomerCompanyNameSetMessage(Message):
-    company_name: str
+    company_name: typing.Optional[str]
 
     def __init__(
         self,
@@ -888,7 +976,7 @@ class CustomerCompanyNameSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        company_name: str
+        company_name: typing.Optional[str] = None
     ):
         self.company_name = company_name
         super().__init__(
@@ -969,7 +1057,7 @@ class CustomerCreatedMessage(Message):
 
 
 class CustomerDateOfBirthSetMessage(Message):
-    date_of_birth: datetime.date
+    date_of_birth: typing.Optional[datetime.date]
 
     def __init__(
         self,
@@ -986,7 +1074,7 @@ class CustomerDateOfBirthSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        date_of_birth: datetime.date
+        date_of_birth: typing.Optional[datetime.date] = None
     ):
         self.date_of_birth = date_of_birth
         super().__init__(
@@ -1015,6 +1103,52 @@ class CustomerDateOfBirthSetMessage(Message):
         from ._schemas.message import CustomerDateOfBirthSetMessageSchema
 
         return CustomerDateOfBirthSetMessageSchema().dump(self)
+
+
+class CustomerDeletedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="CustomerDeleted",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerDeletedMessage":
+        from ._schemas.message import CustomerDeletedMessageSchema
+
+        return CustomerDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerDeletedMessageSchema
+
+        return CustomerDeletedMessageSchema().dump(self)
 
 
 class CustomerEmailChangedMessage(Message):
@@ -1112,8 +1246,8 @@ class CustomerEmailVerifiedMessage(Message):
         return CustomerEmailVerifiedMessageSchema().dump(self)
 
 
-class CustomerGroupSetMessage(Message):
-    customer_group: "CustomerGroupReference"
+class CustomerFirstNameSetMessage(Message):
+    first_name: typing.Optional[str]
 
     def __init__(
         self,
@@ -1130,7 +1264,57 @@ class CustomerGroupSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        customer_group: "CustomerGroupReference"
+        first_name: typing.Optional[str] = None
+    ):
+        self.first_name = first_name
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="CustomerFirstNameSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerFirstNameSetMessage":
+        from ._schemas.message import CustomerFirstNameSetMessageSchema
+
+        return CustomerFirstNameSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerFirstNameSetMessageSchema
+
+        return CustomerFirstNameSetMessageSchema().dump(self)
+
+
+class CustomerGroupSetMessage(Message):
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    customer_group: typing.Optional["CustomerGroupReference"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None
     ):
         self.customer_group = customer_group
         super().__init__(
@@ -1159,6 +1343,55 @@ class CustomerGroupSetMessage(Message):
         from ._schemas.message import CustomerGroupSetMessageSchema
 
         return CustomerGroupSetMessageSchema().dump(self)
+
+
+class CustomerLastNameSetMessage(Message):
+    last_name: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        last_name: typing.Optional[str] = None
+    ):
+        self.last_name = last_name
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="CustomerLastNameSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerLastNameSetMessage":
+        from ._schemas.message import CustomerLastNameSetMessageSchema
+
+        return CustomerLastNameSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerLastNameSetMessageSchema
+
+        return CustomerLastNameSetMessageSchema().dump(self)
 
 
 class CustomerPasswordUpdatedMessage(Message):
@@ -1209,6 +1442,55 @@ class CustomerPasswordUpdatedMessage(Message):
         from ._schemas.message import CustomerPasswordUpdatedMessageSchema
 
         return CustomerPasswordUpdatedMessageSchema().dump(self)
+
+
+class CustomerTitleSetMessage(Message):
+    title: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        title: typing.Optional[str] = None
+    ):
+        self.title = title
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="CustomerTitleSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerTitleSetMessage":
+        from ._schemas.message import CustomerTitleSetMessageSchema
+
+        return CustomerTitleSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerTitleSetMessageSchema
+
+        return CustomerTitleSetMessageSchema().dump(self)
 
 
 class DeliveryAddedMessage(Message):
@@ -1468,7 +1750,7 @@ class InventoryEntryCreatedMessage(Message):
 
 class InventoryEntryDeletedMessage(Message):
     sku: str
-    supply_channel: "ChannelReference"
+    supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
         self,
@@ -1486,7 +1768,7 @@ class InventoryEntryDeletedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         sku: str,
-        supply_channel: "ChannelReference"
+        supply_channel: typing.Optional["ChannelReference"] = None
     ):
         self.sku = sku
         self.supply_channel = supply_channel
@@ -1523,6 +1805,7 @@ class InventoryEntryQuantitySetMessage(Message):
     new_quantity_on_stock: int
     old_available_quantity: int
     new_available_quantity: int
+    supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
         self,
@@ -1542,12 +1825,14 @@ class InventoryEntryQuantitySetMessage(Message):
         old_quantity_on_stock: int,
         new_quantity_on_stock: int,
         old_available_quantity: int,
-        new_available_quantity: int
+        new_available_quantity: int,
+        supply_channel: typing.Optional["ChannelReference"] = None
     ):
         self.old_quantity_on_stock = old_quantity_on_stock
         self.new_quantity_on_stock = new_quantity_on_stock
         self.old_available_quantity = old_available_quantity
         self.new_available_quantity = new_available_quantity
+        self.supply_channel = supply_channel
         super().__init__(
             id=id,
             version=version,
@@ -1929,7 +2214,9 @@ class OrderCustomerEmailSetMessage(Message):
 
 
 class OrderCustomerGroupSetMessage(Message):
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -1982,8 +2269,10 @@ class OrderCustomerGroupSetMessage(Message):
 
 class OrderCustomerSetMessage(Message):
     customer: typing.Optional["CustomerReference"]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     old_customer: typing.Optional["CustomerReference"]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -2449,6 +2738,128 @@ class OrderLineItemDiscountSetMessage(Message):
         return OrderLineItemDiscountSetMessageSchema().dump(self)
 
 
+class OrderLineItemDistributionChannelSetMessage(Message):
+    line_item_id: str
+    distribution_channel: typing.Optional["ChannelReference"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        line_item_id: str,
+        distribution_channel: typing.Optional["ChannelReference"] = None
+    ):
+        self.line_item_id = line_item_id
+        self.distribution_channel = distribution_channel
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="OrderLineItemDistributionChannelSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderLineItemDistributionChannelSetMessage":
+        from ._schemas.message import OrderLineItemDistributionChannelSetMessageSchema
+
+        return OrderLineItemDistributionChannelSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderLineItemDistributionChannelSetMessageSchema
+
+        return OrderLineItemDistributionChannelSetMessageSchema().dump(self)
+
+
+class OrderLineItemRemovedMessage(Message):
+    line_item_id: str
+    removed_quantity: int
+    new_quantity: int
+    new_state: typing.List["ItemState"]
+    new_total_price: "TypedMoney"
+    new_taxed_price: typing.Optional["TaxedItemPrice"]
+    new_price: typing.Optional["Price"]
+    new_shipping_detail: typing.Optional["ItemShippingDetails"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        line_item_id: str,
+        removed_quantity: int,
+        new_quantity: int,
+        new_state: typing.List["ItemState"],
+        new_total_price: "TypedMoney",
+        new_taxed_price: typing.Optional["TaxedItemPrice"] = None,
+        new_price: typing.Optional["Price"] = None,
+        new_shipping_detail: typing.Optional["ItemShippingDetails"] = None
+    ):
+        self.line_item_id = line_item_id
+        self.removed_quantity = removed_quantity
+        self.new_quantity = new_quantity
+        self.new_state = new_state
+        self.new_total_price = new_total_price
+        self.new_taxed_price = new_taxed_price
+        self.new_price = new_price
+        self.new_shipping_detail = new_shipping_detail
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="OrderLineItemRemoved",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderLineItemRemovedMessage":
+        from ._schemas.message import OrderLineItemRemovedMessageSchema
+
+        return OrderLineItemRemovedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderLineItemRemovedMessageSchema
+
+        return OrderLineItemRemovedMessageSchema().dump(self)
+
+
 class OrderPaymentStateChangedMessage(Message):
     payment_state: "PaymentState"
     old_payment_state: typing.Optional["PaymentState"]
@@ -2548,6 +2959,55 @@ class OrderReturnInfoAddedMessage(Message):
         from ._schemas.message import OrderReturnInfoAddedMessageSchema
 
         return OrderReturnInfoAddedMessageSchema().dump(self)
+
+
+class OrderReturnInfoSetMessage(Message):
+    return_info: typing.Optional[typing.List["ReturnInfo"]]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        return_info: typing.Optional[typing.List["ReturnInfo"]] = None
+    ):
+        self.return_info = return_info
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="ReturnInfoSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderReturnInfoSetMessage":
+        from ._schemas.message import OrderReturnInfoSetMessageSchema
+
+        return OrderReturnInfoSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderReturnInfoSetMessageSchema
+
+        return OrderReturnInfoSetMessageSchema().dump(self)
 
 
 class OrderReturnShipmentStateChangedMessage(Message):
@@ -4473,6 +4933,109 @@ class ReviewStateTransitionMessage(Message):
         return ReviewStateTransitionMessageSchema().dump(self)
 
 
+class StoreCreatedMessage(Message):
+    name: typing.Optional["LocalizedString"]
+    languages: typing.List["str"]
+    distribution_channels: typing.List["ChannelReference"]
+    supply_channels: typing.List["ChannelReference"]
+    custom: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        name: typing.Optional["LocalizedString"] = None,
+        languages: typing.List["str"],
+        distribution_channels: typing.List["ChannelReference"],
+        supply_channels: typing.List["ChannelReference"],
+        custom: typing.Optional["CustomFields"] = None
+    ):
+        self.name = name
+        self.languages = languages
+        self.distribution_channels = distribution_channels
+        self.supply_channels = supply_channels
+        self.custom = custom
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StoreCreated",
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StoreCreatedMessage":
+        from ._schemas.message import StoreCreatedMessageSchema
+
+        return StoreCreatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StoreCreatedMessageSchema
+
+        return StoreCreatedMessageSchema().dump(self)
+
+
+class StoreDeletedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StoreDeleted",
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StoreDeletedMessage":
+        from ._schemas.message import StoreDeletedMessageSchema
+
+        return StoreDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StoreDeletedMessageSchema
+
+        return StoreDeletedMessageSchema().dump(self)
+
+
 class UserProvidedIdentifiers(_BaseType):
     key: typing.Optional[str]
     external_id: typing.Optional[str]
@@ -4480,6 +5043,8 @@ class UserProvidedIdentifiers(_BaseType):
     customer_number: typing.Optional[str]
     sku: typing.Optional[str]
     slug: typing.Optional["LocalizedString"]
+    #: Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
+    container_and_key: typing.Optional["ContainerAndKey"]
 
     def __init__(
         self,
@@ -4489,7 +5054,8 @@ class UserProvidedIdentifiers(_BaseType):
         order_number: typing.Optional[str] = None,
         customer_number: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
-        slug: typing.Optional["LocalizedString"] = None
+        slug: typing.Optional["LocalizedString"] = None,
+        container_and_key: typing.Optional["ContainerAndKey"] = None
     ):
         self.key = key
         self.external_id = external_id
@@ -4497,6 +5063,7 @@ class UserProvidedIdentifiers(_BaseType):
         self.customer_number = customer_number
         self.sku = sku
         self.slug = slug
+        self.container_and_key = container_and_key
         super().__init__()
 
     @classmethod
@@ -4560,6 +5127,10 @@ class MessagePayload(_BaseType):
             from ._schemas.message import CustomerDateOfBirthSetMessagePayloadSchema
 
             return CustomerDateOfBirthSetMessagePayloadSchema().load(data)
+        if data["type"] == "CustomerDeleted":
+            from ._schemas.message import CustomerDeletedMessagePayloadSchema
+
+            return CustomerDeletedMessagePayloadSchema().load(data)
         if data["type"] == "CustomerEmailChanged":
             from ._schemas.message import CustomerEmailChangedMessagePayloadSchema
 
@@ -4568,14 +5139,26 @@ class MessagePayload(_BaseType):
             from ._schemas.message import CustomerEmailVerifiedMessagePayloadSchema
 
             return CustomerEmailVerifiedMessagePayloadSchema().load(data)
+        if data["type"] == "CustomerFirstNameSet":
+            from ._schemas.message import CustomerFirstNameSetMessagePayloadSchema
+
+            return CustomerFirstNameSetMessagePayloadSchema().load(data)
         if data["type"] == "CustomerGroupSet":
             from ._schemas.message import CustomerGroupSetMessagePayloadSchema
 
             return CustomerGroupSetMessagePayloadSchema().load(data)
+        if data["type"] == "CustomerLastNameSet":
+            from ._schemas.message import CustomerLastNameSetMessagePayloadSchema
+
+            return CustomerLastNameSetMessagePayloadSchema().load(data)
         if data["type"] == "CustomerPasswordUpdated":
             from ._schemas.message import CustomerPasswordUpdatedMessagePayloadSchema
 
             return CustomerPasswordUpdatedMessagePayloadSchema().load(data)
+        if data["type"] == "CustomerTitleSet":
+            from ._schemas.message import CustomerTitleSetMessagePayloadSchema
+
+            return CustomerTitleSetMessagePayloadSchema().load(data)
         if data["type"] == "DeliveryAdded":
             from ._schemas.message import DeliveryAddedMessagePayloadSchema
 
@@ -4666,6 +5249,16 @@ class MessagePayload(_BaseType):
             from ._schemas.message import OrderLineItemDiscountSetMessagePayloadSchema
 
             return OrderLineItemDiscountSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderLineItemDistributionChannelSet":
+            from ._schemas.message import (
+                OrderLineItemDistributionChannelSetMessagePayloadSchema,
+            )
+
+            return OrderLineItemDistributionChannelSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderLineItemRemoved":
+            from ._schemas.message import OrderLineItemRemovedMessagePayloadSchema
+
+            return OrderLineItemRemovedMessagePayloadSchema().load(data)
         if data["type"] == "OrderPaymentStateChanged":
             from ._schemas.message import OrderPaymentStateChangedMessagePayloadSchema
 
@@ -4674,6 +5267,10 @@ class MessagePayload(_BaseType):
             from ._schemas.message import OrderReturnInfoAddedMessagePayloadSchema
 
             return OrderReturnInfoAddedMessagePayloadSchema().load(data)
+        if data["type"] == "ReturnInfoSet":
+            from ._schemas.message import OrderReturnInfoSetMessagePayloadSchema
+
+            return OrderReturnInfoSetMessagePayloadSchema().load(data)
         if data["type"] == "OrderReturnShipmentStateChanged":
             from ._schemas.message import (
                 OrderReturnShipmentStateChangedMessagePayloadSchema,
@@ -4834,6 +5431,14 @@ class MessagePayload(_BaseType):
             from ._schemas.message import ShoppingListStoreSetMessagePayloadSchema
 
             return ShoppingListStoreSetMessagePayloadSchema().load(data)
+        if data["type"] == "StoreCreated":
+            from ._schemas.message import StoreCreatedMessagePayloadSchema
+
+            return StoreCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "StoreDeleted":
+            from ._schemas.message import StoreDeletedMessagePayloadSchema
+
+            return StoreDeletedMessagePayloadSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.message import MessagePayloadSchema
@@ -4991,9 +5596,9 @@ class CustomerAddressRemovedMessagePayload(MessagePayload):
 
 
 class CustomerCompanyNameSetMessagePayload(MessagePayload):
-    company_name: str
+    company_name: typing.Optional[str]
 
-    def __init__(self, *, company_name: str):
+    def __init__(self, *, company_name: typing.Optional[str] = None):
         self.company_name = company_name
         super().__init__(type="CustomerCompanyNameSet")
 
@@ -5033,9 +5638,9 @@ class CustomerCreatedMessagePayload(MessagePayload):
 
 
 class CustomerDateOfBirthSetMessagePayload(MessagePayload):
-    date_of_birth: datetime.date
+    date_of_birth: typing.Optional[datetime.date]
 
-    def __init__(self, *, date_of_birth: datetime.date):
+    def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
         self.date_of_birth = date_of_birth
         super().__init__(type="CustomerDateOfBirthSet")
 
@@ -5051,6 +5656,25 @@ class CustomerDateOfBirthSetMessagePayload(MessagePayload):
         from ._schemas.message import CustomerDateOfBirthSetMessagePayloadSchema
 
         return CustomerDateOfBirthSetMessagePayloadSchema().dump(self)
+
+
+class CustomerDeletedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="CustomerDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerDeletedMessagePayload":
+        from ._schemas.message import CustomerDeletedMessagePayloadSchema
+
+        return CustomerDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerDeletedMessagePayloadSchema
+
+        return CustomerDeletedMessagePayloadSchema().dump(self)
 
 
 class CustomerEmailChangedMessagePayload(MessagePayload):
@@ -5093,10 +5717,34 @@ class CustomerEmailVerifiedMessagePayload(MessagePayload):
         return CustomerEmailVerifiedMessagePayloadSchema().dump(self)
 
 
-class CustomerGroupSetMessagePayload(MessagePayload):
-    customer_group: "CustomerGroupReference"
+class CustomerFirstNameSetMessagePayload(MessagePayload):
+    first_name: typing.Optional[str]
 
-    def __init__(self, *, customer_group: "CustomerGroupReference"):
+    def __init__(self, *, first_name: typing.Optional[str] = None):
+        self.first_name = first_name
+        super().__init__(type="CustomerFirstNameSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerFirstNameSetMessagePayload":
+        from ._schemas.message import CustomerFirstNameSetMessagePayloadSchema
+
+        return CustomerFirstNameSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerFirstNameSetMessagePayloadSchema
+
+        return CustomerFirstNameSetMessagePayloadSchema().dump(self)
+
+
+class CustomerGroupSetMessagePayload(MessagePayload):
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    customer_group: typing.Optional["CustomerGroupReference"]
+
+    def __init__(
+        self, *, customer_group: typing.Optional["CustomerGroupReference"] = None
+    ):
         self.customer_group = customer_group
         super().__init__(type="CustomerGroupSet")
 
@@ -5112,6 +5760,27 @@ class CustomerGroupSetMessagePayload(MessagePayload):
         from ._schemas.message import CustomerGroupSetMessagePayloadSchema
 
         return CustomerGroupSetMessagePayloadSchema().dump(self)
+
+
+class CustomerLastNameSetMessagePayload(MessagePayload):
+    last_name: typing.Optional[str]
+
+    def __init__(self, *, last_name: typing.Optional[str] = None):
+        self.last_name = last_name
+        super().__init__(type="CustomerLastNameSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerLastNameSetMessagePayload":
+        from ._schemas.message import CustomerLastNameSetMessagePayloadSchema
+
+        return CustomerLastNameSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerLastNameSetMessagePayloadSchema
+
+        return CustomerLastNameSetMessagePayloadSchema().dump(self)
 
 
 class CustomerPasswordUpdatedMessagePayload(MessagePayload):
@@ -5134,6 +5803,27 @@ class CustomerPasswordUpdatedMessagePayload(MessagePayload):
         from ._schemas.message import CustomerPasswordUpdatedMessagePayloadSchema
 
         return CustomerPasswordUpdatedMessagePayloadSchema().dump(self)
+
+
+class CustomerTitleSetMessagePayload(MessagePayload):
+    title: typing.Optional[str]
+
+    def __init__(self, *, title: typing.Optional[str] = None):
+        self.title = title
+        super().__init__(type="CustomerTitleSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerTitleSetMessagePayload":
+        from ._schemas.message import CustomerTitleSetMessagePayloadSchema
+
+        return CustomerTitleSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomerTitleSetMessagePayloadSchema
+
+        return CustomerTitleSetMessagePayloadSchema().dump(self)
 
 
 class DeliveryAddedMessagePayload(MessagePayload):
@@ -5263,9 +5953,11 @@ class InventoryEntryCreatedMessagePayload(MessagePayload):
 
 class InventoryEntryDeletedMessagePayload(MessagePayload):
     sku: str
-    supply_channel: "ChannelReference"
+    supply_channel: typing.Optional["ChannelReference"]
 
-    def __init__(self, *, sku: str, supply_channel: "ChannelReference"):
+    def __init__(
+        self, *, sku: str, supply_channel: typing.Optional["ChannelReference"] = None
+    ):
         self.sku = sku
         self.supply_channel = supply_channel
         super().__init__(type="InventoryEntryDeleted")
@@ -5289,6 +5981,7 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
     new_quantity_on_stock: int
     old_available_quantity: int
     new_available_quantity: int
+    supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
         self,
@@ -5296,12 +5989,14 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
         old_quantity_on_stock: int,
         new_quantity_on_stock: int,
         old_available_quantity: int,
-        new_available_quantity: int
+        new_available_quantity: int,
+        supply_channel: typing.Optional["ChannelReference"] = None
     ):
         self.old_quantity_on_stock = old_quantity_on_stock
         self.new_quantity_on_stock = new_quantity_on_stock
         self.old_available_quantity = old_available_quantity
         self.new_available_quantity = new_available_quantity
+        self.supply_channel = supply_channel
         super().__init__(type="InventoryEntryQuantitySet")
 
     @classmethod
@@ -5466,7 +6161,9 @@ class OrderCustomerEmailSetMessagePayload(MessagePayload):
 
 
 class OrderCustomerGroupSetMessagePayload(MessagePayload):
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -5495,8 +6192,10 @@ class OrderCustomerGroupSetMessagePayload(MessagePayload):
 
 class OrderCustomerSetMessagePayload(MessagePayload):
     customer: typing.Optional["CustomerReference"]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     old_customer: typing.Optional["CustomerReference"]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -5724,6 +6423,84 @@ class OrderLineItemDiscountSetMessagePayload(MessagePayload):
         return OrderLineItemDiscountSetMessagePayloadSchema().dump(self)
 
 
+class OrderLineItemDistributionChannelSetMessagePayload(MessagePayload):
+    line_item_id: str
+    distribution_channel: typing.Optional["ChannelReference"]
+
+    def __init__(
+        self,
+        *,
+        line_item_id: str,
+        distribution_channel: typing.Optional["ChannelReference"] = None
+    ):
+        self.line_item_id = line_item_id
+        self.distribution_channel = distribution_channel
+        super().__init__(type="OrderLineItemDistributionChannelSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderLineItemDistributionChannelSetMessagePayload":
+        from ._schemas.message import (
+            OrderLineItemDistributionChannelSetMessagePayloadSchema,
+        )
+
+        return OrderLineItemDistributionChannelSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import (
+            OrderLineItemDistributionChannelSetMessagePayloadSchema,
+        )
+
+        return OrderLineItemDistributionChannelSetMessagePayloadSchema().dump(self)
+
+
+class OrderLineItemRemovedMessagePayload(MessagePayload):
+    line_item_id: str
+    removed_quantity: int
+    new_quantity: int
+    new_state: typing.List["ItemState"]
+    new_total_price: "TypedMoney"
+    new_taxed_price: typing.Optional["TaxedItemPrice"]
+    new_price: typing.Optional["Price"]
+    new_shipping_detail: typing.Optional["ItemShippingDetails"]
+
+    def __init__(
+        self,
+        *,
+        line_item_id: str,
+        removed_quantity: int,
+        new_quantity: int,
+        new_state: typing.List["ItemState"],
+        new_total_price: "TypedMoney",
+        new_taxed_price: typing.Optional["TaxedItemPrice"] = None,
+        new_price: typing.Optional["Price"] = None,
+        new_shipping_detail: typing.Optional["ItemShippingDetails"] = None
+    ):
+        self.line_item_id = line_item_id
+        self.removed_quantity = removed_quantity
+        self.new_quantity = new_quantity
+        self.new_state = new_state
+        self.new_total_price = new_total_price
+        self.new_taxed_price = new_taxed_price
+        self.new_price = new_price
+        self.new_shipping_detail = new_shipping_detail
+        super().__init__(type="OrderLineItemRemoved")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderLineItemRemovedMessagePayload":
+        from ._schemas.message import OrderLineItemRemovedMessagePayloadSchema
+
+        return OrderLineItemRemovedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderLineItemRemovedMessagePayloadSchema
+
+        return OrderLineItemRemovedMessagePayloadSchema().dump(self)
+
+
 class OrderPaymentStateChangedMessagePayload(MessagePayload):
     payment_state: "PaymentState"
     old_payment_state: typing.Optional["PaymentState"]
@@ -5771,6 +6548,29 @@ class OrderReturnInfoAddedMessagePayload(MessagePayload):
         from ._schemas.message import OrderReturnInfoAddedMessagePayloadSchema
 
         return OrderReturnInfoAddedMessagePayloadSchema().dump(self)
+
+
+class OrderReturnInfoSetMessagePayload(MessagePayload):
+    return_info: typing.Optional[typing.List["ReturnInfo"]]
+
+    def __init__(
+        self, *, return_info: typing.Optional[typing.List["ReturnInfo"]] = None
+    ):
+        self.return_info = return_info
+        super().__init__(type="ReturnInfoSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderReturnInfoSetMessagePayload":
+        from ._schemas.message import OrderReturnInfoSetMessagePayloadSchema
+
+        return OrderReturnInfoSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderReturnInfoSetMessagePayloadSchema
+
+        return OrderReturnInfoSetMessagePayloadSchema().dump(self)
 
 
 class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
@@ -5939,10 +6739,18 @@ class OrderStateChangedMessagePayload(MessagePayload):
 
 class OrderStateTransitionMessagePayload(MessagePayload):
     state: "StateReference"
+    old_state: typing.Optional["StateReference"]
     force: bool
 
-    def __init__(self, *, state: "StateReference", force: bool):
+    def __init__(
+        self,
+        *,
+        state: "StateReference",
+        old_state: typing.Optional["StateReference"] = None,
+        force: bool
+    ):
         self.state = state
+        self.old_state = old_state
         self.force = force
         super().__init__(type="OrderStateTransition")
 
@@ -6726,3 +7534,59 @@ class ShoppingListStoreSetMessagePayload(MessagePayload):
         from ._schemas.message import ShoppingListStoreSetMessagePayloadSchema
 
         return ShoppingListStoreSetMessagePayloadSchema().dump(self)
+
+
+class StoreCreatedMessagePayload(MessagePayload):
+    name: typing.Optional["LocalizedString"]
+    languages: typing.List["str"]
+    distribution_channels: typing.List["ChannelReference"]
+    supply_channels: typing.List["ChannelReference"]
+    custom: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        name: typing.Optional["LocalizedString"] = None,
+        languages: typing.List["str"],
+        distribution_channels: typing.List["ChannelReference"],
+        supply_channels: typing.List["ChannelReference"],
+        custom: typing.Optional["CustomFields"] = None
+    ):
+        self.name = name
+        self.languages = languages
+        self.distribution_channels = distribution_channels
+        self.supply_channels = supply_channels
+        self.custom = custom
+        super().__init__(type="StoreCreated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreCreatedMessagePayload":
+        from ._schemas.message import StoreCreatedMessagePayloadSchema
+
+        return StoreCreatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StoreCreatedMessagePayloadSchema
+
+        return StoreCreatedMessagePayloadSchema().dump(self)
+
+
+class StoreDeletedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="StoreDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreDeletedMessagePayload":
+        from ._schemas.message import StoreDeletedMessagePayloadSchema
+
+        return StoreDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StoreDeletedMessagePayloadSchema
+
+        return StoreDeletedMessagePayloadSchema().dump(self)

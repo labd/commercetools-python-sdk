@@ -24,6 +24,7 @@ __all__ = [
     "DeliveryFormat",
     "DeliveryPlatformFormat",
     "Destination",
+    "EventBridgeDestination",
     "GoogleCloudPubSubDestination",
     "IronMqDestination",
     "MessageDelivery",
@@ -148,6 +149,10 @@ class Destination(_BaseType):
             from ._schemas.subscription import AzureServiceBusDestinationSchema
 
             return AzureServiceBusDestinationSchema().load(data)
+        if data["type"] == "EventBridge":
+            from ._schemas.subscription import EventBridgeDestinationSchema
+
+            return EventBridgeDestinationSchema().load(data)
         if data["type"] == "GoogleCloudPubSub":
             from ._schemas.subscription import GoogleCloudPubSubDestinationSchema
 
@@ -213,6 +218,33 @@ class AzureServiceBusDestination(Destination):
         from ._schemas.subscription import AzureServiceBusDestinationSchema
 
         return AzureServiceBusDestinationSchema().dump(self)
+
+
+class EventBridgeDestination(Destination):
+    """[AWS EventBridge](https://aws.amazon.com/eventbridge/) can be used to push events and messages to a serverless event bus that can forward them to AWS SQS, SNS, Lambda, and other AWS services based on forwarding rules."""
+
+    #: AWS region to which commercetools sends the events.
+    region: str
+    #: ID of the AWS account that receives events from the commercetools platform.
+    account_id: str
+
+    def __init__(self, *, region: str, account_id: str):
+        self.region = region
+        self.account_id = account_id
+        super().__init__(type="EventBridge")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "EventBridgeDestination":
+        from ._schemas.subscription import EventBridgeDestinationSchema
+
+        return EventBridgeDestinationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import EventBridgeDestinationSchema
+
+        return EventBridgeDestinationSchema().dump(self)
 
 
 class GoogleCloudPubSubDestination(Destination):
@@ -355,9 +387,9 @@ class SqsDestination(Destination):
 
 
 class Subscription(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     changes: typing.List["ChangeSubscription"]
     destination: "Destination"

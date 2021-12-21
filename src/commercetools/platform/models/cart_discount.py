@@ -71,16 +71,16 @@ __all__ = [
 
 
 class CartDiscount(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     name: "LocalizedString"
     #: User-specific unique identifier for a cart discount.
     #: Must be unique across a project.
     key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
-    value: "CartDiscountValueDraft"
+    value: "CartDiscountValue"
     #: A valid Cart predicate.
     cart_predicate: str
     #: Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
@@ -116,7 +116,7 @@ class CartDiscount(BaseResource):
         name: "LocalizedString",
         key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
-        value: "CartDiscountValueDraft",
+        value: "CartDiscountValue",
         cart_predicate: str,
         target: typing.Optional["CartDiscountTarget"] = None,
         sort_order: str,
@@ -186,7 +186,7 @@ class CartDiscountDraft(_BaseType):
     valid_until: typing.Optional[datetime.datetime]
     #: States whether the discount can only be used in a connection with a DiscountCode.
     #: Defaults to `false`.
-    requires_discount_code: bool
+    requires_discount_code: typing.Optional[bool]
     #: Specifies whether the application of this discount causes the following discounts to be ignored.
     #: Defaults to Stacking.
     stacking_mode: typing.Optional["StackingMode"]
@@ -205,7 +205,7 @@ class CartDiscountDraft(_BaseType):
         is_active: typing.Optional[bool] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        requires_discount_code: bool,
+        requires_discount_code: typing.Optional[bool] = None,
         stacking_mode: typing.Optional["StackingMode"] = None,
         custom: typing.Optional["CustomFields"] = None
     ):

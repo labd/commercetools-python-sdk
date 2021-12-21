@@ -410,7 +410,7 @@ class DateTimeField(CustomField):
 class ReferenceField(CustomField):
     """A field with a reference value."""
 
-    #: References a resource by its key
+    #: References a resource by key
     value: "KeyReference"
 
     def __init__(self, *, value: "KeyReference"):

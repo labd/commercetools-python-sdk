@@ -37,7 +37,6 @@ class ByProjectKeyMeOrdersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Order"]:
-        """Get Order by ID"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/me/orders/{self._id}",
@@ -47,7 +46,7 @@ class ByProjectKeyMeOrdersByIDRequestBuilder:
         )
         if response.status_code == 200:
             return Order.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

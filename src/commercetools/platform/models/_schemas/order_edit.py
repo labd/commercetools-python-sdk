@@ -150,6 +150,12 @@ class OrderEditSchema(BaseResourceSchema):
                 "setBillingAddress": helpers.absmod(
                     __name__, ".StagedOrderSetBillingAddressActionSchema"
                 ),
+                "setBillingAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetBillingAddressCustomFieldActionSchema"
+                ),
+                "setBillingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetBillingAddressCustomTypeActionSchema"
+                ),
                 "setCountry": helpers.absmod(
                     __name__, ".StagedOrderSetCountryActionSchema"
                 ),
@@ -189,8 +195,27 @@ class OrderEditSchema(BaseResourceSchema):
                 "setDeliveryAddress": helpers.absmod(
                     __name__, ".StagedOrderSetDeliveryAddressActionSchema"
                 ),
+                "setDeliveryAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryAddressCustomFieldActionSchema"
+                ),
+                "setDeliveryAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryAddressCustomTypeActionSchema"
+                ),
+                "setDeliveryCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryCustomFieldActionSchema"
+                ),
+                "setDeliveryCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryCustomTypeActionSchema"
+                ),
                 "setDeliveryItems": helpers.absmod(
                     __name__, ".StagedOrderSetDeliveryItemsActionSchema"
+                ),
+                "setItemShippingAddressCustomField": helpers.absmod(
+                    __name__,
+                    ".StagedOrderSetItemShippingAddressCustomFieldActionSchema",
+                ),
+                "setItemShippingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetItemShippingAddressCustomTypeActionSchema"
                 ),
                 "setLineItemCustomField": helpers.absmod(
                     __name__, ".StagedOrderSetLineItemCustomFieldActionSchema"
@@ -234,6 +259,9 @@ class OrderEditSchema(BaseResourceSchema):
                 "setParcelTrackingData": helpers.absmod(
                     __name__, ".StagedOrderSetParcelTrackingDataActionSchema"
                 ),
+                "setReturnInfo": helpers.absmod(
+                    __name__, ".StagedOrderSetReturnInfoActionSchema"
+                ),
                 "setReturnPaymentState": helpers.absmod(
                     __name__, ".StagedOrderSetReturnPaymentStateActionSchema"
                 ),
@@ -250,6 +278,12 @@ class OrderEditSchema(BaseResourceSchema):
                 "setShippingAddressAndShippingMethod": helpers.absmod(
                     __name__,
                     ".StagedOrderSetShippingAddressAndShippingMethodActionSchema",
+                ),
+                "setShippingAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetShippingAddressCustomFieldActionSchema"
+                ),
+                "setShippingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetShippingAddressCustomTypeActionSchema"
                 ),
                 "setShippingMethod": helpers.absmod(
                     __name__, ".StagedOrderSetShippingMethodActionSchema"
@@ -435,6 +469,12 @@ class OrderEditDraftSchema(helpers.BaseSchema):
                 "setBillingAddress": helpers.absmod(
                     __name__, ".StagedOrderSetBillingAddressActionSchema"
                 ),
+                "setBillingAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetBillingAddressCustomFieldActionSchema"
+                ),
+                "setBillingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetBillingAddressCustomTypeActionSchema"
+                ),
                 "setCountry": helpers.absmod(
                     __name__, ".StagedOrderSetCountryActionSchema"
                 ),
@@ -474,8 +514,27 @@ class OrderEditDraftSchema(helpers.BaseSchema):
                 "setDeliveryAddress": helpers.absmod(
                     __name__, ".StagedOrderSetDeliveryAddressActionSchema"
                 ),
+                "setDeliveryAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryAddressCustomFieldActionSchema"
+                ),
+                "setDeliveryAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryAddressCustomTypeActionSchema"
+                ),
+                "setDeliveryCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryCustomFieldActionSchema"
+                ),
+                "setDeliveryCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryCustomTypeActionSchema"
+                ),
                 "setDeliveryItems": helpers.absmod(
                     __name__, ".StagedOrderSetDeliveryItemsActionSchema"
+                ),
+                "setItemShippingAddressCustomField": helpers.absmod(
+                    __name__,
+                    ".StagedOrderSetItemShippingAddressCustomFieldActionSchema",
+                ),
+                "setItemShippingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetItemShippingAddressCustomTypeActionSchema"
                 ),
                 "setLineItemCustomField": helpers.absmod(
                     __name__, ".StagedOrderSetLineItemCustomFieldActionSchema"
@@ -519,6 +578,9 @@ class OrderEditDraftSchema(helpers.BaseSchema):
                 "setParcelTrackingData": helpers.absmod(
                     __name__, ".StagedOrderSetParcelTrackingDataActionSchema"
                 ),
+                "setReturnInfo": helpers.absmod(
+                    __name__, ".StagedOrderSetReturnInfoActionSchema"
+                ),
                 "setReturnPaymentState": helpers.absmod(
                     __name__, ".StagedOrderSetReturnPaymentStateActionSchema"
                 ),
@@ -535,6 +597,12 @@ class OrderEditDraftSchema(helpers.BaseSchema):
                 "setShippingAddressAndShippingMethod": helpers.absmod(
                     __name__,
                     ".StagedOrderSetShippingAddressAndShippingMethodActionSchema",
+                ),
+                "setShippingAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetShippingAddressCustomFieldActionSchema"
+                ),
+                "setShippingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetShippingAddressCustomTypeActionSchema"
                 ),
                 "setShippingMethod": helpers.absmod(
                     __name__, ".StagedOrderSetShippingMethodActionSchema"
@@ -716,6 +784,7 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "AttributeNameDoesNotExist": helpers.absmod(
                     __name__, ".error.AttributeNameDoesNotExistErrorSchema"
                 ),
+                "BadGateway": helpers.absmod(__name__, ".error.BadGatewayErrorSchema"),
                 "ConcurrentModification": helpers.absmod(
                     __name__, ".error.ConcurrentModificationErrorSchema"
                 ),
@@ -942,17 +1011,29 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "CustomerDateOfBirthSet": helpers.absmod(
                     __name__, ".message.CustomerDateOfBirthSetMessagePayloadSchema"
                 ),
+                "CustomerDeleted": helpers.absmod(
+                    __name__, ".message.CustomerDeletedMessagePayloadSchema"
+                ),
                 "CustomerEmailChanged": helpers.absmod(
                     __name__, ".message.CustomerEmailChangedMessagePayloadSchema"
                 ),
                 "CustomerEmailVerified": helpers.absmod(
                     __name__, ".message.CustomerEmailVerifiedMessagePayloadSchema"
                 ),
+                "CustomerFirstNameSet": helpers.absmod(
+                    __name__, ".message.CustomerFirstNameSetMessagePayloadSchema"
+                ),
                 "CustomerGroupSet": helpers.absmod(
                     __name__, ".message.CustomerGroupSetMessagePayloadSchema"
                 ),
+                "CustomerLastNameSet": helpers.absmod(
+                    __name__, ".message.CustomerLastNameSetMessagePayloadSchema"
+                ),
                 "CustomerPasswordUpdated": helpers.absmod(
                     __name__, ".message.CustomerPasswordUpdatedMessagePayloadSchema"
+                ),
+                "CustomerTitleSet": helpers.absmod(
+                    __name__, ".message.CustomerTitleSetMessagePayloadSchema"
                 ),
                 "DeliveryAdded": helpers.absmod(
                     __name__, ".message.DeliveryAddedMessagePayloadSchema"
@@ -1021,11 +1102,21 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "OrderLineItemDiscountSet": helpers.absmod(
                     __name__, ".message.OrderLineItemDiscountSetMessagePayloadSchema"
                 ),
+                "OrderLineItemDistributionChannelSet": helpers.absmod(
+                    __name__,
+                    ".message.OrderLineItemDistributionChannelSetMessagePayloadSchema",
+                ),
+                "OrderLineItemRemoved": helpers.absmod(
+                    __name__, ".message.OrderLineItemRemovedMessagePayloadSchema"
+                ),
                 "OrderPaymentStateChanged": helpers.absmod(
                     __name__, ".message.OrderPaymentStateChangedMessagePayloadSchema"
                 ),
                 "ReturnInfoAdded": helpers.absmod(
                     __name__, ".message.OrderReturnInfoAddedMessagePayloadSchema"
+                ),
+                "ReturnInfoSet": helpers.absmod(
+                    __name__, ".message.OrderReturnInfoSetMessagePayloadSchema"
                 ),
                 "OrderReturnShipmentStateChanged": helpers.absmod(
                     __name__,
@@ -1144,6 +1235,12 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "ShoppingListStoreSet": helpers.absmod(
                     __name__, ".message.ShoppingListStoreSetMessagePayloadSchema"
                 ),
+                "StoreCreated": helpers.absmod(
+                    __name__, ".message.StoreCreatedMessagePayloadSchema"
+                ),
+                "StoreDeleted": helpers.absmod(
+                    __name__, ".message.StoreDeletedMessagePayloadSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -1170,12 +1267,6 @@ class OrderEditUpdateSchema(helpers.BaseSchema):
                 "addStagedAction": helpers.absmod(
                     __name__, ".OrderEditAddStagedActionActionSchema"
                 ),
-                "setBillingAddressCustomField": helpers.absmod(
-                    __name__, ".OrderEditSetBillingAddressCustomFieldActionSchema"
-                ),
-                "setBillingAddressCustomType": helpers.absmod(
-                    __name__, ".OrderEditSetBillingAddressCustomTypeActionSchema"
-                ),
                 "setComment": helpers.absmod(
                     __name__, ".OrderEditSetCommentActionSchema"
                 ),
@@ -1185,25 +1276,7 @@ class OrderEditUpdateSchema(helpers.BaseSchema):
                 "setCustomType": helpers.absmod(
                     __name__, ".OrderEditSetCustomTypeActionSchema"
                 ),
-                "setDeliveryAddressCustomField": helpers.absmod(
-                    __name__, ".OrderEditSetDeliveryAddressCustomFieldActionSchema"
-                ),
-                "setDeliveryAddressCustomType": helpers.absmod(
-                    __name__, ".OrderEditSetDeliveryAddressCustomTypeActionSchema"
-                ),
-                "setItemShippingAddressCustomField": helpers.absmod(
-                    __name__, ".OrderEditSetItemShippingAddressCustomFieldActionSchema"
-                ),
-                "setItemShippingAddressCustomType": helpers.absmod(
-                    __name__, ".OrderEditSetItemShippingAddressCustomTypeActionSchema"
-                ),
                 "setKey": helpers.absmod(__name__, ".OrderEditSetKeyActionSchema"),
-                "setShippingAddressCustomField": helpers.absmod(
-                    __name__, ".OrderEditSetShippingAddressCustomFieldActionSchema"
-                ),
-                "setShippingAddressCustomType": helpers.absmod(
-                    __name__, ".OrderEditSetShippingAddressCustomTypeActionSchema"
-                ),
                 "setStagedActions": helpers.absmod(
                     __name__, ".OrderEditSetStagedActionsActionSchema"
                 ),
@@ -1370,6 +1443,12 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
             "setBillingAddress": helpers.absmod(
                 __name__, ".StagedOrderSetBillingAddressActionSchema"
             ),
+            "setBillingAddressCustomField": helpers.absmod(
+                __name__, ".StagedOrderSetBillingAddressCustomFieldActionSchema"
+            ),
+            "setBillingAddressCustomType": helpers.absmod(
+                __name__, ".StagedOrderSetBillingAddressCustomTypeActionSchema"
+            ),
             "setCountry": helpers.absmod(
                 __name__, ".StagedOrderSetCountryActionSchema"
             ),
@@ -1409,8 +1488,26 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
             "setDeliveryAddress": helpers.absmod(
                 __name__, ".StagedOrderSetDeliveryAddressActionSchema"
             ),
+            "setDeliveryAddressCustomField": helpers.absmod(
+                __name__, ".StagedOrderSetDeliveryAddressCustomFieldActionSchema"
+            ),
+            "setDeliveryAddressCustomType": helpers.absmod(
+                __name__, ".StagedOrderSetDeliveryAddressCustomTypeActionSchema"
+            ),
+            "setDeliveryCustomField": helpers.absmod(
+                __name__, ".StagedOrderSetDeliveryCustomFieldActionSchema"
+            ),
+            "setDeliveryCustomType": helpers.absmod(
+                __name__, ".StagedOrderSetDeliveryCustomTypeActionSchema"
+            ),
             "setDeliveryItems": helpers.absmod(
                 __name__, ".StagedOrderSetDeliveryItemsActionSchema"
+            ),
+            "setItemShippingAddressCustomField": helpers.absmod(
+                __name__, ".StagedOrderSetItemShippingAddressCustomFieldActionSchema"
+            ),
+            "setItemShippingAddressCustomType": helpers.absmod(
+                __name__, ".StagedOrderSetItemShippingAddressCustomTypeActionSchema"
             ),
             "setLineItemCustomField": helpers.absmod(
                 __name__, ".StagedOrderSetLineItemCustomFieldActionSchema"
@@ -1452,6 +1549,9 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
             "setParcelTrackingData": helpers.absmod(
                 __name__, ".StagedOrderSetParcelTrackingDataActionSchema"
             ),
+            "setReturnInfo": helpers.absmod(
+                __name__, ".StagedOrderSetReturnInfoActionSchema"
+            ),
             "setReturnPaymentState": helpers.absmod(
                 __name__, ".StagedOrderSetReturnPaymentStateActionSchema"
             ),
@@ -1467,6 +1567,12 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
             ),
             "setShippingAddressAndShippingMethod": helpers.absmod(
                 __name__, ".StagedOrderSetShippingAddressAndShippingMethodActionSchema"
+            ),
+            "setShippingAddressCustomField": helpers.absmod(
+                __name__, ".StagedOrderSetShippingAddressCustomFieldActionSchema"
+            ),
+            "setShippingAddressCustomType": helpers.absmod(
+                __name__, ".StagedOrderSetShippingAddressCustomTypeActionSchema"
             ),
             "setShippingMethod": helpers.absmod(
                 __name__, ".StagedOrderSetShippingMethodActionSchema"
@@ -1507,45 +1613,6 @@ class OrderEditAddStagedActionActionSchema(OrderEditUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.OrderEditAddStagedActionAction(**data)
-
-
-class OrderEditSetBillingAddressCustomFieldActionSchema(OrderEditUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetBillingAddressCustomFieldAction(**data)
-
-
-class OrderEditSetBillingAddressCustomTypeActionSchema(OrderEditUpdateActionSchema):
-    type = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    fields = FieldContainerField(
-        allow_none=True,
-        values=marshmallow.fields.Raw(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetBillingAddressCustomTypeAction(**data)
 
 
 class OrderEditSetCommentActionSchema(OrderEditUpdateActionSchema):
@@ -1598,100 +1665,6 @@ class OrderEditSetCustomTypeActionSchema(OrderEditUpdateActionSchema):
         return models.OrderEditSetCustomTypeAction(**data)
 
 
-class OrderEditSetDeliveryAddressCustomFieldActionSchema(OrderEditUpdateActionSchema):
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    type = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    fields = FieldContainerField(
-        allow_none=True,
-        values=marshmallow.fields.Raw(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetDeliveryAddressCustomFieldAction(**data)
-
-
-class OrderEditSetDeliveryAddressCustomTypeActionSchema(OrderEditUpdateActionSchema):
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetDeliveryAddressCustomTypeAction(**data)
-
-
-class OrderEditSetItemShippingAddressCustomFieldActionSchema(
-    OrderEditUpdateActionSchema
-):
-    address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
-    )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetItemShippingAddressCustomFieldAction(**data)
-
-
-class OrderEditSetItemShippingAddressCustomTypeActionSchema(
-    OrderEditUpdateActionSchema
-):
-    address_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressKey"
-    )
-    type = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    fields = FieldContainerField(
-        allow_none=True,
-        values=marshmallow.fields.Raw(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetItemShippingAddressCustomTypeAction(**data)
-
-
 class OrderEditSetKeyActionSchema(OrderEditUpdateActionSchema):
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -1704,45 +1677,6 @@ class OrderEditSetKeyActionSchema(OrderEditUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.OrderEditSetKeyAction(**data)
-
-
-class OrderEditSetShippingAddressCustomFieldActionSchema(OrderEditUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetShippingAddressCustomFieldAction(**data)
-
-
-class OrderEditSetShippingAddressCustomTypeActionSchema(OrderEditUpdateActionSchema):
-    type = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    fields = FieldContainerField(
-        allow_none=True,
-        values=marshmallow.fields.Raw(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["action"]
-        return models.OrderEditSetShippingAddressCustomTypeAction(**data)
 
 
 class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
@@ -1835,6 +1769,12 @@ class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
                 "setBillingAddress": helpers.absmod(
                     __name__, ".StagedOrderSetBillingAddressActionSchema"
                 ),
+                "setBillingAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetBillingAddressCustomFieldActionSchema"
+                ),
+                "setBillingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetBillingAddressCustomTypeActionSchema"
+                ),
                 "setCountry": helpers.absmod(
                     __name__, ".StagedOrderSetCountryActionSchema"
                 ),
@@ -1874,8 +1814,27 @@ class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
                 "setDeliveryAddress": helpers.absmod(
                     __name__, ".StagedOrderSetDeliveryAddressActionSchema"
                 ),
+                "setDeliveryAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryAddressCustomFieldActionSchema"
+                ),
+                "setDeliveryAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryAddressCustomTypeActionSchema"
+                ),
+                "setDeliveryCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryCustomFieldActionSchema"
+                ),
+                "setDeliveryCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetDeliveryCustomTypeActionSchema"
+                ),
                 "setDeliveryItems": helpers.absmod(
                     __name__, ".StagedOrderSetDeliveryItemsActionSchema"
+                ),
+                "setItemShippingAddressCustomField": helpers.absmod(
+                    __name__,
+                    ".StagedOrderSetItemShippingAddressCustomFieldActionSchema",
+                ),
+                "setItemShippingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetItemShippingAddressCustomTypeActionSchema"
                 ),
                 "setLineItemCustomField": helpers.absmod(
                     __name__, ".StagedOrderSetLineItemCustomFieldActionSchema"
@@ -1919,6 +1878,9 @@ class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
                 "setParcelTrackingData": helpers.absmod(
                     __name__, ".StagedOrderSetParcelTrackingDataActionSchema"
                 ),
+                "setReturnInfo": helpers.absmod(
+                    __name__, ".StagedOrderSetReturnInfoActionSchema"
+                ),
                 "setReturnPaymentState": helpers.absmod(
                     __name__, ".StagedOrderSetReturnPaymentStateActionSchema"
                 ),
@@ -1935,6 +1897,12 @@ class OrderEditSetStagedActionsActionSchema(OrderEditUpdateActionSchema):
                 "setShippingAddressAndShippingMethod": helpers.absmod(
                     __name__,
                     ".StagedOrderSetShippingAddressAndShippingMethodActionSchema",
+                ),
+                "setShippingAddressCustomField": helpers.absmod(
+                    __name__, ".StagedOrderSetShippingAddressCustomFieldActionSchema"
+                ),
+                "setShippingAddressCustomType": helpers.absmod(
+                    __name__, ".StagedOrderSetShippingAddressCustomTypeActionSchema"
                 ),
                 "setShippingMethod": helpers.absmod(
                     __name__, ".StagedOrderSetShippingMethodActionSchema"
@@ -2048,6 +2016,13 @@ class StagedOrderAddDeliveryActionSchema(StagedOrderUpdateActionSchema):
         nested=helpers.absmod(__name__, ".order.ParcelDraftSchema"),
         allow_none=True,
         many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
@@ -2660,6 +2635,47 @@ class StagedOrderSetBillingAddressActionSchema(StagedOrderUpdateActionSchema):
         return models.StagedOrderSetBillingAddressAction(**data)
 
 
+class StagedOrderSetBillingAddressCustomFieldActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetBillingAddressCustomFieldAction(**data)
+
+
+class StagedOrderSetBillingAddressCustomTypeActionSchema(StagedOrderUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetBillingAddressCustomTypeAction(**data)
+
+
 class StagedOrderSetCountryActionSchema(StagedOrderUpdateActionSchema):
     country = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -2940,6 +2956,91 @@ class StagedOrderSetDeliveryAddressActionSchema(StagedOrderUpdateActionSchema):
         return models.StagedOrderSetDeliveryAddressAction(**data)
 
 
+class StagedOrderSetDeliveryAddressCustomFieldActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetDeliveryAddressCustomFieldAction(**data)
+
+
+class StagedOrderSetDeliveryAddressCustomTypeActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetDeliveryAddressCustomTypeAction(**data)
+
+
+class StagedOrderSetDeliveryCustomFieldActionSchema(StagedOrderUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetDeliveryCustomFieldAction(**data)
+
+
+class StagedOrderSetDeliveryCustomTypeActionSchema(StagedOrderUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetDeliveryCustomTypeAction(**data)
+
+
 class StagedOrderSetDeliveryItemsActionSchema(StagedOrderUpdateActionSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
@@ -2959,6 +3060,55 @@ class StagedOrderSetDeliveryItemsActionSchema(StagedOrderUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StagedOrderSetDeliveryItemsAction(**data)
+
+
+class StagedOrderSetItemShippingAddressCustomFieldActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetItemShippingAddressCustomFieldAction(**data)
+
+
+class StagedOrderSetItemShippingAddressCustomTypeActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    address_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressKey"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetItemShippingAddressCustomTypeAction(**data)
 
 
 class StagedOrderSetLineItemCustomFieldActionSchema(StagedOrderUpdateActionSchema):
@@ -3262,6 +3412,25 @@ class StagedOrderSetParcelTrackingDataActionSchema(StagedOrderUpdateActionSchema
         return models.StagedOrderSetParcelTrackingDataAction(**data)
 
 
+class StagedOrderSetReturnInfoActionSchema(StagedOrderUpdateActionSchema):
+    items = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.ReturnInfoDraftSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetReturnInfoAction(**data)
+
+
 class StagedOrderSetReturnPaymentStateActionSchema(StagedOrderUpdateActionSchema):
     return_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="returnItemId"
@@ -3404,6 +3573,49 @@ class StagedOrderSetShippingAddressAndShippingMethodActionSchema(
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StagedOrderSetShippingAddressAndShippingMethodAction(**data)
+
+
+class StagedOrderSetShippingAddressCustomFieldActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetShippingAddressCustomFieldAction(**data)
+
+
+class StagedOrderSetShippingAddressCustomTypeActionSchema(
+    StagedOrderUpdateActionSchema
+):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedOrderSetShippingAddressCustomTypeAction(**data)
 
 
 class StagedOrderSetShippingMethodActionSchema(StagedOrderUpdateActionSchema):

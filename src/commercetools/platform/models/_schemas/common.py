@@ -420,6 +420,34 @@ class CreatedBySchema(ClientLoggingSchema):
 
 
 class DiscountedPriceSchema(helpers.BaseSchema):
+    value = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": helpers.absmod(__name__, ".CentPrecisionMoneySchema"),
+            "highPrecision": helpers.absmod(__name__, ".HighPrecisionMoneySchema"),
+        },
+        missing=None,
+    )
+    discount = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".product_discount.ProductDiscountReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.DiscountedPrice(**data)
+
+
+class DiscountedPriceDraftSchema(helpers.BaseSchema):
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MoneySchema"),
         allow_none=True,
@@ -441,7 +469,7 @@ class DiscountedPriceSchema(helpers.BaseSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
 
-        return models.DiscountedPrice(**data)
+        return models.DiscountedPriceDraft(**data)
 
 
 class GeoJsonSchema(helpers.BaseSchema):
@@ -674,7 +702,7 @@ class PriceDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     discounted = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".DiscountedPriceSchema"),
+        nested=helpers.absmod(__name__, ".DiscountedPriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -772,7 +800,7 @@ class QueryPriceSchema(helpers.BaseSchema):
         data_key="validUntil",
     )
     discounted = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".DiscountedPriceSchema"),
+        nested=helpers.absmod(__name__, ".DiscountedPriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},

@@ -274,6 +274,7 @@ class ReferenceAttributeSchema(AttributeSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "cart": helpers.absmod(__name__, ".common.CartKeyReferenceSchema"),
             "cart-discount": helpers.absmod(
                 __name__, ".common.CartDiscountKeyReferenceSchema"
             ),
@@ -283,6 +284,11 @@ class ReferenceAttributeSchema(AttributeSchema):
             "customer-group": helpers.absmod(
                 __name__, ".common.CustomerGroupKeyReferenceSchema"
             ),
+            "discount-code": helpers.absmod(
+                __name__, ".common.DiscountCodeKeyReferenceSchema"
+            ),
+            "order": helpers.absmod(__name__, ".common.OrderKeyReferenceSchema"),
+            "payment": helpers.absmod(__name__, ".common.PaymentKeyReferenceSchema"),
             "price": helpers.absmod(__name__, ".common.PriceKeyReferenceSchema"),
             "product": helpers.absmod(__name__, ".common.ProductKeyReferenceSchema"),
             "product-discount": helpers.absmod(
@@ -303,6 +309,9 @@ class ReferenceAttributeSchema(AttributeSchema):
                 __name__, ".common.TaxCategoryKeyReferenceSchema"
             ),
             "type": helpers.absmod(__name__, ".common.TypeKeyReferenceSchema"),
+            "key-value-document": helpers.absmod(
+                __name__, ".common.CustomObjectKeyReferenceSchema"
+            ),
         },
         missing=None,
     )
@@ -322,6 +331,7 @@ class ReferenceSetAttributeSchema(AttributeSchema):
             allow_none=True,
             discriminator_field=("typeId", "type_id"),
             discriminator_schemas={
+                "cart": helpers.absmod(__name__, ".common.CartKeyReferenceSchema"),
                 "cart-discount": helpers.absmod(
                     __name__, ".common.CartDiscountKeyReferenceSchema"
                 ),
@@ -336,6 +346,13 @@ class ReferenceSetAttributeSchema(AttributeSchema):
                 ),
                 "customer-group": helpers.absmod(
                     __name__, ".common.CustomerGroupKeyReferenceSchema"
+                ),
+                "discount-code": helpers.absmod(
+                    __name__, ".common.DiscountCodeKeyReferenceSchema"
+                ),
+                "order": helpers.absmod(__name__, ".common.OrderKeyReferenceSchema"),
+                "payment": helpers.absmod(
+                    __name__, ".common.PaymentKeyReferenceSchema"
                 ),
                 "price": helpers.absmod(__name__, ".common.PriceKeyReferenceSchema"),
                 "product": helpers.absmod(
@@ -359,6 +376,9 @@ class ReferenceSetAttributeSchema(AttributeSchema):
                     __name__, ".common.TaxCategoryKeyReferenceSchema"
                 ),
                 "type": helpers.absmod(__name__, ".common.TypeKeyReferenceSchema"),
+                "key-value-document": helpers.absmod(
+                    __name__, ".common.CustomObjectKeyReferenceSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -521,6 +541,9 @@ class ProductVariantPatchSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
+    )
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
 
     class Meta:

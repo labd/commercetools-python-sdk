@@ -54,24 +54,23 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
     def get(
         self,
         *,
+        where: typing.List["str"] = None,
         expand: typing.List["str"] = None,
         sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: typing.List["str"] = None,
         predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerGroupPagedQueryResponse"]:
-        """Query customer-groups"""
         params = {
+            "where": where,
             "expand": expand,
             "sort": sort,
             "limit": limit,
             "offset": offset,
             "withTotal": with_total,
-            "where": where,
         }
         predicate_var and params.update(
             {f"var.{k}": v for k, v in predicate_var.items()}
@@ -85,7 +84,7 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
         )
         if response.status_code == 200:
             return CustomerGroupPagedQueryResponse.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -100,7 +99,6 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerGroup"]:
-        """Create CustomerGroup"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/customer-groups",
@@ -111,11 +109,9 @@ class ByProjectKeyCustomerGroupsRequestBuilder:
         )
         if response.status_code in (201, 200):
             return CustomerGroup.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
-        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)

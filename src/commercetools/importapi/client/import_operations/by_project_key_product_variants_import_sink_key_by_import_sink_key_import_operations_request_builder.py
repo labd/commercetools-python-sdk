@@ -51,6 +51,7 @@ class ByProjectKeyProductVariantsImportSinkKeyByImportSinkKeyImportOperationsReq
         sort: typing.List["str"] = None,
         resource_key: str = None,
         state: "ProcessingState" = None,
+        debug: bool = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportOperationPagedResponse":
@@ -64,6 +65,7 @@ class ByProjectKeyProductVariantsImportSinkKeyByImportSinkKeyImportOperationsReq
                 "sort": sort,
                 "resourceKey": resource_key,
                 "state": state,
+                "debug": debug,
             },
             headers=headers,
             options=options,

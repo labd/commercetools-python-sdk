@@ -108,6 +108,7 @@ __all__ = [
     "CartSetLineItemDistributionChannelAction",
     "CartSetLineItemPriceAction",
     "CartSetLineItemShippingDetailsAction",
+    "CartSetLineItemSupplyChannelAction",
     "CartSetLineItemTaxAmountAction",
     "CartSetLineItemTaxRateAction",
     "CartSetLineItemTotalPriceAction",
@@ -166,9 +167,9 @@ __all__ = [
 class Cart(BaseResource):
     #: User-specific unique identifier of the cart.
     key: typing.Optional[str]
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     customer_id: typing.Optional[str]
     customer_email: typing.Optional[str]
@@ -761,6 +762,10 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartSetLineItemShippingDetailsActionSchema
 
             return CartSetLineItemShippingDetailsActionSchema().load(data)
+        if data["action"] == "setLineItemSupplyChannel":
+            from ._schemas.cart import CartSetLineItemSupplyChannelActionSchema
+
+            return CartSetLineItemSupplyChannelActionSchema().load(data)
         if data["action"] == "setLineItemTaxAmount":
             from ._schemas.cart import CartSetLineItemTaxAmountActionSchema
 
@@ -1233,6 +1238,9 @@ class LineItem(_BaseType):
     #: The unique ID of this LineItem.
     id: str
     product_id: str
+    #: User-defined unique identifier for the [Product](ctp:api:type:Product).
+    #: Only present on Line Items in a [Cart](ctp:api:type:Cart) when the `key` is available on that specific Product at the time the Line Item is created or updated on the Cart. On [Order](/ctp:api:type:Order) resources this field is only present when the `key` is available on the specific Product at the time the Order is created from the Cart. This field is in general not present on Carts that had no updates until 3 December 2021 and on Orders created before this date.
+    product_key: typing.Optional[str]
     #: The product name.
     name: "LocalizedString"
     #: The slug of a product is inserted on the fly.
@@ -1287,6 +1295,7 @@ class LineItem(_BaseType):
         *,
         id: str,
         product_id: str,
+        product_key: typing.Optional[str] = None,
         name: "LocalizedString",
         product_slug: typing.Optional["LocalizedString"] = None,
         product_type: "ProductTypeReference",
@@ -1311,6 +1320,7 @@ class LineItem(_BaseType):
     ):
         self.id = id
         self.product_id = product_id
+        self.product_key = product_key
         self.name = name
         self.product_slug = product_slug
         self.product_type = product_type
@@ -1807,6 +1817,7 @@ class CartAddCustomLineItemAction(CartUpdateAction):
     name: "LocalizedString"
     quantity: int
     slug: str
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
@@ -2657,6 +2668,7 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
 class CartSetCustomShippingMethodAction(CartUpdateAction):
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2738,6 +2750,7 @@ class CartSetCustomerEmailAction(CartUpdateAction):
 
 
 class CartSetCustomerGroupAction(CartUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
     def __init__(
@@ -2809,19 +2822,15 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
 
 class CartSetDeliveryAddressCustomFieldAction(CartUpdateAction):
     delivery_id: str
-    type: typing.Optional["TypeResourceIdentifier"]
-    fields: typing.Optional["FieldContainer"]
+    name: str
+    value: typing.Optional[typing.Any]
 
     def __init__(
-        self,
-        *,
-        delivery_id: str,
-        type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
     ):
         self.delivery_id = delivery_id
-        self.type = type
-        self.fields = fields
+        self.name = name
+        self.value = value
         super().__init__(action="setDeliveryAddressCustomField")
 
     @classmethod
@@ -2840,15 +2849,19 @@ class CartSetDeliveryAddressCustomFieldAction(CartUpdateAction):
 
 class CartSetDeliveryAddressCustomTypeAction(CartUpdateAction):
     delivery_id: str
-    name: str
-    value: typing.Optional[typing.Any]
+    type: typing.Optional["TypeResourceIdentifier"]
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
-        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        delivery_id: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
     ):
         self.delivery_id = delivery_id
-        self.name = name
-        self.value = value
+        self.type = type
+        self.fields = fields
         super().__init__(action="setDeliveryAddressCustomType")
 
     @classmethod
@@ -3079,6 +3092,34 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
         from ._schemas.cart import CartSetLineItemShippingDetailsActionSchema
 
         return CartSetLineItemShippingDetailsActionSchema().dump(self)
+
+
+class CartSetLineItemSupplyChannelAction(CartUpdateAction):
+    line_item_id: str
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+
+    def __init__(
+        self,
+        *,
+        line_item_id: str,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+    ):
+        self.line_item_id = line_item_id
+        self.supply_channel = supply_channel
+        super().__init__(action="setLineItemSupplyChannel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetLineItemSupplyChannelAction":
+        from ._schemas.cart import CartSetLineItemSupplyChannelActionSchema
+
+        return CartSetLineItemSupplyChannelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetLineItemSupplyChannelActionSchema
+
+        return CartSetLineItemSupplyChannelActionSchema().dump(self)
 
 
 class CartSetLineItemTaxAmountAction(CartUpdateAction):

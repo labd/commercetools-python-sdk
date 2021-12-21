@@ -26,6 +26,7 @@ __all__ = [
     "AttributeDefinitionAlreadyExistsError",
     "AttributeDefinitionTypeConflictError",
     "AttributeNameDoesNotExistError",
+    "BadGatewayError",
     "ConcurrentModificationError",
     "DiscountCodeNonApplicableError",
     "DuplicateAttributeValueError",
@@ -144,6 +145,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import AttributeNameDoesNotExistErrorSchema
 
             return AttributeNameDoesNotExistErrorSchema().load(data)
+        if data["code"] == "BadGateway":
+            from ._schemas.error import BadGatewayErrorSchema
+
+            return BadGatewayErrorSchema().load(data)
         if data["code"] == "ConcurrentModification":
             from ._schemas.error import ConcurrentModificationErrorSchema
 
@@ -506,6 +511,23 @@ class AttributeNameDoesNotExistError(ErrorObject):
         from ._schemas.error import AttributeNameDoesNotExistErrorSchema
 
         return AttributeNameDoesNotExistErrorSchema().dump(self)
+
+
+class BadGatewayError(ErrorObject):
+    def __init__(self, *, message: str):
+
+        super().__init__(message=message, code="BadGateway")
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "BadGatewayError":
+        from ._schemas.error import BadGatewayErrorSchema
+
+        return BadGatewayErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import BadGatewayErrorSchema
+
+        return BadGatewayErrorSchema().dump(self)
 
 
 class ConcurrentModificationError(ErrorObject):
@@ -1271,6 +1293,7 @@ class MatchingPriceNotFoundError(ErrorObject):
     variant_id: int
     currency: typing.Optional[str]
     country: typing.Optional[str]
+    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     channel: typing.Optional["ChannelReference"]
 

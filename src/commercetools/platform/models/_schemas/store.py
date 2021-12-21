@@ -93,7 +93,10 @@ class StoreSchema(BaseResourceSchema):
 class StoreDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(allow_none=True, missing=None)
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
@@ -283,6 +286,7 @@ class StoreAddSupplyChannelActionSchema(StoreUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -319,6 +323,7 @@ class StoreRemoveSupplyChannelActionSchema(StoreUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )

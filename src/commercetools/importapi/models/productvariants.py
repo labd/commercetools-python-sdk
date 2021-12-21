@@ -168,7 +168,7 @@ class Attribute(_BaseType):
 
 
 class BooleanAttribute(Attribute):
-    """This type represents an attribute which value is either "true" or "false"."""
+    """This type represents an attribute whose value is either "true" or "false"."""
 
     value: bool
 
@@ -189,7 +189,7 @@ class BooleanAttribute(Attribute):
 
 
 class BooleanSetAttribute(Attribute):
-    """This type represents an attribute which value is set of boolean values."""
+    """This type represents an attribute whose value is set of boolean values."""
 
     value: typing.List["bool"]
 
@@ -212,7 +212,7 @@ class BooleanSetAttribute(Attribute):
 
 
 class DateAttribute(Attribute):
-    """This type represents an attribute which value is a date."""
+    """This type represents an attribute whose value is a date."""
 
     value: datetime.date
 
@@ -233,7 +233,7 @@ class DateAttribute(Attribute):
 
 
 class DateSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of dates."""
+    """This type represents an attribute whose value is a set of dates."""
 
     value: typing.List["datetime.date"]
 
@@ -256,7 +256,7 @@ class DateSetAttribute(Attribute):
 
 
 class DateTimeAttribute(Attribute):
-    """This type represents an attribute which value is a date with time."""
+    """This type represents an attribute whose value is a date with time."""
 
     value: datetime.datetime
 
@@ -277,7 +277,7 @@ class DateTimeAttribute(Attribute):
 
 
 class DateTimeSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of dates with time."""
+    """This type represents an attribute whose value is a set of dates with time."""
 
     value: typing.List["datetime.datetime"]
 
@@ -303,7 +303,7 @@ class DateTimeSetAttribute(Attribute):
 
 
 class EnumAttribute(Attribute):
-    """This type represents an attribute which value is an enum.
+    """This type represents an attribute whose value is an enum.
     The attribute value refers to the key of the enum value.
 
     """
@@ -327,7 +327,7 @@ class EnumAttribute(Attribute):
 
 
 class EnumSetAttribute(Attribute):
-    """This type represents an attribute which value is an enum.
+    """This type represents an attribute whose value is an enum.
     The attribute value refers to the key of the enum value.
 
     """
@@ -351,7 +351,7 @@ class EnumSetAttribute(Attribute):
 
 
 class LocalizableEnumAttribute(Attribute):
-    """This type represents an attribute which value is a localized enum.
+    """This type represents an attribute whose value is a localized enum.
     The attribute value refers to the key of the enum value.
 
     """
@@ -377,7 +377,7 @@ class LocalizableEnumAttribute(Attribute):
 
 
 class LocalizableEnumSetAttribute(Attribute):
-    """This type represents an attribute which value is a localized enum.
+    """This type represents an attribute whose value is a localized enum.
     The attribute value refers to the key of the enum value.
 
     """
@@ -403,7 +403,7 @@ class LocalizableEnumSetAttribute(Attribute):
 
 
 class LocalizableTextAttribute(Attribute):
-    """This type represents an attribute which value is a localized text."""
+    """This type represents an attribute whose value is a localized text."""
 
     #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
     #: ```json
@@ -433,7 +433,7 @@ class LocalizableTextAttribute(Attribute):
 
 
 class LocalizableTextSetAttribute(Attribute):
-    """This type represents an attribute which value is a localized text."""
+    """This type represents an attribute whose value is a localized text."""
 
     value: typing.List["LocalizedString"]
 
@@ -461,7 +461,7 @@ class LocalizableTextSetAttribute(Attribute):
 
 
 class MoneyAttribute(Attribute):
-    """This type represents an attribute which value is a money object."""
+    """This type represents an attribute whose value is a money object."""
 
     value: "TypedMoney"
 
@@ -482,8 +482,9 @@ class MoneyAttribute(Attribute):
 
 
 class MoneySetAttribute(Attribute):
-    """This type represents an attribute which value is a set of money objects."""
+    """This type represents an attribute whose value is a set of money objects."""
 
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     value: typing.List["TypedMoney"]
 
     def __init__(
@@ -505,7 +506,7 @@ class MoneySetAttribute(Attribute):
 
 
 class NumberAttribute(Attribute):
-    """This type represents an attribute which value is a number."""
+    """This type represents an attribute whose value is a number."""
 
     value: float
 
@@ -526,7 +527,7 @@ class NumberAttribute(Attribute):
 
 
 class NumberSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of numbers."""
+    """This type represents an attribute whose value is a set of numbers."""
 
     value: typing.List["float"]
 
@@ -549,9 +550,9 @@ class NumberSetAttribute(Attribute):
 
 
 class ReferenceAttribute(Attribute):
-    """This type represents an attribute which value is a key reference."""
+    """This type represents an attribute whose value is a key reference."""
 
-    #: References a resource by its key.
+    #: References a resource by key.
     value: "KeyReference"
 
     def __init__(self, *, name: typing.Optional[str] = None, value: "KeyReference"):
@@ -571,7 +572,7 @@ class ReferenceAttribute(Attribute):
 
 
 class ReferenceSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of references."""
+    """This type represents an attribute whose value is a set of references."""
 
     value: typing.List["KeyReference"]
 
@@ -594,7 +595,7 @@ class ReferenceSetAttribute(Attribute):
 
 
 class TextAttribute(Attribute):
-    """This type represents an attribute which value is a string."""
+    """This type represents an attribute whose value is a string."""
 
     value: str
 
@@ -615,7 +616,7 @@ class TextAttribute(Attribute):
 
 
 class TextSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of strings."""
+    """This type represents an attribute whose value is a set of strings."""
 
     value: typing.List["str"]
 
@@ -636,7 +637,7 @@ class TextSetAttribute(Attribute):
 
 
 class TimeAttribute(Attribute):
-    """This type represents an attribute which value is a time."""
+    """This type represents an attribute whose value is a time."""
 
     value: datetime.time
 
@@ -657,7 +658,7 @@ class TimeAttribute(Attribute):
 
 
 class TimeSetAttribute(Attribute):
-    """This type represents an attribute which value is a set of times."""
+    """This type represents an attribute whose value is a set of times."""
 
     value: typing.List["datetime.time"]
 
@@ -680,32 +681,26 @@ class TimeSetAttribute(Attribute):
 
 
 class ProductVariantImport(ImportResource):
-    """Import representation for a product variant. Use this type for importing new product variants
-    into a commercetools project.
-
-    """
+    """The data representation for a ProductVariant to be imported that is persisted as a [ProductVariant](/../api/projects/products#productvariant) in the Project."""
 
     #: Maps to `ProductVariant.sku`.
     sku: typing.Optional[str]
     #: Maps to `ProductVariant.isMasterVariant`.
     is_master_variant: bool
     #: Maps to `ProductVariant.attributes`.
-    #:
-    #: Each attribute referenced must be defined
-    #: in an already existing product type in the commercetools project, or the import
-    #: operation state is set to `Unresolved`.
+    #: The referenced attribute must be defined in an already existing ProductType in the commercetools project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
     attributes: typing.Optional[typing.List["Attribute"]]
     #: Maps to `ProductVariant.images`.
     images: typing.Optional[typing.List["Image"]]
     #: Maps to `ProductVariant.assets`.
     assets: typing.Optional[typing.List["Asset"]]
-    #: If there were updates, only the updates will be published to `staged` and `current` projection.
+    #: If `publish` is set to either `true` or `false`, both staged and current projections are set to the same value provided by the import data.
+    #: If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
+    #: However, if the import data contains no update, that is, if it matches the staged projection of the existing Product in the platform, the import induces no change in the existing Product whether `publish` is set or not.
     publish: typing.Optional[bool]
-    #: The product in which this product variant is contained. Maps to `ProductVariant.product`.
-    #:
-    #: The product referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The [Product](/../api/projects/products#productvariant) to which this Product Variant belongs. Maps to `ProductVariant.product`.
+    #: The Reference to the [Product](/../api/projects/products#product) with which the ProductVariant is associated.
+    #: If referenced Product does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Product is created.
     product: "ProductKeyReference"
 
     def __init__(
@@ -742,32 +737,31 @@ class ProductVariantImport(ImportResource):
 
 
 class ProductVariantPatch(_BaseType):
-    """Import representation for an update to a product variant. Use this type for importing updates to existing
-    product variants into a commercetools project.
+    """Representation for an update of a [ProductVariant](/../api/projects/products#productvariant). Use this type to import updates for existing
+    [ProductVariants](/../api/projects/products#productvariant) in a commercetools Project.
 
     """
 
-    #: The product variant to which this patch is applied.
-    #:
-    #: The product variant referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The [ProductVariant](/../api/projects/products#productvariant) to which this patch is applied.
+    #: The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the ProductVariantPatch is associated.
+    #: If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
     product_variant: "ProductVariantKeyReference"
     #: Maps to `ProductVariant.attributes`.
-    #:
-    #: Each attribute referenced must be defined
-    #: in an already existing product type in the commercetools project, or the import
-    #: operation state is set to `ValidationFailed`.
+    #: The referenced attribute must be defined in an already existing [ProductType](/../api/projects/productTypes#producttype) in the commercetools Project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
     attributes: typing.Optional["Attributes"]
+    #: If `false`, the attribute changes are applied to both [current and staged projected representations](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product).
+    staged: typing.Optional[bool]
 
     def __init__(
         self,
         *,
         product_variant: "ProductVariantKeyReference",
-        attributes: typing.Optional["Attributes"] = None
+        attributes: typing.Optional["Attributes"] = None,
+        staged: typing.Optional[bool] = None
     ):
         self.product_variant = product_variant
         self.attributes = attributes
+        self.staged = staged
         super().__init__()
 
     @classmethod

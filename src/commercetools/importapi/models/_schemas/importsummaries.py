@@ -37,21 +37,16 @@ class ImportSummarySchema(helpers.BaseSchema):
 
 
 class OperationStatesSchema(helpers.BaseSchema):
+    processing = marshmallow.fields.Integer(allow_none=True, missing=None)
     validation_failed = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="ValidationFailed"
+        allow_none=True, missing=None, data_key="validationFailed"
     )
-    unresolved = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="Unresolved"
-    )
+    unresolved = marshmallow.fields.Integer(allow_none=True, missing=None)
     wait_for_master_variant = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="WaitForMasterVariant"
+        allow_none=True, missing=None, data_key="waitForMasterVariant"
     )
-    imported = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="Imported"
-    )
-    rejected = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="Rejected"
-    )
+    imported = marshmallow.fields.Integer(allow_none=True, missing=None)
+    rejected = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE

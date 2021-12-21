@@ -55,7 +55,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return Customer.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -84,7 +84,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return Customer.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -100,7 +100,6 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Delete Customer by key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/key={self._key}",
@@ -110,7 +109,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         )
         if response.status_code == 200:
             return Customer.deserialize(response.json())
-        elif response.status_code in (409, 400, 401, 403, 500, 503):
+        elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

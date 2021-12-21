@@ -33,8 +33,11 @@ __all__ = [
 
 
 class Location(_BaseType):
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    """A geographical location representing a country and optionally a state within this country.  A location can only be assigned to one Zone."""
+
+    #: Country code of the geographic location.
     country: str
+    #: State within the country.
     state: typing.Optional[str]
 
     def __init__(self, *, country: str, state: typing.Optional[str] = None):
@@ -55,14 +58,17 @@ class Location(_BaseType):
 
 
 class Zone(BaseResource):
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-specific unique identifier for a zone.
-    #: Must be unique across a project.
-    #: The field can be reset using the Set Key UpdateAction.
+    #: User-defined unique identifier for the Zone.
     key: typing.Optional[str]
+    #: Name of the Zone.
     name: str
+    #: Description of the Zone.
     description: typing.Optional[str]
+    #: List of locations that belong to the Zone.
     locations: typing.List["Location"]
 
     def __init__(
@@ -105,13 +111,14 @@ class Zone(BaseResource):
 
 
 class ZoneDraft(_BaseType):
-    #: User-specific unique identifier for a zone.
-    #: Must be unique across a project.
-    #: The field can be reset using the Set Key UpdateAction.
+    #: User-defined unique identifier for the Zone.
     key: typing.Optional[str]
+    #: Name of the Zone.
     name: str
+    #: Description of the Zone.
     description: typing.Optional[str]
-    locations: typing.List["Location"]
+    #: List of locations that belong to the Zone.
+    locations: typing.Optional[typing.List["Location"]]
 
     def __init__(
         self,
@@ -119,7 +126,7 @@ class ZoneDraft(_BaseType):
         key: typing.Optional[str] = None,
         name: str,
         description: typing.Optional[str] = None,
-        locations: typing.List["Location"]
+        locations: typing.Optional[typing.List["Location"]] = None
     ):
         self.key = key
         self.name = name
@@ -140,25 +147,37 @@ class ZoneDraft(_BaseType):
 
 
 class ZonePagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [Zone](ctp:api:type:Zone)."""
+
+    #: Number of results requested in the query request.
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Offset supplied by the client or the server default.
+    #: It is the number of elements skipped, not a page number.
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Zones](ctp:api:type:Zone) matching the query.
     results: typing.List["Zone"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Zone"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         super().__init__()
 
@@ -177,6 +196,9 @@ class ZonePagedQueryResponse(_BaseType):
 
 
 class ZoneReference(Reference):
+    """[Reference](/types#reference) to a [Zone](ctp:api:type:Zone)."""
+
+    #: Contains the representation of the expanded Zone. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Zones.
     obj: typing.Optional["Zone"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Zone"] = None):
@@ -196,6 +218,8 @@ class ZoneReference(Reference):
 
 
 class ZoneResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [Zone](ctp:api:type:Zone)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -217,7 +241,9 @@ class ZoneResourceIdentifier(ResourceIdentifier):
 
 
 class ZoneUpdate(_BaseType):
+    #: Expected version of the Zone on which the changes should be applied. If the expected version does not match the actual version, a 409 Conflict will be returned.
     version: int
+    #: Update actions to be performed on the Zone.
     actions: typing.List["ZoneUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["ZoneUpdateAction"]):
@@ -274,6 +300,7 @@ class ZoneUpdateAction(_BaseType):
 
 
 class ZoneAddLocationAction(ZoneUpdateAction):
+    #: Location to be added to the Zone.
     location: "Location"
 
     def __init__(self, *, location: "Location"):
@@ -293,6 +320,7 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 
 
 class ZoneChangeNameAction(ZoneUpdateAction):
+    #: New name of the Zone.
     name: str
 
     def __init__(self, *, name: str):
@@ -312,6 +340,7 @@ class ZoneChangeNameAction(ZoneUpdateAction):
 
 
 class ZoneRemoveLocationAction(ZoneUpdateAction):
+    #: Location to be removed from the Zone.
     location: "Location"
 
     def __init__(self, *, location: "Location"):
@@ -333,6 +362,7 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
 
 
 class ZoneSetDescriptionAction(ZoneUpdateAction):
+    #: Description of the Zone.
     description: typing.Optional[str]
 
     def __init__(self, *, description: typing.Optional[str] = None):
@@ -354,7 +384,7 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
 
 
 class ZoneSetKeyAction(ZoneUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: If `key` is absent or `null`, the existing key, if any, will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):

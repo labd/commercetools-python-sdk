@@ -90,7 +90,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         )
         if response.status_code == 200:
             return OrderPagedQueryResponse.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -121,11 +121,9 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         )
         if response.status_code in (201, 200):
             return Order.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
-        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)

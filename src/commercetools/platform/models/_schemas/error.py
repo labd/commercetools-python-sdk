@@ -123,6 +123,16 @@ class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
         return models.AttributeNameDoesNotExistError(**data)
 
 
+class BadGatewayErrorSchema(ErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["code"]
+        return models.BadGatewayError(**data)
+
+
 class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     current_version = marshmallow.fields.Integer(
         allow_none=True,
@@ -512,6 +522,7 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "AttributeNameDoesNotExist": helpers.absmod(
                     __name__, ".AttributeNameDoesNotExistErrorSchema"
                 ),
+                "BadGateway": helpers.absmod(__name__, ".BadGatewayErrorSchema"),
                 "ConcurrentModification": helpers.absmod(
                     __name__, ".ConcurrentModificationErrorSchema"
                 ),

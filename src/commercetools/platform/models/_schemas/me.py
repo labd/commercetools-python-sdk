@@ -187,6 +187,9 @@ class MyCartUpdateSchema(helpers.BaseSchema):
                 "setCustomType": helpers.absmod(
                     __name__, ".MyCartSetCustomTypeActionSchema"
                 ),
+                "setCustomerEmail": helpers.absmod(
+                    __name__, ".MyCartSetCustomerEmailActionSchema"
+                ),
                 "setDeleteDaysAfterLastModification": helpers.absmod(
                     __name__, ".MyCartSetDeleteDaysAfterLastModificationActionSchema"
                 ),
@@ -201,6 +204,9 @@ class MyCartUpdateSchema(helpers.BaseSchema):
                 ),
                 "setLineItemShippingDetails": helpers.absmod(
                     __name__, ".MyCartSetLineItemShippingDetailsActionSchema"
+                ),
+                "setLineItemSupplyChannel": helpers.absmod(
+                    __name__, ".MyCartSetLineItemSupplyChannelActionSchema"
                 ),
                 "setLocale": helpers.absmod(__name__, ".MyCartSetLocaleActionSchema"),
                 "setShippingAddress": helpers.absmod(
@@ -643,6 +649,9 @@ class MyPaymentUpdateSchema(helpers.BaseSchema):
                 "setMethodInfoName": helpers.absmod(
                     __name__, ".MyPaymentSetMethodInfoNameActionSchema"
                 ),
+                "setTransactionCustomField": helpers.absmod(
+                    __name__, ".MyPaymentSetTransactionCustomFieldActionSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -840,6 +849,13 @@ class MyTransactionDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="interactionId",
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -1231,6 +1247,20 @@ class MyCartSetCustomTypeActionSchema(MyCartUpdateActionSchema):
         return models.MyCartSetCustomTypeAction(**data)
 
 
+class MyCartSetCustomerEmailActionSchema(MyCartUpdateActionSchema):
+    email = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyCartSetCustomerEmailAction(**data)
+
+
 class MyCartSetDeleteDaysAfterLastModificationActionSchema(MyCartUpdateActionSchema):
     delete_days_after_last_modification = marshmallow.fields.Integer(
         allow_none=True,
@@ -1335,6 +1365,28 @@ class MyCartSetLineItemShippingDetailsActionSchema(MyCartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.MyCartSetLineItemShippingDetailsAction(**data)
+
+
+class MyCartSetLineItemSupplyChannelActionSchema(MyCartUpdateActionSchema):
+    line_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lineItemId"
+    )
+    distribution_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="distributionChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyCartSetLineItemSupplyChannelAction(**data)
 
 
 class MyCartSetLocaleActionSchema(MyCartUpdateActionSchema):
@@ -1904,6 +1956,21 @@ class MyPaymentSetMethodInfoNameActionSchema(MyPaymentUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.MyPaymentSetMethodInfoNameAction(**data)
+
+
+class MyPaymentSetTransactionCustomFieldActionSchema(MyPaymentUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyPaymentSetTransactionCustomFieldAction(**data)
 
 
 class MyShoppingListAddLineItemActionSchema(MyShoppingListUpdateActionSchema):

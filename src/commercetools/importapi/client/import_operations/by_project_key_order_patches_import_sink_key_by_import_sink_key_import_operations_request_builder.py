@@ -9,15 +9,15 @@ import warnings
 
 from ...models.common import ProcessingState
 from ...models.importoperations import ImportOperationPagedResponse
-from .by_project_key_inventories_import_sink_key_by_import_sink_key_import_operations_by_id_request_builder import (
-    ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder,
+from .by_project_key_order_patches_import_sink_key_by_import_sink_key_import_operations_by_id_request_builder import (
+    ByProjectKeyOrderPatchesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder,
 )
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
-class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder:
+class ByProjectKeyOrderPatchesImportSinkKeyByImportSinkKeyImportOperationsRequestBuilder:
 
     _client: "BaseClient"
     _project_key: str
@@ -35,8 +35,8 @@ class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsRequest
 
     def with_id_value(
         self, id: str
-    ) -> ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder:
-        return ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder(
+    ) -> ByProjectKeyOrderPatchesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder:
+        return ByProjectKeyOrderPatchesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder(
             id=id,
             project_key=self._project_key,
             import_sink_key=self._import_sink_key,
@@ -51,19 +51,21 @@ class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsRequest
         sort: typing.List["str"] = None,
         resource_key: str = None,
         state: "ProcessingState" = None,
+        debug: bool = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportOperationPagedResponse":
-        """Retrieves all inventory import operations of an import sink key."""
+        """Retrieves all order-patches import operations of an import sink key."""
         headers = {} if headers is None else headers
         response = self._client._get(
-            endpoint=f"/{self._project_key}/inventories/importSinkKey={self._import_sink_key}/import-operations",
+            endpoint=f"/{self._project_key}/order-patches/importSinkKey={self._import_sink_key}/import-operations",
             params={
                 "limit": limit,
                 "offset": offset,
                 "sort": sort,
                 "resourceKey": resource_key,
                 "state": state,
+                "debug": debug,
             },
             headers=headers,
             options=options,

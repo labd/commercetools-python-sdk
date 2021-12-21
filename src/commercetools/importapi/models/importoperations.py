@@ -13,7 +13,7 @@ from ._abstract import _BaseType
 from .common import ProcessingState
 
 if typing.TYPE_CHECKING:
-    from .common import ProcessingState
+    from .common import ProcessingState, UnresolvedReferences
     from .errors import ErrorObject
 
 __all__ = [
@@ -25,51 +25,56 @@ __all__ = [
 
 
 class ImportOperation(_BaseType):
-    """Tracks the status of a single import resource as it is imported into the commercetools project."""
+    """Import Operation describes the import status of a specific resource."""
 
-    #: The import operation version.
+    #: The version of the ImportOperation.
     version: int
-    #: The key of the import sink.
-    import_sink_key: str
-    #: The key of the import resource.
+    #: The key of the [importContainer](/import-container#importcontainer).
+    import_container_key: str
+    #: The key of the resource.
     resource_key: str
-    #: The identifier of the operaton that is to be commited
+    #: The ID of the ImportOperation.
     id: str
-    #: The status of the import resource.
+    #: The import status of the resource. Set to `rejected` or `validationFailed` if the import of the resource was not successful.
     state: "ProcessingState"
-    #: When the resource is successfully imported, this represents the imported resource version
+    #: The version of the impmorted resource when the import was successful.
     resource_version: typing.Optional[int]
-    #: If an import resource does not import correctly, the state is set to `Rejected` or `ValidationFailed`
-    #: and this property contains the errors.
+    #: Contains an error if the import of the resource was not successful. See [Errors](/error).
     errors: typing.Optional[typing.List["ErrorObject"]]
-    #: When the import operation was created.
+    #: In case of unresolved status this array will show the unresolved references
+    unresolved_references: typing.Optional[typing.List["UnresolvedReferences"]]
+    #: The time when the ImportOperation was created.
     created_at: datetime.datetime
-    #: When the import operation was modified.
+    #: The last time When the ImportOperation was modified.
     last_modified_at: datetime.datetime
-    #: When the import operation expires.
+    #: The expiration time of the ImportOperation.
     expires_at: datetime.datetime
 
     def __init__(
         self,
         *,
         version: int,
-        import_sink_key: str,
+        import_container_key: str,
         resource_key: str,
         id: str,
         state: "ProcessingState",
         resource_version: typing.Optional[int] = None,
         errors: typing.Optional[typing.List["ErrorObject"]] = None,
+        unresolved_references: typing.Optional[
+            typing.List["UnresolvedReferences"]
+        ] = None,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
         expires_at: datetime.datetime
     ):
         self.version = version
-        self.import_sink_key = import_sink_key
+        self.import_container_key = import_container_key
         self.resource_key = resource_key
         self.id = id
         self.state = state
         self.resource_version = resource_version
         self.errors = errors
+        self.unresolved_references = unresolved_references
         self.created_at = created_at
         self.last_modified_at = last_modified_at
         self.expires_at = expires_at
@@ -88,15 +93,18 @@ class ImportOperation(_BaseType):
 
 
 class ImportOperationPagedResponse(_BaseType):
-    """This type represents a paged import operation result."""
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) for Import Operations."""
 
-    #: The maximum number of import operations returned for a page.
+    #: The number of results requested in the query request.
     limit: int
-    #: The offset supplied by the client or the server default. It is the number of elements skipped.
+    #: The number of elements skipped, not a page number.
+    #: Supplied by the client or the server default.
     offset: int
-    #: The actual number of results returned by this response.
+    #: The actual number of results returned.
     count: int
-    #: The results for this paged response.
+    #: The total number of import operations matching the query.
+    total: int
+    #: The array of Import Operations matching the query.
     results: typing.List["ImportOperation"]
 
     def __init__(
@@ -105,11 +113,13 @@ class ImportOperationPagedResponse(_BaseType):
         limit: int,
         offset: int,
         count: int,
+        total: int,
         results: typing.List["ImportOperation"]
     ):
         self.limit = limit
         self.offset = offset
         self.count = count
+        self.total = total
         self.results = results
         super().__init__()
 
@@ -128,20 +138,19 @@ class ImportOperationPagedResponse(_BaseType):
 
 
 class ImportOperationState(enum.Enum):
-    """This enumeration describes the operation state of a newly created import operation."""
+    """Describes the validation state of a newly created [ImportOperation](#importoperation)."""
 
-    UNRESOLVED = "Unresolved"
-    VALIDATION_FAILED = "ValidationFailed"
+    PROCESSING = "processing"
+    VALIDATION_FAILED = "validationFailed"
 
 
 class ImportOperationStatus(_BaseType):
-    """The validation status of a created operation."""
-
-    #: Id of the import operation.
+    #: The ID of the [ImportOperation](#importoperation).
     operation_id: typing.Optional[str]
-    #: Validation state of the import operation.
+    #: The validation state of the [ImportOperation](#importoperation).
     state: "ImportOperationState"
-    #: Validation errors for the import operation.
+    #: The validation errors for the [ImportOperation](#importoperation).
+    #: See [Errors](/error).
     errors: typing.Optional[typing.List["ErrorObject"]]
 
     def __init__(

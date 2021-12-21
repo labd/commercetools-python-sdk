@@ -7,6 +7,9 @@
 import typing
 import warnings
 
+from ..import_containers.by_project_key_categories_import_containers_request_builder import (
+    ByProjectKeyCategoriesImportContainersRequestBuilder,
+)
 from .by_project_key_categories_import_sink_key_by_import_sink_key_request_builder import (
     ByProjectKeyCategoriesImportSinkKeyByImportSinkKeyRequestBuilder,
 )
@@ -27,6 +30,12 @@ class ByProjectKeyCategoriesRequestBuilder:
     ):
         self._project_key = project_key
         self._client = client
+
+    def import_containers(self) -> ByProjectKeyCategoriesImportContainersRequestBuilder:
+        return ByProjectKeyCategoriesImportContainersRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
 
     def import_sink_key_with_import_sink_key_value(
         self, import_sink_key: str

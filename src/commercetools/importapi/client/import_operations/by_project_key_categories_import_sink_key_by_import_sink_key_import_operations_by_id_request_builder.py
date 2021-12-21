@@ -39,7 +39,7 @@ class ByProjectKeyCategoriesImportSinkKeyByImportSinkKeyImportOperationsByIdRequ
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportOperation":
-        """Retrieves the import operation with the given id."""
+        """Retrieves the ImportOperation of a given ID."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/categories/importSinkKey={self._import_sink_key}/import-operations/{self._id}",

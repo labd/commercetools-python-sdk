@@ -71,6 +71,7 @@ __all__ = [
     "CustomerToken",
     "CustomerUpdate",
     "CustomerUpdateAction",
+    "MyCustomerChangePassword",
 ]
 
 
@@ -80,9 +81,9 @@ class AnonymousCartSignInMode(enum.Enum):
 
 
 class Customer(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: The customer number can be used to create a more human-readable (in contrast to ID) identifier for the customer.
     #: It should be unique across a project.
@@ -790,6 +791,31 @@ class CustomerUpdateAction(_BaseType):
         from ._schemas.customer import CustomerUpdateActionSchema
 
         return CustomerUpdateActionSchema().dump(self)
+
+
+class MyCustomerChangePassword(_BaseType):
+    version: int
+    current_password: str
+    new_password: str
+
+    def __init__(self, *, version: int, current_password: str, new_password: str):
+        self.version = version
+        self.current_password = current_password
+        self.new_password = new_password
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyCustomerChangePassword":
+        from ._schemas.customer import MyCustomerChangePasswordSchema
+
+        return MyCustomerChangePasswordSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import MyCustomerChangePasswordSchema
+
+        return MyCustomerChangePasswordSchema().dump(self)
 
 
 class CustomerAddAddressAction(CustomerUpdateAction):

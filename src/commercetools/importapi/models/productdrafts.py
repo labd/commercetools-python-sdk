@@ -35,11 +35,12 @@ __all__ = ["PriceDraftImport", "ProductDraftImport", "ProductVariantDraftImport"
 
 
 class ProductDraftImport(ImportResource):
-    #: The product's product type. Maps to `Product.productType`.
-    #:
-    #: The product type referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    """The representation of a Product Draft for the import purpose."""
+
+    #: The `productType` of a [Product](/../api/projects/products#product).
+    #: Maps to `Product.productType`.
+    #: The Reference to the [ProductType](/../api/projects/productTypes#producttype) with which the ProductDraft is associated.
+    #: If referenced ProductType does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductType is created.
     product_type: "ProductTypeKeyReference"
     name: "LocalizedString"
     #: Human-readable identifiers usually used as deep-link URL to the related product. Each slug must be unique across a project,
@@ -47,11 +48,8 @@ class ProductDraftImport(ImportResource):
     slug: "LocalizedString"
     #: Maps to `Product.description`.
     description: typing.Optional["LocalizedString"]
-    #: An array of references to categories by their keys. Maps to `Product.categories`.
-    #:
-    #: The categories referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [Categories](/../api/projects/categories#category) with which the ProductDraft is associated.
+    #: If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
     categories: typing.Optional[typing.List["CategoryKeyReference"]]
     #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
     #: ```json
@@ -77,16 +75,13 @@ class ProductDraftImport(ImportResource):
     #: }
     #: ```
     meta_keywords: typing.Optional["LocalizedString"]
-    #: The master product variant.
-    #: Required if the `variants` array has product variants.
+    #: The master Product variant.
+    #: Required if the `variants` array contains a Product Variant.
     master_variant: typing.Optional["ProductVariantDraftImport"]
-    #: An array of related product variants.
+    #: An array of related Product Variants.
     variants: typing.Optional[typing.List["ProductVariantDraftImport"]]
-    #: References a tax category by its key.
-    #:
-    #: The tax category referenced must already exist
-    #: in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [TaxCategory](/../api/projects/taxCategories#taxcategory) with which the ProductDraft is associated.
+    #: If referenced TaxCategory does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary TaxCategory is created.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
     #: Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
     #: ```json
@@ -107,13 +102,12 @@ class ProductDraftImport(ImportResource):
     #: }
     #: ```
     search_keywords: typing.Optional["SearchKeywords"]
-    #: References a state by its key.
-    #:
-    #: The tax category referenced must already exist
-    #: in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [State](/../api/projects/states#state) with which the ProductDraft is associated.
+    #: If referenced State does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary State is created.
     state: typing.Optional["StateKeyReference"]
-    #: If there were updates, only the updates will be published to `staged` and `current` projection.
+    #: If `publish` is set to either `true` or `false`, both staged and current projections are set to the same value provided by the import data.
+    #: If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
+    #: However, if the import data contains no update, that is, if it matches the staged projection of the existing Product in the platform, the import induces no change in the existing Product whether `publish` is set or not.
     publish: typing.Optional[bool]
 
     def __init__(
@@ -164,8 +158,10 @@ class ProductDraftImport(ImportResource):
 
 
 class ProductVariantDraftImport(_BaseType):
+    """The representation of a Product Variant Draft for the import purpose."""
+
     sku: typing.Optional[str]
-    key: typing.Optional[str]
+    key: str
     prices: typing.Optional[typing.List["PriceDraftImport"]]
     attributes: typing.Optional[typing.List["Attribute"]]
     images: typing.Optional[typing.List["Image"]]
@@ -175,7 +171,7 @@ class ProductVariantDraftImport(_BaseType):
         self,
         *,
         sku: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
+        key: str,
         prices: typing.Optional[typing.List["PriceDraftImport"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
@@ -204,12 +200,15 @@ class ProductVariantDraftImport(_BaseType):
 
 
 class PriceDraftImport(_BaseType):
+    """The representation of a Price Draft for the import purpose."""
+
+    #: TypedMoney is what is called BaseMoney in the HTTP API.
     value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
-    #: References a customer group by its key.
+    #: References a customer group by key.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
-    #: References a channel by its key.
+    #: References a channel by key.
     channel: typing.Optional["ChannelKeyReference"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]

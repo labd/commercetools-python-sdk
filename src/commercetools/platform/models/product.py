@@ -21,7 +21,7 @@ if typing.TYPE_CHECKING:
         AssetDraft,
         AssetSource,
         CreatedBy,
-        DiscountedPrice,
+        DiscountedPriceDraft,
         Image,
         LastModifiedBy,
         LocalizedString,
@@ -286,9 +286,9 @@ class FilteredFacetResult(FacetResult):
 
 
 class Product(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the product.
     #: *Product keys are different from product variant keys.*
@@ -2335,14 +2335,14 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
     price_id: str
     staged: typing.Optional[bool]
-    discounted: typing.Optional["DiscountedPrice"]
+    discounted: typing.Optional["DiscountedPriceDraft"]
 
     def __init__(
         self,
         *,
         price_id: str,
         staged: typing.Optional[bool] = None,
-        discounted: typing.Optional["DiscountedPrice"] = None
+        discounted: typing.Optional["DiscountedPriceDraft"] = None
     ):
         self.price_id = price_id
         self.staged = staged

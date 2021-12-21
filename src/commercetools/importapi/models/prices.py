@@ -91,11 +91,9 @@ class TaxRate(_BaseType):
 
 
 class PriceImport(ImportResource):
-    """Imports a product variant's prices."""
+    """The data representation for a Price to be imported that is persisted as a [Price](/../api/projects/products#price) in the Project."""
 
-    #: Maps to `Price.value`.
-    #:
-    #: The Import API **only** supports `centPrecision` prices.
+    #: Maps to `Price.value`. TypedMoney is what is called BaseMoney in the HTTP API.
     value: "TypedMoney"
     #: Maps to `Price.county`.
     country: typing.Optional[str]
@@ -103,17 +101,11 @@ class PriceImport(ImportResource):
     valid_from: typing.Optional[datetime.datetime]
     #: Maps to `Price.validUntil`.
     valid_until: typing.Optional[datetime.datetime]
-    #: References a customer group by its key.
-    #:
-    #: The customer group referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the Price is associated.
+    #: If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
-    #: References a channel by its key.
-    #:
-    #: The channel referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [Channel](/../api/projects/channels#channel) with which the Price is associated.
+    #: If referenced Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Channel is created.
     channel: typing.Optional["ChannelKeyReference"]
     #: Sets a discounted price from an external service.
     discounted: typing.Optional["DiscountedPrice"]
@@ -123,17 +115,13 @@ class PriceImport(ImportResource):
     tiers: typing.Optional[typing.List["PriceTier"]]
     #: The custom fields for this price.
     custom: typing.Optional["Custom"]
-    #: The product variant in which this price is contained.
-    #:
-    #: The product variant referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The ProductVariant in which this Price is contained.
+    #: The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the Price is associated.
+    #: If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
     product_variant: "ProductVariantKeyReference"
-    #: The product in which this product variant containong the price is contained. Maps to `ProductVariant.product`.
-    #:
-    #: The product referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Product in which the Product Variant containing this Price is contained. Maps to `ProductVariant.product`.
+    #: The Reference to the [Product](/../api/projects/products#product) with which the Price is associated.
+    #: If referenced Product does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Product is created.
     product: "ProductKeyReference"
 
     def __init__(

@@ -8,7 +8,7 @@ import typing
 import warnings
 
 from ...models.errors import ErrorResponse
-from ...models.importsinks import ImportSink, ImportSinkDraft
+from ...models.importsinks import ImportSink, ImportSinkUpdateDraft
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -32,7 +32,7 @@ class ByProjectKeyImportSinksByImportSinkKeyRequestBuilder:
 
     def put(
         self,
-        body: "ImportSinkDraft",
+        body: "ImportSinkUpdateDraft",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,

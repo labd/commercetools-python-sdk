@@ -36,6 +36,9 @@ __all__ = [
 
 
 class SubRate(_BaseType):
+    """It is used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order."""
+
+    #: Name of the SubRate.
     name: str
     amount: float
 
@@ -57,15 +60,17 @@ class SubRate(_BaseType):
 
 
 class TaxCategory(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: Name of the TaxCategory.
     name: str
+    #: Description of the TaxCategory.
     description: typing.Optional[str]
-    #: The tax rates have unique IDs in the rates list
+    #: Tax rates and subrates of states and countries. Each TaxRate in the array has a unique ID assigned by the platform.
     rates: typing.List["TaxRate"]
-    #: User-specific unique identifier for the category.
+    #: User-defined unique identifier for the TaxCategory.
     key: typing.Optional[str]
 
     def __init__(
@@ -108,9 +113,13 @@ class TaxCategory(BaseResource):
 
 
 class TaxCategoryDraft(_BaseType):
+    #: Name of the TaxCategory.
     name: str
+    #: Description of the TaxCategory.
     description: typing.Optional[str]
-    rates: typing.List["TaxRateDraft"]
+    #: Tax rates and subrates of states and countries.
+    rates: typing.Optional[typing.List["TaxRateDraft"]]
+    #: User-defined unique identifier for the TaxCategory.
     key: typing.Optional[str]
 
     def __init__(
@@ -118,7 +127,7 @@ class TaxCategoryDraft(_BaseType):
         *,
         name: str,
         description: typing.Optional[str] = None,
-        rates: typing.List["TaxRateDraft"],
+        rates: typing.Optional[typing.List["TaxRateDraft"]] = None,
         key: typing.Optional[str] = None
     ):
         self.name = name
@@ -140,25 +149,37 @@ class TaxCategoryDraft(_BaseType):
 
 
 class TaxCategoryPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [TaxCategory](ctp:api:type:TaxCategory)."""
+
+    #: Number of results requested in the query request.
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Offset supplied by the client or the server default.
+    #: It is the number of elements skipped, not a page number.
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/contract#queries).
+    total: typing.Optional[int]
+    #: [TaxCategories](ctp:api:type:TaxCategory) matching the query.
     results: typing.List["TaxCategory"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["TaxCategory"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         super().__init__()
 
@@ -177,6 +198,9 @@ class TaxCategoryPagedQueryResponse(_BaseType):
 
 
 class TaxCategoryReference(Reference):
+    """[Reference](/../api/types#reference) to a [TaxCategory](ctp:api:type:TaxCategory)."""
+
+    #: Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategory.
     obj: typing.Optional["TaxCategory"]
 
     def __init__(self, *, id: str, obj: typing.Optional["TaxCategory"] = None):
@@ -196,6 +220,8 @@ class TaxCategoryReference(Reference):
 
 
 class TaxCategoryResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -217,7 +243,9 @@ class TaxCategoryResourceIdentifier(ResourceIdentifier):
 
 
 class TaxCategoryUpdate(_BaseType):
+    #: Expected version of the TaxCategory on which the changes should be applied. If the expected version does not match the actual version, a 409 Conflict will be returned.
     version: int
+    #: Update actions to be performed on the TaxCategory.
     actions: typing.List["TaxCategoryUpdateAction"]
 
     def __init__(
@@ -282,22 +310,20 @@ class TaxCategoryUpdateAction(_BaseType):
 
 
 class TaxRate(_BaseType):
-    #: The ID is always set if the tax rate is part of a TaxCategory.
-    #: The external tax rates in a
-    #: Cart do not contain an `id`.
+    #: Present if the TaxRate is part of a [TaxCategory](ctp:api:type:TaxCategory).
+    #: Absent for external TaxRates in [LineItem](ctp:api:type:LineItem), [CustomLineItem](ctp:api:type:CustomLineItem), and [ShippingInfo](ctp:api:type:ShippingInfo).
     id: typing.Optional[str]
+    #: Name of the TaxRate.
     name: str
-    #: Percentage in the range of [0..1].
-    #: The sum of the amounts of all `subRates`, if there are any.
+    #: Tax rate. If subrates are used, the amount must be the sum of all subrates.
     amount: float
+    #: If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the platform calculates the `totalNet` price based on the TaxRate.
     included_in_price: bool
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
     country: str
-    #: The state in the country
+    #: State within the country, such as Texas in the United States.
     state: typing.Optional[str]
-    #: For countries (e.g.
-    #: the US) where the total tax is a combination of multiple taxes (e.g.
-    #: state and local taxes).
+    #: Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
     sub_rates: typing.Optional[typing.List["SubRate"]]
 
     def __init__(
@@ -333,20 +359,19 @@ class TaxRate(_BaseType):
 
 
 class TaxRateDraft(_BaseType):
+    #: Name of the TaxRate.
     name: str
-    #: Percentage in the range of [0..1].
+    #: Tax rate.
     #: Must be supplied if no `subRates` are specified.
-    #: If `subRates` are specified
-    #: then the `amount` can be omitted or it must be the sum of the amounts of all `subRates`.
+    #: If `subRates` are specified, this field can be omitted or it must be the sum of amounts of all `subRates`.
     amount: typing.Optional[float]
+    #: Set to `true`, if tax should be included in [Prices](ctp:api:type:Price) and the `taxedPrice` should be present on [Line Items](ctp:api:type:LineItem). In this case, the platform calculates the `totalNet` price based on the TaxRate.
     included_in_price: bool
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
     country: str
-    #: The state in the country
+    #: State within the country, such as Texas in the United States.
     state: typing.Optional[str]
-    #: For countries (e.g.
-    #: the US) where the total tax is a combination of multiple taxes (e.g.
-    #: state and local taxes).
+    #: Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
     sub_rates: typing.Optional[typing.List["SubRate"]]
 
     def __init__(
@@ -380,6 +405,7 @@ class TaxRateDraft(_BaseType):
 
 
 class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
+    #: Value to append to the `rates` array.
     tax_rate: "TaxRateDraft"
 
     def __init__(self, *, tax_rate: "TaxRateDraft"):
@@ -401,6 +427,7 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
+    #: New value to set. Must not be empty.
     name: str
 
     def __init__(self, *, name: str):
@@ -422,6 +449,7 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
+    #: ID of the TaxRate to remove.
     tax_rate_id: str
 
     def __init__(self, *, tax_rate_id: str):
@@ -443,7 +471,9 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
+    #: ID of the TaxRate to replace.
     tax_rate_id: str
+    #: New TaxRate to replace with.
     tax_rate: "TaxRateDraft"
 
     def __init__(self, *, tax_rate_id: str, tax_rate: "TaxRateDraft"):
@@ -466,6 +496,7 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
 
 
 class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional[str]
 
     def __init__(self, *, description: typing.Optional[str] = None):
@@ -487,7 +518,7 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
 
 
 class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
-    #: If `key` is absent or `null`, it is removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):

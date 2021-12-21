@@ -124,9 +124,7 @@ class ProductVariantDraftImportSchema(helpers.BaseSchema):
     sku = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
+    key = marshmallow.fields.String(allow_none=True, missing=None)
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PriceDraftImportSchema"),
         allow_none=True,

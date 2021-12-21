@@ -15,15 +15,14 @@ __all__ = ["ImportSummary", "OperationStates"]
 
 
 class ImportSummary(_BaseType):
-    """An import summary describes the states of import resources of a given import sink.
-
-    It is used to track the overall progress of import resources.
+    """Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingState).
+    Can be used to monitor the import progress per [Import Container](/import-container).
 
     """
 
-    #: The states summary for this import summary.
+    #: The import status of an [ImportContainer](/import-container#importcontainer) given by the number of resources in each [Processing State](/processing-state#processingState).
     states: "OperationStates"
-    #: The total number of import operations received for this import group.
+    #: The total number of [ImportOperations](/import-operation#importoperation) received for this Import Summary.
     total: int
 
     def __init__(self, *, states: "OperationStates", total: int):
@@ -44,26 +43,30 @@ class ImportSummary(_BaseType):
 
 
 class OperationStates(_BaseType):
-    #: The number of import operations that are in the state `ValidationFailed`.
+    #: The number of resources in the `processing` state.
+    processing: int
+    #: The number of resources in the `validationFailed` state.
     validation_failed: int
-    #: The number of import operations that are in the state `Unresolved`.
+    #: The number of resources in the `unresolved` state.
     unresolved: int
-    #: The number of import operations that are in the state `WaitForMasterVariant`.
+    #: The number of resources in the `waitForMasterVariant` state.
     wait_for_master_variant: int
-    #: The number of import operations that are in the state `Imported`.
+    #: The number of resources in the `imported` state.
     imported: int
-    #: The number of import operations that are in the state `Rejected`.
+    #: The number of resources in the `rejected` state.
     rejected: int
 
     def __init__(
         self,
         *,
+        processing: int,
         validation_failed: int,
         unresolved: int,
         wait_for_master_variant: int,
         imported: int,
         rejected: int
     ):
+        self.processing = processing
         self.validation_failed = validation_failed
         self.unresolved = unresolved
         self.wait_for_master_variant = wait_for_master_variant

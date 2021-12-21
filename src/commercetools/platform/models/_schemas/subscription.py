@@ -111,6 +111,21 @@ class AzureServiceBusDestinationSchema(DestinationSchema):
         return models.AzureServiceBusDestination(**data)
 
 
+class EventBridgeDestinationSchema(DestinationSchema):
+    region = marshmallow.fields.String(allow_none=True, missing=None)
+    account_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="accountId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.EventBridgeDestination(**data)
+
+
 class GoogleCloudPubSubDestinationSchema(DestinationSchema):
     project_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="projectId"
@@ -246,6 +261,7 @@ class SubscriptionSchema(BaseResourceSchema):
             "AzureServiceBus": helpers.absmod(
                 __name__, ".AzureServiceBusDestinationSchema"
             ),
+            "EventBridge": helpers.absmod(__name__, ".EventBridgeDestinationSchema"),
             "GoogleCloudPubSub": helpers.absmod(
                 __name__, ".GoogleCloudPubSubDestinationSchema"
             ),
@@ -467,6 +483,7 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
             "AzureServiceBus": helpers.absmod(
                 __name__, ".AzureServiceBusDestinationSchema"
             ),
+            "EventBridge": helpers.absmod(__name__, ".EventBridgeDestinationSchema"),
             "GoogleCloudPubSub": helpers.absmod(
                 __name__, ".GoogleCloudPubSubDestinationSchema"
             ),
@@ -584,6 +601,7 @@ class SubscriptionChangeDestinationActionSchema(SubscriptionUpdateActionSchema):
             "AzureServiceBus": helpers.absmod(
                 __name__, ".AzureServiceBusDestinationSchema"
             ),
+            "EventBridge": helpers.absmod(__name__, ".EventBridgeDestinationSchema"),
             "GoogleCloudPubSub": helpers.absmod(
                 __name__, ".GoogleCloudPubSubDestinationSchema"
             ),

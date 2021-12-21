@@ -52,6 +52,7 @@ __all__ = [
     "ShippingMethodSetDescriptionAction",
     "ShippingMethodSetKeyAction",
     "ShippingMethodSetLocalizedDescriptionAction",
+    "ShippingMethodSetLocalizedNameAction",
     "ShippingMethodSetPredicateAction",
     "ShippingMethodUpdate",
     "ShippingMethodUpdateAction",
@@ -87,11 +88,14 @@ class PriceFunction(_BaseType):
 
 
 class ShippingMethod(BaseResource):
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-specific unique identifier for the shipping method.
     key: typing.Optional[str]
     name: str
+    localized_name: typing.Optional["LocalizedString"]
     description: typing.Optional[str]
     localized_description: typing.Optional["LocalizedString"]
     tax_category: "TaxCategoryReference"
@@ -113,6 +117,7 @@ class ShippingMethod(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         name: str,
+        localized_name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional[str] = None,
         localized_description: typing.Optional["LocalizedString"] = None,
         tax_category: "TaxCategoryReference",
@@ -125,6 +130,7 @@ class ShippingMethod(BaseResource):
         self.created_by = created_by
         self.key = key
         self.name = name
+        self.localized_name = localized_name
         self.description = description
         self.localized_description = localized_description
         self.tax_category = tax_category
@@ -154,6 +160,7 @@ class ShippingMethod(BaseResource):
 class ShippingMethodDraft(_BaseType):
     key: typing.Optional[str]
     name: str
+    localized_name: typing.Optional["LocalizedString"]
     description: typing.Optional[str]
     localized_description: typing.Optional["LocalizedString"]
     tax_category: "TaxCategoryResourceIdentifier"
@@ -169,6 +176,7 @@ class ShippingMethodDraft(_BaseType):
         *,
         key: typing.Optional[str] = None,
         name: str,
+        localized_name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional[str] = None,
         localized_description: typing.Optional["LocalizedString"] = None,
         tax_category: "TaxCategoryResourceIdentifier",
@@ -179,6 +187,7 @@ class ShippingMethodDraft(_BaseType):
     ):
         self.key = key
         self.name = name
+        self.localized_name = localized_name
         self.description = description
         self.localized_description = localized_description
         self.tax_category = tax_category
@@ -377,6 +386,12 @@ class ShippingMethodUpdateAction(_BaseType):
             )
 
             return ShippingMethodSetLocalizedDescriptionActionSchema().load(data)
+        if data["action"] == "setLocalizedName":
+            from ._schemas.shipping_method import (
+                ShippingMethodSetLocalizedNameActionSchema,
+            )
+
+            return ShippingMethodSetLocalizedNameActionSchema().load(data)
         if data["action"] == "setPredicate":
             from ._schemas.shipping_method import ShippingMethodSetPredicateActionSchema
 
@@ -914,6 +929,27 @@ class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
         )
 
         return ShippingMethodSetLocalizedDescriptionActionSchema().dump(self)
+
+
+class ShippingMethodSetLocalizedNameAction(ShippingMethodUpdateAction):
+    localized_name: typing.Optional["LocalizedString"]
+
+    def __init__(self, *, localized_name: typing.Optional["LocalizedString"] = None):
+        self.localized_name = localized_name
+        super().__init__(action="setLocalizedName")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ShippingMethodSetLocalizedNameAction":
+        from ._schemas.shipping_method import ShippingMethodSetLocalizedNameActionSchema
+
+        return ShippingMethodSetLocalizedNameActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.shipping_method import ShippingMethodSetLocalizedNameActionSchema
+
+        return ShippingMethodSetLocalizedNameActionSchema().dump(self)
 
 
 class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):

@@ -59,16 +59,12 @@ class CartDiscountSchema(BaseResourceSchema):
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "absolute": helpers.absmod(
-                __name__, ".CartDiscountValueAbsoluteDraftSchema"
-            ),
-            "fixed": helpers.absmod(__name__, ".CartDiscountValueFixedDraftSchema"),
+            "absolute": helpers.absmod(__name__, ".CartDiscountValueAbsoluteSchema"),
+            "fixed": helpers.absmod(__name__, ".CartDiscountValueFixedSchema"),
             "giftLineItem": helpers.absmod(
-                __name__, ".CartDiscountValueGiftLineItemDraftSchema"
+                __name__, ".CartDiscountValueGiftLineItemSchema"
             ),
-            "relative": helpers.absmod(
-                __name__, ".CartDiscountValueRelativeDraftSchema"
-            ),
+            "relative": helpers.absmod(__name__, ".CartDiscountValueRelativeSchema"),
         },
         missing=None,
     )
@@ -276,7 +272,10 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
         data_key="validUntil",
     )
     requires_discount_code = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="requiresDiscountCode"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="requiresDiscountCode",
     )
     stacking_mode = marshmallow_enum.EnumField(
         StackingMode,

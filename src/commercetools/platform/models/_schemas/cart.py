@@ -644,6 +644,9 @@ class CartUpdateSchema(helpers.BaseSchema):
                 "setLineItemShippingDetails": helpers.absmod(
                     __name__, ".CartSetLineItemShippingDetailsActionSchema"
                 ),
+                "setLineItemSupplyChannel": helpers.absmod(
+                    __name__, ".CartSetLineItemSupplyChannelActionSchema"
+                ),
                 "setLineItemTaxAmount": helpers.absmod(
                     __name__, ".CartSetLineItemTaxAmountActionSchema"
                 ),
@@ -1100,6 +1103,12 @@ class LineItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     product_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="productId"
+    )
+    product_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productKey",
     )
     name = LocalizedStringField(
         allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
@@ -2600,18 +2609,9 @@ class CartSetDeliveryAddressCustomFieldActionSchema(CartUpdateActionSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
-    type = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    fields = FieldContainerField(
-        allow_none=True,
-        values=marshmallow.fields.Raw(allow_none=True),
-        metadata={"omit_empty": True},
-        missing=None,
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
 
     class Meta:
@@ -2627,9 +2627,18 @@ class CartSetDeliveryAddressCustomTypeActionSchema(CartUpdateActionSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -2809,6 +2818,28 @@ class CartSetLineItemShippingDetailsActionSchema(CartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.CartSetLineItemShippingDetailsAction(**data)
+
+
+class CartSetLineItemSupplyChannelActionSchema(CartUpdateActionSchema):
+    line_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lineItemId"
+    )
+    supply_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="supplyChannel",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetLineItemSupplyChannelAction(**data)
 
 
 class CartSetLineItemTaxAmountActionSchema(CartUpdateActionSchema):

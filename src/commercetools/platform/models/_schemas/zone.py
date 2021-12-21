@@ -89,6 +89,7 @@ class ZoneDraftSchema(helpers.BaseSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
     )
 
@@ -103,11 +104,11 @@ class ZoneDraftSchema(helpers.BaseSchema):
 
 class ZonePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ZoneSchema"),
         allow_none=True,

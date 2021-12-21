@@ -2101,7 +2101,7 @@ class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     discounted = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
+        nested=helpers.absmod(__name__, ".common.DiscountedPriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},

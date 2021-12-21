@@ -63,6 +63,13 @@ class ShippingMethodSchema(BaseResourceSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
+    localized_name = LocalizedStringField(
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedName",
+    )
     description = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -116,6 +123,13 @@ class ShippingMethodDraftSchema(helpers.BaseSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     name = marshmallow.fields.String(allow_none=True, missing=None)
+    localized_name = LocalizedStringField(
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedName",
+    )
     description = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -262,6 +276,9 @@ class ShippingMethodUpdateSchema(helpers.BaseSchema):
                 "setKey": helpers.absmod(__name__, ".ShippingMethodSetKeyActionSchema"),
                 "setLocalizedDescription": helpers.absmod(
                     __name__, ".ShippingMethodSetLocalizedDescriptionActionSchema"
+                ),
+                "setLocalizedName": helpers.absmod(
+                    __name__, ".ShippingMethodSetLocalizedNameActionSchema"
                 ),
                 "setPredicate": helpers.absmod(
                     __name__, ".ShippingMethodSetPredicateActionSchema"
@@ -754,6 +771,24 @@ class ShippingMethodSetLocalizedDescriptionActionSchema(
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ShippingMethodSetLocalizedDescriptionAction(**data)
+
+
+class ShippingMethodSetLocalizedNameActionSchema(ShippingMethodUpdateActionSchema):
+    localized_name = LocalizedStringField(
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="localizedName",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ShippingMethodSetLocalizedNameAction(**data)
 
 
 class ShippingMethodSetPredicateActionSchema(ShippingMethodUpdateActionSchema):

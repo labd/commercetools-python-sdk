@@ -679,6 +679,24 @@ class CustomerUpdateActionSchema(helpers.BaseSchema):
         return models.CustomerUpdateAction(**data)
 
 
+class MyCustomerChangePasswordSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    current_password = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="currentPassword"
+    )
+    new_password = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="newPassword"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyCustomerChangePassword(**data)
+
+
 class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),

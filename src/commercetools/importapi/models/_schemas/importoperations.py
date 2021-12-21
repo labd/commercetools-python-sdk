@@ -22,8 +22,8 @@ from ..importoperations import ImportOperationState
 # Marshmallow Schemas
 class ImportOperationSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    import_sink_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="importSinkKey"
+    import_container_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="importContainerKey"
     )
     resource_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="resourceKey"
@@ -109,6 +109,15 @@ class ImportOperationSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    unresolved_references = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.UnresolvedReferencesSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="unresolvedReferences",
+    )
     created_at = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="createdAt"
     )
@@ -132,6 +141,7 @@ class ImportOperationPagedResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ImportOperationSchema"),
         allow_none=True,

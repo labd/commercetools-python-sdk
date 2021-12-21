@@ -33,7 +33,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional[None]:
+    ) -> typing.Optional["ProductProjectionPagedSearchResponse"]:
         """Search Product Projection"""
         headers = {} if headers is None else headers
         response = self._client._post(
@@ -42,12 +42,12 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
             headers={"Content-Type": "application/x-www-form-urlencoded", **headers},
             options=options,
         )
-        if response.status_code in (400, 401, 403, 500, 503):
+        if response.status_code == 200:
+            return ProductProjectionPagedSearchResponse.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
-        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 
@@ -56,7 +56,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         *,
         fuzzy: bool = None,
         fuzzy_level: float = None,
-        mark_matching_variants: bool,
+        mark_matching_variants: bool = None,
         staged: bool = None,
         filter: typing.List["str"] = None,
         filter_facets: typing.List["str"] = None,
@@ -109,7 +109,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         )
         if response.status_code == 200:
             return ProductProjectionPagedSearchResponse.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

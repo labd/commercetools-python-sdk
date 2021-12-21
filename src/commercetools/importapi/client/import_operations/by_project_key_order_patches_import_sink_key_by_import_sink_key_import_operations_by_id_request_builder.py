@@ -14,7 +14,7 @@ if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
-class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder:
+class ByProjectKeyOrderPatchesImportSinkKeyByImportSinkKeyImportOperationsByIdRequestBuilder:
 
     _client: "BaseClient"
     _project_key: str
@@ -42,7 +42,7 @@ class ByProjectKeyInventoriesImportSinkKeyByImportSinkKeyImportOperationsByIdReq
         """Retrieves the import operation with the given id."""
         headers = {} if headers is None else headers
         response = self._client._get(
-            endpoint=f"/{self._project_key}/inventories/importSinkKey={self._import_sink_key}/import-operations/{self._id}",
+            endpoint=f"/{self._project_key}/order-patches/importSinkKey={self._import_sink_key}/import-operations/{self._id}",
             params={},
             headers=headers,
             options=options,

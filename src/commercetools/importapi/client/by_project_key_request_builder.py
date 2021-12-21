@@ -13,14 +13,20 @@ from .categories.by_project_key_categories_request_builder import (
 from .customers.by_project_key_customers_request_builder import (
     ByProjectKeyCustomersRequestBuilder,
 )
+from .import_containers.by_project_key_import_containers_request_builder import (
+    ByProjectKeyImportContainersRequestBuilder,
+)
+from .import_operations.by_project_key_import_operations_request_builder import (
+    ByProjectKeyImportOperationsRequestBuilder,
+)
 from .import_sinks.by_project_key_import_sinks_request_builder import (
     ByProjectKeyImportSinksRequestBuilder,
 )
 from .import_summaries.by_project_key_import_summaries_request_builder import (
     ByProjectKeyImportSummariesRequestBuilder,
 )
-from .inventories.by_project_key_inventories_request_builder import (
-    ByProjectKeyInventoriesRequestBuilder,
+from .order_patches.by_project_key_order_patches_request_builder import (
+    ByProjectKeyOrderPatchesRequestBuilder,
 )
 from .orders.by_project_key_orders_request_builder import (
     ByProjectKeyOrdersRequestBuilder,
@@ -69,6 +75,18 @@ class ByProjectKeyRequestBuilder:
 
     def import_summaries(self) -> ByProjectKeyImportSummariesRequestBuilder:
         return ByProjectKeyImportSummariesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def import_containers(self) -> ByProjectKeyImportContainersRequestBuilder:
+        return ByProjectKeyImportContainersRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def import_operations(self) -> ByProjectKeyImportOperationsRequestBuilder:
+        return ByProjectKeyImportOperationsRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )
@@ -123,14 +141,14 @@ class ByProjectKeyRequestBuilder:
             client=self._client,
         )
 
-    def customers(self) -> ByProjectKeyCustomersRequestBuilder:
-        return ByProjectKeyCustomersRequestBuilder(
+    def order_patches(self) -> ByProjectKeyOrderPatchesRequestBuilder:
+        return ByProjectKeyOrderPatchesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )
 
-    def inventories(self) -> ByProjectKeyInventoriesRequestBuilder:
-        return ByProjectKeyInventoriesRequestBuilder(
+    def customers(self) -> ByProjectKeyCustomersRequestBuilder:
+        return ByProjectKeyCustomersRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

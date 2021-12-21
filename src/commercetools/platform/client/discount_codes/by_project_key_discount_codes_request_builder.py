@@ -54,7 +54,6 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCodePagedQueryResponse"]:
-        """Query discount-codes"""
         params = {
             "expand": expand,
             "sort": sort,
@@ -75,7 +74,7 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         )
         if response.status_code == 200:
             return DiscountCodePagedQueryResponse.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
@@ -90,7 +89,6 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
-        """Create DiscountCode"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/discount-codes",
@@ -101,11 +99,9 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         )
         if response.status_code in (201, 200):
             return DiscountCode.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
-        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)

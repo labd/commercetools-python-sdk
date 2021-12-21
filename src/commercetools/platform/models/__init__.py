@@ -5,6 +5,7 @@
 # but send a pull request to the Lab Digital fork of rmf-codegen at
 # https://github.com/labd/rmf-codegen
 
+from . import *  # noqa
 from .api_client import *  # noqa
 from .cart import *  # noqa
 from .cart_discount import *  # noqa

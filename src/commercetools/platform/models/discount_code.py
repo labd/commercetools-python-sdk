@@ -53,9 +53,9 @@ __all__ = [
 
 
 class DiscountCode(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not tracked.
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     name: typing.Optional["LocalizedString"]
     description: typing.Optional["LocalizedString"]
@@ -84,6 +84,11 @@ class DiscountCode(BaseResource):
     #: The time until the discount can be applied on a cart.
     #: After that time the code is invalid.
     valid_until: typing.Optional[datetime.datetime]
+    #: Used for the internal platform only and registers the reservation of use of a discount code.
+    #: Its value is managed by the platform.
+    #: It can change at any time due to internal and external factors.
+    #: It should not be used in customer logic.
+    application_version: int
 
     def __init__(
         self,
@@ -106,7 +111,8 @@ class DiscountCode(BaseResource):
         custom: typing.Optional["CustomFields"] = None,
         groups: typing.List["str"],
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
+        application_version: int
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -123,6 +129,7 @@ class DiscountCode(BaseResource):
         self.groups = groups
         self.valid_from = valid_from
         self.valid_until = valid_until
+        self.application_version = application_version
         super().__init__(
             id=id,
             version=version,

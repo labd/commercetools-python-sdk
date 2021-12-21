@@ -11,7 +11,7 @@ from .by_project_key_request_builder import ByProjectKeyRequestBuilder
 
 class Client(BaseClient):
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault("url", "https://api.europe-west1.gcp.commercetools.com")
+        kwargs.setdefault("url", "https://api.{region}.commercetools.com")
         super().__init__(self, **kwargs)
 
     def with_project_key(self, project_key: str) -> ByProjectKeyRequestBuilder:

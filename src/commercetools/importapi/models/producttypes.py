@@ -346,7 +346,7 @@ class AttributeMoneyType(AttributeType):
 
 
 class AttributeNestedType(AttributeType):
-    #: References a product type by its key.
+    #: References a product type by key.
     type_reference: "ProductTypeKeyReference"
 
     def __init__(self, *, type_reference: "ProductTypeKeyReference"):
@@ -470,13 +470,13 @@ class TextInputHint(enum.Enum):
 
 
 class ProductTypeImport(ImportResource):
-    """Import representation for a product type."""
+    """The data representation for a ProductType to be imported that is persisted as a [ProductType](/../api/projects/productTypes#producttype) in the Project."""
 
     #: Maps to `ProductType.name`.
     name: str
     #: Maps to `ProductType.description`.
     description: str
-    #: The product type's attributes.
+    #: The `attributes` of [ProductType](/../api/projects/productTypes#producttype).
     attributes: typing.Optional[typing.List["AttributeDefinition"]]
 
     def __init__(

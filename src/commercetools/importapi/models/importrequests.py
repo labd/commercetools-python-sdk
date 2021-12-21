@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
     from .common import ImportResourceType
     from .customers import CustomerImport
     from .importoperations import ImportOperationStatus
-    from .inventories import InventoryImport
+    from .order_patches import OrderPatchImport
     from .orders import OrderImport
     from .prices import PriceImport
     from .productdrafts import ProductDraftImport
@@ -30,8 +30,8 @@ __all__ = [
     "CustomerImportRequest",
     "ImportRequest",
     "ImportResponse",
-    "InventoryImportRequest",
     "OrderImportRequest",
+    "OrderPatchImportRequest",
     "PriceImportRequest",
     "ProductDraftImportRequest",
     "ProductImportRequest",
@@ -42,7 +42,7 @@ __all__ = [
 
 
 class ImportRequest(_BaseType):
-    """An import request batches multiple import resources of the same import resource type for processing by an import sink."""
+    """An import request batches multiple import resources of the same import resource type for processing by an import container."""
 
     #: The type of the import resource.
     type: "ImportResourceType"
@@ -81,6 +81,10 @@ class ImportRequest(_BaseType):
             from ._schemas.importrequests import OrderImportRequestSchema
 
             return OrderImportRequestSchema().load(data)
+        if data["type"] == "order-patch":
+            from ._schemas.importrequests import OrderPatchImportRequestSchema
+
+            return OrderPatchImportRequestSchema().load(data)
         if data["type"] == "product-variant-patch":
             from ._schemas.importrequests import ProductVariantPatchRequestSchema
 
@@ -89,10 +93,6 @@ class ImportRequest(_BaseType):
             from ._schemas.importrequests import CustomerImportRequestSchema
 
             return CustomerImportRequestSchema().load(data)
-        if data["type"] == "inventory":
-            from ._schemas.importrequests import InventoryImportRequestSchema
-
-            return InventoryImportRequestSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.importrequests import ImportRequestSchema
@@ -101,9 +101,8 @@ class ImportRequest(_BaseType):
 
 
 class ImportResponse(_BaseType):
-    """The import response contains an import operation for each import resource sent with an import request. Use it for tracking the progress of imports to a commercetools project.
-
-    This is a generic parent type. In practice, send a specific import request type (`CategoryImportRequest`, `OrderImportRequest`, etc.) to an import sink with a matching import type.
+    """A list of the ID's and validation statuses of newly created [ImportOperations](#importoperation).
+    Used as a response at each resource-specific import endpoint, for example, at [Import Categories](/category#import-categories) and [Import ProductTypes](/product-type#import-producttypes).
 
     """
 
@@ -126,7 +125,7 @@ class ImportResponse(_BaseType):
 
 
 class CategoryImportRequest(ImportRequest):
-    """An import request for multiple category import resources."""
+    """The request body to [import Categories](#import-categories). Contains data for [Categories](/../api/projects/categories#category) to be created or updated in a commercetools Project."""
 
     #: The category import resources of this request.
     resources: typing.List["CategoryImport"]
@@ -148,7 +147,7 @@ class CategoryImportRequest(ImportRequest):
 
 
 class ProductImportRequest(ImportRequest):
-    """An import request for multiple product import resources."""
+    """The request body to [import Products](#import-products). Contains data for [Products](/../api/projects/products#product) to be created or updated in a commercetools Project."""
 
     #: The product import resources of this request.
     resources: typing.List["ProductImport"]
@@ -170,7 +169,7 @@ class ProductImportRequest(ImportRequest):
 
 
 class ProductDraftImportRequest(ImportRequest):
-    """An import request for multiple product draft import resources."""
+    """The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](/../api/projects/products#productdraft) to be created or updated in a commercetools Project."""
 
     #: The product draft import resources of this request.
     resources: typing.List["ProductDraftImport"]
@@ -194,7 +193,7 @@ class ProductDraftImportRequest(ImportRequest):
 
 
 class ProductTypeImportRequest(ImportRequest):
-    """An import request for multiple product type import resources."""
+    """The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](/../api/projects/productTypes#producttype) to be created or updated in a commercetools Project."""
 
     #: The product type import resources of this request.
     resources: typing.List["ProductTypeImport"]
@@ -218,7 +217,7 @@ class ProductTypeImportRequest(ImportRequest):
 
 
 class ProductVariantImportRequest(ImportRequest):
-    """An import request for multiple product variant import resources."""
+    """The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](/../api/projects/products#productvariant) to be created or updated in a commercetools Project."""
 
     #: The product variant import resources of this request.
     resources: typing.List["ProductVariantImport"]
@@ -242,7 +241,7 @@ class ProductVariantImportRequest(ImportRequest):
 
 
 class PriceImportRequest(ImportRequest):
-    """An import request for multiple price import resources."""
+    """The request body to [import Prices](#import-prices). Contains data for [Prices](/../api/projects/products#price) to be created or updated in a commercetools Project."""
 
     #: The price import resources of this request.
     resources: typing.List["PriceImport"]
@@ -264,7 +263,7 @@ class PriceImportRequest(ImportRequest):
 
 
 class OrderImportRequest(ImportRequest):
-    """An import request for multiple order import resources."""
+    """The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a commercetools Project."""
 
     #: The order import resources of this request.
     resources: typing.List["OrderImport"]
@@ -285,8 +284,32 @@ class OrderImportRequest(ImportRequest):
         return OrderImportRequestSchema().dump(self)
 
 
+class OrderPatchImportRequest(ImportRequest):
+    """The request body to [import OrderPatches](#import-orderpatches). The data to be imported are represented by [OrderPatchImport](#orderpatchimport)."""
+
+    #: The order patches of this request
+    patches: typing.List["OrderPatchImport"]
+
+    def __init__(self, *, patches: typing.List["OrderPatchImport"]):
+        self.patches = patches
+        super().__init__(type=ImportResourceType.ORDER_PATCH)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderPatchImportRequest":
+        from ._schemas.importrequests import OrderPatchImportRequestSchema
+
+        return OrderPatchImportRequestSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.importrequests import OrderPatchImportRequestSchema
+
+        return OrderPatchImportRequestSchema().dump(self)
+
+
 class ProductVariantPatchRequest(ImportRequest):
-    """An import request for multiple product variant patch resources."""
+    """The request body to [import ProductVariantPatches](#import-productvariantpatches). The data to be imported are represented by [ProductVariantPatch](#productvariantpatch)."""
 
     #: The product variant patches of this request.
     patches: typing.List["ProductVariantPatch"]
@@ -310,7 +333,7 @@ class ProductVariantPatchRequest(ImportRequest):
 
 
 class CustomerImportRequest(ImportRequest):
-    """An import request for multiple customer import resources."""
+    """The request body to [import Customers](#import-customers). Contains data for [Customers](/../api/projects/customers#customer) to be created or updated in a commercetools Project."""
 
     #: The customer import resources of this request.
     resources: typing.List["CustomerImport"]
@@ -329,27 +352,3 @@ class CustomerImportRequest(ImportRequest):
         from ._schemas.importrequests import CustomerImportRequestSchema
 
         return CustomerImportRequestSchema().dump(self)
-
-
-class InventoryImportRequest(ImportRequest):
-    """An import request for multiple inventory import resources."""
-
-    #: The inventory import resources of this request.
-    resources: typing.List["InventoryImport"]
-
-    def __init__(self, *, resources: typing.List["InventoryImport"]):
-        self.resources = resources
-        super().__init__(type=ImportResourceType.INVENTORY)
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "InventoryImportRequest":
-        from ._schemas.importrequests import InventoryImportRequestSchema
-
-        return InventoryImportRequestSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.importrequests import InventoryImportRequestSchema
-
-        return InventoryImportRequestSchema().dump(self)

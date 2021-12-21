@@ -23,7 +23,7 @@ class CustomerAddress(_BaseType):
     """Different from Address in that `key` is required and `id` is not supported."""
 
     #: User-defined identifier for the address.
-    #: It must follow the pattern [a-zA-Z0-9_\-]{2,256}, and unique per customer.
+    #: Must follow the pattern `[a-zA-Z0-9_\-]{2,256}` and must be unique per customer.
     key: str
     title: typing.Optional[str]
     salutation: typing.Optional[str]
@@ -117,7 +117,7 @@ class CustomerAddress(_BaseType):
 
 
 class CustomerImport(ImportResource):
-    """Import representation for a customer."""
+    """The data representation for a Customer to be imported that is persisted as a [Customer](/../api/projects/customers#top) in the Project."""
 
     #: Maps to `Customer.customerNumber`.
     customer_number: typing.Optional[str]
@@ -125,11 +125,7 @@ class CustomerImport(ImportResource):
     email: str
     #: Maps to `Customer.password`.
     password: str
-    #: References stores by its keys.
-    #:
-    #: The stores referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The References to the Stores with which the Customer is associated. If referenced Stores do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Stores are created.
     stores: typing.Optional[typing.List["StoreKeyReference"]]
     #: Maps to `Customer.firstName`.
     first_name: typing.Optional[str]
@@ -151,11 +147,8 @@ class CustomerImport(ImportResource):
     vat_id: typing.Optional[str]
     #: Maps to `Customer.isEmailVerified`.
     is_email_verified: typing.Optional[bool]
-    #: References a customer group by its key.
-    #:
-    #: The customer group referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the Customer is associated.
+    #: If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: Maps to `Customer.addresses`.
     addresses: typing.List["CustomerAddress"]

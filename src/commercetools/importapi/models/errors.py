@@ -458,6 +458,7 @@ class InvalidFieldError(ErrorObject):
     invalid_value: typing.Any
     #: The set of allowed values for the field, if any.
     allowed_values: typing.Optional[typing.List["typing.Any"]]
+    resource_index: typing.Optional[int]
 
     def __init__(
         self,
@@ -465,11 +466,13 @@ class InvalidFieldError(ErrorObject):
         message: str,
         field: str,
         invalid_value: typing.Any,
-        allowed_values: typing.Optional[typing.List["typing.Any"]] = None
+        allowed_values: typing.Optional[typing.List["typing.Any"]] = None,
+        resource_index: typing.Optional[int] = None
     ):
         self.field = field
         self.invalid_value = invalid_value
         self.allowed_values = allowed_values
+        self.resource_index = resource_index
         super().__init__(message=message, code="InvalidField")
 
     @classmethod
@@ -628,9 +631,9 @@ class RequiredFieldError(ErrorObject):
 
 
 class InvalidStateTransitionError(ErrorObject):
-    #: This enumeration describes the processing state of an import operation.
+    #: Every [Import Operation](/import-operation) is assigned with one of the following states.
     current_state: "ProcessingState"
-    #: This enumeration describes the processing state of an import operation.
+    #: Every [Import Operation](/import-operation) is assigned with one of the following states.
     new_state: "ProcessingState"
 
     def __init__(

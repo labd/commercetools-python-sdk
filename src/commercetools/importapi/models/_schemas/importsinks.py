@@ -25,6 +25,7 @@ class ImportSinkSchema(helpers.BaseSchema):
         ImportResourceType,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="resourceType",
     )
@@ -46,14 +47,12 @@ class ImportSinkSchema(helpers.BaseSchema):
 
 
 class ImportSinkDraftSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
     key = marshmallow.fields.String(allow_none=True, missing=None)
     resource_type = marshmallow_enum.EnumField(
         ImportResourceType,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="resourceType",
     )
@@ -67,10 +66,31 @@ class ImportSinkDraftSchema(helpers.BaseSchema):
         return models.ImportSinkDraft(**data)
 
 
+class ImportSinkUpdateDraftSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    resource_type = marshmallow_enum.EnumField(
+        ImportResourceType,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="resourceType",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.ImportSinkUpdateDraft(**data)
+
+
 class ImportSinkPagedResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ImportSinkSchema"),
         allow_none=True,

@@ -166,6 +166,9 @@ class DiscountCodeSchema(BaseResourceSchema):
         missing=None,
         data_key="validUntil",
     )
+    application_version = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="applicationVersion"
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

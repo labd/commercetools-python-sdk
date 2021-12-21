@@ -229,6 +229,7 @@ class ReferenceFieldSchema(CustomFieldSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "cart": helpers.absmod(__name__, ".common.CartKeyReferenceSchema"),
             "cart-discount": helpers.absmod(
                 __name__, ".common.CartDiscountKeyReferenceSchema"
             ),
@@ -238,6 +239,11 @@ class ReferenceFieldSchema(CustomFieldSchema):
             "customer-group": helpers.absmod(
                 __name__, ".common.CustomerGroupKeyReferenceSchema"
             ),
+            "discount-code": helpers.absmod(
+                __name__, ".common.DiscountCodeKeyReferenceSchema"
+            ),
+            "order": helpers.absmod(__name__, ".common.OrderKeyReferenceSchema"),
+            "payment": helpers.absmod(__name__, ".common.PaymentKeyReferenceSchema"),
             "price": helpers.absmod(__name__, ".common.PriceKeyReferenceSchema"),
             "product": helpers.absmod(__name__, ".common.ProductKeyReferenceSchema"),
             "product-discount": helpers.absmod(
@@ -258,6 +264,9 @@ class ReferenceFieldSchema(CustomFieldSchema):
                 __name__, ".common.TaxCategoryKeyReferenceSchema"
             ),
             "type": helpers.absmod(__name__, ".common.TypeKeyReferenceSchema"),
+            "key-value-document": helpers.absmod(
+                __name__, ".common.CustomObjectKeyReferenceSchema"
+            ),
         },
         missing=None,
     )
@@ -425,6 +434,7 @@ class ReferenceSetFieldSchema(CustomFieldSchema):
             allow_none=True,
             discriminator_field=("typeId", "type_id"),
             discriminator_schemas={
+                "cart": helpers.absmod(__name__, ".common.CartKeyReferenceSchema"),
                 "cart-discount": helpers.absmod(
                     __name__, ".common.CartDiscountKeyReferenceSchema"
                 ),
@@ -439,6 +449,13 @@ class ReferenceSetFieldSchema(CustomFieldSchema):
                 ),
                 "customer-group": helpers.absmod(
                     __name__, ".common.CustomerGroupKeyReferenceSchema"
+                ),
+                "discount-code": helpers.absmod(
+                    __name__, ".common.DiscountCodeKeyReferenceSchema"
+                ),
+                "order": helpers.absmod(__name__, ".common.OrderKeyReferenceSchema"),
+                "payment": helpers.absmod(
+                    __name__, ".common.PaymentKeyReferenceSchema"
                 ),
                 "price": helpers.absmod(__name__, ".common.PriceKeyReferenceSchema"),
                 "product": helpers.absmod(
@@ -462,6 +479,9 @@ class ReferenceSetFieldSchema(CustomFieldSchema):
                     __name__, ".common.TaxCategoryKeyReferenceSchema"
                 ),
                 "type": helpers.absmod(__name__, ".common.TypeKeyReferenceSchema"),
+                "key-value-document": helpers.absmod(
+                    __name__, ".common.CustomObjectKeyReferenceSchema"
+                ),
             },
         ),
         allow_none=True,

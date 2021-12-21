@@ -39,7 +39,6 @@ class ByProjectKeyCustomObjectsByContainerRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomObjectPagedQueryResponse"]:
-        """Get CustomObjectPagedQueryResponse by container"""
         params = {"where": where, "expand": expand}
         predicate_var and params.update(
             {f"var.{k}": v for k, v in predicate_var.items()}
@@ -53,7 +52,7 @@ class ByProjectKeyCustomObjectsByContainerRequestBuilder:
         )
         if response.status_code == 200:
             return CustomObjectPagedQueryResponse.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 503):
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

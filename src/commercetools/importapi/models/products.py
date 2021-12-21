@@ -125,31 +125,27 @@ class WhitespaceTokenizer(SuggestTokenizer):
 
 
 class ProductImport(ImportResource):
-    """Import representation for a product.
+    """The data representation for a Product to be imported that is persisted as a [Product](/../api/projects/products#product) in the Project.
 
-    The import representation for a product is the most minimal representation required
-    for creating a product in commercetools.
+    This is the minimal representation required for creating a [Product](/../api/projects/products#product) in commercetools.
 
     """
 
     #: Maps to `Product.name`.
     name: "LocalizedString"
-    #: The product's product type. Maps to `Product.productType`.
-    #:
-    #: The product type referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The `productType` of a [Product](/../api/projects/products#product).
+    #: Maps to `Product.productType`.
+    #: The Reference to the [ProductType](/../api/projects/productTypes#producttype) with which the Product is associated.
+    #: If referenced ProductType does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductType is created.
     product_type: "ProductTypeKeyReference"
-    #: Human-readable identifiers usually used as deep-link URL to the related product. Each slug must be unique across a project,
+    #: Human-readable identifiers usually used as deep-link URL to the related product. Each slug must be unique across a Project,
     #: but a product can have the same slug for different languages. Allowed are alphabetic, numeric, underscore (_) and hyphen (-) characters.
     slug: "LocalizedString"
     #: Maps to `Product.description`.
     description: typing.Optional["LocalizedString"]
-    #: An array of references to a categories by their keys. Maps to `Product.categories`.
-    #:
-    #: The categories referenced
-    #: must already exist in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: Maps to `Product.categories`.
+    #: The References to the [Categories](/../api/projects/categories#category) with which the Product is associated.
+    #: If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
     categories: typing.Optional[typing.List["CategoryKeyReference"]]
     #: A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
     #: ```json
@@ -175,11 +171,8 @@ class ProductImport(ImportResource):
     #: }
     #: ```
     meta_keywords: typing.Optional["LocalizedString"]
-    #: References a tax category by its key.
-    #:
-    #: The tax category referenced must already exist
-    #: in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [TaxCategory](/../api/projects/taxCategories#taxcategory) with which the Product is associated.
+    #: If referenced TaxCategory does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary TaxCategory is created.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
     #: Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
     #: ```json
@@ -200,13 +193,12 @@ class ProductImport(ImportResource):
     #: }
     #: ```
     search_keywords: typing.Optional["SearchKeywords"]
-    #: References a state by its key.
-    #:
-    #: The tax category referenced must already exist
-    #: in the commercetools project, or the
-    #: import operation state is set to `Unresolved`.
+    #: The Reference to the [State](/../api/projects/states#state) with which the Product is associated.
+    #: If referenced State does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary State is created.
     state: typing.Optional["StateKeyReference"]
-    #: If there were updates, only the updates will be published to `staged` and `current` projection.
+    #: If `publish` is set to either `true` or `false`, both staged and current projections are set to the same value provided by the import data.
+    #: If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
+    #: However, if the import data contains no update, that is, if it matches the staged projection of the existing Product in the platform, the import induces no change in the existing Product whether `publish` is set or not.
     publish: typing.Optional[bool]
 
     def __init__(

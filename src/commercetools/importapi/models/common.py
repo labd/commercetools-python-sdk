@@ -20,10 +20,13 @@ __all__ = [
     "AssetDimensions",
     "AssetSource",
     "CartDiscountKeyReference",
+    "CartKeyReference",
     "CategoryKeyReference",
     "ChannelKeyReference",
+    "CustomObjectKeyReference",
     "CustomerGroupKeyReference",
     "CustomerKeyReference",
+    "DiscountCodeKeyReference",
     "DiscountedPrice",
     "EnumValue",
     "HighPrecisionMoney",
@@ -35,6 +38,8 @@ __all__ = [
     "LocalizedString",
     "Money",
     "MoneyType",
+    "OrderKeyReference",
+    "PaymentKeyReference",
     "PriceKeyReference",
     "PriceTier",
     "ProcessingState",
@@ -49,6 +54,7 @@ __all__ = [
     "TaxCategoryKeyReference",
     "TypeKeyReference",
     "TypedMoney",
+    "UnresolvedReferences",
 ]
 
 
@@ -111,11 +117,11 @@ class AssetDimensions(_BaseType):
     """The width and height of the Asset Source."""
 
     #: The width of the asset source.
-    w: float
+    w: int
     #: The height of the asset source.
-    h: float
+    h: int
 
-    def __init__(self, *, w: float, h: float):
+    def __init__(self, *, w: int, h: int):
         self.w = w
         self.h = h
         super().__init__()
@@ -281,7 +287,7 @@ class ImportResource(_BaseType):
 
 
 class KeyReference(_BaseType):
-    """References a resource by its key."""
+    """References a resource by key."""
 
     key: str
     #: The type of the referenced resource.
@@ -294,6 +300,10 @@ class KeyReference(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "KeyReference":
+        if data["typeId"] == "cart":
+            from ._schemas.common import CartKeyReferenceSchema
+
+            return CartKeyReferenceSchema().load(data)
         if data["typeId"] == "cart-discount":
             from ._schemas.common import CartDiscountKeyReferenceSchema
 
@@ -314,6 +324,18 @@ class KeyReference(_BaseType):
             from ._schemas.common import CustomerGroupKeyReferenceSchema
 
             return CustomerGroupKeyReferenceSchema().load(data)
+        if data["typeId"] == "discount-code":
+            from ._schemas.common import DiscountCodeKeyReferenceSchema
+
+            return DiscountCodeKeyReferenceSchema().load(data)
+        if data["typeId"] == "order":
+            from ._schemas.common import OrderKeyReferenceSchema
+
+            return OrderKeyReferenceSchema().load(data)
+        if data["typeId"] == "payment":
+            from ._schemas.common import PaymentKeyReferenceSchema
+
+            return PaymentKeyReferenceSchema().load(data)
         if data["typeId"] == "price":
             from ._schemas.common import PriceKeyReferenceSchema
 
@@ -354,6 +376,10 @@ class KeyReference(_BaseType):
             from ._schemas.common import TypeKeyReferenceSchema
 
             return TypeKeyReferenceSchema().load(data)
+        if data["typeId"] == "key-value-document":
+            from ._schemas.common import CustomObjectKeyReferenceSchema
+
+            return CustomObjectKeyReferenceSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.common import KeyReferenceSchema
@@ -361,8 +387,27 @@ class KeyReference(_BaseType):
         return KeyReferenceSchema().dump(self)
 
 
+class CartKeyReference(KeyReference):
+    """References a cart by key."""
+
+    def __init__(self, *, key: str):
+
+        super().__init__(key=key, type_id=ReferenceType.CART)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CartKeyReference":
+        from ._schemas.common import CartKeyReferenceSchema
+
+        return CartKeyReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import CartKeyReferenceSchema
+
+        return CartKeyReferenceSchema().dump(self)
+
+
 class CartDiscountKeyReference(KeyReference):
-    """References a cart discount by its key."""
+    """References a cart discount by key."""
 
     def __init__(self, *, key: str):
 
@@ -383,7 +428,7 @@ class CartDiscountKeyReference(KeyReference):
 
 
 class CategoryKeyReference(KeyReference):
-    """References a category by its key."""
+    """References a category by key."""
 
     def __init__(self, *, key: str):
 
@@ -402,7 +447,7 @@ class CategoryKeyReference(KeyReference):
 
 
 class ChannelKeyReference(KeyReference):
-    """References a channel by its key."""
+    """References a channel by key."""
 
     def __init__(self, *, key: str):
 
@@ -421,7 +466,7 @@ class ChannelKeyReference(KeyReference):
 
 
 class CustomerKeyReference(KeyReference):
-    """References a customer by its key."""
+    """References a customer by key."""
 
     def __init__(self, *, key: str):
 
@@ -440,7 +485,7 @@ class CustomerKeyReference(KeyReference):
 
 
 class CustomerGroupKeyReference(KeyReference):
-    """References a customer group by its key."""
+    """References a customer group by key."""
 
     def __init__(self, *, key: str):
 
@@ -460,8 +505,67 @@ class CustomerGroupKeyReference(KeyReference):
         return CustomerGroupKeyReferenceSchema().dump(self)
 
 
+class DiscountCodeKeyReference(KeyReference):
+    """References a discount code by key."""
+
+    def __init__(self, *, key: str):
+
+        super().__init__(key=key, type_id=ReferenceType.DISCOUNT_CODE)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DiscountCodeKeyReference":
+        from ._schemas.common import DiscountCodeKeyReferenceSchema
+
+        return DiscountCodeKeyReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import DiscountCodeKeyReferenceSchema
+
+        return DiscountCodeKeyReferenceSchema().dump(self)
+
+
+class OrderKeyReference(KeyReference):
+    """References an order by key."""
+
+    def __init__(self, *, key: str):
+
+        super().__init__(key=key, type_id=ReferenceType.ORDER)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderKeyReference":
+        from ._schemas.common import OrderKeyReferenceSchema
+
+        return OrderKeyReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import OrderKeyReferenceSchema
+
+        return OrderKeyReferenceSchema().dump(self)
+
+
+class PaymentKeyReference(KeyReference):
+    """References a payment by key."""
+
+    def __init__(self, *, key: str):
+
+        super().__init__(key=key, type_id=ReferenceType.PAYMENT)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "PaymentKeyReference":
+        from ._schemas.common import PaymentKeyReferenceSchema
+
+        return PaymentKeyReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import PaymentKeyReferenceSchema
+
+        return PaymentKeyReferenceSchema().dump(self)
+
+
 class PriceKeyReference(KeyReference):
-    """References a price by its key."""
+    """References a price by key."""
 
     def __init__(self, *, key: str):
 
@@ -480,7 +584,7 @@ class PriceKeyReference(KeyReference):
 
 
 class ProductKeyReference(KeyReference):
-    """References a product by its key."""
+    """References a product by key."""
 
     def __init__(self, *, key: str):
 
@@ -499,7 +603,7 @@ class ProductKeyReference(KeyReference):
 
 
 class ProductDiscountKeyReference(KeyReference):
-    """References a product discount by its key."""
+    """References a product discount by key."""
 
     def __init__(self, *, key: str):
 
@@ -520,7 +624,7 @@ class ProductDiscountKeyReference(KeyReference):
 
 
 class ProductTypeKeyReference(KeyReference):
-    """References a product type by its key."""
+    """References a product type by key."""
 
     def __init__(self, *, key: str):
 
@@ -541,7 +645,7 @@ class ProductTypeKeyReference(KeyReference):
 
 
 class ProductVariantKeyReference(KeyReference):
-    """References a product variant by its key."""
+    """References a product variant by key."""
 
     def __init__(self, *, key: str):
 
@@ -562,7 +666,7 @@ class ProductVariantKeyReference(KeyReference):
 
 
 class ShippingMethodKeyReference(KeyReference):
-    """References a shipping method by its key."""
+    """References a shipping method by key."""
 
     def __init__(self, *, key: str):
 
@@ -583,7 +687,7 @@ class ShippingMethodKeyReference(KeyReference):
 
 
 class StateKeyReference(KeyReference):
-    """References a state by its key."""
+    """References a state by key."""
 
     def __init__(self, *, key: str):
 
@@ -602,7 +706,7 @@ class StateKeyReference(KeyReference):
 
 
 class StoreKeyReference(KeyReference):
-    """References a store by its key."""
+    """References a store by key."""
 
     def __init__(self, *, key: str):
 
@@ -621,7 +725,7 @@ class StoreKeyReference(KeyReference):
 
 
 class TaxCategoryKeyReference(KeyReference):
-    """References a tax category by its key."""
+    """References a tax category by key."""
 
     def __init__(self, *, key: str):
 
@@ -642,7 +746,7 @@ class TaxCategoryKeyReference(KeyReference):
 
 
 class TypeKeyReference(KeyReference):
-    """References a type by its key."""
+    """References a type by key."""
 
     def __init__(self, *, key: str):
 
@@ -658,6 +762,51 @@ class TypeKeyReference(KeyReference):
         from ._schemas.common import TypeKeyReferenceSchema
 
         return TypeKeyReferenceSchema().dump(self)
+
+
+class CustomObjectKeyReference(KeyReference):
+    """References a key value document by key."""
+
+    container: str
+
+    def __init__(self, *, key: str, container: str):
+        self.container = container
+        super().__init__(key=key, type_id=ReferenceType.KEY_VALUE_DOCUMENT)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomObjectKeyReference":
+        from ._schemas.common import CustomObjectKeyReferenceSchema
+
+        return CustomObjectKeyReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import CustomObjectKeyReferenceSchema
+
+        return CustomObjectKeyReferenceSchema().dump(self)
+
+
+class UnresolvedReferences(_BaseType):
+    key: str
+    #: The type of the referenced resource.
+    type_id: "ReferenceType"
+
+    def __init__(self, *, key: str, type_id: "ReferenceType"):
+        self.key = key
+        self.type_id = type_id
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "UnresolvedReferences":
+        from ._schemas.common import UnresolvedReferencesSchema
+
+        return UnresolvedReferencesSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import UnresolvedReferencesSchema
+
+        return UnresolvedReferencesSchema().dump(self)
 
 
 class MoneyType(enum.Enum):
@@ -814,6 +963,7 @@ class ImportResourceType(enum.Enum):
 
     CATEGORY = "category"
     ORDER = "order"
+    ORDER_PATCH = "order-patch"
     PRICE = "price"
     PRODUCT = "product"
     PRODUCT_DRAFT = "product-draft"
@@ -821,17 +971,20 @@ class ImportResourceType(enum.Enum):
     PRODUCT_VARIANT = "product-variant"
     PRODUCT_VARIANT_PATCH = "product-variant-patch"
     CUSTOMER = "customer"
-    INVENTORY = "inventory"
 
 
 class ReferenceType(enum.Enum):
     """The type of the referenced resource."""
 
+    CART = "cart"
     CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
     CHANNEL = "channel"
     CUSTOMER = "customer"
     CUSTOMER_GROUP = "customer-group"
+    DISCOUNT_CODE = "discount-code"
+    ORDER = "order"
+    PAYMENT = "payment"
     PRICE = "price"
     PRODUCT = "product"
     PRODUCT_DISCOUNT = "product-discount"
@@ -842,16 +995,18 @@ class ReferenceType(enum.Enum):
     STORE = "store"
     TAX_CATEGORY = "tax-category"
     TYPE = "type"
+    KEY_VALUE_DOCUMENT = "key-value-document"
 
 
 class ProcessingState(enum.Enum):
-    """This enumeration describes the processing state of an import operation."""
+    """Every [Import Operation](/import-operation) is assigned with one of the following states."""
 
-    VALIDATION_FAILED = "ValidationFailed"
-    UNRESOLVED = "Unresolved"
-    WAIT_FOR_MASTER_VARIANT = "WaitForMasterVariant"
-    IMPORTED = "Imported"
-    REJECTED = "Rejected"
+    PROCESSING = "processing"
+    VALIDATION_FAILED = "validationFailed"
+    UNRESOLVED = "unresolved"
+    WAIT_FOR_MASTER_VARIANT = "waitForMasterVariant"
+    IMPORTED = "imported"
+    REJECTED = "rejected"
 
 
 class Address(_BaseType):

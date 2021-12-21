@@ -505,6 +505,12 @@ class PaymentUpdateSchema(helpers.BaseSchema):
                 "setStatusInterfaceText": helpers.absmod(
                     __name__, ".PaymentSetStatusInterfaceTextActionSchema"
                 ),
+                "setTransactionCustomField": helpers.absmod(
+                    __name__, ".PaymentSetTransactionCustomFieldActionSchema"
+                ),
+                "setTransactionCustomType": helpers.absmod(
+                    __name__, ".PaymentSetTransactionCustomTypeActionSchema"
+                ),
                 "transitionState": helpers.absmod(
                     __name__, ".PaymentTransitionStateActionSchema"
                 ),
@@ -569,6 +575,13 @@ class TransactionSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -602,6 +615,13 @@ class TransactionDraftSchema(helpers.BaseSchema):
         TransactionState,
         by_value=True,
         allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
     )
@@ -969,6 +989,45 @@ class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.PaymentSetStatusInterfaceTextAction(**data)
+
+
+class PaymentSetTransactionCustomFieldActionSchema(PaymentUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.PaymentSetTransactionCustomFieldAction(**data)
+
+
+class PaymentSetTransactionCustomTypeActionSchema(PaymentUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.PaymentSetTransactionCustomTypeAction(**data)
 
 
 class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):

@@ -25,7 +25,7 @@ __all__ = [
     "CartsConfiguration",
     "ExternalOAuth",
     "Project",
-    "ProjectChangeCartsConfiguration",
+    "ProjectChangeCartsConfigurationAction",
     "ProjectChangeCountriesAction",
     "ProjectChangeCountryTaxRateFallbackEnabledAction",
     "ProjectChangeCurrenciesAction",
@@ -34,6 +34,7 @@ __all__ = [
     "ProjectChangeMessagesEnabledAction",
     "ProjectChangeNameAction",
     "ProjectChangeProductSearchIndexingEnabledAction",
+    "ProjectChangeShoppingListsConfigurationAction",
     "ProjectSetExternalOAuthAction",
     "ProjectSetShippingRateInputTypeAction",
     "ProjectUpdate",
@@ -42,6 +43,7 @@ __all__ = [
     "SearchIndexingConfigurationStatus",
     "SearchIndexingConfigurationValues",
     "ShippingRateInputType",
+    "ShoppingListsConfiguration",
 ]
 
 
@@ -114,6 +116,7 @@ class Project(_BaseType):
     external_o_auth: typing.Optional["ExternalOAuth"]
     carts: "CartsConfiguration"
     search_indexing: typing.Optional["SearchIndexingConfiguration"]
+    shopping_lists: typing.Optional["ShoppingListsConfiguration"]
 
     def __init__(
         self,
@@ -130,7 +133,8 @@ class Project(_BaseType):
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_o_auth: typing.Optional["ExternalOAuth"] = None,
         carts: "CartsConfiguration",
-        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None
+        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None,
+        shopping_lists: typing.Optional["ShoppingListsConfiguration"] = None
     ):
         self.version = version
         self.key = key
@@ -145,6 +149,7 @@ class Project(_BaseType):
         self.external_o_auth = external_o_auth
         self.carts = carts
         self.search_indexing = search_indexing
+        self.shopping_lists = shopping_lists
         super().__init__()
 
     @classmethod
@@ -190,9 +195,9 @@ class ProjectUpdateAction(_BaseType):
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProjectUpdateAction":
         if data["action"] == "changeCartsConfiguration":
-            from ._schemas.project import ProjectChangeCartsConfigurationSchema
+            from ._schemas.project import ProjectChangeCartsConfigurationActionSchema
 
-            return ProjectChangeCartsConfigurationSchema().load(data)
+            return ProjectChangeCartsConfigurationActionSchema().load(data)
         if data["action"] == "changeCountries":
             from ._schemas.project import ProjectChangeCountriesActionSchema
 
@@ -229,6 +234,12 @@ class ProjectUpdateAction(_BaseType):
             )
 
             return ProjectChangeProductSearchIndexingEnabledActionSchema().load(data)
+        if data["action"] == "changeShoppingListsConfiguration":
+            from ._schemas.project import (
+                ProjectChangeShoppingListsConfigurationActionSchema,
+            )
+
+            return ProjectChangeShoppingListsConfigurationActionSchema().load(data)
         if data["action"] == "setExternalOAuth":
             from ._schemas.project import ProjectSetExternalOAuthActionSchema
 
@@ -279,6 +290,7 @@ class SearchIndexingConfigurationValues(_BaseType):
     #: Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built.
     status: typing.Optional["SearchIndexingConfigurationStatus"]
     last_modified_at: typing.Optional[datetime.datetime]
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
 
     def __init__(
@@ -390,7 +402,31 @@ class CartValueType(ShippingRateInputType):
         return CartValueTypeSchema().dump(self)
 
 
-class ProjectChangeCartsConfiguration(ProjectUpdateAction):
+class ShoppingListsConfiguration(_BaseType):
+    #: The default value for the deleteDaysAfterLastModification parameter of the ShoppingListDraft. Initially set to 360 for projects created after December 2019.
+    delete_days_after_last_modification: typing.Optional[int]
+
+    def __init__(
+        self, *, delete_days_after_last_modification: typing.Optional[int] = None
+    ):
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ShoppingListsConfiguration":
+        from ._schemas.project import ShoppingListsConfigurationSchema
+
+        return ShoppingListsConfigurationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import ShoppingListsConfigurationSchema
+
+        return ShoppingListsConfigurationSchema().dump(self)
+
+
+class ProjectChangeCartsConfigurationAction(ProjectUpdateAction):
     carts_configuration: typing.Optional["CartsConfiguration"]
 
     def __init__(
@@ -402,15 +438,15 @@ class ProjectChangeCartsConfiguration(ProjectUpdateAction):
     @classmethod
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
-    ) -> "ProjectChangeCartsConfiguration":
-        from ._schemas.project import ProjectChangeCartsConfigurationSchema
+    ) -> "ProjectChangeCartsConfigurationAction":
+        from ._schemas.project import ProjectChangeCartsConfigurationActionSchema
 
-        return ProjectChangeCartsConfigurationSchema().load(data)
+        return ProjectChangeCartsConfigurationActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.project import ProjectChangeCartsConfigurationSchema
+        from ._schemas.project import ProjectChangeCartsConfigurationActionSchema
 
-        return ProjectChangeCartsConfigurationSchema().dump(self)
+        return ProjectChangeCartsConfigurationActionSchema().dump(self)
 
 
 class ProjectChangeCountriesAction(ProjectUpdateAction):
@@ -591,6 +627,37 @@ class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
         )
 
         return ProjectChangeProductSearchIndexingEnabledActionSchema().dump(self)
+
+
+class ProjectChangeShoppingListsConfigurationAction(ProjectUpdateAction):
+    shopping_lists_configuration: typing.Optional["ShoppingListsConfiguration"]
+
+    def __init__(
+        self,
+        *,
+        shopping_lists_configuration: typing.Optional[
+            "ShoppingListsConfiguration"
+        ] = None
+    ):
+        self.shopping_lists_configuration = shopping_lists_configuration
+        super().__init__(action="changeShoppingListsConfiguration")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProjectChangeShoppingListsConfigurationAction":
+        from ._schemas.project import (
+            ProjectChangeShoppingListsConfigurationActionSchema,
+        )
+
+        return ProjectChangeShoppingListsConfigurationActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import (
+            ProjectChangeShoppingListsConfigurationActionSchema,
+        )
+
+        return ProjectChangeShoppingListsConfigurationActionSchema().dump(self)
 
 
 class ProjectSetExternalOAuthAction(ProjectUpdateAction):

@@ -15,35 +15,35 @@ from .common import ImportResourceType
 if typing.TYPE_CHECKING:
     from .common import ImportResourceType
 
-__all__ = ["ImportSink", "ImportSinkDraft", "ImportSinkPagedResponse"]
+__all__ = [
+    "ImportSink",
+    "ImportSinkDraft",
+    "ImportSinkPagedResponse",
+    "ImportSinkUpdateDraft",
+]
 
 
 class ImportSink(_BaseType):
-    """An import sink is the entry point for import resources from other systems.
+    """Serves as the entry point of resources."""
 
-    It has an unique key and is specific to an import resource type.
-
-    """
-
-    #: The unique key of the import sink.
-    #:
-    #: Valid characters are: alphabetic characters (A-Z, a-z), numeric characters (0-9), underscores (_) and hyphens (-).
+    #: User-defined unique identifier for the ImportSink.
+    #: Keys can only contain alphanumeric characters (a-Z, 0-9), underscores and hyphens (_, -).
     key: str
-    #: The type of import resource sent to this import sink.
-    #: You can only send one resource type per import sink.
-    resource_type: "ImportResourceType"
-    #: The version of this resource.
+    #: The [resource type](#importresourcetype) the ImportSink is able to handle.
+    #: If not present, the ImportSink is able to import all of the supported [ImportResourceTypes](#importresourcetype).
+    resource_type: typing.Optional["ImportResourceType"]
+    #: The version of the ImportSink.
     version: int
-    #: When the import sink was created.
+    #: The time when the ImportSink was created.
     created_at: datetime.datetime
-    #: When the import sink was modified.
+    #: The last time when the ImportSink was modified.
     last_modified_at: datetime.datetime
 
     def __init__(
         self,
         *,
         key: str,
-        resource_type: "ImportResourceType",
+        resource_type: typing.Optional["ImportResourceType"] = None,
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime
@@ -68,23 +68,18 @@ class ImportSink(_BaseType):
 
 
 class ImportSinkDraft(_BaseType):
-    """The representation sent to the server when creating or updating an import sink."""
+    """The representation sent to the server when creating an [ImportSink](#importsink)."""
 
-    #: The version of this resource.
-    version: typing.Optional[int]
-    #: The unique key of the import sink.
+    #: User-defined unique identifier of the ImportSink.
+    #: Keys can only contain alphanumeric characters (a-Z, 0-9), underscores and hyphens (_, -).
     key: str
-    #: The type of import resource sent to this import sink.
-    resource_type: "ImportResourceType"
+    #: The [resource type](#importresourcetype) to be imported.
+    #: If not given, the ImportSink is able to import all of the supported [ImportResourceTypes](#importresourcetype).
+    resource_type: typing.Optional["ImportResourceType"]
 
     def __init__(
-        self,
-        *,
-        version: typing.Optional[int] = None,
-        key: str,
-        resource_type: "ImportResourceType"
+        self, *, key: str, resource_type: typing.Optional["ImportResourceType"] = None
     ):
-        self.version = version
         self.key = key
         self.resource_type = resource_type
         super().__init__()
@@ -101,24 +96,68 @@ class ImportSinkDraft(_BaseType):
         return ImportSinkDraftSchema().dump(self)
 
 
-class ImportSinkPagedResponse(_BaseType):
-    """This type represents a paged importsink result."""
+class ImportSinkUpdateDraft(_BaseType):
+    """The representation sent to the server when updating an [ImportSink](#importsink)."""
 
-    #: The maximum number of import operations returned for a page.
+    #: Current version of the ImportSink.
+    version: int
+    #: The [resource type](#importresourcetype) to be imported.
+    #: If not given, the ImportSink is able to import all of the supported [ImportResourceTypes](#importresourcetype).
+    resource_type: typing.Optional["ImportResourceType"]
+
+    def __init__(
+        self,
+        *,
+        version: int,
+        resource_type: typing.Optional["ImportResourceType"] = None
+    ):
+        self.version = version
+        self.resource_type = resource_type
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ImportSinkUpdateDraft":
+        from ._schemas.importsinks import ImportSinkUpdateDraftSchema
+
+        return ImportSinkUpdateDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.importsinks import ImportSinkUpdateDraftSchema
+
+        return ImportSinkUpdateDraftSchema().dump(self)
+
+
+class ImportSinkPagedResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) for [ImportSinks](#importsink).
+    Used as a response to a query request for [ImportSinks](#importsink).
+
+    """
+
+    #: The number of results requested in the query request.
     limit: int
-    #: The offset supplied by the client or the server default. It is the number of elements skipped.
+    #: The number of elements skipped, not a page number.
+    #: Supplied by the client or the server default.
     offset: int
-    #: The actual number of results returned by this response.
+    #: The actual number of results returned.
     count: int
-    #: The results for this paged response.
+    #: The total number of results matching the query.
+    total: int
+    #: The array of Import Sinks matching the query.
     results: typing.List["ImportSink"]
 
     def __init__(
-        self, *, limit: int, offset: int, count: int, results: typing.List["ImportSink"]
+        self,
+        *,
+        limit: int,
+        offset: int,
+        count: int,
+        total: int,
+        results: typing.List["ImportSink"]
     ):
         self.limit = limit
         self.offset = offset
         self.count = count
+        self.total = total
         self.results = results
         super().__init__()
 

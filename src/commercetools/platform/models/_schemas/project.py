@@ -122,6 +122,14 @@ class ProjectSchema(helpers.BaseSchema):
         missing=None,
         data_key="searchIndexing",
     )
+    shopping_lists = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ShoppingListsConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="shoppingLists",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -140,7 +148,7 @@ class ProjectUpdateSchema(helpers.BaseSchema):
             discriminator_field=("action", "action"),
             discriminator_schemas={
                 "changeCartsConfiguration": helpers.absmod(
-                    __name__, ".ProjectChangeCartsConfigurationSchema"
+                    __name__, ".ProjectChangeCartsConfigurationActionSchema"
                 ),
                 "changeCountries": helpers.absmod(
                     __name__, ".ProjectChangeCountriesActionSchema"
@@ -165,6 +173,9 @@ class ProjectUpdateSchema(helpers.BaseSchema):
                 ),
                 "changeProductSearchIndexingEnabled": helpers.absmod(
                     __name__, ".ProjectChangeProductSearchIndexingEnabledActionSchema"
+                ),
+                "changeShoppingListsConfiguration": helpers.absmod(
+                    __name__, ".ProjectChangeShoppingListsConfigurationActionSchema"
                 ),
                 "setExternalOAuth": helpers.absmod(
                     __name__, ".ProjectSetExternalOAuthActionSchema"
@@ -301,7 +312,24 @@ class CartValueTypeSchema(ShippingRateInputTypeSchema):
         return models.CartValueType(**data)
 
 
-class ProjectChangeCartsConfigurationSchema(ProjectUpdateActionSchema):
+class ShoppingListsConfigurationSchema(helpers.BaseSchema):
+    delete_days_after_last_modification = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterLastModification",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.ShoppingListsConfiguration(**data)
+
+
+class ProjectChangeCartsConfigurationActionSchema(ProjectUpdateActionSchema):
     carts_configuration = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CartsConfigurationSchema"),
         allow_none=True,
@@ -317,7 +345,7 @@ class ProjectChangeCartsConfigurationSchema(ProjectUpdateActionSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["action"]
-        return models.ProjectChangeCartsConfiguration(**data)
+        return models.ProjectChangeCartsConfigurationAction(**data)
 
 
 class ProjectChangeCountriesActionSchema(ProjectUpdateActionSchema):
@@ -430,6 +458,25 @@ class ProjectChangeProductSearchIndexingEnabledActionSchema(ProjectUpdateActionS
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ProjectChangeProductSearchIndexingEnabledAction(**data)
+
+
+class ProjectChangeShoppingListsConfigurationActionSchema(ProjectUpdateActionSchema):
+    shopping_lists_configuration = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ShoppingListsConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="shoppingListsConfiguration",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProjectChangeShoppingListsConfigurationAction(**data)
 
 
 class ProjectSetExternalOAuthActionSchema(ProjectUpdateActionSchema):

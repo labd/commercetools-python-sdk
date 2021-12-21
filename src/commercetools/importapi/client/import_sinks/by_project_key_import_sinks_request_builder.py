@@ -65,8 +65,9 @@ class ByProjectKeyImportSinksRequestBuilder:
     def get(
         self,
         *,
-        limit: float,
-        offset: float,
+        limit: float = None,
+        offset: float = None,
+        sort: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportSinkPagedResponse":
@@ -74,7 +75,7 @@ class ByProjectKeyImportSinksRequestBuilder:
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/import-sinks",
-            params={"limit": limit, "offset": offset},
+            params={"limit": limit, "offset": offset, "sort": sort},
             headers=headers,
             options=options,
         )

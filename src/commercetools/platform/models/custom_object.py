@@ -24,7 +24,9 @@ __all__ = [
 
 
 class CustomObject(BaseResource):
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: A namespace to group custom objects.
     container: str

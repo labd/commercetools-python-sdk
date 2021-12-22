@@ -88,7 +88,7 @@ class DiscountCode(BaseResource):
     #: Its value is managed by the platform.
     #: It can change at any time due to internal and external factors.
     #: It should not be used in customer logic.
-    application_version: int
+    application_version: typing.Optional[int]
 
     def __init__(
         self,
@@ -112,7 +112,7 @@ class DiscountCode(BaseResource):
         groups: typing.List["str"],
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        application_version: int
+        application_version: typing.Optional[int] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by

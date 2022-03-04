@@ -14,7 +14,7 @@ from commercetools import helpers
 
 from ... import models
 from ..common import ReferenceTypeId
-from ..type import ResourceTypeId, TypeTextInputHint
+from ..type import CustomFieldReferenceValue, ResourceTypeId, TypeTextInputHint
 from .common import (
     BaseResourceSchema,
     LocalizedStringField,
@@ -259,7 +259,7 @@ class CustomFieldNumberTypeSchema(FieldTypeSchema):
 
 class CustomFieldReferenceTypeSchema(FieldTypeSchema):
     reference_type_id = marshmallow_enum.EnumField(
-        ReferenceTypeId,
+        CustomFieldReferenceValue,
         by_value=True,
         allow_none=True,
         missing=None,
@@ -419,11 +419,11 @@ class TypeDraftSchema(helpers.BaseSchema):
 
 class TypePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".TypeSchema"),
         allow_none=True,
@@ -490,6 +490,9 @@ class TypeUpdateSchema(helpers.BaseSchema):
                 ),
                 "changeEnumValueOrder": helpers.absmod(
                     __name__, ".TypeChangeEnumValueOrderActionSchema"
+                ),
+                "changeFieldDefinitionLabel": helpers.absmod(
+                    __name__, ".TypeChangeFieldDefinitionLabelActionSchema"
                 ),
                 "changeFieldDefinitionOrder": helpers.absmod(
                     __name__, ".TypeChangeFieldDefinitionOrderActionSchema"
@@ -632,6 +635,23 @@ class TypeChangeEnumValueOrderActionSchema(TypeUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.TypeChangeEnumValueOrderAction(**data)
+
+
+class TypeChangeFieldDefinitionLabelActionSchema(TypeUpdateActionSchema):
+    field_name = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="fieldName"
+    )
+    label = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.TypeChangeFieldDefinitionLabelAction(**data)
 
 
 class TypeChangeFieldDefinitionOrderActionSchema(TypeUpdateActionSchema):

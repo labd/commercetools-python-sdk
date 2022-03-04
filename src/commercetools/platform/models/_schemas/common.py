@@ -950,14 +950,14 @@ class TypedMoneySchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
         MoneyType, by_value=True, allow_none=True, missing=None
     )
-    fraction_digits = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="fractionDigits"
+    currency_code = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="currencyCode"
     )
     cent_amount = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="centAmount"
     )
-    currency_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="currencyCode"
+    fraction_digits = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="fractionDigits"
     )
 
     class Meta:

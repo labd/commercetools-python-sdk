@@ -93,6 +93,9 @@ class ReviewSchema(BaseResourceSchema):
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
             ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
@@ -212,6 +215,9 @@ class ReviewDraftSchema(helpers.BaseSchema):
             ),
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountResourceIdentifierSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeResourceIdentifierSchema"
@@ -554,6 +560,9 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
             ),
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountResourceIdentifierSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeResourceIdentifierSchema"

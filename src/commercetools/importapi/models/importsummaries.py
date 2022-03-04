@@ -15,12 +15,12 @@ __all__ = ["ImportSummary", "OperationStates"]
 
 
 class ImportSummary(_BaseType):
-    """Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingState).
+    """Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingstate).
     Can be used to monitor the import progress per [Import Container](/import-container).
 
     """
 
-    #: The import status of an [ImportContainer](/import-container#importcontainer) given by the number of resources in each [Processing State](/processing-state#processingState).
+    #: The import status of an [ImportContainer](/import-container#importcontainer) given by the number of resources in each [Processing State](/processing-state#processingstate).
     states: "OperationStates"
     #: The total number of [ImportOperations](/import-operation#importoperation) received for this Import Summary.
     total: int

@@ -15,6 +15,9 @@ from ..edits.by_project_key_orders_edits_request_builder import (
 from ..import_.by_project_key_orders_import_request_builder import (
     ByProjectKeyOrdersImportRequestBuilder,
 )
+from ..search.by_project_key_orders_search_request_builder import (
+    ByProjectKeyOrdersSearchRequestBuilder,
+)
 from .by_project_key_orders_by_id_request_builder import (
     ByProjectKeyOrdersByIDRequestBuilder,
 )
@@ -64,6 +67,13 @@ class ByProjectKeyOrdersRequestBuilder:
     def with_id(self, id: str) -> ByProjectKeyOrdersByIDRequestBuilder:
         return ByProjectKeyOrdersByIDRequestBuilder(
             id=id,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def search(self) -> ByProjectKeyOrdersSearchRequestBuilder:
+        """This endpoint provides high performance search queries over Orders. The order search allows searching through all orders (currently supporting a limit of the 10.000.000 newest orders) in your project."""
+        return ByProjectKeyOrdersSearchRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

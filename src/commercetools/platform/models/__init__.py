@@ -27,6 +27,7 @@ from .order_edit import *  # noqa
 from .payment import *  # noqa
 from .product import *  # noqa
 from .product_discount import *  # noqa
+from .product_selection import *  # noqa
 from .product_type import *  # noqa
 from .project import *  # noqa
 from .review import *  # noqa

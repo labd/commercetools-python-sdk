@@ -13,8 +13,7 @@ from ._abstract import _BaseType
 from .shipping_method import ShippingRateTierType
 
 if typing.TYPE_CHECKING:
-    from .common import LastModifiedBy
-    from .message import MessageConfiguration, MessageConfigurationDraft
+    from .message import MessagesConfiguration, MessagesConfigurationDraft
     from .shipping_method import ShippingRateTierType
     from .type import CustomFieldLocalizedEnumValue
 
@@ -24,6 +23,7 @@ __all__ = [
     "CartValueType",
     "CartsConfiguration",
     "ExternalOAuth",
+    "OrderSearchStatus",
     "Project",
     "ProjectChangeCartsConfigurationAction",
     "ProjectChangeCountriesAction",
@@ -33,6 +33,7 @@ __all__ = [
     "ProjectChangeMessagesConfigurationAction",
     "ProjectChangeMessagesEnabledAction",
     "ProjectChangeNameAction",
+    "ProjectChangeOrderSearchStatusAction",
     "ProjectChangeProductSearchIndexingEnabledAction",
     "ProjectChangeShoppingListsConfigurationAction",
     "ProjectSetExternalOAuthAction",
@@ -48,19 +49,19 @@ __all__ = [
 
 
 class CartsConfiguration(_BaseType):
-    #: if country - no state tax rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all tax categories of a cart line items. Default value 'false'
-    country_tax_rate_fallback_enabled: typing.Optional[bool]
-    #: The default value for the deleteDaysAfterLastModification parameter of the CartDraft. Initially set to 90 for projects created after December 2019.
+    #: Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft). This field may not be present on Projects created before January 2020.
     delete_days_after_last_modification: typing.Optional[int]
+    #: Indicates if country _- no state_ Tax Rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all Tax Categories of a Cart Line Items. This field may not be present on Projects created before June 2020.
+    country_tax_rate_fallback_enabled: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        country_tax_rate_fallback_enabled: typing.Optional[bool] = None,
-        delete_days_after_last_modification: typing.Optional[int] = None
+        delete_days_after_last_modification: typing.Optional[int] = None,
+        country_tax_rate_fallback_enabled: typing.Optional[bool] = None
     ):
-        self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
         self.delete_days_after_last_modification = delete_days_after_last_modification
+        self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
         super().__init__()
 
     @classmethod
@@ -76,7 +77,15 @@ class CartsConfiguration(_BaseType):
 
 
 class ExternalOAuth(_BaseType):
+    """Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server).
+
+    You can only configure **one** external OAuth 2.0 endpoint per Project. To authenticate using multiple external services (such as social network logins), use a middle layer authentication service.
+
+    """
+
+    #: URL with authorization header.
     url: str
+    #: Partially hidden on retrieval.
     authorization_header: str
 
     def __init__(self, *, url: str, authorization_header: str):
@@ -96,27 +105,42 @@ class ExternalOAuth(_BaseType):
         return ExternalOAuthSchema().dump(self)
 
 
+class OrderSearchStatus(enum.Enum):
+    """Specifies the status of the [Order Search](/../api/projects/order-search) index."""
+
+    ACTIVATED = "Activated"
+    DEACTIVATED = "Deactivated"
+
+
 class Project(_BaseType):
-    #: The current version of the project.
+    #: Current version of the Project.
     version: int
-    #: The unique key of the project.
+    #: User-defined unique identifier of the Project.
     key: str
-    #: The name of the project.
+    #: Name of the Project.
     name: str
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Country code of the geographic location.
     countries: typing.List["str"]
-    #: A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+    #: Currency code of the country. A Project must have at least one currency.
     currencies: typing.List["str"]
+    #: Language of the country. A Project must have at least one language.
     languages: typing.List["str"]
+    #: Date and time (UTC) the Project was initially created.
     created_at: datetime.datetime
-    #: The time is in the format Year-Month `YYYY-MM`.
+    #: Date in YYYY-MM format specifying when the trial period for the Project ends. Only present on Projects in trial period.
     trial_until: typing.Optional[str]
-    messages: "MessageConfiguration"
-    shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
-    external_o_auth: typing.Optional["ExternalOAuth"]
+    #: Holds the configuration for the [Messages Query](/../api/projects/messages) feature.
+    messages: "MessagesConfiguration"
+    #: Holds the configuration for the [Carts](/../api/projects/carts) feature.
     carts: "CartsConfiguration"
-    search_indexing: typing.Optional["SearchIndexingConfiguration"]
+    #: Holds the configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature. This field may not be present on Projects created before January 2020.
     shopping_lists: typing.Optional["ShoppingListsConfiguration"]
+    #: Holds the configuration for the [tiered shipping rates](ctp:api:type:ShippingRatePriceTier) feature.
+    shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
+    #: Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint.
+    external_o_auth: typing.Optional["ExternalOAuth"]
+    #: Controls indexing of resources to be provided on high performance read-only search endpoints.
+    search_indexing: typing.Optional["SearchIndexingConfiguration"]
 
     def __init__(
         self,
@@ -129,12 +153,12 @@ class Project(_BaseType):
         languages: typing.List["str"],
         created_at: datetime.datetime,
         trial_until: typing.Optional[str] = None,
-        messages: "MessageConfiguration",
+        messages: "MessagesConfiguration",
+        carts: "CartsConfiguration",
+        shopping_lists: typing.Optional["ShoppingListsConfiguration"] = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_o_auth: typing.Optional["ExternalOAuth"] = None,
-        carts: "CartsConfiguration",
-        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None,
-        shopping_lists: typing.Optional["ShoppingListsConfiguration"] = None
+        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None
     ):
         self.version = version
         self.key = key
@@ -145,11 +169,11 @@ class Project(_BaseType):
         self.created_at = created_at
         self.trial_until = trial_until
         self.messages = messages
+        self.carts = carts
+        self.shopping_lists = shopping_lists
         self.shipping_rate_input_type = shipping_rate_input_type
         self.external_o_auth = external_o_auth
-        self.carts = carts
         self.search_indexing = search_indexing
-        self.shopping_lists = shopping_lists
         super().__init__()
 
     @classmethod
@@ -165,7 +189,9 @@ class Project(_BaseType):
 
 
 class ProjectUpdate(_BaseType):
+    #: Expected version of the Project on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the Project.
     actions: typing.List["ProjectUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["ProjectUpdateAction"]):
@@ -228,6 +254,10 @@ class ProjectUpdateAction(_BaseType):
             from ._schemas.project import ProjectChangeNameActionSchema
 
             return ProjectChangeNameActionSchema().load(data)
+        if data["action"] == "changeOrderSearchStatus":
+            from ._schemas.project import ProjectChangeOrderSearchStatusActionSchema
+
+            return ProjectChangeOrderSearchStatusActionSchema().load(data)
         if data["action"] == "changeProductSearchIndexingEnabled":
             from ._schemas.project import (
                 ProjectChangeProductSearchIndexingEnabledActionSchema,
@@ -256,12 +286,21 @@ class ProjectUpdateAction(_BaseType):
 
 
 class SearchIndexingConfiguration(_BaseType):
+    """Controls indexing of resources to be provided on high performance read-only search endpoints."""
+
+    #: Configuration for the [Product Projection Search](/../api/projects/products-search) and [Product Suggestions](/../api/projects/products-suggestions) endpoints.
     products: typing.Optional["SearchIndexingConfigurationValues"]
+    #: Configuration for the [Order Search](/../api/projects/order-search) feature.
+    orders: typing.Optional["SearchIndexingConfigurationValues"]
 
     def __init__(
-        self, *, products: typing.Optional["SearchIndexingConfigurationValues"] = None
+        self,
+        *,
+        products: typing.Optional["SearchIndexingConfigurationValues"] = None,
+        orders: typing.Optional["SearchIndexingConfigurationValues"] = None
     ):
         self.products = products
+        self.orders = orders
         super().__init__()
 
     @classmethod
@@ -279,7 +318,7 @@ class SearchIndexingConfiguration(_BaseType):
 
 
 class SearchIndexingConfigurationStatus(enum.Enum):
-    """Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built."""
+    """Status of resource indexing."""
 
     ACTIVATED = "Activated"
     DEACTIVATED = "Deactivated"
@@ -287,18 +326,19 @@ class SearchIndexingConfigurationStatus(enum.Enum):
 
 
 class SearchIndexingConfigurationValues(_BaseType):
-    #: Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built.
+    #: Current status of resource indexing. Present on Projects from 1 February 2019.
     status: typing.Optional["SearchIndexingConfigurationStatus"]
-    last_modified_at: typing.Optional[datetime.datetime]
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
-    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Date and time (UTC) the Project was last updated.
+    last_modified_at: datetime.datetime
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    last_modified_by: typing.Optional[str]
 
     def __init__(
         self,
         *,
         status: typing.Optional["SearchIndexingConfigurationStatus"] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional[str] = None
     ):
         self.status = status
         self.last_modified_at = last_modified_at
@@ -320,6 +360,7 @@ class SearchIndexingConfigurationValues(_BaseType):
 
 
 class ShippingRateInputType(_BaseType):
+    #: Can be one of the following or absent.
     type: "ShippingRateTierType"
 
     def __init__(self, *, type: "ShippingRateTierType"):
@@ -348,6 +389,7 @@ class ShippingRateInputType(_BaseType):
 
 
 class CartClassificationType(ShippingRateInputType):
+    #: The classification items that can be used for specifiying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
     values: typing.List["CustomFieldLocalizedEnumValue"]
 
     def __init__(self, *, values: typing.List["CustomFieldLocalizedEnumValue"]):
@@ -403,7 +445,8 @@ class CartValueType(ShippingRateInputType):
 
 
 class ShoppingListsConfiguration(_BaseType):
-    #: The default value for the deleteDaysAfterLastModification parameter of the ShoppingListDraft. Initially set to 360 for projects created after December 2019.
+    #: Default value for the `deleteDaysAfterLastModification` parameter of the [ShoppingListDraft](ctp:api:type:ShoppingListDraft).
+    #: This field may not be present on Projects created before January 2020.
     delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
@@ -427,11 +470,10 @@ class ShoppingListsConfiguration(_BaseType):
 
 
 class ProjectChangeCartsConfigurationAction(ProjectUpdateAction):
-    carts_configuration: typing.Optional["CartsConfiguration"]
+    #: Configuration for the [Carts](/../api/projects/carts) feature.
+    carts_configuration: "CartsConfiguration"
 
-    def __init__(
-        self, *, carts_configuration: typing.Optional["CartsConfiguration"] = None
-    ):
+    def __init__(self, *, carts_configuration: "CartsConfiguration"):
         self.carts_configuration = carts_configuration
         super().__init__(action="changeCartsConfiguration")
 
@@ -450,7 +492,7 @@ class ProjectChangeCartsConfigurationAction(ProjectUpdateAction):
 
 
 class ProjectChangeCountriesAction(ProjectUpdateAction):
-    #: A two-digit country code as per country code.
+    #: New value to set. Must not be empty.
     countries: typing.List["str"]
 
     def __init__(self, *, countries: typing.List["str"]):
@@ -472,7 +514,7 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 
 
 class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
-    #: default value is `false`
+    #: When `true`, country _- no state_ Tax Rate is used as fallback. See [CartsConfiguration](ctp:api:type:CartsConfiguration).
     country_tax_rate_fallback_enabled: bool
 
     def __init__(self, *, country_tax_rate_fallback_enabled: bool):
@@ -498,7 +540,7 @@ class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
 
 
 class ProjectChangeCurrenciesAction(ProjectUpdateAction):
-    #: A three-digit currency code as per currency code.
+    #: New value to set. Must not be empty.
     currencies: typing.List["str"]
 
     def __init__(self, *, currencies: typing.List["str"]):
@@ -520,7 +562,9 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 
 
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
-    #:  .
+    """If a language is used by a [Store](ctp:api:type:Store), it cannot be deleted. Attempts to delete such language will lead to [LanguageUsedInStores](/../api/errors#projects-400-language-used-in-stores) errors."""
+
+    #: New value to set. Must not be empty.
     languages: typing.List["str"]
 
     def __init__(self, *, languages: typing.List["str"]):
@@ -542,9 +586,10 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
 
 
 class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
-    messages_configuration: "MessageConfigurationDraft"
+    #: Configuration for the [Messages Query](/../api/projects/messages) feature.
+    messages_configuration: "MessagesConfigurationDraft"
 
-    def __init__(self, *, messages_configuration: "MessageConfigurationDraft"):
+    def __init__(self, *, messages_configuration: "MessagesConfigurationDraft"):
         self.messages_configuration = messages_configuration
         super().__init__(action="changeMessagesConfiguration")
 
@@ -584,6 +629,7 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 
 
 class ProjectChangeNameAction(ProjectUpdateAction):
+    #: New value to set. Must not be empty.
     name: str
 
     def __init__(self, *, name: str):
@@ -604,7 +650,32 @@ class ProjectChangeNameAction(ProjectUpdateAction):
         return ProjectChangeNameActionSchema().dump(self)
 
 
+class ProjectChangeOrderSearchStatusAction(ProjectUpdateAction):
+    #: Activates or deactivates the [Order Search](/../api/projects/order-search) feature. Activation will trigger building a search index for the Orders in the Project.
+    status: "OrderSearchStatus"
+
+    def __init__(self, *, status: "OrderSearchStatus"):
+        self.status = status
+        super().__init__(action="changeOrderSearchStatus")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProjectChangeOrderSearchStatusAction":
+        from ._schemas.project import ProjectChangeOrderSearchStatusActionSchema
+
+        return ProjectChangeOrderSearchStatusActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import ProjectChangeOrderSearchStatusActionSchema
+
+        return ProjectChangeOrderSearchStatusActionSchema().dump(self)
+
+
 class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
+    #: If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
+    #:
+    #: If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
     enabled: bool
 
     def __init__(self, *, enabled: bool):
@@ -630,15 +701,10 @@ class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
 
 
 class ProjectChangeShoppingListsConfigurationAction(ProjectUpdateAction):
-    shopping_lists_configuration: typing.Optional["ShoppingListsConfiguration"]
+    #: Configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature.
+    shopping_lists_configuration: "ShoppingListsConfiguration"
 
-    def __init__(
-        self,
-        *,
-        shopping_lists_configuration: typing.Optional[
-            "ShoppingListsConfiguration"
-        ] = None
-    ):
+    def __init__(self, *, shopping_lists_configuration: "ShoppingListsConfiguration"):
         self.shopping_lists_configuration = shopping_lists_configuration
         super().__init__(action="changeShoppingListsConfiguration")
 
@@ -661,8 +727,7 @@ class ProjectChangeShoppingListsConfigurationAction(ProjectUpdateAction):
 
 
 class ProjectSetExternalOAuthAction(ProjectUpdateAction):
-    #: If you do not provide the `externalOAuth` field or provide a value
-    #: of `null`, the update action unsets the External OAuth provider.
+    #: Value to set. If empty, any existing value will be removed.
     external_o_auth: typing.Optional["ExternalOAuth"]
 
     def __init__(self, *, external_o_auth: typing.Optional["ExternalOAuth"] = None):
@@ -684,7 +749,7 @@ class ProjectSetExternalOAuthAction(ProjectUpdateAction):
 
 
 class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
-    #: If not set, removes existing shippingRateInputType.
+    #: Value to set. If empty, any existing value will be removed.
     shipping_rate_input_type: typing.Optional["ShippingRateInputType"]
 
     def __init__(

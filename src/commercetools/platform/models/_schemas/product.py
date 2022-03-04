@@ -46,21 +46,7 @@ class AttributeSchema(helpers.BaseSchema):
         return models.Attribute(**data)
 
 
-class FacetResultSchema(helpers.BaseSchema):
-    type = marshmallow_enum.EnumField(
-        FacetTypes, by_value=True, allow_none=True, missing=None
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.FacetResult(**data)
-
-
-class FacetResultRangeSchema(helpers.BaseSchema):
+class FacetRangeSchema(helpers.BaseSchema):
     from_ = marshmallow.fields.Float(allow_none=True, missing=None, data_key="from")
     from_str = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="fromStr"
@@ -85,17 +71,12 @@ class FacetResultRangeSchema(helpers.BaseSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
 
-        return models.FacetResultRange(**data)
+        return models.FacetRange(**data)
 
 
-class FacetResultTermSchema(helpers.BaseSchema):
-    term = marshmallow.fields.Raw(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    product_count = marshmallow.fields.Integer(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="productCount",
+class FacetResultSchema(helpers.BaseSchema):
+    type = marshmallow_enum.EnumField(
+        FacetTypes, by_value=True, allow_none=True, missing=None
     )
 
     class Meta:
@@ -103,8 +84,8 @@ class FacetResultTermSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
-        return models.FacetResultTerm(**data)
+        del data["type"]
+        return models.FacetResult(**data)
 
 
 class FacetResultsSchema(helpers.BaseSchema):
@@ -146,6 +127,25 @@ class FacetResultsSchema(helpers.BaseSchema):
     def post_dump(self, data, **kwargs):
         data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
         return data
+
+
+class FacetTermSchema(helpers.BaseSchema):
+    term = marshmallow.fields.Raw(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    product_count = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="productCount",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.FacetTerm(**data)
 
 
 class FilteredFacetResultSchema(FacetResultSchema):
@@ -1076,7 +1076,7 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
 
 class RangeFacetResultSchema(FacetResultSchema):
     ranges = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".FacetResultRangeSchema"),
+        nested=helpers.absmod(__name__, ".FacetRangeSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
@@ -1241,7 +1241,7 @@ class TermFacetResultSchema(FacetResultSchema):
     total = marshmallow.fields.Integer(allow_none=True, missing=None)
     other = marshmallow.fields.Integer(allow_none=True, missing=None)
     terms = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".FacetResultTermSchema"),
+        nested=helpers.absmod(__name__, ".FacetTermSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
@@ -1845,8 +1845,11 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    fields = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

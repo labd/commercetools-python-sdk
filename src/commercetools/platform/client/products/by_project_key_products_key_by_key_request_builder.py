@@ -9,6 +9,9 @@ import warnings
 
 from ...models.error import ErrorResponse
 from ...models.product import Product, ProductUpdate
+from ..product_selections.by_project_key_products_key_by_key_product_selections_request_builder import (
+    ByProjectKeyProductsKeyByKeyProductSelectionsRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -29,6 +32,15 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         self._project_key = project_key
         self._key = key
         self._client = client
+
+    def product_selections(
+        self,
+    ) -> ByProjectKeyProductsKeyByKeyProductSelectionsRequestBuilder:
+        return ByProjectKeyProductsKeyByKeyProductSelectionsRequestBuilder(
+            project_key=self._project_key,
+            key=self._key,
+            client=self._client,
+        )
 
     def get(
         self,

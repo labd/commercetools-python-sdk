@@ -202,7 +202,6 @@ class ProductVariantDraftImport(_BaseType):
 class PriceDraftImport(_BaseType):
     """The representation of a Price Draft for the import purpose."""
 
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]

@@ -40,7 +40,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Order"]:
-        """Returns an order by its ID from a specific Store. The {storeKey} path parameter maps to a Store's key.
+        """Returns an order by its ID from a specific Store.
         If the order exists in the commercetools project but does not have the store field,
         or the store field references a different store, this method returns a ResourceNotFound error.
 
@@ -69,7 +69,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Order"]:
-        """Updates an order in the store specified by {storeKey}. The {storeKey} path parameter maps to a Store's key.
+        """Updates an order in the store specified by {storeKey}.
         If the order exists in the commercetools project but does not have the store field,
         or the store field references a different store, this method returns a ResourceNotFound error.
 

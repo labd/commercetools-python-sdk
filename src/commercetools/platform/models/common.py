@@ -145,6 +145,7 @@ class Asset(_BaseType):
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
     tags: typing.Optional[typing.List["str"]]
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
     key: typing.Optional[str]
 
@@ -206,6 +207,7 @@ class AssetDraft(_BaseType):
     name: "LocalizedString"
     description: typing.Optional["LocalizedString"]
     tags: typing.Optional[typing.List["str"]]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     key: typing.Optional[str]
 
@@ -609,6 +611,7 @@ class CreatedBy(ClientLogging):
 
 
 class DiscountedPrice(_BaseType):
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     value: "TypedMoney"
     discount: "ProductDiscountReference"
 
@@ -630,6 +633,8 @@ class DiscountedPrice(_BaseType):
 
 
 class DiscountedPriceDraft(_BaseType):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     value: "Money"
     discount: "ProductDiscountReference"
 
@@ -795,6 +800,15 @@ class LocalizedString(typing.Dict[str, str]):
 
 
 class Money(_BaseType):
+    """Draft type that stores amounts in cent precision for the specified currency.
+    For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+
+    """
+
+    #: amount in the smallest indivisible unit of a currency, such as
+    #:
+    #: * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+    #: * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
     cent_amount: int
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currency_code: str
@@ -817,21 +831,26 @@ class Money(_BaseType):
 
 
 class MoneyType(enum.Enum):
+    """The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits."""
+
     CENT_PRECISION = "centPrecision"
     HIGH_PRECISION = "highPrecision"
 
 
 class Price(_BaseType):
     id: str
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
     discounted: typing.Optional["DiscountedPrice"]
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
     tiers: typing.Optional[typing.List["PriceTier"]]
 
@@ -874,14 +893,18 @@ class Price(_BaseType):
 
 
 class PriceDraft(_BaseType):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     value: "Money"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
     #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelResourceIdentifier"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
     discounted: typing.Optional["DiscountedPriceDraft"]
@@ -924,6 +947,7 @@ class PriceDraft(_BaseType):
 
 class PriceTier(_BaseType):
     minimum_quantity: int
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     value: "TypedMoney"
 
     def __init__(self, *, minimum_quantity: int, value: "TypedMoney"):
@@ -945,6 +969,8 @@ class PriceTier(_BaseType):
 
 class PriceTierDraft(_BaseType):
     minimum_quantity: int
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     value: "Money"
 
     def __init__(self, *, minimum_quantity: int, value: "Money"):
@@ -966,15 +992,19 @@ class PriceTierDraft(_BaseType):
 
 class QueryPrice(_BaseType):
     id: str
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     value: "Money"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
     discounted: typing.Optional["DiscountedPriceDraft"]
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
 
@@ -1080,6 +1110,10 @@ class Reference(_BaseType):
             from ._schemas.product_discount import ProductDiscountReferenceSchema
 
             return ProductDiscountReferenceSchema().load(data)
+        if data["typeId"] == "product-selection":
+            from ._schemas.product_selection import ProductSelectionReferenceSchema
+
+            return ProductSelectionReferenceSchema().load(data)
         if data["typeId"] == "product-type":
             from ._schemas.product_type import ProductTypeReferenceSchema
 
@@ -1145,6 +1179,7 @@ class ReferenceTypeId(enum.Enum):
     PAYMENT = "payment"
     PRODUCT = "product"
     PRODUCT_DISCOUNT = "product-discount"
+    PRODUCT_SELECTION = "product-selection"
     PRODUCT_TYPE = "product-type"
     REVIEW = "review"
     SHIPPING_METHOD = "shipping-method"
@@ -1228,6 +1263,12 @@ class ResourceIdentifier(_BaseType):
             )
 
             return ProductDiscountResourceIdentifierSchema().load(data)
+        if data["typeId"] == "product-selection":
+            from ._schemas.product_selection import (
+                ProductSelectionResourceIdentifierSchema,
+            )
+
+            return ProductSelectionResourceIdentifierSchema().load(data)
         if data["typeId"] == "product-type":
             from ._schemas.product_type import ProductTypeResourceIdentifierSchema
 
@@ -1277,16 +1318,20 @@ class ResourceIdentifier(_BaseType):
 
 class ScopedPrice(_BaseType):
     id: str
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     value: "TypedMoney"
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     current_value: "TypedMoney"
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
     discounted: typing.Optional["DiscountedPrice"]
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -1328,24 +1373,35 @@ class ScopedPrice(_BaseType):
 
 
 class TypedMoney(_BaseType):
+    """Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field."""
+
+    #: The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits.
     type: "MoneyType"
-    fraction_digits: int
-    cent_amount: int
     #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currency_code: str
+    #: amount in the smallest indivisible unit of a currency, such as
+    #:
+    #: * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+    #: * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+    cent_amount: int
+    #: number of digits after the decimal separator
+    #:
+    #: * equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
+    #: * greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
+    fraction_digits: int
 
     def __init__(
         self,
         *,
         type: "MoneyType",
-        fraction_digits: int,
+        currency_code: str,
         cent_amount: int,
-        currency_code: str
+        fraction_digits: int
     ):
         self.type = type
-        self.fraction_digits = fraction_digits
-        self.cent_amount = cent_amount
         self.currency_code = currency_code
+        self.cent_amount = cent_amount
+        self.fraction_digits = fraction_digits
         super().__init__()
 
     @classmethod
@@ -1366,12 +1422,12 @@ class TypedMoney(_BaseType):
 
 
 class CentPrecisionMoney(TypedMoney):
-    def __init__(self, *, fraction_digits: int, cent_amount: int, currency_code: str):
+    def __init__(self, *, currency_code: str, cent_amount: int, fraction_digits: int):
 
         super().__init__(
-            fraction_digits=fraction_digits,
-            cent_amount=cent_amount,
             currency_code=currency_code,
+            cent_amount=cent_amount,
+            fraction_digits=fraction_digits,
             type=MoneyType.CENT_PRECISION,
         )
 
@@ -1388,21 +1444,24 @@ class CentPrecisionMoney(TypedMoney):
 
 
 class HighPrecisionMoney(TypedMoney):
+    """Money object that stores an amount of a fraction of the smallest indivisible unit of the specified currency."""
+
+    #: amount in 1 / (10 ^ `fractionDigits`) of a currency.
     precise_amount: int
 
     def __init__(
         self,
         *,
-        fraction_digits: int,
-        cent_amount: int,
         currency_code: str,
+        cent_amount: int,
+        fraction_digits: int,
         precise_amount: int
     ):
         self.precise_amount = precise_amount
         super().__init__(
-            fraction_digits=fraction_digits,
-            cent_amount=cent_amount,
             currency_code=currency_code,
+            cent_amount=cent_amount,
+            fraction_digits=fraction_digits,
             type=MoneyType.HIGH_PRECISION,
         )
 
@@ -1419,7 +1478,9 @@ class HighPrecisionMoney(TypedMoney):
 
 
 class TypedMoneyDraft(Money):
+    #: The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits.
     type: "MoneyType"
+    #: Must be equal to the default number of fraction digits for the specified currency.
     fraction_digits: typing.Optional[int]
 
     def __init__(
@@ -1482,6 +1543,9 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
 
 
 class HighPrecisionMoneyDraft(TypedMoneyDraft):
+    """Money draft object to store an amount of a fraction of the smallest indivisible unit of the specified currency."""
+
+    #: amount in 1 / (10 ^ `fractionDigits`) of a currency.
     precise_amount: int
 
     def __init__(

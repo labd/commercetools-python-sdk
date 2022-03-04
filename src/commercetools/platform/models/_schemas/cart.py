@@ -250,6 +250,12 @@ class CartSchema(BaseResourceSchema):
         missing=None,
         data_key="itemShippingAddresses",
     )
+    total_line_item_quantity = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="totalLineItemQuantity",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1367,6 +1373,9 @@ class ReplicaCartDraftSchema(helpers.BaseSchema):
             "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"

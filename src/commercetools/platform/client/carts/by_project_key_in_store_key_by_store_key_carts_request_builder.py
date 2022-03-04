@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.cart import Cart, CartDraft
+from ...models.cart import Cart, CartDraft, CartPagedQueryResponse
 from ...models.error import ErrorResponse
 from ..replicate.by_project_key_in_store_key_by_store_key_carts_replicate_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyCartsReplicateRequestBuilder,
@@ -84,7 +84,6 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
     def get(
         self,
         *,
-        customer_id: str = None,
         expand: typing.List["str"] = None,
         sort: typing.List["str"] = None,
         limit: int = None,
@@ -94,10 +93,9 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional[object]:
-        """Queries carts in a specific Store. The {storeKey} path parameter maps to a Store's key."""
+    ) -> typing.Optional["CartPagedQueryResponse"]:
+        """Queries carts in a specific Store."""
         params = {
-            "customerId": customer_id,
             "expand": expand,
             "sort": sort,
             "limit": limit,
@@ -116,7 +114,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return object.deserialize(response.json())
+            return CartPagedQueryResponse.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -132,7 +130,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Creates a cart in the store specified by {storeKey}. The {storeKey} path parameter maps to a Store's key.
+        """Creates a cart in the store specified by {storeKey}.
         When using this endpoint the cart's store field is always set to the store specified in the path parameter.
         Creating a cart can fail with an InvalidOperation if the referenced shipping method
         in the CartDraft has a predicate which does not match the cart.

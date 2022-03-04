@@ -59,11 +59,12 @@ if typing.TYPE_CHECKING:
         TrackingData,
     )
     from .order_edit import OrderEditApplied, OrderEditReference
-    from .payment import Payment, Transaction, TransactionState
-    from .product import ProductProjection, ProductVariant
+    from .payment import Payment, PaymentReference, Transaction, TransactionState
+    from .product import ProductProjection, ProductReference, ProductVariant
+    from .product_selection import ProductSelectionType
     from .review import Review
     from .state import StateReference
-    from .store import StoreKeyReference
+    from .store import ProductSelectionSetting, StoreKeyReference
     from .type import CustomFields
 
 __all__ = [
@@ -119,10 +120,10 @@ __all__ = [
     "LineItemStateTransitionMessage",
     "LineItemStateTransitionMessagePayload",
     "Message",
-    "MessageConfiguration",
-    "MessageConfigurationDraft",
     "MessagePagedQueryResponse",
     "MessagePayload",
+    "MessagesConfiguration",
+    "MessagesConfigurationDraft",
     "OrderBillingAddressSetMessage",
     "OrderBillingAddressSetMessagePayload",
     "OrderCreatedMessage",
@@ -155,6 +156,10 @@ __all__ = [
     "OrderLineItemDistributionChannelSetMessagePayload",
     "OrderLineItemRemovedMessage",
     "OrderLineItemRemovedMessagePayload",
+    "OrderMessage",
+    "OrderMessagePayload",
+    "OrderPaymentAddedMessage",
+    "OrderPaymentAddedMessagePayload",
     "OrderPaymentStateChangedMessage",
     "OrderPaymentStateChangedMessagePayload",
     "OrderReturnInfoAddedMessage",
@@ -218,6 +223,14 @@ __all__ = [
     "ProductRemovedFromCategoryMessagePayload",
     "ProductRevertedStagedChangesMessage",
     "ProductRevertedStagedChangesMessagePayload",
+    "ProductSelectionCreatedMessage",
+    "ProductSelectionCreatedMessagePayload",
+    "ProductSelectionDeletedMessage",
+    "ProductSelectionDeletedMessagePayload",
+    "ProductSelectionProductAddedMessage",
+    "ProductSelectionProductAddedMessagePayload",
+    "ProductSelectionProductRemovedMessage",
+    "ProductSelectionProductRemovedMessagePayload",
     "ProductSlugChangedMessage",
     "ProductSlugChangedMessagePayload",
     "ProductStateTransitionMessage",
@@ -239,6 +252,8 @@ __all__ = [
     "StoreCreatedMessagePayload",
     "StoreDeletedMessage",
     "StoreDeletedMessagePayload",
+    "StoreProductSelectionsChangedMessage",
+    "StoreProductSelectionsChangedMessagePayload",
     "UserProvidedIdentifiers",
 ]
 
@@ -320,10 +335,6 @@ class Message(BaseResource):
             from ._schemas.message import CategorySlugChangedMessageSchema
 
             return CategorySlugChangedMessageSchema().load(data)
-        if data["type"] == "CustomLineItemStateTransition":
-            from ._schemas.message import CustomLineItemStateTransitionMessageSchema
-
-            return CustomLineItemStateTransitionMessageSchema().load(data)
         if data["type"] == "CustomerAddressAdded":
             from ._schemas.message import CustomerAddressAddedMessageSchema
 
@@ -380,22 +391,6 @@ class Message(BaseResource):
             from ._schemas.message import CustomerTitleSetMessageSchema
 
             return CustomerTitleSetMessageSchema().load(data)
-        if data["type"] == "DeliveryAdded":
-            from ._schemas.message import DeliveryAddedMessageSchema
-
-            return DeliveryAddedMessageSchema().load(data)
-        if data["type"] == "DeliveryAddressSet":
-            from ._schemas.message import DeliveryAddressSetMessageSchema
-
-            return DeliveryAddressSetMessageSchema().load(data)
-        if data["type"] == "DeliveryItemsUpdated":
-            from ._schemas.message import DeliveryItemsUpdatedMessageSchema
-
-            return DeliveryItemsUpdatedMessageSchema().load(data)
-        if data["type"] == "DeliveryRemoved":
-            from ._schemas.message import DeliveryRemovedMessageSchema
-
-            return DeliveryRemovedMessageSchema().load(data)
         if data["type"] == "InventoryEntryCreated":
             from ._schemas.message import InventoryEntryCreatedMessageSchema
 
@@ -408,140 +403,10 @@ class Message(BaseResource):
             from ._schemas.message import InventoryEntryQuantitySetMessageSchema
 
             return InventoryEntryQuantitySetMessageSchema().load(data)
-        if data["type"] == "LineItemStateTransition":
-            from ._schemas.message import LineItemStateTransitionMessageSchema
+        if data["type"] == "OrderPaymentAdded":
+            from ._schemas.message import OrderPaymentAddedMessageSchema
 
-            return LineItemStateTransitionMessageSchema().load(data)
-        if data["type"] == "OrderBillingAddressSet":
-            from ._schemas.message import OrderBillingAddressSetMessageSchema
-
-            return OrderBillingAddressSetMessageSchema().load(data)
-        if data["type"] == "OrderCreated":
-            from ._schemas.message import OrderCreatedMessageSchema
-
-            return OrderCreatedMessageSchema().load(data)
-        if data["type"] == "OrderCustomLineItemDiscountSet":
-            from ._schemas.message import OrderCustomLineItemDiscountSetMessageSchema
-
-            return OrderCustomLineItemDiscountSetMessageSchema().load(data)
-        if data["type"] == "OrderCustomerEmailSet":
-            from ._schemas.message import OrderCustomerEmailSetMessageSchema
-
-            return OrderCustomerEmailSetMessageSchema().load(data)
-        if data["type"] == "OrderCustomerGroupSet":
-            from ._schemas.message import OrderCustomerGroupSetMessageSchema
-
-            return OrderCustomerGroupSetMessageSchema().load(data)
-        if data["type"] == "OrderCustomerSet":
-            from ._schemas.message import OrderCustomerSetMessageSchema
-
-            return OrderCustomerSetMessageSchema().load(data)
-        if data["type"] == "OrderDeleted":
-            from ._schemas.message import OrderDeletedMessageSchema
-
-            return OrderDeletedMessageSchema().load(data)
-        if data["type"] == "OrderDiscountCodeAdded":
-            from ._schemas.message import OrderDiscountCodeAddedMessageSchema
-
-            return OrderDiscountCodeAddedMessageSchema().load(data)
-        if data["type"] == "OrderDiscountCodeRemoved":
-            from ._schemas.message import OrderDiscountCodeRemovedMessageSchema
-
-            return OrderDiscountCodeRemovedMessageSchema().load(data)
-        if data["type"] == "OrderDiscountCodeStateSet":
-            from ._schemas.message import OrderDiscountCodeStateSetMessageSchema
-
-            return OrderDiscountCodeStateSetMessageSchema().load(data)
-        if data["type"] == "OrderEditApplied":
-            from ._schemas.message import OrderEditAppliedMessageSchema
-
-            return OrderEditAppliedMessageSchema().load(data)
-        if data["type"] == "OrderImported":
-            from ._schemas.message import OrderImportedMessageSchema
-
-            return OrderImportedMessageSchema().load(data)
-        if data["type"] == "OrderLineItemAdded":
-            from ._schemas.message import OrderLineItemAddedMessageSchema
-
-            return OrderLineItemAddedMessageSchema().load(data)
-        if data["type"] == "OrderLineItemDiscountSet":
-            from ._schemas.message import OrderLineItemDiscountSetMessageSchema
-
-            return OrderLineItemDiscountSetMessageSchema().load(data)
-        if data["type"] == "OrderLineItemDistributionChannelSet":
-            from ._schemas.message import (
-                OrderLineItemDistributionChannelSetMessageSchema,
-            )
-
-            return OrderLineItemDistributionChannelSetMessageSchema().load(data)
-        if data["type"] == "OrderLineItemRemoved":
-            from ._schemas.message import OrderLineItemRemovedMessageSchema
-
-            return OrderLineItemRemovedMessageSchema().load(data)
-        if data["type"] == "OrderPaymentStateChanged":
-            from ._schemas.message import OrderPaymentStateChangedMessageSchema
-
-            return OrderPaymentStateChangedMessageSchema().load(data)
-        if data["type"] == "ReturnInfoAdded":
-            from ._schemas.message import OrderReturnInfoAddedMessageSchema
-
-            return OrderReturnInfoAddedMessageSchema().load(data)
-        if data["type"] == "ReturnInfoSet":
-            from ._schemas.message import OrderReturnInfoSetMessageSchema
-
-            return OrderReturnInfoSetMessageSchema().load(data)
-        if data["type"] == "OrderReturnShipmentStateChanged":
-            from ._schemas.message import OrderReturnShipmentStateChangedMessageSchema
-
-            return OrderReturnShipmentStateChangedMessageSchema().load(data)
-        if data["type"] == "OrderShipmentStateChanged":
-            from ._schemas.message import OrderShipmentStateChangedMessageSchema
-
-            return OrderShipmentStateChangedMessageSchema().load(data)
-        if data["type"] == "OrderShippingAddressSet":
-            from ._schemas.message import OrderShippingAddressSetMessageSchema
-
-            return OrderShippingAddressSetMessageSchema().load(data)
-        if data["type"] == "OrderShippingInfoSet":
-            from ._schemas.message import OrderShippingInfoSetMessageSchema
-
-            return OrderShippingInfoSetMessageSchema().load(data)
-        if data["type"] == "OrderShippingRateInputSet":
-            from ._schemas.message import OrderShippingRateInputSetMessageSchema
-
-            return OrderShippingRateInputSetMessageSchema().load(data)
-        if data["type"] == "OrderStateChanged":
-            from ._schemas.message import OrderStateChangedMessageSchema
-
-            return OrderStateChangedMessageSchema().load(data)
-        if data["type"] == "OrderStateTransition":
-            from ._schemas.message import OrderStateTransitionMessageSchema
-
-            return OrderStateTransitionMessageSchema().load(data)
-        if data["type"] == "OrderStoreSet":
-            from ._schemas.message import OrderStoreSetMessageSchema
-
-            return OrderStoreSetMessageSchema().load(data)
-        if data["type"] == "ParcelAddedToDelivery":
-            from ._schemas.message import ParcelAddedToDeliveryMessageSchema
-
-            return ParcelAddedToDeliveryMessageSchema().load(data)
-        if data["type"] == "ParcelItemsUpdated":
-            from ._schemas.message import ParcelItemsUpdatedMessageSchema
-
-            return ParcelItemsUpdatedMessageSchema().load(data)
-        if data["type"] == "ParcelMeasurementsUpdated":
-            from ._schemas.message import ParcelMeasurementsUpdatedMessageSchema
-
-            return ParcelMeasurementsUpdatedMessageSchema().load(data)
-        if data["type"] == "ParcelRemovedFromDelivery":
-            from ._schemas.message import ParcelRemovedFromDeliveryMessageSchema
-
-            return ParcelRemovedFromDeliveryMessageSchema().load(data)
-        if data["type"] == "ParcelTrackingDataUpdated":
-            from ._schemas.message import ParcelTrackingDataUpdatedMessageSchema
-
-            return ParcelTrackingDataUpdatedMessageSchema().load(data)
+            return OrderPaymentAddedMessageSchema().load(data)
         if data["type"] == "PaymentCreated":
             from ._schemas.message import PaymentCreatedMessageSchema
 
@@ -602,6 +467,22 @@ class Message(BaseResource):
             from ._schemas.message import ProductRevertedStagedChangesMessageSchema
 
             return ProductRevertedStagedChangesMessageSchema().load(data)
+        if data["type"] == "ProductSelectionCreated":
+            from ._schemas.message import ProductSelectionCreatedMessageSchema
+
+            return ProductSelectionCreatedMessageSchema().load(data)
+        if data["type"] == "ProductSelectionDeleted":
+            from ._schemas.message import ProductSelectionDeletedMessageSchema
+
+            return ProductSelectionDeletedMessageSchema().load(data)
+        if data["type"] == "ProductSelectionProductAdded":
+            from ._schemas.message import ProductSelectionProductAddedMessageSchema
+
+            return ProductSelectionProductAddedMessageSchema().load(data)
+        if data["type"] == "ProductSelectionProductRemoved":
+            from ._schemas.message import ProductSelectionProductRemovedMessageSchema
+
+            return ProductSelectionProductRemovedMessageSchema().load(data)
         if data["type"] == "ProductSlugChanged":
             from ._schemas.message import ProductSlugChangedMessageSchema
 
@@ -642,6 +523,10 @@ class Message(BaseResource):
             from ._schemas.message import StoreDeletedMessageSchema
 
             return StoreDeletedMessageSchema().load(data)
+        if data["type"] == "StoreProductSelectionsChanged":
+            from ._schemas.message import StoreProductSelectionsChangedMessageSchema
+
+            return StoreProductSelectionsChangedMessageSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.message import MessageSchema
@@ -748,67 +633,6 @@ class CategorySlugChangedMessage(Message):
         from ._schemas.message import CategorySlugChangedMessageSchema
 
         return CategorySlugChangedMessageSchema().dump(self)
-
-
-class CustomLineItemStateTransitionMessage(Message):
-    custom_line_item_id: str
-    transition_date: datetime.datetime
-    quantity: int
-    from_state: "StateReference"
-    to_state: "StateReference"
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int,
-        resource: "Reference",
-        resource_version: int,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        custom_line_item_id: str,
-        transition_date: datetime.datetime,
-        quantity: int,
-        from_state: "StateReference",
-        to_state: "StateReference"
-    ):
-        self.custom_line_item_id = custom_line_item_id
-        self.transition_date = transition_date
-        self.quantity = quantity
-        self.from_state = from_state
-        self.to_state = to_state
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            type="CustomLineItemStateTransition",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "CustomLineItemStateTransitionMessage":
-        from ._schemas.message import CustomLineItemStateTransitionMessageSchema
-
-        return CustomLineItemStateTransitionMessageSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import CustomLineItemStateTransitionMessageSchema
-
-        return CustomLineItemStateTransitionMessageSchema().dump(self)
 
 
 class CustomerAddressAddedMessage(Message):
@@ -1493,212 +1317,6 @@ class CustomerTitleSetMessage(Message):
         return CustomerTitleSetMessageSchema().dump(self)
 
 
-class DeliveryAddedMessage(Message):
-    delivery: "Delivery"
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int,
-        resource: "Reference",
-        resource_version: int,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        delivery: "Delivery"
-    ):
-        self.delivery = delivery
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            type="DeliveryAdded",
-        )
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeliveryAddedMessage":
-        from ._schemas.message import DeliveryAddedMessageSchema
-
-        return DeliveryAddedMessageSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryAddedMessageSchema
-
-        return DeliveryAddedMessageSchema().dump(self)
-
-
-class DeliveryAddressSetMessage(Message):
-    delivery_id: str
-    address: typing.Optional["Address"]
-    old_address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int,
-        resource: "Reference",
-        resource_version: int,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        delivery_id: str,
-        address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
-    ):
-        self.delivery_id = delivery_id
-        self.address = address
-        self.old_address = old_address
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            type="DeliveryAddressSet",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryAddressSetMessage":
-        from ._schemas.message import DeliveryAddressSetMessageSchema
-
-        return DeliveryAddressSetMessageSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryAddressSetMessageSchema
-
-        return DeliveryAddressSetMessageSchema().dump(self)
-
-
-class DeliveryItemsUpdatedMessage(Message):
-    delivery_id: str
-    items: typing.List["DeliveryItem"]
-    old_items: typing.List["DeliveryItem"]
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int,
-        resource: "Reference",
-        resource_version: int,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        delivery_id: str,
-        items: typing.List["DeliveryItem"],
-        old_items: typing.List["DeliveryItem"]
-    ):
-        self.delivery_id = delivery_id
-        self.items = items
-        self.old_items = old_items
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            type="DeliveryItemsUpdated",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryItemsUpdatedMessage":
-        from ._schemas.message import DeliveryItemsUpdatedMessageSchema
-
-        return DeliveryItemsUpdatedMessageSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryItemsUpdatedMessageSchema
-
-        return DeliveryItemsUpdatedMessageSchema().dump(self)
-
-
-class DeliveryRemovedMessage(Message):
-    delivery: "Delivery"
-
-    def __init__(
-        self,
-        *,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        sequence_number: int,
-        resource: "Reference",
-        resource_version: int,
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        delivery: "Delivery"
-    ):
-        self.delivery = delivery
-        super().__init__(
-            id=id,
-            version=version,
-            created_at=created_at,
-            last_modified_at=last_modified_at,
-            last_modified_by=last_modified_by,
-            created_by=created_by,
-            sequence_number=sequence_number,
-            resource=resource,
-            resource_version=resource_version,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            type="DeliveryRemoved",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryRemovedMessage":
-        from ._schemas.message import DeliveryRemovedMessageSchema
-
-        return DeliveryRemovedMessageSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryRemovedMessageSchema
-
-        return DeliveryRemovedMessageSchema().dump(self)
-
-
 class InventoryEntryCreatedMessage(Message):
     inventory_entry: "InventoryEntry"
 
@@ -1750,6 +1368,7 @@ class InventoryEntryCreatedMessage(Message):
 
 class InventoryEntryDeletedMessage(Message):
     sku: str
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1805,6 +1424,7 @@ class InventoryEntryQuantitySetMessage(Message):
     new_quantity_on_stock: int
     old_available_quantity: int
     new_available_quantity: int
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1861,11 +1481,571 @@ class InventoryEntryQuantitySetMessage(Message):
         return InventoryEntryQuantitySetMessageSchema().dump(self)
 
 
-class LineItemStateTransitionMessage(Message):
+class MessagePagedQueryResponse(_BaseType):
+    limit: int
+    count: int
+    total: typing.Optional[int]
+    offset: int
+    results: typing.List["Message"]
+
+    def __init__(
+        self,
+        *,
+        limit: int,
+        count: int,
+        total: typing.Optional[int] = None,
+        offset: int,
+        results: typing.List["Message"]
+    ):
+        self.limit = limit
+        self.count = count
+        self.total = total
+        self.offset = offset
+        self.results = results
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MessagePagedQueryResponse":
+        from ._schemas.message import MessagePagedQueryResponseSchema
+
+        return MessagePagedQueryResponseSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import MessagePagedQueryResponseSchema
+
+        return MessagePagedQueryResponseSchema().dump(self)
+
+
+class MessagesConfiguration(_BaseType):
+    """Holds the configuration for the [Messages Query](/../api/projects/messages) feature for the Project."""
+
+    #: When `true`, the [Messages Query](/../api/projects/messages) feature is active.
+    enabled: bool
+    #: Specifies the number of days each Message should be available via the [Messages Query](/../api/projects/messages) API.
+    #: For Messages older than the specified period, it is not guaranteed that they are still accessible via the API.
+    #: This field may not be present on Projects created before 8 October 2018.
+    delete_days_after_creation: typing.Optional[int]
+
+    def __init__(
+        self, *, enabled: bool, delete_days_after_creation: typing.Optional[int] = None
+    ):
+        self.enabled = enabled
+        self.delete_days_after_creation = delete_days_after_creation
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MessagesConfiguration":
+        from ._schemas.message import MessagesConfigurationSchema
+
+        return MessagesConfigurationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import MessagesConfigurationSchema
+
+        return MessagesConfigurationSchema().dump(self)
+
+
+class MessagesConfigurationDraft(_BaseType):
+    """Defines the configuration for the [Messages Query](/../api/projects/messages) feature for the Project."""
+
+    #: Setting to `true` activates the [Messages Query](/../api/projects/messages) feature.
+    enabled: bool
+    #: Specifies the number of days each Message should be available via the [Messages Query](/../api/projects/messages) API. For Messages older than the specified period, it is not guaranteed that they are still accessible via the API.
+    delete_days_after_creation: int
+
+    def __init__(self, *, enabled: bool, delete_days_after_creation: int):
+        self.enabled = enabled
+        self.delete_days_after_creation = delete_days_after_creation
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MessagesConfigurationDraft":
+        from ._schemas.message import MessagesConfigurationDraftSchema
+
+        return MessagesConfigurationDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import MessagesConfigurationDraftSchema
+
+        return MessagesConfigurationDraftSchema().dump(self)
+
+
+class OrderMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        type: str,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            type=type,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderMessage":
+        if data["type"] == "CustomLineItemStateTransition":
+            from ._schemas.message import CustomLineItemStateTransitionMessageSchema
+
+            return CustomLineItemStateTransitionMessageSchema().load(data)
+        if data["type"] == "DeliveryAdded":
+            from ._schemas.message import DeliveryAddedMessageSchema
+
+            return DeliveryAddedMessageSchema().load(data)
+        if data["type"] == "DeliveryAddressSet":
+            from ._schemas.message import DeliveryAddressSetMessageSchema
+
+            return DeliveryAddressSetMessageSchema().load(data)
+        if data["type"] == "DeliveryItemsUpdated":
+            from ._schemas.message import DeliveryItemsUpdatedMessageSchema
+
+            return DeliveryItemsUpdatedMessageSchema().load(data)
+        if data["type"] == "DeliveryRemoved":
+            from ._schemas.message import DeliveryRemovedMessageSchema
+
+            return DeliveryRemovedMessageSchema().load(data)
+        if data["type"] == "LineItemStateTransition":
+            from ._schemas.message import LineItemStateTransitionMessageSchema
+
+            return LineItemStateTransitionMessageSchema().load(data)
+        if data["type"] == "OrderBillingAddressSet":
+            from ._schemas.message import OrderBillingAddressSetMessageSchema
+
+            return OrderBillingAddressSetMessageSchema().load(data)
+        if data["type"] == "OrderCreated":
+            from ._schemas.message import OrderCreatedMessageSchema
+
+            return OrderCreatedMessageSchema().load(data)
+        if data["type"] == "OrderCustomLineItemDiscountSet":
+            from ._schemas.message import OrderCustomLineItemDiscountSetMessageSchema
+
+            return OrderCustomLineItemDiscountSetMessageSchema().load(data)
+        if data["type"] == "OrderCustomerEmailSet":
+            from ._schemas.message import OrderCustomerEmailSetMessageSchema
+
+            return OrderCustomerEmailSetMessageSchema().load(data)
+        if data["type"] == "OrderCustomerGroupSet":
+            from ._schemas.message import OrderCustomerGroupSetMessageSchema
+
+            return OrderCustomerGroupSetMessageSchema().load(data)
+        if data["type"] == "OrderCustomerSet":
+            from ._schemas.message import OrderCustomerSetMessageSchema
+
+            return OrderCustomerSetMessageSchema().load(data)
+        if data["type"] == "OrderDeleted":
+            from ._schemas.message import OrderDeletedMessageSchema
+
+            return OrderDeletedMessageSchema().load(data)
+        if data["type"] == "OrderDiscountCodeAdded":
+            from ._schemas.message import OrderDiscountCodeAddedMessageSchema
+
+            return OrderDiscountCodeAddedMessageSchema().load(data)
+        if data["type"] == "OrderDiscountCodeRemoved":
+            from ._schemas.message import OrderDiscountCodeRemovedMessageSchema
+
+            return OrderDiscountCodeRemovedMessageSchema().load(data)
+        if data["type"] == "OrderDiscountCodeStateSet":
+            from ._schemas.message import OrderDiscountCodeStateSetMessageSchema
+
+            return OrderDiscountCodeStateSetMessageSchema().load(data)
+        if data["type"] == "OrderEditApplied":
+            from ._schemas.message import OrderEditAppliedMessageSchema
+
+            return OrderEditAppliedMessageSchema().load(data)
+        if data["type"] == "OrderImported":
+            from ._schemas.message import OrderImportedMessageSchema
+
+            return OrderImportedMessageSchema().load(data)
+        if data["type"] == "OrderLineItemAdded":
+            from ._schemas.message import OrderLineItemAddedMessageSchema
+
+            return OrderLineItemAddedMessageSchema().load(data)
+        if data["type"] == "OrderLineItemDiscountSet":
+            from ._schemas.message import OrderLineItemDiscountSetMessageSchema
+
+            return OrderLineItemDiscountSetMessageSchema().load(data)
+        if data["type"] == "OrderLineItemDistributionChannelSet":
+            from ._schemas.message import (
+                OrderLineItemDistributionChannelSetMessageSchema,
+            )
+
+            return OrderLineItemDistributionChannelSetMessageSchema().load(data)
+        if data["type"] == "OrderLineItemRemoved":
+            from ._schemas.message import OrderLineItemRemovedMessageSchema
+
+            return OrderLineItemRemovedMessageSchema().load(data)
+        if data["type"] == "OrderPaymentStateChanged":
+            from ._schemas.message import OrderPaymentStateChangedMessageSchema
+
+            return OrderPaymentStateChangedMessageSchema().load(data)
+        if data["type"] == "ReturnInfoAdded":
+            from ._schemas.message import OrderReturnInfoAddedMessageSchema
+
+            return OrderReturnInfoAddedMessageSchema().load(data)
+        if data["type"] == "ReturnInfoSet":
+            from ._schemas.message import OrderReturnInfoSetMessageSchema
+
+            return OrderReturnInfoSetMessageSchema().load(data)
+        if data["type"] == "OrderReturnShipmentStateChanged":
+            from ._schemas.message import OrderReturnShipmentStateChangedMessageSchema
+
+            return OrderReturnShipmentStateChangedMessageSchema().load(data)
+        if data["type"] == "OrderShipmentStateChanged":
+            from ._schemas.message import OrderShipmentStateChangedMessageSchema
+
+            return OrderShipmentStateChangedMessageSchema().load(data)
+        if data["type"] == "OrderShippingAddressSet":
+            from ._schemas.message import OrderShippingAddressSetMessageSchema
+
+            return OrderShippingAddressSetMessageSchema().load(data)
+        if data["type"] == "OrderShippingInfoSet":
+            from ._schemas.message import OrderShippingInfoSetMessageSchema
+
+            return OrderShippingInfoSetMessageSchema().load(data)
+        if data["type"] == "OrderShippingRateInputSet":
+            from ._schemas.message import OrderShippingRateInputSetMessageSchema
+
+            return OrderShippingRateInputSetMessageSchema().load(data)
+        if data["type"] == "OrderStateChanged":
+            from ._schemas.message import OrderStateChangedMessageSchema
+
+            return OrderStateChangedMessageSchema().load(data)
+        if data["type"] == "OrderStateTransition":
+            from ._schemas.message import OrderStateTransitionMessageSchema
+
+            return OrderStateTransitionMessageSchema().load(data)
+        if data["type"] == "OrderStoreSet":
+            from ._schemas.message import OrderStoreSetMessageSchema
+
+            return OrderStoreSetMessageSchema().load(data)
+        if data["type"] == "ParcelAddedToDelivery":
+            from ._schemas.message import ParcelAddedToDeliveryMessageSchema
+
+            return ParcelAddedToDeliveryMessageSchema().load(data)
+        if data["type"] == "ParcelItemsUpdated":
+            from ._schemas.message import ParcelItemsUpdatedMessageSchema
+
+            return ParcelItemsUpdatedMessageSchema().load(data)
+        if data["type"] == "ParcelMeasurementsUpdated":
+            from ._schemas.message import ParcelMeasurementsUpdatedMessageSchema
+
+            return ParcelMeasurementsUpdatedMessageSchema().load(data)
+        if data["type"] == "ParcelRemovedFromDelivery":
+            from ._schemas.message import ParcelRemovedFromDeliveryMessageSchema
+
+            return ParcelRemovedFromDeliveryMessageSchema().load(data)
+        if data["type"] == "ParcelTrackingDataUpdated":
+            from ._schemas.message import ParcelTrackingDataUpdatedMessageSchema
+
+            return ParcelTrackingDataUpdatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderMessageSchema
+
+        return OrderMessageSchema().dump(self)
+
+
+class CustomLineItemStateTransitionMessage(OrderMessage):
+    custom_line_item_id: str
+    transition_date: datetime.datetime
+    quantity: int
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    from_state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    to_state: "StateReference"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        custom_line_item_id: str,
+        transition_date: datetime.datetime,
+        quantity: int,
+        from_state: "StateReference",
+        to_state: "StateReference"
+    ):
+        self.custom_line_item_id = custom_line_item_id
+        self.transition_date = transition_date
+        self.quantity = quantity
+        self.from_state = from_state
+        self.to_state = to_state
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="CustomLineItemStateTransition",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomLineItemStateTransitionMessage":
+        from ._schemas.message import CustomLineItemStateTransitionMessageSchema
+
+        return CustomLineItemStateTransitionMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomLineItemStateTransitionMessageSchema
+
+        return CustomLineItemStateTransitionMessageSchema().dump(self)
+
+
+class DeliveryAddedMessage(OrderMessage):
+    delivery: "Delivery"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        delivery: "Delivery"
+    ):
+        self.delivery = delivery
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="DeliveryAdded",
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeliveryAddedMessage":
+        from ._schemas.message import DeliveryAddedMessageSchema
+
+        return DeliveryAddedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryAddedMessageSchema
+
+        return DeliveryAddedMessageSchema().dump(self)
+
+
+class DeliveryAddressSetMessage(OrderMessage):
+    delivery_id: str
+    address: typing.Optional["Address"]
+    old_address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        delivery_id: str,
+        address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None
+    ):
+        self.delivery_id = delivery_id
+        self.address = address
+        self.old_address = old_address
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="DeliveryAddressSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryAddressSetMessage":
+        from ._schemas.message import DeliveryAddressSetMessageSchema
+
+        return DeliveryAddressSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryAddressSetMessageSchema
+
+        return DeliveryAddressSetMessageSchema().dump(self)
+
+
+class DeliveryItemsUpdatedMessage(OrderMessage):
+    delivery_id: str
+    items: typing.List["DeliveryItem"]
+    old_items: typing.List["DeliveryItem"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        delivery_id: str,
+        items: typing.List["DeliveryItem"],
+        old_items: typing.List["DeliveryItem"]
+    ):
+        self.delivery_id = delivery_id
+        self.items = items
+        self.old_items = old_items
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="DeliveryItemsUpdated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryItemsUpdatedMessage":
+        from ._schemas.message import DeliveryItemsUpdatedMessageSchema
+
+        return DeliveryItemsUpdatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryItemsUpdatedMessageSchema
+
+        return DeliveryItemsUpdatedMessageSchema().dump(self)
+
+
+class DeliveryRemovedMessage(OrderMessage):
+    delivery: "Delivery"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        delivery: "Delivery"
+    ):
+        self.delivery = delivery
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="DeliveryRemoved",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryRemovedMessage":
+        from ._schemas.message import DeliveryRemovedMessageSchema
+
+        return DeliveryRemovedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryRemovedMessageSchema
+
+        return DeliveryRemovedMessageSchema().dump(self)
+
+
+class LineItemStateTransitionMessage(OrderMessage):
     line_item_id: str
     transition_date: datetime.datetime
     quantity: int
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     from_state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     to_state: "StateReference"
 
     def __init__(
@@ -1922,90 +2102,7 @@ class LineItemStateTransitionMessage(Message):
         return LineItemStateTransitionMessageSchema().dump(self)
 
 
-class MessageConfiguration(_BaseType):
-    enabled: bool
-    delete_days_after_creation: typing.Optional[int]
-
-    def __init__(
-        self, *, enabled: bool, delete_days_after_creation: typing.Optional[int] = None
-    ):
-        self.enabled = enabled
-        self.delete_days_after_creation = delete_days_after_creation
-        super().__init__()
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MessageConfiguration":
-        from ._schemas.message import MessageConfigurationSchema
-
-        return MessageConfigurationSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import MessageConfigurationSchema
-
-        return MessageConfigurationSchema().dump(self)
-
-
-class MessageConfigurationDraft(_BaseType):
-    enabled: bool
-    delete_days_after_creation: int
-
-    def __init__(self, *, enabled: bool, delete_days_after_creation: int):
-        self.enabled = enabled
-        self.delete_days_after_creation = delete_days_after_creation
-        super().__init__()
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "MessageConfigurationDraft":
-        from ._schemas.message import MessageConfigurationDraftSchema
-
-        return MessageConfigurationDraftSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import MessageConfigurationDraftSchema
-
-        return MessageConfigurationDraftSchema().dump(self)
-
-
-class MessagePagedQueryResponse(_BaseType):
-    limit: int
-    count: int
-    total: typing.Optional[int]
-    offset: int
-    results: typing.List["Message"]
-
-    def __init__(
-        self,
-        *,
-        limit: int,
-        count: int,
-        total: typing.Optional[int] = None,
-        offset: int,
-        results: typing.List["Message"]
-    ):
-        self.limit = limit
-        self.count = count
-        self.total = total
-        self.offset = offset
-        self.results = results
-        super().__init__()
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "MessagePagedQueryResponse":
-        from ._schemas.message import MessagePagedQueryResponseSchema
-
-        return MessagePagedQueryResponseSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import MessagePagedQueryResponseSchema
-
-        return MessagePagedQueryResponseSchema().dump(self)
-
-
-class OrderBillingAddressSetMessage(Message):
+class OrderBillingAddressSetMessage(OrderMessage):
     address: typing.Optional["Address"]
     old_address: typing.Optional["Address"]
 
@@ -2057,7 +2154,7 @@ class OrderBillingAddressSetMessage(Message):
         return OrderBillingAddressSetMessageSchema().dump(self)
 
 
-class OrderCreatedMessage(Message):
+class OrderCreatedMessage(OrderMessage):
     order: "Order"
 
     def __init__(
@@ -2104,7 +2201,7 @@ class OrderCreatedMessage(Message):
         return OrderCreatedMessageSchema().dump(self)
 
 
-class OrderCustomLineItemDiscountSetMessage(Message):
+class OrderCustomLineItemDiscountSetMessage(OrderMessage):
     custom_line_item_id: str
     discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
     taxed_price: typing.Optional["TaxedItemPrice"]
@@ -2161,7 +2258,7 @@ class OrderCustomLineItemDiscountSetMessage(Message):
         return OrderCustomLineItemDiscountSetMessageSchema().dump(self)
 
 
-class OrderCustomerEmailSetMessage(Message):
+class OrderCustomerEmailSetMessage(OrderMessage):
     email: typing.Optional[str]
     old_email: typing.Optional[str]
 
@@ -2213,7 +2310,7 @@ class OrderCustomerEmailSetMessage(Message):
         return OrderCustomerEmailSetMessageSchema().dump(self)
 
 
-class OrderCustomerGroupSetMessage(Message):
+class OrderCustomerGroupSetMessage(OrderMessage):
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
@@ -2267,7 +2364,7 @@ class OrderCustomerGroupSetMessage(Message):
         return OrderCustomerGroupSetMessageSchema().dump(self)
 
 
-class OrderCustomerSetMessage(Message):
+class OrderCustomerSetMessage(OrderMessage):
     customer: typing.Optional["CustomerReference"]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
@@ -2327,7 +2424,7 @@ class OrderCustomerSetMessage(Message):
         return OrderCustomerSetMessageSchema().dump(self)
 
 
-class OrderDeletedMessage(Message):
+class OrderDeletedMessage(OrderMessage):
     order: "Order"
 
     def __init__(
@@ -2374,7 +2471,7 @@ class OrderDeletedMessage(Message):
         return OrderDeletedMessageSchema().dump(self)
 
 
-class OrderDiscountCodeAddedMessage(Message):
+class OrderDiscountCodeAddedMessage(OrderMessage):
     discount_code: "DiscountCodeReference"
 
     def __init__(
@@ -2423,7 +2520,7 @@ class OrderDiscountCodeAddedMessage(Message):
         return OrderDiscountCodeAddedMessageSchema().dump(self)
 
 
-class OrderDiscountCodeRemovedMessage(Message):
+class OrderDiscountCodeRemovedMessage(OrderMessage):
     discount_code: "DiscountCodeReference"
 
     def __init__(
@@ -2472,7 +2569,7 @@ class OrderDiscountCodeRemovedMessage(Message):
         return OrderDiscountCodeRemovedMessageSchema().dump(self)
 
 
-class OrderDiscountCodeStateSetMessage(Message):
+class OrderDiscountCodeStateSetMessage(OrderMessage):
     discount_code: "DiscountCodeReference"
     state: "DiscountCodeState"
     old_state: typing.Optional["DiscountCodeState"]
@@ -2527,7 +2624,7 @@ class OrderDiscountCodeStateSetMessage(Message):
         return OrderDiscountCodeStateSetMessageSchema().dump(self)
 
 
-class OrderEditAppliedMessage(Message):
+class OrderEditAppliedMessage(OrderMessage):
     edit: "OrderEditReference"
     result: "OrderEditApplied"
 
@@ -2579,7 +2676,7 @@ class OrderEditAppliedMessage(Message):
         return OrderEditAppliedMessageSchema().dump(self)
 
 
-class OrderImportedMessage(Message):
+class OrderImportedMessage(OrderMessage):
     order: "Order"
 
     def __init__(
@@ -2626,7 +2723,7 @@ class OrderImportedMessage(Message):
         return OrderImportedMessageSchema().dump(self)
 
 
-class OrderLineItemAddedMessage(Message):
+class OrderLineItemAddedMessage(OrderMessage):
     line_item: "LineItem"
     added_quantity: int
 
@@ -2678,9 +2775,11 @@ class OrderLineItemAddedMessage(Message):
         return OrderLineItemAddedMessageSchema().dump(self)
 
 
-class OrderLineItemDiscountSetMessage(Message):
+class OrderLineItemDiscountSetMessage(OrderMessage):
     line_item_id: str
     discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_price: "Money"
     taxed_price: typing.Optional["TaxedItemPrice"]
 
@@ -2738,8 +2837,9 @@ class OrderLineItemDiscountSetMessage(Message):
         return OrderLineItemDiscountSetMessageSchema().dump(self)
 
 
-class OrderLineItemDistributionChannelSetMessage(Message):
+class OrderLineItemDistributionChannelSetMessage(OrderMessage):
     line_item_id: str
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -2790,11 +2890,12 @@ class OrderLineItemDistributionChannelSetMessage(Message):
         return OrderLineItemDistributionChannelSetMessageSchema().dump(self)
 
 
-class OrderLineItemRemovedMessage(Message):
+class OrderLineItemRemovedMessage(OrderMessage):
     line_item_id: str
     removed_quantity: int
     new_quantity: int
     new_state: typing.List["ItemState"]
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     new_total_price: "TypedMoney"
     new_taxed_price: typing.Optional["TaxedItemPrice"]
     new_price: typing.Optional["Price"]
@@ -2860,7 +2961,56 @@ class OrderLineItemRemovedMessage(Message):
         return OrderLineItemRemovedMessageSchema().dump(self)
 
 
-class OrderPaymentStateChangedMessage(Message):
+class OrderPaymentAddedMessage(Message):
+    payment: "PaymentReference"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        payment: "PaymentReference"
+    ):
+        self.payment = payment
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="OrderPaymentAdded",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderPaymentAddedMessage":
+        from ._schemas.message import OrderPaymentAddedMessageSchema
+
+        return OrderPaymentAddedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderPaymentAddedMessageSchema
+
+        return OrderPaymentAddedMessageSchema().dump(self)
+
+
+class OrderPaymentStateChangedMessage(OrderMessage):
     payment_state: "PaymentState"
     old_payment_state: typing.Optional["PaymentState"]
 
@@ -2912,7 +3062,7 @@ class OrderPaymentStateChangedMessage(Message):
         return OrderPaymentStateChangedMessageSchema().dump(self)
 
 
-class OrderReturnInfoAddedMessage(Message):
+class OrderReturnInfoAddedMessage(OrderMessage):
     return_info: "ReturnInfo"
 
     def __init__(
@@ -2961,7 +3111,7 @@ class OrderReturnInfoAddedMessage(Message):
         return OrderReturnInfoAddedMessageSchema().dump(self)
 
 
-class OrderReturnInfoSetMessage(Message):
+class OrderReturnInfoSetMessage(OrderMessage):
     return_info: typing.Optional[typing.List["ReturnInfo"]]
 
     def __init__(
@@ -3010,7 +3160,7 @@ class OrderReturnInfoSetMessage(Message):
         return OrderReturnInfoSetMessageSchema().dump(self)
 
 
-class OrderReturnShipmentStateChangedMessage(Message):
+class OrderReturnShipmentStateChangedMessage(OrderMessage):
     return_item_id: str
     return_shipment_state: "ReturnShipmentState"
 
@@ -3062,7 +3212,7 @@ class OrderReturnShipmentStateChangedMessage(Message):
         return OrderReturnShipmentStateChangedMessageSchema().dump(self)
 
 
-class OrderShipmentStateChangedMessage(Message):
+class OrderShipmentStateChangedMessage(OrderMessage):
     shipment_state: "ShipmentState"
     old_shipment_state: typing.Optional["ShipmentState"]
 
@@ -3114,7 +3264,7 @@ class OrderShipmentStateChangedMessage(Message):
         return OrderShipmentStateChangedMessageSchema().dump(self)
 
 
-class OrderShippingAddressSetMessage(Message):
+class OrderShippingAddressSetMessage(OrderMessage):
     address: typing.Optional["Address"]
     old_address: typing.Optional["Address"]
 
@@ -3166,7 +3316,7 @@ class OrderShippingAddressSetMessage(Message):
         return OrderShippingAddressSetMessageSchema().dump(self)
 
 
-class OrderShippingInfoSetMessage(Message):
+class OrderShippingInfoSetMessage(OrderMessage):
     shipping_info: typing.Optional["ShippingInfo"]
     old_shipping_info: typing.Optional["ShippingInfo"]
 
@@ -3218,7 +3368,7 @@ class OrderShippingInfoSetMessage(Message):
         return OrderShippingInfoSetMessageSchema().dump(self)
 
 
-class OrderShippingRateInputSetMessage(Message):
+class OrderShippingRateInputSetMessage(OrderMessage):
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     old_shipping_rate_input: typing.Optional["ShippingRateInput"]
 
@@ -3270,7 +3420,7 @@ class OrderShippingRateInputSetMessage(Message):
         return OrderShippingRateInputSetMessageSchema().dump(self)
 
 
-class OrderStateChangedMessage(Message):
+class OrderStateChangedMessage(OrderMessage):
     order_state: "OrderState"
     old_order_state: "OrderState"
 
@@ -3322,8 +3472,10 @@ class OrderStateChangedMessage(Message):
         return OrderStateChangedMessageSchema().dump(self)
 
 
-class OrderStateTransitionMessage(Message):
+class OrderStateTransitionMessage(OrderMessage):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     old_state: typing.Optional["StateReference"]
     force: bool
 
@@ -3377,7 +3529,7 @@ class OrderStateTransitionMessage(Message):
         return OrderStateTransitionMessageSchema().dump(self)
 
 
-class OrderStoreSetMessage(Message):
+class OrderStoreSetMessage(OrderMessage):
     store: "StoreKeyReference"
 
     def __init__(
@@ -3424,7 +3576,7 @@ class OrderStoreSetMessage(Message):
         return OrderStoreSetMessageSchema().dump(self)
 
 
-class ParcelAddedToDeliveryMessage(Message):
+class ParcelAddedToDeliveryMessage(OrderMessage):
     delivery: "Delivery"
     parcel: "Parcel"
 
@@ -3476,7 +3628,7 @@ class ParcelAddedToDeliveryMessage(Message):
         return ParcelAddedToDeliveryMessageSchema().dump(self)
 
 
-class ParcelItemsUpdatedMessage(Message):
+class ParcelItemsUpdatedMessage(OrderMessage):
     parcel_id: str
     delivery_id: typing.Optional[str]
     items: typing.List["DeliveryItem"]
@@ -3534,7 +3686,7 @@ class ParcelItemsUpdatedMessage(Message):
         return ParcelItemsUpdatedMessageSchema().dump(self)
 
 
-class ParcelMeasurementsUpdatedMessage(Message):
+class ParcelMeasurementsUpdatedMessage(OrderMessage):
     delivery_id: str
     parcel_id: str
     measurements: typing.Optional["ParcelMeasurements"]
@@ -3589,7 +3741,7 @@ class ParcelMeasurementsUpdatedMessage(Message):
         return ParcelMeasurementsUpdatedMessageSchema().dump(self)
 
 
-class ParcelRemovedFromDeliveryMessage(Message):
+class ParcelRemovedFromDeliveryMessage(OrderMessage):
     delivery_id: str
     parcel: "Parcel"
 
@@ -3641,7 +3793,7 @@ class ParcelRemovedFromDeliveryMessage(Message):
         return ParcelRemovedFromDeliveryMessageSchema().dump(self)
 
 
-class ParcelTrackingDataUpdatedMessage(Message):
+class ParcelTrackingDataUpdatedMessage(OrderMessage):
     delivery_id: str
     parcel_id: str
     tracking_data: typing.Optional["TrackingData"]
@@ -3744,6 +3896,7 @@ class PaymentCreatedMessage(Message):
 
 
 class PaymentInteractionAddedMessage(Message):
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     interaction: "CustomFields"
 
     def __init__(
@@ -3845,6 +3998,7 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
 
 
 class PaymentStatusStateTransitionMessage(Message):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -4510,6 +4664,202 @@ class ProductRevertedStagedChangesMessage(Message):
         return ProductRevertedStagedChangesMessageSchema().dump(self)
 
 
+class ProductSelectionCreatedMessage(Message):
+    product_selection: "ProductSelectionType"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        product_selection: "ProductSelectionType"
+    ):
+        self.product_selection = product_selection
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="ProductSelectionCreated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionCreatedMessage":
+        from ._schemas.message import ProductSelectionCreatedMessageSchema
+
+        return ProductSelectionCreatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionCreatedMessageSchema
+
+        return ProductSelectionCreatedMessageSchema().dump(self)
+
+
+class ProductSelectionDeletedMessage(Message):
+    name: "LocalizedString"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        name: "LocalizedString"
+    ):
+        self.name = name
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="ProductSelectionDeleted",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionDeletedMessage":
+        from ._schemas.message import ProductSelectionDeletedMessageSchema
+
+        return ProductSelectionDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionDeletedMessageSchema
+
+        return ProductSelectionDeletedMessageSchema().dump(self)
+
+
+class ProductSelectionProductAddedMessage(Message):
+    product: "ProductReference"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        product: "ProductReference"
+    ):
+        self.product = product
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="ProductSelectionProductAdded",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionProductAddedMessage":
+        from ._schemas.message import ProductSelectionProductAddedMessageSchema
+
+        return ProductSelectionProductAddedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionProductAddedMessageSchema
+
+        return ProductSelectionProductAddedMessageSchema().dump(self)
+
+
+class ProductSelectionProductRemovedMessage(Message):
+    product: "ProductReference"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        product: "ProductReference"
+    ):
+        self.product = product
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="ProductSelectionProductRemoved",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionProductRemovedMessage":
+        from ._schemas.message import ProductSelectionProductRemovedMessageSchema
+
+        return ProductSelectionProductRemovedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionProductRemovedMessageSchema
+
+        return ProductSelectionProductRemovedMessageSchema().dump(self)
+
+
 class ProductSlugChangedMessage(Message):
     slug: "LocalizedString"
     old_slug: typing.Optional["LocalizedString"]
@@ -4563,6 +4913,7 @@ class ProductSlugChangedMessage(Message):
 
 
 class ProductStateTransitionMessage(Message):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -4870,7 +5221,9 @@ class ReviewRatingSetMessage(Message):
 
 
 class ReviewStateTransitionMessage(Message):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     old_state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     new_state: "StateReference"
     old_included_in_statistics: bool
     new_included_in_statistics: bool
@@ -4938,6 +5291,8 @@ class StoreCreatedMessage(Message):
     languages: typing.List["str"]
     distribution_channels: typing.List["ChannelReference"]
     supply_channels: typing.List["ChannelReference"]
+    product_selections: typing.List["ProductSelectionSetting"]
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -4959,12 +5314,14 @@ class StoreCreatedMessage(Message):
         languages: typing.List["str"],
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.List["ChannelReference"],
+        product_selections: typing.List["ProductSelectionSetting"],
         custom: typing.Optional["CustomFields"] = None
     ):
         self.name = name
         self.languages = languages
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
+        self.product_selections = product_selections
         self.custom = custom
         super().__init__(
             id=id,
@@ -5036,6 +5393,67 @@ class StoreDeletedMessage(Message):
         return StoreDeletedMessageSchema().dump(self)
 
 
+class StoreProductSelectionsChangedMessage(Message):
+    added_product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+    removed_product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+    updated_product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        added_product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None,
+        removed_product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None,
+        updated_product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None
+    ):
+        self.added_product_selections = added_product_selections
+        self.removed_product_selections = removed_product_selections
+        self.updated_product_selections = updated_product_selections
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StoreProductSelectionsChanged",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreProductSelectionsChangedMessage":
+        from ._schemas.message import StoreProductSelectionsChangedMessageSchema
+
+        return StoreProductSelectionsChangedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StoreProductSelectionsChangedMessageSchema
+
+        return StoreProductSelectionsChangedMessageSchema().dump(self)
+
+
 class UserProvidedIdentifiers(_BaseType):
     key: typing.Optional[str]
     external_id: typing.Optional[str]
@@ -5097,12 +5515,6 @@ class MessagePayload(_BaseType):
             from ._schemas.message import CategorySlugChangedMessagePayloadSchema
 
             return CategorySlugChangedMessagePayloadSchema().load(data)
-        if data["type"] == "CustomLineItemStateTransition":
-            from ._schemas.message import (
-                CustomLineItemStateTransitionMessagePayloadSchema,
-            )
-
-            return CustomLineItemStateTransitionMessagePayloadSchema().load(data)
         if data["type"] == "CustomerAddressAdded":
             from ._schemas.message import CustomerAddressAddedMessagePayloadSchema
 
@@ -5159,22 +5571,6 @@ class MessagePayload(_BaseType):
             from ._schemas.message import CustomerTitleSetMessagePayloadSchema
 
             return CustomerTitleSetMessagePayloadSchema().load(data)
-        if data["type"] == "DeliveryAdded":
-            from ._schemas.message import DeliveryAddedMessagePayloadSchema
-
-            return DeliveryAddedMessagePayloadSchema().load(data)
-        if data["type"] == "DeliveryAddressSet":
-            from ._schemas.message import DeliveryAddressSetMessagePayloadSchema
-
-            return DeliveryAddressSetMessagePayloadSchema().load(data)
-        if data["type"] == "DeliveryItemsUpdated":
-            from ._schemas.message import DeliveryItemsUpdatedMessagePayloadSchema
-
-            return DeliveryItemsUpdatedMessagePayloadSchema().load(data)
-        if data["type"] == "DeliveryRemoved":
-            from ._schemas.message import DeliveryRemovedMessagePayloadSchema
-
-            return DeliveryRemovedMessagePayloadSchema().load(data)
         if data["type"] == "InventoryEntryCreated":
             from ._schemas.message import InventoryEntryCreatedMessagePayloadSchema
 
@@ -5187,144 +5583,10 @@ class MessagePayload(_BaseType):
             from ._schemas.message import InventoryEntryQuantitySetMessagePayloadSchema
 
             return InventoryEntryQuantitySetMessagePayloadSchema().load(data)
-        if data["type"] == "LineItemStateTransition":
-            from ._schemas.message import LineItemStateTransitionMessagePayloadSchema
+        if data["type"] == "OrderPaymentAdded":
+            from ._schemas.message import OrderPaymentAddedMessagePayloadSchema
 
-            return LineItemStateTransitionMessagePayloadSchema().load(data)
-        if data["type"] == "OrderBillingAddressSet":
-            from ._schemas.message import OrderBillingAddressSetMessagePayloadSchema
-
-            return OrderBillingAddressSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderCreated":
-            from ._schemas.message import OrderCreatedMessagePayloadSchema
-
-            return OrderCreatedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderCustomLineItemDiscountSet":
-            from ._schemas.message import (
-                OrderCustomLineItemDiscountSetMessagePayloadSchema,
-            )
-
-            return OrderCustomLineItemDiscountSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderCustomerEmailSet":
-            from ._schemas.message import OrderCustomerEmailSetMessagePayloadSchema
-
-            return OrderCustomerEmailSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderCustomerGroupSet":
-            from ._schemas.message import OrderCustomerGroupSetMessagePayloadSchema
-
-            return OrderCustomerGroupSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderCustomerSet":
-            from ._schemas.message import OrderCustomerSetMessagePayloadSchema
-
-            return OrderCustomerSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderDeleted":
-            from ._schemas.message import OrderDeletedMessagePayloadSchema
-
-            return OrderDeletedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderDiscountCodeAdded":
-            from ._schemas.message import OrderDiscountCodeAddedMessagePayloadSchema
-
-            return OrderDiscountCodeAddedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderDiscountCodeRemoved":
-            from ._schemas.message import OrderDiscountCodeRemovedMessagePayloadSchema
-
-            return OrderDiscountCodeRemovedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderDiscountCodeStateSet":
-            from ._schemas.message import OrderDiscountCodeStateSetMessagePayloadSchema
-
-            return OrderDiscountCodeStateSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderEditApplied":
-            from ._schemas.message import OrderEditAppliedMessagePayloadSchema
-
-            return OrderEditAppliedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderImported":
-            from ._schemas.message import OrderImportedMessagePayloadSchema
-
-            return OrderImportedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderLineItemAdded":
-            from ._schemas.message import OrderLineItemAddedMessagePayloadSchema
-
-            return OrderLineItemAddedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderLineItemDiscountSet":
-            from ._schemas.message import OrderLineItemDiscountSetMessagePayloadSchema
-
-            return OrderLineItemDiscountSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderLineItemDistributionChannelSet":
-            from ._schemas.message import (
-                OrderLineItemDistributionChannelSetMessagePayloadSchema,
-            )
-
-            return OrderLineItemDistributionChannelSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderLineItemRemoved":
-            from ._schemas.message import OrderLineItemRemovedMessagePayloadSchema
-
-            return OrderLineItemRemovedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderPaymentStateChanged":
-            from ._schemas.message import OrderPaymentStateChangedMessagePayloadSchema
-
-            return OrderPaymentStateChangedMessagePayloadSchema().load(data)
-        if data["type"] == "ReturnInfoAdded":
-            from ._schemas.message import OrderReturnInfoAddedMessagePayloadSchema
-
-            return OrderReturnInfoAddedMessagePayloadSchema().load(data)
-        if data["type"] == "ReturnInfoSet":
-            from ._schemas.message import OrderReturnInfoSetMessagePayloadSchema
-
-            return OrderReturnInfoSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderReturnShipmentStateChanged":
-            from ._schemas.message import (
-                OrderReturnShipmentStateChangedMessagePayloadSchema,
-            )
-
-            return OrderReturnShipmentStateChangedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderShipmentStateChanged":
-            from ._schemas.message import OrderShipmentStateChangedMessagePayloadSchema
-
-            return OrderShipmentStateChangedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderShippingAddressSet":
-            from ._schemas.message import OrderShippingAddressSetMessagePayloadSchema
-
-            return OrderShippingAddressSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderShippingInfoSet":
-            from ._schemas.message import OrderShippingInfoSetMessagePayloadSchema
-
-            return OrderShippingInfoSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderShippingRateInputSet":
-            from ._schemas.message import OrderShippingRateInputSetMessagePayloadSchema
-
-            return OrderShippingRateInputSetMessagePayloadSchema().load(data)
-        if data["type"] == "OrderStateChanged":
-            from ._schemas.message import OrderStateChangedMessagePayloadSchema
-
-            return OrderStateChangedMessagePayloadSchema().load(data)
-        if data["type"] == "OrderStateTransition":
-            from ._schemas.message import OrderStateTransitionMessagePayloadSchema
-
-            return OrderStateTransitionMessagePayloadSchema().load(data)
-        if data["type"] == "OrderStoreSet":
-            from ._schemas.message import OrderStoreSetMessagePayloadSchema
-
-            return OrderStoreSetMessagePayloadSchema().load(data)
-        if data["type"] == "ParcelAddedToDelivery":
-            from ._schemas.message import ParcelAddedToDeliveryMessagePayloadSchema
-
-            return ParcelAddedToDeliveryMessagePayloadSchema().load(data)
-        if data["type"] == "ParcelItemsUpdated":
-            from ._schemas.message import ParcelItemsUpdatedMessagePayloadSchema
-
-            return ParcelItemsUpdatedMessagePayloadSchema().load(data)
-        if data["type"] == "ParcelMeasurementsUpdated":
-            from ._schemas.message import ParcelMeasurementsUpdatedMessagePayloadSchema
-
-            return ParcelMeasurementsUpdatedMessagePayloadSchema().load(data)
-        if data["type"] == "ParcelRemovedFromDelivery":
-            from ._schemas.message import ParcelRemovedFromDeliveryMessagePayloadSchema
-
-            return ParcelRemovedFromDeliveryMessagePayloadSchema().load(data)
-        if data["type"] == "ParcelTrackingDataUpdated":
-            from ._schemas.message import ParcelTrackingDataUpdatedMessagePayloadSchema
-
-            return ParcelTrackingDataUpdatedMessagePayloadSchema().load(data)
+            return OrderPaymentAddedMessagePayloadSchema().load(data)
         if data["type"] == "PaymentCreated":
             from ._schemas.message import PaymentCreatedMessagePayloadSchema
 
@@ -5395,6 +5657,26 @@ class MessagePayload(_BaseType):
             )
 
             return ProductRevertedStagedChangesMessagePayloadSchema().load(data)
+        if data["type"] == "ProductSelectionCreated":
+            from ._schemas.message import ProductSelectionCreatedMessagePayloadSchema
+
+            return ProductSelectionCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "ProductSelectionDeleted":
+            from ._schemas.message import ProductSelectionDeletedMessagePayloadSchema
+
+            return ProductSelectionDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "ProductSelectionProductAdded":
+            from ._schemas.message import (
+                ProductSelectionProductAddedMessagePayloadSchema,
+            )
+
+            return ProductSelectionProductAddedMessagePayloadSchema().load(data)
+        if data["type"] == "ProductSelectionProductRemoved":
+            from ._schemas.message import (
+                ProductSelectionProductRemovedMessagePayloadSchema,
+            )
+
+            return ProductSelectionProductRemovedMessagePayloadSchema().load(data)
         if data["type"] == "ProductSlugChanged":
             from ._schemas.message import ProductSlugChangedMessagePayloadSchema
 
@@ -5439,6 +5721,12 @@ class MessagePayload(_BaseType):
             from ._schemas.message import StoreDeletedMessagePayloadSchema
 
             return StoreDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "StoreProductSelectionsChanged":
+            from ._schemas.message import (
+                StoreProductSelectionsChangedMessagePayloadSchema,
+            )
+
+            return StoreProductSelectionsChangedMessagePayloadSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.message import MessagePayloadSchema
@@ -5493,43 +5781,6 @@ class CategorySlugChangedMessagePayload(MessagePayload):
         from ._schemas.message import CategorySlugChangedMessagePayloadSchema
 
         return CategorySlugChangedMessagePayloadSchema().dump(self)
-
-
-class CustomLineItemStateTransitionMessagePayload(MessagePayload):
-    custom_line_item_id: str
-    transition_date: datetime.datetime
-    quantity: int
-    from_state: "StateReference"
-    to_state: "StateReference"
-
-    def __init__(
-        self,
-        *,
-        custom_line_item_id: str,
-        transition_date: datetime.datetime,
-        quantity: int,
-        from_state: "StateReference",
-        to_state: "StateReference"
-    ):
-        self.custom_line_item_id = custom_line_item_id
-        self.transition_date = transition_date
-        self.quantity = quantity
-        self.from_state = from_state
-        self.to_state = to_state
-        super().__init__(type="CustomLineItemStateTransition")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "CustomLineItemStateTransitionMessagePayload":
-        from ._schemas.message import CustomLineItemStateTransitionMessagePayloadSchema
-
-        return CustomLineItemStateTransitionMessagePayloadSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import CustomLineItemStateTransitionMessagePayloadSchema
-
-        return CustomLineItemStateTransitionMessagePayloadSchema().dump(self)
 
 
 class CustomerAddressAddedMessagePayload(MessagePayload):
@@ -5826,110 +6077,6 @@ class CustomerTitleSetMessagePayload(MessagePayload):
         return CustomerTitleSetMessagePayloadSchema().dump(self)
 
 
-class DeliveryAddedMessagePayload(MessagePayload):
-    delivery: "Delivery"
-
-    def __init__(self, *, delivery: "Delivery"):
-        self.delivery = delivery
-        super().__init__(type="DeliveryAdded")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryAddedMessagePayload":
-        from ._schemas.message import DeliveryAddedMessagePayloadSchema
-
-        return DeliveryAddedMessagePayloadSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryAddedMessagePayloadSchema
-
-        return DeliveryAddedMessagePayloadSchema().dump(self)
-
-
-class DeliveryAddressSetMessagePayload(MessagePayload):
-    delivery_id: str
-    address: typing.Optional["Address"]
-    old_address: typing.Optional["Address"]
-
-    def __init__(
-        self,
-        *,
-        delivery_id: str,
-        address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
-    ):
-        self.delivery_id = delivery_id
-        self.address = address
-        self.old_address = old_address
-        super().__init__(type="DeliveryAddressSet")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryAddressSetMessagePayload":
-        from ._schemas.message import DeliveryAddressSetMessagePayloadSchema
-
-        return DeliveryAddressSetMessagePayloadSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryAddressSetMessagePayloadSchema
-
-        return DeliveryAddressSetMessagePayloadSchema().dump(self)
-
-
-class DeliveryItemsUpdatedMessagePayload(MessagePayload):
-    delivery_id: str
-    items: typing.List["DeliveryItem"]
-    old_items: typing.List["DeliveryItem"]
-
-    def __init__(
-        self,
-        *,
-        delivery_id: str,
-        items: typing.List["DeliveryItem"],
-        old_items: typing.List["DeliveryItem"]
-    ):
-        self.delivery_id = delivery_id
-        self.items = items
-        self.old_items = old_items
-        super().__init__(type="DeliveryItemsUpdated")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryItemsUpdatedMessagePayload":
-        from ._schemas.message import DeliveryItemsUpdatedMessagePayloadSchema
-
-        return DeliveryItemsUpdatedMessagePayloadSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryItemsUpdatedMessagePayloadSchema
-
-        return DeliveryItemsUpdatedMessagePayloadSchema().dump(self)
-
-
-class DeliveryRemovedMessagePayload(MessagePayload):
-    delivery: "Delivery"
-
-    def __init__(self, *, delivery: "Delivery"):
-        self.delivery = delivery
-        super().__init__(type="DeliveryRemoved")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryRemovedMessagePayload":
-        from ._schemas.message import DeliveryRemovedMessagePayloadSchema
-
-        return DeliveryRemovedMessagePayloadSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.message import DeliveryRemovedMessagePayloadSchema
-
-        return DeliveryRemovedMessagePayloadSchema().dump(self)
-
-
 class InventoryEntryCreatedMessagePayload(MessagePayload):
     inventory_entry: "InventoryEntry"
 
@@ -5953,6 +6100,7 @@ class InventoryEntryCreatedMessagePayload(MessagePayload):
 
 class InventoryEntryDeletedMessagePayload(MessagePayload):
     sku: str
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -5981,6 +6129,7 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
     new_quantity_on_stock: int
     old_available_quantity: int
     new_available_quantity: int
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -6013,11 +6162,330 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
         return InventoryEntryQuantitySetMessagePayloadSchema().dump(self)
 
 
-class LineItemStateTransitionMessagePayload(MessagePayload):
+class OrderMessagePayload(MessagePayload):
+    def __init__(self, *, type: str):
+
+        super().__init__(type=type)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderMessagePayload":
+        if data["type"] == "CustomLineItemStateTransition":
+            from ._schemas.message import (
+                CustomLineItemStateTransitionMessagePayloadSchema,
+            )
+
+            return CustomLineItemStateTransitionMessagePayloadSchema().load(data)
+        if data["type"] == "DeliveryAdded":
+            from ._schemas.message import DeliveryAddedMessagePayloadSchema
+
+            return DeliveryAddedMessagePayloadSchema().load(data)
+        if data["type"] == "DeliveryAddressSet":
+            from ._schemas.message import DeliveryAddressSetMessagePayloadSchema
+
+            return DeliveryAddressSetMessagePayloadSchema().load(data)
+        if data["type"] == "DeliveryItemsUpdated":
+            from ._schemas.message import DeliveryItemsUpdatedMessagePayloadSchema
+
+            return DeliveryItemsUpdatedMessagePayloadSchema().load(data)
+        if data["type"] == "DeliveryRemoved":
+            from ._schemas.message import DeliveryRemovedMessagePayloadSchema
+
+            return DeliveryRemovedMessagePayloadSchema().load(data)
+        if data["type"] == "LineItemStateTransition":
+            from ._schemas.message import LineItemStateTransitionMessagePayloadSchema
+
+            return LineItemStateTransitionMessagePayloadSchema().load(data)
+        if data["type"] == "OrderBillingAddressSet":
+            from ._schemas.message import OrderBillingAddressSetMessagePayloadSchema
+
+            return OrderBillingAddressSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderCreated":
+            from ._schemas.message import OrderCreatedMessagePayloadSchema
+
+            return OrderCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderCustomLineItemDiscountSet":
+            from ._schemas.message import (
+                OrderCustomLineItemDiscountSetMessagePayloadSchema,
+            )
+
+            return OrderCustomLineItemDiscountSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderCustomerEmailSet":
+            from ._schemas.message import OrderCustomerEmailSetMessagePayloadSchema
+
+            return OrderCustomerEmailSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderCustomerGroupSet":
+            from ._schemas.message import OrderCustomerGroupSetMessagePayloadSchema
+
+            return OrderCustomerGroupSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderCustomerSet":
+            from ._schemas.message import OrderCustomerSetMessagePayloadSchema
+
+            return OrderCustomerSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderDeleted":
+            from ._schemas.message import OrderDeletedMessagePayloadSchema
+
+            return OrderDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderDiscountCodeAdded":
+            from ._schemas.message import OrderDiscountCodeAddedMessagePayloadSchema
+
+            return OrderDiscountCodeAddedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderDiscountCodeRemoved":
+            from ._schemas.message import OrderDiscountCodeRemovedMessagePayloadSchema
+
+            return OrderDiscountCodeRemovedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderDiscountCodeStateSet":
+            from ._schemas.message import OrderDiscountCodeStateSetMessagePayloadSchema
+
+            return OrderDiscountCodeStateSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderEditApplied":
+            from ._schemas.message import OrderEditAppliedMessagePayloadSchema
+
+            return OrderEditAppliedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderImported":
+            from ._schemas.message import OrderImportedMessagePayloadSchema
+
+            return OrderImportedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderLineItemAdded":
+            from ._schemas.message import OrderLineItemAddedMessagePayloadSchema
+
+            return OrderLineItemAddedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderLineItemDiscountSet":
+            from ._schemas.message import OrderLineItemDiscountSetMessagePayloadSchema
+
+            return OrderLineItemDiscountSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderLineItemDistributionChannelSet":
+            from ._schemas.message import (
+                OrderLineItemDistributionChannelSetMessagePayloadSchema,
+            )
+
+            return OrderLineItemDistributionChannelSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderLineItemRemoved":
+            from ._schemas.message import OrderLineItemRemovedMessagePayloadSchema
+
+            return OrderLineItemRemovedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderPaymentStateChanged":
+            from ._schemas.message import OrderPaymentStateChangedMessagePayloadSchema
+
+            return OrderPaymentStateChangedMessagePayloadSchema().load(data)
+        if data["type"] == "ReturnInfoAdded":
+            from ._schemas.message import OrderReturnInfoAddedMessagePayloadSchema
+
+            return OrderReturnInfoAddedMessagePayloadSchema().load(data)
+        if data["type"] == "ReturnInfoSet":
+            from ._schemas.message import OrderReturnInfoSetMessagePayloadSchema
+
+            return OrderReturnInfoSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderReturnShipmentStateChanged":
+            from ._schemas.message import (
+                OrderReturnShipmentStateChangedMessagePayloadSchema,
+            )
+
+            return OrderReturnShipmentStateChangedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderShipmentStateChanged":
+            from ._schemas.message import OrderShipmentStateChangedMessagePayloadSchema
+
+            return OrderShipmentStateChangedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderShippingAddressSet":
+            from ._schemas.message import OrderShippingAddressSetMessagePayloadSchema
+
+            return OrderShippingAddressSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderShippingInfoSet":
+            from ._schemas.message import OrderShippingInfoSetMessagePayloadSchema
+
+            return OrderShippingInfoSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderShippingRateInputSet":
+            from ._schemas.message import OrderShippingRateInputSetMessagePayloadSchema
+
+            return OrderShippingRateInputSetMessagePayloadSchema().load(data)
+        if data["type"] == "OrderStateChanged":
+            from ._schemas.message import OrderStateChangedMessagePayloadSchema
+
+            return OrderStateChangedMessagePayloadSchema().load(data)
+        if data["type"] == "OrderStateTransition":
+            from ._schemas.message import OrderStateTransitionMessagePayloadSchema
+
+            return OrderStateTransitionMessagePayloadSchema().load(data)
+        if data["type"] == "OrderStoreSet":
+            from ._schemas.message import OrderStoreSetMessagePayloadSchema
+
+            return OrderStoreSetMessagePayloadSchema().load(data)
+        if data["type"] == "ParcelAddedToDelivery":
+            from ._schemas.message import ParcelAddedToDeliveryMessagePayloadSchema
+
+            return ParcelAddedToDeliveryMessagePayloadSchema().load(data)
+        if data["type"] == "ParcelItemsUpdated":
+            from ._schemas.message import ParcelItemsUpdatedMessagePayloadSchema
+
+            return ParcelItemsUpdatedMessagePayloadSchema().load(data)
+        if data["type"] == "ParcelMeasurementsUpdated":
+            from ._schemas.message import ParcelMeasurementsUpdatedMessagePayloadSchema
+
+            return ParcelMeasurementsUpdatedMessagePayloadSchema().load(data)
+        if data["type"] == "ParcelRemovedFromDelivery":
+            from ._schemas.message import ParcelRemovedFromDeliveryMessagePayloadSchema
+
+            return ParcelRemovedFromDeliveryMessagePayloadSchema().load(data)
+        if data["type"] == "ParcelTrackingDataUpdated":
+            from ._schemas.message import ParcelTrackingDataUpdatedMessagePayloadSchema
+
+            return ParcelTrackingDataUpdatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderMessagePayloadSchema
+
+        return OrderMessagePayloadSchema().dump(self)
+
+
+class CustomLineItemStateTransitionMessagePayload(OrderMessagePayload):
+    custom_line_item_id: str
+    transition_date: datetime.datetime
+    quantity: int
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    from_state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    to_state: "StateReference"
+
+    def __init__(
+        self,
+        *,
+        custom_line_item_id: str,
+        transition_date: datetime.datetime,
+        quantity: int,
+        from_state: "StateReference",
+        to_state: "StateReference"
+    ):
+        self.custom_line_item_id = custom_line_item_id
+        self.transition_date = transition_date
+        self.quantity = quantity
+        self.from_state = from_state
+        self.to_state = to_state
+        super().__init__(type="CustomLineItemStateTransition")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomLineItemStateTransitionMessagePayload":
+        from ._schemas.message import CustomLineItemStateTransitionMessagePayloadSchema
+
+        return CustomLineItemStateTransitionMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import CustomLineItemStateTransitionMessagePayloadSchema
+
+        return CustomLineItemStateTransitionMessagePayloadSchema().dump(self)
+
+
+class DeliveryAddedMessagePayload(OrderMessagePayload):
+    delivery: "Delivery"
+
+    def __init__(self, *, delivery: "Delivery"):
+        self.delivery = delivery
+        super().__init__(type="DeliveryAdded")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryAddedMessagePayload":
+        from ._schemas.message import DeliveryAddedMessagePayloadSchema
+
+        return DeliveryAddedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryAddedMessagePayloadSchema
+
+        return DeliveryAddedMessagePayloadSchema().dump(self)
+
+
+class DeliveryAddressSetMessagePayload(OrderMessagePayload):
+    delivery_id: str
+    address: typing.Optional["Address"]
+    old_address: typing.Optional["Address"]
+
+    def __init__(
+        self,
+        *,
+        delivery_id: str,
+        address: typing.Optional["Address"] = None,
+        old_address: typing.Optional["Address"] = None
+    ):
+        self.delivery_id = delivery_id
+        self.address = address
+        self.old_address = old_address
+        super().__init__(type="DeliveryAddressSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryAddressSetMessagePayload":
+        from ._schemas.message import DeliveryAddressSetMessagePayloadSchema
+
+        return DeliveryAddressSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryAddressSetMessagePayloadSchema
+
+        return DeliveryAddressSetMessagePayloadSchema().dump(self)
+
+
+class DeliveryItemsUpdatedMessagePayload(OrderMessagePayload):
+    delivery_id: str
+    items: typing.List["DeliveryItem"]
+    old_items: typing.List["DeliveryItem"]
+
+    def __init__(
+        self,
+        *,
+        delivery_id: str,
+        items: typing.List["DeliveryItem"],
+        old_items: typing.List["DeliveryItem"]
+    ):
+        self.delivery_id = delivery_id
+        self.items = items
+        self.old_items = old_items
+        super().__init__(type="DeliveryItemsUpdated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryItemsUpdatedMessagePayload":
+        from ._schemas.message import DeliveryItemsUpdatedMessagePayloadSchema
+
+        return DeliveryItemsUpdatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryItemsUpdatedMessagePayloadSchema
+
+        return DeliveryItemsUpdatedMessagePayloadSchema().dump(self)
+
+
+class DeliveryRemovedMessagePayload(OrderMessagePayload):
+    delivery: "Delivery"
+
+    def __init__(self, *, delivery: "Delivery"):
+        self.delivery = delivery
+        super().__init__(type="DeliveryRemoved")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DeliveryRemovedMessagePayload":
+        from ._schemas.message import DeliveryRemovedMessagePayloadSchema
+
+        return DeliveryRemovedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import DeliveryRemovedMessagePayloadSchema
+
+        return DeliveryRemovedMessagePayloadSchema().dump(self)
+
+
+class LineItemStateTransitionMessagePayload(OrderMessagePayload):
     line_item_id: str
     transition_date: datetime.datetime
     quantity: int
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     from_state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     to_state: "StateReference"
 
     def __init__(
@@ -6050,7 +6518,7 @@ class LineItemStateTransitionMessagePayload(MessagePayload):
         return LineItemStateTransitionMessagePayloadSchema().dump(self)
 
 
-class OrderBillingAddressSetMessagePayload(MessagePayload):
+class OrderBillingAddressSetMessagePayload(OrderMessagePayload):
     address: typing.Optional["Address"]
     old_address: typing.Optional["Address"]
 
@@ -6078,7 +6546,7 @@ class OrderBillingAddressSetMessagePayload(MessagePayload):
         return OrderBillingAddressSetMessagePayloadSchema().dump(self)
 
 
-class OrderCreatedMessagePayload(MessagePayload):
+class OrderCreatedMessagePayload(OrderMessagePayload):
     order: "Order"
 
     def __init__(self, *, order: "Order"):
@@ -6099,7 +6567,7 @@ class OrderCreatedMessagePayload(MessagePayload):
         return OrderCreatedMessagePayloadSchema().dump(self)
 
 
-class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
+class OrderCustomLineItemDiscountSetMessagePayload(OrderMessagePayload):
     custom_line_item_id: str
     discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
     taxed_price: typing.Optional["TaxedItemPrice"]
@@ -6132,7 +6600,7 @@ class OrderCustomLineItemDiscountSetMessagePayload(MessagePayload):
         return OrderCustomLineItemDiscountSetMessagePayloadSchema().dump(self)
 
 
-class OrderCustomerEmailSetMessagePayload(MessagePayload):
+class OrderCustomerEmailSetMessagePayload(OrderMessagePayload):
     email: typing.Optional[str]
     old_email: typing.Optional[str]
 
@@ -6160,7 +6628,7 @@ class OrderCustomerEmailSetMessagePayload(MessagePayload):
         return OrderCustomerEmailSetMessagePayloadSchema().dump(self)
 
 
-class OrderCustomerGroupSetMessagePayload(MessagePayload):
+class OrderCustomerGroupSetMessagePayload(OrderMessagePayload):
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
@@ -6190,7 +6658,7 @@ class OrderCustomerGroupSetMessagePayload(MessagePayload):
         return OrderCustomerGroupSetMessagePayloadSchema().dump(self)
 
 
-class OrderCustomerSetMessagePayload(MessagePayload):
+class OrderCustomerSetMessagePayload(OrderMessagePayload):
     customer: typing.Optional["CustomerReference"]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
@@ -6226,7 +6694,7 @@ class OrderCustomerSetMessagePayload(MessagePayload):
         return OrderCustomerSetMessagePayloadSchema().dump(self)
 
 
-class OrderDeletedMessagePayload(MessagePayload):
+class OrderDeletedMessagePayload(OrderMessagePayload):
     order: "Order"
 
     def __init__(self, *, order: "Order"):
@@ -6247,7 +6715,7 @@ class OrderDeletedMessagePayload(MessagePayload):
         return OrderDeletedMessagePayloadSchema().dump(self)
 
 
-class OrderDiscountCodeAddedMessagePayload(MessagePayload):
+class OrderDiscountCodeAddedMessagePayload(OrderMessagePayload):
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -6268,7 +6736,7 @@ class OrderDiscountCodeAddedMessagePayload(MessagePayload):
         return OrderDiscountCodeAddedMessagePayloadSchema().dump(self)
 
 
-class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
+class OrderDiscountCodeRemovedMessagePayload(OrderMessagePayload):
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -6289,7 +6757,7 @@ class OrderDiscountCodeRemovedMessagePayload(MessagePayload):
         return OrderDiscountCodeRemovedMessagePayloadSchema().dump(self)
 
 
-class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
+class OrderDiscountCodeStateSetMessagePayload(OrderMessagePayload):
     discount_code: "DiscountCodeReference"
     state: "DiscountCodeState"
     old_state: typing.Optional["DiscountCodeState"]
@@ -6320,7 +6788,7 @@ class OrderDiscountCodeStateSetMessagePayload(MessagePayload):
         return OrderDiscountCodeStateSetMessagePayloadSchema().dump(self)
 
 
-class OrderEditAppliedMessagePayload(MessagePayload):
+class OrderEditAppliedMessagePayload(OrderMessagePayload):
     edit: "OrderEditReference"
     result: "OrderEditApplied"
 
@@ -6343,7 +6811,7 @@ class OrderEditAppliedMessagePayload(MessagePayload):
         return OrderEditAppliedMessagePayloadSchema().dump(self)
 
 
-class OrderImportedMessagePayload(MessagePayload):
+class OrderImportedMessagePayload(OrderMessagePayload):
     order: "Order"
 
     def __init__(self, *, order: "Order"):
@@ -6364,7 +6832,7 @@ class OrderImportedMessagePayload(MessagePayload):
         return OrderImportedMessagePayloadSchema().dump(self)
 
 
-class OrderLineItemAddedMessagePayload(MessagePayload):
+class OrderLineItemAddedMessagePayload(OrderMessagePayload):
     line_item: "LineItem"
     added_quantity: int
 
@@ -6387,9 +6855,11 @@ class OrderLineItemAddedMessagePayload(MessagePayload):
         return OrderLineItemAddedMessagePayloadSchema().dump(self)
 
 
-class OrderLineItemDiscountSetMessagePayload(MessagePayload):
+class OrderLineItemDiscountSetMessagePayload(OrderMessagePayload):
     line_item_id: str
     discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_price: "Money"
     taxed_price: typing.Optional["TaxedItemPrice"]
 
@@ -6423,8 +6893,9 @@ class OrderLineItemDiscountSetMessagePayload(MessagePayload):
         return OrderLineItemDiscountSetMessagePayloadSchema().dump(self)
 
 
-class OrderLineItemDistributionChannelSetMessagePayload(MessagePayload):
+class OrderLineItemDistributionChannelSetMessagePayload(OrderMessagePayload):
     line_item_id: str
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -6455,11 +6926,12 @@ class OrderLineItemDistributionChannelSetMessagePayload(MessagePayload):
         return OrderLineItemDistributionChannelSetMessagePayloadSchema().dump(self)
 
 
-class OrderLineItemRemovedMessagePayload(MessagePayload):
+class OrderLineItemRemovedMessagePayload(OrderMessagePayload):
     line_item_id: str
     removed_quantity: int
     new_quantity: int
     new_state: typing.List["ItemState"]
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     new_total_price: "TypedMoney"
     new_taxed_price: typing.Optional["TaxedItemPrice"]
     new_price: typing.Optional["Price"]
@@ -6501,7 +6973,28 @@ class OrderLineItemRemovedMessagePayload(MessagePayload):
         return OrderLineItemRemovedMessagePayloadSchema().dump(self)
 
 
-class OrderPaymentStateChangedMessagePayload(MessagePayload):
+class OrderPaymentAddedMessagePayload(MessagePayload):
+    payment: "PaymentReference"
+
+    def __init__(self, *, payment: "PaymentReference"):
+        self.payment = payment
+        super().__init__(type="OrderPaymentAdded")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderPaymentAddedMessagePayload":
+        from ._schemas.message import OrderPaymentAddedMessagePayloadSchema
+
+        return OrderPaymentAddedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import OrderPaymentAddedMessagePayloadSchema
+
+        return OrderPaymentAddedMessagePayloadSchema().dump(self)
+
+
+class OrderPaymentStateChangedMessagePayload(OrderMessagePayload):
     payment_state: "PaymentState"
     old_payment_state: typing.Optional["PaymentState"]
 
@@ -6529,7 +7022,7 @@ class OrderPaymentStateChangedMessagePayload(MessagePayload):
         return OrderPaymentStateChangedMessagePayloadSchema().dump(self)
 
 
-class OrderReturnInfoAddedMessagePayload(MessagePayload):
+class OrderReturnInfoAddedMessagePayload(OrderMessagePayload):
     return_info: "ReturnInfo"
 
     def __init__(self, *, return_info: "ReturnInfo"):
@@ -6550,7 +7043,7 @@ class OrderReturnInfoAddedMessagePayload(MessagePayload):
         return OrderReturnInfoAddedMessagePayloadSchema().dump(self)
 
 
-class OrderReturnInfoSetMessagePayload(MessagePayload):
+class OrderReturnInfoSetMessagePayload(OrderMessagePayload):
     return_info: typing.Optional[typing.List["ReturnInfo"]]
 
     def __init__(
@@ -6573,7 +7066,7 @@ class OrderReturnInfoSetMessagePayload(MessagePayload):
         return OrderReturnInfoSetMessagePayloadSchema().dump(self)
 
 
-class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
+class OrderReturnShipmentStateChangedMessagePayload(OrderMessagePayload):
     return_item_id: str
     return_shipment_state: "ReturnShipmentState"
 
@@ -6602,7 +7095,7 @@ class OrderReturnShipmentStateChangedMessagePayload(MessagePayload):
         return OrderReturnShipmentStateChangedMessagePayloadSchema().dump(self)
 
 
-class OrderShipmentStateChangedMessagePayload(MessagePayload):
+class OrderShipmentStateChangedMessagePayload(OrderMessagePayload):
     shipment_state: "ShipmentState"
     old_shipment_state: typing.Optional["ShipmentState"]
 
@@ -6630,7 +7123,7 @@ class OrderShipmentStateChangedMessagePayload(MessagePayload):
         return OrderShipmentStateChangedMessagePayloadSchema().dump(self)
 
 
-class OrderShippingAddressSetMessagePayload(MessagePayload):
+class OrderShippingAddressSetMessagePayload(OrderMessagePayload):
     address: typing.Optional["Address"]
     old_address: typing.Optional["Address"]
 
@@ -6658,7 +7151,7 @@ class OrderShippingAddressSetMessagePayload(MessagePayload):
         return OrderShippingAddressSetMessagePayloadSchema().dump(self)
 
 
-class OrderShippingInfoSetMessagePayload(MessagePayload):
+class OrderShippingInfoSetMessagePayload(OrderMessagePayload):
     shipping_info: typing.Optional["ShippingInfo"]
     old_shipping_info: typing.Optional["ShippingInfo"]
 
@@ -6686,7 +7179,7 @@ class OrderShippingInfoSetMessagePayload(MessagePayload):
         return OrderShippingInfoSetMessagePayloadSchema().dump(self)
 
 
-class OrderShippingRateInputSetMessagePayload(MessagePayload):
+class OrderShippingRateInputSetMessagePayload(OrderMessagePayload):
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     old_shipping_rate_input: typing.Optional["ShippingRateInput"]
 
@@ -6714,7 +7207,7 @@ class OrderShippingRateInputSetMessagePayload(MessagePayload):
         return OrderShippingRateInputSetMessagePayloadSchema().dump(self)
 
 
-class OrderStateChangedMessagePayload(MessagePayload):
+class OrderStateChangedMessagePayload(OrderMessagePayload):
     order_state: "OrderState"
     old_order_state: "OrderState"
 
@@ -6737,8 +7230,10 @@ class OrderStateChangedMessagePayload(MessagePayload):
         return OrderStateChangedMessagePayloadSchema().dump(self)
 
 
-class OrderStateTransitionMessagePayload(MessagePayload):
+class OrderStateTransitionMessagePayload(OrderMessagePayload):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     old_state: typing.Optional["StateReference"]
     force: bool
 
@@ -6768,7 +7263,7 @@ class OrderStateTransitionMessagePayload(MessagePayload):
         return OrderStateTransitionMessagePayloadSchema().dump(self)
 
 
-class OrderStoreSetMessagePayload(MessagePayload):
+class OrderStoreSetMessagePayload(OrderMessagePayload):
     store: "StoreKeyReference"
 
     def __init__(self, *, store: "StoreKeyReference"):
@@ -6789,7 +7284,7 @@ class OrderStoreSetMessagePayload(MessagePayload):
         return OrderStoreSetMessagePayloadSchema().dump(self)
 
 
-class ParcelAddedToDeliveryMessagePayload(MessagePayload):
+class ParcelAddedToDeliveryMessagePayload(OrderMessagePayload):
     delivery: "Delivery"
     parcel: "Parcel"
 
@@ -6812,7 +7307,7 @@ class ParcelAddedToDeliveryMessagePayload(MessagePayload):
         return ParcelAddedToDeliveryMessagePayloadSchema().dump(self)
 
 
-class ParcelItemsUpdatedMessagePayload(MessagePayload):
+class ParcelItemsUpdatedMessagePayload(OrderMessagePayload):
     parcel_id: str
     delivery_id: typing.Optional[str]
     items: typing.List["DeliveryItem"]
@@ -6846,7 +7341,7 @@ class ParcelItemsUpdatedMessagePayload(MessagePayload):
         return ParcelItemsUpdatedMessagePayloadSchema().dump(self)
 
 
-class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
+class ParcelMeasurementsUpdatedMessagePayload(OrderMessagePayload):
     delivery_id: str
     parcel_id: str
     measurements: typing.Optional["ParcelMeasurements"]
@@ -6877,7 +7372,7 @@ class ParcelMeasurementsUpdatedMessagePayload(MessagePayload):
         return ParcelMeasurementsUpdatedMessagePayloadSchema().dump(self)
 
 
-class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
+class ParcelRemovedFromDeliveryMessagePayload(OrderMessagePayload):
     delivery_id: str
     parcel: "Parcel"
 
@@ -6900,7 +7395,7 @@ class ParcelRemovedFromDeliveryMessagePayload(MessagePayload):
         return ParcelRemovedFromDeliveryMessagePayloadSchema().dump(self)
 
 
-class ParcelTrackingDataUpdatedMessagePayload(MessagePayload):
+class ParcelTrackingDataUpdatedMessagePayload(OrderMessagePayload):
     delivery_id: str
     parcel_id: str
     tracking_data: typing.Optional["TrackingData"]
@@ -6953,6 +7448,7 @@ class PaymentCreatedMessagePayload(MessagePayload):
 
 
 class PaymentInteractionAddedMessagePayload(MessagePayload):
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     interaction: "CustomFields"
 
     def __init__(self, *, interaction: "CustomFields"):
@@ -6997,6 +7493,7 @@ class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
 
 
 class PaymentStatusStateTransitionMessagePayload(MessagePayload):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -7302,6 +7799,90 @@ class ProductRevertedStagedChangesMessagePayload(MessagePayload):
         return ProductRevertedStagedChangesMessagePayloadSchema().dump(self)
 
 
+class ProductSelectionCreatedMessagePayload(MessagePayload):
+    product_selection: "ProductSelectionType"
+
+    def __init__(self, *, product_selection: "ProductSelectionType"):
+        self.product_selection = product_selection
+        super().__init__(type="ProductSelectionCreated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionCreatedMessagePayload":
+        from ._schemas.message import ProductSelectionCreatedMessagePayloadSchema
+
+        return ProductSelectionCreatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionCreatedMessagePayloadSchema
+
+        return ProductSelectionCreatedMessagePayloadSchema().dump(self)
+
+
+class ProductSelectionDeletedMessagePayload(MessagePayload):
+    name: "LocalizedString"
+
+    def __init__(self, *, name: "LocalizedString"):
+        self.name = name
+        super().__init__(type="ProductSelectionDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionDeletedMessagePayload":
+        from ._schemas.message import ProductSelectionDeletedMessagePayloadSchema
+
+        return ProductSelectionDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionDeletedMessagePayloadSchema
+
+        return ProductSelectionDeletedMessagePayloadSchema().dump(self)
+
+
+class ProductSelectionProductAddedMessagePayload(MessagePayload):
+    product: "ProductReference"
+
+    def __init__(self, *, product: "ProductReference"):
+        self.product = product
+        super().__init__(type="ProductSelectionProductAdded")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionProductAddedMessagePayload":
+        from ._schemas.message import ProductSelectionProductAddedMessagePayloadSchema
+
+        return ProductSelectionProductAddedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionProductAddedMessagePayloadSchema
+
+        return ProductSelectionProductAddedMessagePayloadSchema().dump(self)
+
+
+class ProductSelectionProductRemovedMessagePayload(MessagePayload):
+    product: "ProductReference"
+
+    def __init__(self, *, product: "ProductReference"):
+        self.product = product
+        super().__init__(type="ProductSelectionProductRemoved")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionProductRemovedMessagePayload":
+        from ._schemas.message import ProductSelectionProductRemovedMessagePayloadSchema
+
+        return ProductSelectionProductRemovedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import ProductSelectionProductRemovedMessagePayloadSchema
+
+        return ProductSelectionProductRemovedMessagePayloadSchema().dump(self)
+
+
 class ProductSlugChangedMessagePayload(MessagePayload):
     slug: "LocalizedString"
     old_slug: typing.Optional["LocalizedString"]
@@ -7331,6 +7912,7 @@ class ProductSlugChangedMessagePayload(MessagePayload):
 
 
 class ProductStateTransitionMessagePayload(MessagePayload):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -7476,7 +8058,9 @@ class ReviewRatingSetMessagePayload(MessagePayload):
 
 
 class ReviewStateTransitionMessagePayload(MessagePayload):
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     old_state: "StateReference"
+    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
     new_state: "StateReference"
     old_included_in_statistics: bool
     new_included_in_statistics: bool
@@ -7541,6 +8125,8 @@ class StoreCreatedMessagePayload(MessagePayload):
     languages: typing.List["str"]
     distribution_channels: typing.List["ChannelReference"]
     supply_channels: typing.List["ChannelReference"]
+    product_selections: typing.List["ProductSelectionSetting"]
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -7550,12 +8136,14 @@ class StoreCreatedMessagePayload(MessagePayload):
         languages: typing.List["str"],
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.List["ChannelReference"],
+        product_selections: typing.List["ProductSelectionSetting"],
         custom: typing.Optional["CustomFields"] = None
     ):
         self.name = name
         self.languages = languages
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
+        self.product_selections = product_selections
         self.custom = custom
         super().__init__(type="StoreCreated")
 
@@ -7590,3 +8178,40 @@ class StoreDeletedMessagePayload(MessagePayload):
         from ._schemas.message import StoreDeletedMessagePayloadSchema
 
         return StoreDeletedMessagePayloadSchema().dump(self)
+
+
+class StoreProductSelectionsChangedMessagePayload(MessagePayload):
+    added_product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+    removed_product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+    updated_product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+
+    def __init__(
+        self,
+        *,
+        added_product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None,
+        removed_product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None,
+        updated_product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None
+    ):
+        self.added_product_selections = added_product_selections
+        self.removed_product_selections = removed_product_selections
+        self.updated_product_selections = updated_product_selections
+        super().__init__(type="StoreProductSelectionsChanged")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreProductSelectionsChangedMessagePayload":
+        from ._schemas.message import StoreProductSelectionsChangedMessagePayloadSchema
+
+        return StoreProductSelectionsChangedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StoreProductSelectionsChangedMessagePayloadSchema
+
+        return StoreProductSelectionsChangedMessagePayloadSchema().dump(self)

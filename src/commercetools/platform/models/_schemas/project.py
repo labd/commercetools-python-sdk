@@ -13,7 +13,7 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
-from ..project import SearchIndexingConfigurationStatus
+from ..project import OrderSearchStatus, SearchIndexingConfigurationStatus
 from ..shipping_method import ShippingRateTierType
 
 # Fields
@@ -21,17 +21,17 @@ from ..shipping_method import ShippingRateTierType
 
 # Marshmallow Schemas
 class CartsConfigurationSchema(helpers.BaseSchema):
-    country_tax_rate_fallback_enabled = marshmallow.fields.Boolean(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="countryTaxRateFallbackEnabled",
-    )
     delete_days_after_last_modification = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
         missing=None,
         data_key="deleteDaysAfterLastModification",
+    )
+    country_tax_rate_fallback_enabled = marshmallow.fields.Boolean(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="countryTaxRateFallbackEnabled",
     )
 
     class Meta:
@@ -81,10 +81,24 @@ class ProjectSchema(helpers.BaseSchema):
         data_key="trialUntil",
     )
     messages = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".message.MessageConfigurationSchema"),
+        nested=helpers.absmod(__name__, ".message.MessagesConfigurationSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
+    )
+    carts = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".CartsConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    shopping_lists = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ShoppingListsConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="shoppingLists",
     )
     shipping_rate_input_type = helpers.Discriminator(
         allow_none=True,
@@ -108,12 +122,6 @@ class ProjectSchema(helpers.BaseSchema):
         missing=None,
         data_key="externalOAuth",
     )
-    carts = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".CartsConfigurationSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
     search_indexing = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SearchIndexingConfigurationSchema"),
         allow_none=True,
@@ -121,14 +129,6 @@ class ProjectSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="searchIndexing",
-    )
-    shopping_lists = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ShoppingListsConfigurationSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="shoppingLists",
     )
 
     class Meta:
@@ -170,6 +170,9 @@ class ProjectUpdateSchema(helpers.BaseSchema):
                 ),
                 "changeName": helpers.absmod(
                     __name__, ".ProjectChangeNameActionSchema"
+                ),
+                "changeOrderSearchStatus": helpers.absmod(
+                    __name__, ".ProjectChangeOrderSearchStatusActionSchema"
                 ),
                 "changeProductSearchIndexingEnabled": helpers.absmod(
                     __name__, ".ProjectChangeProductSearchIndexingEnabledActionSchema"
@@ -218,6 +221,13 @@ class SearchIndexingConfigurationSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    orders = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".SearchIndexingConfigurationValuesSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -237,15 +247,10 @@ class SearchIndexingConfigurationValuesSchema(helpers.BaseSchema):
         missing=None,
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="lastModifiedAt",
+        allow_none=True, missing=None, data_key="lastModifiedAt"
     )
-    last_modified_by = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
+    last_modified_by = marshmallow.fields.String(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",
@@ -334,7 +339,6 @@ class ProjectChangeCartsConfigurationActionSchema(ProjectUpdateActionSchema):
         nested=helpers.absmod(__name__, ".CartsConfigurationSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="cartsConfiguration",
     )
@@ -406,7 +410,7 @@ class ProjectChangeLanguagesActionSchema(ProjectUpdateActionSchema):
 
 class ProjectChangeMessagesConfigurationActionSchema(ProjectUpdateActionSchema):
     messages_configuration = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".message.MessageConfigurationDraftSchema"),
+        nested=helpers.absmod(__name__, ".message.MessagesConfigurationDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
@@ -448,6 +452,20 @@ class ProjectChangeNameActionSchema(ProjectUpdateActionSchema):
         return models.ProjectChangeNameAction(**data)
 
 
+class ProjectChangeOrderSearchStatusActionSchema(ProjectUpdateActionSchema):
+    status = marshmallow_enum.EnumField(
+        OrderSearchStatus, by_value=True, allow_none=True, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProjectChangeOrderSearchStatusAction(**data)
+
+
 class ProjectChangeProductSearchIndexingEnabledActionSchema(ProjectUpdateActionSchema):
     enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
 
@@ -465,7 +483,6 @@ class ProjectChangeShoppingListsConfigurationActionSchema(ProjectUpdateActionSch
         nested=helpers.absmod(__name__, ".ShoppingListsConfigurationSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="shoppingListsConfiguration",
     )

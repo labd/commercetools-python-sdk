@@ -607,7 +607,11 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
 class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
     asset_id: typing.Optional[str]
     asset_key: typing.Optional[str]
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -641,10 +645,10 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
 class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
     asset_id: typing.Optional[str]
     asset_key: typing.Optional[str]
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Asset.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: If set, the custom fields are set to this new value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
     fields: typing.Optional[object]
 
     def __init__(
@@ -794,7 +798,11 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
 
 
 class CategorySetCustomFieldAction(CategoryUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -817,9 +825,10 @@ class CategorySetCustomFieldAction(CategoryUpdateAction):
 
 
 class CategorySetCustomTypeAction(CategoryUpdateAction):
-    #: If absent, the custom type and any existing CustomFields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Category with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Category.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: A valid JSON object, based on the FieldDefinitions of the Type. Sets the custom fields to this value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Category.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

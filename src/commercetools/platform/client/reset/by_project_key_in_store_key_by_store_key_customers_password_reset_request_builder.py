@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.customer import Customer, CustomerResetPassword
+from ...models.customer import Customer, MyCustomerResetPassword
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -32,7 +32,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder:
 
     def post(
         self,
-        body: "CustomerResetPassword",
+        body: "MyCustomerResetPassword",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,

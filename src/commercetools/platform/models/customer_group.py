@@ -217,8 +217,7 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
 
 class CustomerGroupUpdate(_BaseType):
     #: Expected version of the Customer Group on which the changes should be applied.
-    #: If the expected version does not match the actual version, a 409 Conflict
-    #: will be returned.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
     #: Update actions to be performed on the Customer Group.
     actions: typing.List["CustomerGroupUpdateAction"]
@@ -299,9 +298,8 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
 
 
 class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
-    #: Name of the Custom Field.
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
-    #: Value must be of type [Value](/../api/projects/custom-fields#value).
     #: If `value` is absent or `null`, this field will be removed if it exists.
     #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
     #: If `value` is provided, it is set for the field defined by `name`.
@@ -328,14 +326,14 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
 
 class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
     """This action sets or removes the custom type for an existing Customer Group.
-    If present, this action overwrites any existing [custom](/../api/projects/custom-fields#custom) type and fields.
+    If present, this action overwrites any existing [custom](/../api/projects/custom-fields) type and fields.
 
     """
 
-    #: If absent, the [custom](/../api/projects/custom-fields#custom) type and any existing [CustomFields](/../api/projects/custom-fields) are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the CustomerGroup with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the CustomerGroup.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Valid JSON object, based on the [FieldDefinitions](/../api/projects/types#fielddefinition) of the [Type](/../api/projects/types#type).
-    #: Sets the [custom](/../api/projects/custom-fields#custom) fields to this value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CustomerGroup.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

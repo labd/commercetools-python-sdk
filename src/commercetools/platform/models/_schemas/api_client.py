@@ -43,6 +43,18 @@ class ApiClientSchema(helpers.BaseSchema):
         missing=None,
         data_key="createdAt",
     )
+    access_token_validity_seconds = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="accessTokenValiditySeconds",
+    )
+    refresh_token_validity_seconds = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="refreshTokenValiditySeconds",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -61,6 +73,18 @@ class ApiClientDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="deleteDaysAfterCreation",
+    )
+    access_token_validity_seconds = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="accessTokenValiditySeconds",
+    )
+    refresh_token_validity_seconds = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="refreshTokenValiditySeconds",
     )
 
     class Meta:

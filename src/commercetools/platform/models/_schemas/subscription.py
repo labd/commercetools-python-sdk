@@ -46,7 +46,7 @@ class DeliveryFormatSchema(helpers.BaseSchema):
         return models.DeliveryFormat(**data)
 
 
-class DeliveryCloudEventsFormatSchema(DeliveryFormatSchema):
+class CloudEventsFormatSchema(DeliveryFormatSchema):
     cloud_events_version = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="cloudEventsVersion"
     )
@@ -57,17 +57,87 @@ class DeliveryCloudEventsFormatSchema(DeliveryFormatSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return models.DeliveryCloudEventsFormat(**data)
+        return models.CloudEventsFormat(**data)
 
 
-class DeliveryPlatformFormatSchema(DeliveryFormatSchema):
+class DeliveryPayloadSchema(helpers.BaseSchema):
+    project_key = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="projectKey"
+    )
+    notification_type = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="notificationType"
+    )
+    resource = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("typeId", "type_id"),
+        discriminator_schemas={
+            "cart-discount": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountReferenceSchema"
+            ),
+            "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+            "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
+            "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
+            "key-value-document": helpers.absmod(
+                __name__, ".custom_object.CustomObjectReferenceSchema"
+            ),
+            "customer-group": helpers.absmod(
+                __name__, ".customer_group.CustomerGroupReferenceSchema"
+            ),
+            "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
+            "discount-code": helpers.absmod(
+                __name__, ".discount_code.DiscountCodeReferenceSchema"
+            ),
+            "inventory-entry": helpers.absmod(
+                __name__, ".inventory.InventoryEntryReferenceSchema"
+            ),
+            "order-edit": helpers.absmod(
+                __name__, ".order_edit.OrderEditReferenceSchema"
+            ),
+            "order": helpers.absmod(__name__, ".order.OrderReferenceSchema"),
+            "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
+            "product-discount": helpers.absmod(
+                __name__, ".product_discount.ProductDiscountReferenceSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-type": helpers.absmod(
+                __name__, ".product_type.ProductTypeReferenceSchema"
+            ),
+            "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
+            "shipping-method": helpers.absmod(
+                __name__, ".shipping_method.ShippingMethodReferenceSchema"
+            ),
+            "shopping-list": helpers.absmod(
+                __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
+            "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
+            "tax-category": helpers.absmod(
+                __name__, ".tax_category.TaxCategoryReferenceSchema"
+            ),
+            "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
+            "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
+        },
+        missing=None,
+    )
+    resource_user_provided_identifiers = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".message.UserProvidedIdentifiersSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="resourceUserProvidedIdentifiers",
+    )
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryPlatformFormat(**data)
+        del data["notification_type"]
+        return models.DeliveryPayload(**data)
 
 
 class DestinationSchema(helpers.BaseSchema):
@@ -153,6 +223,38 @@ class IronMqDestinationSchema(DestinationSchema):
         return models.IronMqDestination(**data)
 
 
+class MessageDeliveryPayloadSchema(DeliveryPayloadSchema):
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    created_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="createdAt"
+    )
+    last_modified_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="lastModifiedAt"
+    )
+    sequence_number = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="sequenceNumber"
+    )
+    resource_version = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="resourceVersion"
+    )
+    payload_not_included = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".PayloadNotIncludedSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="payloadNotIncluded",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["notification_type"]
+        return models.MessageDeliveryPayload(**data)
+
+
 class MessageSubscriptionSchema(helpers.BaseSchema):
     resource_type_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="resourceTypeId"
@@ -186,6 +288,70 @@ class PayloadNotIncludedSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.PayloadNotIncluded(**data)
+
+
+class PlatformFormatSchema(DeliveryFormatSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.PlatformFormat(**data)
+
+
+class ResourceCreatedDeliveryPayloadSchema(DeliveryPayloadSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    modified_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="modifiedAt"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["notification_type"]
+        return models.ResourceCreatedDeliveryPayload(**data)
+
+
+class ResourceDeletedDeliveryPayloadSchema(DeliveryPayloadSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    modified_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="modifiedAt"
+    )
+    data_erasure = marshmallow.fields.Boolean(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="dataErasure",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["notification_type"]
+        return models.ResourceDeletedDeliveryPayload(**data)
+
+
+class ResourceUpdatedDeliveryPayloadSchema(DeliveryPayloadSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    old_version = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="oldVersion"
+    )
+    modified_at = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="modifiedAt"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["notification_type"]
+        return models.ResourceUpdatedDeliveryPayload(**data)
 
 
 class SnsDestinationSchema(DestinationSchema):
@@ -285,8 +451,8 @@ class SubscriptionSchema(BaseResourceSchema):
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "CloudEvents": helpers.absmod(__name__, ".DeliveryCloudEventsFormatSchema"),
-            "Platform": helpers.absmod(__name__, ".DeliveryPlatformFormatSchema"),
+            "CloudEvents": helpers.absmod(__name__, ".CloudEventsFormatSchema"),
+            "Platform": helpers.absmod(__name__, ".PlatformFormatSchema"),
         },
         missing=None,
     )
@@ -301,169 +467,6 @@ class SubscriptionSchema(BaseResourceSchema):
     def post_load(self, data, **kwargs):
 
         return models.Subscription(**data)
-
-
-class SubscriptionDeliverySchema(helpers.BaseSchema):
-    project_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="projectKey"
-    )
-    notification_type = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="notificationType"
-    )
-    resource = helpers.Discriminator(
-        allow_none=True,
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": helpers.absmod(
-                __name__, ".cart_discount.CartDiscountReferenceSchema"
-            ),
-            "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
-            "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
-            "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
-            "key-value-document": helpers.absmod(
-                __name__, ".custom_object.CustomObjectReferenceSchema"
-            ),
-            "customer-group": helpers.absmod(
-                __name__, ".customer_group.CustomerGroupReferenceSchema"
-            ),
-            "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
-            "discount-code": helpers.absmod(
-                __name__, ".discount_code.DiscountCodeReferenceSchema"
-            ),
-            "inventory-entry": helpers.absmod(
-                __name__, ".inventory.InventoryEntryReferenceSchema"
-            ),
-            "order-edit": helpers.absmod(
-                __name__, ".order_edit.OrderEditReferenceSchema"
-            ),
-            "order": helpers.absmod(__name__, ".order.OrderReferenceSchema"),
-            "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
-            "product-discount": helpers.absmod(
-                __name__, ".product_discount.ProductDiscountReferenceSchema"
-            ),
-            "product-type": helpers.absmod(
-                __name__, ".product_type.ProductTypeReferenceSchema"
-            ),
-            "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
-            "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
-            "shipping-method": helpers.absmod(
-                __name__, ".shipping_method.ShippingMethodReferenceSchema"
-            ),
-            "shopping-list": helpers.absmod(
-                __name__, ".shopping_list.ShoppingListReferenceSchema"
-            ),
-            "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
-            "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
-            "tax-category": helpers.absmod(
-                __name__, ".tax_category.TaxCategoryReferenceSchema"
-            ),
-            "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
-            "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
-        },
-        missing=None,
-    )
-    resource_user_provided_identifiers = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".message.UserProvidedIdentifiersSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="resourceUserProvidedIdentifiers",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["notification_type"]
-        return models.SubscriptionDelivery(**data)
-
-
-class MessageDeliverySchema(SubscriptionDeliverySchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    created_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="createdAt"
-    )
-    last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
-    )
-    sequence_number = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="sequenceNumber"
-    )
-    resource_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="resourceVersion"
-    )
-    payload_not_included = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".PayloadNotIncludedSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="payloadNotIncluded",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["notification_type"]
-        return models.MessageDelivery(**data)
-
-
-class ResourceCreatedDeliverySchema(SubscriptionDeliverySchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="modifiedAt"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["notification_type"]
-        return models.ResourceCreatedDelivery(**data)
-
-
-class ResourceDeletedDeliverySchema(SubscriptionDeliverySchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="modifiedAt"
-    )
-    data_erasure = marshmallow.fields.Boolean(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="dataErasure",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["notification_type"]
-        return models.ResourceDeletedDelivery(**data)
-
-
-class ResourceUpdatedDeliverySchema(SubscriptionDeliverySchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
-    old_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="oldVersion"
-    )
-    modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="modifiedAt"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["notification_type"]
-        return models.ResourceUpdatedDelivery(**data)
 
 
 class SubscriptionDraftSchema(helpers.BaseSchema):
@@ -508,8 +511,8 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "CloudEvents": helpers.absmod(__name__, ".DeliveryCloudEventsFormatSchema"),
-            "Platform": helpers.absmod(__name__, ".DeliveryPlatformFormatSchema"),
+            "CloudEvents": helpers.absmod(__name__, ".CloudEventsFormatSchema"),
+            "Platform": helpers.absmod(__name__, ".PlatformFormatSchema"),
         },
         metadata={"omit_empty": True},
         missing=None,

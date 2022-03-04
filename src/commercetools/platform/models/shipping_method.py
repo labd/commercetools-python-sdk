@@ -474,6 +474,7 @@ class ShippingRateDraft(_BaseType):
 
 
 class ShippingRatePriceTier(_BaseType):
+    #: Can be one of the following or absent.
     type: "ShippingRateTierType"
 
     def __init__(self, *, type: "ShippingRateTierType"):
@@ -503,6 +504,8 @@ class ShippingRatePriceTier(_BaseType):
 
 class CartClassificationTier(ShippingRatePriceTier):
     value: str
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     price: "Money"
     is_matching: typing.Optional[bool]
 
@@ -530,6 +533,8 @@ class CartClassificationTier(ShippingRatePriceTier):
 
 class CartScoreTier(ShippingRatePriceTier):
     score: float
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     price: typing.Optional["Money"]
     price_function: typing.Optional["PriceFunction"]
     is_matching: typing.Optional[bool]
@@ -562,6 +567,8 @@ class CartScoreTier(ShippingRatePriceTier):
 
 class CartValueTier(ShippingRatePriceTier):
     minimum_cent_amount: int
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     price: "Money"
     is_matching: typing.Optional[bool]
 
@@ -590,6 +597,8 @@ class CartValueTier(ShippingRatePriceTier):
 
 
 class ShippingRateTierType(enum.Enum):
+    """Can be one of the following or absent."""
+
     CART_VALUE = "CartValue"
     CART_CLASSIFICATION = "CartClassification"
     CART_SCORE = "CartScore"
@@ -811,7 +820,11 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetCustomFieldAction(ShippingMethodUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -834,7 +847,10 @@ class ShippingMethodSetCustomFieldAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetCustomTypeAction(ShippingMethodUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the ShippingMethod with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the ShippingMethod.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShippingMethod.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

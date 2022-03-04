@@ -72,6 +72,7 @@ __all__ = [
     "CustomerUpdate",
     "CustomerUpdateAction",
     "MyCustomerChangePassword",
+    "MyCustomerResetPassword",
 ]
 
 
@@ -818,6 +819,29 @@ class MyCustomerChangePassword(_BaseType):
         return MyCustomerChangePasswordSchema().dump(self)
 
 
+class MyCustomerResetPassword(_BaseType):
+    token_value: str
+    new_password: str
+
+    def __init__(self, *, token_value: str, new_password: str):
+        self.token_value = token_value
+        self.new_password = new_password
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyCustomerResetPassword":
+        from ._schemas.customer import MyCustomerResetPasswordSchema
+
+        return MyCustomerResetPasswordSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import MyCustomerResetPasswordSchema
+
+        return MyCustomerResetPasswordSchema().dump(self)
+
+
 class CustomerAddAddressAction(CustomerUpdateAction):
     address: "BaseAddress"
 
@@ -1075,7 +1099,11 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
 
 class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
     address_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -1101,7 +1129,10 @@ class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
 
 
 class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `address`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
     fields: typing.Optional["FieldContainer"]
     address_id: str
 
@@ -1154,7 +1185,11 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -1177,10 +1212,10 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomTypeAction(CustomerUpdateAction):
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Customer with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Customer.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: A valid JSON object, based on the FieldDefinitions of the Type.
-    #: Sets the custom fields to this value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Customer.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

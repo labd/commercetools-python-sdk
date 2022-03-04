@@ -12,6 +12,9 @@ from ...models.product import Product, ProductUpdate
 from ..images.by_project_key_products_by_id_images_request_builder import (
     ByProjectKeyProductsByIDImagesRequestBuilder,
 )
+from ..product_selections.by_project_key_products_by_id_product_selections_request_builder import (
+    ByProjectKeyProductsByIDProductSelectionsRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -35,6 +38,15 @@ class ByProjectKeyProductsByIDRequestBuilder:
 
     def images(self) -> ByProjectKeyProductsByIDImagesRequestBuilder:
         return ByProjectKeyProductsByIDImagesRequestBuilder(
+            project_key=self._project_key,
+            id=self._id,
+            client=self._client,
+        )
+
+    def product_selections(
+        self,
+    ) -> ByProjectKeyProductsByIDProductSelectionsRequestBuilder:
+        return ByProjectKeyProductsByIDProductSelectionsRequestBuilder(
             project_key=self._project_key,
             id=self._id,
             client=self._client,

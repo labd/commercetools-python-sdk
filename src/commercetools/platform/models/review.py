@@ -424,7 +424,11 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomFieldAction(ReviewUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -447,10 +451,10 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomTypeAction(ReviewUpdateAction):
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Review with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Review.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: A valid JSON object, based on the FieldDefinitions of the Type.
-    #: Sets the CustomFields to this value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Review.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

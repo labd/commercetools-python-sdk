@@ -1081,14 +1081,19 @@ class MyCartAddItemShippingAddressAction(MyCartUpdateAction):
 
 
 class MyCartAddLineItemAction(MyCartUpdateAction):
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
     sku: typing.Optional[str]
     quantity: typing.Optional[int]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
@@ -1191,6 +1196,8 @@ class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction)
 class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
     line_item_id: str
     quantity: int
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
@@ -1309,6 +1316,8 @@ class MyCartRemoveItemShippingAddressAction(MyCartUpdateAction):
 class MyCartRemoveLineItemAction(MyCartUpdateAction):
     line_item_id: str
     quantity: typing.Optional[int]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
@@ -1408,7 +1417,11 @@ class MyCartSetCountryAction(MyCartUpdateAction):
 
 
 class MyCartSetCustomFieldAction(MyCartUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -1431,7 +1444,10 @@ class MyCartSetCustomFieldAction(MyCartUpdateAction):
 
 
 class MyCartSetCustomTypeAction(MyCartUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the MyCart with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the MyCart.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyCart.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1504,7 +1520,11 @@ class MyCartSetDeleteDaysAfterLastModificationAction(MyCartUpdateAction):
 
 class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
     line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -1531,7 +1551,10 @@ class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
 
 class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
     line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1562,6 +1585,7 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
 
 class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
     line_item_id: str
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -1618,16 +1642,17 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
 
 class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
     line_item_id: str
-    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
         line_item_id: str,
-        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.line_item_id = line_item_id
-        self.distribution_channel = distribution_channel
+        self.supply_channel = supply_channel
         super().__init__(action="setLineItemSupplyChannel")
 
     @classmethod
@@ -1968,7 +1993,11 @@ class MyCustomerSetCompanyNameAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -1991,7 +2020,10 @@ class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the MyCustomer.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyCustomer.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2264,6 +2296,8 @@ class MyPaymentAddTransactionAction(MyPaymentUpdateAction):
 
 
 class MyPaymentChangeAmountPlannedAction(MyPaymentUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: "Money"
 
     def __init__(self, *, amount: "Money"):
@@ -2285,7 +2319,11 @@ class MyPaymentChangeAmountPlannedAction(MyPaymentUpdateAction):
 
 
 class MyPaymentSetCustomFieldAction(MyPaymentUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -2371,7 +2409,11 @@ class MyPaymentSetMethodInfoNameAction(MyPaymentUpdateAction):
 
 
 class MyPaymentSetTransactionCustomFieldAction(MyPaymentUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -2399,6 +2441,7 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
     variant_id: typing.Optional[int]
     quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -2438,6 +2481,7 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
     description: typing.Optional["LocalizedString"]
     quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -2651,7 +2695,11 @@ class MyShoppingListRemoveTextLineItemAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListSetCustomFieldAction(MyShoppingListUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -2674,7 +2722,10 @@ class MyShoppingListSetCustomFieldAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListSetCustomTypeAction(MyShoppingListUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the MyShoppingList with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the MyShoppingList.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyShoppingList.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2753,7 +2804,11 @@ class MyShoppingListSetDescriptionAction(MyShoppingListUpdateAction):
 
 class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
     line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2780,7 +2835,10 @@ class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
 
 class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
     line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2811,7 +2869,11 @@ class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
 
 class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction):
     text_line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2842,7 +2904,10 @@ class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction)
 
 class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
     text_line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the TextLineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the TextLineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

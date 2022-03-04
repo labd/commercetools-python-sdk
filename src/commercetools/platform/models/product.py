@@ -40,10 +40,10 @@ __all__ = [
     "Attribute",
     "CategoryOrderHints",
     "CustomTokenizer",
+    "FacetRange",
     "FacetResult",
-    "FacetResultRange",
-    "FacetResultTerm",
     "FacetResults",
+    "FacetTerm",
     "FacetTypes",
     "FilteredFacetResult",
     "Product",
@@ -147,35 +147,7 @@ class CategoryOrderHints(typing.Dict[str, str]):
     pass
 
 
-class FacetResult(_BaseType):
-    type: "FacetTypes"
-
-    def __init__(self, *, type: "FacetTypes"):
-        self.type = type
-        super().__init__()
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetResult":
-        if data["type"] == "filter":
-            from ._schemas.product import FilteredFacetResultSchema
-
-            return FilteredFacetResultSchema().load(data)
-        if data["type"] == "range":
-            from ._schemas.product import RangeFacetResultSchema
-
-            return RangeFacetResultSchema().load(data)
-        if data["type"] == "terms":
-            from ._schemas.product import TermFacetResultSchema
-
-            return TermFacetResultSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.product import FacetResultSchema
-
-        return FacetResultSchema().dump(self)
-
-
-class FacetResultRange(_BaseType):
+class FacetRange(_BaseType):
     from_: float
     from_str: str
     to: float
@@ -214,18 +186,50 @@ class FacetResultRange(_BaseType):
         super().__init__()
 
     @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetResultRange":
-        from ._schemas.product import FacetResultRangeSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetRange":
+        from ._schemas.product import FacetRangeSchema
 
-        return FacetResultRangeSchema().load(data)
+        return FacetRangeSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.product import FacetResultRangeSchema
+        from ._schemas.product import FacetRangeSchema
 
-        return FacetResultRangeSchema().dump(self)
+        return FacetRangeSchema().dump(self)
 
 
-class FacetResultTerm(_BaseType):
+class FacetResult(_BaseType):
+    type: "FacetTypes"
+
+    def __init__(self, *, type: "FacetTypes"):
+        self.type = type
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetResult":
+        if data["type"] == "filter":
+            from ._schemas.product import FilteredFacetResultSchema
+
+            return FilteredFacetResultSchema().load(data)
+        if data["type"] == "range":
+            from ._schemas.product import RangeFacetResultSchema
+
+            return RangeFacetResultSchema().load(data)
+        if data["type"] == "terms":
+            from ._schemas.product import TermFacetResultSchema
+
+            return TermFacetResultSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product import FacetResultSchema
+
+        return FacetResultSchema().dump(self)
+
+
+class FacetResults(typing.Dict[str, "FacetResult"]):
+    pass
+
+
+class FacetTerm(_BaseType):
     term: typing.Any
     count: int
     product_count: typing.Optional[int]
@@ -243,19 +247,15 @@ class FacetResultTerm(_BaseType):
         super().__init__()
 
     @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetResultTerm":
-        from ._schemas.product import FacetResultTermSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FacetTerm":
+        from ._schemas.product import FacetTermSchema
 
-        return FacetResultTermSchema().load(data)
+        return FacetTermSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.product import FacetResultTermSchema
+        from ._schemas.product import FacetTermSchema
 
-        return FacetResultTermSchema().dump(self)
-
-
-class FacetResults(typing.Dict[str, "FacetResult"]):
-    pass
+        return FacetTermSchema().dump(self)
 
 
 class FacetTypes(enum.Enum):
@@ -1136,9 +1136,9 @@ class ProductVariantDraft(_BaseType):
 
 
 class RangeFacetResult(FacetResult):
-    ranges: typing.List["FacetResultRange"]
+    ranges: typing.List["FacetRange"]
 
-    def __init__(self, *, ranges: typing.List["FacetResultRange"]):
+    def __init__(self, *, ranges: typing.List["FacetRange"]):
         self.ranges = ranges
         super().__init__(type=FacetTypes.RANGE)
 
@@ -1256,7 +1256,7 @@ class TermFacetResult(FacetResult):
     missing: int
     total: int
     other: int
-    terms: typing.List["FacetResultTerm"]
+    terms: typing.List["FacetTerm"]
 
     def __init__(
         self,
@@ -1265,7 +1265,7 @@ class TermFacetResult(FacetResult):
         missing: int,
         total: int,
         other: int,
-        terms: typing.List["FacetResultTerm"]
+        terms: typing.List["FacetTerm"]
     ):
         self.data_type = data_type
         self.missing = missing
@@ -1959,7 +1959,11 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
     staged: typing.Optional[bool]
     asset_id: typing.Optional[str]
     asset_key: typing.Optional[str]
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2002,11 +2006,11 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
     staged: typing.Optional[bool]
     asset_id: typing.Optional[str]
     asset_key: typing.Optional[str]
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Asset.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: If set, the custom fields are set to this new value.
-    fields: typing.Optional[object]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
@@ -2017,7 +2021,7 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional[object] = None
+        fields: typing.Optional["FieldContainer"] = None
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2545,7 +2549,11 @@ class ProductSetPricesAction(ProductUpdateAction):
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
     price_id: str
     staged: typing.Optional[bool]
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2579,7 +2587,10 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
     price_id: str
     staged: typing.Optional[bool]
+    #: Defines the [Type](ctp:api:type:Type) that extends the Price with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Price.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Price.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

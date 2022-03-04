@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.customer import Customer
+from ...models.customer import Customer, MyCustomerResetPassword
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -29,6 +29,7 @@ class ByProjectKeyMePasswordResetRequestBuilder:
 
     def post(
         self,
+        body: "MyCustomerResetPassword",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -37,7 +38,8 @@ class ByProjectKeyMePasswordResetRequestBuilder:
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/password/reset",
             params={},
-            headers=headers,
+            json=body.serialize(),
+            headers={"Content-Type": "application/json", **headers},
             options=options,
         )
         if response.status_code == 200:

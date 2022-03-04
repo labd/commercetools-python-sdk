@@ -174,10 +174,14 @@ __all__ = [
     "StagedOrderSetLocaleAction",
     "StagedOrderSetOrderNumberAction",
     "StagedOrderSetOrderTotalTaxAction",
+    "StagedOrderSetParcelCustomFieldAction",
+    "StagedOrderSetParcelCustomTypeAction",
     "StagedOrderSetParcelItemsAction",
     "StagedOrderSetParcelMeasurementsAction",
     "StagedOrderSetParcelTrackingDataAction",
     "StagedOrderSetReturnInfoAction",
+    "StagedOrderSetReturnItemCustomFieldAction",
+    "StagedOrderSetReturnItemCustomTypeAction",
     "StagedOrderSetReturnPaymentStateAction",
     "StagedOrderSetReturnShipmentStateAction",
     "StagedOrderSetShippingAddressAction",
@@ -769,7 +773,11 @@ class OrderEditSetCommentAction(OrderEditUpdateAction):
 
 
 class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -792,17 +800,17 @@ class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
 
 
 class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the OrderEdit with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the OrderEdit.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: If set, the custom fields are set to this new value.
-    fields: typing.Optional[object]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the OrderEdit.
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional[object] = None
+        fields: typing.Optional["FieldContainer"] = None
     ):
         self.type = type
         self.fields = fields
@@ -865,12 +873,15 @@ class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
 
 
 class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
     name: "LocalizedString"
     quantity: typing.Optional[float]
     slug: str
     #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -986,7 +997,9 @@ class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
@@ -994,7 +1007,10 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     sku: typing.Optional[str]
     quantity: typing.Optional[float]
     added_at: typing.Optional[datetime.datetime]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
@@ -1131,7 +1147,9 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
 
 class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
     shopping_list: "ShoppingListResourceIdentifier"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -1162,6 +1180,8 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
 
 class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
     custom_line_item_id: str
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
 
     def __init__(self, *, custom_line_item_id: str, money: "Money"):
@@ -1217,6 +1237,8 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     line_item_id: str
     quantity: float
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
@@ -1515,6 +1537,8 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     line_item_id: str
     quantity: typing.Optional[float]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
@@ -1613,7 +1637,11 @@ class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetBillingAddressCustomFieldAction(StagedOrderUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -1640,7 +1668,10 @@ class StagedOrderSetBillingAddressCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetBillingAddressCustomTypeAction(StagedOrderUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `billingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `billingAddress`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `billingAddress`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1693,7 +1724,11 @@ class StagedOrderSetCountryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -1717,7 +1752,11 @@ class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
 
 class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
     custom_line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -1752,7 +1791,10 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
 
 class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
     custom_line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the CustomLineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the CustomLineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CustomLineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1913,7 +1955,10 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the StagedOrder with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the StagedOrder.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the StagedOrder.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2035,7 +2080,11 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
 
 class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
     delivery_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2066,7 +2115,10 @@ class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
 
 class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
     delivery_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address` in a Delivery.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2100,10 +2152,18 @@ class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
+    delivery_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+    def __init__(
+        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.delivery_id = delivery_id
         self.name = name
         self.value = value
         super().__init__(action="setDeliveryCustomField")
@@ -2123,18 +2183,21 @@ class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    delivery_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: If set, the custom fields are set to this new value.
-    fields: typing.Optional[object]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Delivery.
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
+        delivery_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional[object] = None
+        fields: typing.Optional["FieldContainer"] = None
     ):
+        self.delivery_id = delivery_id
         self.type = type
         self.fields = fields
         super().__init__(action="setDeliveryCustomType")
@@ -2178,7 +2241,11 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
 
 class StagedOrderSetItemShippingAddressCustomFieldAction(StagedOrderUpdateAction):
     address_key: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2209,7 +2276,10 @@ class StagedOrderSetItemShippingAddressCustomFieldAction(StagedOrderUpdateAction
 
 class StagedOrderSetItemShippingAddressCustomTypeAction(StagedOrderUpdateAction):
     address_key: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the `itemShippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `itemShippingAddress`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `itemShippingAddress`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2244,7 +2314,11 @@ class StagedOrderSetItemShippingAddressCustomTypeAction(StagedOrderUpdateAction)
 
 class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2271,7 +2345,10 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2302,6 +2379,7 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -2334,6 +2412,8 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
 
     def __init__(
@@ -2516,6 +2596,8 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_total_gross: "Money"
     external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]]
 
@@ -2541,6 +2623,71 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
         from ._schemas.order_edit import StagedOrderSetOrderTotalTaxActionSchema
 
         return StagedOrderSetOrderTotalTaxActionSchema().dump(self)
+
+
+class StagedOrderSetParcelCustomFieldAction(StagedOrderUpdateAction):
+    parcel_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
+    name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, parcel_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.parcel_id = parcel_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setParcelCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetParcelCustomFieldAction":
+        from ._schemas.order_edit import StagedOrderSetParcelCustomFieldActionSchema
+
+        return StagedOrderSetParcelCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetParcelCustomFieldActionSchema
+
+        return StagedOrderSetParcelCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetParcelCustomTypeAction(StagedOrderUpdateAction):
+    parcel_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Parcel.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Parcel.
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        parcel_id: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.parcel_id = parcel_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setParcelCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetParcelCustomTypeAction":
+        from ._schemas.order_edit import StagedOrderSetParcelCustomTypeActionSchema
+
+        return StagedOrderSetParcelCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetParcelCustomTypeActionSchema
+
+        return StagedOrderSetParcelCustomTypeActionSchema().dump(self)
 
 
 class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
@@ -2640,6 +2787,75 @@ class StagedOrderSetReturnInfoAction(StagedOrderUpdateAction):
         from ._schemas.order_edit import StagedOrderSetReturnInfoActionSchema
 
         return StagedOrderSetReturnInfoActionSchema().dump(self)
+
+
+class StagedOrderSetReturnItemCustomFieldAction(StagedOrderUpdateAction):
+    return_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
+    name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        return_item_id: str,
+        name: str,
+        value: typing.Optional[typing.Any] = None
+    ):
+        self.return_item_id = return_item_id
+        self.name = name
+        self.value = value
+        super().__init__(action="setReturnItemCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetReturnItemCustomFieldAction":
+        from ._schemas.order_edit import StagedOrderSetReturnItemCustomFieldActionSchema
+
+        return StagedOrderSetReturnItemCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetReturnItemCustomFieldActionSchema
+
+        return StagedOrderSetReturnItemCustomFieldActionSchema().dump(self)
+
+
+class StagedOrderSetReturnItemCustomTypeAction(StagedOrderUpdateAction):
+    return_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the ReturnItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the ReturnItem.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ReturnItem.
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        return_item_id: str,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.return_item_id = return_item_id
+        self.type = type
+        self.fields = fields
+        super().__init__(action="setReturnItemCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetReturnItemCustomTypeAction":
+        from ._schemas.order_edit import StagedOrderSetReturnItemCustomTypeActionSchema
+
+        return StagedOrderSetReturnItemCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetReturnItemCustomTypeActionSchema
+
+        return StagedOrderSetReturnItemCustomTypeActionSchema().dump(self)
 
 
 class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
@@ -2793,7 +3009,11 @@ class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateActi
 
 
 class StagedOrderSetShippingAddressCustomFieldAction(StagedOrderUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -2820,7 +3040,10 @@ class StagedOrderSetShippingAddressCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingAddressCustomTypeAction(StagedOrderUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `shippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `shippingAddress`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingAddress`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2955,7 +3178,9 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
 class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
     custom_line_item_id: str
     quantity: int
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
     from_state: "StateResourceIdentifier"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
     to_state: "StateResourceIdentifier"
     actual_transition_date: typing.Optional[datetime.datetime]
 
@@ -2996,7 +3221,9 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
 class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
     line_item_id: str
     quantity: int
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
     from_state: "StateResourceIdentifier"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
     to_state: "StateResourceIdentifier"
     actual_transition_date: typing.Optional[datetime.datetime]
 
@@ -3031,6 +3258,7 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
     state: "StateResourceIdentifier"
     force: typing.Optional[bool]
 
@@ -3081,6 +3309,7 @@ class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     channel: "ChannelResourceIdentifier"
     external_id: typing.Optional[str]
     synced_at: typing.Optional[datetime.datetime]

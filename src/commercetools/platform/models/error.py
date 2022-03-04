@@ -118,9 +118,10 @@ class ErrorObject(_BaseType):
     code: str
     message: str
 
-    def __init__(self, *, code: str, message: str):
+    def __init__(self, *, code: str, message: str, **kwargs):
         self.code = code
         self.message = message
+        self.__dict__.update(kwargs)
         super().__init__()
 
     @classmethod
@@ -393,9 +394,9 @@ class ErrorObject(_BaseType):
 
 
 class AccessDeniedError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="access_denied")
+        super().__init__(message=message, code="access_denied", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "AccessDeniedError":
@@ -410,9 +411,9 @@ class AccessDeniedError(ErrorObject):
 
 
 class AnonymousIdAlreadyInUseError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="AnonymousIdAlreadyInUse")
+        super().__init__(message=message, code="AnonymousIdAlreadyInUse", **kwargs)
 
     @classmethod
     def deserialize(
@@ -439,12 +440,15 @@ class AttributeDefinitionAlreadyExistsError(ErrorObject):
         message: str,
         conflicting_product_type_id: str,
         conflicting_product_type_name: str,
-        conflicting_attribute_name: str
+        conflicting_attribute_name: str,
+        **kwargs
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
         self.conflicting_attribute_name = conflicting_attribute_name
-        super().__init__(message=message, code="AttributeDefinitionAlreadyExists")
+        super().__init__(
+            message=message, code="AttributeDefinitionAlreadyExists", **kwargs
+        )
 
     @classmethod
     def deserialize(
@@ -471,12 +475,15 @@ class AttributeDefinitionTypeConflictError(ErrorObject):
         message: str,
         conflicting_product_type_id: str,
         conflicting_product_type_name: str,
-        conflicting_attribute_name: str
+        conflicting_attribute_name: str,
+        **kwargs
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
         self.conflicting_attribute_name = conflicting_attribute_name
-        super().__init__(message=message, code="AttributeDefinitionTypeConflict")
+        super().__init__(
+            message=message, code="AttributeDefinitionTypeConflict", **kwargs
+        )
 
     @classmethod
     def deserialize(
@@ -495,9 +502,9 @@ class AttributeDefinitionTypeConflictError(ErrorObject):
 class AttributeNameDoesNotExistError(ErrorObject):
     invalid_attribute_name: str
 
-    def __init__(self, *, message: str, invalid_attribute_name: str):
+    def __init__(self, *, message: str, invalid_attribute_name: str, **kwargs):
         self.invalid_attribute_name = invalid_attribute_name
-        super().__init__(message=message, code="AttributeNameDoesNotExist")
+        super().__init__(message=message, code="AttributeNameDoesNotExist", **kwargs)
 
     @classmethod
     def deserialize(
@@ -514,9 +521,9 @@ class AttributeNameDoesNotExistError(ErrorObject):
 
 
 class BadGatewayError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="BadGateway")
+        super().__init__(message=message, code="BadGateway", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "BadGatewayError":
@@ -533,9 +540,11 @@ class BadGatewayError(ErrorObject):
 class ConcurrentModificationError(ErrorObject):
     current_version: typing.Optional[int]
 
-    def __init__(self, *, message: str, current_version: typing.Optional[int] = None):
+    def __init__(
+        self, *, message: str, current_version: typing.Optional[int] = None, **kwargs
+    ):
         self.current_version = current_version
-        super().__init__(message=message, code="ConcurrentModification")
+        super().__init__(message=message, code="ConcurrentModification", **kwargs)
 
     @classmethod
     def deserialize(
@@ -568,7 +577,8 @@ class DiscountCodeNonApplicableError(ErrorObject):
         dicount_code_id: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        validity_check_time: typing.Optional[datetime.datetime] = None
+        validity_check_time: typing.Optional[datetime.datetime] = None,
+        **kwargs
     ):
         self.discount_code = discount_code
         self.reason = reason
@@ -576,7 +586,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
         self.valid_from = valid_from
         self.valid_until = valid_until
         self.validity_check_time = validity_check_time
-        super().__init__(message=message, code="DiscountCodeNonApplicable")
+        super().__init__(message=message, code="DiscountCodeNonApplicable", **kwargs)
 
     @classmethod
     def deserialize(
@@ -595,9 +605,9 @@ class DiscountCodeNonApplicableError(ErrorObject):
 class DuplicateAttributeValueError(ErrorObject):
     attribute: "Attribute"
 
-    def __init__(self, *, message: str, attribute: "Attribute"):
+    def __init__(self, *, message: str, attribute: "Attribute", **kwargs):
         self.attribute = attribute
-        super().__init__(message=message, code="DuplicateAttributeValue")
+        super().__init__(message=message, code="DuplicateAttributeValue", **kwargs)
 
     @classmethod
     def deserialize(
@@ -616,9 +626,9 @@ class DuplicateAttributeValueError(ErrorObject):
 class DuplicateAttributeValuesError(ErrorObject):
     attributes: typing.List["Attribute"]
 
-    def __init__(self, *, message: str, attributes: typing.List["Attribute"]):
+    def __init__(self, *, message: str, attributes: typing.List["Attribute"], **kwargs):
         self.attributes = attributes
-        super().__init__(message=message, code="DuplicateAttributeValues")
+        super().__init__(message=message, code="DuplicateAttributeValues", **kwargs)
 
     @classmethod
     def deserialize(
@@ -637,9 +647,9 @@ class DuplicateAttributeValuesError(ErrorObject):
 class DuplicateEnumValuesError(ErrorObject):
     duplicates: typing.List["str"]
 
-    def __init__(self, *, message: str, duplicates: typing.List["str"]):
+    def __init__(self, *, message: str, duplicates: typing.List["str"], **kwargs):
         self.duplicates = duplicates
-        super().__init__(message=message, code="DuplicateEnumValues")
+        super().__init__(message=message, code="DuplicateEnumValues", **kwargs)
 
     @classmethod
     def deserialize(
@@ -666,12 +676,13 @@ class DuplicateFieldError(ErrorObject):
         message: str,
         field: typing.Optional[str] = None,
         duplicate_value: typing.Optional[typing.Any] = None,
-        conflicting_resource: typing.Optional["Reference"] = None
+        conflicting_resource: typing.Optional["Reference"] = None,
+        **kwargs
     ):
         self.field = field
         self.duplicate_value = duplicate_value
         self.conflicting_resource = conflicting_resource
-        super().__init__(message=message, code="DuplicateField")
+        super().__init__(message=message, code="DuplicateField", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DuplicateFieldError":
@@ -696,12 +707,15 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
         message: str,
         field: str,
         duplicate_value: typing.Any,
-        conflicting_resource: "Reference"
+        conflicting_resource: "Reference",
+        **kwargs
     ):
         self.field = field
         self.duplicate_value = duplicate_value
         self.conflicting_resource = conflicting_resource
-        super().__init__(message=message, code="DuplicateFieldWithConflictingResource")
+        super().__init__(
+            message=message, code="DuplicateFieldWithConflictingResource", **kwargs
+        )
 
     @classmethod
     def deserialize(
@@ -720,9 +734,11 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
 class DuplicatePriceScopeError(ErrorObject):
     conflicting_prices: typing.List["Price"]
 
-    def __init__(self, *, message: str, conflicting_prices: typing.List["Price"]):
+    def __init__(
+        self, *, message: str, conflicting_prices: typing.List["Price"], **kwargs
+    ):
         self.conflicting_prices = conflicting_prices
-        super().__init__(message=message, code="DuplicatePriceScope")
+        super().__init__(message=message, code="DuplicatePriceScope", **kwargs)
 
     @classmethod
     def deserialize(
@@ -741,9 +757,9 @@ class DuplicatePriceScopeError(ErrorObject):
 class DuplicateVariantValuesError(ErrorObject):
     variant_values: "VariantValues"
 
-    def __init__(self, *, message: str, variant_values: "VariantValues"):
+    def __init__(self, *, message: str, variant_values: "VariantValues", **kwargs):
         self.variant_values = variant_values
-        super().__init__(message=message, code="DuplicateVariantValues")
+        super().__init__(message=message, code="DuplicateVariantValues", **kwargs)
 
     @classmethod
     def deserialize(
@@ -762,9 +778,9 @@ class DuplicateVariantValuesError(ErrorObject):
 class EditPreviewFailedError(ErrorObject):
     result: "OrderEditPreviewFailure"
 
-    def __init__(self, *, message: str, result: "OrderEditPreviewFailure"):
+    def __init__(self, *, message: str, result: "OrderEditPreviewFailure", **kwargs):
         self.result = result
-        super().__init__(message=message, code="EditPreviewFailed")
+        super().__init__(message=message, code="EditPreviewFailed", **kwargs)
 
     @classmethod
     def deserialize(
@@ -789,11 +805,12 @@ class EnumKeyAlreadyExistsError(ErrorObject):
         *,
         message: str,
         conflicting_enum_key: str,
-        conflicting_attribute_name: str
+        conflicting_attribute_name: str,
+        **kwargs
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
-        super().__init__(message=message, code="EnumKeyAlreadyExists")
+        super().__init__(message=message, code="EnumKeyAlreadyExists", **kwargs)
 
     @classmethod
     def deserialize(
@@ -818,11 +835,12 @@ class EnumKeyDoesNotExistError(ErrorObject):
         *,
         message: str,
         conflicting_enum_key: str,
-        conflicting_attribute_name: str
+        conflicting_attribute_name: str,
+        **kwargs
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
-        super().__init__(message=message, code="EnumKeyDoesNotExist")
+        super().__init__(message=message, code="EnumKeyDoesNotExist", **kwargs)
 
     @classmethod
     def deserialize(
@@ -839,9 +857,9 @@ class EnumKeyDoesNotExistError(ErrorObject):
 
 
 class EnumValueIsUsedError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="EnumValueIsUsed")
+        super().__init__(message=message, code="EnumValueIsUsed", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "EnumValueIsUsedError":
@@ -856,9 +874,9 @@ class EnumValueIsUsedError(ErrorObject):
 
 
 class EnumValuesMustMatchError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="EnumValuesMustMatch")
+        super().__init__(message=message, code="EnumValuesMustMatch", **kwargs)
 
     @classmethod
     def deserialize(
@@ -920,12 +938,13 @@ class ExtensionBadResponseError(ErrorObject):
         message: str,
         localized_message: typing.Optional["LocalizedString"] = None,
         extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension"
+        error_by_extension: "ErrorByExtension",
+        **kwargs
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
         self.error_by_extension = error_by_extension
-        super().__init__(message=message, code="ExtensionBadResponse")
+        super().__init__(message=message, code="ExtensionBadResponse", **kwargs)
 
     @classmethod
     def deserialize(
@@ -950,11 +969,12 @@ class ExtensionNoResponseError(ErrorObject):
         *,
         message: str,
         extension_id: str,
-        extension_key: typing.Optional[str] = None
+        extension_key: typing.Optional[str] = None,
+        **kwargs
     ):
         self.extension_id = extension_id
         self.extension_key = extension_key
-        super().__init__(message=message, code="ExtensionNoResponse")
+        super().__init__(message=message, code="ExtensionNoResponse", **kwargs)
 
     @classmethod
     def deserialize(
@@ -981,12 +1001,13 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
         message: str,
         localized_message: typing.Optional["LocalizedString"] = None,
         extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension"
+        error_by_extension: "ErrorByExtension",
+        **kwargs
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
         self.error_by_extension = error_by_extension
-        super().__init__(message=message, code="ExtensionUpdateActionsFailed")
+        super().__init__(message=message, code="ExtensionUpdateActionsFailed", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1003,9 +1024,9 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
 
 
 class ExternalOAuthFailedError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="ExternalOAuthFailed")
+        super().__init__(message=message, code="ExternalOAuthFailed", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1022,9 +1043,9 @@ class ExternalOAuthFailedError(ErrorObject):
 
 
 class FeatureRemovedError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="FeatureRemoved")
+        super().__init__(message=message, code="FeatureRemoved", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "FeatureRemovedError":
@@ -1039,9 +1060,9 @@ class FeatureRemovedError(ErrorObject):
 
 
 class GeneralError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="General")
+        super().__init__(message=message, code="General", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "GeneralError":
@@ -1056,9 +1077,9 @@ class GeneralError(ErrorObject):
 
 
 class InsufficientScopeError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="insufficient_scope")
+        super().__init__(message=message, code="insufficient_scope", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1075,9 +1096,9 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InternalConstraintViolatedError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InternalConstraintViolated")
+        super().__init__(message=message, code="InternalConstraintViolated", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1094,9 +1115,9 @@ class InternalConstraintViolatedError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InvalidCredentials")
+        super().__init__(message=message, code="InvalidCredentials", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1113,9 +1134,9 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidCurrentPasswordError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InvalidCurrentPassword")
+        super().__init__(message=message, code="InvalidCurrentPassword", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1142,12 +1163,13 @@ class InvalidFieldError(ErrorObject):
         message: str,
         field: str,
         invalid_value: typing.Any,
-        allowed_values: typing.Optional[typing.List["typing.Any"]] = None
+        allowed_values: typing.Optional[typing.List["typing.Any"]] = None,
+        **kwargs
     ):
         self.field = field
         self.invalid_value = invalid_value
         self.allowed_values = allowed_values
-        super().__init__(message=message, code="InvalidField")
+        super().__init__(message=message, code="InvalidField", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InvalidFieldError":
@@ -1162,9 +1184,9 @@ class InvalidFieldError(ErrorObject):
 
 
 class InvalidInputError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InvalidInput")
+        super().__init__(message=message, code="InvalidInput", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InvalidInputError":
@@ -1182,10 +1204,10 @@ class InvalidItemShippingDetailsError(ErrorObject):
     subject: str
     item_id: str
 
-    def __init__(self, *, message: str, subject: str, item_id: str):
+    def __init__(self, *, message: str, subject: str, item_id: str, **kwargs):
         self.subject = subject
         self.item_id = item_id
-        super().__init__(message=message, code="InvalidItemShippingDetails")
+        super().__init__(message=message, code="InvalidItemShippingDetails", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1202,9 +1224,9 @@ class InvalidItemShippingDetailsError(ErrorObject):
 
 
 class InvalidJsonInputError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InvalidJsonInput")
+        super().__init__(message=message, code="InvalidJsonInput", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InvalidJsonInputError":
@@ -1219,9 +1241,9 @@ class InvalidJsonInputError(ErrorObject):
 
 
 class InvalidOperationError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InvalidOperation")
+        super().__init__(message=message, code="InvalidOperation", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InvalidOperationError":
@@ -1236,9 +1258,9 @@ class InvalidOperationError(ErrorObject):
 
 
 class InvalidSubjectError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="InvalidSubject")
+        super().__init__(message=message, code="InvalidSubject", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InvalidSubjectError":
@@ -1253,9 +1275,9 @@ class InvalidSubjectError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="invalid_token")
+        super().__init__(message=message, code="invalid_token", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InvalidTokenError":
@@ -1270,9 +1292,9 @@ class InvalidTokenError(ErrorObject):
 
 
 class LanguageUsedInStoresError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="LanguageUsedInStores")
+        super().__init__(message=message, code="LanguageUsedInStores", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1295,6 +1317,7 @@ class MatchingPriceNotFoundError(ErrorObject):
     country: typing.Optional[str]
     #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1306,7 +1329,8 @@ class MatchingPriceNotFoundError(ErrorObject):
         currency: typing.Optional[str] = None,
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
-        channel: typing.Optional["ChannelReference"] = None
+        channel: typing.Optional["ChannelReference"] = None,
+        **kwargs
     ):
         self.product_id = product_id
         self.variant_id = variant_id
@@ -1314,7 +1338,7 @@ class MatchingPriceNotFoundError(ErrorObject):
         self.country = country
         self.customer_group = customer_group
         self.channel = channel
-        super().__init__(message=message, code="MatchingPriceNotFound")
+        super().__init__(message=message, code="MatchingPriceNotFound", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1333,9 +1357,9 @@ class MatchingPriceNotFoundError(ErrorObject):
 class MaxResourceLimitExceededError(ErrorObject):
     exceeded_resource: "ReferenceTypeId"
 
-    def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId"):
+    def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId", **kwargs):
         self.exceeded_resource = exceeded_resource
-        super().__init__(message=message, code="MaxResourceLimitExceeded")
+        super().__init__(message=message, code="MaxResourceLimitExceeded", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1352,7 +1376,9 @@ class MaxResourceLimitExceededError(ErrorObject):
 
 
 class MissingRoleOnChannelError(ErrorObject):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Describes the purpose and type of the Channel. A Channel can have one or more roles.
     missing_role: "ChannelRoleEnum"
 
     def __init__(
@@ -1360,11 +1386,12 @@ class MissingRoleOnChannelError(ErrorObject):
         *,
         message: str,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        missing_role: "ChannelRoleEnum"
+        missing_role: "ChannelRoleEnum",
+        **kwargs
     ):
         self.channel = channel
         self.missing_role = missing_role
-        super().__init__(message=message, code="MissingRoleOnChannel")
+        super().__init__(message=message, code="MissingRoleOnChannel", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1391,12 +1418,13 @@ class MissingTaxRateForCountryError(ErrorObject):
         message: str,
         tax_category_id: str,
         country: typing.Optional[str] = None,
-        state: typing.Optional[str] = None
+        state: typing.Optional[str] = None,
+        **kwargs
     ):
         self.tax_category_id = tax_category_id
         self.country = country
         self.state = state
-        super().__init__(message=message, code="MissingTaxRateForCountry")
+        super().__init__(message=message, code="MissingTaxRateForCountry", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1413,9 +1441,11 @@ class MissingTaxRateForCountryError(ErrorObject):
 
 
 class NoMatchingProductDiscountFoundError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="NoMatchingProductDiscountFound")
+        super().__init__(
+            message=message, code="NoMatchingProductDiscountFound", **kwargs
+        )
 
     @classmethod
     def deserialize(
@@ -1432,9 +1462,9 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
 
 
 class NotEnabledError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="NotEnabled")
+        super().__init__(message=message, code="NotEnabled", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "NotEnabledError":
@@ -1449,9 +1479,9 @@ class NotEnabledError(ErrorObject):
 
 
 class ObjectNotFoundError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="ObjectNotFound")
+        super().__init__(message=message, code="ObjectNotFound", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ObjectNotFoundError":
@@ -1470,11 +1500,16 @@ class OutOfStockError(ErrorObject):
     skus: typing.List["str"]
 
     def __init__(
-        self, *, message: str, line_items: typing.List["str"], skus: typing.List["str"]
+        self,
+        *,
+        message: str,
+        line_items: typing.List["str"],
+        skus: typing.List["str"],
+        **kwargs
     ):
         self.line_items = line_items
         self.skus = skus
-        super().__init__(message=message, code="OutOfStock")
+        super().__init__(message=message, code="OutOfStock", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OutOfStockError":
@@ -1489,9 +1524,9 @@ class OutOfStockError(ErrorObject):
 
 
 class OverCapacityError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="OverCapacity")
+        super().__init__(message=message, code="OverCapacity", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OverCapacityError":
@@ -1506,9 +1541,9 @@ class OverCapacityError(ErrorObject):
 
 
 class PendingOperationError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="PendingOperation")
+        super().__init__(message=message, code="PendingOperation", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "PendingOperationError":
@@ -1526,10 +1561,12 @@ class PriceChangedError(ErrorObject):
     line_items: typing.List["str"]
     shipping: bool
 
-    def __init__(self, *, message: str, line_items: typing.List["str"], shipping: bool):
+    def __init__(
+        self, *, message: str, line_items: typing.List["str"], shipping: bool, **kwargs
+    ):
         self.line_items = line_items
         self.shipping = shipping
-        super().__init__(message=message, code="PriceChanged")
+        super().__init__(message=message, code="PriceChanged", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "PriceChangedError":
@@ -1547,10 +1584,16 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
     languages: typing.Optional[typing.List["str"]]
 
     def __init__(
-        self, *, message: str, languages: typing.Optional[typing.List["str"]] = None
+        self,
+        *,
+        message: str,
+        languages: typing.Optional[typing.List["str"]] = None,
+        **kwargs
     ):
         self.languages = languages
-        super().__init__(message=message, code="ProjectNotConfiguredForLanguages")
+        super().__init__(
+            message=message, code="ProjectNotConfiguredForLanguages", **kwargs
+        )
 
     @classmethod
     def deserialize(
@@ -1567,9 +1610,9 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
 
 
 class QueryComplexityLimitExceededError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="QueryComplexityLimitExceeded")
+        super().__init__(message=message, code="QueryComplexityLimitExceeded", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1586,9 +1629,9 @@ class QueryComplexityLimitExceededError(ErrorObject):
 
 
 class QueryTimedOutError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="QueryTimedOut")
+        super().__init__(message=message, code="QueryTimedOut", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "QueryTimedOutError":
@@ -1606,10 +1649,14 @@ class ReferenceExistsError(ErrorObject):
     referenced_by: typing.Optional["ReferenceTypeId"]
 
     def __init__(
-        self, *, message: str, referenced_by: typing.Optional["ReferenceTypeId"] = None
+        self,
+        *,
+        message: str,
+        referenced_by: typing.Optional["ReferenceTypeId"] = None,
+        **kwargs
     ):
         self.referenced_by = referenced_by
-        super().__init__(message=message, code="ReferenceExists")
+        super().__init__(message=message, code="ReferenceExists", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ReferenceExistsError":
@@ -1634,12 +1681,13 @@ class ReferencedResourceNotFoundError(ErrorObject):
         message: str,
         type_id: "ReferenceTypeId",
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
+        **kwargs
     ):
         self.type_id = type_id
         self.id = id
         self.key = key
-        super().__init__(message=message, code="ReferencedResourceNotFound")
+        super().__init__(message=message, code="ReferencedResourceNotFound", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1658,9 +1706,9 @@ class ReferencedResourceNotFoundError(ErrorObject):
 class RequiredFieldError(ErrorObject):
     field: str
 
-    def __init__(self, *, message: str, field: str):
+    def __init__(self, *, message: str, field: str, **kwargs):
         self.field = field
-        super().__init__(message=message, code="RequiredField")
+        super().__init__(message=message, code="RequiredField", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "RequiredFieldError":
@@ -1675,9 +1723,9 @@ class RequiredFieldError(ErrorObject):
 
 
 class ResourceNotFoundError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="ResourceNotFound")
+        super().__init__(message=message, code="ResourceNotFound", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ResourceNotFoundError":
@@ -1692,9 +1740,9 @@ class ResourceNotFoundError(ErrorObject):
 
 
 class ResourceSizeLimitExceededError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="ResourceSizeLimitExceeded")
+        super().__init__(message=message, code="ResourceSizeLimitExceeded", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1711,9 +1759,9 @@ class ResourceSizeLimitExceededError(ErrorObject):
 
 
 class SearchDeactivatedError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="SearchDeactivated")
+        super().__init__(message=message, code="SearchDeactivated", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1730,9 +1778,9 @@ class SearchDeactivatedError(ErrorObject):
 
 
 class SearchExecutionFailureError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="SearchExecutionFailure")
+        super().__init__(message=message, code="SearchExecutionFailure", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1749,9 +1797,9 @@ class SearchExecutionFailureError(ErrorObject):
 
 
 class SearchFacetPathNotFoundError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="SearchFacetPathNotFound")
+        super().__init__(message=message, code="SearchFacetPathNotFound", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1768,9 +1816,9 @@ class SearchFacetPathNotFoundError(ErrorObject):
 
 
 class SearchIndexingInProgressError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="SearchIndexingInProgress")
+        super().__init__(message=message, code="SearchIndexingInProgress", **kwargs)
 
     @classmethod
     def deserialize(
@@ -1787,9 +1835,9 @@ class SearchIndexingInProgressError(ErrorObject):
 
 
 class SemanticErrorError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="SemanticError")
+        super().__init__(message=message, code="SemanticError", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SemanticErrorError":
@@ -1804,9 +1852,11 @@ class SemanticErrorError(ErrorObject):
 
 
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="ShippingMethodDoesNotMatchCart")
+        super().__init__(
+            message=message, code="ShippingMethodDoesNotMatchCart", **kwargs
+        )
 
     @classmethod
     def deserialize(
@@ -1823,9 +1873,9 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
 
 
 class SyntaxErrorError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="SyntaxError")
+        super().__init__(message=message, code="SyntaxError", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SyntaxErrorError":
@@ -1869,9 +1919,9 @@ class VariantValues(_BaseType):
 
 
 class WeakPasswordError(ErrorObject):
-    def __init__(self, *, message: str):
+    def __init__(self, *, message: str, **kwargs):
 
-        super().__init__(message=message, code="WeakPassword")
+        super().__init__(message=message, code="WeakPassword", **kwargs)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "WeakPasswordError":

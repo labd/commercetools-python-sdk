@@ -24,7 +24,12 @@ if typing.TYPE_CHECKING:
         TypedMoney,
     )
     from .product import ProductReference, ProductResourceIdentifier
-    from .type import CustomFields, TypeResourceIdentifier
+    from .type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 
 __all__ = [
     "CartDiscount",
@@ -190,7 +195,7 @@ class CartDiscountDraft(_BaseType):
     #: Specifies whether the application of this discount causes the following discounts to be ignored.
     #: Defaults to Stacking.
     stacking_mode: typing.Optional["StackingMode"]
-    custom: typing.Optional["CustomFields"]
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -207,7 +212,7 @@ class CartDiscountDraft(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         requires_discount_code: typing.Optional[bool] = None,
         stacking_mode: typing.Optional["StackingMode"] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.name = name
         self.key = key
@@ -1052,11 +1057,11 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an `InvalidOperation` error.
-    #: If `value` is provided, set the `value` of the field defined by the `name`.
-    #: The FieldDefinition determines the format for the `value` to be provided.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -1079,17 +1084,17 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
-    #: If absent, the custom type and any existing CustomFields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the CartDiscount with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the CartDiscount.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: A valid JSON object, based on the FieldDefinitions of the Type.
-    #: Sets the custom fields to this value.
-    fields: typing.Optional[object]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CartDiscount.
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional[object] = None
+        fields: typing.Optional["FieldContainer"] = None
     ):
         self.type = type
         self.fields = fields

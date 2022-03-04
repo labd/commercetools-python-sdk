@@ -89,9 +89,12 @@ class Payment(BaseResource):
     #: How much money this payment intends to receive from the customer.
     #: The value usually matches the cart or order gross total.
     amount_planned: "TypedMoney"
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     amount_authorized: typing.Optional["TypedMoney"]
     authorized_until: typing.Optional[str]
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     amount_paid: typing.Optional["TypedMoney"]
+    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     amount_refunded: typing.Optional["TypedMoney"]
     payment_method_info: "PaymentMethodInfo"
     payment_status: "PaymentStatus"
@@ -181,9 +184,15 @@ class PaymentDraft(_BaseType):
     #: How much money this payment intends to receive from the customer.
     #: The value usually matches the cart or order gross total.
     amount_planned: "Money"
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount_authorized: typing.Optional["Money"]
     authorized_until: typing.Optional[str]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount_paid: typing.Optional["Money"]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount_refunded: typing.Optional["Money"]
     payment_method_info: typing.Optional["PaymentMethodInfo"]
     payment_status: typing.Optional["PaymentStatusDraft"]
@@ -397,6 +406,7 @@ class PaymentStatus(_BaseType):
 class PaymentStatusDraft(_BaseType):
     interface_code: typing.Optional[str]
     interface_text: typing.Optional[str]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
     state: typing.Optional["StateResourceIdentifier"]
 
     def __init__(
@@ -619,7 +629,7 @@ class TransactionDraft(_BaseType):
     #: If not set, defaults to `Initial`.
     state: typing.Optional["TransactionState"]
     #: Custom Fields for the Transaction.
-    custom: typing.Optional["CustomFields"]
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -629,7 +639,7 @@ class TransactionDraft(_BaseType):
         amount: "Money",
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.timestamp = timestamp
         self.type = type
@@ -806,6 +816,8 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
 
 
 class PaymentSetAmountPaidAction(PaymentUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: typing.Optional["Money"]
 
     def __init__(self, *, amount: typing.Optional["Money"] = None):
@@ -827,6 +839,8 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
 
 
 class PaymentSetAmountRefundedAction(PaymentUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: typing.Optional["Money"]
 
     def __init__(self, *, amount: typing.Optional["Money"] = None):
@@ -871,6 +885,8 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
 
 class PaymentSetAuthorizationAction(PaymentUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: typing.Optional["Money"]
     until: typing.Optional[datetime.datetime]
 
@@ -899,7 +915,11 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomFieldAction(PaymentUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -922,10 +942,10 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomTypeAction(PaymentUpdateAction):
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Payment with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Payment.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the custom fields to this value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Payment.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1148,10 +1168,23 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 
 
 class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
+    transaction_id: str
+    #: description: |
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
-    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+    def __init__(
+        self,
+        *,
+        transaction_id: str,
+        name: str,
+        value: typing.Optional[typing.Any] = None
+    ):
+        self.transaction_id = transaction_id
         self.name = name
         self.value = value
         super().__init__(action="setTransactionCustomField")
@@ -1171,18 +1204,21 @@ class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
 
 
 class PaymentSetTransactionCustomTypeAction(PaymentUpdateAction):
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    transaction_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the Transaction with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Transaction.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the custom fields to this value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Transaction.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
+        transaction_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
+        self.transaction_id = transaction_id
         self.type = type
         self.fields = fields
         super().__init__(action="setTransactionCustomType")

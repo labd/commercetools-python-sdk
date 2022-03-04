@@ -20,24 +20,24 @@ __all__ = [
     "AzureEventGridDestination",
     "AzureServiceBusDestination",
     "ChangeSubscription",
-    "DeliveryCloudEventsFormat",
+    "CloudEventsFormat",
     "DeliveryFormat",
-    "DeliveryPlatformFormat",
+    "DeliveryPayload",
     "Destination",
     "EventBridgeDestination",
     "GoogleCloudPubSubDestination",
     "IronMqDestination",
-    "MessageDelivery",
+    "MessageDeliveryPayload",
     "MessageSubscription",
     "PayloadNotIncluded",
-    "ResourceCreatedDelivery",
-    "ResourceDeletedDelivery",
-    "ResourceUpdatedDelivery",
+    "PlatformFormat",
+    "ResourceCreatedDeliveryPayload",
+    "ResourceDeletedDeliveryPayload",
+    "ResourceUpdatedDeliveryPayload",
     "SnsDestination",
     "SqsDestination",
     "Subscription",
     "SubscriptionChangeDestinationAction",
-    "SubscriptionDelivery",
     "SubscriptionDraft",
     "SubscriptionHealthStatus",
     "SubscriptionPagedQueryResponse",
@@ -78,13 +78,13 @@ class DeliveryFormat(_BaseType):
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeliveryFormat":
         if data["type"] == "CloudEvents":
-            from ._schemas.subscription import DeliveryCloudEventsFormatSchema
+            from ._schemas.subscription import CloudEventsFormatSchema
 
-            return DeliveryCloudEventsFormatSchema().load(data)
+            return CloudEventsFormatSchema().load(data)
         if data["type"] == "Platform":
-            from ._schemas.subscription import DeliveryPlatformFormatSchema
+            from ._schemas.subscription import PlatformFormatSchema
 
-            return DeliveryPlatformFormatSchema().load(data)
+            return PlatformFormatSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.subscription import DeliveryFormatSchema
@@ -92,7 +92,7 @@ class DeliveryFormat(_BaseType):
         return DeliveryFormatSchema().dump(self)
 
 
-class DeliveryCloudEventsFormat(DeliveryFormat):
+class CloudEventsFormat(DeliveryFormat):
     cloud_events_version: str
 
     def __init__(self, *, cloud_events_version: str):
@@ -100,36 +100,62 @@ class DeliveryCloudEventsFormat(DeliveryFormat):
         super().__init__(type="CloudEvents")
 
     @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryCloudEventsFormat":
-        from ._schemas.subscription import DeliveryCloudEventsFormatSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CloudEventsFormat":
+        from ._schemas.subscription import CloudEventsFormatSchema
 
-        return DeliveryCloudEventsFormatSchema().load(data)
+        return CloudEventsFormatSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import DeliveryCloudEventsFormatSchema
+        from ._schemas.subscription import CloudEventsFormatSchema
 
-        return DeliveryCloudEventsFormatSchema().dump(self)
+        return CloudEventsFormatSchema().dump(self)
 
 
-class DeliveryPlatformFormat(DeliveryFormat):
-    def __init__(self):
+class DeliveryPayload(_BaseType):
+    project_key: str
+    notification_type: str
+    resource: "Reference"
+    resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
-        super().__init__(type="Platform")
+    def __init__(
+        self,
+        *,
+        project_key: str,
+        notification_type: str,
+        resource: "Reference",
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+        self.project_key = project_key
+        self.notification_type = notification_type
+        self.resource = resource
+        self.resource_user_provided_identifiers = resource_user_provided_identifiers
+        super().__init__()
 
     @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "DeliveryPlatformFormat":
-        from ._schemas.subscription import DeliveryPlatformFormatSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeliveryPayload":
+        if data["notificationType"] == "Message":
+            from ._schemas.subscription import MessageDeliveryPayloadSchema
 
-        return DeliveryPlatformFormatSchema().load(data)
+            return MessageDeliveryPayloadSchema().load(data)
+        if data["notificationType"] == "ResourceCreated":
+            from ._schemas.subscription import ResourceCreatedDeliveryPayloadSchema
+
+            return ResourceCreatedDeliveryPayloadSchema().load(data)
+        if data["notificationType"] == "ResourceDeleted":
+            from ._schemas.subscription import ResourceDeletedDeliveryPayloadSchema
+
+            return ResourceDeletedDeliveryPayloadSchema().load(data)
+        if data["notificationType"] == "ResourceUpdated":
+            from ._schemas.subscription import ResourceUpdatedDeliveryPayloadSchema
+
+            return ResourceUpdatedDeliveryPayloadSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import DeliveryPlatformFormatSchema
+        from ._schemas.subscription import DeliveryPayloadSchema
 
-        return DeliveryPlatformFormatSchema().dump(self)
+        return DeliveryPayloadSchema().dump(self)
 
 
 class Destination(_BaseType):
@@ -289,6 +315,59 @@ class IronMqDestination(Destination):
         return IronMqDestinationSchema().dump(self)
 
 
+class MessageDeliveryPayload(DeliveryPayload):
+    id: str
+    version: int
+    created_at: datetime.datetime
+    last_modified_at: datetime.datetime
+    sequence_number: int
+    resource_version: int
+    payload_not_included: "PayloadNotIncluded"
+
+    def __init__(
+        self,
+        *,
+        project_key: str,
+        resource: "Reference",
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        sequence_number: int,
+        resource_version: int,
+        payload_not_included: "PayloadNotIncluded"
+    ):
+        self.id = id
+        self.version = version
+        self.created_at = created_at
+        self.last_modified_at = last_modified_at
+        self.sequence_number = sequence_number
+        self.resource_version = resource_version
+        self.payload_not_included = payload_not_included
+        super().__init__(
+            project_key=project_key,
+            resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            notification_type="Message",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MessageDeliveryPayload":
+        from ._schemas.subscription import MessageDeliveryPayloadSchema
+
+        return MessageDeliveryPayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import MessageDeliveryPayloadSchema
+
+        return MessageDeliveryPayloadSchema().dump(self)
+
+
 class MessageSubscription(_BaseType):
     resource_type_id: str
     types: typing.Optional[typing.List["str"]]
@@ -334,6 +413,143 @@ class PayloadNotIncluded(_BaseType):
         from ._schemas.subscription import PayloadNotIncludedSchema
 
         return PayloadNotIncludedSchema().dump(self)
+
+
+class PlatformFormat(DeliveryFormat):
+    def __init__(self):
+
+        super().__init__(type="Platform")
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "PlatformFormat":
+        from ._schemas.subscription import PlatformFormatSchema
+
+        return PlatformFormatSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import PlatformFormatSchema
+
+        return PlatformFormatSchema().dump(self)
+
+
+class ResourceCreatedDeliveryPayload(DeliveryPayload):
+    version: int
+    modified_at: datetime.datetime
+
+    def __init__(
+        self,
+        *,
+        project_key: str,
+        resource: "Reference",
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        version: int,
+        modified_at: datetime.datetime
+    ):
+        self.version = version
+        self.modified_at = modified_at
+        super().__init__(
+            project_key=project_key,
+            resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            notification_type="ResourceCreated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ResourceCreatedDeliveryPayload":
+        from ._schemas.subscription import ResourceCreatedDeliveryPayloadSchema
+
+        return ResourceCreatedDeliveryPayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import ResourceCreatedDeliveryPayloadSchema
+
+        return ResourceCreatedDeliveryPayloadSchema().dump(self)
+
+
+class ResourceDeletedDeliveryPayload(DeliveryPayload):
+    version: int
+    modified_at: datetime.datetime
+    data_erasure: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        project_key: str,
+        resource: "Reference",
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        version: int,
+        modified_at: datetime.datetime,
+        data_erasure: typing.Optional[bool] = None
+    ):
+        self.version = version
+        self.modified_at = modified_at
+        self.data_erasure = data_erasure
+        super().__init__(
+            project_key=project_key,
+            resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            notification_type="ResourceDeleted",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ResourceDeletedDeliveryPayload":
+        from ._schemas.subscription import ResourceDeletedDeliveryPayloadSchema
+
+        return ResourceDeletedDeliveryPayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import ResourceDeletedDeliveryPayloadSchema
+
+        return ResourceDeletedDeliveryPayloadSchema().dump(self)
+
+
+class ResourceUpdatedDeliveryPayload(DeliveryPayload):
+    version: int
+    old_version: int
+    modified_at: datetime.datetime
+
+    def __init__(
+        self,
+        *,
+        project_key: str,
+        resource: "Reference",
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        version: int,
+        old_version: int,
+        modified_at: datetime.datetime
+    ):
+        self.version = version
+        self.old_version = old_version
+        self.modified_at = modified_at
+        super().__init__(
+            project_key=project_key,
+            resource=resource,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            notification_type="ResourceUpdated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ResourceUpdatedDeliveryPayload":
+        from ._schemas.subscription import ResourceUpdatedDeliveryPayloadSchema
+
+        return ResourceUpdatedDeliveryPayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import ResourceUpdatedDeliveryPayloadSchema
+
+        return ResourceUpdatedDeliveryPayloadSchema().dump(self)
 
 
 class SnsDestination(Destination):
@@ -439,224 +655,6 @@ class Subscription(BaseResource):
         from ._schemas.subscription import SubscriptionSchema
 
         return SubscriptionSchema().dump(self)
-
-
-class SubscriptionDelivery(_BaseType):
-    project_key: str
-    notification_type: str
-    resource: "Reference"
-    resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
-
-    def __init__(
-        self,
-        *,
-        project_key: str,
-        notification_type: str,
-        resource: "Reference",
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None
-    ):
-        self.project_key = project_key
-        self.notification_type = notification_type
-        self.resource = resource
-        self.resource_user_provided_identifiers = resource_user_provided_identifiers
-        super().__init__()
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SubscriptionDelivery":
-        if data["notificationType"] == "Message":
-            from ._schemas.subscription import MessageDeliverySchema
-
-            return MessageDeliverySchema().load(data)
-        if data["notificationType"] == "ResourceCreated":
-            from ._schemas.subscription import ResourceCreatedDeliverySchema
-
-            return ResourceCreatedDeliverySchema().load(data)
-        if data["notificationType"] == "ResourceDeleted":
-            from ._schemas.subscription import ResourceDeletedDeliverySchema
-
-            return ResourceDeletedDeliverySchema().load(data)
-        if data["notificationType"] == "ResourceUpdated":
-            from ._schemas.subscription import ResourceUpdatedDeliverySchema
-
-            return ResourceUpdatedDeliverySchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import SubscriptionDeliverySchema
-
-        return SubscriptionDeliverySchema().dump(self)
-
-
-class MessageDelivery(SubscriptionDelivery):
-    id: str
-    version: int
-    created_at: datetime.datetime
-    last_modified_at: datetime.datetime
-    sequence_number: int
-    resource_version: int
-    payload_not_included: "PayloadNotIncluded"
-
-    def __init__(
-        self,
-        *,
-        project_key: str,
-        resource: "Reference",
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        id: str,
-        version: int,
-        created_at: datetime.datetime,
-        last_modified_at: datetime.datetime,
-        sequence_number: int,
-        resource_version: int,
-        payload_not_included: "PayloadNotIncluded"
-    ):
-        self.id = id
-        self.version = version
-        self.created_at = created_at
-        self.last_modified_at = last_modified_at
-        self.sequence_number = sequence_number
-        self.resource_version = resource_version
-        self.payload_not_included = payload_not_included
-        super().__init__(
-            project_key=project_key,
-            resource=resource,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            notification_type="Message",
-        )
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MessageDelivery":
-        from ._schemas.subscription import MessageDeliverySchema
-
-        return MessageDeliverySchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import MessageDeliverySchema
-
-        return MessageDeliverySchema().dump(self)
-
-
-class ResourceCreatedDelivery(SubscriptionDelivery):
-    version: int
-    modified_at: datetime.datetime
-
-    def __init__(
-        self,
-        *,
-        project_key: str,
-        resource: "Reference",
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        version: int,
-        modified_at: datetime.datetime
-    ):
-        self.version = version
-        self.modified_at = modified_at
-        super().__init__(
-            project_key=project_key,
-            resource=resource,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            notification_type="ResourceCreated",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ResourceCreatedDelivery":
-        from ._schemas.subscription import ResourceCreatedDeliverySchema
-
-        return ResourceCreatedDeliverySchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import ResourceCreatedDeliverySchema
-
-        return ResourceCreatedDeliverySchema().dump(self)
-
-
-class ResourceDeletedDelivery(SubscriptionDelivery):
-    version: int
-    modified_at: datetime.datetime
-    data_erasure: typing.Optional[bool]
-
-    def __init__(
-        self,
-        *,
-        project_key: str,
-        resource: "Reference",
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        version: int,
-        modified_at: datetime.datetime,
-        data_erasure: typing.Optional[bool] = None
-    ):
-        self.version = version
-        self.modified_at = modified_at
-        self.data_erasure = data_erasure
-        super().__init__(
-            project_key=project_key,
-            resource=resource,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            notification_type="ResourceDeleted",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ResourceDeletedDelivery":
-        from ._schemas.subscription import ResourceDeletedDeliverySchema
-
-        return ResourceDeletedDeliverySchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import ResourceDeletedDeliverySchema
-
-        return ResourceDeletedDeliverySchema().dump(self)
-
-
-class ResourceUpdatedDelivery(SubscriptionDelivery):
-    version: int
-    old_version: int
-    modified_at: datetime.datetime
-
-    def __init__(
-        self,
-        *,
-        project_key: str,
-        resource: "Reference",
-        resource_user_provided_identifiers: typing.Optional[
-            "UserProvidedIdentifiers"
-        ] = None,
-        version: int,
-        old_version: int,
-        modified_at: datetime.datetime
-    ):
-        self.version = version
-        self.old_version = old_version
-        self.modified_at = modified_at
-        super().__init__(
-            project_key=project_key,
-            resource=resource,
-            resource_user_provided_identifiers=resource_user_provided_identifiers,
-            notification_type="ResourceUpdated",
-        )
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ResourceUpdatedDelivery":
-        from ._schemas.subscription import ResourceUpdatedDeliverySchema
-
-        return ResourceUpdatedDeliverySchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.subscription import ResourceUpdatedDeliverySchema
-
-        return ResourceUpdatedDeliverySchema().dump(self)
 
 
 class SubscriptionDraft(_BaseType):

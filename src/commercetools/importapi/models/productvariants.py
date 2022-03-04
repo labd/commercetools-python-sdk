@@ -484,7 +484,6 @@ class MoneyAttribute(Attribute):
 class MoneySetAttribute(Attribute):
     """This type represents an attribute whose value is a set of money objects."""
 
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     value: typing.List["TypedMoney"]
 
     def __init__(

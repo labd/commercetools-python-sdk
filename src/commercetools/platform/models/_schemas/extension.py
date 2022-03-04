@@ -44,10 +44,8 @@ class ExtensionSchema(BaseResourceSchema):
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "AWSLambda": helpers.absmod(
-                __name__, ".ExtensionAWSLambdaDestinationSchema"
-            ),
-            "HTTP": helpers.absmod(__name__, ".ExtensionHttpDestinationSchema"),
+            "AWSLambda": helpers.absmod(__name__, ".AWSLambdaDestinationSchema"),
+            "HTTP": helpers.absmod(__name__, ".HttpDestinationSchema"),
         },
         missing=None,
     )
@@ -86,7 +84,7 @@ class ExtensionDestinationSchema(helpers.BaseSchema):
         return models.ExtensionDestination(**data)
 
 
-class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
+class AWSLambdaDestinationSchema(ExtensionDestinationSchema):
     arn = marshmallow.fields.String(allow_none=True, missing=None)
     access_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="accessKey"
@@ -101,7 +99,7 @@ class ExtensionAWSLambdaDestinationSchema(ExtensionDestinationSchema):
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
         del data["type"]
-        return models.ExtensionAWSLambdaDestination(**data)
+        return models.AWSLambdaDestination(**data)
 
 
 class ExtensionDraftSchema(helpers.BaseSchema):
@@ -112,10 +110,8 @@ class ExtensionDraftSchema(helpers.BaseSchema):
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "AWSLambda": helpers.absmod(
-                __name__, ".ExtensionAWSLambdaDestinationSchema"
-            ),
-            "HTTP": helpers.absmod(__name__, ".ExtensionHttpDestinationSchema"),
+            "AWSLambda": helpers.absmod(__name__, ".AWSLambdaDestinationSchema"),
+            "HTTP": helpers.absmod(__name__, ".HttpDestinationSchema"),
         },
         missing=None,
     )
@@ -140,74 +136,6 @@ class ExtensionDraftSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.ExtensionDraft(**data)
-
-
-class ExtensionHttpDestinationSchema(ExtensionDestinationSchema):
-    url = marshmallow.fields.String(allow_none=True, missing=None)
-    authentication = helpers.Discriminator(
-        allow_none=True,
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "AuthorizationHeader": helpers.absmod(
-                __name__, ".ExtensionAuthorizationHeaderAuthenticationSchema"
-            ),
-            "AzureFunctions": helpers.absmod(
-                __name__, ".ExtensionAzureFunctionsAuthenticationSchema"
-            ),
-        },
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.ExtensionHttpDestination(**data)
-
-
-class ExtensionHttpDestinationAuthenticationSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.ExtensionHttpDestinationAuthentication(**data)
-
-
-class ExtensionAuthorizationHeaderAuthenticationSchema(
-    ExtensionHttpDestinationAuthenticationSchema
-):
-    header_value = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="headerValue"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.ExtensionAuthorizationHeaderAuthentication(**data)
-
-
-class ExtensionAzureFunctionsAuthenticationSchema(
-    ExtensionHttpDestinationAuthenticationSchema
-):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.ExtensionAzureFunctionsAuthentication(**data)
 
 
 class ExtensionInputSchema(helpers.BaseSchema):
@@ -244,6 +172,9 @@ class ExtensionInputSchema(helpers.BaseSchema):
             "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -367,15 +298,77 @@ class ExtensionUpdateActionSchema(helpers.BaseSchema):
         return models.ExtensionUpdateAction(**data)
 
 
+class HttpDestinationSchema(ExtensionDestinationSchema):
+    url = marshmallow.fields.String(allow_none=True, missing=None)
+    authentication = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "AuthorizationHeader": helpers.absmod(
+                __name__, ".AuthorizationHeaderAuthenticationSchema"
+            ),
+            "AzureFunctions": helpers.absmod(
+                __name__, ".AzureFunctionsAuthenticationSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.HttpDestination(**data)
+
+
+class HttpDestinationAuthenticationSchema(helpers.BaseSchema):
+    type = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.HttpDestinationAuthentication(**data)
+
+
+class AuthorizationHeaderAuthenticationSchema(HttpDestinationAuthenticationSchema):
+    header_value = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="headerValue"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.AuthorizationHeaderAuthentication(**data)
+
+
+class AzureFunctionsAuthenticationSchema(HttpDestinationAuthenticationSchema):
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.AzureFunctionsAuthentication(**data)
+
+
 class ExtensionChangeDestinationActionSchema(ExtensionUpdateActionSchema):
     destination = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
-            "AWSLambda": helpers.absmod(
-                __name__, ".ExtensionAWSLambdaDestinationSchema"
-            ),
-            "HTTP": helpers.absmod(__name__, ".ExtensionHttpDestinationSchema"),
+            "AWSLambda": helpers.absmod(__name__, ".AWSLambdaDestinationSchema"),
+            "HTTP": helpers.absmod(__name__, ".HttpDestinationSchema"),
         },
         missing=None,
     )

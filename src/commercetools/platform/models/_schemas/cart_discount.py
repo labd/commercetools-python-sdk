@@ -21,6 +21,7 @@ from .common import (
     ReferenceSchema,
     ResourceIdentifierSchema,
 )
+from .type import FieldContainerField
 
 # Fields
 
@@ -148,6 +149,9 @@ class CartDiscountSchema(BaseResourceSchema):
                 "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
                 "product-discount": helpers.absmod(
                     __name__, ".product_discount.ProductDiscountReferenceSchema"
+                ),
+                "product-selection": helpers.absmod(
+                    __name__, ".product_selection.ProductSelectionReferenceSchema"
                 ),
                 "product-type": helpers.absmod(
                     __name__, ".product_type.ProductTypeReferenceSchema"
@@ -286,7 +290,7 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
         data_key="stackingMode",
     )
     custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -921,8 +925,11 @@ class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    fields = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:

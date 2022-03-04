@@ -86,6 +86,9 @@ class MessageSchema(BaseResourceSchema):
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
             ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
@@ -165,38 +168,6 @@ class CategorySlugChangedMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.CategorySlugChangedMessage(**data)
-
-
-class CustomLineItemStateTransitionMessageSchema(MessageSchema):
-    custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customLineItemId"
-    )
-    transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="transitionDate"
-    )
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
-    from_state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="fromState",
-    )
-    to_state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="toState",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.CustomLineItemStateTransitionMessage(**data)
 
 
 class CustomerAddressAddedMessageSchema(MessageSchema):
@@ -412,98 +383,6 @@ class CustomerTitleSetMessageSchema(MessageSchema):
         return models.CustomerTitleSetMessage(**data)
 
 
-class DeliveryAddedMessageSchema(MessageSchema):
-    delivery = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryAddedMessage(**data)
-
-
-class DeliveryAddressSetMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    old_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="oldAddress",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryAddressSetMessage(**data)
-
-
-class DeliveryItemsUpdatedMessageSchema(MessageSchema):
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
-    old_items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="oldItems",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryItemsUpdatedMessage(**data)
-
-
-class DeliveryRemovedMessageSchema(MessageSchema):
-    delivery = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryRemovedMessage(**data)
-
-
 class InventoryEntryCreatedMessageSchema(MessageSchema):
     inventory_entry = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".inventory.InventoryEntrySchema"),
@@ -573,71 +452,6 @@ class InventoryEntryQuantitySetMessageSchema(MessageSchema):
         return models.InventoryEntryQuantitySetMessage(**data)
 
 
-class LineItemStateTransitionMessageSchema(MessageSchema):
-    line_item_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="lineItemId"
-    )
-    transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="transitionDate"
-    )
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
-    from_state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="fromState",
-    )
-    to_state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="toState",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.LineItemStateTransitionMessage(**data)
-
-
-class MessageConfigurationSchema(helpers.BaseSchema):
-    enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
-    delete_days_after_creation = marshmallow.fields.Integer(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="deleteDaysAfterCreation",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-
-        return models.MessageConfiguration(**data)
-
-
-class MessageConfigurationDraftSchema(helpers.BaseSchema):
-    enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
-    delete_days_after_creation = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-
-        return models.MessageConfigurationDraft(**data)
-
-
 class MessagePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
@@ -655,9 +469,6 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 ),
                 "CategorySlugChanged": helpers.absmod(
                     __name__, ".CategorySlugChangedMessageSchema"
-                ),
-                "CustomLineItemStateTransition": helpers.absmod(
-                    __name__, ".CustomLineItemStateTransitionMessageSchema"
                 ),
                 "CustomerAddressAdded": helpers.absmod(
                     __name__, ".CustomerAddressAddedMessageSchema"
@@ -701,18 +512,6 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 "CustomerTitleSet": helpers.absmod(
                     __name__, ".CustomerTitleSetMessageSchema"
                 ),
-                "DeliveryAdded": helpers.absmod(
-                    __name__, ".DeliveryAddedMessageSchema"
-                ),
-                "DeliveryAddressSet": helpers.absmod(
-                    __name__, ".DeliveryAddressSetMessageSchema"
-                ),
-                "DeliveryItemsUpdated": helpers.absmod(
-                    __name__, ".DeliveryItemsUpdatedMessageSchema"
-                ),
-                "DeliveryRemoved": helpers.absmod(
-                    __name__, ".DeliveryRemovedMessageSchema"
-                ),
                 "InventoryEntryCreated": helpers.absmod(
                     __name__, ".InventoryEntryCreatedMessageSchema"
                 ),
@@ -722,100 +521,8 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 "InventoryEntryQuantitySet": helpers.absmod(
                     __name__, ".InventoryEntryQuantitySetMessageSchema"
                 ),
-                "LineItemStateTransition": helpers.absmod(
-                    __name__, ".LineItemStateTransitionMessageSchema"
-                ),
-                "OrderBillingAddressSet": helpers.absmod(
-                    __name__, ".OrderBillingAddressSetMessageSchema"
-                ),
-                "OrderCreated": helpers.absmod(__name__, ".OrderCreatedMessageSchema"),
-                "OrderCustomLineItemDiscountSet": helpers.absmod(
-                    __name__, ".OrderCustomLineItemDiscountSetMessageSchema"
-                ),
-                "OrderCustomerEmailSet": helpers.absmod(
-                    __name__, ".OrderCustomerEmailSetMessageSchema"
-                ),
-                "OrderCustomerGroupSet": helpers.absmod(
-                    __name__, ".OrderCustomerGroupSetMessageSchema"
-                ),
-                "OrderCustomerSet": helpers.absmod(
-                    __name__, ".OrderCustomerSetMessageSchema"
-                ),
-                "OrderDeleted": helpers.absmod(__name__, ".OrderDeletedMessageSchema"),
-                "OrderDiscountCodeAdded": helpers.absmod(
-                    __name__, ".OrderDiscountCodeAddedMessageSchema"
-                ),
-                "OrderDiscountCodeRemoved": helpers.absmod(
-                    __name__, ".OrderDiscountCodeRemovedMessageSchema"
-                ),
-                "OrderDiscountCodeStateSet": helpers.absmod(
-                    __name__, ".OrderDiscountCodeStateSetMessageSchema"
-                ),
-                "OrderEditApplied": helpers.absmod(
-                    __name__, ".OrderEditAppliedMessageSchema"
-                ),
-                "OrderImported": helpers.absmod(
-                    __name__, ".OrderImportedMessageSchema"
-                ),
-                "OrderLineItemAdded": helpers.absmod(
-                    __name__, ".OrderLineItemAddedMessageSchema"
-                ),
-                "OrderLineItemDiscountSet": helpers.absmod(
-                    __name__, ".OrderLineItemDiscountSetMessageSchema"
-                ),
-                "OrderLineItemDistributionChannelSet": helpers.absmod(
-                    __name__, ".OrderLineItemDistributionChannelSetMessageSchema"
-                ),
-                "OrderLineItemRemoved": helpers.absmod(
-                    __name__, ".OrderLineItemRemovedMessageSchema"
-                ),
-                "OrderPaymentStateChanged": helpers.absmod(
-                    __name__, ".OrderPaymentStateChangedMessageSchema"
-                ),
-                "ReturnInfoAdded": helpers.absmod(
-                    __name__, ".OrderReturnInfoAddedMessageSchema"
-                ),
-                "ReturnInfoSet": helpers.absmod(
-                    __name__, ".OrderReturnInfoSetMessageSchema"
-                ),
-                "OrderReturnShipmentStateChanged": helpers.absmod(
-                    __name__, ".OrderReturnShipmentStateChangedMessageSchema"
-                ),
-                "OrderShipmentStateChanged": helpers.absmod(
-                    __name__, ".OrderShipmentStateChangedMessageSchema"
-                ),
-                "OrderShippingAddressSet": helpers.absmod(
-                    __name__, ".OrderShippingAddressSetMessageSchema"
-                ),
-                "OrderShippingInfoSet": helpers.absmod(
-                    __name__, ".OrderShippingInfoSetMessageSchema"
-                ),
-                "OrderShippingRateInputSet": helpers.absmod(
-                    __name__, ".OrderShippingRateInputSetMessageSchema"
-                ),
-                "OrderStateChanged": helpers.absmod(
-                    __name__, ".OrderStateChangedMessageSchema"
-                ),
-                "OrderStateTransition": helpers.absmod(
-                    __name__, ".OrderStateTransitionMessageSchema"
-                ),
-                "OrderStoreSet": helpers.absmod(
-                    __name__, ".OrderStoreSetMessageSchema"
-                ),
-                "ParcelAddedToDelivery": helpers.absmod(
-                    __name__, ".ParcelAddedToDeliveryMessageSchema"
-                ),
-                "ParcelItemsUpdated": helpers.absmod(
-                    __name__, ".ParcelItemsUpdatedMessageSchema"
-                ),
-                "ParcelMeasurementsUpdated": helpers.absmod(
-                    __name__, ".ParcelMeasurementsUpdatedMessageSchema"
-                ),
-                "ParcelRemovedFromDelivery": helpers.absmod(
-                    __name__, ".ParcelRemovedFromDeliveryMessageSchema"
-                ),
-                "ParcelTrackingDataUpdated": helpers.absmod(
-                    __name__, ".ParcelTrackingDataUpdatedMessageSchema"
+                "OrderPaymentAdded": helpers.absmod(
+                    __name__, ".OrderPaymentAddedMessageSchema"
                 ),
                 "PaymentCreated": helpers.absmod(
                     __name__, ".PaymentCreatedMessageSchema"
@@ -862,6 +569,18 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 "ProductRevertedStagedChanges": helpers.absmod(
                     __name__, ".ProductRevertedStagedChangesMessageSchema"
                 ),
+                "ProductSelectionCreated": helpers.absmod(
+                    __name__, ".ProductSelectionCreatedMessageSchema"
+                ),
+                "ProductSelectionDeleted": helpers.absmod(
+                    __name__, ".ProductSelectionDeletedMessageSchema"
+                ),
+                "ProductSelectionProductAdded": helpers.absmod(
+                    __name__, ".ProductSelectionProductAddedMessageSchema"
+                ),
+                "ProductSelectionProductRemoved": helpers.absmod(
+                    __name__, ".ProductSelectionProductRemovedMessageSchema"
+                ),
                 "ProductSlugChanged": helpers.absmod(
                     __name__, ".ProductSlugChangedMessageSchema"
                 ),
@@ -888,6 +607,9 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 ),
                 "StoreCreated": helpers.absmod(__name__, ".StoreCreatedMessageSchema"),
                 "StoreDeleted": helpers.absmod(__name__, ".StoreDeletedMessageSchema"),
+                "StoreProductSelectionsChanged": helpers.absmod(
+                    __name__, ".StoreProductSelectionsChangedMessageSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -903,7 +625,206 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
         return models.MessagePagedQueryResponse(**data)
 
 
-class OrderBillingAddressSetMessageSchema(MessageSchema):
+class MessagesConfigurationSchema(helpers.BaseSchema):
+    enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    delete_days_after_creation = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="deleteDaysAfterCreation",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MessagesConfiguration(**data)
+
+
+class MessagesConfigurationDraftSchema(helpers.BaseSchema):
+    enabled = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    delete_days_after_creation = marshmallow.fields.Integer(
+        allow_none=True, missing=None, data_key="deleteDaysAfterCreation"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MessagesConfigurationDraft(**data)
+
+
+class OrderMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.OrderMessage(**data)
+
+
+class CustomLineItemStateTransitionMessageSchema(OrderMessageSchema):
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customLineItemId"
+    )
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    from_state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="fromState",
+    )
+    to_state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="toState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.CustomLineItemStateTransitionMessage(**data)
+
+
+class DeliveryAddedMessageSchema(OrderMessageSchema):
+    delivery = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryAddedMessage(**data)
+
+
+class DeliveryAddressSetMessageSchema(OrderMessageSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    old_address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldAddress",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryAddressSetMessage(**data)
+
+
+class DeliveryItemsUpdatedMessageSchema(OrderMessageSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    items = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    old_items = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="oldItems",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryItemsUpdatedMessage(**data)
+
+
+class DeliveryRemovedMessageSchema(OrderMessageSchema):
+    delivery = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryRemovedMessage(**data)
+
+
+class LineItemStateTransitionMessageSchema(OrderMessageSchema):
+    line_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="lineItemId"
+    )
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    from_state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="fromState",
+    )
+    to_state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="toState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.LineItemStateTransitionMessage(**data)
+
+
+class OrderBillingAddressSetMessageSchema(OrderMessageSchema):
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
@@ -929,7 +850,7 @@ class OrderBillingAddressSetMessageSchema(MessageSchema):
         return models.OrderBillingAddressSetMessage(**data)
 
 
-class OrderCreatedMessageSchema(MessageSchema):
+class OrderCreatedMessageSchema(OrderMessageSchema):
     order = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderSchema"),
         allow_none=True,
@@ -946,7 +867,7 @@ class OrderCreatedMessageSchema(MessageSchema):
         return models.OrderCreatedMessage(**data)
 
 
-class OrderCustomLineItemDiscountSetMessageSchema(MessageSchema):
+class OrderCustomLineItemDiscountSetMessageSchema(OrderMessageSchema):
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customLineItemId"
     )
@@ -978,7 +899,7 @@ class OrderCustomLineItemDiscountSetMessageSchema(MessageSchema):
         return models.OrderCustomLineItemDiscountSetMessage(**data)
 
 
-class OrderCustomerEmailSetMessageSchema(MessageSchema):
+class OrderCustomerEmailSetMessageSchema(OrderMessageSchema):
     email = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -998,7 +919,7 @@ class OrderCustomerEmailSetMessageSchema(MessageSchema):
         return models.OrderCustomerEmailSetMessage(**data)
 
 
-class OrderCustomerGroupSetMessageSchema(MessageSchema):
+class OrderCustomerGroupSetMessageSchema(OrderMessageSchema):
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
@@ -1025,7 +946,7 @@ class OrderCustomerGroupSetMessageSchema(MessageSchema):
         return models.OrderCustomerGroupSetMessage(**data)
 
 
-class OrderCustomerSetMessageSchema(MessageSchema):
+class OrderCustomerSetMessageSchema(OrderMessageSchema):
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
@@ -1067,7 +988,7 @@ class OrderCustomerSetMessageSchema(MessageSchema):
         return models.OrderCustomerSetMessage(**data)
 
 
-class OrderDeletedMessageSchema(MessageSchema):
+class OrderDeletedMessageSchema(OrderMessageSchema):
     order = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderSchema"),
         allow_none=True,
@@ -1084,7 +1005,7 @@ class OrderDeletedMessageSchema(MessageSchema):
         return models.OrderDeletedMessage(**data)
 
 
-class OrderDiscountCodeAddedMessageSchema(MessageSchema):
+class OrderDiscountCodeAddedMessageSchema(OrderMessageSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -1102,7 +1023,7 @@ class OrderDiscountCodeAddedMessageSchema(MessageSchema):
         return models.OrderDiscountCodeAddedMessage(**data)
 
 
-class OrderDiscountCodeRemovedMessageSchema(MessageSchema):
+class OrderDiscountCodeRemovedMessageSchema(OrderMessageSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -1120,7 +1041,7 @@ class OrderDiscountCodeRemovedMessageSchema(MessageSchema):
         return models.OrderDiscountCodeRemovedMessage(**data)
 
 
-class OrderDiscountCodeStateSetMessageSchema(MessageSchema):
+class OrderDiscountCodeStateSetMessageSchema(OrderMessageSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -1149,7 +1070,7 @@ class OrderDiscountCodeStateSetMessageSchema(MessageSchema):
         return models.OrderDiscountCodeStateSetMessage(**data)
 
 
-class OrderEditAppliedMessageSchema(MessageSchema):
+class OrderEditAppliedMessageSchema(OrderMessageSchema):
     edit = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order_edit.OrderEditReferenceSchema"),
         allow_none=True,
@@ -1172,7 +1093,7 @@ class OrderEditAppliedMessageSchema(MessageSchema):
         return models.OrderEditAppliedMessage(**data)
 
 
-class OrderImportedMessageSchema(MessageSchema):
+class OrderImportedMessageSchema(OrderMessageSchema):
     order = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderSchema"),
         allow_none=True,
@@ -1189,7 +1110,7 @@ class OrderImportedMessageSchema(MessageSchema):
         return models.OrderImportedMessage(**data)
 
 
-class OrderLineItemAddedMessageSchema(MessageSchema):
+class OrderLineItemAddedMessageSchema(OrderMessageSchema):
     line_item = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.LineItemSchema"),
         allow_none=True,
@@ -1210,7 +1131,7 @@ class OrderLineItemAddedMessageSchema(MessageSchema):
         return models.OrderLineItemAddedMessage(**data)
 
 
-class OrderLineItemDiscountSetMessageSchema(MessageSchema):
+class OrderLineItemDiscountSetMessageSchema(OrderMessageSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -1249,7 +1170,7 @@ class OrderLineItemDiscountSetMessageSchema(MessageSchema):
         return models.OrderLineItemDiscountSetMessage(**data)
 
 
-class OrderLineItemDistributionChannelSetMessageSchema(MessageSchema):
+class OrderLineItemDistributionChannelSetMessageSchema(OrderMessageSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -1271,7 +1192,7 @@ class OrderLineItemDistributionChannelSetMessageSchema(MessageSchema):
         return models.OrderLineItemDistributionChannelSetMessage(**data)
 
 
-class OrderLineItemRemovedMessageSchema(MessageSchema):
+class OrderLineItemRemovedMessageSchema(OrderMessageSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -1337,7 +1258,24 @@ class OrderLineItemRemovedMessageSchema(MessageSchema):
         return models.OrderLineItemRemovedMessage(**data)
 
 
-class OrderPaymentStateChangedMessageSchema(MessageSchema):
+class OrderPaymentAddedMessageSchema(MessageSchema):
+    payment = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.OrderPaymentAddedMessage(**data)
+
+
+class OrderPaymentStateChangedMessageSchema(OrderMessageSchema):
     payment_state = marshmallow_enum.EnumField(
         PaymentState,
         by_value=True,
@@ -1363,7 +1301,7 @@ class OrderPaymentStateChangedMessageSchema(MessageSchema):
         return models.OrderPaymentStateChangedMessage(**data)
 
 
-class OrderReturnInfoAddedMessageSchema(MessageSchema):
+class OrderReturnInfoAddedMessageSchema(OrderMessageSchema):
     return_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.ReturnInfoSchema"),
         allow_none=True,
@@ -1381,7 +1319,7 @@ class OrderReturnInfoAddedMessageSchema(MessageSchema):
         return models.OrderReturnInfoAddedMessage(**data)
 
 
-class OrderReturnInfoSetMessageSchema(MessageSchema):
+class OrderReturnInfoSetMessageSchema(OrderMessageSchema):
     return_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.ReturnInfoSchema"),
         allow_none=True,
@@ -1401,7 +1339,7 @@ class OrderReturnInfoSetMessageSchema(MessageSchema):
         return models.OrderReturnInfoSetMessage(**data)
 
 
-class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
+class OrderReturnShipmentStateChangedMessageSchema(OrderMessageSchema):
     return_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="returnItemId"
     )
@@ -1422,7 +1360,7 @@ class OrderReturnShipmentStateChangedMessageSchema(MessageSchema):
         return models.OrderReturnShipmentStateChangedMessage(**data)
 
 
-class OrderShipmentStateChangedMessageSchema(MessageSchema):
+class OrderShipmentStateChangedMessageSchema(OrderMessageSchema):
     shipment_state = marshmallow_enum.EnumField(
         ShipmentState,
         by_value=True,
@@ -1448,7 +1386,7 @@ class OrderShipmentStateChangedMessageSchema(MessageSchema):
         return models.OrderShipmentStateChangedMessage(**data)
 
 
-class OrderShippingAddressSetMessageSchema(MessageSchema):
+class OrderShippingAddressSetMessageSchema(OrderMessageSchema):
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
@@ -1474,7 +1412,7 @@ class OrderShippingAddressSetMessageSchema(MessageSchema):
         return models.OrderShippingAddressSetMessage(**data)
 
 
-class OrderShippingInfoSetMessageSchema(MessageSchema):
+class OrderShippingInfoSetMessageSchema(OrderMessageSchema):
     shipping_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
@@ -1501,7 +1439,7 @@ class OrderShippingInfoSetMessageSchema(MessageSchema):
         return models.OrderShippingInfoSetMessage(**data)
 
 
-class OrderShippingRateInputSetMessageSchema(MessageSchema):
+class OrderShippingRateInputSetMessageSchema(OrderMessageSchema):
     shipping_rate_input = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -1538,7 +1476,7 @@ class OrderShippingRateInputSetMessageSchema(MessageSchema):
         return models.OrderShippingRateInputSetMessage(**data)
 
 
-class OrderStateChangedMessageSchema(MessageSchema):
+class OrderStateChangedMessageSchema(OrderMessageSchema):
     order_state = marshmallow_enum.EnumField(
         OrderState, by_value=True, allow_none=True, missing=None, data_key="orderState"
     )
@@ -1559,7 +1497,7 @@ class OrderStateChangedMessageSchema(MessageSchema):
         return models.OrderStateChangedMessage(**data)
 
 
-class OrderStateTransitionMessageSchema(MessageSchema):
+class OrderStateTransitionMessageSchema(OrderMessageSchema):
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
@@ -1585,7 +1523,7 @@ class OrderStateTransitionMessageSchema(MessageSchema):
         return models.OrderStateTransitionMessage(**data)
 
 
-class OrderStoreSetMessageSchema(MessageSchema):
+class OrderStoreSetMessageSchema(OrderMessageSchema):
     store = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
@@ -1602,7 +1540,7 @@ class OrderStoreSetMessageSchema(MessageSchema):
         return models.OrderStoreSetMessage(**data)
 
 
-class ParcelAddedToDeliveryMessageSchema(MessageSchema):
+class ParcelAddedToDeliveryMessageSchema(OrderMessageSchema):
     delivery = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.DeliverySchema"),
         allow_none=True,
@@ -1625,7 +1563,7 @@ class ParcelAddedToDeliveryMessageSchema(MessageSchema):
         return models.ParcelAddedToDeliveryMessage(**data)
 
 
-class ParcelItemsUpdatedMessageSchema(MessageSchema):
+class ParcelItemsUpdatedMessageSchema(OrderMessageSchema):
     parcel_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="parcelId"
     )
@@ -1660,7 +1598,7 @@ class ParcelItemsUpdatedMessageSchema(MessageSchema):
         return models.ParcelItemsUpdatedMessage(**data)
 
 
-class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
+class ParcelMeasurementsUpdatedMessageSchema(OrderMessageSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
@@ -1684,7 +1622,7 @@ class ParcelMeasurementsUpdatedMessageSchema(MessageSchema):
         return models.ParcelMeasurementsUpdatedMessage(**data)
 
 
-class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
+class ParcelRemovedFromDeliveryMessageSchema(OrderMessageSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
@@ -1704,7 +1642,7 @@ class ParcelRemovedFromDeliveryMessageSchema(MessageSchema):
         return models.ParcelRemovedFromDeliveryMessage(**data)
 
 
-class ParcelTrackingDataUpdatedMessageSchema(MessageSchema):
+class ParcelTrackingDataUpdatedMessageSchema(OrderMessageSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
@@ -2062,6 +2000,76 @@ class ProductRevertedStagedChangesMessageSchema(MessageSchema):
         return models.ProductRevertedStagedChangesMessage(**data)
 
 
+class ProductSelectionCreatedMessageSchema(MessageSchema):
+    product_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "individual": helpers.absmod(
+                __name__, ".product_selection.IndividualProductSelectionTypeSchema"
+            )
+        },
+        missing=None,
+        data_key="productSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionCreatedMessage(**data)
+
+
+class ProductSelectionDeletedMessageSchema(MessageSchema):
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionDeletedMessage(**data)
+
+
+class ProductSelectionProductAddedMessageSchema(MessageSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionProductAddedMessage(**data)
+
+
+class ProductSelectionProductRemovedMessageSchema(MessageSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionProductRemovedMessage(**data)
+
+
 class ProductSlugChangedMessageSchema(MessageSchema):
     slug = LocalizedStringField(
         allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
@@ -2216,6 +2224,9 @@ class ReviewRatingSetMessageSchema(MessageSchema):
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
             ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
@@ -2300,6 +2311,9 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
             ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
@@ -2358,6 +2372,14 @@ class StoreCreatedMessageSchema(MessageSchema):
         missing=None,
         data_key="supplyChannels",
     )
+    product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="productSelections",
+    )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
@@ -2383,6 +2405,44 @@ class StoreDeletedMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.StoreDeletedMessage(**data)
+
+
+class StoreProductSelectionsChangedMessageSchema(MessageSchema):
+    added_product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addedProductSelections",
+    )
+    removed_product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="removedProductSelections",
+    )
+    updated_product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="updatedProductSelections",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StoreProductSelectionsChangedMessage(**data)
 
 
 class UserProvidedIdentifiersSchema(helpers.BaseSchema):
@@ -2482,38 +2542,6 @@ class CategorySlugChangedMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.CategorySlugChangedMessagePayload(**data)
-
-
-class CustomLineItemStateTransitionMessagePayloadSchema(MessagePayloadSchema):
-    custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="customLineItemId"
-    )
-    transition_date = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="transitionDate"
-    )
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
-    from_state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="fromState",
-    )
-    to_state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="toState",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.CustomLineItemStateTransitionMessagePayload(**data)
 
 
 class CustomerAddressAddedMessagePayloadSchema(MessagePayloadSchema):
@@ -2729,98 +2757,6 @@ class CustomerTitleSetMessagePayloadSchema(MessagePayloadSchema):
         return models.CustomerTitleSetMessagePayload(**data)
 
 
-class DeliveryAddedMessagePayloadSchema(MessagePayloadSchema):
-    delivery = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryAddedMessagePayload(**data)
-
-
-class DeliveryAddressSetMessagePayloadSchema(MessagePayloadSchema):
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
-    old_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="oldAddress",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryAddressSetMessagePayload(**data)
-
-
-class DeliveryItemsUpdatedMessagePayloadSchema(MessagePayloadSchema):
-    delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
-    )
-    items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
-    old_items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="oldItems",
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryItemsUpdatedMessagePayload(**data)
-
-
-class DeliveryRemovedMessagePayloadSchema(MessagePayloadSchema):
-    delivery = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        missing=None,
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type"]
-        return models.DeliveryRemovedMessagePayload(**data)
-
-
 class InventoryEntryCreatedMessagePayloadSchema(MessagePayloadSchema):
     inventory_entry = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".inventory.InventoryEntrySchema"),
@@ -2890,7 +2826,141 @@ class InventoryEntryQuantitySetMessagePayloadSchema(MessagePayloadSchema):
         return models.InventoryEntryQuantitySetMessagePayload(**data)
 
 
-class LineItemStateTransitionMessagePayloadSchema(MessagePayloadSchema):
+class OrderMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.OrderMessagePayload(**data)
+
+
+class CustomLineItemStateTransitionMessagePayloadSchema(OrderMessagePayloadSchema):
+    custom_line_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="customLineItemId"
+    )
+    transition_date = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="transitionDate"
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    from_state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="fromState",
+    )
+    to_state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="toState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.CustomLineItemStateTransitionMessagePayload(**data)
+
+
+class DeliveryAddedMessagePayloadSchema(OrderMessagePayloadSchema):
+    delivery = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryAddedMessagePayload(**data)
+
+
+class DeliveryAddressSetMessagePayloadSchema(OrderMessagePayloadSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    old_address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldAddress",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryAddressSetMessagePayload(**data)
+
+
+class DeliveryItemsUpdatedMessagePayloadSchema(OrderMessagePayloadSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
+    items = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    old_items = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliveryItemSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="oldItems",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryItemsUpdatedMessagePayload(**data)
+
+
+class DeliveryRemovedMessagePayloadSchema(OrderMessagePayloadSchema):
+    delivery = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order.DeliverySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DeliveryRemovedMessagePayload(**data)
+
+
+class LineItemStateTransitionMessagePayloadSchema(OrderMessagePayloadSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -2922,7 +2992,7 @@ class LineItemStateTransitionMessagePayloadSchema(MessagePayloadSchema):
         return models.LineItemStateTransitionMessagePayload(**data)
 
 
-class OrderBillingAddressSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderBillingAddressSetMessagePayloadSchema(OrderMessagePayloadSchema):
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
@@ -2948,7 +3018,7 @@ class OrderBillingAddressSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderBillingAddressSetMessagePayload(**data)
 
 
-class OrderCreatedMessagePayloadSchema(MessagePayloadSchema):
+class OrderCreatedMessagePayloadSchema(OrderMessagePayloadSchema):
     order = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderSchema"),
         allow_none=True,
@@ -2965,7 +3035,7 @@ class OrderCreatedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderCreatedMessagePayload(**data)
 
 
-class OrderCustomLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderCustomLineItemDiscountSetMessagePayloadSchema(OrderMessagePayloadSchema):
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customLineItemId"
     )
@@ -2997,7 +3067,7 @@ class OrderCustomLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderCustomLineItemDiscountSetMessagePayload(**data)
 
 
-class OrderCustomerEmailSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderCustomerEmailSetMessagePayloadSchema(OrderMessagePayloadSchema):
     email = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -3017,7 +3087,7 @@ class OrderCustomerEmailSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderCustomerEmailSetMessagePayload(**data)
 
 
-class OrderCustomerGroupSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderCustomerGroupSetMessagePayloadSchema(OrderMessagePayloadSchema):
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
@@ -3044,7 +3114,7 @@ class OrderCustomerGroupSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderCustomerGroupSetMessagePayload(**data)
 
 
-class OrderCustomerSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderCustomerSetMessagePayloadSchema(OrderMessagePayloadSchema):
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
@@ -3086,7 +3156,7 @@ class OrderCustomerSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderCustomerSetMessagePayload(**data)
 
 
-class OrderDeletedMessagePayloadSchema(MessagePayloadSchema):
+class OrderDeletedMessagePayloadSchema(OrderMessagePayloadSchema):
     order = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderSchema"),
         allow_none=True,
@@ -3103,7 +3173,7 @@ class OrderDeletedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderDeletedMessagePayload(**data)
 
 
-class OrderDiscountCodeAddedMessagePayloadSchema(MessagePayloadSchema):
+class OrderDiscountCodeAddedMessagePayloadSchema(OrderMessagePayloadSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -3121,7 +3191,7 @@ class OrderDiscountCodeAddedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderDiscountCodeAddedMessagePayload(**data)
 
 
-class OrderDiscountCodeRemovedMessagePayloadSchema(MessagePayloadSchema):
+class OrderDiscountCodeRemovedMessagePayloadSchema(OrderMessagePayloadSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -3139,7 +3209,7 @@ class OrderDiscountCodeRemovedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderDiscountCodeRemovedMessagePayload(**data)
 
 
-class OrderDiscountCodeStateSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderDiscountCodeStateSetMessagePayloadSchema(OrderMessagePayloadSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
         allow_none=True,
@@ -3168,7 +3238,7 @@ class OrderDiscountCodeStateSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderDiscountCodeStateSetMessagePayload(**data)
 
 
-class OrderEditAppliedMessagePayloadSchema(MessagePayloadSchema):
+class OrderEditAppliedMessagePayloadSchema(OrderMessagePayloadSchema):
     edit = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order_edit.OrderEditReferenceSchema"),
         allow_none=True,
@@ -3191,7 +3261,7 @@ class OrderEditAppliedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderEditAppliedMessagePayload(**data)
 
 
-class OrderImportedMessagePayloadSchema(MessagePayloadSchema):
+class OrderImportedMessagePayloadSchema(OrderMessagePayloadSchema):
     order = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.OrderSchema"),
         allow_none=True,
@@ -3208,7 +3278,7 @@ class OrderImportedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderImportedMessagePayload(**data)
 
 
-class OrderLineItemAddedMessagePayloadSchema(MessagePayloadSchema):
+class OrderLineItemAddedMessagePayloadSchema(OrderMessagePayloadSchema):
     line_item = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.LineItemSchema"),
         allow_none=True,
@@ -3229,7 +3299,7 @@ class OrderLineItemAddedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderLineItemAddedMessagePayload(**data)
 
 
-class OrderLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderLineItemDiscountSetMessagePayloadSchema(OrderMessagePayloadSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -3268,7 +3338,9 @@ class OrderLineItemDiscountSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderLineItemDiscountSetMessagePayload(**data)
 
 
-class OrderLineItemDistributionChannelSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderLineItemDistributionChannelSetMessagePayloadSchema(
+    OrderMessagePayloadSchema
+):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -3290,7 +3362,7 @@ class OrderLineItemDistributionChannelSetMessagePayloadSchema(MessagePayloadSche
         return models.OrderLineItemDistributionChannelSetMessagePayload(**data)
 
 
-class OrderLineItemRemovedMessagePayloadSchema(MessagePayloadSchema):
+class OrderLineItemRemovedMessagePayloadSchema(OrderMessagePayloadSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
@@ -3356,7 +3428,24 @@ class OrderLineItemRemovedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderLineItemRemovedMessagePayload(**data)
 
 
-class OrderPaymentStateChangedMessagePayloadSchema(MessagePayloadSchema):
+class OrderPaymentAddedMessagePayloadSchema(MessagePayloadSchema):
+    payment = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.OrderPaymentAddedMessagePayload(**data)
+
+
+class OrderPaymentStateChangedMessagePayloadSchema(OrderMessagePayloadSchema):
     payment_state = marshmallow_enum.EnumField(
         PaymentState,
         by_value=True,
@@ -3382,7 +3471,7 @@ class OrderPaymentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderPaymentStateChangedMessagePayload(**data)
 
 
-class OrderReturnInfoAddedMessagePayloadSchema(MessagePayloadSchema):
+class OrderReturnInfoAddedMessagePayloadSchema(OrderMessagePayloadSchema):
     return_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.ReturnInfoSchema"),
         allow_none=True,
@@ -3400,7 +3489,7 @@ class OrderReturnInfoAddedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderReturnInfoAddedMessagePayload(**data)
 
 
-class OrderReturnInfoSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderReturnInfoSetMessagePayloadSchema(OrderMessagePayloadSchema):
     return_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.ReturnInfoSchema"),
         allow_none=True,
@@ -3420,7 +3509,7 @@ class OrderReturnInfoSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderReturnInfoSetMessagePayload(**data)
 
 
-class OrderReturnShipmentStateChangedMessagePayloadSchema(MessagePayloadSchema):
+class OrderReturnShipmentStateChangedMessagePayloadSchema(OrderMessagePayloadSchema):
     return_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="returnItemId"
     )
@@ -3441,7 +3530,7 @@ class OrderReturnShipmentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderReturnShipmentStateChangedMessagePayload(**data)
 
 
-class OrderShipmentStateChangedMessagePayloadSchema(MessagePayloadSchema):
+class OrderShipmentStateChangedMessagePayloadSchema(OrderMessagePayloadSchema):
     shipment_state = marshmallow_enum.EnumField(
         ShipmentState,
         by_value=True,
@@ -3467,7 +3556,7 @@ class OrderShipmentStateChangedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderShipmentStateChangedMessagePayload(**data)
 
 
-class OrderShippingAddressSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderShippingAddressSetMessagePayloadSchema(OrderMessagePayloadSchema):
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
@@ -3493,7 +3582,7 @@ class OrderShippingAddressSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderShippingAddressSetMessagePayload(**data)
 
 
-class OrderShippingInfoSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderShippingInfoSetMessagePayloadSchema(OrderMessagePayloadSchema):
     shipping_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
@@ -3520,7 +3609,7 @@ class OrderShippingInfoSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderShippingInfoSetMessagePayload(**data)
 
 
-class OrderShippingRateInputSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderShippingRateInputSetMessagePayloadSchema(OrderMessagePayloadSchema):
     shipping_rate_input = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -3557,7 +3646,7 @@ class OrderShippingRateInputSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderShippingRateInputSetMessagePayload(**data)
 
 
-class OrderStateChangedMessagePayloadSchema(MessagePayloadSchema):
+class OrderStateChangedMessagePayloadSchema(OrderMessagePayloadSchema):
     order_state = marshmallow_enum.EnumField(
         OrderState, by_value=True, allow_none=True, missing=None, data_key="orderState"
     )
@@ -3578,7 +3667,7 @@ class OrderStateChangedMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderStateChangedMessagePayload(**data)
 
 
-class OrderStateTransitionMessagePayloadSchema(MessagePayloadSchema):
+class OrderStateTransitionMessagePayloadSchema(OrderMessagePayloadSchema):
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
@@ -3604,7 +3693,7 @@ class OrderStateTransitionMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderStateTransitionMessagePayload(**data)
 
 
-class OrderStoreSetMessagePayloadSchema(MessagePayloadSchema):
+class OrderStoreSetMessagePayloadSchema(OrderMessagePayloadSchema):
     store = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
@@ -3621,7 +3710,7 @@ class OrderStoreSetMessagePayloadSchema(MessagePayloadSchema):
         return models.OrderStoreSetMessagePayload(**data)
 
 
-class ParcelAddedToDeliveryMessagePayloadSchema(MessagePayloadSchema):
+class ParcelAddedToDeliveryMessagePayloadSchema(OrderMessagePayloadSchema):
     delivery = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".order.DeliverySchema"),
         allow_none=True,
@@ -3644,7 +3733,7 @@ class ParcelAddedToDeliveryMessagePayloadSchema(MessagePayloadSchema):
         return models.ParcelAddedToDeliveryMessagePayload(**data)
 
 
-class ParcelItemsUpdatedMessagePayloadSchema(MessagePayloadSchema):
+class ParcelItemsUpdatedMessagePayloadSchema(OrderMessagePayloadSchema):
     parcel_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="parcelId"
     )
@@ -3679,7 +3768,7 @@ class ParcelItemsUpdatedMessagePayloadSchema(MessagePayloadSchema):
         return models.ParcelItemsUpdatedMessagePayload(**data)
 
 
-class ParcelMeasurementsUpdatedMessagePayloadSchema(MessagePayloadSchema):
+class ParcelMeasurementsUpdatedMessagePayloadSchema(OrderMessagePayloadSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
@@ -3703,7 +3792,7 @@ class ParcelMeasurementsUpdatedMessagePayloadSchema(MessagePayloadSchema):
         return models.ParcelMeasurementsUpdatedMessagePayload(**data)
 
 
-class ParcelRemovedFromDeliveryMessagePayloadSchema(MessagePayloadSchema):
+class ParcelRemovedFromDeliveryMessagePayloadSchema(OrderMessagePayloadSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
@@ -3723,7 +3812,7 @@ class ParcelRemovedFromDeliveryMessagePayloadSchema(MessagePayloadSchema):
         return models.ParcelRemovedFromDeliveryMessagePayload(**data)
 
 
-class ParcelTrackingDataUpdatedMessagePayloadSchema(MessagePayloadSchema):
+class ParcelTrackingDataUpdatedMessagePayloadSchema(OrderMessagePayloadSchema):
     delivery_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="deliveryId"
     )
@@ -4047,6 +4136,76 @@ class ProductRevertedStagedChangesMessagePayloadSchema(MessagePayloadSchema):
         return models.ProductRevertedStagedChangesMessagePayload(**data)
 
 
+class ProductSelectionCreatedMessagePayloadSchema(MessagePayloadSchema):
+    product_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "individual": helpers.absmod(
+                __name__, ".product_selection.IndividualProductSelectionTypeSchema"
+            )
+        },
+        missing=None,
+        data_key="productSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionCreatedMessagePayload(**data)
+
+
+class ProductSelectionDeletedMessagePayloadSchema(MessagePayloadSchema):
+    name = LocalizedStringField(
+        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionDeletedMessagePayload(**data)
+
+
+class ProductSelectionProductAddedMessagePayloadSchema(MessagePayloadSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionProductAddedMessagePayload(**data)
+
+
+class ProductSelectionProductRemovedMessagePayloadSchema(MessagePayloadSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionProductRemovedMessagePayload(**data)
+
+
 class ProductSlugChangedMessagePayloadSchema(MessagePayloadSchema):
     slug = LocalizedStringField(
         allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
@@ -4201,6 +4360,9 @@ class ReviewRatingSetMessagePayloadSchema(MessagePayloadSchema):
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
             ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
@@ -4285,6 +4447,9 @@ class ReviewStateTransitionMessagePayloadSchema(MessagePayloadSchema):
             "product-discount": helpers.absmod(
                 __name__, ".product_discount.ProductDiscountReferenceSchema"
             ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
@@ -4360,6 +4525,14 @@ class StoreCreatedMessagePayloadSchema(MessagePayloadSchema):
         missing=None,
         data_key="supplyChannels",
     )
+    product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="productSelections",
+    )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
@@ -4385,3 +4558,41 @@ class StoreDeletedMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.StoreDeletedMessagePayload(**data)
+
+
+class StoreProductSelectionsChangedMessagePayloadSchema(MessagePayloadSchema):
+    added_product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addedProductSelections",
+    )
+    removed_product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="removedProductSelections",
+    )
+    updated_product_selections = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.ProductSelectionSettingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="updatedProductSelections",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StoreProductSelectionsChangedMessagePayload(**data)

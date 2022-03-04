@@ -1371,13 +1371,13 @@ class MyCartSetLineItemSupplyChannelActionSchema(MyCartUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    distribution_channel = helpers.LazyNestedField(
+    supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
-        data_key="distributionChannel",
+        data_key="supplyChannel",
     )
 
     class Meta:

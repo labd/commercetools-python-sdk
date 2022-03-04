@@ -71,7 +71,6 @@ class ByProjectKeyCartsRequestBuilder:
     def get(
         self,
         *,
-        customer_id: str = None,
         expand: typing.List["str"] = None,
         sort: typing.List["str"] = None,
         limit: int = None,
@@ -83,7 +82,6 @@ class ByProjectKeyCartsRequestBuilder:
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CartPagedQueryResponse"]:
         params = {
-            "customerId": customer_id,
             "expand": expand,
             "sort": sort,
             "limit": limit,

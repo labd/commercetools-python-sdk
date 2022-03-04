@@ -27,6 +27,7 @@ __all__ = [
     "CustomFieldMoneyType",
     "CustomFieldNumberType",
     "CustomFieldReferenceType",
+    "CustomFieldReferenceValue",
     "CustomFieldSetType",
     "CustomFieldStringType",
     "CustomFieldTimeType",
@@ -42,6 +43,7 @@ __all__ = [
     "TypeAddLocalizedEnumValueAction",
     "TypeChangeEnumValueLabelAction",
     "TypeChangeEnumValueOrderAction",
+    "TypeChangeFieldDefinitionLabelAction",
     "TypeChangeFieldDefinitionOrderAction",
     "TypeChangeInputHintAction",
     "TypeChangeKeyAction",
@@ -62,7 +64,11 @@ __all__ = [
 
 
 class CustomFieldEnumValue(_BaseType):
+    """Defines an allowed value of a [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType) field."""
+
+    #: Key of the value used as a programmatic identifier.
     key: str
+    #: Descriptive label of the value.
     label: str
 
     def __init__(self, *, key: str, label: str):
@@ -83,7 +89,11 @@ class CustomFieldEnumValue(_BaseType):
 
 
 class CustomFieldLocalizedEnumValue(_BaseType):
+    """Defines an allowed value of a [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) field."""
+
+    #: Key of the value used as a programmatic identifier.
     key: str
+    #: Descriptive localized label of the value.
     label: "LocalizedString"
 
     def __init__(self, *, key: str, label: "LocalizedString"):
@@ -105,9 +115,29 @@ class CustomFieldLocalizedEnumValue(_BaseType):
         return CustomFieldLocalizedEnumValueSchema().dump(self)
 
 
+class CustomFieldReferenceValue(enum.Enum):
+    """Defines which resource type a [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType) can reference."""
+
+    CART = "cart"
+    CATEGORY = "category"
+    CHANNEL = "channel"
+    CUSTOMER = "customer"
+    KEY_VALUE_DOCUMENT = "key-value-document"
+    ORDER = "order"
+    PRODUCT = "product"
+    PRODUCT_TYPE = "product-type"
+    REVIEW = "review"
+    STATE = "state"
+    SHIPPING_METHOD = "shipping-method"
+    ZONE = "zone"
+
+
 class CustomFields(_BaseType):
+    """Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type)."""
+
+    #: Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
     type: "TypeReference"
-    #: A valid JSON object, based on FieldDefinition.
+    #: Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#list-of-customizable-data-types).
     fields: "FieldContainer"
 
     def __init__(self, *, type: "TypeReference", fields: "FieldContainer"):
@@ -128,9 +158,11 @@ class CustomFields(_BaseType):
 
 
 class CustomFieldsDraft(_BaseType):
-    #: The `id` or the `key` of the type to use.
+    """The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields."""
+
+    #: `id` or `key` of the [Type](ctp:api:type:Type).
     type: "TypeResourceIdentifier"
-    #: A valid JSON object, based on the FieldDefinitions of the Type.
+    #: Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#list-of-customizable-data-types).
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -160,19 +192,24 @@ class FieldContainer(typing.Dict[str, typing.Any]):
 
 
 class FieldDefinition(_BaseType):
-    #: Describes the type of the field.
+    """Defines a [Custom Field](/../api/projects/custom-fields) and its meta-information.
+    This FieldDefinition is similar to an [AttributeDefinition](ctp:api:type:AttributeDefinition) of [Product Types](/../api/projects/productTypes).
+
+    """
+
+    #: Data type of the Custom Field to define.
     type: "FieldType"
-    #: The name of the field.
-    #: The name must be between two and 36 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
-    #: The name must be unique for a given resource type ID.
-    #: In case there is a field with the same name in another type it has to have the same FieldType also.
+    #: Name of the Custom Field to define.
+    #: Must be unique for a given [ResourceTypeId](ctp:api:type:ResourceTypeId).
+    #: In case there is a FieldDefinition with the same `name` in another [Type](ctp:api:type:Type), both FieldDefinitions must have the same `type`.
     name: str
     #: A human-readable label for the field.
     label: "LocalizedString"
-    #: Whether the field is required to have a value.
+    #: Defines whether the field is required to have a value.
     required: bool
-    #: Provides a visual representation type for this field.
-    #: It is only relevant for string-based field types like StringType and LocalizedStringType.
+    #: Must be either `SingleLine` or `MultiLine`.
+    #: Defines the visual representation of the field in user interfaces like the Merchant Center.
+    #: It is only relevant for string-based [FieldTypes](ctp:api:type:FieldType) like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType).
     input_hint: typing.Optional["TypeTextInputHint"]
 
     def __init__(
@@ -268,6 +305,8 @@ class FieldType(_BaseType):
 
 
 class CustomFieldBooleanType(FieldType):
+    """Field type for Boolean values."""
+
     def __init__(self):
 
         super().__init__(name="Boolean")
@@ -287,6 +326,8 @@ class CustomFieldBooleanType(FieldType):
 
 
 class CustomFieldDateTimeType(FieldType):
+    """Field type for [DateTime](ctp:api:type:DateTime) values."""
+
     def __init__(self):
 
         super().__init__(name="DateTime")
@@ -306,6 +347,8 @@ class CustomFieldDateTimeType(FieldType):
 
 
 class CustomFieldDateType(FieldType):
+    """Field type for [Date](ctp:api:type:Date) values."""
+
     def __init__(self):
 
         super().__init__(name="Date")
@@ -323,6 +366,9 @@ class CustomFieldDateType(FieldType):
 
 
 class CustomFieldEnumType(FieldType):
+    """Field type for enum values."""
+
+    #: Allowed values.
     values: typing.List["CustomFieldEnumValue"]
 
     def __init__(self, *, values: typing.List["CustomFieldEnumValue"]):
@@ -342,6 +388,9 @@ class CustomFieldEnumType(FieldType):
 
 
 class CustomFieldLocalizedEnumType(FieldType):
+    """Field type for localized enum values."""
+
+    #: Allowed values.
     values: typing.List["CustomFieldLocalizedEnumValue"]
 
     def __init__(self, *, values: typing.List["CustomFieldLocalizedEnumValue"]):
@@ -363,6 +412,8 @@ class CustomFieldLocalizedEnumType(FieldType):
 
 
 class CustomFieldLocalizedStringType(FieldType):
+    """Field type for [LocalizedString](ctp:api:type:LocalizedString) values."""
+
     def __init__(self):
 
         super().__init__(name="LocalizedString")
@@ -382,6 +433,8 @@ class CustomFieldLocalizedStringType(FieldType):
 
 
 class CustomFieldMoneyType(FieldType):
+    """Field type for [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney) values."""
+
     def __init__(self):
 
         super().__init__(name="Money")
@@ -399,6 +452,8 @@ class CustomFieldMoneyType(FieldType):
 
 
 class CustomFieldNumberType(FieldType):
+    """Field type for number values."""
+
     def __init__(self):
 
         super().__init__(name="Number")
@@ -416,9 +471,12 @@ class CustomFieldNumberType(FieldType):
 
 
 class CustomFieldReferenceType(FieldType):
-    reference_type_id: "ReferenceTypeId"
+    """Field type for [Reference](ctp:api:type:Reference) values."""
 
-    def __init__(self, *, reference_type_id: "ReferenceTypeId"):
+    #: Resource type the Custom Field can reference.
+    reference_type_id: "CustomFieldReferenceValue"
+
+    def __init__(self, *, reference_type_id: "CustomFieldReferenceValue"):
         self.reference_type_id = reference_type_id
         super().__init__(name="Reference")
 
@@ -437,6 +495,9 @@ class CustomFieldReferenceType(FieldType):
 
 
 class CustomFieldSetType(FieldType):
+    """Values of a SetType Custom Field are sets of values of the specified `elementType`."""
+
+    #: Field type of the elements in the set.
     element_type: "FieldType"
 
     def __init__(self, *, element_type: "FieldType"):
@@ -456,6 +517,8 @@ class CustomFieldSetType(FieldType):
 
 
 class CustomFieldStringType(FieldType):
+    """Field type for string values."""
+
     def __init__(self):
 
         super().__init__(name="String")
@@ -473,6 +536,8 @@ class CustomFieldStringType(FieldType):
 
 
 class CustomFieldTimeType(FieldType):
+    """Field type for [Time](ctp:api:type:Time) values."""
+
     def __init__(self):
 
         super().__init__(name="Time")
@@ -490,41 +555,48 @@ class CustomFieldTimeType(FieldType):
 
 
 class ResourceTypeId(enum.Enum):
+    """IDs indicating the [customizable resources and data types](/../api/projects/types#list-of-customizable-data-types)."""
+
     ADDRESS = "address"
     ASSET = "asset"
+    CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
     CHANNEL = "channel"
     CUSTOMER = "customer"
-    ORDER = "order"
-    ORDER_EDIT = "order-edit"
+    CUSTOMER_GROUP = "customer-group"
+    CUSTOM_LINE_ITEM = "custom-line-item"
+    DISCOUNT_CODE = "discount-code"
     INVENTORY_ENTRY = "inventory-entry"
     LINE_ITEM = "line-item"
-    CUSTOM_LINE_ITEM = "custom-line-item"
-    PRODUCT_PRICE = "product-price"
+    ORDER = "order"
+    ORDER_EDIT = "order-edit"
+    ORDER_DELIVERY = "order-delivery"
     PAYMENT = "payment"
     PAYMENT_INTERFACE_INTERACTION = "payment-interface-interaction"
+    PRODUCT_PRICE = "product-price"
+    PRODUCT_SELECTION = "product-selection"
     REVIEW = "review"
     SHIPPING_METHOD = "shipping-method"
     SHOPPING_LIST = "shopping-list"
     SHOPPING_LIST_TEXT_LINE_ITEM = "shopping-list-text-line-item"
-    DISCOUNT_CODE = "discount-code"
-    CART_DISCOUNT = "cart-discount"
-    CUSTOMER_GROUP = "customer-group"
     STORE = "store"
+    TRANSACTION = "transaction"
 
 
 class Type(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: Identifier for the type (max.
-    #: 256 characters).
+    #: User-defined unique identifier for the Type.
     key: str
+    #: Name of the Type.
     name: "LocalizedString"
+    #: Description of the Type.
     description: typing.Optional["LocalizedString"]
-    #: Defines for which resource(s) the type is valid.
+    #: Resources and/or data types for which the Type is defined.
     resource_type_ids: typing.List["ResourceTypeId"]
+    #: Defines Custom Fields.
     field_definitions: typing.List["FieldDefinition"]
 
     def __init__(
@@ -569,11 +641,15 @@ class Type(BaseResource):
 
 
 class TypeDraft(_BaseType):
+    #: User-defined unique identifier for the Type.
     key: str
+    #: Name of the Type.
     name: "LocalizedString"
+    #: Description of the Type.
     description: typing.Optional["LocalizedString"]
-    #: The IDs of the resources that can be customized with this type.
+    #: Resources and/or data types for which the Type is defined.
     resource_type_ids: typing.List["ResourceTypeId"]
+    #: Defines Custom Fields.
     field_definitions: typing.Optional[typing.List["FieldDefinition"]]
 
     def __init__(
@@ -605,25 +681,36 @@ class TypeDraft(_BaseType):
 
 
 class TypePagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Types](ctp:api:type:Type)."""
+
+    #: Number of results requested in the query request.
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Offset supplied by the client or server default. It is the number of elements skipped, not a page number.
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Types](ctp:api:type:Type) matching the query.
     results: typing.List["Type"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Type"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         super().__init__()
 
@@ -642,6 +729,10 @@ class TypePagedQueryResponse(_BaseType):
 
 
 class TypeReference(Reference):
+    """[Reference](/../api/types#reference) to a [Type](ctp:api:type:Type)."""
+
+    #: Contains the representation of the expanded Type.
+    #: Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Types.
     obj: typing.Optional["Type"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Type"] = None):
@@ -661,6 +752,8 @@ class TypeReference(Reference):
 
 
 class TypeResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -682,12 +775,17 @@ class TypeResourceIdentifier(ResourceIdentifier):
 
 
 class TypeTextInputHint(enum.Enum):
+    """Provides a visual representation type for this field. It is only relevant for string-based field types like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType). Following values are supported:"""
+
     SINGLE_LINE = "SingleLine"
     MULTI_LINE = "MultiLine"
 
 
 class TypeUpdate(_BaseType):
+    #: Expected version of the type on which the changes should be applied.
+    #: If the expected version does not match the actual version, a 409 Conflict will be returned.
     version: int
+    #: Update actions to be performed on the Type.
     actions: typing.List["TypeUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["TypeUpdateAction"]):
@@ -736,6 +834,10 @@ class TypeUpdateAction(_BaseType):
             from ._schemas.type import TypeChangeEnumValueOrderActionSchema
 
             return TypeChangeEnumValueOrderActionSchema().load(data)
+        if data["action"] == "changeFieldDefinitionLabel":
+            from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
+
+            return TypeChangeFieldDefinitionLabelActionSchema().load(data)
         if data["action"] == "changeFieldDefinitionOrder":
             from ._schemas.type import TypeChangeFieldDefinitionOrderActionSchema
 
@@ -780,7 +882,14 @@ class TypeUpdateAction(_BaseType):
 
 
 class TypeAddEnumValueAction(TypeUpdateAction):
+    """Adds a value to an [EnumType](ctp:api:type:CustomFieldEnumType).
+    This update action can be used to update an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [EnumType](ctp:api:type:CustomFieldEnumType).
+
+    """
+
+    #: `name` of the [Field Definition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: Value to append to the array.
     value: "CustomFieldEnumValue"
 
     def __init__(self, *, field_name: str, value: "CustomFieldEnumValue"):
@@ -803,6 +912,7 @@ class TypeAddEnumValueAction(TypeUpdateAction):
 
 
 class TypeAddFieldDefinitionAction(TypeUpdateAction):
+    #: Value to append to the array.
     field_definition: "FieldDefinition"
 
     def __init__(self, *, field_definition: "FieldDefinition"):
@@ -824,7 +934,14 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 
 
 class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
+    """Adds a value to a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType).
+    This update action can be used to update a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType).
+
+    """
+
+    #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: Value to append to the array.
     value: "CustomFieldLocalizedEnumValue"
 
     def __init__(self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"):
@@ -847,7 +964,12 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
 
 
 class TypeChangeEnumValueLabelAction(TypeUpdateAction):
+    """Changes the `label` of an [EnumValue](ctp:api:type:CustomFieldEnumValue) of an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition."""
+
+    #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: New value to set.
+    #: Must not be empty.
     value: "CustomFieldEnumValue"
 
     def __init__(self, *, field_name: str, value: "CustomFieldEnumValue"):
@@ -870,7 +992,14 @@ class TypeChangeEnumValueLabelAction(TypeUpdateAction):
 
 
 class TypeChangeEnumValueOrderAction(TypeUpdateAction):
+    """Changes the order of [EnumValues](ctp:api:type:CustomFieldEnumValue) in an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition.
+    This update action can be used to update an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [EnumType](ctp:api:type:CustomFieldEnumType).
+
+    """
+
+    #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: Must match the set of `key`s of the EnumValues in the FieldDefinition (apart from their order).
     keys: typing.List["str"]
 
     def __init__(self, *, field_name: str, keys: typing.List["str"]):
@@ -892,7 +1021,34 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
         return TypeChangeEnumValueOrderActionSchema().dump(self)
 
 
+class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
+    #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+    field_name: str
+    #: New value to set.
+    #: Must not be empty.
+    label: "LocalizedString"
+
+    def __init__(self, *, field_name: str, label: "LocalizedString"):
+        self.field_name = field_name
+        self.label = label
+        super().__init__(action="changeFieldDefinitionLabel")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "TypeChangeFieldDefinitionLabelAction":
+        from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
+
+        return TypeChangeFieldDefinitionLabelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.type import TypeChangeFieldDefinitionLabelActionSchema
+
+        return TypeChangeFieldDefinitionLabelActionSchema().dump(self)
+
+
 class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
+    #: Must match the set of `name`s of FieldDefinitions (up to order).
     field_names: typing.List["str"]
 
     def __init__(self, *, field_names: typing.List["str"]):
@@ -914,7 +1070,12 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 
 
 class TypeChangeInputHintAction(TypeUpdateAction):
+    """Changes the `inputHint` of [CustomFieldStringType](ctp:api:type:CustomFieldStringType) [FieldDefinition](ctp:api:type:FieldDefinition), a [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) [FieldDefinition](ctp:api:type:FieldDefinition), and [CustomFieldSetType](ctp:api:type:CustomFieldSetType) [FieldDefinition](ctp:api:type:FieldDefinition) of these string-based FieldTypes."""
+
+    #: `name` of the [Field Definition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: New value to set.
+    #: Must not be empty.
     input_hint: "TypeTextInputHint"
 
     def __init__(self, *, field_name: str, input_hint: "TypeTextInputHint"):
@@ -937,6 +1098,8 @@ class TypeChangeInputHintAction(TypeUpdateAction):
 
 
 class TypeChangeKeyAction(TypeUpdateAction):
+    #: New value to set.
+    #: Must not be empty.
     key: str
 
     def __init__(self, *, key: str):
@@ -956,6 +1119,7 @@ class TypeChangeKeyAction(TypeUpdateAction):
 
 
 class TypeChangeLabelAction(TypeUpdateAction):
+    #: Name of the [Field Definition](ctp:api:type:FieldDefinition) to update.
     field_name: str
     label: "LocalizedString"
 
@@ -977,7 +1141,12 @@ class TypeChangeLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
+    """Changes the `label` of a [LocalizedEnumValue](ctp:api:type:CustomFieldLocalizedEnumValue) of an [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition."""
+
+    #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: New value to set.
+    #: Must not be empty.
     value: "CustomFieldLocalizedEnumValue"
 
     def __init__(self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"):
@@ -1000,7 +1169,14 @@ class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
+    """Changes the order of [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) in a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition.
+    This update action can be used to update a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) of [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinitions.
+
+    """
+
+    #: `name` of the [Field Definition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: Must match the set of `key`s of the LocalizedEnumValues in the FieldDefinition (up to order).
     keys: typing.List["str"]
 
     def __init__(self, *, field_name: str, keys: typing.List["str"]):
@@ -1023,6 +1199,8 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
 
 
 class TypeChangeNameAction(TypeUpdateAction):
+    #: New value to set.
+    #: Must not be empty.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -1042,6 +1220,8 @@ class TypeChangeNameAction(TypeUpdateAction):
 
 
 class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
+    #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to remove.
+    #: The removal of a FieldDefinition deletes [asynchronously](/../api/general-concepts#eventual-consistency) all Custom Fields using the FieldDefinition as well.
     field_name: str
 
     def __init__(self, *, field_name: str):
@@ -1063,6 +1243,7 @@ class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
 
 
 class TypeSetDescriptionAction(TypeUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):

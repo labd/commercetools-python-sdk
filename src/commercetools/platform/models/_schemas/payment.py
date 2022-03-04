@@ -619,7 +619,7 @@ class TransactionDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -992,6 +992,9 @@ class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetTransactionCustomFieldActionSchema(PaymentUpdateActionSchema):
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="transactionId"
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
     value = marshmallow.fields.Raw(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -1007,6 +1010,9 @@ class PaymentSetTransactionCustomFieldActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetTransactionCustomTypeActionSchema(PaymentUpdateActionSchema):
+    transaction_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="transactionId"
+    )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,

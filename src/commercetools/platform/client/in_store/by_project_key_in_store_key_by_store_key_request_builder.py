@@ -22,6 +22,12 @@ from ..me.by_project_key_in_store_key_by_store_key_me_request_builder import (
 from ..orders.by_project_key_in_store_key_by_store_key_orders_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder,
 )
+from ..product_projections.by_project_key_in_store_key_by_store_key_product_projections_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder,
+)
+from ..product_selection_assignments.by_project_key_in_store_key_by_store_key_product_selection_assignments_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder,
+)
 from ..shipping_methods.by_project_key_in_store_key_by_store_key_shipping_methods_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder,
 )
@@ -108,4 +114,28 @@ class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
             project_key=self._project_key,
             store_key=self._store_key,
             client=self._client,
+        )
+
+    def product_projections(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder:
+        """A projected representation of a product shows the product with its current or staged data. The current or staged
+        representation of a product in a catalog is called a product projection.
+
+        """
+        return ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def product_selection_assignments(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder:
+        return (
+            ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder(
+                project_key=self._project_key,
+                store_key=self._store_key,
+                client=self._client,
+            )
         )

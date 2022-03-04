@@ -151,7 +151,7 @@ class ItemShippingDetailsDraft(_BaseType):
 
 
 class LineItemPrice(_BaseType):
-    #: Maps to `Price.value`. TypedMoney is what is called BaseMoney in the HTTP API.
+    #: Maps to `Price.value`.
     value: "TypedMoney"
     #: Maps to `Price.county`.
     country: typing.Optional[str]
@@ -631,7 +631,6 @@ class ShippingInfoImportDraft(_BaseType):
     """
 
     shipping_method_name: str
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     price: "TypedMoney"
     shipping_rate: "ShippingRateDraft"
     tax_rate: typing.Optional["TaxRate"]
@@ -721,9 +720,7 @@ class ExternalTaxRateDraft(_BaseType):
 
 
 class CustomLineItemTaxedPrice(_BaseType):
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     total_net: "TypedMoney"
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     total_gross: "TypedMoney"
 
     def __init__(self, *, total_net: "TypedMoney", total_gross: "TypedMoney"):
@@ -754,10 +751,8 @@ class CustomLineItemDraft(_BaseType):
     #: }
     #: ```
     name: "LocalizedString"
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     money: "TypedMoney"
     taxed_price: typing.Optional["CustomLineItemTaxedPrice"]
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     total_price: "TypedMoney"
     slug: str
     quantity: float
@@ -818,7 +813,6 @@ class CustomLineItemDraft(_BaseType):
 class TaxPortion(_BaseType):
     name: typing.Optional[str]
     rate: float
-    #: TypedMoney is what is called BaseMoney in the HTTP API.
     amount: "TypedMoney"
 
     def __init__(
@@ -1112,7 +1106,7 @@ class OrderImport(_BaseType):
     line_items: typing.Optional[typing.List["LineItemImportDraft"]]
     #: Maps to `Order.customLineItems`
     custom_line_items: typing.Optional[typing.List["CustomLineItemDraft"]]
-    #: Maps to `Order.totalPrice`. TypedMoney is what is called BaseMoney in the HTTP API.
+    #: Maps to `Order.totalPrice`.
     total_price: "TypedMoney"
     #: Maps to `Order.taxedPrice`.
     taxed_price: typing.Optional["TaxedPrice"]

@@ -55,26 +55,25 @@ __all__ = [
 
 
 class Channel(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: Any arbitrary string key that uniquely identifies this channel within the project.
+    #: User-defined unique identifier for the Channel.
     key: str
-    #: The roles of this channel.
-    #: Each channel must have at least one role.
+    #: Roles of the Channel.
     roles: typing.List["ChannelRoleEnum"]
-    #: A human-readable name of the channel.
+    #: Name of the Channel.
     name: typing.Optional["LocalizedString"]
-    #: A human-readable description of the channel.
+    #: Description of the Channel.
     description: typing.Optional["LocalizedString"]
-    #: The address where this channel is located (e.g.
-    #: if the channel is a physical store).
+    #: Address where the Channel is located (for example, if the Channel is a physical store).
     address: typing.Optional["Address"]
-    #: Statistics about the review ratings taken into account for this channel.
+    #: Statistics about the review ratings taken into account for the Channel.
     review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
+    #: Custom Fields defined for the Channel.
     custom: typing.Optional["CustomFields"]
-    #: A GeoJSON geometry object encoding the geo location of the channel.
+    #: GeoJSON geometry object encoding the geo location of the Channel.
     geo_location: typing.Optional["GeoJson"]
 
     def __init__(
@@ -125,14 +124,22 @@ class Channel(BaseResource):
 
 
 class ChannelDraft(_BaseType):
+    #: User-defined unique identifier for the Channel.
     key: str
-    #: If not specified, then channel will get InventorySupply role by default
+    #: Roles of the Channel.
+    #: Each channel must have at least one role.
+    #: If not specified, then `InventorySupply` is assigned by default.
     roles: typing.Optional[typing.List["ChannelRoleEnum"]]
+    #: Name of the Channel.
     name: typing.Optional["LocalizedString"]
+    #: Description of the Channel.
     description: typing.Optional["LocalizedString"]
+    #: Address where the Channel is located.
     address: typing.Optional["BaseAddress"]
-    #: The custom fields.
+    #: Custom fields defined for the Channel.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: GeoJSON geometry object encoding the geo location of the Channel.
+    #: Currently, only the [Point](/../api/types#point) type is supported.
     geo_location: typing.Optional["GeoJson"]
 
     def __init__(
@@ -168,25 +175,37 @@ class ChannelDraft(_BaseType):
 
 
 class ChannelPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Channel](ctp:api:type:Channel)."""
+
+    #: Number of results requested in the query request.
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Offset supplied by the client or server default.
+    #: It is the number of elements skipped, not a page number.
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Channels](ctp:api:type:Channel) matching the query.
     results: typing.List["Channel"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Channel"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         super().__init__()
 
@@ -205,6 +224,10 @@ class ChannelPagedQueryResponse(_BaseType):
 
 
 class ChannelReference(Reference):
+    """[Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel)."""
+
+    #: Contains the representation of the expanded Channel.
+    #: Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Channels.
     obj: typing.Optional["Channel"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Channel"] = None):
@@ -224,6 +247,8 @@ class ChannelReference(Reference):
 
 
 class ChannelResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -245,6 +270,8 @@ class ChannelResourceIdentifier(ResourceIdentifier):
 
 
 class ChannelRoleEnum(enum.Enum):
+    """Describes the purpose and type of the Channel. A Channel can have one or more roles."""
+
     INVENTORY_SUPPLY = "InventorySupply"
     PRODUCT_DISTRIBUTION = "ProductDistribution"
     ORDER_EXPORT = "OrderExport"
@@ -253,7 +280,9 @@ class ChannelRoleEnum(enum.Enum):
 
 
 class ChannelUpdate(_BaseType):
+    #: Expected version of the Channel on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the Channel.
     actions: typing.List["ChannelUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["ChannelUpdateAction"]):
@@ -338,6 +367,7 @@ class ChannelUpdateAction(_BaseType):
 
 
 class ChannelAddRolesAction(ChannelUpdateAction):
+    #: Value to append to the array.
     roles: typing.List["ChannelRoleEnum"]
 
     def __init__(self, *, roles: typing.List["ChannelRoleEnum"]):
@@ -357,6 +387,7 @@ class ChannelAddRolesAction(ChannelUpdateAction):
 
 
 class ChannelChangeDescriptionAction(ChannelUpdateAction):
+    #: New value to set. Must not be empty.
     description: "LocalizedString"
 
     def __init__(self, *, description: "LocalizedString"):
@@ -378,6 +409,7 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 
 
 class ChannelChangeKeyAction(ChannelUpdateAction):
+    #: New value to set. Must not be empty.
     key: str
 
     def __init__(self, *, key: str):
@@ -399,6 +431,7 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
 
 
 class ChannelChangeNameAction(ChannelUpdateAction):
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -420,6 +453,7 @@ class ChannelChangeNameAction(ChannelUpdateAction):
 
 
 class ChannelRemoveRolesAction(ChannelUpdateAction):
+    #: Value to remove from the array.
     roles: typing.List["ChannelRoleEnum"]
 
     def __init__(self, *, roles: typing.List["ChannelRoleEnum"]):
@@ -441,6 +475,7 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
 
 
 class ChannelSetAddressAction(ChannelUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -462,7 +497,10 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 
 
 class ChannelSetAddressCustomFieldAction(ChannelUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: Specifies the format of the value of the Custom Field defined by `name`.
+    #: If `value` is absent or `null`, this field will be removed, if it exists. Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -485,7 +523,10 @@ class ChannelSetAddressCustomFieldAction(ChannelUpdateAction):
 
 
 class ChannelSetAddressCustomTypeAction(ChannelUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `address`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -513,7 +554,11 @@ class ChannelSetAddressCustomTypeAction(ChannelUpdateAction):
 
 
 class ChannelSetCustomFieldAction(ChannelUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -536,7 +581,10 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
 
 
 class ChannelSetCustomTypeAction(ChannelUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the Channel with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Channel.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Channel.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -564,6 +612,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
 
 
 class ChannelSetGeoLocationAction(ChannelUpdateAction):
+    #: Value to set.
     geo_location: typing.Optional["GeoJson"]
 
     def __init__(self, *, geo_location: typing.Optional["GeoJson"] = None):
@@ -585,6 +634,7 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
 
 
 class ChannelSetRolesAction(ChannelUpdateAction):
+    #: Value to set. If not specified, then `InventorySupply` is assigned by default.
     roles: typing.List["ChannelRoleEnum"]
 
     def __init__(self, *, roles: typing.List["ChannelRoleEnum"]):

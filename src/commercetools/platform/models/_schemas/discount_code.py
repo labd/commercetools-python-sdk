@@ -109,6 +109,9 @@ class DiscountCodeSchema(BaseResourceSchema):
                 "product-discount": helpers.absmod(
                     __name__, ".product_discount.ProductDiscountReferenceSchema"
                 ),
+                "product-selection": helpers.absmod(
+                    __name__, ".product_selection.ProductSelectionReferenceSchema"
+                ),
                 "product-type": helpers.absmod(
                     __name__, ".product_type.ProductTypeReferenceSchema"
                 ),

@@ -133,11 +133,11 @@ class StateDraftSchema(helpers.BaseSchema):
 
 class StatePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StateSchema"),
         allow_none=True,

@@ -38,28 +38,27 @@ __all__ = [
 
 
 class State(BaseResource):
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: A unique identifier for the state.
+    #: User-defined unique identifier for the State.
     key: str
+    #: Indicates to which resource or object types the State is assigned to.
     type: "StateTypeEnum"
-    #: A human-readable name of the state.
+    #: Name of the State.
     name: typing.Optional["LocalizedString"]
-    #: A human-readable description of the state.
+    #: Description of the State.
     description: typing.Optional["LocalizedString"]
-    #: A state can be declared as an initial state for any state machine.
-    #: When a workflow starts, this first state must be an `initial` state.
+    #: `true` for an initial State, the first State in a workflow.
     initial: bool
-    #: Builtin states are integral parts of the project that cannot be deleted nor the key can be changed.
+    #: `true` for States that are an integral part of the [Project](ctp:api:type:Project). Those States cannot be deleted and their `key` cannot be changed.
     built_in: bool
+    #: Roles the State can fulfill for [Reviews](ctp:api:type:Review) and [Line Items](ctp:api:type:LineItem).
     roles: typing.Optional[typing.List["StateRoleEnum"]]
-    #: Transitions are a way to describe possible transformations of the current state to other states of the same `type` (e.g.: _Initial_ -> _Shipped_).
-    #: When performing a `transitionState` update action and `transitions` is set, the currently referenced state must have a transition to the new state.
-    #: If `transitions` is an empty list, it means the current state is a final state and no further transitions are allowed.
-    #: If `transitions` is not set, the validation is turned off.
-    #: When performing a `transitionState` update action, any other state of the same `type` can be transitioned to.
+    #: - list of States of the same `type` that the current State can be transitioned to. For example, when the current State is the _Initial_ State of [StateType](ctp:api:type:StateTypeEnum) `OrderState` and this list contains the reference to the _Shipped_ `OrderState`, the transition _Initial_ -> _Shipped_ is allowed.
+    #: - if empty, no transitions are allowed from the current State, defining the current State as final for this workflow.
+    #: - if not set, the validation is turned off and the current State can be transitioned to any other State of the same `type` as the current State.
     transitions: typing.Optional[typing.List["StateReference"]]
 
     def __init__(
@@ -110,12 +109,23 @@ class State(BaseResource):
 
 
 class StateDraft(_BaseType):
+    #: User-defined unique identifier for the State.
     key: str
+    #: Specify to which resource or object type the State is assigned to.
     type: "StateTypeEnum"
+    #: Name of the State.
     name: typing.Optional["LocalizedString"]
+    #: Description of the State.
     description: typing.Optional["LocalizedString"]
+    #: Set to `false` if the State is not the first step in a workflow.
     initial: typing.Optional[bool]
+    #: If suitable, assign predifined roles the State can fulfill in case the State's `type` is `LineItemState` or `ReviewState`.
     roles: typing.Optional[typing.List["StateRoleEnum"]]
+    #: Define the list of States of the same `type` to which the current State can be transitioned to.
+    #:
+    #: - If, for example, the current State is the _Initial_ State of [StateType](ctp:api:type:StateTypeEnum) `OrderState` and you want to allow the transition _Initial_ -> _Shipped_, then add the [StateResourceIdentifier](ctp:api:type:StateResourceIdentifier) to the _Shipped_ `OrderState` to this list.
+    #: - Set to empty list for not allowing any transition from the current State and defining it as final State for a workflow.
+    #: - Do not set this field at all to turn off validation and allowing transitions to any other State of the same `type` as the current State.
     transitions: typing.Optional[typing.List["StateResourceIdentifier"]]
 
     def __init__(
@@ -151,25 +161,37 @@ class StateDraft(_BaseType):
 
 
 class StatePagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [State](ctp:api:type:State)."""
+
+    #: Number of results requested in the query request.
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Offset supplied by the client or the server default.
+    #: It is the number of elements skipped, not a page number.
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [States](ctp:api:type:State) matching the query.
     results: typing.List["State"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["State"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         super().__init__()
 
@@ -188,6 +210,9 @@ class StatePagedQueryResponse(_BaseType):
 
 
 class StateReference(Reference):
+    """[Reference](/../api/types#reference) to a [State](ctp:api:type:State)."""
+
+    #: Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for State.
     obj: typing.Optional["State"]
 
     def __init__(self, *, id: str, obj: typing.Optional["State"] = None):
@@ -207,6 +232,8 @@ class StateReference(Reference):
 
 
 class StateResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -228,11 +255,15 @@ class StateResourceIdentifier(ResourceIdentifier):
 
 
 class StateRoleEnum(enum.Enum):
+    """For some resource types, a State can fulfill the following predefined roles:"""
+
     REVIEW_INCLUDED_IN_STATISTICS = "ReviewIncludedInStatistics"
     RETURN = "Return"
 
 
 class StateTypeEnum(enum.Enum):
+    """Resource or object type the State can be assigned to."""
+
     ORDER_STATE = "OrderState"
     LINE_ITEM_STATE = "LineItemState"
     PRODUCT_STATE = "ProductState"
@@ -241,7 +272,9 @@ class StateTypeEnum(enum.Enum):
 
 
 class StateUpdate(_BaseType):
+    #: Expected version of the State on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the State.
     actions: typing.List["StateUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["StateUpdateAction"]):
@@ -314,6 +347,7 @@ class StateUpdateAction(_BaseType):
 
 
 class StateAddRolesAction(StateUpdateAction):
+    #: Value to append to the array.
     roles: typing.List["StateRoleEnum"]
 
     def __init__(self, *, roles: typing.List["StateRoleEnum"]):
@@ -333,6 +367,7 @@ class StateAddRolesAction(StateUpdateAction):
 
 
 class StateChangeInitialAction(StateUpdateAction):
+    #: Set to `true` for defining the State as initial State in a state machine and making it the first step in a workflow.
     initial: bool
 
     def __init__(self, *, initial: bool):
@@ -354,6 +389,8 @@ class StateChangeInitialAction(StateUpdateAction):
 
 
 class StateChangeKeyAction(StateUpdateAction):
+    #: New value to set.
+    #: Must not be empty.
     key: str
 
     def __init__(self, *, key: str):
@@ -373,6 +410,8 @@ class StateChangeKeyAction(StateUpdateAction):
 
 
 class StateChangeTypeAction(StateUpdateAction):
+    #: Resource or object types the State shall be assigned to.
+    #: Must not be empty.
     type: "StateTypeEnum"
 
     def __init__(self, *, type: "StateTypeEnum"):
@@ -392,6 +431,7 @@ class StateChangeTypeAction(StateUpdateAction):
 
 
 class StateRemoveRolesAction(StateUpdateAction):
+    #: Roles to remove from the State.
     roles: typing.List["StateRoleEnum"]
 
     def __init__(self, *, roles: typing.List["StateRoleEnum"]):
@@ -413,6 +453,8 @@ class StateRemoveRolesAction(StateUpdateAction):
 
 
 class StateSetDescriptionAction(StateUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     description: "LocalizedString"
 
     def __init__(self, *, description: "LocalizedString"):
@@ -434,6 +476,8 @@ class StateSetDescriptionAction(StateUpdateAction):
 
 
 class StateSetNameAction(StateUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -453,6 +497,8 @@ class StateSetNameAction(StateUpdateAction):
 
 
 class StateSetRolesAction(StateUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     roles: typing.List["StateRoleEnum"]
 
     def __init__(self, *, roles: typing.List["StateRoleEnum"]):
@@ -472,6 +518,16 @@ class StateSetRolesAction(StateUpdateAction):
 
 
 class StateSetTransitionsAction(StateUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value will be removed.
+    #:
+    #: Possible transformations of the current State to other States of the same `type` (for example, _Initial_ -> _Shipped_).
+    #: When performing a `transitionState` update action and `transitions` is set, the currently referenced State must have a transition to the new State.
+    #:
+    #: If `transitions` is an empty list, it means the current State is a final State and no further transitions are allowed.
+    #: If `transitions` is not set, the validation is turned off.
+    #:
+    #: When performing a `transitionState` update action, any other State of the same `type` can be transitioned to.
     transitions: typing.Optional[typing.List["StateResourceIdentifier"]]
 
     def __init__(

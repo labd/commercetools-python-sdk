@@ -202,6 +202,7 @@ class ShoppingListDraft(_BaseType):
 
 class ShoppingListLineItem(_BaseType):
     added_at: datetime.datetime
+    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
     deactivated_at: typing.Optional[datetime.datetime]
     id: str
@@ -255,6 +256,7 @@ class ShoppingListLineItem(_BaseType):
 
 class ShoppingListLineItemDraft(_BaseType):
     added_at: typing.Optional[datetime.datetime]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     sku: typing.Optional[str]
     product_id: typing.Optional[str]
@@ -617,6 +619,7 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
     variant_id: typing.Optional[int]
     quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -656,6 +659,7 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
     description: typing.Optional["LocalizedString"]
     quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -908,7 +912,11 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -931,10 +939,10 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
-    #: If set, the custom type is set to this new value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the ShoppingList with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the ShoppingList.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: If set, the custom fields are set to this new value.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingList.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1056,7 +1064,11 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
 
 class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
     line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -1087,7 +1099,10 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
 
 class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
     line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1164,7 +1179,11 @@ class ShoppingListSetStoreAction(ShoppingListUpdateAction):
 
 class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
     text_line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -1199,7 +1218,10 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
 
 class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
     text_line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the TextLineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the TextLineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

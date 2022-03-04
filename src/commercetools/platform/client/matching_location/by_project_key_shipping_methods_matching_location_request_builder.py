@@ -34,6 +34,7 @@ class ByProjectKeyShippingMethodsMatchingLocationRequestBuilder:
         state: str = None,
         currency: str = None,
         expand: typing.List["str"] = None,
+        sort: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShippingMethodPagedQueryResponse"]:
@@ -45,6 +46,7 @@ class ByProjectKeyShippingMethodsMatchingLocationRequestBuilder:
                 "state": state,
                 "currency": currency,
                 "expand": expand,
+                "sort": sort,
             },
             headers=headers,
             options=options,

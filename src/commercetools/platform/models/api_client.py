@@ -15,7 +15,7 @@ __all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
 
 
 class ApiClient(_BaseType):
-    #: Unique ID of the API client.
+    #: Unique ID of the API Client.
     #: This is the OAuth2 `client_id` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     id: str
     #: Name of the API Client.
@@ -27,10 +27,14 @@ class ApiClient(_BaseType):
     secret: typing.Optional[str]
     #: Date of the last day this API Client was used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     last_used_at: typing.Optional[datetime.date]
-    #: If set, the client will be deleted on (or shortly after) this point in time.
+    #: If set, the Client will be deleted on (or shortly after) this point in time.
     delete_at: typing.Optional[datetime.datetime]
-    #: Date and time (UTC) the API Client was initially created.
+    #: Date and time (UTC) the API Client was initially created at.
     created_at: typing.Optional[datetime.datetime]
+    #: Expiration time in seconds for each access token obtained by the API Client. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
+    access_token_validity_seconds: typing.Optional[int]
+    #: Inactivity expiration time in seconds for each refresh token obtained by the API Client. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
+    refresh_token_validity_seconds: typing.Optional[int]
 
     def __init__(
         self,
@@ -41,7 +45,9 @@ class ApiClient(_BaseType):
         secret: typing.Optional[str] = None,
         last_used_at: typing.Optional[datetime.date] = None,
         delete_at: typing.Optional[datetime.datetime] = None,
-        created_at: typing.Optional[datetime.datetime] = None
+        created_at: typing.Optional[datetime.datetime] = None,
+        access_token_validity_seconds: typing.Optional[int] = None,
+        refresh_token_validity_seconds: typing.Optional[int] = None
     ):
         self.id = id
         self.name = name
@@ -50,6 +56,8 @@ class ApiClient(_BaseType):
         self.last_used_at = last_used_at
         self.delete_at = delete_at
         self.created_at = created_at
+        self.access_token_validity_seconds = access_token_validity_seconds
+        self.refresh_token_validity_seconds = refresh_token_validity_seconds
         super().__init__()
 
     @classmethod
@@ -69,19 +77,27 @@ class ApiClientDraft(_BaseType):
     name: str
     #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
     scope: str
-    #: If set, the client will be deleted after the specified amount of days.
+    #: If set, the Client will be deleted after the specified amount of days.
     delete_days_after_creation: typing.Optional[int]
+    #: Expiration time in seconds for each access token obtained by the API Client. If not set the default value applies.
+    access_token_validity_seconds: typing.Optional[int]
+    #: Inactivity expiration time in seconds for each refresh token obtained by the API Client. The expiration time for refresh tokens is restarted each time the token is used. If not set the default value applies.
+    refresh_token_validity_seconds: typing.Optional[int]
 
     def __init__(
         self,
         *,
         name: str,
         scope: str,
-        delete_days_after_creation: typing.Optional[int] = None
+        delete_days_after_creation: typing.Optional[int] = None,
+        access_token_validity_seconds: typing.Optional[int] = None,
+        refresh_token_validity_seconds: typing.Optional[int] = None
     ):
         self.name = name
         self.scope = scope
         self.delete_days_after_creation = delete_days_after_creation
+        self.access_token_validity_seconds = access_token_validity_seconds
+        self.refresh_token_validity_seconds = refresh_token_validity_seconds
         super().__init__()
 
     @classmethod

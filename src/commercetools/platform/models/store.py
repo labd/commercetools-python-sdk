@@ -20,18 +20,38 @@ from .common import (
 
 if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
-    from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
-    from .type import CustomFields, CustomFieldsDraft, TypeResourceIdentifier
+    from .common import (
+        CreatedBy,
+        LastModifiedBy,
+        LocalizedString,
+        ReferenceTypeId,
+        ResourceIdentifier,
+    )
+    from .product_selection import (
+        ProductSelectionReference,
+        ProductSelectionResourceIdentifier,
+    )
+    from .type import (
+        CustomFields,
+        CustomFieldsDraft,
+        FieldContainer,
+        TypeResourceIdentifier,
+    )
 
 __all__ = [
+    "ProductSelectionSetting",
+    "ProductSelectionSettingDraft",
     "Store",
     "StoreAddDistributionChannelAction",
+    "StoreAddProductSelectionAction",
     "StoreAddSupplyChannelAction",
+    "StoreChangeProductSelectionAction",
     "StoreDraft",
     "StoreKeyReference",
     "StorePagedQueryResponse",
     "StoreReference",
     "StoreRemoveDistributionChannelAction",
+    "StoreRemoveProductSelectionAction",
     "StoreRemoveSupplyChannelAction",
     "StoreResourceIdentifier",
     "StoreSetCustomFieldAction",
@@ -39,10 +59,66 @@ __all__ = [
     "StoreSetDistributionChannelsAction",
     "StoreSetLanguagesAction",
     "StoreSetNameAction",
+    "StoreSetProductSelectionsAction",
     "StoreSetSupplyChannelsAction",
     "StoreUpdate",
     "StoreUpdateAction",
 ]
+
+
+class ProductSelectionSetting(_BaseType):
+    #: Reference to a Product Selection
+    product_selection: "ProductSelectionReference"
+    #: If `true` all Products assigned to this Product Selection are part of the Store's assortment.
+    active: bool
+
+    def __init__(self, *, product_selection: "ProductSelectionReference", active: bool):
+        self.product_selection = product_selection
+        self.active = active
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionSetting":
+        from ._schemas.store import ProductSelectionSettingSchema
+
+        return ProductSelectionSettingSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import ProductSelectionSettingSchema
+
+        return ProductSelectionSettingSchema().dump(self)
+
+
+class ProductSelectionSettingDraft(_BaseType):
+    #: Resource Identifier of a Product Selection
+    product_selection: "ProductSelectionResourceIdentifier"
+    #: If `true` all Products assigned to this Product Selection become part of the Store's assortment.
+    active: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        product_selection: "ProductSelectionResourceIdentifier",
+        active: typing.Optional[bool] = None
+    ):
+        self.product_selection = product_selection
+        self.active = active
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionSettingDraft":
+        from ._schemas.store import ProductSelectionSettingDraftSchema
+
+        return ProductSelectionSettingDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import ProductSelectionSettingDraftSchema
+
+        return ProductSelectionSettingDraftSchema().dump(self)
 
 
 class Store(BaseResource):
@@ -61,6 +137,10 @@ class Store(BaseResource):
     distribution_channels: typing.List["ChannelReference"]
     #: Set of ResourceIdentifiers of Channels with `InventorySupply` role
     supply_channels: typing.Optional[typing.List["ChannelReference"]]
+    #: Set of References to Product Selections along with settings.
+    #: If `productSelections` is empty all products in the project are available in this Store.
+    #: If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+    product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -77,6 +157,9 @@ class Store(BaseResource):
         languages: typing.Optional[typing.List["str"]] = None,
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.Optional[typing.List["ChannelReference"]] = None,
+        product_selections: typing.Optional[
+            typing.List["ProductSelectionSetting"]
+        ] = None,
         custom: typing.Optional["CustomFields"] = None
     ):
         self.last_modified_by = last_modified_by
@@ -86,6 +169,7 @@ class Store(BaseResource):
         self.languages = languages
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
+        self.product_selections = product_selections
         self.custom = custom
         super().__init__(
             id=id,
@@ -118,6 +202,10 @@ class StoreDraft(_BaseType):
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
     #: Set of ResourceIdentifiers of Channels with `InventorySupply` role
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
+    #: Set of ResourceIdentifiers of Product Selections along with settings.
+    #: If `productSelections` is empty all products in the project are available in this Store.
+    #: If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+    product_selections: typing.Optional[typing.List["ProductSelectionSettingDraft"]]
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -132,6 +220,9 @@ class StoreDraft(_BaseType):
         supply_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
         ] = None,
+        product_selections: typing.Optional[
+            typing.List["ProductSelectionSettingDraft"]
+        ] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.key = key
@@ -139,6 +230,7 @@ class StoreDraft(_BaseType):
         self.languages = languages
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
+        self.product_selections = product_selections
         self.custom = custom
         super().__init__()
 
@@ -282,14 +374,26 @@ class StoreUpdateAction(_BaseType):
             from ._schemas.store import StoreAddDistributionChannelActionSchema
 
             return StoreAddDistributionChannelActionSchema().load(data)
+        if data["action"] == "addProductSelection":
+            from ._schemas.store import StoreAddProductSelectionActionSchema
+
+            return StoreAddProductSelectionActionSchema().load(data)
         if data["action"] == "addSupplyChannel":
             from ._schemas.store import StoreAddSupplyChannelActionSchema
 
             return StoreAddSupplyChannelActionSchema().load(data)
+        if data["action"] == "changeProductSelectionActive":
+            from ._schemas.store import StoreChangeProductSelectionActionSchema
+
+            return StoreChangeProductSelectionActionSchema().load(data)
         if data["action"] == "removeDistributionChannel":
             from ._schemas.store import StoreRemoveDistributionChannelActionSchema
 
             return StoreRemoveDistributionChannelActionSchema().load(data)
+        if data["action"] == "removeProductSelection":
+            from ._schemas.store import StoreRemoveProductSelectionActionSchema
+
+            return StoreRemoveProductSelectionActionSchema().load(data)
         if data["action"] == "removeSupplyChannel":
             from ._schemas.store import StoreRemoveSupplyChannelActionSchema
 
@@ -314,6 +418,10 @@ class StoreUpdateAction(_BaseType):
             from ._schemas.store import StoreSetNameActionSchema
 
             return StoreSetNameActionSchema().load(data)
+        if data["action"] == "setProductSelections":
+            from ._schemas.store import StoreSetProductSelectionsActionSchema
+
+            return StoreSetProductSelectionsActionSchema().load(data)
         if data["action"] == "setSupplyChannels":
             from ._schemas.store import StoreSetSupplyChannelsActionSchema
 
@@ -346,6 +454,28 @@ class StoreAddDistributionChannelAction(StoreUpdateAction):
         return StoreAddDistributionChannelActionSchema().dump(self)
 
 
+class StoreAddProductSelectionAction(StoreUpdateAction):
+    #: A Product Selection to be added to the current Product Selections of this Store.
+    product_selection: "ProductSelectionSettingDraft"
+
+    def __init__(self, *, product_selection: "ProductSelectionSettingDraft"):
+        self.product_selection = product_selection
+        super().__init__(action="addProductSelection")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreAddProductSelectionAction":
+        from ._schemas.store import StoreAddProductSelectionActionSchema
+
+        return StoreAddProductSelectionActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreAddProductSelectionActionSchema
+
+        return StoreAddProductSelectionActionSchema().dump(self)
+
+
 class StoreAddSupplyChannelAction(StoreUpdateAction):
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
@@ -369,6 +499,36 @@ class StoreAddSupplyChannelAction(StoreUpdateAction):
         return StoreAddSupplyChannelActionSchema().dump(self)
 
 
+class StoreChangeProductSelectionAction(StoreUpdateAction):
+    #: A current Product Selection of this Store that is to be activated or deactivated.
+    product_selection: "ResourceIdentifier"
+    #: If `true` all Products assigned to the Product Selection become part of the Store's assortment.
+    active: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        product_selection: "ResourceIdentifier",
+        active: typing.Optional[bool] = None
+    ):
+        self.product_selection = product_selection
+        self.active = active
+        super().__init__(action="changeProductSelectionActive")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreChangeProductSelectionAction":
+        from ._schemas.store import StoreChangeProductSelectionActionSchema
+
+        return StoreChangeProductSelectionActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreChangeProductSelectionActionSchema
+
+        return StoreChangeProductSelectionActionSchema().dump(self)
+
+
 class StoreRemoveDistributionChannelAction(StoreUpdateAction):
     distribution_channel: "ChannelResourceIdentifier"
 
@@ -388,6 +548,28 @@ class StoreRemoveDistributionChannelAction(StoreUpdateAction):
         from ._schemas.store import StoreRemoveDistributionChannelActionSchema
 
         return StoreRemoveDistributionChannelActionSchema().dump(self)
+
+
+class StoreRemoveProductSelectionAction(StoreUpdateAction):
+    #: A Product Selection to be removed from the current Product Selections of this Store.
+    product_selection: "ResourceIdentifier"
+
+    def __init__(self, *, product_selection: "ResourceIdentifier"):
+        self.product_selection = product_selection
+        super().__init__(action="removeProductSelection")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreRemoveProductSelectionAction":
+        from ._schemas.store import StoreRemoveProductSelectionActionSchema
+
+        return StoreRemoveProductSelectionActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreRemoveProductSelectionActionSchema
+
+        return StoreRemoveProductSelectionActionSchema().dump(self)
 
 
 class StoreRemoveSupplyChannelAction(StoreUpdateAction):
@@ -414,7 +596,11 @@ class StoreRemoveSupplyChannelAction(StoreUpdateAction):
 
 
 class StoreSetCustomFieldAction(StoreUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -437,18 +623,17 @@ class StoreSetCustomFieldAction(StoreUpdateAction):
 
 
 class StoreSetCustomTypeAction(StoreUpdateAction):
-    #: If set, the custom type is reset to this value.
-    #: If absent, the custom type and any existing custom fields are removed.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Store with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Store.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: A valid JSON object, based on the FieldDefinitions of the Type
-    #: Sets the custom field to this value.
-    fields: typing.Optional[object]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Store.
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional[object] = None
+        fields: typing.Optional["FieldContainer"] = None
     ):
         self.type = type
         self.fields = fields
@@ -534,6 +719,30 @@ class StoreSetNameAction(StoreUpdateAction):
         from ._schemas.store import StoreSetNameActionSchema
 
         return StoreSetNameActionSchema().dump(self)
+
+
+class StoreSetProductSelectionsAction(StoreUpdateAction):
+    #: The total of Product Selections to be set for this Store.
+    product_selections: typing.List["ProductSelectionSettingDraft"]
+
+    def __init__(
+        self, *, product_selections: typing.List["ProductSelectionSettingDraft"]
+    ):
+        self.product_selections = product_selections
+        super().__init__(action="setProductSelections")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreSetProductSelectionsAction":
+        from ._schemas.store import StoreSetProductSelectionsActionSchema
+
+        return StoreSetProductSelectionsActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreSetProductSelectionsActionSchema
+
+        return StoreSetProductSelectionsActionSchema().dump(self)
 
 
 class StoreSetSupplyChannelsAction(StoreUpdateAction):

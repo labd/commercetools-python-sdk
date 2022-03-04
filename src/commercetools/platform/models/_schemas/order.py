@@ -53,6 +53,45 @@ class StagedOrderUpdateActionSchema(helpers.BaseSchema):
         return models.StagedOrderUpdateAction(**data)
 
 
+class HitSchema(helpers.BaseSchema):
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    relevance = marshmallow.fields.Float(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.Hit(**data)
+
+
+class OrderPagedSearchResponseSchema(helpers.BaseSchema):
+    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    hits = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".HitSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.OrderPagedSearchResponse(**data)
+
+
 class DeliverySchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
     created_at = marshmallow.fields.DateTime(
@@ -800,6 +839,42 @@ class OrderResourceIdentifierSchema(ResourceIdentifierSchema):
         return models.OrderResourceIdentifier(**data)
 
 
+class OrderSearchQuerySchema(helpers.BaseSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.OrderSearchQuery(**data)
+
+
+class OrderSearchRequestSchema(helpers.BaseSchema):
+    query = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".OrderSearchQuerySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    sort = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    limit = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    offset = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.OrderSearchRequest(**data)
+
+
 class OrderUpdateSchema(helpers.BaseSchema):
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
     actions = marshmallow.fields.List(
@@ -914,6 +989,12 @@ class OrderUpdateSchema(helpers.BaseSchema):
                 "setOrderNumber": helpers.absmod(
                     __name__, ".OrderSetOrderNumberActionSchema"
                 ),
+                "setParcelCustomField": helpers.absmod(
+                    __name__, ".OrderSetParcelCustomFieldActionSchema"
+                ),
+                "setParcelCustomType": helpers.absmod(
+                    __name__, ".OrderSetParcelCustomTypeActionSchema"
+                ),
                 "setParcelItems": helpers.absmod(
                     __name__, ".OrderSetParcelItemsActionSchema"
                 ),
@@ -925,6 +1006,12 @@ class OrderUpdateSchema(helpers.BaseSchema):
                 ),
                 "setReturnInfo": helpers.absmod(
                     __name__, ".OrderSetReturnInfoActionSchema"
+                ),
+                "setReturnItemCustomField": helpers.absmod(
+                    __name__, ".OrderSetReturnItemCustomFieldActionSchema"
+                ),
+                "setReturnItemCustomType": helpers.absmod(
+                    __name__, ".OrderSetReturnItemCustomTypeActionSchema"
                 ),
                 "setReturnPaymentState": helpers.absmod(
                     __name__, ".OrderSetReturnPaymentStateActionSchema"
@@ -1012,6 +1099,13 @@ class ParcelSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1042,6 +1136,13 @@ class ParcelDraftSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".DeliveryItemSchema"),
         allow_none=True,
         many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
@@ -1240,6 +1341,13 @@ class ReturnItemSchema(helpers.BaseSchema):
         missing=None,
         data_key="paymentState",
     )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
     last_modified_at = marshmallow.fields.DateTime(
         allow_none=True, missing=None, data_key="lastModifiedAt"
     )
@@ -1307,6 +1415,13 @@ class ReturnItemDraftSchema(helpers.BaseSchema):
         allow_none=True,
         missing=None,
         data_key="shipmentState",
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
     )
 
     class Meta:
@@ -1508,7 +1623,7 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
         missing=None,
     )
     custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -2039,6 +2154,9 @@ class OrderSetDeliveryAddressCustomTypeActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetDeliveryCustomFieldActionSchema(OrderUpdateActionSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
     name = marshmallow.fields.String(allow_none=True, missing=None)
     value = marshmallow.fields.Raw(
         allow_none=True, metadata={"omit_empty": True}, missing=None
@@ -2054,6 +2172,9 @@ class OrderSetDeliveryCustomFieldActionSchema(OrderUpdateActionSchema):
 
 
 class OrderSetDeliveryCustomTypeActionSchema(OrderUpdateActionSchema):
+    delivery_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="deliveryId"
+    )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
@@ -2241,6 +2362,51 @@ class OrderSetOrderNumberActionSchema(OrderUpdateActionSchema):
         return models.OrderSetOrderNumberAction(**data)
 
 
+class OrderSetParcelCustomFieldActionSchema(OrderUpdateActionSchema):
+    parcel_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="parcelId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderSetParcelCustomFieldAction(**data)
+
+
+class OrderSetParcelCustomTypeActionSchema(OrderUpdateActionSchema):
+    parcel_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="parcelId"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderSetParcelCustomTypeAction(**data)
+
+
 class OrderSetParcelItemsActionSchema(OrderUpdateActionSchema):
     parcel_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="parcelId"
@@ -2322,6 +2488,51 @@ class OrderSetReturnInfoActionSchema(OrderUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.OrderSetReturnInfoAction(**data)
+
+
+class OrderSetReturnItemCustomFieldActionSchema(OrderUpdateActionSchema):
+    return_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="returnItemId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderSetReturnItemCustomFieldAction(**data)
+
+
+class OrderSetReturnItemCustomTypeActionSchema(OrderUpdateActionSchema):
+    return_item_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="returnItemId"
+    )
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.OrderSetReturnItemCustomTypeAction(**data)
 
 
 class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):

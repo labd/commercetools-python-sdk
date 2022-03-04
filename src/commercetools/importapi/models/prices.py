@@ -93,7 +93,7 @@ class TaxRate(_BaseType):
 class PriceImport(ImportResource):
     """The data representation for a Price to be imported that is persisted as a [Price](/../api/projects/products#price) in the Project."""
 
-    #: Maps to `Price.value`. TypedMoney is what is called BaseMoney in the HTTP API.
+    #: Maps to `Price.value`.
     value: "TypedMoney"
     #: Maps to `Price.county`.
     country: typing.Optional[str]

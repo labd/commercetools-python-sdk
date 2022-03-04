@@ -63,6 +63,9 @@ from .product_discounts.by_project_key_product_discounts_request_builder import 
 from .product_projections.by_project_key_product_projections_request_builder import (
     ByProjectKeyProductProjectionsRequestBuilder,
 )
+from .product_selections.by_project_key_product_selections_request_builder import (
+    ByProjectKeyProductSelectionsRequestBuilder,
+)
 from .product_types.by_project_key_product_types_request_builder import (
     ByProjectKeyProductTypesRequestBuilder,
 )
@@ -235,6 +238,19 @@ class ByProjectKeyRequestBuilder:
             client=self._client,
         )
 
+    def product_selections(self) -> ByProjectKeyProductSelectionsRequestBuilder:
+        """Manage individual Store assortments through Product Selections.
+
+        After you have created Product Selections and populated them by Products,
+        you can manage Store assortments by assigning Product Selections to Stores.
+        Product Selections may be used by a single Store or shared across several Stores.
+
+        """
+        return ByProjectKeyProductSelectionsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
     def product_types(self) -> ByProjectKeyProductTypesRequestBuilder:
         """Product Types are used to describe common characteristics, most importantly common custom attributes,
         of many concrete products.
@@ -347,7 +363,6 @@ class ByProjectKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Project"]:
-        """The Endpoint is responding a limited set of information about settings and configuration of the project."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}",
@@ -371,7 +386,6 @@ class ByProjectKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "Project":
-        """Update project"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}",

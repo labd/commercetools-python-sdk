@@ -222,6 +222,8 @@ class Cart(BaseResource):
     #: The addresses captured here are not used to determine eligible shipping methods or the applicable tax rate.
     #: Only the cart's `shippingAddress` is used for this.
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: The sum off all the [Line Items](ctp:api:type:LineItem) quantities. Does not take [Custom Line Items](ctp:api:type:CustomLineItem) into consideration.
+    total_line_item_quantity: typing.Optional[int]
 
     def __init__(
         self,
@@ -259,7 +261,8 @@ class Cart(BaseResource):
         refused_gifts: typing.List["CartDiscountReference"],
         origin: "CartOrigin",
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        total_line_item_quantity: typing.Optional[int] = None
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -291,6 +294,7 @@ class Cart(BaseResource):
         self.origin = origin
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
+        self.total_line_item_quantity = total_line_item_quantity
         super().__init__(
             id=id,
             version=version,
@@ -1709,6 +1713,8 @@ class TaxPortion(_BaseType):
 class TaxPortionDraft(_BaseType):
     name: typing.Optional[str]
     rate: float
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: "Money"
 
     def __init__(
@@ -1784,7 +1790,11 @@ class TaxedPrice(_BaseType):
 
 
 class TaxedPriceDraft(_BaseType):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_net: "Money"
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_gross: "Money"
     tax_portions: typing.List["TaxPortionDraft"]
 
@@ -1813,12 +1823,15 @@ class TaxedPriceDraft(_BaseType):
 
 
 class CartAddCustomLineItemAction(CartUpdateAction):
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
     name: "LocalizedString"
     quantity: int
     slug: str
     #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -1899,14 +1912,19 @@ class CartAddItemShippingAddressAction(CartUpdateAction):
 
 
 class CartAddLineItemAction(CartUpdateAction):
+    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
     sku: typing.Optional[str]
     quantity: typing.Optional[int]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
@@ -1972,7 +1990,9 @@ class CartAddPaymentAction(CartUpdateAction):
 
 class CartAddShoppingListAction(CartUpdateAction):
     shopping_list: "ShoppingListResourceIdentifier"
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -2068,6 +2088,8 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
 
 class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
     custom_line_item_id: str
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
 
     def __init__(self, *, custom_line_item_id: str, money: "Money"):
@@ -2115,6 +2137,8 @@ class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
 class CartChangeLineItemQuantityAction(CartUpdateAction):
     line_item_id: str
     quantity: int
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
@@ -2298,6 +2322,8 @@ class CartRemoveItemShippingAddressAction(CartUpdateAction):
 class CartRemoveLineItemAction(CartUpdateAction):
     line_item_id: str
     quantity: typing.Optional[int]
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
@@ -2397,7 +2423,11 @@ class CartSetBillingAddressAction(CartUpdateAction):
 
 
 class CartSetBillingAddressCustomFieldAction(CartUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -2420,7 +2450,10 @@ class CartSetBillingAddressCustomFieldAction(CartUpdateAction):
 
 
 class CartSetBillingAddressCustomTypeAction(CartUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `billingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `billingAddress`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `billingAddress`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2497,7 +2530,11 @@ class CartSetCountryAction(CartUpdateAction):
 
 
 class CartSetCustomFieldAction(CartUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -2521,7 +2558,11 @@ class CartSetCustomFieldAction(CartUpdateAction):
 
 class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
     custom_line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2552,7 +2593,10 @@ class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
 
 class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
     custom_line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the CustomLineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the CustomLineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CustomLineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2701,7 +2745,10 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
 
 
 class CartSetCustomTypeAction(CartUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the Cart with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Cart.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Cart.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2822,7 +2869,11 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
 
 class CartSetDeliveryAddressCustomFieldAction(CartUpdateAction):
     delivery_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2849,7 +2900,10 @@ class CartSetDeliveryAddressCustomFieldAction(CartUpdateAction):
 
 class CartSetDeliveryAddressCustomTypeAction(CartUpdateAction):
     delivery_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address` in a Delivery.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2880,7 +2934,11 @@ class CartSetDeliveryAddressCustomTypeAction(CartUpdateAction):
 
 class CartSetItemShippingAddressCustomFieldAction(CartUpdateAction):
     address_key: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2907,7 +2965,10 @@ class CartSetItemShippingAddressCustomFieldAction(CartUpdateAction):
 
 class CartSetItemShippingAddressCustomTypeAction(CartUpdateAction):
     address_key: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the `itemShippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `itemShippingAddress`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `itemShippingAddress`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2957,7 +3018,11 @@ class CartSetKeyAction(CartUpdateAction):
 
 class CartSetLineItemCustomFieldAction(CartUpdateAction):
     line_item_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -2984,7 +3049,10 @@ class CartSetLineItemCustomFieldAction(CartUpdateAction):
 
 class CartSetLineItemCustomTypeAction(CartUpdateAction):
     line_item_id: str
+    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -3015,6 +3083,7 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
 
 class CartSetLineItemDistributionChannelAction(CartUpdateAction):
     line_item_id: str
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -3043,6 +3112,8 @@ class CartSetLineItemDistributionChannelAction(CartUpdateAction):
 
 class CartSetLineItemPriceAction(CartUpdateAction):
     line_item_id: str
+    #: Draft type that stores amounts in cent precision for the specified currency.
+    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
 
     def __init__(
@@ -3096,6 +3167,7 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
 
 class CartSetLineItemSupplyChannelAction(CartUpdateAction):
     line_item_id: str
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -3247,7 +3319,11 @@ class CartSetShippingAddressAction(CartUpdateAction):
 
 
 class CartSetShippingAddressCustomFieldAction(CartUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -3270,7 +3346,10 @@ class CartSetShippingAddressCustomFieldAction(CartUpdateAction):
 
 
 class CartSetShippingAddressCustomTypeAction(CartUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `shippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `shippingAddress`.
     type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingAddress`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(

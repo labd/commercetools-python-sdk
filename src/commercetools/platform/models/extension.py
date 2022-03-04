@@ -16,17 +16,15 @@ if typing.TYPE_CHECKING:
     from .common import CreatedBy, LastModifiedBy, Reference
 
 __all__ = [
+    "AWSLambdaDestination",
+    "AuthorizationHeaderAuthentication",
+    "AzureFunctionsAuthentication",
     "Extension",
-    "ExtensionAWSLambdaDestination",
     "ExtensionAction",
-    "ExtensionAuthorizationHeaderAuthentication",
-    "ExtensionAzureFunctionsAuthentication",
     "ExtensionChangeDestinationAction",
     "ExtensionChangeTriggersAction",
     "ExtensionDestination",
     "ExtensionDraft",
-    "ExtensionHttpDestination",
-    "ExtensionHttpDestinationAuthentication",
     "ExtensionInput",
     "ExtensionPagedQueryResponse",
     "ExtensionResourceTypeId",
@@ -35,6 +33,8 @@ __all__ = [
     "ExtensionTrigger",
     "ExtensionUpdate",
     "ExtensionUpdateAction",
+    "HttpDestination",
+    "HttpDestinationAuthentication",
 ]
 
 
@@ -104,13 +104,13 @@ class ExtensionDestination(_BaseType):
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ExtensionDestination":
         if data["type"] == "AWSLambda":
-            from ._schemas.extension import ExtensionAWSLambdaDestinationSchema
+            from ._schemas.extension import AWSLambdaDestinationSchema
 
-            return ExtensionAWSLambdaDestinationSchema().load(data)
+            return AWSLambdaDestinationSchema().load(data)
         if data["type"] == "HTTP":
-            from ._schemas.extension import ExtensionHttpDestinationSchema
+            from ._schemas.extension import HttpDestinationSchema
 
-            return ExtensionHttpDestinationSchema().load(data)
+            return HttpDestinationSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.extension import ExtensionDestinationSchema
@@ -118,7 +118,7 @@ class ExtensionDestination(_BaseType):
         return ExtensionDestinationSchema().dump(self)
 
 
-class ExtensionAWSLambdaDestination(ExtensionDestination):
+class AWSLambdaDestination(ExtensionDestination):
     arn: str
     access_key: str
     access_secret: str
@@ -130,17 +130,15 @@ class ExtensionAWSLambdaDestination(ExtensionDestination):
         super().__init__(type="AWSLambda")
 
     @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ExtensionAWSLambdaDestination":
-        from ._schemas.extension import ExtensionAWSLambdaDestinationSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "AWSLambdaDestination":
+        from ._schemas.extension import AWSLambdaDestinationSchema
 
-        return ExtensionAWSLambdaDestinationSchema().load(data)
+        return AWSLambdaDestinationSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.extension import ExtensionAWSLambdaDestinationSchema
+        from ._schemas.extension import AWSLambdaDestinationSchema
 
-        return ExtensionAWSLambdaDestinationSchema().dump(self)
+        return AWSLambdaDestinationSchema().dump(self)
 
 
 class ExtensionDraft(_BaseType):
@@ -180,106 +178,6 @@ class ExtensionDraft(_BaseType):
         from ._schemas.extension import ExtensionDraftSchema
 
         return ExtensionDraftSchema().dump(self)
-
-
-class ExtensionHttpDestination(ExtensionDestination):
-    url: str
-    authentication: typing.Optional["ExtensionHttpDestinationAuthentication"]
-
-    def __init__(
-        self,
-        *,
-        url: str,
-        authentication: typing.Optional["ExtensionHttpDestinationAuthentication"] = None
-    ):
-        self.url = url
-        self.authentication = authentication
-        super().__init__(type="HTTP")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ExtensionHttpDestination":
-        from ._schemas.extension import ExtensionHttpDestinationSchema
-
-        return ExtensionHttpDestinationSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.extension import ExtensionHttpDestinationSchema
-
-        return ExtensionHttpDestinationSchema().dump(self)
-
-
-class ExtensionHttpDestinationAuthentication(_BaseType):
-    type: str
-
-    def __init__(self, *, type: str):
-        self.type = type
-        super().__init__()
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ExtensionHttpDestinationAuthentication":
-        if data["type"] == "AuthorizationHeader":
-            from ._schemas.extension import (
-                ExtensionAuthorizationHeaderAuthenticationSchema,
-            )
-
-            return ExtensionAuthorizationHeaderAuthenticationSchema().load(data)
-        if data["type"] == "AzureFunctions":
-            from ._schemas.extension import ExtensionAzureFunctionsAuthenticationSchema
-
-            return ExtensionAzureFunctionsAuthenticationSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.extension import ExtensionHttpDestinationAuthenticationSchema
-
-        return ExtensionHttpDestinationAuthenticationSchema().dump(self)
-
-
-class ExtensionAuthorizationHeaderAuthentication(
-    ExtensionHttpDestinationAuthentication
-):
-    header_value: str
-
-    def __init__(self, *, header_value: str):
-        self.header_value = header_value
-        super().__init__(type="AuthorizationHeader")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ExtensionAuthorizationHeaderAuthentication":
-        from ._schemas.extension import ExtensionAuthorizationHeaderAuthenticationSchema
-
-        return ExtensionAuthorizationHeaderAuthenticationSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.extension import ExtensionAuthorizationHeaderAuthenticationSchema
-
-        return ExtensionAuthorizationHeaderAuthenticationSchema().dump(self)
-
-
-class ExtensionAzureFunctionsAuthentication(ExtensionHttpDestinationAuthentication):
-    key: str
-
-    def __init__(self, *, key: str):
-        self.key = key
-        super().__init__(type="AzureFunctions")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "ExtensionAzureFunctionsAuthentication":
-        from ._schemas.extension import ExtensionAzureFunctionsAuthenticationSchema
-
-        return ExtensionAzureFunctionsAuthenticationSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.extension import ExtensionAzureFunctionsAuthenticationSchema
-
-        return ExtensionAzureFunctionsAuthenticationSchema().dump(self)
 
 
 class ExtensionInput(_BaseType):
@@ -424,6 +322,100 @@ class ExtensionUpdateAction(_BaseType):
         from ._schemas.extension import ExtensionUpdateActionSchema
 
         return ExtensionUpdateActionSchema().dump(self)
+
+
+class HttpDestination(ExtensionDestination):
+    url: str
+    authentication: typing.Optional["HttpDestinationAuthentication"]
+
+    def __init__(
+        self,
+        *,
+        url: str,
+        authentication: typing.Optional["HttpDestinationAuthentication"] = None
+    ):
+        self.url = url
+        self.authentication = authentication
+        super().__init__(type="HTTP")
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "HttpDestination":
+        from ._schemas.extension import HttpDestinationSchema
+
+        return HttpDestinationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.extension import HttpDestinationSchema
+
+        return HttpDestinationSchema().dump(self)
+
+
+class HttpDestinationAuthentication(_BaseType):
+    type: str
+
+    def __init__(self, *, type: str):
+        self.type = type
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "HttpDestinationAuthentication":
+        if data["type"] == "AuthorizationHeader":
+            from ._schemas.extension import AuthorizationHeaderAuthenticationSchema
+
+            return AuthorizationHeaderAuthenticationSchema().load(data)
+        if data["type"] == "AzureFunctions":
+            from ._schemas.extension import AzureFunctionsAuthenticationSchema
+
+            return AzureFunctionsAuthenticationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.extension import HttpDestinationAuthenticationSchema
+
+        return HttpDestinationAuthenticationSchema().dump(self)
+
+
+class AuthorizationHeaderAuthentication(HttpDestinationAuthentication):
+    header_value: str
+
+    def __init__(self, *, header_value: str):
+        self.header_value = header_value
+        super().__init__(type="AuthorizationHeader")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "AuthorizationHeaderAuthentication":
+        from ._schemas.extension import AuthorizationHeaderAuthenticationSchema
+
+        return AuthorizationHeaderAuthenticationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.extension import AuthorizationHeaderAuthenticationSchema
+
+        return AuthorizationHeaderAuthenticationSchema().dump(self)
+
+
+class AzureFunctionsAuthentication(HttpDestinationAuthentication):
+    key: str
+
+    def __init__(self, *, key: str):
+        self.key = key
+        super().__init__(type="AzureFunctions")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "AzureFunctionsAuthentication":
+        from ._schemas.extension import AzureFunctionsAuthenticationSchema
+
+        return AzureFunctionsAuthenticationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.extension import AzureFunctionsAuthenticationSchema
+
+        return AzureFunctionsAuthenticationSchema().dump(self)
 
 
 class ExtensionChangeDestinationAction(ExtensionUpdateAction):

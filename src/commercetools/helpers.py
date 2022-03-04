@@ -96,7 +96,6 @@ class RegexField(Field):
     def _serialize(self, nested_obj, attr, obj):
         result = {}
         data = obj[attr]
-
         for key, subvalue in data.items():
             result[key] = self.metadata["type"].serialize(
                 key, data, lambda obj, key, default: obj.get(key) or missing
@@ -110,20 +109,53 @@ class RegexField(Field):
             result[key] = self.metadata["type"].deserialize(subvalue, **kwargs)
         return result
 
-    def postprocess(self, data):
-        extra_data = data.pop(self.name)
-        data.update(extra_data)
+    def pre_load(self, schema, data):
+        known_keys = {field.data_key or name for name, field in schema.fields.items()}
+        name = str(self.name)
+        extra = {}
+        for key, value in list(data.items()):
+            if key in known_keys:
+                continue
+
+            if self.metadata["pattern"].match(key):
+                extra[key] = data.pop(key)
+
+        if extra:
+            data[name] = extra
         return data
 
-    def preprocess(self, data):
+    def post_load(self, data, original_data):
         name = str(self.name)
-        new: typing.Dict[str, typing.Any] = {name: {}}
-        for k, v in data.items():
+        extra = data.pop(name, {})
+        if extra:
+            data.update(extra)
+        return data
+
+    def post_dump(self, data, original_data):
+        extra = {}
+        known_fields = self.parent.fields.keys()
+        for k, v in original_data.__dict__.items():
+            if k in known_fields:
+                continue
+
             if self.metadata["pattern"].match(k):
-                new[name][k] = v
-            else:
-                new[k] = v
-        return new
+                extra[k] = v
+
+        if extra:
+            data.update(extra)
+        return data
+
+    # def preprocess(self, data):
+    #     name = str(self.name)
+    #     new: typing.Dict[str, typing.Any] = {name: {}}
+    #     if not isinstance(data, dict):
+    #         data = data.__dict__
+    #     for k, v in data.items():
+    #         if self.metadata["pattern"].match(k):
+    #             new[name][k] = v
+    #         else:
+    #             new[k] = v
+    #     return new
 
 
 class LazyNestedField(Nested):
@@ -287,6 +319,7 @@ def _concurrent_retry(num, source):
             # num value is decreated to <= 0.
             while True:
                 response = func(*args, **kwargs)
+
                 if response.status_code == 409 and num > 0:
                     response_data = response.json()
                     if response_data.get("errors"):
